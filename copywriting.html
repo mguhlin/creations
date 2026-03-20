@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Copywriting Made Simple</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0a2463;
+    --blue: #1a56db;
+    --blue-mid: #2563eb;
+    --blue-light: #dbeafe;
+    --blue-pale: #eff6ff;
+    --accent: #f59e0b;
+    --white: #ffffff;
+    --grid: #c7d9f5;
+    --text-dark: #0f172a;
+    --text-mid: #334155;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #f0f6ff;
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+    min-height: 100vh;
+  }
+
+  .card {
+    width: 760px;
+    background: var(--white);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 48px rgba(10,36,99,0.15), 0 2px 8px rgba(10,36,99,0.08);
+    position: relative;
+  }
+
+  /* Grid background texture */
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 28px 28px;
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  .inner {
+    position: relative;
+    z-index: 1;
+    padding: 48px 52px 52px;
+  }
+
+  /* ── TITLE ── */
+  .title-block {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .title-block h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 62px;
+    letter-spacing: 3px;
+    color: var(--navy);
+    line-height: 1;
+  }
+
+  .title-underline {
+    width: 80px;
+    height: 4px;
+    background: var(--accent);
+    margin: 10px auto 0;
+    border-radius: 2px;
+  }
+
+  /* ── FLOW SECTION ── */
+  .flow-section {
+    margin-bottom: 44px;
+  }
+
+  .flow-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+
+  .flow-pill {
+    background: var(--blue);
+    color: var(--white);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    padding: 11px 32px;
+    border-radius: 40px;
+    text-align: center;
+    width: 340px;
+    box-shadow: 0 4px 14px rgba(26,86,219,0.35);
+  }
+
+  .branches {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0;
+    width: 100%;
+    margin-top: 0;
+    position: relative;
+  }
+
+  /* Connector lines */
+  .branches::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 1px;
+    background: var(--blue-mid);
+    opacity: 0.4;
+  }
+
+  .branch-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .branch-line {
+    width: 1px;
+    height: 18px;
+    background: var(--blue-mid);
+    opacity: 0.5;
+  }
+
+  .branch-box {
+    border: 1.5px solid var(--blue-mid);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text-dark);
+    background: var(--white);
+    letter-spacing: 0.1px;
+    min-width: 110px;
+    text-align: center;
+  }
+
+  .down-arrow {
+    display: flex;
+    justify-content: center;
+    margin: 12px 0;
+    color: var(--blue);
+    font-size: 20px;
+    opacity: 0.7;
+  }
+
+  /* ── FRAMEWORKS SECTION ── */
+  .frameworks-header {
+    background: var(--navy);
+    color: var(--white);
+    text-align: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 3px;
+    padding: 14px 0;
+    border-radius: 10px;
+    margin-bottom: 28px;
+  }
+
+  .frameworks-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+  }
+
+  .framework-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .framework-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--blue);
+    color: var(--white);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    padding: 7px 18px;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    align-self: flex-start;
+    box-shadow: 0 3px 10px rgba(26,86,219,0.3);
+  }
+
+  .fw-arrow {
+    font-size: 16px;
+    color: var(--blue);
+    margin: 2px 0 4px 2px;
+    opacity: 0.7;
+  }
+
+  .fw-step {
+    border: 1.5px solid var(--blue-mid);
+    border-radius: 8px;
+    padding: 6px 13px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blue-mid);
+    background: var(--white);
+    display: inline-block;
+    margin-bottom: 4px;
+  }
+
+  .fw-desc {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 12.5px;
+    color: var(--text-mid);
+    line-height: 1.45;
+    margin-bottom: 12px;
+    padding-left: 2px;
+  }
+
+  .fw-desc .arrow-icon {
+    color: var(--blue);
+    font-size: 13px;
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+
+  /* ── FOOTER ── */
+  .footer-stripe {
+    height: 6px;
+    background: linear-gradient(90deg, var(--blue) 0%, var(--navy) 50%, var(--accent) 100%);
+    margin-top: 36px;
+    border-radius: 3px;
+    opacity: 0.6;
+  }
+
+  /* animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .flow-step, .frameworks-grid, .frameworks-header, .title-block {
+    animation: fadeUp 0.6s ease both;
+  }
+  .title-block { animation-delay: 0.05s; }
+  .flow-section .flow-step:nth-child(1) { animation-delay: 0.1s; }
+  .flow-section .flow-step:nth-child(2) { animation-delay: 0.18s; }
+  .flow-section .flow-step:nth-child(3) { animation-delay: 0.26s; }
+  .frameworks-header { animation-delay: 0.34s; }
+  .frameworks-grid { animation-delay: 0.42s; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="inner">
+
+    <!-- TITLE -->
+    <div class="title-block">
+      <h1>Copywriting Made Simple</h1>
+      <div class="title-underline"></div>
+    </div>
+
+    <!-- FLOW SECTION -->
+    <div class="flow-section">
+
+      <!-- Step 1 -->
+      <div class="flow-step">
+        <div class="flow-pill">Get their attention with emotion</div>
+        <div class="branches">
+          <div class="branch-item">
+            <div class="branch-line"></div>
+            <div class="branch-box">Curiosity</div>
+          </div>
+          <div class="branch-item">
+            <div class="branch-line"></div>
+            <div class="branch-box">Intrigue</div>
+          </div>
+          <div class="branch-item">
+            <div class="branch-line"></div>
+            <div class="branch-box">Excitement</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="down-arrow">↓</div>
+
+      <!-- Step 2 -->
+      <div class="flow-step">
+        <div class="flow-pill">Keep their attention with logic</div>
+        <div class="branches">
+          <div class="branch-item">
+            <div class="branch-line"></div>
+            <div class="branch-box">Data</div>
+          </div>
+          <div class="branch-item">
+            <div class="branch-line"></div>
+            <div class="branch-box">Arguments</div>
+          </div>
+          <div class="branch-item">
+            <div class="branch-line"></div>
+            <div class="branch-box">Statistics</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="down-arrow">↓</div>
+
+      <!-- Step 3 -->
+      <div class="flow-step">
+        <div class="flow-pill">Make them take action with authority</div>
+        <div class="branches">
+          <div class="branch-item">
+            <div class="branch-line"></div>
+            <div class="branch-box">Testimonials</div>
+          </div>
+          <div class="branch-item">
+            <div class="branch-line"></div>
+            <div class="branch-box">Case Studies</div>
+          </div>
+          <div class="branch-item">
+            <div class="branch-line"></div>
+            <div class="branch-box">Guarantees</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /flow-section -->
+
+    <!-- FRAMEWORKS -->
+    <div class="frameworks-header">3 Copywriting Frameworks</div>
+
+    <div class="frameworks-grid">
+
+      <!-- PAS -->
+      <div class="framework-col">
+        <div class="framework-label">PAS</div>
+        <div class="fw-arrow">↓</div>
+        <div class="fw-step">Problem</div>
+        <div class="fw-desc"><span class="arrow-icon">↳</span> Identify the most painful problem your target has.</div>
+        <div class="fw-step">Agitate</div>
+        <div class="fw-desc"><span class="arrow-icon">↳</span> Make the problem hurt — show why it is bad.</div>
+        <div class="fw-step">Solve</div>
+        <div class="fw-desc"><span class="arrow-icon">↳</span> Present your product as the logical solution to the problem.</div>
+      </div>
+
+      <!-- BAB -->
+      <div class="framework-col">
+        <div class="framework-label">BAB</div>
+        <div class="fw-arrow">↓</div>
+        <div class="fw-step">Before</div>
+        <div class="fw-desc"><span class="arrow-icon">↳</span> Present the current situation with the problem.</div>
+        <div class="fw-step">After</div>
+        <div class="fw-desc"><span class="arrow-icon">↳</span> Show them the world without the product.</div>
+        <div class="fw-step">Bridge</div>
+        <div class="fw-desc"><span class="arrow-icon">↳</span> Show them how to get there.</div>
+      </div>
+
+      <!-- FAB -->
+      <div class="framework-col">
+        <div class="framework-label">FAB</div>
+        <div class="fw-arrow">↓</div>
+        <div class="fw-step">Features</div>
+        <div class="fw-desc"><span class="arrow-icon">↳</span> Start with what your product can do.</div>
+        <div class="fw-step">Advantages</div>
+        <div class="fw-desc"><span class="arrow-icon">↳</span> Explain why it's helpful.</div>
+        <div class="fw-step">Benefits</div>
+        <div class="fw-desc"><span class="arrow-icon">↳</span> Elaborate on what it means for the reader.</div>
+      </div>
+
+    </div><!-- /frameworks-grid -->
+
+    <div class="footer-stripe"></div>
+
+  </div><!-- /inner -->
+</div><!-- /card -->
+</body>
+</html>
