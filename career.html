@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Career Longevity in EdTech Leadership</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest: #2D6A4F;
+    --forest-light: #40916C;
+    --forest-pale: #B7E4C7;
+    --forest-faint: #D8F3DC;
+    --charcoal: #2B2D2F;
+    --charcoal-mid: #3D4145;
+    --charcoal-soft: #555C63;
+    --charcoal-pale: #8D9399;
+    --cream: #F5F2EB;
+    --white: #FFFFFF;
+    --gold: #C9A84C;
+    --gold-light: #E8C96A;
+    --border: rgba(45,106,79,0.18);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--charcoal);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* === HEADER === */
+  .hero {
+    background: var(--charcoal);
+    padding: 60px 40px 50px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 420px; height: 420px;
+    background: radial-gradient(circle, rgba(45,106,79,0.28) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -40px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(64,145,108,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(45,106,79,0.3);
+    border: 1px solid rgba(64,145,108,0.4);
+    border-radius: 4px;
+    padding: 6px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--forest-pale);
+    margin-bottom: 24px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    width: 7px; height: 7px;
+    background: var(--forest-light);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--forest-pale);
+  }
+  .hero-sub {
+    font-size: 16px;
+    color: var(--charcoal-pale);
+    font-weight: 300;
+    letter-spacing: 0.02em;
+  }
+  .hero-stat-row {
+    display: flex;
+    gap: 32px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+  .hero-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .hero-stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--forest-pale);
+    line-height: 1;
+  }
+  .hero-stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--charcoal-pale);
+  }
+  .hero-divider { width: 1px; background: rgba(255,255,255,0.12); align-self: stretch; }
+
+  /* === MAIN LAYOUT === */
+  .main { max-width: 960px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  /* === SECTION CARDS === */
+  .section-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 32px;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .section-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 20px 28px;
+    background: var(--charcoal);
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+  }
+  .section-header:hover { background: var(--charcoal-mid); }
+  .section-icon {
+    width: 36px; height: 36px;
+    background: var(--forest);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--white);
+    flex: 1;
+  }
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--charcoal-pale);
+    letter-spacing: 0.1em;
+  }
+  .chevron {
+    color: var(--forest-pale);
+    font-size: 14px;
+    transition: transform 0.3s;
+    font-style: normal;
+  }
+  .chevron.open { transform: rotate(180deg); }
+  .section-body {
+    padding: 28px;
+    display: block;
+  }
+  .section-body.collapsed { display: none; }
+
+  /* === TIMELINE === */
+  .timeline {
+    position: relative;
+    padding-left: 32px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 11px; top: 8px; bottom: 8px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--forest), var(--forest-light), var(--forest-pale));
+    border-radius: 2px;
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 20px;
+    cursor: pointer;
+  }
+  .timeline-item:last-child { margin-bottom: 0; }
+  .timeline-dot {
+    position: absolute;
+    left: -28px;
+    top: 8px;
+    width: 14px; height: 14px;
+    background: var(--forest);
+    border: 2px solid var(--white);
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px rgba(45,106,79,0.2);
+    transition: transform 0.2s, background 0.2s;
+  }
+  .timeline-item:hover .timeline-dot {
+    transform: scale(1.3);
+    background: var(--forest-light);
+  }
+  .timeline-content {
+    background: var(--cream);
+    border: 1px solid rgba(45,106,79,0.15);
+    border-radius: 8px;
+    padding: 14px 18px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .timeline-item:hover .timeline-content {
+    border-color: var(--forest);
+    box-shadow: 0 2px 12px rgba(45,106,79,0.12);
+  }
+  .timeline-org {
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--charcoal);
+    margin-bottom: 2px;
+  }
+  .timeline-meta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .timeline-years {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--charcoal-pale);
+  }
+  .timeline-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-weight: 500;
+  }
+  .badge-decade {
+    background: rgba(45,106,79,0.1);
+    color: var(--forest);
+    border: 1px solid rgba(45,106,79,0.25);
+  }
+  .badge-k12 {
+    background: rgba(43,45,47,0.08);
+    color: var(--charcoal-soft);
+    border: 1px solid rgba(43,45,47,0.15);
+  }
+  .badge-np {
+    background: rgba(201,168,76,0.12);
+    color: #8B6914;
+    border: 1px solid rgba(201,168,76,0.3);
+  }
+  .timeline-tenure-bar {
+    margin-top: 8px;
+    height: 4px;
+    background: rgba(45,106,79,0.12);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .timeline-tenure-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--forest), var(--forest-light));
+    border-radius: 2px;
+    width: 0;
+    transition: width 1s ease 0.3s;
+  }
+  .timeline-item.visible .timeline-tenure-fill { width: var(--pct); }
+
+  .avg-callout {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 24px;
+    padding: 16px 20px;
+    background: var(--charcoal);
+    border-radius: 8px;
+    flex-wrap: wrap;
+  }
+  .avg-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--forest-pale);
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .avg-text {
+    font-size: 14px;
+    color: var(--charcoal-pale);
+    line-height: 1.5;
+  }
+  .avg-text strong { color: var(--white); }
+
+  /* === BENCHMARK GRID === */
+  .bench-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 640px) { .bench-grid { grid-template-columns: 1fr; } }
+  .bench-group {
+    background: var(--cream);
+    border: 1px solid rgba(45,106,79,0.15);
+    border-radius: 8px;
+    padding: 20px;
+  }
+  .bench-group-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--charcoal-soft);
+    margin-bottom: 14px;
+  }
+  .bench-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .bench-row:last-child { margin-bottom: 0; }
+  .bench-label { font-size: 13px; color: var(--charcoal-soft); flex: 1; min-width: 0; }
+  .bench-bar-wrap { width: 100px; height: 6px; background: rgba(45,106,79,0.1); border-radius: 3px; overflow: hidden; flex-shrink: 0; }
+  .bench-bar-fill {
+    height: 100%;
+    background: var(--forest-light);
+    border-radius: 3px;
+    width: 0;
+    transition: width 1s ease 0.4s;
+  }
+  .bench-row.visible .bench-bar-fill { width: var(--pct); }
+  .bench-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--forest);
+    white-space: nowrap;
+  }
+
+  /* === COMPARISON PANELS === */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 700px) { .compare-grid { grid-template-columns: 1fr; } }
+  .compare-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+  }
+  .compare-card-head {
+    background: var(--charcoal);
+    padding: 14px 16px;
+  }
+  .compare-card-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--forest-pale);
+  }
+  .compare-card-body { padding: 18px 16px; }
+  .compare-vs-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .compare-col { flex: 1; text-align: center; }
+  .compare-bar-wrap {
+    height: 80px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    margin-bottom: 6px;
+  }
+  .compare-bar {
+    width: 32px;
+    border-radius: 4px 4px 0 0;
+    transition: height 1s ease 0.3s;
+    position: relative;
+  }
+  .compare-bar.industry { background: rgba(45,106,79,0.2); border: 1px solid rgba(45,106,79,0.25); }
+  .compare-bar.mine { background: var(--forest); box-shadow: 0 -2px 10px rgba(45,106,79,0.3); }
+  .compare-bar-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--charcoal);
+  }
+  .compare-bar-sub { font-size: 10px; color: var(--charcoal-pale); line-height: 1.3; }
+  .compare-verdict {
+    background: rgba(45,106,79,0.08);
+    border: 1px solid rgba(45,106,79,0.2);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 12px;
+    color: var(--charcoal-soft);
+    line-height: 1.5;
+  }
+  .compare-verdict strong { color: var(--forest); font-size: 13px; }
+  .compare-badge-big {
+    display: inline-block;
+    background: var(--forest);
+    color: var(--white);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  .vs-divider {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--charcoal-pale);
+    padding-bottom: 24px;
+  }
+
+  /* === TAKEAWAYS === */
+  .takeaway-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 700px) { .takeaway-grid { grid-template-columns: 1fr; } }
+  .takeaway-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 22px 20px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: default;
+  }
+  .takeaway-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(45,106,79,0.12);
+  }
+  .takeaway-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--forest);
+  }
+  .takeaway-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 900;
+    color: rgba(45,106,79,0.1);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .takeaway-emoji { font-size: 24px; margin-bottom: 10px; display: block; }
+  .takeaway-title {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--forest);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .takeaway-text { font-size: 13px; color: var(--charcoal-soft); line-height: 1.6; }
+
+  /* === FOOTER === */
+  .footnote {
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--charcoal-pale);
+    padding: 24px;
+    border-top: 1px solid var(--border);
+    letter-spacing: 0.05em;
+  }
+
+  /* NAV DOTS */
+  .nav-dots {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 100;
+  }
+  .nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(45,106,79,0.25);
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    padding: 0;
+  }
+  .nav-dot.active, .nav-dot:hover {
+    background: var(--forest);
+    transform: scale(1.4);
+  }
+  @media (max-width: 960px) { .nav-dots { display: none; } }
+
+  /* SCROLL HINT */
+  .scroll-hint {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--charcoal-pale);
+    opacity: 0.7;
+    animation: bounce 2s infinite;
+    z-index: 2;
+  }
+  @keyframes bounce {
+    0%,100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(5px); }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav-dots" id="navDots">
+  <button class="nav-dot active" onclick="scrollToSection(0)" title="Snapshot"></button>
+  <button class="nav-dot" onclick="scrollToSection(1)" title="Benchmarks"></button>
+  <button class="nav-dot" onclick="scrollToSection(2)" title="Comparison"></button>
+  <button class="nav-dot" onclick="scrollToSection(3)" title="Takeaways"></button>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Individual Analysis · EdTech Leadership · 1994–2026</div>
+    <h1>Career Longevity<br>in <em>EdTech Leadership</em></h1>
+    <p class="hero-sub">An Individual Analysis vs. Industry Benchmarks</p>
+    <div class="hero-stat-row">
+      <div class="hero-stat">
+        <span class="hero-stat-num">32</span>
+        <span class="hero-stat-label">Years in Profession</span>
+      </div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">6.2</span>
+        <span class="hero-stat-label">Avg Tenure (yrs)</span>
+      </div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">10</span>
+        <span class="hero-stat-label">Longest Tenure (yrs)</span>
+      </div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">×2</span>
+        <span class="hero-stat-label">10-Year Tenures Achieved</span>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint">▼ scroll to explore</div>
+</header>
+
+<main class="main">
+
+  <!-- PART 1 -->
+  <div class="section-card" id="section-0">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-icon">👤</div>
+      <span class="section-title">Your Career Snapshot</span>
+      <span class="section-num">PART 01</span>
+      <em class="chevron open">▲</em>
+    </div>
+    <div class="section-body">
+      <div class="timeline">
+        <div class="timeline-item" style="--pct: 60%">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-org">Campus &amp; District Roles</div>
+            <div class="timeline-meta">
+              <span class="timeline-years">1994 – 2000</span>
+              <span class="timeline-badge badge-k12">Public K-12</span>
+            </div>
+            <div class="timeline-tenure-bar"><div class="timeline-tenure-fill"></div></div>
+            <div style="font-size:12px;color:var(--charcoal-pale);margin-top:6px;">6 Years · Teacher → Campus Tech Coord → District Technologist</div>
+          </div>
+        </div>
+        <div class="timeline-item" style="--pct: 10%">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-org">Northside ISD / HBU</div>
+            <div class="timeline-meta">
+              <span class="timeline-years">2001 – 2002</span>
+              <span class="timeline-badge badge-k12">Public / Higher Ed</span>
+            </div>
+            <div class="timeline-tenure-bar"><div class="timeline-tenure-fill"></div></div>
+            <div style="font-size:12px;color:var(--charcoal-pale);margin-top:6px;">1 Year · Strategic stepping stone</div>
+          </div>
+        </div>
+        <div class="timeline-item" style="--pct: 100%">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-org">SAISD — Director, Instructional Technology &amp; Learning Services</div>
+            <div class="timeline-meta">
+              <span class="timeline-years">2002 – 2012</span>
+              <span class="timeline-badge badge-k12">Public K-12</span>
+              <span class="timeline-badge badge-decade">🏆 Decade Tenure</span>
+            </div>
+            <div class="timeline-tenure-bar"><div class="timeline-tenure-fill"></div></div>
+            <div style="font-size:12px;color:var(--charcoal-pale);margin-top:6px;">10 Years · Longest K-12 tenure</div>
+          </div>
+        </div>
+        <div class="timeline-item" style="--pct: 40%">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-org">East Central ISD — Director of Technology Operations</div>
+            <div class="timeline-meta">
+              <span class="timeline-years">2012 – 2016</span>
+              <span class="timeline-badge badge-k12">Public K-12</span>
+            </div>
+            <div class="timeline-tenure-bar"><div class="timeline-tenure-fill"></div></div>
+            <div style="font-size:12px;color:var(--charcoal-pale);margin-top:6px;">4 Years · Strategic transition role</div>
+          </div>
+        </div>
+        <div class="timeline-item" style="--pct: 100%">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-org">TCEA — Director of Professional Development</div>
+            <div class="timeline-meta">
+              <span class="timeline-years">2016 – Present</span>
+              <span class="timeline-badge badge-np">Nonprofit</span>
+              <span class="timeline-badge badge-decade">🏆 Decade Tenure</span>
+            </div>
+            <div class="timeline-tenure-bar"><div class="timeline-tenure-fill"></div></div>
+            <div style="font-size:12px;color:var(--charcoal-pale);margin-top:6px;">10 Years · Current role</div>
+          </div>
+        </div>
+      </div>
+      <div class="avg-callout">
+        <div class="avg-num">6.2 yrs</div>
+        <div class="avg-text"><strong>Average tenure across all roles</strong><br>Your longest tenure was 10 years — achieved twice (SAISD &amp; TCEA)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PART 2 -->
+  <div class="section-card" id="section-1">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-icon">🏢</div>
+      <span class="section-title">The Industry Benchmarks</span>
+      <span class="section-num">PART 02</span>
+      <em class="chevron open">▲</em>
+    </div>
+    <div class="section-body">
+      <div class="bench-grid">
+        <div class="bench-group">
+          <div class="bench-group-title">📚 Public Education (K-12)</div>
+          <div class="bench-row" style="--pct: 78%">
+            <span class="bench-label">Overall Education Median</span>
+            <div class="bench-bar-wrap"><div class="bench-bar-fill"></div></div>
+            <span class="bench-val">5.3 yrs</span>
+          </div>
+          <div class="bench-row" style="--pct: 100%">
+            <span class="bench-label">Public Sector Median</span>
+            <div class="bench-bar-wrap"><div class="bench-bar-fill"></div></div>
+            <span class="bench-val">6.8 yrs</span>
+          </div>
+        </div>
+        <div class="bench-group">
+          <div class="bench-group-title">🌱 Nonprofit Education Associations</div>
+          <div class="bench-row" style="--pct: 44%">
+            <span class="bench-label">General Nonprofit Staff</span>
+            <div class="bench-bar-wrap"><div class="bench-bar-fill"></div></div>
+            <span class="bench-val">2–5 yrs</span>
+          </div>
+          <div class="bench-row" style="--pct: 88%">
+            <span class="bench-label">Nonprofit Directors / Execs</span>
+            <div class="bench-bar-wrap"><div class="bench-bar-fill"></div></div>
+            <span class="bench-val">~6 yrs</span>
+          </div>
+          <div class="bench-row" style="--pct: 96%">
+            <span class="bench-label">Experienced Pros (&gt;10 yrs)</span>
+            <div class="bench-bar-wrap"><div class="bench-bar-fill"></div></div>
+            <span class="bench-val">6.5 yrs</span>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:20px;padding:16px 20px;background:var(--charcoal);border-radius:8px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+        <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--charcoal-pale);">Industry Average (Education)</div>
+        <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--forest-pale);">5.3 yrs</div>
+        <div style="color:var(--charcoal-pale);font-size:13px;flex:1;">Your 6.2-year average exceeds this by <strong style="color:var(--forest-pale);">+0.9 years</strong>, even accounting for strategic short stints.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PART 3 -->
+  <div class="section-card" id="section-2">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-icon">⚖️</div>
+      <span class="section-title">Head-to-Head Comparison</span>
+      <span class="section-num">PART 03</span>
+      <em class="chevron open">▲</em>
+    </div>
+    <div class="section-body">
+      <div class="compare-grid" id="compareGrid">
+
+        <div class="compare-card">
+          <div class="compare-card-head">
+            <div class="compare-card-title">Nonprofit Leadership</div>
+          </div>
+          <div class="compare-card-body">
+            <div class="compare-vs-row">
+              <div class="compare-col">
+                <div class="compare-bar-wrap">
+                  <div class="compare-bar industry" id="bar-np-industry" style="height:0px" data-target="72"></div>
+                </div>
+                <div class="compare-bar-num">6 yrs</div>
+                <div class="compare-bar-sub">Industry Avg<br>(Nonprofit Dir)</div>
+              </div>
+              <div class="vs-divider">VS</div>
+              <div class="compare-col">
+                <div class="compare-bar-wrap">
+                  <div class="compare-bar mine" id="bar-np-mine" style="height:0px" data-target="80"></div>
+                </div>
+                <div class="compare-bar-num">10 yrs</div>
+                <div class="compare-bar-sub">Your Tenure<br>(TCEA)</div>
+              </div>
+            </div>
+            <div class="compare-verdict">
+              <div class="compare-badge-big">+66%</div><br>
+              You stayed <strong>66% longer</strong> than the avg nonprofit director, bucking the sector's high-turnover trend.
+            </div>
+          </div>
+        </div>
+
+        <div class="compare-card">
+          <div class="compare-card-head">
+            <div class="compare-card-title">Public K-12 Leadership</div>
+          </div>
+          <div class="compare-card-body">
+            <div class="compare-vs-row">
+              <div class="compare-col">
+                <div class="compare-bar-wrap">
+                  <div class="compare-bar industry" id="bar-k12-industry" style="height:0px" data-target="54"></div>
+                </div>
+                <div class="compare-bar-num">6.8 yrs</div>
+                <div class="compare-bar-sub">Industry Avg<br>(Public Sector)</div>
+              </div>
+              <div class="vs-divider">VS</div>
+              <div class="compare-col">
+                <div class="compare-bar-wrap">
+                  <div class="compare-bar mine" id="bar-k12-mine" style="height:0px" data-target="80"></div>
+                </div>
+                <div class="compare-bar-num">10 yrs</div>
+                <div class="compare-bar-sub">Longest K-12<br>(SAISD)</div>
+              </div>
+            </div>
+            <div class="compare-verdict">
+              <div class="compare-badge-big">+47%</div><br>
+              Your decade at SAISD is <strong>47% longer</strong> than the median public sector tenure.
+            </div>
+          </div>
+        </div>
+
+        <div class="compare-card">
+          <div class="compare-card-head">
+            <div class="compare-card-title">Overall Career Stability</div>
+          </div>
+          <div class="compare-card-body">
+            <div class="compare-vs-row">
+              <div class="compare-col">
+                <div class="compare-bar-wrap">
+                  <div class="compare-bar industry" id="bar-ov-industry" style="height:0px" data-target="42"></div>
+                </div>
+                <div class="compare-bar-num">5.3 yrs</div>
+                <div class="compare-bar-sub">Industry Avg<br>(Education)</div>
+              </div>
+              <div class="vs-divider">VS</div>
+              <div class="compare-col">
+                <div class="compare-bar-wrap">
+                  <div class="compare-bar mine" id="bar-ov-mine" style="height:0px" data-target="50"></div>
+                </div>
+                <div class="compare-bar-num">6.2 yrs</div>
+                <div class="compare-bar-sub">Your Career<br>Average</div>
+              </div>
+            </div>
+            <div class="compare-verdict">
+              <div class="compare-badge-big">+0.9 yrs</div><br>
+              Your average is <strong>nearly a full year higher</strong> than the national education median — even with short transitions.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- PART 4 -->
+  <div class="section-card" id="section-3">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-icon">💡</div>
+      <span class="section-title">Key Takeaways</span>
+      <span class="section-num">PART 04</span>
+      <em class="chevron open">▲</em>
+    </div>
+    <div class="section-body">
+      <div class="takeaway-grid">
+        <div class="takeaway-card">
+          <div class="takeaway-num">01</div>
+          <span class="takeaway-emoji">🏛️</span>
+          <div class="takeaway-title">High Organizational Loyalty</div>
+          <div class="takeaway-text">Achieving two separate 10-year tenures in high-level director roles is exceptionally rare. It demonstrates deep commitment and adaptability to organizational change over time.</div>
+        </div>
+        <div class="takeaway-card">
+          <div class="takeaway-num">02</div>
+          <span class="takeaway-emoji">🔥</span>
+          <div class="takeaway-title">Defying Nonprofit Burnout</div>
+          <div class="takeaway-text">The nonprofit sector struggles with retention, averaging just 2–5 years. Your 10-year run at TCEA signals high resilience and deep alignment with the association's mission.</div>
+        </div>
+        <div class="takeaway-card">
+          <div class="takeaway-num">03</div>
+          <span class="takeaway-emoji">♟️</span>
+          <div class="takeaway-title">Strategic Mobility</div>
+          <div class="takeaway-text">Shorter stints at Northside ISD (1 yr) and East Central ISD (4 yrs) were not instability — they served as deliberate stepping stones connecting two major decade-long leadership eras.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footnote">
+  Tenure calculations are approximate based on available data. · Industry benchmarks are illustrative based on published research.
+</footer>
+
+<script>
+  // === SECTION TOGGLE ===
+  function toggleSection(header) {
+    const body = header.nextElementSibling;
+    const chevron = header.querySelector('.chevron');
+    if (body.classList.contains('collapsed')) {
+      body.classList.remove('collapsed');
+      chevron.classList.add('open');
+      chevron.textContent = '▲';
+    } else {
+      body.classList.add('collapsed');
+      chevron.classList.remove('open');
+      chevron.textContent = '▼';
+    }
+  }
+
+  // === SCROLL TO SECTION ===
+  const sections = ['section-0','section-1','section-2','section-3'];
+  function scrollToSection(i) {
+    document.getElementById(sections[i]).scrollIntoView({behavior:'smooth'});
+  }
+
+  // === INTERSECTION OBSERVER ===
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+
+        // Animate timeline fills
+        entry.target.querySelectorAll('.timeline-item').forEach(item => {
+          item.classList.add('visible');
+        });
+
+        // Animate bench bar fills
+        entry.target.querySelectorAll('.bench-row').forEach(row => {
+          row.classList.add('visible');
+        });
+
+        // Animate compare bars
+        entry.target.querySelectorAll('.compare-bar').forEach(bar => {
+          const target = parseInt(bar.dataset.target || 0);
+          setTimeout(() => {
+            bar.style.height = target + 'px';
+          }, 300);
+        });
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.section-card').forEach(card => observer.observe(card));
+
+  // === NAV DOT ACTIVE STATE ===
+  const navDots = document.querySelectorAll('.nav-dot');
+  const sectionEls = sections.map(id => document.getElementById(id));
+
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const idx = sectionEls.indexOf(entry.target);
+        navDots.forEach((d,i) => d.classList.toggle('active', i===idx));
+      }
+    });
+  }, { threshold: 0.4 });
+  sectionEls.forEach(el => navObserver.observe(el));
+</script>
+</body>
+</html>
