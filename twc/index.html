@@ -1,0 +1,1232 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Think with Claude — Technical Orientation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0E2A4A;
+    --navy-mid: #1B4F8A;
+    --navy-light: #234E7A;
+    --teal: #0D7A6B;
+    --teal-light: #12A08D;
+    --gold: #E8A020;
+    --gold-light: #F5B84C;
+    --cream: #F5F0E8;
+    --white: #FFFFFF;
+    --text-dim: rgba(245,240,232,0.6);
+    --text-mid: rgba(245,240,232,0.85);
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy);
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* ── BACKGROUND TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 15% 10%, rgba(27,79,138,0.45) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 85% 80%, rgba(13,122,107,0.25) 0%, transparent 55%),
+      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(232,160,32,0.06) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── GRID OVERLAY ── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(245,240,232,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(245,240,232,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(14,42,74,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(245,240,232,0.08);
+  }
+
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .nav-owl {
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  .nav-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--cream);
+  }
+
+  .nav-title span {
+    color: var(--gold);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 8px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--text-mid);
+    border: 1px solid transparent;
+    transition: all 0.22s ease;
+  }
+
+  .nav-links a:hover {
+    background: rgba(245,240,232,0.07);
+    border-color: rgba(245,240,232,0.12);
+    color: var(--cream);
+  }
+
+  .nav-links .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: rgba(232,160,32,0.2);
+    color: var(--gold);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 500;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 100px 48px 80px;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 20px;
+    border-radius: 100px;
+    border: 1px solid rgba(232,160,32,0.35);
+    background: rgba(232,160,32,0.08);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    color: var(--gold-light);
+    margin-bottom: 40px;
+    animation: fadeDown 0.7s ease both;
+  }
+
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: pulse 2s ease infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.7); }
+  }
+
+  .hero-owl {
+    font-size: 5rem;
+    line-height: 1;
+    margin-bottom: 24px;
+    animation: fadeDown 0.7s 0.1s ease both;
+    filter: drop-shadow(0 0 40px rgba(13,122,107,0.5));
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.25em;
+    color: var(--teal-light);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    animation: fadeDown 0.7s 0.15s ease both;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--cream);
+    margin-bottom: 12px;
+    animation: fadeDown 0.8s 0.2s ease both;
+  }
+
+  .hero-title .accent {
+    color: var(--gold);
+    position: relative;
+  }
+
+  .hero-subtitle {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 700;
+    color: var(--teal-light);
+    margin-bottom: 28px;
+    animation: fadeDown 0.8s 0.25s ease both;
+  }
+
+  .hero-desc {
+    max-width: 560px;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-mid);
+    margin-bottom: 52px;
+    animation: fadeDown 0.8s 0.3s ease both;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 28px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 56px;
+    animation: fadeDown 0.8s 0.35s ease both;
+  }
+
+  .meta-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background: rgba(245,240,232,0.05);
+    border: 1px solid rgba(245,240,232,0.1);
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-mid);
+  }
+
+  .meta-pill .icon { font-size: 1rem; }
+
+  .hero-scroll-cta {
+    animation: fadeDown 0.8s 0.4s ease both;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-dim);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .scroll-arrow {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(245,240,232,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    animation: bounce 2s ease infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SECTION DIVIDER ── */
+  .section-divider {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 0 48px;
+    margin-bottom: 48px;
+  }
+
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(245,240,232,0.15), transparent);
+  }
+
+  .divider-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* ── SCREENCASTS GRID ── */
+  .screencasts {
+    position: relative;
+    z-index: 1;
+    padding: 0 48px 120px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+  }
+
+  /* ── SCREENCAST CARD ── */
+  .card {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(245,240,232,0.08);
+    background: rgba(14,42,74,0.6);
+    backdrop-filter: blur(12px);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+    display: block;
+    cursor: pointer;
+  }
+
+  .card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(245,240,232,0.18);
+    box-shadow: 0 24px 64px rgba(0,0,0,0.35);
+  }
+
+  /* Each card gets a unique accent color */
+  .card-1 { --card-accent: #1B84DC; --card-accent-dim: rgba(27,132,220,0.12); }
+  .card-2 { --card-accent: #0D7A6B; --card-accent-dim: rgba(13,122,107,0.12); }
+  .card-3 { --card-accent: #E8A020; --card-accent-dim: rgba(232,160,32,0.12); }
+  .card-4 { --card-accent: #9B59B6; --card-accent-dim: rgba(155,89,182,0.12); }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--card-accent), transparent);
+    opacity: 0.8;
+  }
+
+  .card-header {
+    padding: 32px 32px 24px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .card-num-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .card-screencast-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .card-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--card-accent);
+    opacity: 0.25;
+    transition: opacity 0.3s;
+  }
+
+  .card:hover .card-num { opacity: 0.45; }
+
+  .card-icon-wrap {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    background: var(--card-accent-dim);
+    border: 1px solid rgba(245,240,232,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    transition: transform 0.3s, background 0.3s;
+  }
+
+  .card:hover .card-icon-wrap {
+    transform: scale(1.08) rotate(-4deg);
+    background: rgba(245,240,232,0.08);
+  }
+
+  .card-body {
+    padding: 0 32px 28px;
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--cream);
+    margin-bottom: 12px;
+  }
+
+  .card-desc {
+    font-size: 0.875rem;
+    line-height: 1.65;
+    color: var(--text-mid);
+    margin-bottom: 24px;
+  }
+
+  /* ── TOPIC CHIPS ── */
+  .chip-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+
+  .chip {
+    padding: 5px 12px;
+    border-radius: 100px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    background: var(--card-accent-dim);
+    border: 1px solid rgba(245,240,232,0.08);
+    color: var(--text-mid);
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .card:hover .chip {
+    background: rgba(245,240,232,0.07);
+    color: var(--cream);
+  }
+
+  /* ── CARD FOOTER ── */
+  .card-footer {
+    padding: 20px 32px;
+    border-top: 1px solid rgba(245,240,232,0.07);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .card-duration {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+  }
+
+  .duration-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--card-accent);
+    opacity: 0.6;
+  }
+
+  .card-cta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--card-accent);
+    letter-spacing: 0.04em;
+    transition: gap 0.2s;
+  }
+
+  .card:hover .card-cta { gap: 10px; }
+
+  /* ── ANCHOR TARGETS ── */
+  .anchor-target {
+    position: relative;
+    scroll-margin-top: 90px;
+  }
+
+  /* ── FOOTER STRIP ── */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(245,240,232,0.07);
+    padding: 28px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .footer-brand {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+  }
+
+  .footer-brand strong {
+    color: var(--gold);
+  }
+
+  .footer-credit {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+  }
+
+  /* ── SCREENCAST DETAIL SECTIONS ── */
+  .detail-sections {
+    position: relative;
+    z-index: 1;
+    padding: 0 48px 80px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .detail-block {
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(245,240,232,0.08);
+    background: rgba(14,42,74,0.4);
+    margin-bottom: 28px;
+    scroll-margin-top: 90px;
+  }
+
+  .detail-header {
+    padding: 36px 40px 28px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-bottom: 1px solid rgba(245,240,232,0.07);
+  }
+
+  .detail-num-badge {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 900;
+    flex-shrink: 0;
+  }
+
+  .detail-block:nth-child(1) .detail-num-badge { background: rgba(27,132,220,0.15); color: #1B84DC; }
+  .detail-block:nth-child(2) .detail-num-badge { background: rgba(13,122,107,0.15); color: #0D7A6B; }
+  .detail-block:nth-child(3) .detail-num-badge { background: rgba(232,160,32,0.15); color: #E8A020; }
+  .detail-block:nth-child(4) .detail-num-badge { background: rgba(155,89,182,0.15); color: #9B59B6; }
+
+  .detail-header-text h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 4px;
+  }
+
+  .detail-header-text p {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.06em;
+  }
+
+  .tips-grid {
+    padding: 28px 40px 32px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .tip-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 16px;
+    border-radius: 10px;
+    background: rgba(245,240,232,0.03);
+    border: 1px solid rgba(245,240,232,0.06);
+    transition: background 0.2s;
+  }
+
+  .tip-item:hover {
+    background: rgba(245,240,232,0.06);
+  }
+
+  .tip-icon {
+    font-size: 1.1rem;
+    line-height: 1.4;
+    flex-shrink: 0;
+  }
+
+  .tip-text {
+    font-size: 0.825rem;
+    line-height: 1.55;
+    color: var(--text-mid);
+  }
+
+  .tip-text strong {
+    display: block;
+    color: var(--cream);
+    font-weight: 600;
+    margin-bottom: 3px;
+    font-size: 0.82rem;
+  }
+
+  /* ── PROMPT BLOCKS ── */
+  .prompt-block {
+    margin-top: 12px;
+    border-radius: 8px;
+    background: rgba(0,0,0,0.35);
+    border: 1px solid rgba(155,89,182,0.25);
+    overflow: hidden;
+  }
+
+  .detail-block:nth-child(1) .prompt-block { border-color: rgba(27,132,220,0.25); }
+  .detail-block:nth-child(2) .prompt-block { border-color: rgba(13,122,107,0.25); }
+  .detail-block:nth-child(3) .prompt-block { border-color: rgba(232,160,32,0.25); }
+  .detail-block:nth-child(4) .prompt-block { border-color: rgba(155,89,182,0.25); }
+
+  .prompt-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 10px;
+    background: rgba(155,89,182,0.1);
+    border-bottom: 1px solid rgba(155,89,182,0.18);
+  }
+
+  .detail-block:nth-child(3) .prompt-label { background: rgba(232,160,32,0.1); border-bottom-color: rgba(232,160,32,0.18); }
+
+  .prompt-label-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(155,89,182,0.9);
+  }
+
+  .detail-block:nth-child(3) .prompt-label-text { color: rgba(232,160,32,0.9); }
+
+  .copy-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgba(245,240,232,0.06);
+    border: 1px solid rgba(245,240,232,0.1);
+    color: var(--text-dim);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .copy-btn:hover {
+    background: rgba(245,240,232,0.1);
+    color: var(--cream);
+  }
+
+  .copy-btn.copied {
+    color: #4CAF82;
+    border-color: rgba(76,175,130,0.3);
+  }
+
+  .prompt-text {
+    padding: 12px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.73rem;
+    line-height: 1.6;
+    color: rgba(245,240,232,0.8);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  /* SC4 gets single-column layout for wider tip cards */
+  .tips-grid-wide {
+    padding: 28px 40px 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .tip-item-wide {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 18px;
+    border-radius: 10px;
+    background: rgba(245,240,232,0.03);
+    border: 1px solid rgba(245,240,232,0.06);
+    transition: background 0.2s;
+  }
+
+  .tip-item-wide:hover { background: rgba(245,240,232,0.06); }
+
+  .tip-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .tip-header .tip-icon { font-size: 1.1rem; flex-shrink: 0; }
+
+  .tip-header .tip-text strong {
+    display: block;
+    color: var(--cream);
+    font-weight: 600;
+    font-size: 0.84rem;
+    margin-bottom: 3px;
+  }
+
+  .tip-header .tip-text p {
+    font-size: 0.815rem;
+    line-height: 1.55;
+    color: var(--text-mid);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .hero { padding: 90px 24px 60px; }
+    .screencasts, .detail-sections { padding: 0 24px 80px; }
+    .grid { grid-template-columns: 1fr; }
+    .section-divider { padding: 0 24px; }
+    footer { padding: 24px; flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <span class="nav-owl">🦉</span>
+    <span class="nav-title">Think with <span>Claude</span></span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#sc1"><span class="num">1</span> Getting Started</a></li>
+    <li><a href="#sc2"><span class="num">2</span> Projects & Files</a></li>
+    <li><a href="#sc3"><span class="num">3</span> Personalize</a></li>
+    <li><a href="#sc4"><span class="num">4</span> Power Habits</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">TCEA Knowledge Booster · Technical Orientation</div>
+  <div class="hero-owl">🦉</div>
+  <p class="hero-eyebrow">Before You Begin</p>
+  <h1 class="hero-title">Think with <span class="accent">Claude</span></h1>
+  <p class="hero-subtitle">A Practical AI Series for K–12 Educators</p>
+  <p class="hero-desc">Four orientation screencasts that get you confident in Claude's interface before the Knowledge Booster series begins. Know the tool. Work the tool. Then go build something real.</p>
+
+  <div class="hero-meta">
+    <div class="meta-pill"><span class="icon">🎬</span> 4 Screencasts</div>
+    <div class="meta-pill"><span class="icon">⏱</span> ~40 Minutes Total</div>
+    <div class="meta-pill"><span class="icon">🏫</span> K–12 Educators</div>
+    <div class="meta-pill"><span class="icon">✅</span> No Experience Needed</div>
+  </div>
+
+  <div class="hero-scroll-cta">
+    <span>Explore Screencasts</span>
+    <div class="scroll-arrow">↓</div>
+  </div>
+</section>
+
+<!-- OVERVIEW GRID -->
+<div class="section-divider">
+  <div class="divider-line"></div>
+  <span class="divider-label">Screencast Overview</span>
+  <div class="divider-line"></div>
+</div>
+
+<section class="screencasts">
+  <div class="grid">
+
+    <!-- CARD 1 -->
+    <a class="card card-1" href="https://vimeo.com/1173323551/f6d335b7f4?share=copy&fl=sv&fe=ci" target="_blank" rel="noopener">
+      <div class="card-header">
+        <div class="card-num-block">
+          <span class="card-screencast-label">Screencast</span>
+          <span class="card-num">01</span>
+        </div>
+        <div class="card-icon-wrap">🖥️</div>
+      </div>
+      <div class="card-body">
+        <h2 class="card-title">Creating Your Account & Navigating Claude</h2>
+        <p class="card-desc">Get your account set up and take a confident tour of the Claude interface — from sidebar to message box — before writing a single prompt.</p>
+        <div class="chip-list">
+          <span class="chip">Account Setup</span>
+          <span class="chip">Interface Layout</span>
+          <span class="chip">First Conversation</span>
+          <span class="chip">Free vs Pro</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="card-duration"><div class="duration-dot"></div>9–10 minutes</div>
+        <span class="card-cta">Watch screencast →</span>
+      </div>
+    </a>
+
+    <!-- CARD 2 -->
+    <a class="card card-2" href="https://vimeo.com/1173323612/6200869573?share=copy&fl=sv&fe=ci" target="_blank" rel="noopener">
+      <div class="card-header">
+        <div class="card-num-block">
+          <span class="card-screencast-label">Screencast</span>
+          <span class="card-num">02</span>
+        </div>
+        <div class="card-icon-wrap">📁</div>
+      </div>
+      <div class="card-body">
+        <h2 class="card-title">Projects, File Uploads & Artifacts</h2>
+        <p class="card-desc">The three features that turn Claude from a chatbot into a professional workflow tool. Organize your work, bring your own documents, and build things worth keeping.</p>
+        <div class="chip-list">
+          <span class="chip">Projects</span>
+          <span class="chip">File Uploads</span>
+          <span class="chip">Artifacts Panel</span>
+          <span class="chip">Document Workflow</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="card-duration"><div class="duration-dot"></div>10–11 minutes</div>
+        <span class="card-cta">Watch screencast →</span>
+      </div>
+    </a>
+
+    <!-- CARD 3 -->
+    <a class="card card-3" href="https://vimeo.com/1173328613/97fddcfa46?share=copy&fl=sv&fe=ci" target="_blank" rel="noopener">
+      <div class="card-header">
+        <div class="card-num-block">
+          <span class="card-screencast-label">Screencast</span>
+          <span class="card-num">03</span>
+        </div>
+        <div class="card-icon-wrap">⚙️</div>
+      </div>
+      <div class="card-body">
+        <h2 class="card-title">Personalizing Claude, Model Selector & Mobile</h2>
+        <p class="card-desc">Tell Claude who you are once and it applies everywhere. Understand which model to use and when. Take Claude with you on any device.</p>
+        <div class="chip-list">
+          <span class="chip">Custom Instructions</span>
+          <span class="chip">Model Selector</span>
+          <span class="chip">Mobile App</span>
+          <span class="chip">Voice Input</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="card-duration"><div class="duration-dot"></div>8–10 minutes</div>
+        <span class="card-cta">Watch screencast →</span>
+      </div>
+    </a>
+
+    <!-- CARD 4 -->
+    <a class="card card-4" href="https://vimeo.com/1173338710/d62325c229?share=copy&fl=sv&fe=ci" target="_blank" rel="noopener">
+      <div class="card-header">
+        <div class="card-num-block">
+          <span class="card-screencast-label">Screencast</span>
+          <span class="card-num">04</span>
+        </div>
+        <div class="card-icon-wrap">⚡</div>
+      </div>
+      <div class="card-body">
+        <h2 class="card-title">Power Habits — Working Smarter with Claude</h2>
+        <p class="card-desc">The habits experienced Claude users build in weeks one and two — model selection, context management, project organization, and professional-grade collaboration.</p>
+        <div class="chip-list">
+          <span class="chip">Context Windows</span>
+          <span class="chip">Session Summaries</span>
+          <span class="chip">Julian Date Naming</span>
+          <span class="chip">Role Assignment</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="card-duration"><div class="duration-dot"></div>11–13 minutes</div>
+        <span class="card-cta">Watch screencast →</span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- DETAIL SECTIONS -->
+<div class="section-divider">
+  <div class="divider-line"></div>
+  <span class="divider-label">What You'll Learn</span>
+  <div class="divider-line"></div>
+</div>
+
+<section class="detail-sections">
+
+  <!-- SC 1 -->
+  <div id="sc1" class="detail-block anchor-target">
+    <div class="detail-header">
+      <div class="detail-num-badge">1</div>
+      <div class="detail-header-text">
+        <h3>Creating Your Account & Navigating Claude</h3>
+        <p>9–10 min · Account · Interface · First Steps</p>
+      </div>
+    </div>
+    <div class="tips-grid">
+      <div class="tip-item"><span class="tip-icon">🌐</span><div class="tip-text"><strong>Getting to Claude</strong>Open your browser and go to claude.ai — Chrome, Firefox, Edge, and Safari all work.</div></div>
+      <div class="tip-item"><span class="tip-icon">🔑</span><div class="tip-text"><strong>Sign Up or Sign In</strong>Create your account with Google or email. Google Workspace users: sign-in takes under a minute.</div></div>
+      <div class="tip-item"><span class="tip-icon">🗂️</span><div class="tip-text"><strong>The Sidebar</strong>New Chat button, conversation history, Projects, and your account settings — all in one panel.</div></div>
+      <div class="tip-item"><span class="tip-icon">💬</span><div class="tip-text"><strong>The Message Box</strong>Where your prompts live. Supports typing, file attachments, and voice input on some devices.</div></div>
+      <div class="tip-item"><span class="tip-icon">✍️</span><div class="tip-text"><strong>Your First Message</strong>Try: "Tell me what you are in two sentences." Watch responses stream in real time.</div></div>
+      <div class="tip-item"><span class="tip-icon">💡</span><div class="tip-text"><strong>Free vs. Pro</strong>The free plan is enough to complete this series. Pro unlocks higher limits and all Claude models.</div></div>
+    </div>
+  </div>
+
+  <!-- SC 2 -->
+  <div id="sc2" class="detail-block anchor-target">
+    <div class="detail-header">
+      <div class="detail-num-badge">2</div>
+      <div class="detail-header-text">
+        <h3>Projects, File Uploads & Artifacts</h3>
+        <p>10–11 min · Organization · Documents · Output Workspace</p>
+      </div>
+    </div>
+    <div class="tips-grid">
+      <div class="tip-item"><span class="tip-icon">📂</span><div class="tip-text"><strong>Projects as Folders</strong>Group related conversations together and give Claude standing context that applies to all of them.</div></div>
+      <div class="tip-item"><span class="tip-icon">📝</span><div class="tip-text"><strong>Project Instructions</strong>Tell Claude your grade level, school context, and preferences once — it remembers them automatically.</div></div>
+      <div class="tip-item"><span class="tip-icon">📎</span><div class="tip-text"><strong>File Uploads</strong>Upload PDFs, Word docs, images, and CSVs directly into your conversation for Claude to read and respond to.</div></div>
+      <div class="tip-item"><span class="tip-icon">🔒</span><div class="tip-text"><strong>Privacy First</strong>Claude does not retain uploaded files after your session. Never upload student PII.</div></div>
+      <div class="tip-item"><span class="tip-icon">🖼️</span><div class="tip-text"><strong>Artifacts Panel</strong>Long, formatted outputs — lesson plans, rubrics, letters — open in a clean side panel for easy review and copying.</div></div>
+      <div class="tip-item"><span class="tip-icon">🔄</span><div class="tip-text"><strong>Revising Artifacts</strong>Keep the Artifact open and ask for specific changes. Claude updates in place while the conversation continues.</div></div>
+    </div>
+  </div>
+
+  <!-- SC 3 -->
+  <div id="sc3" class="detail-block anchor-target">
+    <div class="detail-header">
+      <div class="detail-num-badge">3</div>
+      <div class="detail-header-text">
+        <h3>Personalizing Claude, Model Selector & Mobile</h3>
+        <p>8–10 min · Settings · Models · Mobile App</p>
+      </div>
+    </div>
+    <div class="tips-grid">
+      <div class="tip-item"><span class="tip-icon">👤</span><div class="tip-text"><strong>Custom Instructions</strong>Settings → Profile. Tell Claude your role, school, student demographics, and preferred response style — once, forever.</div></div>
+      <div class="tip-item" style="flex-direction:column;gap:10px;">
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <span class="tip-icon">🔧</span>
+          <div class="tip-text"><strong>What to Write in Custom Instructions</strong>One or two sentences covering your role, school context, students, and preferred response style.</div>
+        </div>
+        <div class="prompt-block">
+          <div class="prompt-label">
+            <span class="prompt-label-text">Example · Custom Instructions</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">⧉ Copy</button>
+          </div>
+          <div class="prompt-text">I am a 7th grade science teacher at a Title I middle school. My students are 30% English Language Learners. Keep responses practical and concise. Always include differentiation suggestions for ELL students and avoid jargon.</div>
+        </div>
+      </div>
+      <div class="tip-item"><span class="tip-icon">🧠</span><div class="tip-text"><strong>Model Selector</strong>Haiku → quick tasks. Sonnet → everyday work. Opus → complex reasoning and long documents.</div></div>
+      <div class="tip-item"><span class="tip-icon">✅</span><div class="tip-text"><strong>Sonnet for This Series</strong>For everything in this Knowledge Booster, Claude Sonnet is the right choice.</div></div>
+      <div class="tip-item"><span class="tip-icon">📱</span><div class="tip-text"><strong>Claude on Mobile</strong>Available on iOS and Android. Download the Anthropic app, sign in with your same account.</div></div>
+      <div class="tip-item"><span class="tip-icon">🎙️</span><div class="tip-text"><strong>Voice Input on Mobile</strong>Tap the microphone on your keyboard to speak your prompts — great for on-the-go quick questions.</div></div>
+    </div>
+  </div>
+
+  <!-- SC 4 -->
+  <div id="sc4" class="detail-block anchor-target">
+    <div class="detail-header">
+      <div class="detail-num-badge">4</div>
+      <div class="detail-header-text">
+        <h3>Power Habits — Working Smarter with Claude</h3>
+        <p>11–13 min · Context · Workflow · Collaboration · Prompts you can use today</p>
+      </div>
+    </div>
+    <div class="tips-grid-wide">
+
+      <!-- Tip: Right-Size Model -->
+      <div class="tip-item-wide">
+        <div class="tip-header">
+          <span class="tip-icon">⚖️</span>
+          <div class="tip-text">
+            <strong>Right-Size Your Model</strong>
+            <p>Sonnet handles 95% of educator tasks. Use Haiku for quick rewrites and simple lookups. Reserve Opus for genuinely complex reasoning — it costs more of your usage quota.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tip: Context Window -->
+      <div class="tip-item-wide">
+        <div class="tip-header">
+          <span class="tip-icon">📏</span>
+          <div class="tip-text">
+            <strong>The Context Window</strong>
+            <p>Claude re-reads your entire conversation every single time you send a message. Long threads get slow and start to drift. Keep conversations focused on one task.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tip: Summarize & Continue -->
+      <div class="tip-item-wide">
+        <div class="tip-header">
+          <span class="tip-icon">🔁</span>
+          <div class="tip-text">
+            <strong>Summarize & Continue</strong>
+            <p>When you feel drag — responses getting less precise or slower — stop and use this prompt. Open a new chat, paste the summary, keep going at full speed.</p>
+          </div>
+        </div>
+        <div class="prompt-block">
+          <div class="prompt-label">
+            <span class="prompt-label-text">Prompt · Quick Summary</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">⧉ Copy</button>
+          </div>
+          <div class="prompt-text">Summarize where we started, what we've accomplished, and what still needs to be done. Keep it under 200 words.</div>
+        </div>
+      </div>
+
+      <!-- Tip: Deep Re-Prompt -->
+      <div class="tip-item-wide">
+        <div class="tip-header">
+          <span class="tip-icon">⚡</span>
+          <div class="tip-text">
+            <strong>The Deep Re-Prompt Move</strong>
+            <p>The advanced version. Claude summarizes your progress AND generates the opening prompt for your next session. One step — zero lost context, ready to paste and go.</p>
+          </div>
+        </div>
+        <div class="prompt-block">
+          <div class="prompt-label">
+            <span class="prompt-label-text">Prompt · Deep Summary + Re-Prompt</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">⧉ Copy</button>
+          </div>
+          <div class="prompt-text">Summarize where we started this chat, where we currently are, and where we still need to go. Then turn that summary into a prompt I can use to start the next conversation and continue this work seamlessly.</div>
+        </div>
+      </div>
+
+      <!-- Tip: Session Summary -->
+      <div class="tip-item-wide">
+        <div class="tip-header">
+          <span class="tip-icon">📋</span>
+          <div class="tip-text">
+            <strong>Session Summary — Do This Every Time</strong>
+            <p>End every productive session with a Markdown summary. Drop it in at the start of your next session before asking anything else. Claude never loses the thread. Do this religiously, whether there are issues or not.</p>
+          </div>
+        </div>
+        <div class="prompt-block">
+          <div class="prompt-label">
+            <span class="prompt-label-text">Prompt · Session Summary</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">⧉ Copy</button>
+          </div>
+          <div class="prompt-text">Generate a Markdown session summary covering: what we set out to do, what we accomplished, key decisions made, and what comes next. I'll save this and drop it in at the start of our next session.</div>
+        </div>
+        <div class="prompt-block">
+          <div class="prompt-label">
+            <span class="prompt-label-text">Prompt · Auto-Remind (add to Project Instructions)</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">⧉ Copy</button>
+          </div>
+          <div class="prompt-text">At a natural stopping point in any session, remind me to generate a Markdown session summary before we close out.</div>
+        </div>
+      </div>
+
+      <!-- Tip: Julian Date Naming -->
+      <div class="tip-item-wide">
+        <div class="tip-header">
+          <span class="tip-icon">📅</span>
+          <div class="tip-text">
+            <strong>Julian Date Naming for Conversations</strong>
+            <p>Name conversations with a Julian date + one or two word descriptor. The Julian date is the year + the day number of the year (e.g., day 67 of 2026 = 26067). Your project log becomes chronological and searchable.</p>
+          </div>
+        </div>
+        <div class="prompt-block">
+          <div class="prompt-label">
+            <span class="prompt-label-text">Naming Pattern · Examples</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">⧉ Copy</button>
+          </div>
+          <div class="prompt-text">26067-Unit-Overview
+26071-Assessment-Draft
+26085-Parent-Letter
+26092-Rubric-Final</div>
+        </div>
+      </div>
+
+      <!-- Tip: One Task Per Conversation -->
+      <div class="tip-item-wide">
+        <div class="tip-header">
+          <span class="tip-icon">🗃️</span>
+          <div class="tip-text">
+            <strong>One Task per Conversation</strong>
+            <p>Create a Project, then tackle each task in its own focused thread. Lesson plan in one chat, assessment in another, family letter in a third. Organized, fast, and easy to revisit.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tip: Working Agreement -->
+      <div class="tip-item-wide">
+        <div class="tip-header">
+          <span class="tip-icon">🤝</span>
+          <div class="tip-text">
+            <strong>Set a Working Agreement</strong>
+            <p>Open complex sessions by telling Claude your name, experience level, preferred pace, and how you want to collaborate. Claude takes these agreements seriously — every response that follows is better calibrated.</p>
+          </div>
+        </div>
+        <div class="prompt-block">
+          <div class="prompt-label">
+            <span class="prompt-label-text">Prompt · Working Agreement (adapt to your context)</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">⧉ Copy</button>
+          </div>
+          <div class="prompt-text">My name is [your name]. I want to [describe your goal]. I have [describe your experience level — e.g., "some experience with backward design but need a lot of help with the assessment piece"].
+
+Show me step by step, but don't lay it all out at once. Go section by section. Lead and guide me — don't just generate the content. First discuss, align, and get my sign-off before we move forward. Be honest, direct, and supportive.</div>
+        </div>
+      </div>
+
+      <!-- Tip: Assign Roles -->
+      <div class="tip-item-wide">
+        <div class="tip-header">
+          <span class="tip-icon">🎭</span>
+          <div class="tip-text">
+            <strong>Assign Roles by Stage of Work</strong>
+            <p>Each stage of a project needs a different lens. Assign Claude a role that matches what the work requires right now. Research assistant → writing partner → editor → evaluator. Quality compounds at every stage.</p>
+          </div>
+        </div>
+        <div class="prompt-block">
+          <div class="prompt-label">
+            <span class="prompt-label-text">Prompt · Role Assignment (swap role to fit your stage)</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">⧉ Copy</button>
+          </div>
+          <div class="prompt-text">For this session, you are acting as a [developmental editor / curriculum reviewer / student / acquisitions editor — choose one]. Your job is to [describe the specific lens — e.g., "evaluate the structure and argument of each section, not the sentence-level writing"]. Be direct about what isn't working.</div>
+        </div>
+      </div>
+
+      <!-- Tip: anthropic.com/learn -->
+      <div class="tip-item-wide">
+        <div class="tip-header">
+          <span class="tip-icon">📚</span>
+          <div class="tip-text">
+            <strong>anthropic.com/learn</strong>
+            <p>Official guides, tutorials, and prompt examples from the team that built Claude. When you have a question about what Claude can do or how to get better results, this is your most reliable first stop. Free, accurate, and updated as Claude improves.</p>
+          </div>
+        </div>
+        <div class="prompt-block">
+          <div class="prompt-label">
+            <span class="prompt-label-text">Resource URL</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">⧉ Copy</button>
+          </div>
+          <div class="prompt-text">https://www.anthropic.com/learn</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">🦉 &nbsp;<strong>Think with Claude</strong> &nbsp;·&nbsp; A Practical AI Series for K–12 Educators &nbsp;·&nbsp; TCEA Knowledge Booster</div>
+  <div class="footer-credit">200 Minutes · 2.0 CPE Credits · Presented by TCEA</div>
+</footer>
+
+<script>
+  // Smooth highlight on anchor arrival
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', e => {
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        target.style.transition = 'box-shadow 0.4s ease';
+        target.style.boxShadow = '0 0 0 2px rgba(232,160,32,0.5), 0 24px 64px rgba(0,0,0,0.4)';
+        setTimeout(() => { target.style.boxShadow = ''; }, 1800);
+      }
+    });
+  });
+
+  // Staggered card entrance animation
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '0';
+        entry.target.style.transform = 'translateY(24px)';
+        setTimeout(() => {
+          entry.target.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }, 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.card, .detail-block').forEach(el => observer.observe(el));
+
+  // Copy prompt text to clipboard
+  function copyPrompt(btn) {
+    const text = btn.closest('.prompt-block').querySelector('.prompt-text').innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '✓ Copied';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = '⧉ Copy';
+        btn.classList.remove('copied');
+      }, 1800);
+    });
+  }
+</script>
+
+</body>
+</html>
