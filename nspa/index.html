@@ -1,1 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NSPA AI Training Series | Resource Index</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --teal:        #237683;
+      --teal-light:  #2d8f9e;
+      --teal-pale:   #e6f2f4;
+      --gold:        #FDB414;
+      --gold-text:   #b08a00;
+      --gold-pale:   #fff6d6;
+      --gold-border: #e8c84a;
+      --navy:        #1a2e4a;
+      --navy-dark:   #111f33;
+      --bg:          #f4f6f7;
+      --white:       #ffffff;
+      --border:      #d8dde0;
+      --text:        #1e2a35;
+      --text-light:  #4a5568;
+      --success:     #27695a;
+      --success-pale:#eaf4f0;
+      --muted:       #6b7280;
+    }
 
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Source Sans 3', 'Calibri', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      font-size: 16px;
+    }
+
+    /* ── TOP HEADER ── */
+    .site-header {
+      background: var(--teal);
+      color: white;
+    }
+
+    .header-top {
+      background: rgba(0,0,0,.18);
+      padding: 7px 40px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 2px solid var(--gold);
+    }
+
+    .nspa-badge {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .header-divider { color: var(--gold); opacity: .6; }
+
+    .series-label {
+      font-size: 12px;
+      color: rgba(255,255,255,.75);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .header-main {
+      padding: 22px 40px 18px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .header-main h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: white;
+      line-height: 1.2;
+    }
+
+    .header-main .subtitle {
+      font-size: 13.5px;
+      color: rgba(255,255,255,.82);
+      margin-top: 4px;
+    }
+
+    .count-badge {
+      background: var(--gold);
+      color: var(--navy-dark);
+      font-weight: 700;
+      font-size: 13px;
+      padding: 6px 16px;
+      border-radius: 20px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* ── STICKY NAV ── */
+    #main-menu {
+      background: var(--navy-dark);
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      box-shadow: 0 2px 10px rgba(0,0,0,.35);
+    }
+
+    .nav-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      overflow-x: auto;
+      scrollbar-width: none;
+      gap: 0;
+    }
+
+    .nav-inner::-webkit-scrollbar { display: none; }
+
+    .nav-inner a {
+      color: rgba(255,255,255,.78);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 12px 16px;
+      white-space: nowrap;
+      border-bottom: 3px solid transparent;
+      transition: color .15s, border-color .15s, background .15s;
+      display: block;
+    }
+
+    .nav-inner a:hover {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+      background: rgba(255,255,255,.05);
+    }
+
+    .nav-inner a.nav-home {
+      color: var(--gold);
+      font-weight: 700;
+      letter-spacing: .5px;
+      border-right: 1px solid rgba(255,255,255,.12);
+      padding-right: 18px;
+      margin-right: 4px;
+    }
+
+    /* ── PREREQ BANNER ── */
+    .prereq-banner {
+      background: var(--navy);
+      color: rgba(255,255,255,.88);
+      padding: 13px 40px;
+      font-size: 13.5px;
+      line-height: 1.6;
+      border-top: 3px solid var(--gold);
+    }
+
+    .prereq-banner strong { color: var(--gold); }
+
+    /* ── MAIN ── */
+    .page-wrap {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 48px 40px 80px;
+    }
+
+    /* scroll offset for anchor targets below sticky nav */
+    .section-anchor {
+      display: block;
+      height: 0;
+      visibility: hidden;
+      /* sticky nav ~42px + a little breathing room */
+      margin-top: -58px;
+      padding-top: 58px;
+    }
+
+    /* ── SESSION BLOCK ── */
+    .session-block { margin-bottom: 56px; }
+
+    .session-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 22px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--teal);
+    }
+
+    .session-number {
+      background: var(--teal);
+      color: white;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 5px 13px;
+      border-radius: 4px;
+      white-space: nowrap;
+      letter-spacing: .5px;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+
+    .session-meta { flex: 1; }
+
+    .session-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.3;
+    }
+
+    .session-desc {
+      font-size: 13.5px;
+      color: var(--text-light);
+      margin-top: 4px;
+    }
+
+    .avail-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-top: 8px;
+    }
+
+    .avail-live { background: var(--success-pale); color: var(--success); border: 1px solid #a7d9cd; }
+    .avail-soon { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+
+    /* ── RETURN TO MENU LINK ── */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--teal);
+      text-decoration: none;
+      padding: 5px 12px;
+      border: 1px solid #b2d9df;
+      border-radius: 20px;
+      background: var(--teal-pale);
+      margin-top: 28px;
+      transition: background .15s, color .15s;
+    }
+
+    .back-link:hover { background: var(--teal); color: white; border-color: var(--teal); }
+
+    .back-link::before { content: '\2191'; font-size: 13px; }
+
+    /* ── SUBSECTION LABEL ── */
+    .subsection-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--gold-text);
+      background: var(--gold-pale);
+      border-left: 3px solid var(--gold);
+      padding: 5px 12px;
+      margin: 26px 0 12px;
+      border-radius: 0 4px 4px 0;
+      display: inline-block;
+    }
+
+    /* ── CARD GRID ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(295px, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px 20px;
+      text-decoration: none;
+      color: inherit;
+      transition: box-shadow .2s, border-color .2s, transform .15s;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .card:hover {
+      box-shadow: 0 4px 16px rgba(35,118,131,.15);
+      border-color: var(--teal-light);
+      transform: translateY(-2px);
+    }
+
+    .card-tag {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.1px;
+      padding: 3px 8px;
+      border-radius: 20px;
+      align-self: flex-start;
+      color: var(--teal);
+      background: var(--teal-pale);
+    }
+
+    .card-tag.gold  { color: var(--gold-text); background: var(--gold-pale); }
+    .card-tag.navy  { color: white; background: var(--navy); }
+
+    .card h3 {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.35;
+    }
+
+    .card p {
+      font-size: 13px;
+      color: var(--text-light);
+      line-height: 1.55;
+      flex: 1;
+    }
+
+    .card p a { color: var(--teal); }
+
+    .card-arrow {
+      font-size: 12.5px;
+      color: var(--teal);
+      font-weight: 600;
+      margin-top: 4px;
+      align-self: flex-end;
+    }
+
+    /* ── LINK PILLS ── */
+    .link-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 8px 0 4px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 20px;
+      text-decoration: none;
+      transition: background .15s, color .15s;
+    }
+
+    .pill-teal  { color: var(--teal); background: var(--teal-pale); border: 1px solid #b2d9df; }
+    .pill-teal:hover  { background: var(--teal); color: white; border-color: var(--teal); }
+
+    .pill-gold  { color: var(--gold-text); background: var(--gold-pale); border: 1px solid var(--gold-border); }
+    .pill-gold:hover  { background: var(--gold); color: var(--navy-dark); border-color: var(--gold); }
+
+    .pill-navy  { color: white; background: var(--navy); border: 1px solid var(--navy); }
+    .pill-navy:hover  { background: var(--navy-dark); border-color: var(--navy-dark); }
+
+    /* ── INFO BOX ── */
+    .info-box {
+      background: var(--teal-pale);
+      border-left: 4px solid var(--teal);
+      border-radius: 0 8px 8px 0;
+      padding: 13px 16px;
+      font-size: 13.5px;
+      color: var(--text);
+      margin: 8px 0 14px;
+    }
+
+    .info-box strong { color: var(--teal); }
+
+    /* ── RESOURCE LIST GROUP ── */
+    .resource-group {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px 20px;
+      margin-bottom: 14px;
+    }
+
+    .resource-group h4 {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--teal);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .resource-group ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .resource-group li {
+      font-size: 13.5px;
+      color: var(--text-light);
+      padding-left: 16px;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .resource-group li::before {
+      content: '\2192';
+      position: absolute;
+      left: 0;
+      color: var(--teal);
+      font-weight: 700;
+    }
+
+    .resource-group a { color: var(--teal); font-weight: 600; text-decoration: none; }
+    .resource-group a:hover { text-decoration: underline; }
+    .resource-group .note { font-size: 12px; color: var(--muted); display: block; margin-top: 2px; }
+
+    .resource-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    /* ── CHATBOT GRID ── */
+    .chatbot-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+
+    .chatbot-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      text-decoration: none;
+      color: inherit;
+      transition: box-shadow .15s, border-color .15s;
+    }
+
+    .chatbot-card:hover { border-color: var(--teal-light); box-shadow: 0 2px 10px rgba(35,118,131,.12); }
+
+    .chatbot-name { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 5px; }
+    .chatbot-tiers { font-size: 12px; color: var(--text-light); line-height: 1.6; }
+    .tier-safe   { color: var(--success); font-weight: 700; }
+    .tier-caution { color: #92400e; font-weight: 700; }
+
+    /* ── SERIES EXTRAS ── */
+    .extras-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+    }
+
+    .extras-group {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px 20px;
+    }
+
+    .extras-group h4 {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.3px;
+      color: var(--teal);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .extras-group ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .extras-group li {
+      font-size: 13.5px;
+      color: var(--text-light);
+      padding-left: 16px;
+      position: relative;
+      line-height: 1.45;
+    }
+
+    .extras-group li::before { content: '\2192'; position: absolute; left: 0; color: var(--teal); font-weight: 700; }
+    .extras-group a { color: var(--teal); font-weight: 600; text-decoration: none; }
+    .extras-group a:hover { text-decoration: underline; }
+    .extras-group .note { font-size: 11.5px; color: var(--muted); display: block; margin-top: 2px; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 16px 40px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-light);
+      background: var(--white);
+    }
+
+    footer a { color: var(--teal); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .header-main, .prereq-banner { padding: 16px 20px; }
+      .header-top { padding: 7px 20px; }
+      .header-main { flex-direction: column; align-items: flex-start; }
+      .nav-inner { padding: 0 16px; }
+      .page-wrap { padding: 24px 16px 60px; }
+      .session-header { flex-direction: column; }
+      .card-grid, .extras-grid, .resource-two-col, .chatbot-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── TOP HEADER ── -->
+<header class="site-header">
+  <div class="header-top">
+    <span class="nspa-badge">NSPA</span>
+    <span class="header-divider">|</span>
+    <span class="series-label">AI Training Series</span>
+  </div>
+  <div class="header-main">
+    <div>
+      <h1>AI Training Series &mdash; Resource Index</h1>
+      <p class="subtitle">All session web resources in one place. Select any item to open it.</p>
+    </div>
+    <div class="count-badge">4 Sessions &nbsp;|&nbsp; 13 Resources</div>
+  </div>
+</header>
+
+<!-- ── STICKY NAV ── -->
+<nav id="main-menu" aria-label="Session navigation">
+  <div class="nav-inner">
+    <a href="#main-menu" class="nav-home">&#9776; Menu</a>
+    <a href="#session1">Session 1 &mdash; Ethics</a>
+    <a href="#session2">Session 2 &mdash; Applications</a>
+    <a href="#session3">Session 3 &mdash; Automating</a>
+    <a href="#session4">Session 4 &mdash; Marketing</a>
+    <a href="#series">Series Resources</a>
+  </div>
+</nav>
+
+<!-- ── PREREQ BANNER ── -->
+<div class="prereq-banner">
+  <strong>Prerequisites:</strong> A paid Gen AI account is strongly recommended. NSPA recommends <strong>ChatGPT</strong>, but Google Gemini Pro, Claude Pro, or MS Copilot (paid) all work well. Use free versions at your own risk. <strong>Never share confidential, PII, FERPA, or HIPAA data via consumer chatbots</strong>, especially free ones. Choose a premium plan with enhanced data protection.
+</div>
+
+<main class="page-wrap">
+
+  <!-- ════════════════════ SESSION 1 ════════════════════ -->
+  <span id="session1" class="section-anchor"></span>
+  <section class="session-block">
+    <div class="session-header">
+      <span class="session-number">Session 1</span>
+      <div class="session-meta">
+        <div class="session-title">The Ethics of AI Use in Scholarships and Data Protection</div>
+        <div class="session-desc">Foundations of responsible AI: what AI can and cannot do, equity risks, data protection, and governing AI use in scholarship programs.</div>
+        <span class="avail-badge avail-live">&#10003; Available</span>
+      </div>
+    </div>
+
+    <span class="subsection-label">Pre-Assessment</span>
+    <div class="card-grid">
+      <a class="card" href="ai_fluency_levels.html" target="_blank">
+        <span class="card-tag gold">Self-Assessment</span>
+        <h3>Scholarship Provider AI Fluency Self-Assessment</h3>
+        <p>A 5-question interactive quiz scoring participants across four levels: Disconnected, Foundational, Integrated, and Strategic. Best used as an opening activity before any session.</p>
+        <span class="card-arrow">Open &rarr;</span>
+      </a>
+    </div>
+
+    <span class="subsection-label">Session Links</span>
+    <div class="link-row">
+      <a class="pill pill-gold" href="https://mguhlin.org/2025/08/28/nspa1/" target="_blank">&#9654;&nbsp; Watch PreShow &amp; Get Slides</a>
+    </div>
+
+    <a href="#main-menu" class="back-link">Back to Menu</a>
+  </section>
+
+  <!-- ════════════════════ SESSION 2 ════════════════════ -->
+  <span id="session2" class="section-anchor"></span>
+  <section class="session-block">
+    <div class="session-header">
+      <span class="session-number">Session 2</span>
+      <div class="session-meta">
+        <div class="session-title">Creating and Revising Scholarship Applications with AI</div>
+        <div class="session-desc">Beginner-focused session on using Gen AI to draft, revise, and refine scholarship applications: essay prompts, eligibility criteria, FAQs, and scoring rubrics. Includes hands-on activities and a badge/certificate option.</div>
+        <span class="avail-badge avail-live">&#10003; Available</span>
+      </div>
+    </div>
+
+    <span class="subsection-label">Session Links</span>
+    <div class="link-row">
+      <a class="pill pill-gold" href="https://drive.google.com/file/d/1a1PFTjvHQ9jV84VjSlQ84L8r4pIJkfnO/view?usp=sharing" target="_blank">&#9654;&nbsp; Watch PreShow</a>
+      <a class="pill pill-teal" href="https://drive.google.com/file/d/1riazvg9UhYLvi8DBrcbE1Aflvil9pv8H/view?usp=sharing" target="_blank">&#128196;&nbsp; PreShow Slides (PDF)</a>
+      <a class="pill pill-teal" href="https://drive.google.com/file/d/1xQLXylvdtJVG775282uvm2uYgJnO609z/view?usp=drive_link" target="_blank">&#128196;&nbsp; Session Slide Deck (PDF)</a>
+      <a class="pill pill-navy" href="https://mguhlin.org/2025/11/13/nspa2/" target="_blank">&#127760;&nbsp; Full Session Page</a>
+    </div>
+
+    <span class="subsection-label">AI in 5 Series &mdash; Tool Tutorials</span>
+    <div class="info-box">
+      <strong>New to Gen AI?</strong> Watch the AI in 5 Series for your tool of choice before this session. Use the password <strong>nspa</strong> to access.
+    </div>
+    <div class="link-row">
+      <a class="pill pill-teal" href="https://mguhlin.org/2026/01/06/nspa-ai-in-5-boodlebox-unlimited/" target="_blank">BoodleBox Unlimited</a>
+      <a class="pill pill-teal" href="https://mguhlin.org/2026/01/07/nspa-ai-in-5-for-chatgpt/" target="_blank">ChatGPT</a>
+      <a class="pill pill-teal" href="https://mguhlin.org/2026/01/08/nspa-ai-in-5-gemini/" target="_blank">Google Gemini / NotebookLM</a>
+    </div>
+
+    <span class="subsection-label">Session Activities</span>
+    <div class="card-grid">
+
+      <a class="card" href="https://chatgpt.com/g/g-679f825484a8819181879069a591e4e6-fun-personality-quizzes-for-educators" target="_blank">
+        <span class="card-tag gold">Pre-Event</span>
+        <h3>Fun Personality Quiz</h3>
+        <p>Discover which Winnie the Pooh, Smurf, or Looney Tunes character you are. Share results in Zoom chat before the session starts. Requires a free ChatGPT account.</p>
+        <span class="card-arrow">Open &rarr;</span>
+      </a>
+
+      <a class="card" href="https://docs.google.com/document/d/1_N2w6jVF0bcnMUv4RlZIHyTefWHA4AxPOnT7YVZRMto/copy?usp=sharing" target="_blank">
+        <span class="card-tag">Activity 1</span>
+        <h3>AI Prompt Builder Worksheet</h3>
+        <p>Guided worksheet for building effective prompts for application materials and scoring guides. Also available as <a href="https://docs.google.com/document/d/1AJcT0Wz10ZREEOyN9WYQO5j-JmPSHd02/edit?usp=sharing&ouid=105261645514405001534&rtpof=true&sd=true" target="_blank">MS Word (docx)</a>.</p>
+        <span class="card-arrow">Open in Google Docs &rarr;</span>
+      </a>
+
+      <a class="card" href="https://drive.google.com/file/d/1wcVB1pxbnZTs7yd3_MOLhW3RS-QBOVqz/view?usp=sharing" target="_blank">
+        <span class="card-tag">Activity 2</span>
+        <h3>RAG with ChatGPT</h3>
+        <p>Reusable RAG prompt template, instructions file, and four knowledge source documents for building a scholarship-specific chatbot context.</p>
+        <span class="card-arrow">Open RAG Template (PDF) &rarr;</span>
+      </a>
+
+      <a class="card" href="https://drive.google.com/file/d/1SN17qHiZAXBi3JakwBtKjIxnyKKN0B2o/view?usp=sharing" target="_blank">
+        <span class="card-tag">Activity 3</span>
+        <h3>RAG with Google Gemini Gem &mdash; Rubric Assessment</h3>
+        <p>Instructions and a Meta-Rubric for Assessing Rubrics (MRAR) source document for a Gemini Gem that evaluates scholarship rubric quality.</p>
+        <span class="card-arrow">Open Instructions &rarr;</span>
+      </a>
+
+    </div>
+
+    <span class="subsection-label">Printable Materials</span>
+    <div class="resource-group">
+      <h4>PDFs &amp; Worksheets</h4>
+      <ul>
+        <li><a href="https://drive.google.com/file/d/1y6qj13KlphCQwgWG7xBzixPEeCwAvkjR/view?usp=sharing" target="_blank">Context and Prompt Engineering Workbook</a></li>
+        <li><a href="https://drive.google.com/file/d/1tJTx8qir0_ER3nvYSQbBQNzoGuxP_T4E/view?usp=sharing" target="_blank">Prompting Framework and Library for Scholarship Application Design</a></li>
+        <li><a href="https://drive.google.com/file/d/19VW09NYz8mcrx80-QyZrYu73tqsgeLBk/view?usp=sharing" target="_blank">Mission Alignment Checklist</a></li>
+        <li><a href="https://drive.google.com/file/d/1kZj6rmdbmTH9QeR56ehozy0d2xcytzFs/view?usp=sharing" target="_blank">AI Tools Quick Selection Guide</a></li>
+        <li><a href="https://drive.google.com/file/d/1ea17NxbfSypvqYLuOxnoLsTUWlEj7ADf/view?usp=sharing" target="_blank">Bias Detection Framework for Application Materials</a></li>
+        <li><a href="https://drive.google.com/file/d/145y8v-_vyjHFoITYTZPOzNN79Mzn-XTY/view?usp=sharing" target="_blank">Quick Start Guide: Your First AI-Generated Essay Prompt</a></li>
+        <li><a href="https://drive.google.com/file/d/1PaUobzwpDX4SHQuKExEltTztr9T4rXsM/view?usp=sharing" target="_blank">Equity Language Reference Sheet</a></li>
+        <li><a href="https://docs.google.com/document/d/1PrsQmfpnKvgSX5SQzC6nNasvUQjPJVfc3iGWO-N8IwY/edit?usp=sharing" target="_blank">MPAR &mdash; Meta-Prompt Analysis Rubric</a> <span style="font-size:12px;color:var(--muted);">(also as <a href="https://drive.google.com/file/d/1FzM6hfsWbwtPCyYakX-zfkGSRMMwniS/view?usp=sharing" target="_blank">PDF</a>)</span></li>
+      </ul>
+    </div>
+
+    <span class="subsection-label">Tutorial Videos</span>
+    <div class="resource-two-col">
+      <div class="resource-group">
+        <h4>Images &amp; Diagrams</h4>
+        <ul>
+          <li><a href="https://drive.google.com/file/d/1FFunsVDUGhqYybw-gWucsW3PTrVXdvQS/view?usp=sharing" target="_blank">How to use Canva to fix AI-generated images</a><span class="note">6-minute video</span></li>
+          <li><a href="https://drive.google.com/file/d/1UnPdSLGD9c0xiAHKQS3OnDWJvDxPkAOS/view?usp=sharing" target="_blank">Generate MXGraph XML diagrams with Gen AI</a></li>
+        </ul>
+      </div>
+      <div class="resource-group">
+        <h4>Creating Custom GPTs / Bots / Gems</h4>
+        <ul>
+          <li><a href="https://drive.google.com/file/d/1oSGg6OdrgDKEYYHWe15svuFTbeQJcHkr/view?usp=sharing" target="_blank">Overview of ChatGPT Projects</a></li>
+          <li><a href="https://youtu.be/siLJelISyqE" target="_blank">How to create a BoodleBox bot</a><span class="note">Requires BoodleBox Unlimited</span></li>
+          <li><a href="https://youtu.be/ssSoUCizCgs" target="_blank">How to create a ChatGPT Custom GPT</a><span class="note">Requires Plus or higher</span></li>
+          <li><a href="https://youtu.be/tfdNeV_3lTo" target="_blank">How to create a Gemini Gem</a><span class="note">Requires Pro or better</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <span class="subsection-label">Tools</span>
+    <div class="card-grid">
+      <a class="card" href="https://chatgpt.com/g/g-6786871119908191a907d987e3e8eeae-scholarship-navigator" target="_blank">
+        <span class="card-tag gold">Custom GPT</span>
+        <h3>Scholarship Navigator</h3>
+        <p>A custom ChatGPT tool for drafting applicant guides, FAQs, scoring rubrics, thank-you letters, and impact summaries, with built-in prompting tips.</p>
+        <span class="card-arrow">Open &rarr;</span>
+      </a>
+      <a class="card" href="https://drive.google.com/file/d/1-yQYf5jVY3XafrbII303piUhfg3TeUqf/view?usp=sharing" target="_blank">
+        <span class="card-tag">Windows Tool</span>
+        <h3>PDF to Markdown with File Merge</h3>
+        <p>Converts PDFs, TXT, and Markdown files into a single merged file for AI knowledge banks. Reduces upload count and speeds processing. <a href="https://drive.google.com/file/d/18sV1_NVdQaVvvE5HZidrQBEncUP2ndF_/view" target="_blank">Watch video</a>.</p>
+        <span class="card-arrow">Download (Windows) &rarr;</span>
+      </a>
+    </div>
+
+    <span class="subsection-label">Available Gen AI Chatbots</span>
+    <div class="info-box">
+      <strong>&#9888; Consumer tools:</strong> Everything you submit may be used for training. Never share confidential, PII, FERPA, or HIPAA data. Enterprise/Education versions offer stronger data protections.
+    </div>
+    <div class="chatbot-grid">
+      <a class="chatbot-card" href="https://box.boodle.ai/launch/chat/signup" target="_blank">
+        <div class="chatbot-name">BoodleBox</div>
+        <div class="chatbot-tiers"><span class="tier-safe">&#10003; Free (2 mo Pro: MGFREE123)</span><br><span class="tier-safe">&#10003; BoodleBox Pro</span></div>
+      </a>
+      <a class="chatbot-card" href="https://claude.ai/login" target="_blank">
+        <div class="chatbot-name">Claude</div>
+        <div class="chatbot-tiers"><span class="tier-caution">&#9888; Free / Teams</span><br><span class="tier-safe">&#10003; Enterprise</span></div>
+      </a>
+      <a class="chatbot-card" href="https://chat.com/" target="_blank">
+        <div class="chatbot-name">ChatGPT</div>
+        <div class="chatbot-tiers"><span class="tier-caution">&#9888; Free / Plus / Teams</span><br><span class="tier-safe">&#10003; Enterprise / Education</span></div>
+      </a>
+      <a class="chatbot-card" href="https://copilot.microsoft.com/" target="_blank">
+        <div class="chatbot-name">Microsoft Copilot</div>
+        <div class="chatbot-tiers"><span class="tier-caution">&#9888; Free / Consumer</span><br><span class="tier-safe">&#10003; Enterprise / Education</span></div>
+      </a>
+      <a class="chatbot-card" href="https://gemini.google.com/app" target="_blank">
+        <div class="chatbot-name">Google Gemini</div>
+        <div class="chatbot-tiers"><span class="tier-caution">&#9888; Free / Pro ($20/mo)</span><br><span class="tier-safe">&#10003; Enterprise / Workspace</span></div>
+      </a>
+      <a class="chatbot-card" href="https://chat.mistral.ai/chat" target="_blank">
+        <div class="chatbot-name">Mistral Le Chat</div>
+        <div class="chatbot-tiers"><span class="tier-caution">&#9888; Free / Student / Pro</span><br><span class="tier-safe">&#10003; Team / Enterprise</span></div>
+      </a>
+    </div>
+
+    <span class="subsection-label">Badge &amp; Certificate</span>
+    <div class="link-row">
+      <a class="pill pill-gold" href="https://docs.google.com/forms/d/e/1FAIpQLSdQkAoeDbSgf6OZyCxVh6twzK60jIiW5BzwcuX_kXwfwlHXiA/viewform?usp=publish-editor" target="_blank">&#127941;&nbsp; Claim Badge &amp; Certificate (2 CPE hours)</a>
+    </div>
+
+    <a href="#main-menu" class="back-link">Back to Menu</a>
+  </section>
+
+  <!-- ════════════════════ SESSION 3 ════════════════════ -->
+  <span id="session3" class="section-anchor"></span>
+  <section class="session-block">
+    <div class="session-header">
+      <span class="session-number">Session 3</span>
+      <div class="session-meta">
+        <div class="session-title">Automating Office Tasks with AI</div>
+        <div class="session-desc">Practical frameworks, task guides, and prompting workshops for scholarship office workflows: communications, triage, reviewer prep, reporting, and GEO-optimized content.</div>
+        <span class="avail-badge avail-live">&#10003; Available &mdash; Released 03/04/2026</span>
+      </div>
+    </div>
+
+    <span class="subsection-label">Session Links</span>
+    <div class="link-row">
+      <a class="pill pill-gold" href="https://mguhlin.org/2026/02/20/nspa3-automating-office-tasks-with-ai/" target="_blank">&#9654;&nbsp; Watch PreShow &amp; Get Slides</a>
+    </div>
+
+    <span class="subsection-label">Frameworks &amp; Guides</span>
+    <div class="card-grid">
+      <a class="card" href="nspa3_222_framework.html" target="_blank">
+        <span class="card-tag">Framework</span>
+        <h3>NSPA 2/2/2 AI Implementation Framework</h3>
+        <p>The core session framework: two tasks to start, two weeks to test, two measures of success. The structured model connecting to all five applied examples.</p>
+        <span class="card-arrow">Open &rarr;</span>
+      </a>
+      <a class="card" href="nspa3_guide.html" target="_blank">
+        <span class="card-tag">Reference Guide</span>
+        <h3>Scholarship Program AI Task Guide</h3>
+        <p>A filterable guide mapping common scholarship office tasks to AI use cases, effort levels, and risk ratings. Helps teams decide what to automate and what to keep human-only.</p>
+        <span class="card-arrow">Open &rarr;</span>
+      </a>
+      <a class="card" href="nspa3_oag.html" target="_blank">
+        <span class="card-tag">Reference Guide</span>
+        <h3>Office Task Automation Guide</h3>
+        <p>Covers routine tasks across the scholarship cycle with prompts, workflow steps, and guardrail notes for each task type.</p>
+        <span class="card-arrow">Open &rarr;</span>
+      </a>
+      <a class="card" href="nspa3_workflow_prompting.html" target="_blank">
+        <span class="card-tag">Workshop</span>
+        <h3>Workflow Prompting Workshop</h3>
+        <p>Interactive workshop covering the Good / Better / Best prompt framework with practice scenarios, copy-ready prompts, and structured team exercises.</p>
+        <span class="card-arrow">Open &rarr;</span>
+      </a>
+    </div>
+
+    <span class="subsection-label">2/2/2 Framework &mdash; Applied Examples</span>
+    <div class="card-grid">
+      <a class="card" href="nspa-example1-communications.html" target="_blank">
+        <span class="card-tag navy">Example 1</span>
+        <h3>Applicant Communications Pilot</h3>
+        <p>AI-assisted drafts for acknowledgment messages, status updates, and follow-up sequences, with staff approval built in throughout.</p>
+        <span class="card-arrow">Open &rarr;</span>
+      </a>
+      <a class="card" href="nspa-example2-triage.html" target="_blank">
+        <span class="card-tag navy">Example 2</span>
+        <h3>Application Triage</h3>
+        <p>AI-assisted triage: flagging incomplete applications, running completeness checks, and preparing reviewer packets without exposing PII.</p>
+        <span class="card-arrow">Open &rarr;</span>
+      </a>
+      <a class="card" href="nspa-example3-onboarding.html" target="_blank">
+        <span class="card-tag navy">Example 3</span>
+        <h3>Reviewer Onboarding &amp; Calibration</h3>
+        <p>Generating onboarding packets, rubric summaries, and calibration exercises so volunteer reviewers score consistently from day one.</p>
+        <span class="card-arrow">Open &rarr;</span>
+      </a>
+      <a class="card" href="nspa-example4-reporting.html" target="_blank">
+        <span class="card-tag navy">Example 4</span>
+        <h3>Donor &amp; Board Reporting</h3>
+        <p>Drafting board summaries, donor impact narratives, and program metrics from anonymized data, with human review built into every step.</p>
+        <span class="card-arrow">Open &rarr;</span>
+      </a>
+      <a class="card" href="nspa-example5-faq-geo.html" target="_blank">
+        <span class="card-tag navy">Example 5</span>
+        <h3>FAQ &amp; Eligibility Page Optimization</h3>
+        <p>Rewriting public-facing eligibility pages and FAQs for clarity, accessibility, and GEO so accurate program info surfaces in AI-powered search tools.</p>
+        <span class="card-arrow">Open &rarr;</span>
+      </a>
+    </div>
+
+    <a href="#main-menu" class="back-link">Back to Menu</a>
+  </section>
+
+  <!-- ════════════════════ SESSION 4 ════════════════════ -->
+  <span id="session4" class="section-anchor"></span>
+  <section class="session-block">
+    <div class="session-header">
+      <span class="session-number">Session 4</span>
+      <div class="session-meta">
+        <div class="session-title">AI for Marketing &amp; Engagement: A Nonprofit Toolkit</div>
+        <div class="session-desc">Prompt libraries and scenario-based toolkits for outreach, recruitment, donor engagement, and scholarship brand communications.</div>
+        <span class="avail-badge avail-soon">&#9679; Coming 06/03/2026</span>
+      </div>
+    </div>
+
+    <span class="subsection-label">Tools &amp; Prompt Libraries</span>
+    <div class="card-grid">
+      <a class="card" href="nspa4_100_marketing_prompts.html" target="_blank">
+        <span class="card-tag">Prompt Library</span>
+        <h3>100 AI Marketing Prompts for Scholarship Providers</h3>
+        <p>A categorized, copy-ready library of 100 prompts covering social media, email outreach, donor communications, recruitment messaging, and program storytelling.</p>
+        <span class="card-arrow">Open &rarr;</span>
+      </a>
+      <a class="card" href="nspa4_marketing_scenarios.html" target="_blank">
+        <span class="card-tag">Scenario Toolkit</span>
+        <h3>AI Marketing Scenarios &mdash; Prompt Toolkit</h3>
+        <p>Scenario-based exercises for real scholarship marketing situations: reactivating lapsed donors, reaching first-gen students, announcing cycle openings, and handling public inquiries.</p>
+        <span class="card-arrow">Open &rarr;</span>
+      </a>
+    </div>
+
+    <a href="#main-menu" class="back-link">Back to Menu</a>
+  </section>
+
+  <!-- ════════════════════ SERIES-WIDE ════════════════════ -->
+  <span id="series" class="section-anchor"></span>
+  <section class="session-block">
+    <div class="session-header">
+      <span class="session-number">Series</span>
+      <div class="session-meta">
+        <div class="session-title">Articles, Presentations &amp; AI Tools</div>
+        <div class="session-desc">Resources available to all participants across all sessions.</div>
+      </div>
+    </div>
+
+    <div class="extras-grid">
+
+      <div class="extras-group">
+        <h4>Article Series</h4>
+        <ul>
+          <li><a href="https://mguhlin.org/2025/06/14/nspa-create-your-scholarships-resource-hub/" target="_blank">#1 &mdash; Create Your Scholarships Resource Hub</a></li>
+          <li><a href="https://mguhlin.org/2025/08/07/nspa-icebreakers-that-stick/" target="_blank">#2 &mdash; Icebreakers That Stick</a></li>
+        </ul>
+      </div>
+
+      <div class="extras-group">
+        <h4>Presentations</h4>
+        <ul>
+          <li><a href="https://mguhlin.org/2025/05/14/nspa-ai-fast-track/" target="_blank">Crafting Better AI Prompts: Unlocking Efficiency and Accuracy for Scholarship Workflows</a></li>
+        </ul>
+      </div>
+
+      <div class="extras-group">
+        <h4>Bots / Custom GPTs</h4>
+        <ul>
+          <li>
+            <a href="https://chatgpt.com/g/g-6786871119908191a907d987e3e8eeae-scholarship-navigator?model=gpt-4o" target="_blank">Scholarship Navigator</a>
+          </li>
+          <li>
+            <a href="https://chatgpt.com/g/g-6860b3d9699c81918dd72d4959d981f3-instructions-designer-whiz" target="_blank">Instructions Designer Whiz</a>
+            <span class="note">Get help creating your own GPT custom instructions.</span>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <a href="#main-menu" class="back-link">Back to Menu</a>
+  </section>
+
+</main>
+
+<footer>
+  NSPA AI Training Series &mdash; Resource Index &nbsp;|&nbsp; All linked files open in a new tab &nbsp;|&nbsp;
+  <a href="https://mguhlin.org" target="_blank">mguhlin.org</a>
+</footer>
+
+</body>
+</html>

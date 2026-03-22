@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NSPA 2/2/2 Framework | Example 2: Application Triage</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{--teal:#237683;--teal-light:#2d8f9e;--teal-pale:#e6f2f4;--gold:#FDB414;--gold-text:#b08a00;--gold-pale:#fff6d6;--gold-border:#e8c84a;--gray-mid:#A5A9AD;--navy:#1a2e4a;--navy-dark:#111f33;--bg:#f4f6f7;--white:#ffffff;--border:#d8dde0;--text:#1e2a35;--success:#27695a;--success-pale:#eaf4f0;--guardrail-bg:#fffbe6;--info-bg:#e6f2f4;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Source Sans 3','Calibri',sans-serif;background:var(--bg);color:var(--text);line-height:1.65;font-size:16px;}
+  .site-header{background:var(--teal);color:white;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.25);overflow:hidden;}
+  .site-header::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:var(--gold);opacity:.18;pointer-events:none;}
+  .header-top{background:rgba(0,0,0,.18);padding:7px 40px;display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--gold);position:relative;z-index:1;}
+  .nspa-badge{font-family:'Playfair Display',Georgia,serif;font-size:13px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;}
+  .header-divider{color:var(--gold);opacity:.6;}
+  .series-label{font-size:12px;color:rgba(255,255,255,.75);letter-spacing:1px;text-transform:uppercase;}
+  .header-main{padding:20px 40px;display:flex;align-items:center;justify-content:space-between;gap:20px;position:relative;z-index:1;}
+  .header-title-group h1{font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:700;color:white;line-height:1.2;}
+  .header-title-group .subtitle{font-size:14px;color:rgba(255,255,255,.85);margin-top:4px;}
+  .framework-badge{background:var(--gold);color:var(--navy-dark);font-weight:700;font-size:13px;padding:6px 16px;border-radius:20px;white-space:nowrap;letter-spacing:.5px;}
+  .toc-nav{background:rgba(0,0,0,.15);padding:0 40px;display:flex;overflow-x:auto;border-top:1px solid rgba(255,255,255,.15);position:relative;z-index:1;}
+  .toc-nav a{color:rgba(255,255,255,.8);text-decoration:none;font-size:13px;font-weight:600;padding:11px 16px;white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s;}
+  .toc-nav a:hover{color:var(--gold);border-bottom-color:var(--gold);background:rgba(255,255,255,.05);}
+  .page-wrap{max-width:1100px;margin:0 auto;padding:48px 40px 80px;}
+  .overview-bar{background:var(--teal);color:white;border-radius:8px;padding:24px 28px;margin-bottom:40px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;position:relative;overflow:hidden;}
+  .overview-bar::after{content:'';position:absolute;bottom:-30px;right:-30px;width:130px;height:130px;border-radius:50%;background:var(--gold);opacity:.18;pointer-events:none;}
+  .overview-item label{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);font-weight:700;display:block;margin-bottom:4px;}
+  .overview-item p{font-size:15px;color:rgba(255,255,255,.92);line-height:1.4;}
+  .sprint-divider{height:1px;background:var(--gray-mid);opacity:.35;margin:44px 0;}
+  .sprint-header{display:flex;align-items:center;gap:16px;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid var(--border);}
+  .sprint-num{background:var(--teal);color:white;font-family:'Playfair Display',serif;font-size:26px;font-weight:700;width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:3px solid var(--gold);}
+  .sprint-header-text h2{font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:var(--teal);}
+  .sprint-header-text .sprint-weeks{font-size:13px;color:var(--gold-text);font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+  section{scroll-margin-top:120px;}
+  .section-title{font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:600;color:var(--teal);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+  .section-title::before{content:'';display:inline-block;width:4px;height:20px;background:var(--gold);border-radius:2px;flex-shrink:0;}
+  .card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:28px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+  .card-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--teal);margin-bottom:14px;}
+  .policy-block{background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:20px;}
+  .policy-header{background:var(--teal);color:white;padding:14px 24px;font-family:'Playfair Display',serif;font-size:16px;font-weight:700;}
+  .policy-cols{display:grid;grid-template-columns:1fr 1fr;}
+  .policy-col{padding:20px 24px;}
+  .policy-col:first-child{border-right:1px solid var(--border);}
+  .policy-col-header{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;}
+  .will{color:var(--success);}
+  .will-not{color:#c0392b;}
+  .policy-col ul{list-style:none;display:flex;flex-direction:column;gap:8px;}
+  .policy-col li{font-size:14px;line-height:1.5;padding-left:22px;position:relative;}
+  .will li::before{content:'✓';position:absolute;left:0;color:var(--success);font-weight:700;}
+  .will-not li::before{content:'✕';position:absolute;left:0;color:#c0392b;font-weight:700;}
+  .alert{border-radius:6px;padding:13px 18px;margin-bottom:16px;font-size:14px;display:flex;gap:10px;align-items:flex-start;line-height:1.5;}
+  .alert-icon{font-size:18px;flex-shrink:0;}
+  .alert-guardrail{background:var(--guardrail-bg);border-left:4px solid var(--gold);}
+  .alert-info{background:var(--info-bg);border-left:4px solid var(--teal);}
+  .alert-success{background:var(--success-pale);border-left:4px solid var(--success);}
+  .prompt-tier{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px;}
+  .prompt-tier-header{padding:12px 20px;display:flex;align-items:center;justify-content:space-between;}
+  .tier-good .prompt-tier-header{background:#f0faf5;border-bottom:1px solid #c3e6d8;}
+  .tier-better .prompt-tier-header{background:var(--gold-pale);border-bottom:1px solid var(--gold-border);}
+  .tier-best .prompt-tier-header{background:#eef4fd;border-bottom:1px solid #b8d0f0;}
+  .tier-label{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:1px;}
+  .tier-good .tier-label{color:var(--success);}
+  .tier-better .tier-label{color:var(--gold-text);}
+  .tier-best .tier-label{color:#2563b0;}
+  .tier-name{font-size:13px;color:var(--gray-mid);}
+  .copy-btn{background:var(--teal);color:white;border:none;padding:5px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s;font-family:'Source Sans 3',sans-serif;}
+  .copy-btn:hover{background:var(--teal-light);}
+  .copy-btn.copied{background:var(--success);}
+  .prompt-body{background:#f9fafb;padding:20px;font-family:'Source Code Pro',monospace;font-size:13px;line-height:1.7;color:#2d3748;white-space:pre-wrap;}
+  .prompt-note{background:#f5f5f3;padding:10px 20px;font-size:13px;color:var(--gray-mid);border-top:1px solid var(--border);font-style:italic;}
+  .checklist{list-style:none;display:flex;flex-direction:column;gap:8px;}
+  .checklist li{display:flex;align-items:flex-start;gap:10px;font-size:14px;line-height:1.5;padding:8px 12px;background:var(--white);border:1px solid var(--border);border-radius:6px;}
+  .check-box{width:18px;height:18px;border:2px solid var(--border);border-radius:3px;flex-shrink:0;margin-top:1px;background:white;cursor:pointer;transition:all .15s;}
+  .checklist li.critical{border-left:3px solid #c0392b;}
+  .checklist li.important{border-left:3px solid var(--gold);}
+  .checklist li.standard{border-left:3px solid var(--teal);}
+  .priority-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:2px 6px;border-radius:3px;white-space:nowrap;flex-shrink:0;}
+  .badge-critical{background:#fdf0ee;color:#c0392b;}
+  .badge-important{background:var(--gold-pale);color:var(--gold-text);border:1px solid var(--gold-border);}
+  .badge-standard{background:var(--teal-pale);color:var(--teal);}
+  .data-table{width:100%;border-collapse:collapse;font-size:14px;}
+  .data-table th{background:var(--teal);color:white;padding:10px 14px;text-align:left;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+  .data-table td{padding:10px 14px;border-bottom:1px solid var(--border);line-height:1.4;}
+  .data-table tr:last-child td{border-bottom:none;}
+  .data-table tr:nth-child(even) td{background:#f7f9fa;}
+  .outputs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:20px;}
+  .output-chip{background:var(--white);border:1px solid var(--border);border-left:3px solid var(--teal);border-radius:6px;padding:12px 16px;font-size:14px;display:flex;align-items:center;gap:8px;}
+  .output-icon{font-size:18px;}
+  .metrics-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;}
+  .metric-card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:20px;text-align:center;}
+  .metric-label{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--gray-mid);font-weight:700;margin-bottom:8px;}
+  .metric-value{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--teal);}
+  .metric-desc{font-size:13px;color:var(--gray-mid);margin-top:4px;}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .mt-4{margin-top:16px;}
+  .mt-8{margin-top:32px;}
+  .mb-4{margin-bottom:16px;}
+  .text-sm{font-size:14px;}
+  .text-muted{color:var(--gray-mid);}
+  .step-list{list-style:none;counter-reset:steps;display:flex;flex-direction:column;gap:10px;}
+  .step-list li{counter-increment:steps;display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.5;}
+  .step-list li::before{content:counter(steps);background:var(--teal);color:white;font-size:12px;font-weight:700;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+  /* Flag key chips */
+  .flag-key{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+  .flag-chip{padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+  .flag-missing{background:#fdf0ee;color:#c0392b;border:1px solid #f4c0b8;}
+  .flag-unclear{background:var(--gold-pale);color:var(--gold-text);border:1px solid var(--gold-border);}
+  .flag-human{background:#f0e8fa;color:#6b2fa0;border:1px solid #d8b8f5;}
+  .flag-complete{background:var(--teal-pale);color:var(--teal);border:1px solid #b0cdd2;}
+  .triage-block{background:#f9fafb;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:20px;}
+  .triage-block-header{background:var(--teal);color:white;padding:10px 20px;font-weight:700;font-size:14px;}
+  .triage-block-body{padding:20px;font-family:'Source Code Pro',monospace;font-size:13px;line-height:1.8;}
+  .page-footer{background:var(--teal);color:rgba(255,255,255,.85);text-align:center;padding:28px 40px;font-size:13px;margin-top:64px;line-height:1.9;}
+  .page-footer strong{color:white;}
+  .page-footer a{color:var(--gold);text-decoration:underline;text-underline-offset:2px;}
+  .page-footer a:hover{color:white;}
+  .footer-sep{border:none;border-top:1px solid var(--gray-mid);opacity:.4;margin:12px auto;max-width:400px;}
+  @media(max-width:900px){
+    .overview-bar{grid-template-columns:1fr 1fr;}
+    .metrics-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media(max-width:768px){
+    .page-wrap{padding:24px 16px 60px;}
+    .header-main{padding:16px 20px;flex-direction:column;align-items:flex-start;gap:12px;}
+    .header-top{padding:7px 16px;}
+    .toc-nav{padding:0 12px;}
+    .toc-nav a{padding:10px 12px;font-size:12px;}
+    .overview-bar{grid-template-columns:1fr;}
+    .policy-cols{grid-template-columns:1fr;}
+    .policy-col:first-child{border-right:none;border-bottom:1px solid var(--border);}
+    .two-col{grid-template-columns:1fr;}
+    .metrics-grid{grid-template-columns:1fr;}
+    .outputs-grid{grid-template-columns:1fr 1fr;}
+    .card{padding:20px 16px;}
+    .prompt-body{font-size:12px;padding:16px;}
+    .page-footer{padding:24px 16px;text-align:left;}
+    .footer-sep{margin:12px 0;}
+    .triage-block-body{font-size:12px;padding:14px;}
+  }
+  @media(max-width:520px){
+    .header-title-group h1{font-size:20px;}
+    .framework-badge{font-size:12px;padding:5px 12px;}
+    .sprint-num{width:44px;height:44px;font-size:20px;}
+    .sprint-header-text h2{font-size:18px;}
+    .section-title{font-size:16px;}
+    .outputs-grid{grid-template-columns:1fr;}
+    .check-box{width:22px;height:22px;}
+    .data-table{font-size:12px;}
+    .data-table th,.data-table td{padding:8px 10px;}
+    .metric-value{font-size:22px;}
+    .flag-key{gap:6px;}
+  }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-top">
+    <span class="nspa-badge">NSPA</span>
+    <span class="header-divider">|</span>
+    <span class="series-label">AI Implementation Series &mdash; 2/2/2 Framework</span>
+  </div>
+  <div class="header-main">
+    <div class="header-title-group">
+      <h1>Example 2: AI-Assisted Application Triage</h1>
+      <div class="subtitle">6-Week Implementation Package &mdash; Eligibility and Completeness Screening</div>
+    </div>
+    <div class="framework-badge">Weeks 1&ndash;6 / Sprint 2</div>
+  </div>
+  <nav class="toc-nav">
+    <a href="#overview">Overview</a>
+    <a href="#policy">Policy Statement</a>
+    <a href="#planning">Weeks 1&ndash;2</a>
+    <a href="#building">Weeks 3&ndash;4</a>
+    <a href="#review">Weeks 5&ndash;6</a>
+    <a href="#prompts">Prompt Pack</a>
+    <a href="#triage-report">Triage Report</a>
+    <a href="#checklist">Verification Checklist</a>
+    <a href="#metrics">Metrics</a>
+  </nav>
+</header>
+
+<main class="page-wrap">
+
+  <section id="overview">
+    <div class="overview-bar">
+      <div class="overview-item">
+        <label>Milestone Goal</label>
+        <p>Build a staff-operated triage pipeline that flags incomplete or ineligible applications before they reach reviewers, reducing reviewer burden and back-and-forth with applicants.</p>
+      </div>
+      <div class="overview-item">
+        <label>Team Pod</label>
+        <p>Program coordinator + eligibility screener + 1 committee member (calibration) + supervisor. Organized around the review committee experience.</p>
+      </div>
+      <div class="overview-item">
+        <label>Core Constraint</label>
+        <p>Triage is for flagging, not deciding. The AI output is a structured checklist. Staff confirm every flag before any action is taken. No AI-to-applicant pipeline.</p>
+      </div>
+    </div>
+    <div class="alert alert-guardrail">
+      <span class="alert-icon">🔒</span>
+      <div><strong>Non-negotiable data rule:</strong> Prompts receive an anonymized checklist of submitted materials vs. required items only. Applicant names, contact information, financial data, and personally identifiable details never enter any prompt at any stage.</div>
+    </div>
+    <div class="alert alert-guardrail">
+      <span class="alert-icon">⚠</span>
+      <div><strong>Triage is not a decision engine.</strong> An AI flag means a human looks at the application. It does not mean the application is rejected, denied, or removed from consideration. This distinction must be communicated to all staff before the pilot begins.</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="policy">
+    <div class="section-title">Program Policy Statement</div>
+    <div class="policy-block">
+      <div class="policy-header">AI-Assisted Application Triage &mdash; We Will / We Will Not</div>
+      <div class="policy-cols">
+        <div class="policy-col will">
+          <div class="policy-col-header will">&#10003; We Will</div>
+          <ul>
+            <li>Use AI to generate a structured triage report flagging potential completeness or eligibility gaps against defined criteria.</li>
+            <li>Require staff to verify every AI flag against the original application before taking any action.</li>
+            <li>Treat edge-case flags as human-only review items (dual enrollment, partial transcripts, special circumstances).</li>
+            <li>Document false positives and false negatives to improve prompt accuracy over time.</li>
+            <li>Audit triage flag rates by school type and region to detect potential equity drift.</li>
+            <li>Notify applicants of gaps only after a staff member confirms the flag is accurate.</li>
+          </ul>
+        </div>
+        <div class="policy-col will-not">
+          <div class="policy-col-header will-not">&#10005; We Will Not</div>
+          <ul>
+            <li>Include applicant names, IDs, contact information, or financial data in any prompt.</li>
+            <li>Treat an AI flag as a final eligibility ruling. All flags require human confirmation.</li>
+            <li>Contact applicants directly from an AI-generated output without staff review.</li>
+            <li>Use triage AI output to disqualify, reject, or remove an applicant without human decision-making.</li>
+            <li>Expand triage to a second scholarship track until this pilot is stable and measured.</li>
+            <li>Rely on AI to interpret ambiguous eligibility edge cases. Those go to a human screener.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="planning">
+    <div class="sprint-header">
+      <div class="sprint-num">1</div>
+      <div class="sprint-header-text">
+        <div class="sprint-weeks">Weeks 1&ndash;2</div>
+        <h2>Planning: Eligibility Audit and Prompt-Ready Criteria List</h2>
+      </div>
+    </div>
+    <div class="alert alert-success">
+      <span class="alert-icon">🎯</span>
+      <div><strong>Sprint goal:</strong> Leave Weeks 1&ndash;2 with a prompt-ready eligibility criteria list, an incomplete application audit, a handoff protocol, and a policy statement on file. No prompts written yet.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Task 1 &mdash; Eligibility Criteria Extraction</div>
+      <p class="text-sm mb-4">Pull your eligibility criteria from program guidelines and convert them into a prompt-ready format. Each criterion must be precise enough that a checklist comparison is unambiguous.</p>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead>
+            <tr><th>Criterion</th><th>Hard Cutoff?</th><th>Verifiable from Submitted Materials?</th><th>Edge Cases / Ambiguities</th><th>Prompt-Ready?</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Minimum GPA requirement</td><td>Yes</td><td>Yes (transcript)</td><td>Weighted vs. unweighted; mid-year grading</td><td style="color:var(--success);font-weight:700;">Y</td></tr>
+            <tr><td>Residency / geographic requirement</td><td>Yes</td><td>Yes (address on form)</td><td>Dual residency, recent movers</td><td style="color:var(--success);font-weight:700;">Y</td></tr>
+            <tr><td>Enrollment status (full-time / part-time)</td><td>Yes</td><td>Partial (self-reported)</td><td>Dual enrollment, gap year applicants</td><td style="color:var(--gold-text);font-weight:700;">Edge</td></tr>
+            <tr><td>Application deadline</td><td>Yes</td><td>Yes (submission timestamp)</td><td>Technical issues, email submissions</td><td style="color:var(--success);font-weight:700;">Y</td></tr>
+            <tr><td>Required essay submitted</td><td>Yes</td><td>Yes (checklist)</td><td>Partial essays, wrong prompt answered</td><td style="color:var(--gold-text);font-weight:700;">Edge</td></tr>
+            <tr><td>Letters of recommendation (count)</td><td>Yes</td><td>Yes (submission log)</td><td>One letter missing vs. both missing</td><td style="color:var(--success);font-weight:700;">Y</td></tr>
+            <tr><td>Financial need documentation</td><td>Varies</td><td>Partial</td><td>FAFSA pending, amended returns</td><td style="color:#c0392b;font-weight:700;">Human-only</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert alert-info mt-4">
+        <span class="alert-icon">ℹ️</span>
+        <div>Only criteria marked <strong>Y</strong> go into the triage prompt. <strong>Edge</strong> criteria generate an "uncertain" flag for human review. <strong>Human-only</strong> criteria are removed from the prompt entirely and handled by staff screeners.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Task 2 &mdash; Incomplete Application Audit (Last Cycle)</div>
+      <p class="text-sm mb-4">Pull last cycle's incomplete or ineligible applications. Categorize by gap type to identify where triage adds the most value.</p>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead>
+            <tr><th>Gap Type</th><th>Count (Last Cycle)</th><th>% of Total Applications</th><th>Staff Time to Catch (hrs)</th><th>Triage Priority</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Missing transcript</td><td><em>Fill in</em></td><td><em>Fill in</em></td><td><em>Fill in</em></td><td style="color:var(--success);font-weight:700;">High</td></tr>
+            <tr><td>Missing letter of recommendation</td><td><em>Fill in</em></td><td><em>Fill in</em></td><td><em>Fill in</em></td><td style="color:var(--success);font-weight:700;">High</td></tr>
+            <tr><td>GPA below cutoff</td><td><em>Fill in</em></td><td><em>Fill in</em></td><td><em>Fill in</em></td><td style="color:var(--success);font-weight:700;">High</td></tr>
+            <tr><td>Submitted after deadline</td><td><em>Fill in</em></td><td><em>Fill in</em></td><td><em>Fill in</em></td><td style="color:var(--gold-text);font-weight:700;">Medium</td></tr>
+            <tr><td>Wrong enrollment status</td><td><em>Fill in</em></td><td><em>Fill in</em></td><td><em>Fill in</em></td><td style="color:var(--gold-text);font-weight:700;">Medium</td></tr>
+            <tr><td>Essay missing or incomplete</td><td><em>Fill in</em></td><td><em>Fill in</em></td><td><em>Fill in</em></td><td style="color:var(--gold-text);font-weight:700;">Medium</td></tr>
+            <tr><td>Financial docs incomplete</td><td><em>Fill in</em></td><td><em>Fill in</em></td><td><em>Fill in</em></td><td style="color:#c0392b;font-weight:700;">Human-only</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Task 3 &mdash; Handoff Protocol</div>
+      <p class="text-sm mb-4">Document what happens after a flag is confirmed by staff. The AI triage report is the trigger; all actions that follow are human-owned.</p>
+      <ol class="step-list">
+        <li>Staff screener receives the AI triage report for the application batch.</li>
+        <li>For each flagged item, staff locates the original application and confirms the gap is real (not a false positive).</li>
+        <li>Confirmed gaps are logged in the applicant tracking system with a timestamp and staff initials.</li>
+        <li>Staff generate the applicant outreach message using an approved template (not AI-generated). Message specifies the gap, the correction deadline, and submission instructions.</li>
+        <li>Applications with confirmed hard-cutoff failures (GPA, deadline, residency) are flagged for supervisor review before any notification is sent.</li>
+        <li>Edge cases (dual enrollment, partial transcript, contested deadline) are routed to the program director for determination before any action.</li>
+      </ol>
+    </div>
+
+    <div class="section-title">Sprint 1 Deliverable Checklist</div>
+    <div class="outputs-grid">
+      <div class="output-chip"><span class="output-icon">📋</span>Prompt-ready eligibility criteria list</div>
+      <div class="output-chip"><span class="output-icon">📊</span>Incomplete application audit</div>
+      <div class="output-chip"><span class="output-icon">🗺️</span>Handoff protocol document</div>
+      <div class="output-chip"><span class="output-icon">🔒</span>Data handling agreement</div>
+      <div class="output-chip"><span class="output-icon">📝</span>Policy statement (signed)</div>
+      <div class="output-chip"><span class="output-icon">📁</span>20&ndash;30 anonymized test applications</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="building">
+    <div class="sprint-header">
+      <div class="sprint-num">2</div>
+      <div class="sprint-header-text">
+        <div class="sprint-weeks">Weeks 3&ndash;4</div>
+        <h2>Building: Triage Prompt, Test Run, and Verification Workflow</h2>
+      </div>
+    </div>
+    <div class="alert alert-success">
+      <span class="alert-icon">🎯</span>
+      <div><strong>Sprint goal:</strong> Produce a tested triage prompt with documented accuracy results, a staff verification checklist, an outreach template, and a one-page workflow reference.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Task 4 &mdash; Test Run Protocol (20&ndash;30 Applications)</div>
+      <p class="text-sm mb-4">Before using the prompt on live applications, test it against 20&ndash;30 anonymized applications from the prior cycle where you already know the correct triage outcome.</p>
+      <ol class="step-list">
+        <li>Select 20&ndash;30 anonymized applications from last cycle: 10 complete and eligible, 10 incomplete or ineligible, 5&ndash;10 edge cases.</li>
+        <li>Run each application's anonymized checklist through the prompt. Record the AI output for each.</li>
+        <li>Compare AI output to the known outcome (what actually happened to that application last cycle).</li>
+        <li>Log false positives (AI flagged it; it was actually fine) and false negatives (AI missed a real gap).</li>
+        <li>Calculate accuracy rate. If false positive rate exceeds 10% or false negative rate exceeds 5%, revise the prompt before using it on live applications.</li>
+      </ol>
+      <div class="mt-4">
+        <strong style="font-size:14px;display:block;margin-bottom:10px;">Test Run Accuracy Log</strong>
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead>
+              <tr><th>App # (Anon)</th><th>Known Outcome</th><th>AI Flag Produced</th><th>Correct?</th><th>Error Type</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>A-001</td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr><td>A-002</td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr><td>A-003</td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr><td colspan="6" style="text-align:center;color:var(--gray-mid);font-style:italic;font-size:13px;">Continue for all test applications. Compile accuracy summary before live use.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Sprint 2 Deliverable Checklist</div>
+    <div class="outputs-grid">
+      <div class="output-chip"><span class="output-icon">🧾</span>Three-tier prompt pack (tested)</div>
+      <div class="output-chip"><span class="output-icon">📊</span>Test run accuracy log</div>
+      <div class="output-chip"><span class="output-icon">✅</span>Staff verification checklist</div>
+      <div class="output-chip"><span class="output-icon">📄</span>Outreach template (staff-approved)</div>
+      <div class="output-chip"><span class="output-icon">📄</span>One-page workflow reference</div>
+      <div class="output-chip"><span class="output-icon">👤</span>Director sign-off on accuracy threshold</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="review">
+    <div class="sprint-header">
+      <div class="sprint-num">3</div>
+      <div class="sprint-header-text">
+        <div class="sprint-weeks">Weeks 5&ndash;6</div>
+        <h2>Review &amp; Wrap-Up: Accuracy Audit, Equity Check, and Next Cycle Brief</h2>
+      </div>
+    </div>
+    <div class="alert alert-success">
+      <span class="alert-icon">🎯</span>
+      <div><strong>Sprint goal:</strong> Measure accuracy against the live batch, run the equity audit, document edge cases, and decide whether to expand to a second scholarship track.</div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">Accuracy Audit Protocol</div>
+        <ul class="checklist">
+          <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Measure</span>False positive rate: AI flagged an application that was actually complete and eligible.</li>
+          <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Measure</span>False negative rate: AI missed a real gap that staff caught during verification.</li>
+          <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Measure</span>Average staff time to verify a triage report (target: faster than manual screening).</li>
+          <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Measure</span>Number of edge cases that the "uncertain" flag correctly surfaced for human review.</li>
+          <li class="standard"><span class="check-box"></span><span class="priority-badge badge-standard">Note</span>Number of applications where staff overrode the AI report entirely.</li>
+        </ul>
+        <div class="alert alert-guardrail mt-4">
+          <span class="alert-icon">⚠</span>
+          <div><strong>Decision threshold:</strong> If false positive rate exceeds 15% in the live batch, pause and revise the prompt before next cycle. Do not expand to a second track.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Equity Audit Protocol</div>
+        <ul class="checklist">
+          <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Audit</span>Did flag rates differ meaningfully by school type (public/private/charter, rural/urban)?</li>
+          <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Audit</span>Did flag rates differ by region or zip code cluster?</li>
+          <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Audit</span>Were first-generation applicants flagged at a higher rate than continuing-generation applicants?</li>
+          <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Audit</span>Did any flag pattern suggest the AI is penalizing non-standard application formats rather than actual gaps?</li>
+          <li class="standard"><span class="check-box"></span><span class="priority-badge badge-standard">Note</span>Flag rates should track eligibility gaps, not applicant demographics. Investigate any mismatch before continuing.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section-title mt-8">Sprint 3 Deliverable Checklist</div>
+    <div class="outputs-grid">
+      <div class="output-chip"><span class="output-icon">⏱️</span>Accuracy log (live batch)</div>
+      <div class="output-chip"><span class="output-icon">⚖️</span>Equity audit summary</div>
+      <div class="output-chip"><span class="output-icon">📋</span>Edge case reference list</div>
+      <div class="output-chip"><span class="output-icon">🔄</span>Revised prompt (if needed)</div>
+      <div class="output-chip"><span class="output-icon">📝</span>Next milestone brief</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="prompts">
+    <div class="section-title">Full Prompt Pack &mdash; Application Triage Reports</div>
+    <div class="alert alert-info">
+      <span class="alert-icon">ℹ️</span>
+      <div>Input to all three prompts is always an <strong>anonymized submission checklist</strong>: what the applicant submitted vs. what was required. Never include names, IDs, or contact information.</div>
+    </div>
+
+    <div class="prompt-tier tier-good">
+      <div class="prompt-tier-header">
+        <div><span class="tier-label">Good</span> <span class="tier-name">&mdash; Fast Draft: Quick flag list for clear-cut completeness gaps</span></div>
+        <button class="copy-btn" onclick="copyPrompt(this,'p1')">Copy</button>
+      </div>
+      <pre class="prompt-body" id="p1">You are helping a nonprofit scholarship program screen applications for completeness before reviewer assignment.
+
+Your task: Compare the submitted materials checklist below against the required materials list. Flag any gaps.
+
+Required materials for this program:
+[PASTE YOUR REQUIRED ITEMS LIST HERE — e.g., transcript, 2 letters of recommendation, essay, application form, deadline met]
+
+Submitted materials for this application batch (anonymized):
+[PASTE SUBMITTED CHECKLIST — one row per application, no names or IDs. Use Application A, B, C, etc.]
+
+Output format: A table with columns: Application ID | Missing Item(s) | Flag Type | Notes
+Flag types: MISSING (item not submitted), INCOMPLETE (partial submission), ELIGIBLE (complete, no issues)
+
+Important: Do not guess, infer, or extrapolate. Only flag what is verifiably absent from the submitted checklist above.</pre>
+      <div class="prompt-note">Use for: standard batches with clear-cut completeness checks. Staff still verify every flag against the original submission before taking action.</div>
+    </div>
+
+    <div class="prompt-tier tier-better">
+      <div class="prompt-tier-header">
+        <div><span class="tier-label">Better</span> <span class="tier-name">&mdash; High-Accuracy: Adds eligibility criteria checks and uncertainty flags</span></div>
+        <button class="copy-btn" onclick="copyPrompt(this,'p2')">Copy</button>
+      </div>
+      <pre class="prompt-body" id="p2">You are helping a nonprofit scholarship program screen applications for completeness and eligibility before reviewer assignment.
+
+Your task: Review the anonymized application checklist against both the required materials list and the eligibility criteria below. Produce a structured triage report.
+
+Required materials:
+[PASTE REQUIRED ITEMS LIST]
+
+Eligibility criteria (hard cutoffs only — do not include financial need criteria):
+[PASTE CRITERIA — e.g., GPA minimum 3.0, in-state residency, full-time enrollment, deadline met]
+
+Anonymized application batch (no names or IDs; use Application A, B, C, etc.):
+[PASTE CHECKLIST — submitted items and any reported eligibility data points]
+
+Output format: One row per application with these columns:
+1. Application ID
+2. Completeness Flag: COMPLETE / INCOMPLETE (list missing items) / UNCERTAIN
+3. Eligibility Flag: APPEARS ELIGIBLE / APPEARS INELIGIBLE (cite which criterion) / UNCERTAIN
+4. Edge Case?: YES / NO (note the specific ambiguity if YES)
+5. Recommended Action: ADVANCE TO REVIEW / HOLD FOR STAFF REVIEW / FLAG FOR DIRECTOR
+
+Rules:
+- If information is missing or ambiguous, output UNCERTAIN rather than guessing.
+- Do not make eligibility determinations on financial need, enrollment edge cases, or dual-enrollment situations.
+- Cite the specific criterion that triggers any INELIGIBLE flag.</pre>
+      <div class="prompt-note">Use for: standard cycle batches where eligibility criteria checks matter alongside completeness. The UNCERTAIN flag protects against false positives on edge cases.</div>
+    </div>
+
+    <div class="prompt-tier tier-best">
+      <div class="prompt-tier-header">
+        <div><span class="tier-label">Best</span> <span class="tier-name">&mdash; Governed Workflow: Full audit trail, self-check, mandatory staff review gate</span></div>
+        <button class="copy-btn" onclick="copyPrompt(this,'p3')">Copy</button>
+      </div>
+      <pre class="prompt-body" id="p3">You are helping a nonprofit scholarship program screen applications for completeness and eligibility. This is a governed workflow. Follow all steps in order.
+
+STEP 1 — Acknowledge scope:
+Confirm: (a) no applicant PII is present in this prompt, (b) your output is a triage report for staff review, not a final eligibility ruling, (c) you will output UNCERTAIN rather than guess on any ambiguous case.
+
+STEP 2 — Triage each application using only the information below:
+
+Required materials:
+[PASTE REQUIRED ITEMS LIST]
+
+Eligibility criteria (hard cutoffs only):
+[PASTE CRITERIA]
+
+Human-only review items (do not triage these — mark HUMAN-ONLY):
+[PASTE — e.g., financial need documentation, dual-enrollment status, late submission with documented technical issues]
+
+Anonymized application batch:
+[PASTE CHECKLIST — Application A, B, C, etc. No names or IDs.]
+
+STEP 3 — Self-check before outputting:
+- [ ] Did I flag any application based on inferred or missing information not in the checklist?
+- [ ] Did I make any determination on human-only items?
+- [ ] Are all UNCERTAIN flags documented with a specific reason?
+- [ ] Does my recommended action column distinguish ADVANCE / HOLD / DIRECTOR-LEVEL?
+
+STEP 4 — Output format:
+A. Self-check results (one line per item above)
+B. Triage report table: App ID | Completeness | Eligibility | Edge Case | Recommended Action | Notes
+C. Summary counts: Total screened | Complete/Eligible | Flags | UNCERTAIN | Human-only items</pre>
+      <div class="prompt-note">Use for: pilot launch and any batch where full audit documentation is required. Retain the self-check output as part of the triage record.</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="triage-report">
+    <div class="section-title">Sample Triage Report Output</div>
+    <p class="text-sm text-muted mb-4">This is what a completed triage report should look like after the prompt has run and staff have reviewed each flag. Use this as the benchmark for evaluating AI output quality.</p>
+
+    <div class="flag-key">
+      <span class="flag-chip flag-missing">MISSING</span>
+      <span class="flag-chip flag-unclear">UNCERTAIN</span>
+      <span class="flag-chip flag-human">HUMAN-ONLY</span>
+      <span class="flag-chip flag-complete">COMPLETE</span>
+    </div>
+
+    <div class="triage-block">
+      <div class="triage-block-header">Triage Report &mdash; Sample Batch Output (Anonymized)</div>
+      <div class="triage-block-body">
+<strong>Self-check results:</strong>
+&#10003; No PII present in input
+&#10003; No determinations made on human-only items
+&#10003; All UNCERTAIN flags have documented reasons
+&#10003; Recommended actions use correct three-level scale
+
+<strong>Triage Report:</strong>
+
+App ID | Completeness      | Eligibility           | Edge Case | Recommended Action     | Notes
+-------|-------------------|-----------------------|-----------|------------------------|------------------------
+A-001  | COMPLETE          | APPEARS ELIGIBLE      | No        | ADVANCE TO REVIEW      | All materials present
+A-002  | INCOMPLETE        | APPEARS ELIGIBLE      | No        | HOLD FOR STAFF REVIEW  | Missing 1 of 2 rec letters
+A-003  | COMPLETE          | APPEARS INELIGIBLE    | No        | HOLD FOR STAFF REVIEW  | GPA reported as 2.7 (min: 3.0)
+A-004  | COMPLETE          | UNCERTAIN             | Yes       | FLAG FOR DIRECTOR      | Dual enrollment — criteria unclear
+A-005  | INCOMPLETE        | UNCERTAIN             | No        | HOLD FOR STAFF REVIEW  | Transcript marked "pending"
+A-006  | HUMAN-ONLY ITEM   | HUMAN-ONLY ITEM       | Yes       | FLAG FOR DIRECTOR      | Financial need docs; not triaged per policy
+
+<strong>Summary:</strong>
+Total screened: 6 | Complete/Eligible: 1 | Flags: 3 | UNCERTAIN: 2 | Human-only: 1
+      </div>
+    </div>
+
+    <div class="alert alert-guardrail">
+      <span class="alert-icon">⚠</span>
+      <div><strong>Staff action required:</strong> Every row in "HOLD FOR STAFF REVIEW" and "FLAG FOR DIRECTOR" requires a human to open the original application and verify before any action is taken. The triage report is a to-do list for screeners, not a decision.</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="checklist">
+    <div class="section-title">Staff Verification Checklist &mdash; Before Any Action on a Flagged Application</div>
+    <p class="text-sm text-muted mb-4">Required for every flagged application. Staff initials and date before any outreach or routing decision.</p>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">Section 1 &mdash; Flag Verification</div>
+        <ul class="checklist">
+          <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Required</span>Open the original application submission. Confirm the flagged item is actually missing or fails the criterion.</li>
+          <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Required</span>If the AI output is UNCERTAIN, route to program director. Do not make an independent determination.</li>
+          <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Review</span>For INCOMPLETE flags: check whether the missing item arrived separately (email, fax, late upload).</li>
+          <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Review</span>For INELIGIBLE flags: confirm the criterion cited matches the current program guidelines (not last year's).</li>
+          <li class="standard"><span class="check-box"></span><span class="priority-badge badge-standard">Note</span>Log whether the AI flag was a true positive or false positive in the accuracy tracking sheet.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Section 2 &mdash; Outreach Authorization</div>
+        <ul class="checklist">
+          <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Required</span>Outreach is only initiated after a human screener confirms the flag is accurate.</li>
+          <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Required</span>Outreach message uses the approved template. No AI-generated outreach goes directly to applicants.</li>
+          <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Required</span>Hard-cutoff failures (GPA, deadline, residency) receive supervisor review before notification is sent.</li>
+          <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Review</span>Correction deadline in the outreach message matches current program policy.</li>
+          <li class="standard"><span class="check-box"></span><span class="priority-badge badge-standard">Log</span>Outreach logged with staff initials, date, and confirmation that the AI flag was verified.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="metrics">
+    <div class="section-title">Measurement Framework</div>
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-label">Primary Metric</div>
+        <div class="metric-value">Triage Time</div>
+        <div class="metric-desc">Minutes per application to complete triage before and after. Track across full batch.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Accuracy Metric</div>
+        <div class="metric-value">False + Rate</div>
+        <div class="metric-desc">Target below 10%. Above 15% triggers prompt revision before next cycle.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Safety Metric</div>
+        <div class="metric-value">False &minus; Rate</div>
+        <div class="metric-desc">Gaps AI missed that staff caught during verification. Target below 5%.</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="page-footer">
+  <strong>NSPA AI Implementation Series</strong> &mdash; 2/2/2 Framework &mdash; Example 2: Application Triage
+  <hr class="footer-sep">
+  Produced for the "Automating Office Tasks with AI" session &mdash; March 4, 2026<br>
+  Contact: <a href="/cdn-cgi/l/email-protection#7e13190b161217103e0a1d1b1f50110c19"><span class="__cf_email__" data-cfemail="b8d5dfcdd0d4d1d6f8ccdbddd996d7cadf">[email&#160;protected]</span></a> &nbsp;|&nbsp; <strong><a href="https://go.mgpd.org/nspa3">Return to Session Resources</a></strong>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+function copyPrompt(btn,id){
+  navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>{
+    btn.textContent='Copied!';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied');},2000);
+  });
+}
+document.querySele

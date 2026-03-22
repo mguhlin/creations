@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>100 AI Marketing Prompts for Scholarship Providers — NSPA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --teal:    #237683;
+  --teal-dk: #1a5861;
+  --teal-lt: #e4f3f5;
+  --gold:    #FDB414;
+  --gold-lt: #fff8e1;
+  --gold-dk: #b08a00;
+  --navy:    #1A2B4A;
+  --navy-lt: #d4dde8;
+  --slate:   #4a5e6d;
+  --ink:     #1e293b;
+  --mist:    #f4f7f8;
+  --white:   #ffffff;
+  --border:  #d1dce2;
+  --radius:  8px;
+  --shadow:  0 2px 12px rgba(26,43,74,.1);
+  --shadow-md:0 4px 24px rgba(26,43,74,.15);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{font-family:'Source Sans 3',sans-serif;background:var(--mist);color:var(--ink);line-height:1.65;font-size:16px}
+
+/* ── HEADER ── */
+.site-header{background:var(--navy);position:sticky;top:0;z-index:200;box-shadow:0 2px 16px rgba(0,0,0,.3)}
+.header-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:14px;height:58px}
+.logo-bar{width:8px;height:36px;background:var(--gold);border-radius:2px;flex-shrink:0}
+.header-inner h1{font-weight:700;font-size:.95rem;color:var(--white);letter-spacing:.04em;text-transform:uppercase}
+.hbadge{margin-left:auto;background:var(--teal);color:var(--white);font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(140deg,var(--teal-dk) 0%,var(--teal) 55%,#2a8e9e 100%);padding:64px 24px 52px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E")}
+.hero-inner{max-width:800px;margin:0 auto;position:relative}
+.eyebrow{display:inline-block;background:rgba(253,180,20,.15);border:1px solid rgba(253,180,20,.4);color:var(--gold);font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:4px 14px;border-radius:20px;margin-bottom:20px}
+.hero h2{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.9rem,5vw,3rem);font-weight:900;color:var(--white);line-height:1.18;margin-bottom:16px}
+.hero h2 em{color:var(--gold);font-style:normal}
+.hero p{color:rgba(255,255,255,.85);font-size:1.05rem;max-width:600px;margin:0 auto 28px}
+.hero-stats{display:flex;gap:32px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+.stat{text-align:center}
+.stat-n{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--gold);line-height:1}
+.stat-l{font-size:.75rem;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.08em;margin-top:4px}
+
+/* ── LAYOUT ── */
+.page-wrap{max-width:1200px;margin:0 auto;padding:32px 24px 64px;display:grid;grid-template-columns:260px 1fr;gap:32px;align-items:start}
+@media(max-width:900px){.page-wrap{grid-template-columns:1fr}.toc-wrap{display:none}}
+
+/* ── TOC SIDEBAR ── */
+.toc-wrap{position:sticky;top:78px;background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;border-top:4px solid var(--teal)}
+.toc-wrap h3{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--slate);font-weight:700;margin-bottom:12px}
+.toc-list{list-style:none}
+.toc-list li+li{border-top:1px solid var(--border)}
+.toc-list a{display:flex;align-items:center;gap:10px;padding:8px 4px;font-size:.84rem;color:var(--slate);text-decoration:none;transition:color .15s}
+.toc-list a:hover{color:var(--teal)}
+.toc-list a .toc-num{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:500;color:var(--teal);width:48px;flex-shrink:0}
+.toc-list a.active{color:var(--teal);font-weight:600}
+.toc-divider{margin:12px 0 8px;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--navy-lt);font-weight:700}
+.jump-top{display:block;text-align:center;margin-top:14px;font-size:.78rem;color:var(--teal);text-decoration:none;border-top:1px solid var(--border);padding-top:12px}
+.jump-top:hover{text-decoration:underline}
+
+/* ── SEARCH BAR ── */
+.search-strip{background:var(--white);border-bottom:1px solid var(--border);padding:12px 24px;position:sticky;top:58px;z-index:100}
+.search-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.search-box{display:flex;align-items:center;gap:8px;flex:1;min-width:200px;background:var(--mist);border:1px solid var(--border);border-radius:var(--radius);padding:8px 14px}
+.search-box input{border:none;background:none;outline:none;font-family:inherit;font-size:.9rem;width:100%;color:var(--ink)}
+.search-box input::placeholder{color:var(--slate)}
+.search-icon{color:var(--slate);font-size:1rem}
+.filter-row{display:flex;gap:8px;flex-wrap:wrap}
+.filter-btn{background:none;border:1px solid var(--border);color:var(--slate);font-family:inherit;font-size:.75rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:5px 12px;border-radius:20px;cursor:pointer;transition:all .15s}
+.filter-btn:hover,.filter-btn.active{background:var(--teal);border-color:var(--teal);color:var(--white)}
+.result-count{font-size:.8rem;color:var(--slate);white-space:nowrap}
+
+/* ── CATEGORY SECTION ── */
+.category{margin-bottom:48px}
+.cat-header{display:flex;align-items:center;gap:16px;margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid var(--border)}
+.cat-number{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:500;background:var(--navy);color:var(--gold);padding:3px 8px;border-radius:4px}
+.cat-title{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:700;color:var(--navy)}
+.cat-count{margin-left:auto;font-size:.75rem;color:var(--slate);background:var(--mist);border:1px solid var(--border);padding:2px 10px;border-radius:12px}
+
+/* ── PROMPT CARD ── */
+.prompt-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:14px;border-left:4px solid var(--border);transition:box-shadow .15s,border-color .15s;overflow:hidden}
+.prompt-card:hover{box-shadow:var(--shadow-md);border-left-color:var(--teal)}
+.prompt-card.hidden{display:none}
+
+.card-header{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;user-select:none}
+.card-num{font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:500;color:var(--white);background:var(--teal);width:36px;height:36px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.card-meta{}
+.card-title{font-weight:700;font-size:.95rem;color:var(--navy);line-height:1.3}
+.card-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.tag{font-size:.65rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:12px}
+.tag-cat{background:var(--teal-lt);color:var(--teal-dk)}
+.tag-tier-fast{background:var(--gold-lt);color:#7a5c00}
+.tag-tier-high{background:#e8f5e9;color:#2e7d32}
+.tag-tier-gov{background:#ede7f6;color:#4527a0}
+.card-toggle{font-size:1.1rem;color:var(--slate);transition:transform .2s;width:24px;text-align:center}
+.card-header.open .card-toggle{transform:rotate(180deg)}
+
+.card-body{display:none;padding:0 16px 16px}
+.card-body.open{display:block}
+
+.card-context{background:var(--gold-lt);border-left:3px solid var(--gold);padding:10px 14px;border-radius:0 var(--radius) var(--radius) 0;margin-bottom:14px;font-size:.87rem;color:#5a3d00}
+.card-context strong{font-weight:700}
+
+.prompt-block{position:relative;background:#f8fafb;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.prompt-label{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:8px 14px;background:var(--navy);color:var(--gold);display:flex;align-items:center;gap:8px}
+.prompt-label .dot{width:6px;height:6px;border-radius:50%;background:var(--gold)}
+pre{font-family:'JetBrains Mono',monospace;font-size:.8rem;line-height:1.7;padding:14px;white-space:pre-wrap;word-break:break-word;color:#1e293b;margin:0}
+.copy-btn{position:absolute;top:36px;right:10px;background:var(--white);border:1px solid var(--border);color:var(--teal);font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:var(--radius);cursor:pointer;transition:all .15s;z-index:1}
+.copy-btn:hover{background:var(--teal);color:var(--white);border-color:var(--teal)}
+.copy-btn.copied{background:var(--teal);color:var(--white);border-color:var(--teal)}
+
+.tier-badge{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:.72rem;font-weight:700;padding:4px 12px;border-radius:12px}
+.tier-fast{background:var(--gold-lt);color:#7a5c00}
+.tier-high{background:#e8f5e9;color:#2e7d32}
+.tier-gov{background:#ede7f6;color:#4527a0}
+
+.guardrail{background:#fff3f3;border-left:3px solid #e53935;padding:8px 14px;border-radius:0 var(--radius) var(--radius) 0;margin-top:10px;font-size:.82rem;color:#b71c1c}
+.guardrail strong{font-weight:700}
+
+/* ── TIER REFERENCE ── */
+.tier-table-wrap{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:28px 24px;margin-bottom:48px;border-top:4px solid var(--gold)}
+.tier-table-wrap h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:16px}
+.tier-table{width:100%;border-collapse:collapse;font-size:.85rem}
+.tier-table th{background:var(--navy);color:var(--white);padding:8px 14px;text-align:left;font-size:.75rem;letter-spacing:.05em;text-transform:uppercase}
+.tier-table td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+.tier-table tr:last-child td{border-bottom:none}
+.tier-table tr:hover td{background:var(--mist)}
+.t-fast{color:#7a5c00;font-weight:700}
+.t-high{color:#2e7d32;font-weight:700}
+.t-gov{color:#4527a0;font-weight:700}
+
+/* ── FOOTER ── */
+footer{background:var(--navy);color:rgba(255,255,255,.65);text-align:center;padding:28px 24px;font-size:.85rem}
+footer a{color:var(--gold);text-decoration:none}
+footer strong{color:rgba(255,255,255,.9)}
+
+/* ── UTILITIES ── */
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+.no-results{text-align:center;padding:48px;color:var(--slate);font-size:1rem}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header" id="top">
+  <div class="header-inner">
+    <div class="logo-bar"></div>
+    <h1>NSPA AI Prompt Toolkit — 100 Marketing Prompts</h1>
+    <span class="hbadge">Scholarship Providers</span>
+  </div>
+</header>
+
+<!-- SEARCH + FILTER -->
+<div class="search-strip">
+  <div class="search-inner">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search-input" placeholder="Search prompts by title or keyword…" aria-label="Search prompts">
+    </div>
+    <div class="filter-row" id="filter-row">
+      <button class="filter-btn active" data-filter="all">All 100</button>
+      <button class="filter-btn" data-filter="applicants">Applicants</button>
+      <button class="filter-btn" data-filter="donors">Donors</button>
+      <button class="filter-btn" data-filter="partners">Partners</button>
+      <button class="filter-btn" data-filter="social">Social Media</button>
+      <button class="filter-btn" data-filter="internal">Internal</button>
+      <button class="filter-btn" data-filter="fast">Fast Draft</button>
+      <button class="filter-btn" data-filter="governed">Governed</button>
+    </div>
+    <span class="result-count" id="result-count">Showing 100 prompts</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">NSPA 2026 Session Resource</div>
+    <h2>100 AI Marketing Prompts<br>for <em>Scholarship Programs</em></h2>
+    <p>Platform-agnostic, equity-forward, ready to copy. Every prompt requires human review before use.</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-n">100</div><div class="stat-l">Prompts</div></div>
+      <div class="stat"><div class="stat-n">10</div><div class="stat-l">Categories</div></div>
+      <div class="stat"><div class="stat-n">3</div><div class="stat-l">Tiers</div></div>
+      <div class="stat"><div class="stat-n">0</div><div class="stat-l">PII Required</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PAGE BODY -->
+<div class="page-wrap">
+
+  <!-- SIDEBAR TOC -->
+  <nav class="toc-wrap" aria-label="Table of contents">
+    <h3>Jump to Category</h3>
+    <ul class="toc-list">
+      <li><a href="#cat1" id="toc-cat1"><span class="toc-num">01–10</span>Applicant Outreach</a></li>
+      <li><a href="#cat2" id="toc-cat2"><span class="toc-num">11–20</span>Counselor & Partners</a></li>
+      <li><a href="#cat3" id="toc-cat3"><span class="toc-num">21–30</span>Donor Communications</a></li>
+      <li><a href="#cat4" id="toc-cat4"><span class="toc-num">31–40</span>Social Media</a></li>
+      <li><a href="#cat5" id="toc-cat5"><span class="toc-num">41–50</span>Email Campaigns</a></li>
+      <li><a href="#cat6" id="toc-cat6"><span class="toc-num">51–60</span>Website & FAQ</a></li>
+      <li><a href="#cat7" id="toc-cat7"><span class="toc-num">61–70</span>Scholar Engagement</a></li>
+      <li><a href="#cat8" id="toc-cat8"><span class="toc-num">71–80</span>Event Promotion</a></li>
+      <li><a href="#cat9" id="toc-cat9"><span class="toc-num">81–90</span>Board & Governance</a></li>
+      <li><a href="#cat10" id="toc-cat10"><span class="toc-num">91–100</span>Internal Operations</a></li>
+      <li><a href="#tier-ref" id="toc-tier"><span class="toc-num">Ref</span>Tier Guide</a></li>
+    </ul>
+    <a href="#top" class="jump-top">↑ Back to top</a>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main id="main-content">
+
+    <!-- TIER QUICK REFERENCE -->
+    <div class="tier-table-wrap" id="tier-ref">
+      <h3>Prompt Tier Quick Reference</h3>
+      <table class="tier-table">
+        <thead>
+          <tr><th>Tier</th><th>When to Use</th><th>Key Feature</th><th>Review Required</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="t-fast">Fast Draft</span></td><td>Internal docs, brainstorming, low-stakes drafts</td><td>Speed; output is a first draft</td><td>Staff reviews before use</td></tr>
+          <tr><td><span class="t-high">High-Accuracy</span></td><td>Applicant-facing, donor-facing communications</td><td>Includes verify/flag instructions</td><td>Staff verifies all facts and tone</td></tr>
+          <tr><td><span class="t-gov">Governed Workflow</span></td><td>Policy docs, award decisions, equity-sensitive content</td><td>Human review step + audit trail note + consent check</td><td>Supervisor or committee sign-off</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:12px;font-size:.82rem;color:var(--slate)"><strong>Platform-agnostic:</strong> All prompts work in ChatGPT, Claude, Gemini, Copilot, BoodleBox, and similar tools. &nbsp;|&nbsp; <strong>No PII rule:</strong> Never paste applicant names, SSNs, or identifiable data into any prompt.</p>
+    </div>
+
+    <!-- CATEGORY 1 -->
+    <section class="category" id="cat1">
+      <div class="cat-header">
+        <span class="cat-number">CAT 01</span>
+        <h2 class="cat-title">Applicant Outreach &amp; Recruitment</h2>
+        <span class="cat-count">Prompts 1–10</span>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants fast" data-title="program announcement plain language">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">01</div>
+          <div class="card-meta">
+            <div class="card-title">Program Announcement — Plain Language</div>
+            <div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> First-generation students who may have limited familiarity with formal scholarship applications.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>You are a scholarship program communications specialist writing for first-generation college students who may have limited experience with formal applications. Write a 150-word program announcement for [program name] that: states eligibility in the first sentence, names the award amount and deadline, lists exactly 3 steps to apply, and ends with one sentence of encouragement. Use plain language (8th-grade reading level). No jargon.</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft — staff reviews before publishing</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants governed" data-title="eligibility FAQ underrepresented applicant lens">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">02</div>
+          <div class="card-meta">
+            <div class="card-title">Eligibility FAQ — Underrepresented Applicant Lens</div>
+            <div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-gov">Governed</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Build a FAQ that answers what first-generation, rural, or underrepresented applicants actually need to know before applying.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — GOVERNED WORKFLOW</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>You are a scholarship program coordinator. Write a 10-question FAQ for [program name] that answers the questions a first-generation, rural, or underrepresented applicant is most likely to have before applying. For each question, write a plain-language answer under 50 words. Flag any answer that assumes applicants have prior knowledge of financial aid processes so staff can revise.</pre>
+          </div>
+          <span class="tier-badge tier-gov">Governed — equity review required before publishing</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants fast" data-title="recruitment email cold outreach prospective applicants">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">03</div>
+          <div class="card-meta">
+            <div class="card-title">Recruitment Email — Cold Outreach</div>
+            <div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Email to prospective applicants from a list of eligible students who have not yet started an application.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write a 120-word recruitment email for [program name] targeting [eligible population, e.g., community college transfer students in STEM]. The email should: open with one sentence about the student's situation (not the organization), state the award and deadline in sentence two, list three reasons this scholarship fits them specifically, and close with a single call to action. Tone: warm, direct, not institutional.</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft — personalize and verify before sending</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants fast" data-title="text message SMS deadline reminder campaign">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">04</div>
+          <div class="card-meta">
+            <div class="card-title">Text Message Campaign — Deadline Reminder</div>
+            <div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> SMS reminders to applicants who opted in to text updates from your program.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write 3 SMS-length reminders (under 160 characters each) for the [program name] application deadline of [date]. Each message should vary in angle: (1) deadline urgency, (2) amount of award, (3) ease of applying. Include a shortened URL placeholder [link]. No emoji unless they add meaning.</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft — test character count before scheduling</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants partners fast" data-title="program one-liner third party sharing counselors partners">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">05</div>
+          <div class="card-meta">
+            <div class="card-title">Program One-Liner — For Third-Party Sharing</div>
+            <div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-cat">Partners</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Short descriptions that school counselors, community orgs, or social media followers can use to share your program without extra editing.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write 5 versions of a one-sentence description of [program name] that a teacher, counselor, or community organization could use to introduce our scholarship to students. Each version should be under 25 words, lead with student benefit (not organization name), and be accurate to these details: [eligibility, award, deadline].</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft — verify accuracy of facts before distributing</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants governed" data-title="eligibility self-screening tool checklist">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">06</div>
+          <div class="card-meta">
+            <div class="card-title">"Is This Scholarship for Me?" Self-Screening Checklist</div>
+            <div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-gov">Governed</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Help applicants self-screen before they invest time starting an application they may not complete.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — GOVERNED WORKFLOW</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write a 6-question self-screening checklist that prospective applicants for [program name] can use to determine if they are eligible before starting the application. Each question should be answerable yes/no. After the checklist, write a 2-sentence "if you answered yes to all 6" next step and a 2-sentence "if you answered no to any" referral message. Base eligibility on: [paste eligibility criteria — no student names or PII].</pre>
+          </div>
+          <span class="tier-badge tier-gov">Governed — legal/program team verifies eligibility language</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants fast" data-title="parent guardian announcement family">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">07</div>
+          <div class="card-meta">
+            <div class="card-title">Parent-Facing Announcement</div>
+            <div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Reach skeptical parents and guardians who filter out generic scholarship promotions.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write a 180-word scholarship announcement for parents and guardians of [eligible students, e.g., graduating high school seniors in Texas]. Assume the parent is skeptical of scholarships and worried about scams. Lead with legitimacy markers (organization name, years in operation, contact info). State the award, deadline, and application steps. Close with a direct invitation to ask questions. Tone: trustworthy, not salesy.</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft — verify org details before distributing</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants governed" data-title="bilingual recruitment Spanish English announcement">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">08</div>
+          <div class="card-meta">
+            <div class="card-title">Bilingual Recruitment Snippet (English + Spanish)</div>
+            <div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-gov">Governed</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Reach Spanish-speaking applicants and families with a natural, accurate translation — not a literal one.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — GOVERNED WORKFLOW</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write a 100-word bilingual scholarship announcement for [program name] — first in English, then in Spanish. The Spanish version should be a natural translation, not a literal word-for-word translation. Content: eligibility, award amount, deadline, how to apply, contact. Flag any terms that may not translate cleanly so staff can review with a native speaker before publishing.</pre>
+          </div>
+          <div class="guardrail"><strong>Required:</strong> Native Spanish speaker must review before any publication. AI translation may contain errors or culturally inappropriate phrasing.</div>
+          <span class="tier-badge tier-gov">Governed — native speaker review required</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants fast" data-title="application tips email reducing barriers incomplete">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">09</div>
+          <div class="card-meta">
+            <div class="card-title">Application Tips Email — Reducing Barriers</div>
+            <div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Re-engage applicants who started but haven't submitted — without pressure or shame.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>You are a scholarship coordinator who wants applicants to succeed. Write a 200-word email to students who have started but not submitted their [program name] application. The email should: acknowledge the application takes effort, provide 3 specific tips to strengthen their submission, remind them of the deadline, and offer a contact for help. Do not pressure or shame. Tone: coaching, supportive.</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft — staff personalizes before sending</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants fast" data-title="recruitment flyer copy block print design">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">10</div>
+          <div class="card-meta">
+            <div class="card-title">Recruitment Flyer — Copy Block Only</div>
+            <div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Give your designer or Canva template the exact copy for a recruitment flyer — concise and accurate.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write the copy for a recruitment flyer for [program name]. Include: headline (8 words max), one-sentence description, award amount, eligibility in 3 bullets, deadline, how to apply (URL and/or QR code placeholder), and contact information. All text should fit in under 100 words total. No filler phrases like "Don't miss this opportunity."</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft — verify all facts match current program year</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CATEGORY 2 -->
+    <section class="category" id="cat2">
+      <div class="cat-header">
+        <span class="cat-number">CAT 02</span>
+        <h2 class="cat-title">School &amp; Counselor Partner Outreach</h2>
+        <span class="cat-count">Prompts 11–20</span>
+      </div>
+
+      <div class="prompt-card" data-tags="partners fast" data-title="counselor outreach email first contact school">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">11</div>
+          <div class="card-meta">
+            <div class="card-title">Counselor Outreach Email — First Contact</div>
+            <div class="card-tags"><span class="tag tag-cat">Partners</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Cold outreach to school counselors who receive dozens of scholarship announcements weekly.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>You are a high school counselor with 300 students who forwards only scholarships that take under 60 seconds to evaluate. Write an outreach email FROM [program name] TO counselors. Include: who is eligible (sentence 1), award and deadline (sentence 2), what to do (3 action options), a copyable "forward to students" blurb in quotes, and staff contact. Max 150 words total.</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft — add specific staff name before sending</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="partners fast" data-title="counselor one-pager program overview school">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">12</div>
+          <div class="card-meta">
+            <div class="card-title">Counselor One-Pager — Program Overview</div>
+            <div class="card-tags"><span class="tag tag-cat">Partners</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> A print-ready or PDF document counselors can keep on file and share with students year after year.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write a one-page program overview for high school counselors promoting [program name]. Sections: Program Summary (50 words), Eligibility at a Glance (bullet list), Award Details, Application Timeline, How to Nominate or Refer Students, FAQs (3 most common counselor questions with answers), Contact. Tone: professional, peer-to-peer. Avoid language that talks down to counselors.</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="partners fast" data-title="principal letter school partnership ask">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">13</div>
+          <div class="card-meta">
+            <div class="card-title">Principal Letter — School Partnership Ask</div>
+            <div class="card-tags"><span class="tag tag-cat">Partners</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Ask a principal to formally support your scholarship program at their school.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write a 200-word letter to high school principals asking them to designate [program name] as an official school-supported scholarship. Cover: program legitimacy, student benefit, what the school is asked to do (minimal ask), and what support we provide (flyers, presentations, application help). Close with a specific next step (reply, schedule a call, sign a simple MOU). No fundraising language.</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="partners fast" data-title="college access coordinator TRIO upward bound brief">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">14</div>
+          <div class="card-meta">
+            <div class="card-title">College Access Coordinator Brief</div>
+            <div class="card-tags"><span class="tag tag-cat">Partners</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Introduce your program to TRIO, Upward Bound, and college access staff who work directly with first-gen students.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write a 150-word brief for college access coordinators and TRIO/Upward Bound staff introducing [program name]. Emphasize: alignment with first-gen and low-income student populations, what the scholarship covers, how to refer students, and what support students receive beyond the award (if applicable). Include a table with: Eligibility Criteria | Award | Deadline | Application Link | Staff Contact.</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="partners fast" data-title="counselor newsletter submission school district spotlight">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">15</div>
+          <div class="card-meta">
+            <div class="card-title">Counselor Newsletter Submission</div>
+            <div class="card-tags"><span class="tag tag-cat">Partners</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Submit a short blurb to a school district newsletter or counselor association digest.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write a 75-word scholarship spotlight for a school district counselor newsletter about [program name]. Format: 1 sentence on who it's for, 1 sentence on the award, 1 sentence on the deadline and how to apply, 1 sentence inviting counselors to contact us. Include a URL. Professional tone, no superlatives.</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="partners fast" data-title="partner school thank you annual acknowledgment referral">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">16</div>
+          <div class="card-meta">
+            <div class="card-title">Partner School Thank-You — Annual Acknowledgment</div>
+            <div class="card-tags"><span class="tag tag-cat">Partners</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Steward school partnerships with an annual thank-you noting aggregate referrals — no student names.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write a 150-word thank-you letter from [program name] to a partner high school that referred [X] applicants this cycle. Acknowledge the school's role, name the number of students who applied (no names), note any who received awards (no names), and invite continued partnership. Warm but professional. No placeholder names — write the letter so staff can fill in specifics.</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="partners fast" data-title="host information session invite community school">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">17</div>
+          <div class="card-meta">
+            <div class="card-title">"Host a Scholarship Info Session" Invite</div>
+            <div class="card-tags"><span class="tag tag-cat">Partners</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Invite a school or community org to host a 30-minute info session — make the ask easy to say yes to.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write an email inviting a high school or community organization to host a 30-minute scholarship information session for [program name]. Include: what the session covers, what we provide (presenter, slides, flyers), what the host needs to provide (a room and 10+ students), how to schedule, and contact. Under 150 words. Make the ask easy to say yes to.</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="partners fast" data-title="community college transfer student outreach financial aid">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">18</div>
+          <div class="card-meta">
+            <div class="card-title">Community College Outreach — Transfer Students</div>
+            <div class="card-tags"><span class="tag tag-cat">Partners</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Reach transfer students via community college financial aid offices and transfer centers.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write a 150-word outreach message to community college financial aid offices and transfer centers promoting [program name] for transfer students. State eligibility clearly (GPA, enrollment status, major if applicable). Explain the application process. Note any specific supports for transfer students. Include a referral link and staff contact. Tone: collegial and efficient.</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="partners fast" data-title="counselor relationship check-in mid year">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">19</div>
+          <div class="card-meta">
+            <div class="card-title">Counselor Relationship Check-In — Mid-Year</div>
+            <div class="card-tags"><span class="tag tag-cat">Partners</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Stay top-of-mind between application cycles without a hard ask.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write a 100-word mid-year check-in email from [program name] staff to high school counselors we partnered with last year. Purpose: stay top-of-mind before the new application cycle opens. Include: a brief note of appreciation, one upcoming date to remember, an offer to provide updated materials, and a question that invites a response. No hard sell. Tone: relationship-first.</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="partners fast" data-title="partnership renewal one-pager returning partner schools">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">20</div>
+          <div class="card-meta">
+            <div class="card-title">Partnership Renewal One-Pager</div>
+            <div class="card-tags"><span class="tag tag-cat">Partners</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Re-engage returning partner schools with a recap of outcomes and a simple renewal ask.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write a one-page partnership renewal summary for schools that partnered with [program name] last year. Include: recap of outcomes (use placeholders for numbers), what's new this cycle, what the school is asked to do, what we provide in return, and a simple sign-off or confirmation step. Professional, concise, under 300 words.</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CATEGORY 3 -->
+    <section class="category" id="cat3">
+      <div class="cat-header">
+        <span class="cat-number">CAT 03</span>
+        <h2 class="cat-title">Donor Communications &amp; Stewardship</h2>
+        <span class="cat-count">Prompts 21–30</span>
+      </div>
+
+      <div class="prompt-card" data-tags="donors high" data-title="donor impact report narrative annual">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">21</div>
+          <div class="card-meta">
+            <div class="card-title">Donor Impact Report Narrative — Annual</div>
+            <div class="card-tags"><span class="tag tag-cat">Donors</span><span class="tag tag-tier-high">High-Accuracy</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Annual report narrative section for donors — aggregate data only, no individual student information.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — HIGH-ACCURACY</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>You are a nonprofit communications writer. Write a 300-word narrative for [program name]'s annual donor impact report. Cover: number of scholars supported, aggregate outcomes (graduation rates, fields of study, career paths — no PII), one composite scholar story (clearly labeled as composite), and what donor funding made possible. Tone: grateful, evidence-based, not sentimental. Flag any stat placeholder for staff to verify before publishing.</pre>
+          </div>
+          <div class="guardrail"><strong>Required:</strong> All statistics must be verified against actual program data before publishing. Composite stories must be labeled as such in the final document.</div>
+          <span class="tier-badge tier-high">High-Accuracy — verify all data before publishing</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="donors fast" data-title="individual donor thank you mid-size gift">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">22</div>
+          <div class="card-meta">
+            <div class="card-title">Individual Donor Thank-You — Mid-Size Gift</div>
+            <div class="card-tags"><span class="tag tag-cat">Donors</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Personalized thank-you for a $500–$2,500 gift. Staff adds specific donor name and fund details.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write a 200-word thank-you letter from [program name] to a donor who gave [gift amount or range, e.g., $500–$2,500]. Personalize to the donor's named fund or scholarship if applicable. Include: what the gift funds specifically, a brief aggregate scholar outcome (no student names), and an invitation to stay connected. Avoid clichés like "your gift makes a difference." Be specific.</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft — staff personalizes and verifies before sending</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="donors high" data-title="major donor stewardship email annual update named fund">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">23</div>
+          <div class="card-meta">
+            <div class="card-title">Major Donor Stewardship Email — Annual Update</div>
+            <div class="card-tags"><span class="tag tag-cat">Donors</span><span class="tag tag-tier-high">High-Accuracy</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Annual update to a named scholarship fund donor — aggregate outcomes, consented quotes only.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — HIGH-ACCURACY</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write a 250-word annual stewardship email to a named scholarship fund donor for [program name]. Include: number of scholars awarded from their fund this cycle, aggregate academic outcomes (no individual PII), one invited scholar quote (placeholder for consented quote), upcoming cycle dates, and a direct staff contact for questions. Professional, warm, specific.</pre>
+          </div>
+          <span class="tier-badge tier-high">High-Accuracy — confirm quote consent before sending</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="donors fast" data-title="lapsed donor re-engagement email giving">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">24</div>
+          <div class="card-meta">
+            <div class="card-title">Lapsed Donor Re-Engagement Email</div>
+            <div class="card-tags"><span class="tag tag-cat">Donors</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Reach out to donors who gave 2–3 years ago with a soft reconnect — no guilt, no hard ask.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write a 150-word re-engagement email to a donor who gave to [program name] 2–3 years ago but has not given since. Do not guilt-trip. Acknowledge their past support, share one concrete program update, and issue a soft invitation to reconnect (reply to this email, visit the site, consider a gift this cycle). Close with a specific staff name and contact. Tone: low-pressure.</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="donors high" data-title="corporate sponsor pitch cold outreach CSR">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">25</div>
+          <div class="card-meta">
+            <div class="card-title">Corporate Sponsor Pitch — Cold Outreach</div>
+            <div class="card-tags"><span class="tag tag-cat">Donors</span><span class="tag tag-tier-high">High-Accuracy</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> First contact with a corporate prospect — must be specific and honest about what the program offers.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — HIGH-ACCURACY</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>You are writing on behalf of [program name]. Write a 180-word partnership letter to a company in [industry] that aligns with our student population. Open with one sentence connecting the company's CSR goals to our mission. State: the sponsorship ask, what it funds, the student population served (aggregate, no names), visibility/recognition opportunities, and a clear next step. Flag: "The following company-specific claims should be verified before sending: [list assumed facts]."</pre>
+          </div>
+          <div class="guardrail"><strong>Required:</strong> Verify all company-specific claims before sending. AI may assume facts about the company that are incorrect.</div>
+          <span class="tier-badge tier-high">High-Accuracy — verify company facts before sending</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="donors fast" data-title="corporate sponsor renewal letter partnership">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">26</div>
+          <div class="card-meta">
+            <div class="card-title">Corporate Sponsor Renewal Letter</div>
+            <div class="card-tags"><span class="tag tag-cat">Donors</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Retain a first-year corporate sponsor with a results-oriented renewal ask.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write a 200-word renewal letter from [program name] to a corporate sponsor completing their first year of partnership. Include: what their funding supported (specific outcomes, no PII), what's new in the coming cycle, the renewal ask with specifics, and a named staff contact to discuss. Professional, concise. No filler. Make renewing easy.</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="donors fast" data-title="end of year giving appeal email fundraising">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">27</div>
+          <div class="card-meta">
+            <div class="card-title">End-of-Year Giving Appeal Email</div>
+            <div class="card-tags"><span class="tag tag-cat">Donors</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> December giving appeal — honest about the funding need, no manufactured urgency.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write a 200-word year-end giving appeal for [program name] targeting individual donors. Open with one concrete outcome from this year (aggregate, no student names). State the funding need for the upcoming cycle. Include a clear donation ask with a specific amount suggestion and deadline. One call to action (donation link placeholder). Honest tone — no manufactured urgency.</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="donors high" data-title="scholarship fund naming opportunity major donor letter">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">28</div>
+          <div class="card-meta">
+            <div class="card-title">Scholarship Fund Naming Opportunity Letter</div>
+            <div class="card-tags"><span class="tag tag-cat">Donors</span><span class="tag tag-tier-high">High-Accuracy</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Introduce a major donor prospect to the opportunity to establish a named fund.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — HIGH-ACCURACY</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write a 250-word letter to a prospective major donor about the opportunity to establish a named scholarship fund with [program name]. Cover: what a named fund is, the minimum commitment, how scholars are selected, how the donor is acknowledged, and how to take the next step. No pressure language. Include a placeholder for gift officer name and contact.</pre>
+          </div>
+          <span class="tier-badge tier-high">High-Accuracy — legal/finance review of gift terms before sending</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="donors fast" data-title="donor newsletter quarterly update stewardship">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">29</div>
+          <div class="card-meta">
+            <div class="card-title">Donor Newsletter — Quarterly Update</div>
+            <div class="card-tags"><span class="tag tag-cat">Donors</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Quarterly touchpoint for donors — brief, specific, not a fundraising ask.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write a 250-word quarterly donor newsletter for [program name]. Sections: Program Update (what happened this quarter, aggregate data), Scholar Spotlight (placeholder for consented story or composite vignette labeled as such), Upcoming Cycle Dates, and How to Help (share, give, refer). Professional but warm. Under 300 words total.</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="donors high" data-title="foundation grant thank you outcome report accountability">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">30</div>
+          <div class="card-meta">
+            <div class="card-title">Foundation Grant Thank-You and Outcome Report</div>
+            <div class="card-tags"><span class="tag tag-cat">Donors</span><span class="tag tag-tier-high">High-Accuracy</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Post-grant stewardship letter to a foundation funder — transparent about outcomes and challenges.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — HIGH-ACCURACY</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write a 300-word thank-you and outcome letter to a foundation that awarded [program name] a grant of [amount] for [purpose]. Include: how the grant was used, measurable outcomes achieved (use placeholders staff will fill in), any challenges encountered and how they were addressed, and a statement about impact going forward. Tone: accountable, transparent, professional.</pre>
+          </div>
+          <span class="tier-badge tier-high">High-Accuracy — verify all outcomes against program data</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CATEGORY 4 -->
+    <section class="category" id="cat4">
+      <div class="cat-header">
+        <span class="cat-number">CAT 04</span>
+        <h2 class="cat-title">Social Media</h2>
+        <span class="cat-count">Prompts 31–40</span>
+      </div>
+
+      <div class="prompt-card" data-tags="social fast" data-title="application window opening multi-platform launch LinkedIn Instagram Facebook">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">31</div>
+          <div class="card-meta">
+            <div class="card-title">Application Window Opening — Multi-Platform Launch</div>
+            <div class="card-tags"><span class="tag tag-cat">Social Media</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Launch day posts across LinkedIn, Instagram, and Facebook — tailored to each platform's audience.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write opening-day posts for [program name]'s application window across 3 platforms. Platform 1 (LinkedIn): 100-word professional announcement, eligibility in the first sentence. Platform 2 (Instagram): 50-word caption with a clear CTA and 5 relevant hashtags (no trending tags unless verified relevant). Platform 3 (Facebook): 80-word post optimized for sharing by school counselors and parents. No student names or photos in any prompt output. Include link placeholder.</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft — confirm hashtags are current and relevant</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="social governed" data-title="scholar celebration posts privacy safe student recognition">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">32</div>
+          <div class="card-meta">
+            <div class="card-title">Scholar Celebration Posts — Privacy-Safe</div>
+            <div class="card-tags"><span class="tag tag-cat">Social Media</span><span class="tag tag-tier-gov">Governed</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Celebrate award recipients while protecting student privacy — consent must be confirmed before any post.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — GOVERNED WORKFLOW</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write a template for celebrating scholarship award recipients on social media that protects student privacy. Provide: a version that uses only first name + field of study (consented), a version that uses no names but describes the cohort in aggregate, and a version for sharing a consented student quote without identifying details. Each version under 75 words. Include a note reminding staff to confirm consent before posting.</pre>
+          </div>
+          <div class="guardrail"><strong>Required:</strong> Written consent from student before using any identifying information (name, photo, institution, field of study) in public posts.</div>
+          <span class="tier-badge tier-gov">Governed — written student consent required</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="social fast" data-title="deadline countdown series 5 posts campaign">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">33</div>
+          <div class="card-meta">
+            <div class="card-title">Deadline Countdown Series (5 Posts)</div>
+            <div class="card-tags"><span class="tag tag-cat">Social Media</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> A ready-to-schedule countdown series from 3 weeks out to deadline day.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write a 5-post deadline countdown series for [program name] with the final deadline of [date]. Posts should be spaced: 3 weeks out, 2 weeks out, 1 week out, 3 days out, day-of. Each post: under 60 words, single CTA, one specific fact about the program (award amount, eligibility, outcome stat), application link placeholder. Vary tone across posts — do not repeat the same language.</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft — verify deadline date before scheduling</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="social fast" data-title="myth busting series misconceptions eligibility">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">34</div>
+          <div class="card-meta">
+            <div class="card-title">Myth-Busting Series (3 Posts)</div>
+            <div class="card-tags"><span class="tag tag-cat">Social Media</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Address the top reasons eligible students self-screen out before applying.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write 3 social media posts for [program name] that address common applicant misconceptions. Myth 1: "This scholarship is only for students with perfect grades." Myth 2: "The application takes too long." Myth 3: "I won't qualify because of [common eligibility misunderstanding — staff to specify]." Each post: state the myth, correct it in 2 sentences, include a CTA. Under 70 words each.</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="social governed" data-title="why I applied scholar testimonial collection user generated content">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">35</div>
+          <div class="card-meta">
+            <div class="card-title">"Why I Applied" — Scholar Testimonial Collection</div>
+            <div class="card-tags"><span class="tag tag-cat">Social Media</span><span class="tag tag-tier-gov">Governed</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Invite scholars to share their story — with explicit consent framing built in.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — GOVERNED WORKFLOW</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write a social media post asking current or past scholars to share why they applied to [program name]. Frame it as an invitation for user-generated content. Include: what to share (their story, 2–3 sentences), where to share it (tag us, use hashtag [placeholder]), and a note that selected stories may be featured (with permission). Under 80 words. Tone: inviting, not pressuring.</pre>
+          </div>
+          <span class="tier-badge tier-gov">Governed — obtain written consent before reposting</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="social fast" data-title="program anniversary post milestone celebration">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">36</div>
+          <div class="card-meta">
+            <div class="card-title">Program Anniversary Post</div>
+            <div class="card-tags"><span class="tag tag-cat">Social Media</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Celebrate a program milestone — let real numbers do the work, no superlatives needed.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write a social media post celebrating [program name]'s [X]-year anniversary. Include: years in operation, total scholars served (aggregate), one sentence of mission statement, and a forward-looking statement. Under 100 words. Avoid superlatives. Do not fabricate statistics — leave placeholders for staff to verify numbers.</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft — verify all statistics before posting</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="social donors fast" data-title="donor appreciation post LinkedIn Facebook community">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">37</div>
+          <div class="card-meta">
+            <div class="card-title">Donor Appreciation Post</div>
+            <div class="card-tags"><span class="tag tag-cat">Social Media</span><span class="tag tag-cat">Donors</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Public thank-you to the donor community — collective appreciation, no individual names unless staff adds them.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write a donor appreciation social media post for [program name] that can be used on LinkedIn and Facebook. Do not name individual donors unless staff adds names manually. Acknowledge the donor community collectively, state what their support funded (aggregate data), and invite others to join. Under 100 words. Professional tone, not gushing.</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="social internal fast" data-title="board member recruitment post LinkedIn governance">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">38</div>
+          <div class="card-meta">
+            <div class="card-title">Board Member Recruitment Post</div>
+            <div class="card-tags"><span class="tag tag-cat">Social Media</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> LinkedIn post recruiting new board members — specific about skills needed and time commitment.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write a LinkedIn post recruiting new board members for [program name]. State: what the board does, who we are looking for (skills, not demographics), time commitment, how to express interest. Under 120 words. Direct, no jargon. Avoid phrases like "passionate about education."</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="social fast" data-title="event promotion scholarship ceremony social media">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">39</div>
+          <div class="card-meta">
+            <div class="card-title">Event Promotion — Scholarship Ceremony</div>
+            <div class="card-tags"><span class="tag tag-cat">Social Media</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Three audience-specific posts for the annual scholarship ceremony — scholars, donors, and the public.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write social media posts promoting the annual [program name] scholarship ceremony for 3 audiences: (1) scholars and families (warm, celebratory, 60 words), (2) donors and sponsors (recognition-focused, professional, 80 words), (3) general public and community partners (mission-focused, inviting, 70 words). Include event date, location, and RSVP link placeholder in each. No student names.</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="social fast" data-title="year in review graphic caption data stats">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">40</div>
+          <div class="card-meta">
+            <div class="card-title">Year-in-Review Graphic Caption</div>
+            <div class="card-tags"><span class="tag tag-cat">Social Media</span><span class="tag tag-tier-fast">Fast Draft</span></div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Caption for an annual data graphic with aggregate program stats.</div>
+          <div class="prompt-block">
+            <div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre>Write a caption for a year-in-review data graphic for [program name]. The graphic contains: number of applications received, number of awards, total dollars awarded, and number of schools represented. Caption should: contextualize the numbers, thank the community, and point to next year's cycle. Under 100 words. Include hashtag placeholder and link placeholder.</pre>
+          </div>
+          <span class="tier-badge tier-fast">Fast Draft — verify all numbers against final program data</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CATEGORY 5 -->
+    <section class="category" id="cat5">
+      <div class="cat-header">
+        <span class="cat-number">CAT 05</span>
+        <h2 class="cat-title">Email Campaigns</h2>
+        <span class="cat-count">Prompts 41–50</span>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants fast" data-title="welcome email new scholar onboarding">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">41</div><div class="card-meta"><div class="card-title">Welcome Email — New Scholar Onboarding</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> First email a newly selected scholar receives — practical, warm, sets clear expectations.</div>
+          <div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 200-word welcome email from [program name] to a newly selected scholar (no name in the output — staff will personalize). Cover: congratulations (1 sentence), what happens next (3 steps), what the scholar can expect from us, and who to contact with questions. Warm but not effusive. Practical.</pre></div>
+          <span class="tier-badge tier-fast">Fast Draft — staff personalizes name and specifics</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants high" data-title="waitlist notification email compassionate honest">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">42</div><div class="card-meta"><div class="card-title">Waitlist Notification Email</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-high">High-Accuracy</span></div></div><span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Honest, compassionate communication to applicants placed on a waitlist.</div>
+          <div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — HIGH-ACCURACY</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 150-word waitlist notification email for [program name] applicants. Be honest about their status, explain how the waitlist works, state a timeline for updates, and invite them to reapply next cycle if applicable. No false hope. Compassionate but clear. Staff will personalize name and date fields.</pre></div>
+          <span class="tier-badge tier-high">High-Accuracy — program director reviews before sending</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants fast" data-title="application confirmation email receipt review timeline">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">43</div><div class="card-meta"><div class="card-title">Application Confirmation Email</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Automated or manual confirmation that an application was received — reassuring without overclaiming.</div>
+          <div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 120-word application confirmation email for [program name]. Confirm receipt, state the review timeline, list 1–2 things the applicant may be asked to provide later (interview, additional docs), and give a contact for questions. Tone: efficient, reassuring. No inflated language about the applicant's "amazing" submission.</pre></div>
+          <span class="tier-badge tier-fast">Fast Draft</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants governed" data-title="declination email rejection first time applicant compassionate">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">44</div><div class="card-meta"><div class="card-title">Declination Email — First-Time Applicant</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-gov">Governed</span></div></div><span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Rejection letter that is honest, compassionate, and constructive — one of the hardest emails to get right.</div>
+          <div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — GOVERNED WORKFLOW</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a compassionate, professional declination email for [program name] for applicants who were not selected. Include: appreciation for applying (specific to their effort, not generic), an honest brief reason if policy allows (or a note that feedback is unavailable), encouragement to reapply, and 2 other scholarship resources to explore. Under 180 words. Staff must review before sending. Do not imply the student did anything wrong.</pre></div>
+          <div class="guardrail"><strong>Required:</strong> Program director reviews every declination email batch before sending. Check language equity across the cohort.</div>
+          <span class="tier-badge tier-gov">Governed — director review required before sending</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants fast" data-title="renewal reminder returning scholar GPA enrollment">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">45</div><div class="card-meta"><div class="card-title">Renewal Reminder — Returning Scholar</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Clear, practical reminder of what returning scholars need to do to renew their award.</div>
+          <div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 150-word renewal reminder email for a returning scholar at [program name]. State: what is required to renew, the deadline, how to submit, who to contact if they have questions, and a brief encouraging note. Matter-of-fact tone. Include placeholders for GPA requirement and deadline date.</pre></div>
+          <span class="tier-badge tier-fast">Fast Draft</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants fast" data-title="mid cycle check in active scholars wellbeing">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">46</div><div class="card-meta"><div class="card-title">Mid-Cycle Check-In — Active Scholars</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Stay connected with current scholars mid-semester — mentoring, not monitoring.</div>
+          <div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 150-word mid-semester check-in email from [program name] staff to active scholars. Purpose: maintain relationship, surface any challenges early. Include: a brief update from the program, 2 questions asking how things are going, an offer to connect, and upcoming program dates. Tone: mentoring, not monitoring.</pre></div>
+          <span class="tier-badge tier-fast">Fast Draft</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants fast" data-title="interview invitation email finalist selection">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">47</div><div class="card-meta"><div class="card-title">Interview Invitation Email</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Advance a finalist to the interview stage without overpromising selection outcomes.</div>
+          <div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 150-word email inviting a [program name] finalist to an interview. Include: congratulations on advancing, interview format (virtual/in-person), date and time placeholder, what to prepare (brief, not overwhelming), who to contact to reschedule if needed, and a word of encouragement. Professional, warm. No over-promising about selection outcomes.</pre></div>
+          <span class="tier-badge tier-fast">Fast Draft</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="internal fast" data-title="reviewer volunteer thank you email review cycle">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">48</div><div class="card-meta"><div class="card-title">Reviewer / Volunteer Thank-You Email</div><div class="card-tags"><span class="tag tag-cat">Internal</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Thank volunteer reviewers after a cycle — specific about what they contributed.</div>
+          <div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 150-word thank-you email from [program name] to volunteer application reviewers after a review cycle. Thank them for their time, briefly note the outcome of the cycle (aggregate: number reviewed, number selected), invite them to participate next year, and note when they can expect any follow-up communication. Specific, genuine, brief.</pre></div>
+          <span class="tier-badge tier-fast">Fast Draft</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants fast" data-title="alumni re-engagement email reconnect past scholars">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">49</div><div class="card-meta"><div class="card-title">Alumni Re-Engagement Email</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> Reconnect with program alumni who have been inactive — relationship first, no donation ask.</div>
+          <div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 200-word email to [program name] alumni who have not been engaged in the past 2+ years. Purpose: reconnect, not fundraise. Share one program update, ask one question about their life since graduating, and offer one way to stay involved (mentoring, speaking, social media follow). No donation ask. Tone: peer-to-peer, not institutional.</pre></div>
+          <span class="tier-badge tier-fast">Fast Draft</span>
+        </div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants partners fast" data-title="application portal opens launch email campaign three audiences">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-num">50</div><div class="card-meta"><div class="card-title">Announcement: Application Portal Opens</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-cat">Partners</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="card-context"><strong>Use case:</strong> One prompt generates three audience-tailored versions of the cycle-launch announcement.</div>
+          <div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write an email campaign launch message for [program name]'s application opening. Version A (for prospective applicants): 120 words, application link, key dates, one reason to apply now. Version B (for school partners): 100 words, asking counselors to share with eligible students, referral toolkit link placeholder. Version C (for donors): 80 words, note that the cycle is open, invite them to share with their networks. All three in one output.</pre></div>
+          <span class="tier-badge tier-fast">Fast Draft</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CATEGORY 6 -->
+    <section class="category" id="cat6">
+      <div class="cat-header">
+        <span class="cat-number">CAT 06</span>
+        <h2 class="cat-title">Website &amp; FAQ Content</h2>
+        <span class="cat-count">Prompts 51–60</span>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants fast" data-title="homepage hero copy H1 H2 CTA website"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">51</div><div class="card-meta"><div class="card-title">Homepage Hero Copy</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Student-benefit-first headline and subhead for a scholarship program website.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write homepage hero copy for [program name]'s website. Deliverables: H1 headline (8 words max, student-benefit focused), H2 subheadline (1 sentence, includes award and eligibility hint), one CTA button label (4 words max), and a 30-word intro paragraph. No organization-centric language in the H1. Optimize for clarity over creativity.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants fast" data-title="about program page 250 words mission history"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">52</div><div class="card-meta"><div class="card-title">About the Program Page — 250 Words</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> The "About" page that introduces your program to a prospective applicant in 30 seconds.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 250-word "About" page for [program name]. Cover: mission (1 sentence), who is served (specific population), what the award includes, how scholars are selected (briefly), history or founding story (1 sentence), and a closing sentence that invites prospective applicants to apply. No jargon. Use second person ("you") for applicant-facing sections.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants governed" data-title="eligibility page scannable format GEO position zero"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">53</div><div class="card-meta"><div class="card-title">Eligibility Page — Scannable Format</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-gov">Governed</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> The single most-visited page on a scholarship website — must be accurate, scannable, and AI-answer-ready.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — GOVERNED WORKFLOW</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write the eligibility page for [program name]'s website. Format: one introductory sentence, a Yes/No checklist of 6–8 eligibility requirements, a "Not sure if you qualify?" section with a contact prompt, and a note about re-application for those who don't currently qualify. Based on: [paste eligibility criteria — no student data]. Optimize for position-zero AI answer retrieval.</pre></div><div class="guardrail"><strong>Required:</strong> Legal or program director verifies all eligibility criteria before publishing. Errors here have the highest impact on applicants.</div><span class="tier-badge tier-gov">Governed — accuracy-critical; director sign-off required</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants fast" data-title="FAQ page applicant 10 questions plain language"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">54</div><div class="card-meta"><div class="card-title">FAQ Page — Applicant Version (10 Questions)</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> A comprehensive FAQ written from the applicant's perspective — not the organization's.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 10-question FAQ page for [program name] applicants. Questions must come from the applicant's perspective, not the organization's. Cover: eligibility edge cases, application process, timeline, selection criteria, what happens after selection, renewal requirements, and contact. Each answer: under 60 words, plain language, specific. No vague answers like "it depends."</pre></div><span class="tier-badge tier-fast">Fast Draft — verify each answer against current program policy</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants governed" data-title="selection process explainer transparency bias how we choose"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">55</div><div class="card-meta"><div class="card-title">Selection Process Explainer Page</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-gov">Governed</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Build trust by being transparent about how selection works — without creating unrealistic expectations.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — GOVERNED WORKFLOW</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 200-word "How We Select Scholars" page for [program name]'s website. Cover: who reviews applications, what the criteria are (no rubric scores), how bias is managed (briefly), timeline from close to notification, and what applicants can and cannot expect during review. Transparent, trust-building tone. Avoid language that implies subjective preference without explanation.</pre></div><span class="tier-badge tier-gov">Governed — program director reviews before publishing</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants fast" data-title="renewal requirements page scholars GPA enrollment checklist"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">56</div><div class="card-meta"><div class="card-title">Renewal Requirements Page</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Clear expectations for returning scholars about what they need to maintain their award.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a clear, scannable renewal requirements page for [program name] scholars. Include: GPA minimum, enrollment status, required check-ins or reporting, deadline for renewal application, and what happens if a scholar is at risk of losing eligibility. Format: bullet list + short explanatory paragraph. Under 200 words. Tone: informative, not threatening.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants fast" data-title="contact page multiple pathways staff accessibility"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">57</div><div class="card-meta"><div class="card-title">Contact Page — Multiple Pathways</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> A contact page that routes inquiries to the right person quickly — applicants, donors, media, and partners.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write the contact page copy for [program name]'s website. Include: who to contact for what (applicant inquiries, donor inquiries, school partnerships, media), response time expectations, a brief FAQ link for common questions, and accessibility note (TTY/relay if applicable). Under 150 words. Make it easy to find the right person quickly.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants governed" data-title="GEO optimized program description AI answer engine readable"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">58</div><div class="card-meta"><div class="card-title">GEO-Optimized Program Description</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-gov">Governed</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> A description optimized to be quoted accurately by AI tools like ChatGPT, Perplexity, and Google AI Overviews.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — GOVERNED WORKFLOW</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 150-word program description for [program name] optimized for AI answer engines (GEO format). Lead with the most common question: "What is [program name]?" Answer it in the first sentence. Include: award amount, eligibility, deadline, and how to apply in the first paragraph. Use simple declarative sentences. Avoid passive voice. This text will be indexed and may be quoted by AI assistants.</pre></div><span class="tier-badge tier-gov">Governed — accuracy-critical; all facts verified before publishing</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants fast" data-title="deadline key dates page timeline application cycle"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">59</div><div class="card-meta"><div class="card-title">Deadline and Key Dates Page</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> A scannable dates page that applicants and counselors can reference quickly.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a "Key Dates" web page for [program name]'s application cycle. Format: a simple table or timeline with: Application Opens, Application Closes, Review Period, Notification Date, Acceptance Deadline, Award Disbursement. Below the table, write a 50-word note about late applications (accepted or not) and who to contact with timeline questions. Clean, scannable, no filler.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants governed" data-title="scholar stories page privacy safe consent template"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">60</div><div class="card-meta"><div class="card-title">Scholar Stories Page — Privacy-Safe Template</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-gov">Governed</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Build a scholar stories section that protects student privacy by design — consent infrastructure built in.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — GOVERNED WORKFLOW</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a template for a "Scholar Stories" page on [program name]'s website that protects student privacy by design. Include: a template for stories using first name and major only (with explicit note that student consent is required), a composite vignette format (labeled "Representative Scholar Story"), and a 50-word note about how stories are collected and how students can opt out. The template, not an actual story.</pre></div><div class="guardrail"><strong>Required:</strong> Written consent form must be completed before any student story is published. Include opt-out instructions on every story.</div><span class="tier-badge tier-gov">Governed — consent-critical; legal review recommended</span></div>
+      </div>
+    </section>
+
+    <!-- CATEGORY 7 -->
+    <section class="category" id="cat7">
+      <div class="cat-header">
+        <span class="cat-number">CAT 07</span>
+        <h2 class="cat-title">Scholar Engagement &amp; Retention</h2>
+        <span class="cat-count">Prompts 61–70</span>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants fast" data-title="monthly scholar newsletter template current scholars"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">61</div><div class="card-meta"><div class="card-title">Monthly Scholar Newsletter Template</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> A reusable newsletter structure that staff can fill in monthly — designed for mobile reading.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a monthly newsletter template for current [program name] scholars. Sections: Personal opening (2 sentences, staff to customize), Scholar Spotlight (placeholder for consented story), Upcoming Deadlines (table format), Resource of the Month, and Warm Closing with staff contact. Under 220 words. Design for mobile reading. Do not assume scholars check email daily.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants fast" data-title="professional development invitation workshop resume networking"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">62</div><div class="card-meta"><div class="card-title">Professional Development Invitation Email</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Invite scholars to a workshop or career event — frame as opportunity, not obligation.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 150-word email inviting [program name] scholars to a professional development event or workshop (e.g., resume workshop, networking session, career panel). Include: what the event covers, why it's valuable, date/time/location placeholder, RSVP link placeholder, and what to bring or prepare. Tone: opportunity-focused, not mandatory.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants fast" data-title="alumni mentorship program invitation current scholar peer"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">63</div><div class="card-meta"><div class="card-title">Alumni Mentorship Program Invitation</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Connect current scholars with alumni mentors — specific about time commitment and opt-in framing.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 150-word email inviting a current [program name] scholar to participate in a peer or alumni mentorship program. Cover: what the program involves (time commitment, format), what the scholar gains, how to sign up, and who to contact with questions. Tone: inviting, no pressure. Under 150 words.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants internal fast" data-title="end of year scholar survey invitation feedback"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">64</div><div class="card-meta"><div class="card-title">End-of-Year Scholar Survey Invitation</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Get genuine feedback from scholars — be honest about time and use of responses.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 100-word email inviting [program name] scholars to complete an end-of-year program survey. State: why their feedback matters (specific), how long it takes (be honest), the deadline, and what happens with their responses. Include a note that responses are confidential. No incentive language unless staff adds one. Tone: respectful of their time.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants governed" data-title="crisis support resource email wellbeing mental health scholars"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">65</div><div class="card-meta"><div class="card-title">Crisis Support Resource Email — Sensitive</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-gov">Governed</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> A proactive wellbeing check-in with resources — not reactive to a specific incident.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — GOVERNED WORKFLOW</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a brief, sensitive email from [program name] to scholars acknowledging that academic life is stressful and that the program cares about their wellbeing. List 3–4 campus or national support resources (use placeholders for specific school resources). Note that the program staff is also available to talk. Do not be alarmist or presumptuous. Under 150 words. Staff must review before sending.</pre></div><div class="guardrail"><strong>Required:</strong> Staff or student services professional reviews before sending. Do not send following a critical incident without additional guidance.</div><span class="tier-badge tier-gov">Governed — wellbeing professional reviews before sending</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants fast" data-title="scholar graduation recognition email congratulatory alumni"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">66</div><div class="card-meta"><div class="card-title">Scholar Graduation Recognition Email</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Mark a scholar's graduation as a relationship milestone — no donation ask in this touchpoint.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 150-word congratulatory email to a [program name] scholar who is graduating. Acknowledge their completion (1 sentence), thank them for representing the program, invite them to stay connected as an alum, and share one way they can give back (speaking, mentoring — no donation ask in this touchpoint). Warm, not formulaic.</pre></div><span class="tier-badge tier-fast">Fast Draft — personalize with scholar name and field</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants governed" data-title="renewal encouragement email scholar at risk GPA support"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">67</div><div class="card-meta"><div class="card-title">Renewal Encouragement — Scholar at Risk</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-gov">Governed</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Sensitive outreach to a scholar who may not meet renewal requirements — supportive, not punitive.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — GOVERNED WORKFLOW</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 150-word check-in email to a [program name] scholar who may be at risk of not meeting renewal requirements. Tone: supportive, not punitive. Ask how they are doing, name the requirement (GPA or enrollment) without accusation, offer a conversation to discuss options, and include a deadline for resolving the issue. Staff must review and personalize before sending.</pre></div><div class="guardrail"><strong>Required:</strong> Staff personalizes and reviews each email individually. Do not batch-send this type of communication.</div><span class="tier-badge tier-gov">Governed — individual staff review before each send</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants fast" data-title="cohort community building invitation event peer connection"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">68</div><div class="card-meta"><div class="card-title">Cohort Community-Building Invitation</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Invite the current scholar cohort to a low-stakes social or networking event.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 120-word email inviting [program name] scholars to a cohort community event (virtual or in-person). Cover: what the event is (format, not just a name), who will be there, what scholars can expect to gain from attending, and RSVP link/deadline placeholder. Tone: social, low-stakes, no performance pressure.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="social governed applicants" data-title="social media scholar spotlight request consent privacy"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">69</div><div class="card-meta"><div class="card-title">Social Media Spotlight — Consent Request</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-cat">Social Media</span><span class="tag tag-tier-gov">Governed</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Ask a scholar for permission to feature their story — explicit about what will be shared and how to decline.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — GOVERNED WORKFLOW</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write an email asking a [program name] scholar for permission to feature their story on social media. Be explicit about: what will be shared (major, institution, quote — no home address, no family details), where it will be posted, how they can review it before publication, and how to decline without consequence. Include a simple consent confirmation step. Under 150 words.</pre></div><div class="guardrail"><strong>Required:</strong> Obtain written or email confirmation of consent before posting any student story. Keep consent records on file.</div><span class="tier-badge tier-gov">Governed — written consent required before publishing</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants fast" data-title="career milestone congratulations alumni career update job"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">70</div><div class="card-meta"><div class="card-title">Career Milestone Congratulations — Alumni</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Brief acknowledgment when an alum shares a career win — relationship maintenance, no ask.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a brief congratulatory email to a [program name] alum who has shared a career milestone (new job, promotion, degree). Acknowledge the milestone specifically, connect it briefly to their scholar journey, and invite them to share their story with current scholars if they are willing. No ask. Under 100 words. Tone: proud, peer-level.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+    </section>
+
+    <!-- CATEGORY 8 -->
+    <section class="category" id="cat8">
+      <div class="cat-header">
+        <span class="cat-number">CAT 08</span>
+        <h2 class="cat-title">Event Promotion</h2>
+        <span class="cat-count">Prompts 71–80</span>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants social fast" data-title="scholarship ceremony save the date email SMS social"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">71</div><div class="card-meta"><div class="card-title">Scholarship Ceremony Save-the-Date</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Three formats of the same save-the-date for different delivery channels.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write three versions of a save-the-date announcement for [program name]'s annual scholarship ceremony: (1) Email format, 80 words, for scholars and families. (2) Social media caption, 60 words, for public announcement. (3) Text/SMS version, under 160 characters, for scholars. All include: event name, date, location/format placeholder, and RSVP link placeholder. No student names.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="donors fast" data-title="sponsor table seat invitation ceremony gala corporate"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">72</div><div class="card-meta"><div class="card-title">Sponsor Table / Seat Invitation — Ceremony</div><div class="card-tags"><span class="tag tag-cat">Donors</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Sell tables or seats to corporate sponsors at the annual ceremony — value proposition must be clear.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 180-word letter inviting a corporate sponsor to purchase a table or seats at [program name]'s annual scholarship ceremony. Cover: event overview, who attends, visibility/recognition included, pricing placeholder, and RSVP or commitment deadline. Professional, specific, no soft-focus language. Make the value proposition clear.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="internal fast" data-title="event program narrative copy booklet ceremony welcome"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">73</div><div class="card-meta"><div class="card-title">Event Program Narrative Copy</div><div class="card-tags"><span class="tag tag-cat">Internal</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> The narrative sections of a ceremony program booklet — placeholder structure for staff to populate.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write the narrative sections for [program name]'s scholarship ceremony program booklet. Sections: Welcome from Executive Director (100 words, mission-forward), About the Scholars (aggregate: number, fields, schools — no names without consent), Donor Acknowledgments page (template for listing names/organizations), and Closing Statement (50 words, forward-looking). Staff will insert actual names and data.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants donors fast" data-title="post event thank you email attendees ceremony recap"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">74</div><div class="card-meta"><div class="card-title">Post-Event Thank-You Email — Attendees</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-cat">Donors</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Warm close-the-loop email for all event attendees — brief, specific, one forward action.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 150-word post-ceremony thank-you email from [program name] to all attendees (scholars, families, donors, guests). Thank them for attending, share one highlight from the event (placeholder for staff to add), include a link to event photos if available (placeholder), and invite them to stay connected. Warm, brief, specific.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants fast" data-title="virtual event logistics email Zoom technology access instructions"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">75</div><div class="card-meta"><div class="card-title">Virtual Event Logistics Email</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Pre-event logistics email for scholars and families attending a virtual event — non-technical language.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 150-word logistics email for [program name] scholars and families attending a virtual event. Include: Zoom/platform link placeholder, how to test their audio/video in advance, what to expect (agenda overview, 3 bullets), who to contact if they have technical issues, and a note about recording. Accessible and non-technical language.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="applicants fast" data-title="pre event excitement email scholar families ceremony award"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">76</div><div class="card-meta"><div class="card-title">Pre-Event Excitement Email — Scholar Families</div><div class="card-tags"><span class="tag tag-cat">Applicants</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Build anticipation with scholarship recipient families ahead of the ceremony.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 150-word email to the families of [program name] scholarship recipients in advance of the award ceremony. Acknowledge their role in the scholar's journey (briefly, not saccharine), share what to expect at the event, provide logistics details (placeholders), and note how proud the program is of the scholar. Do not use family member names.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="donors fast" data-title="sponsor recap email post event outcomes visibility"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">77</div><div class="card-meta"><div class="card-title">Sponsor Recap Email — Post-Event</div><div class="card-tags"><span class="tag tag-cat">Donors</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Close the loop with sponsors after a ceremony — evidence-based, brief, relationship-building.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 150-word post-event recap email from [program name] to corporate sponsors. Cover: event highlights (aggregate attendance, number of scholars recognized), visibility delivered to the sponsor (mentions, table presence — placeholders), a thank-you, and a note about next year's cycle. Professional, evidence-based, brief.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="partners fast" data-title="panel speaker invitation professional alumni community leader event"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">78</div><div class="card-meta"><div class="card-title">Panel / Speaker Invitation Email</div><div class="card-tags"><span class="tag tag-cat">Partners</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Invite a speaker or panelist — specific about time commitment and topic.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 180-word email inviting a professional (donor, alumni, or community leader) to speak or sit on a panel at [program name]'s upcoming event. State: the event, the audience, the topic or question you want them to address, the time commitment (specific), any compensation or recognition offered, and a clear yes/no response deadline. No flattery beyond one sentence.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="internal fast" data-title="event debrief summary template internal staff post mortem"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">79</div><div class="card-meta"><div class="card-title">Event Debrief Summary — Internal</div><div class="card-tags"><span class="tag tag-cat">Internal</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Structured debrief template staff completes after every major event — captures what worked and what to improve.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write an internal event debrief summary template for [program name] staff after a scholarship ceremony or program event. Sections: Attendance (planned vs. actual), Highlights (3 bullets), What Worked, What to Improve, Donor/Partner Feedback (placeholder), Follow-Up Actions (table: Action | Owner | Deadline). Staff will complete the content; this is the structural template.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="donors fast" data-title="annual gala save the date major donor board formal"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">80</div><div class="card-meta"><div class="card-title">Annual Gala Save-the-Date — Major Donor Audience</div><div class="card-tags"><span class="tag tag-cat">Donors</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Formal save-the-date for major donors and board members — mission-driven, not generic event marketing.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 120-word save-the-date for [program name]'s annual gala targeted at major donors and board members. Tone: formal but mission-driven. Include: event date and venue placeholder, a one-sentence "why this matters" hook, RSVP deadline placeholder, and a named staff contact. No general public language — this version is for high-relationship contacts.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+    </section>
+
+    <!-- CATEGORY 9 -->
+    <section class="category" id="cat9">
+      <div class="cat-header">
+        <span class="cat-number">CAT 09</span>
+        <h2 class="cat-title">Board &amp; Governance Reporting</h2>
+        <span class="cat-count">Prompts 81–90</span>
+      </div>
+
+      <div class="prompt-card" data-tags="internal high" data-title="board report narrative program outcomes quarterly data"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">81</div><div class="card-meta"><div class="card-title">Board Report Narrative — Program Outcomes</div><div class="card-tags"><span class="tag tag-cat">Internal</span><span class="tag tag-tier-high">High-Accuracy</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Quarterly board report narrative — data-forward, no spin, includes decision requests.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — HIGH-ACCURACY</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 250-word board report narrative for [program name]'s quarterly meeting. Cover: applications received vs. last cycle (placeholder for data), selection outcomes, any equity flags identified in this cycle's applicant pool (process-level, no individual data), staff capacity notes, and 1–2 decisions the board is being asked to make. Professional, data-forward, no spin. Staff must verify all numbers before submitting.</pre></div><span class="tier-badge tier-high">High-Accuracy — director verifies all data before submission</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="internal governed" data-title="AI use policy statement board approval draft governance"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">82</div><div class="card-meta"><div class="card-title">AI Use Policy Statement — Board Approval Draft</div><div class="card-tags"><span class="tag tag-cat">Internal</span><span class="tag tag-tier-gov">Governed</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Draft a board-level AI use policy — establishes what staff may and may not do with AI tools.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — GOVERNED WORKFLOW</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a one-page AI Use Policy for [program name] for board review and approval. Sections: Purpose, Scope (what tasks AI may assist with), Permitted Uses, Prohibited Uses (include: no individual student data in AI prompts, no AI-only decisions on awards), Human Oversight Requirements, Staff Responsibilities, and Review Cadence. Tone: governance-level, precise. This is a draft; board should treat it as such.</pre></div><div class="guardrail"><strong>Required:</strong> Legal counsel reviews before board adoption. This prompt produces a starting draft only.</div><span class="tier-badge tier-gov">Governed — legal review before board adoption</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="internal high" data-title="annual report executive summary board version strategy"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">83</div><div class="card-meta"><div class="card-title">Annual Report Executive Summary — Board Version</div><div class="card-tags"><span class="tag tag-cat">Internal</span><span class="tag tag-tier-high">High-Accuracy</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Concise executive summary for board members who need the essentials in 5 minutes.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — HIGH-ACCURACY</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 300-word executive summary of [program name]'s annual report for board members. Cover: program performance vs. stated goals (placeholder for data), financial summary (placeholder), strategic priorities met, risks and how they were mitigated, and 3 priorities for the next fiscal year. Concise, strategic, honest. No puffery.</pre></div><span class="tier-badge tier-high">High-Accuracy — verify all data against final program records</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="internal fast" data-title="board meeting agenda item brief new initiative proposal"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">84</div><div class="card-meta"><div class="card-title">Board Meeting Agenda Item Brief</div><div class="card-tags"><span class="tag tag-cat">Internal</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> One-page brief for a new initiative being brought to the board for discussion or approval.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a board meeting agenda item brief for a proposed new initiative at [program name] (e.g., adding a mentoring component, expanding eligibility). Format: Background (50 words), Proposed Change (50 words), Why Now (30 words), Financial Implication (placeholder), Equity Consideration (30 words), Staff Recommendation (1 sentence), Board Action Requested (approve / discuss / table). Under 250 words total.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="internal fast" data-title="board recruitment one-pager skills time commitment governance"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">85</div><div class="card-meta"><div class="card-title">Board Recruitment One-Pager</div><div class="card-tags"><span class="tag tag-cat">Internal</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Attract the right board candidates with a candid, skills-focused recruitment document.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a one-page board recruitment description for [program name]. Include: organization overview (50 words), board role and responsibilities (bullet list), skills and expertise sought (specific list — avoid "passionate about"), time commitment (meetings per year, expected prep time), term length, how to apply or express interest, and staff contact. Professional, candid about commitment level.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="internal governed" data-title="risk register summary AI data use board governance privacy"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">86</div><div class="card-meta"><div class="card-title">Risk Register Summary — AI and Data Use</div><div class="card-tags"><span class="tag tag-cat">Internal</span><span class="tag tag-tier-gov">Governed</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Board-level risk assessment template for AI and data use — staff assesses likelihood and mitigation.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — GOVERNED WORKFLOW</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a board-level risk summary (1 page) for [program name] covering AI and data use risks. Risk categories: Student Data Privacy, Algorithmic Bias in Application Review, Staff AI Skill Gap, Vendor Reliability, and Reputational Risk. For each: 1-sentence risk description, likelihood (High/Medium/Low — staff to assess), current mitigation, and recommended action. Format: table. Staff completes the assessment; this is the template.</pre></div><span class="tier-badge tier-gov">Governed — leadership team assesses likelihood before presenting to board</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="internal donors fast" data-title="donor board report stewardship section fundraising retention"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">87</div><div class="card-meta"><div class="card-title">Donor Board Report Excerpt — Stewardship</div><div class="card-tags"><span class="tag tag-cat">Internal</span><span class="tag tag-cat">Donors</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Stewardship section for the board report — retention data and recommended board outreach actions.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 150-word donor stewardship section for [program name]'s board report. Cover: number of active named funds, total donor households, retention rate vs. prior year (placeholder), any lapsed major donors flagged for board awareness (no names in this draft — staff adds), and recommended board member outreach actions. Data-driven, governance-appropriate tone.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="internal high" data-title="strategic plan progress update mid year board goals"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">88</div><div class="card-meta"><div class="card-title">Strategic Plan Progress Update — Mid-Year</div><div class="card-tags"><span class="tag tag-cat">Internal</span><span class="tag tag-tier-high">High-Accuracy</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Honest mid-year update on strategic plan — on track, at risk, achieved — no false positivity.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — HIGH-ACCURACY</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a mid-year strategic plan progress update for [program name] board. Format: Goal | Status (On Track / At Risk / Achieved) | Brief Note. Cover 4–6 goals (placeholders — staff inserts actual goals). After the table, write a 50-word narrative note on the most significant risk to plan completion. Honest, no false positivity.</pre></div><span class="tier-badge tier-high">High-Accuracy — leadership verifies status assessments</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="internal fast" data-title="board orientation briefing new member onboarding overview"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">89</div><div class="card-meta"><div class="card-title">Board Orientation Briefing — New Member</div><div class="card-tags"><span class="tag tag-cat">Internal</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Welcome packet narrative for a new board member — practical, clear, covers the first 90 days.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 300-word orientation briefing document for a new [program name] board member. Cover: program overview, current scholar cohort (aggregate), governance structure, top 3 strategic priorities, the board's current ask for this year, key staff contacts, and the most important thing to know in the first 90 days. Clear, welcoming, practical.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="internal governed" data-title="IRS compliance brief board nonprofit scholarship FERPA legal"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">90</div><div class="card-meta"><div class="card-title">IRS / Compliance Brief Excerpt for Board</div><div class="card-tags"><span class="tag tag-cat">Internal</span><span class="tag tag-tier-gov">Governed</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> General compliance orientation note for new board members — always verified by legal counsel.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — GOVERNED WORKFLOW</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 150-word board brief on key compliance considerations for [program name]'s scholarship program (non-legal advice; for orientation purposes). Cover: IRS requirements for scholarship programs (scholarship vs. taxable grant distinction), FERPA considerations for student data, and state-level scholarship tax considerations (generic — staff must verify with legal counsel). Flag clearly: "This is a general orientation note. Consult legal counsel for specific guidance."</pre></div><div class="guardrail"><strong>Required:</strong> Legal counsel reviews before distribution. This prompt produces an orientation overview, not legal advice.</div><span class="tier-badge tier-gov">Governed — legal review before any distribution</span></div>
+      </div>
+    </section>
+
+    <!-- CATEGORY 10 -->
+    <section class="category" id="cat10">
+      <div class="cat-header">
+        <span class="cat-number">CAT 10</span>
+        <h2 class="cat-title">Internal Operations &amp; Workflow</h2>
+        <span class="cat-count">Prompts 91–100</span>
+      </div>
+
+      <div class="prompt-card" data-tags="internal fast" data-title="reviewer orientation email volunteer equity rubric bias"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">91</div><div class="card-meta"><div class="card-title">Reviewer Orientation Email</div><div class="card-tags"><span class="tag tag-cat">Internal</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Onboard volunteer reviewers at the start of a cycle — equity reminders built in.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 200-word orientation email from [program name] to volunteer application reviewers at the start of a new review cycle. Cover: review timeline, rubric summary (2–3 dimensions, no detailed scoring), equity reminders (watch for language fluency bias, zip code bias, school-type bias), how to flag concerns, and who to contact with questions. Tone: collegial, not condescending.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="internal fast" data-title="rubric explainer plain language version reviewer training bias"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">92</div><div class="card-meta"><div class="card-title">Rubric Explainer — Plain Language Version</div><div class="card-tags"><span class="tag tag-cat">Internal</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Help new reviewers understand the scoring rubric — with bias risk callouts for each dimension.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a plain-language explainer for [program name]'s application scoring rubric for new reviewers. Take these rubric dimensions (staff inserts actual dimensions) and for each: write a 2-sentence explanation of what the dimension measures, one example of a "strong" indicator, one example of a "weak" indicator, and one common bias risk to watch for. Do not fabricate rubric criteria — use only what staff provides.</pre></div><span class="tier-badge tier-fast">Fast Draft — staff must insert actual rubric dimensions</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="internal governed" data-title="application triage summary prompt batch mode anonymized review"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">93</div><div class="card-meta"><div class="card-title">Application Triage Summary — Batch Mode</div><div class="card-tags"><span class="tag tag-cat">Internal</span><span class="tag tag-tier-gov">Governed</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> AI-assisted first-pass triage of anonymized application responses — staff reads originals before any decision.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — GOVERNED WORKFLOW</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>You are a scholarship program reviewer. The following application response has been provided by staff [staff pastes anonymized response with all PII removed]. Summarize this response in 3–4 bullet points covering: main theme, demonstrated need or context (if present), stated goals, and any information gaps that would require follow-up. This summary is a triage aid only. Staff must read the original before making any selection decision. Flag any statement you are uncertain about with "[VERIFY]".</pre></div><div class="guardrail"><strong>Required:</strong> All PII (name, address, school, ID numbers) must be removed before pasting any application text into this prompt. Staff reads the original before any selection decision is made.</div><span class="tier-badge tier-gov">Governed — PII removal + human final review mandatory</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="internal fast" data-title="internal meeting summary template AI assisted notes action items"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">94</div><div class="card-meta"><div class="card-title">Internal Meeting Summary Template</div><div class="card-tags"><span class="tag tag-cat">Internal</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Reusable meeting summary structure — AI generates the draft, staff verifies against actual notes.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a template for [program name] staff to use when generating AI-assisted meeting summaries. The template should include: Meeting Name, Date, Attendees (placeholder), Agenda Items (table), Key Decisions Made, Action Items (Action | Owner | Deadline table), Open Questions Carried Forward, and Next Meeting Date. The output is a first draft — staff must verify against actual notes before distributing.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="internal governed" data-title="job description program coordinator hiring equity inclusive"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">95</div><div class="card-meta"><div class="card-title">Job Description Draft — Program Coordinator</div><div class="card-tags"><span class="tag tag-cat">Internal</span><span class="tag tag-tier-gov">Governed</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Draft an equitable, accurate job description — avoid coded language before posting.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — GOVERNED WORKFLOW</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a job description for a Scholarship Program Coordinator at [program name]. Include: job summary (50 words), key responsibilities (8–10 bullets, specific), required qualifications (skills and experience, not degrees unless genuinely required), preferred qualifications, compensation range placeholder, and application instructions. Avoid coded language that may screen out qualified diverse candidates. Staff must review for equity and accuracy before posting.</pre></div><div class="guardrail"><strong>Required:</strong> HR or DEI review before posting. AI may reproduce language patterns that screen out diverse candidates.</div><span class="tier-badge tier-gov">Governed — HR/DEI review before posting</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="internal governed" data-title="staff AI use agreement internal policy permitted prohibited uses"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">96</div><div class="card-meta"><div class="card-title">Staff AI Use Agreement — Internal</div><div class="card-tags"><span class="tag tag-cat">Internal</span><span class="tag tag-tier-gov">Governed</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> A plain-language staff agreement covering what AI may and may not be used for — building a culture of responsible use.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — GOVERNED WORKFLOW</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 1-page staff AI use agreement for [program name] employees. Cover: approved uses (drafting, summarizing, scheduling), prohibited uses (student PII in prompts, final award decisions without human review), required disclosures (when to note AI assistance in internal documents), escalation process for uncertain cases, and acknowledgment signature line. Plain language, under 400 words total.</pre></div><span class="tier-badge tier-gov">Governed — leadership sign-off before distribution to staff</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="internal fast" data-title="donor database cleanup instructions data quality deduplication"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">97</div><div class="card-meta"><div class="card-title">Donor Database Cleanup — Instruction Set</div><div class="card-tags"><span class="tag tag-cat">Internal</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Generate instructions for a data cleanup task — no actual donor data goes into the prompt.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>I have a donor contact list with inconsistent formatting (mixed case names, missing titles, duplicate entries). Write a step-by-step instruction set I can give to a data entry assistant or use with a spreadsheet tool to: standardize name capitalization, flag likely duplicates, identify records with missing email or phone, and export a "needs review" list. Do not process actual donor data — produce the instructions only.</pre></div><span class="tier-badge tier-fast">Fast Draft — never paste actual donor records into any AI prompt</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="internal fast" data-title="process documentation application review cycle annual"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">98</div><div class="card-meta"><div class="card-title">Process Documentation — Application Review Cycle</div><div class="card-tags"><span class="tag tag-cat">Internal</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Structured process documentation template for the annual review cycle — staff fills in specifics.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a process documentation template for [program name]'s annual application review cycle. Sections: Pre-Review Preparation (checklist), Reviewer Assignment Process, Scoring and Calibration Protocol, Conflict of Interest Procedure, Escalation Steps for Edge Cases, Final Selection Meeting Format, Notification Timeline, and Post-Cycle Audit. Staff will fill in specifics. Format: numbered steps under each section. Under 500 words total for the template structure.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="internal governed" data-title="equity audit checklist application cycle bias demographics representation"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">99</div><div class="card-meta"><div class="card-title">Equity Audit Checklist — Application Cycle</div><div class="card-tags"><span class="tag tag-cat">Internal</span><span class="tag tag-tier-gov">Governed</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> Post-cycle equity review — 20-item checklist that surfaces representation and process fairness issues.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — GOVERNED WORKFLOW</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>Write a 20-item equity audit checklist for [program name] to use after each application cycle. Cover: applicant pool demographics vs. eligible population, outreach channel reach, language access, school-type representation, selection rate by subgroup (aggregate), reviewer calibration consistency, essay prompt language review, appeal/complaint process, and documentation completeness. Format: Yes / No / Needs Review for each item. Staff uses this as a post-cycle quality tool, not a compliance form.</pre></div><div class="guardrail"><strong>Required:</strong> This checklist uses aggregate data only. Do not track individual applicants by demographic category in the audit — only cohort-level patterns.</div><span class="tier-badge tier-gov">Governed — program director reviews audit findings</span></div>
+      </div>
+
+      <div class="prompt-card" data-tags="internal fast" data-title="annual program retrospective staff facilitation questions year end"><div class="card-header" onclick="toggleCard(this)"><div class="card-num">100</div><div class="card-meta"><div class="card-title">Annual Program Retrospective — Facilitation Questions</div><div class="card-tags"><span class="tag tag-cat">Internal</span><span class="tag tag-tier-fast">Fast Draft</span></div></div><span class="card-toggle">▾</span></div>
+        <div class="card-body"><div class="card-context"><strong>Use case:</strong> End-of-year staff retrospective — 10 open-ended questions for a 60-minute team session.</div><div class="prompt-block"><div class="prompt-label"><span class="dot"></span>PROMPT — FAST DRAFT</div><button class="copy-btn" onclick="copyPrompt(this)">Copy</button><pre>You are facilitating an end-of-year retrospective for [program name] staff. Generate 10 discussion questions for a 60-minute team session covering: what worked in the application cycle, what created friction, where AI tools helped, where human review caught AI errors, equity concerns that surfaced, and what to change next cycle. Questions should be open-ended, specific to scholarship operations, and safe for honest answers. Do not generate answers — generate questions only.</pre></div><span class="tier-badge tier-fast">Fast Draft</span></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>NSPA AI Prompt Toolkit</strong> &nbsp;|&nbsp; Resource by <a href="mailto:mguhlin@tcea.org">Miguel Guhlin</a> (mguhlin@tcea.org) for NSPA &nbsp;|&nbsp; <a href="https://go.mgpd.org">go.mgpd.org</a></p>
+  <p style="margin-top:8px">All outputs are first drafts. Never paste student PII into any AI prompt. Human review required before use.</p>
+</footer>
+
+<script>
+// ── COPY BUTTON ──────────────────────────────────────────────
+function copyPrompt(btn) {
+  const pre = btn.nextElementSibling;
+  navigator.clipboard.writeText(pre.textContent.trim()).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// ── CARD TOGGLE ──────────────────────────────────────────────
+function toggleCard(header) {
+  const body = header.nextElementSibling;
+  const isOpen = header.classList.contains('open');
+  header.classList.toggle('open', !isOpen);
+  body.classList.toggle('open', !isOpen);
+}
+
+// ── SEARCH ───────────────────────────────────────────────────
+const searchInput = document.getElementById('search-input');
+const cards = document.querySelectorAll('.prompt-card');
+const resultCount = document.getElementById('result-count');
+let activeFilter = 'all';
+
+function updateVisibility() {
+  const query = searchInput.value.toLowerCase().trim();
+  let visible = 0;
+  cards.forEach(card => {
+    const tags = card.dataset.tags || '';
+    const title = card.dataset.title || '';
+    const matchesFilter = activeFilter === 'all' || tags.includes(activeFilter);
+    const matchesSearch = !query || title.includes(query) || tags.includes(query);
+    const show = matchesFilter && matchesSearch;
+    card.classList.toggle('hidden', !show);
+    if (show) visible++;
+  });
+  resultCount.textContent = `Showing ${visible} prompt${visible !== 1 ? 's' : ''}`;
+  // Show/hide category sections if all cards hidden
+  document.querySelectorAll('.category').forEach(cat => {
+    const anyVisible = [...cat.querySelectorAll('.prompt-card')].some(c => !c.classList.contains('hidden'));
+    cat.style.display = anyVisible ? '' : 'none';
+  });
+}
+
+searchInput.addEventListener('input', updateVisibility);
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.filter;
+    updateVisibility();
+  });
+});
+
+// ── TOC ACTIVE STATE ─────────────────────────────────────────
+const sections = document.querySelectorAll('.category, #tier-ref');
+const tocLinks = document.querySelectorAll('.toc-list a');
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      tocLinks.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === `#${id}`);
+      });
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+
+sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

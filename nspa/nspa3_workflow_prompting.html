@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workflow Prompting Workshop | NSPA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  /* ── CSS Variables ─────────────────────────────────── */
+  :root {
+    --navy:   #1A2B5E;
+    --navy-dk:#0F1A40;
+    --navy-md:#243A7A;
+    --gold:   #F0A500;
+    --gold-lt:#FEF3CC;
+    --teal:   #0D9488;
+    --teal-lt:#F0FDF9;
+    --white:  #FFFFFF;
+    --lgray:  #F4F6FA;
+    --mgray:  #E2E8F0;
+    --slate:  #475569;
+    --text:   #1E293B;
+    --good:   #475569;
+    --better: #0D9488;
+    --best:   #1A2B5E;
+    --red:    #991B1B;
+    --green:  #166534;
+  }
+
+  /* ── Reset & Base ──────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--lgray);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── Header ────────────────────────────────────────── */
+  header {
+    background: var(--navy);
+    color: var(--white);
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0;
+    width: 8px; height: 100%;
+    background: var(--gold);
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 0;
+    width: 120px; height: 100%;
+    background: var(--navy-dk);
+    opacity: 0.6;
+  }
+  .header-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 2rem 2.5rem;
+    position: relative;
+    z-index: 1;
+  }
+  .companion-badge {
+    display: inline-block;
+    background: var(--teal);
+    color: var(--white);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.75rem;
+    border-radius: 2px;
+    margin-bottom: 0.9rem;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+  }
+  .header-sub {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 0.4rem 1rem;
+    margin: 0.75rem 0 0.5rem;
+    border-radius: 2px;
+  }
+  .header-meta {
+    font-size: 0.82rem;
+    color: #7E99C8;
+    margin-top: 0.5rem;
+  }
+  .header-meta a { color: var(--teal); text-decoration: none; }
+  .header-meta a:hover { text-decoration: underline; }
+
+  /* ── How It Works Bar ──────────────────────────────── */
+  .how-it-works {
+    background: var(--navy-md);
+    border-top: 3px solid var(--gold);
+  }
+  .how-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1.25rem 2rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+  .how-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+  .how-num {
+    width: 1.6rem;
+    height: 1.6rem;
+    min-width: 1.6rem;
+    background: var(--gold);
+    color: var(--navy);
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+  }
+  .how-label {
+    color: var(--white);
+    font-size: 0.8rem;
+    line-height: 1.35;
+  }
+  .how-label strong { color: var(--gold); display: block; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; }
+
+  /* ── Main Content ──────────────────────────────────── */
+  main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  /* ── Generator Section ─────────────────────────────── */
+  .generator-section {
+    background: var(--white);
+    border-radius: 6px;
+    border-left: 6px solid var(--gold);
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 12px rgba(26,43,94,0.08);
+  }
+  .generator-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    color: var(--navy);
+    margin-bottom: 0.4rem;
+  }
+  .generator-section p {
+    color: var(--slate);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+  .gen-controls {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .btn-random {
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 0.65rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .btn-random:hover { background: #D49200; }
+  .btn-random:active { transform: scale(0.98); }
+  .btn-random svg { flex-shrink: 0; }
+
+  .theme-filter {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+  .theme-btn {
+    background: var(--lgray);
+    border: 1.5px solid var(--mgray);
+    color: var(--slate);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.35rem 0.8rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .theme-btn:hover, .theme-btn.active {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--white);
+  }
+
+  /* ── Activity Map ──────────────────────────────────── */
+  .section-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--mgray);
+  }
+
+  .activity-map {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+  .map-card {
+    border-radius: 5px;
+    padding: 0.9rem 1rem;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    border: 2px solid transparent;
+    position: relative;
+  }
+  .map-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(26,43,94,0.12); }
+  .map-card.active { border-color: var(--gold) !important; }
+  .map-card[data-theme="task"] { background: var(--navy); }
+  .map-card[data-theme="comms"] { background: var(--teal); }
+  .map-card[data-theme="workflow"] { background: #4C1D95; }
+  .map-card-num {
+    width: 1.6rem; height: 1.6rem;
+    background: var(--gold);
+    color: var(--navy);
+    border-radius: 50%;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 0.5rem;
+  }
+  .map-card-theme {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.2rem;
+  }
+  .map-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.88rem;
+    color: var(--white);
+    line-height: 1.25;
+    margin-bottom: 0.4rem;
+  }
+  .map-card-time {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.65);
+  }
+
+  /* ── Scenario Display ──────────────────────────────── */
+  .scenario-display {
+    display: none;
+    animation: fadeUp 0.3s ease;
+  }
+  .scenario-display.visible { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .scenario-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .scenario-num {
+    width: 2.4rem; height: 2.4rem; min-width: 2.4rem;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--navy);
+    background: var(--gold);
+  }
+  .scenario-title-group h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: var(--navy);
+    line-height: 1.2;
+  }
+  .scenario-meta {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.3rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.18rem 0.55rem;
+    border-radius: 3px;
+  }
+  .tag-theme { background: var(--navy); color: var(--gold); }
+  .tag-task  { background: var(--teal); color: var(--white); }
+  .tag-time  { background: var(--gold-lt); color: var(--navy); border: 1px solid var(--gold); }
+
+  /* Scenario card */
+  .scenario-card {
+    background: #FEF9E7;
+    border: 2px solid var(--gold);
+    border-radius: 6px;
+    padding: 1.2rem 1.4rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  .scenario-card::before {
+    content: 'SCENARIO';
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .scenario-card p {
+    font-size: 0.97rem;
+    line-height: 1.65;
+    color: var(--text);
+  }
+
+  /* Prompt tiers */
+  .prompt-tiers {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .tier-card {
+    border-radius: 5px;
+    border: 1.5px solid;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(26,43,94,0.07);
+    display: flex;
+    flex-direction: column;
+  }
+  .tier-card.good   { border-color: #CBD5E1; }
+  .tier-card.better { border-color: var(--teal); }
+  .tier-card.best   { border-color: var(--navy); }
+
+  .tier-header {
+    padding: 0.6rem 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .tier-card.good   .tier-header { background: var(--slate); }
+  .tier-card.better .tier-header { background: var(--teal); }
+  .tier-card.best   .tier-header { background: var(--navy); }
+
+  .tier-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--white);
+    flex: 1;
+  }
+  .tier-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 0.15rem 0.45rem;
+    border-radius: 2px;
+  }
+  .tier-card.good   .tier-badge { background: rgba(255,255,255,0.2); color: var(--white); }
+  .tier-card.better .tier-badge { background: rgba(255,255,255,0.2); color: var(--white); }
+  .tier-card.best   .tier-badge { background: var(--gold); color: var(--navy); }
+
+  .tier-desc {
+    padding: 0.5rem 0.9rem 0;
+    font-size: 0.72rem;
+    font-style: italic;
+    line-height: 1.4;
+  }
+  .tier-card.good   .tier-desc { background: #F8FAFC; color: var(--slate); }
+  .tier-card.better .tier-desc { background: var(--teal-lt); color: #065F46; }
+  .tier-card.best   .tier-desc { background: #EFF6FF; color: var(--navy); }
+
+  .tier-body {
+    padding: 0.75rem 0.9rem 0.9rem;
+    flex: 1;
+  }
+  .tier-card.good   .tier-body { background: #F8FAFC; }
+  .tier-card.better .tier-body { background: var(--teal-lt); }
+  .tier-card.best   .tier-body { background: #EFF6FF; }
+
+  .prompt-text {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.78rem;
+    line-height: 1.6;
+    color: var(--text);
+    background: rgba(255,255,255,0.75);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 4px;
+    padding: 0.7rem 0.8rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+    position: relative;
+  }
+  .copy-btn {
+    position: absolute;
+    top: 0.35rem; right: 0.35rem;
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .prompt-text:hover .copy-btn { opacity: 1; }
+  .copy-btn:hover { background: var(--gold); color: var(--navy); }
+  .copy-btn.copied { background: var(--teal); }
+
+  /* ── Guardrail Callout ─────────────────────────────── */
+  .guardrail {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .guardrail-col {
+    border-radius: 5px;
+    border: 1.5px solid;
+    padding: 1rem 1.1rem;
+  }
+  .guardrail-col.will    { background: #F0FDF4; border-color: #86EFAC; }
+  .guardrail-col.willnot { background: #FEF2F2; border-color: #FCA5A5; }
+  .guardrail-col h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.92rem;
+    margin-bottom: 0.65rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .guardrail-col.will    h4 { color: var(--green); }
+  .guardrail-col.willnot h4 { color: var(--red); }
+  .guardrail-col ul {
+    list-style: none;
+    padding: 0;
+  }
+  .guardrail-col ul li {
+    font-size: 0.83rem;
+    line-height: 1.5;
+    color: #14532D;
+    padding: 0.2rem 0 0.2rem 1.1rem;
+    position: relative;
+  }
+  .guardrail-col.willnot ul li { color: #7F1D1D; }
+  .guardrail-col.will ul li::before { content: '✓'; position: absolute; left: 0; color: var(--green); font-weight: 700; font-size: 0.8rem; }
+  .guardrail-col.willnot ul li::before { content: '✗'; position: absolute; left: 0; color: var(--red); font-weight: 700; font-size: 0.8rem; }
+
+  /* ── Reflection Strip ──────────────────────────────── */
+  .reflection {
+    background: var(--navy);
+    border-radius: 5px;
+    padding: 0.8rem 1.1rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .reflect-icon {
+    width: 1.4rem; height: 1.4rem; min-width: 1.4rem;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem;
+    margin-top: 1px;
+  }
+  .reflection p {
+    font-size: 0.88rem;
+    color: var(--gold);
+    font-style: italic;
+    line-height: 1.5;
+  }
+  .reflection strong { color: var(--white); font-style: normal; }
+
+  /* ── CARE Strip ────────────────────────────────────── */
+  .care-strip {
+    background: var(--teal);
+    border-radius: 5px;
+    padding: 0.75rem 1.2rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .care-strip strong { color: var(--white); font-size: 0.82rem; }
+  .care-strip span { color: rgba(255,255,255,0.85); font-size: 0.82rem; }
+  .care-pill {
+    background: rgba(255,255,255,0.2);
+    color: var(--white);
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.15rem 0.55rem;
+    border-radius: 20px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── All Scenarios Section ─────────────────────────── */
+  .all-section { margin-bottom: 2rem; }
+
+  /* ── Prompt Library Table ──────────────────────────── */
+  .library-section {
+    background: var(--white);
+    border-radius: 6px;
+    box-shadow: 0 2px 12px rgba(26,43,94,0.08);
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+  .library-header {
+    background: var(--navy);
+    padding: 1rem 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .library-header h2 {
+    font-family: 'Playfair Display', serif;
+    color: var(--white);
+    font-size: 1.1rem;
+  }
+  .library-header p {
+    color: #AAB8D4;
+    font-size: 0.8rem;
+    margin-top: 0.15rem;
+  }
+  .library-inner { padding: 1.25rem 1.4rem; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.83rem;
+  }
+  thead tr { background: var(--navy); }
+  thead th {
+    color: var(--white);
+    text-align: left;
+    padding: 0.6rem 0.8rem;
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  tbody tr:nth-child(even) { background: var(--lgray); }
+  tbody tr:hover { background: #EEF2FF; }
+  tbody td {
+    padding: 0.6rem 0.8rem;
+    vertical-align: top;
+    border-bottom: 1px solid var(--mgray);
+    color: var(--text);
+    line-height: 1.45;
+  }
+  .tier-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+  .tier-dot.good   { background: var(--slate); }
+  .tier-dot.better { background: var(--teal); }
+  .tier-dot.best   { background: var(--navy); }
+
+  .lib-teal {
+    background: var(--teal);
+    color: var(--white);
+    padding: 0.5rem 1.25rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  /* ── Footer ────────────────────────────────────────── */
+  footer {
+    background: var(--navy-dk);
+    color: var(--white);
+    padding: 1.75rem 2rem;
+    text-align: center;
+    position: relative;
+  }
+  footer::before {
+    content: '';
+    display: block;
+    height: 4px;
+    background: var(--gold);
+    position: absolute;
+    top: 0; left: 0; right: 0;
+  }
+  .footer-inner {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .footer-inner p {
+    font-size: 0.88rem;
+    color: #AAB8D4;
+    line-height: 1.7;
+  }
+  .footer-inner a { color: var(--gold); text-decoration: none; font-weight: 600; }
+  .footer-inner a:hover { text-decoration: underline; }
+  .footer-inner .divider { color: #475569; margin: 0 0.4rem; }
+  .footer-copy {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: #475569;
+  }
+  .footer-nspa {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.8rem;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+
+  /* ── Responsive ────────────────────────────────────── */
+  @media (max-width: 700px) {
+    .how-inner { grid-template-columns: 1fr 1fr; }
+    .activity-map { grid-template-columns: 1fr 1fr; }
+    .prompt-tiers { grid-template-columns: 1fr; }
+    .guardrail { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 480px) {
+    main { padding: 1rem; }
+    .how-inner { grid-template-columns: 1fr; }
+    .activity-map { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ──────────────────────────────────────────── -->
+<header>
+  <div class="header-inner">
+    <span class="companion-badge">Companion Workshop</span>
+    <h1>Workflow Prompting Workshop</h1>
+    <div class="header-sub">Automating Office Tasks with AI — Hands-On Practice</div>
+    <p class="header-meta">
+      March 4, 2026 &nbsp;·&nbsp;
+      National Scholarship Providers Association &nbsp;·&nbsp;
+      <a href="https://mguhlin.org/nspa" target="_blank">#NSPAai</a>
+    </p>
+  </div>
+</header>
+
+<!-- ── HOW IT WORKS ────────────────────────────────────── -->
+<div class="how-it-works">
+  <div class="how-inner">
+    <div class="how-step">
+      <div class="how-num">1</div>
+      <div class="how-label"><strong>Scenario</strong>A real scholarship-office situation you'll recognize.</div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">2</div>
+      <div class="how-label"><strong>Prompt Tiers</strong>Good → Better → Best. Try all three.</div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">3</div>
+      <div class="how-label"><strong>You Try It</strong>Open your AI tool. Run it. Rate it 0–10.</div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">4</div>
+      <div class="how-label"><strong>Debrief</strong>What worked? What surprised you? What would you change?</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MAIN ────────────────────────────────────────────── -->
+<main>
+
+  <!-- Random Generator -->
+  <div class="generator-section">
+    <h2>Random Scenario Generator</h2>
+    <p>Click the button to load a random activity, or filter by theme. Works with any AI tool: ChatGPT, Claude, Gemini, Copilot, BoodleBox.</p>
+    <div class="gen-controls">
+      <button class="btn-random" id="randomBtn" onclick="loadRandom()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+        Surprise Me
+      </button>
+      <div class="theme-filter">
+        <button class="theme-btn active" data-filter="all" onclick="setFilter('all', this)">All Themes</button>
+        <button class="theme-btn" data-filter="task" onclick="setFilter('task', this)">Task Management</button>
+        <button class="theme-btn" data-filter="comms" onclick="setFilter('comms', this)">Drafting Comms</button>
+        <button class="theme-btn" data-filter="workflow" onclick="setFilter('workflow', this)">Custom Workflows</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Activity Map -->
+  <div class="section-label">Activity Map — 6 Scenarios, 3 Themes</div>
+  <div class="activity-map" id="activityMap">
+    <div class="map-card" data-theme="task" data-id="0" onclick="loadScenario(0)">
+      <div class="map-card-num">1</div>
+      <div class="map-card-theme">Task Management</div>
+      <h3>Meeting Notes to Action Items</h3>
+      <div class="map-card-time">⏱ 8 min</div>
+    </div>
+    <div class="map-card" data-theme="task" data-id="1" onclick="loadScenario(1)">
+      <div class="map-card-num">2</div>
+      <div class="map-card-theme">Task Management</div>
+      <h3>Taming the Inbox</h3>
+      <div class="map-card-time">⏱ 8 min</div>
+    </div>
+    <div class="map-card" data-theme="comms" data-id="2" onclick="loadScenario(2)">
+      <div class="map-card-num">3</div>
+      <div class="map-card-theme">Drafting Comms</div>
+      <h3>Follow-Up Email Fast Draft</h3>
+      <div class="map-card-time">⏱ 10 min</div>
+    </div>
+    <div class="map-card" data-theme="comms" data-id="3" onclick="loadScenario(3)">
+      <div class="map-card-num">4</div>
+      <div class="map-card-theme">Drafting Comms</div>
+      <h3>Rejection Letter with Compassion</h3>
+      <div class="map-card-time">⏱ 10 min</div>
+    </div>
+    <div class="map-card" data-theme="workflow" data-id="4" onclick="loadScenario(4)">
+      <div class="map-card-num">5</div>
+      <div class="map-card-theme">Custom Workflows</div>
+      <h3>Repeatable Award Notification</h3>
+      <div class="map-card-time">⏱ 12 min</div>
+    </div>
+    <div class="map-card" data-theme="workflow" data-id="5" onclick="loadScenario(5)">
+      <div class="map-card-num">6</div>
+      <div class="map-card-theme">Custom Workflows</div>
+      <h3>RAG Knowledge Base Prompt</h3>
+      <div class="map-card-time">⏱ 12 min</div>
+    </div>
+  </div>
+
+  <!-- Scenario Display -->
+  <div class="scenario-display" id="scenarioDisplay"></div>
+
+  <!-- CARE Strip (always visible) -->
+  <div class="care-strip">
+    <strong>C.A.R.E. Check:</strong>
+    <span class="care-pill">Critical Awareness</span>
+    <span class="care-pill">Applied Purpose</span>
+    <span class="care-pill">Responsible Practice</span>
+    <span class="care-pill">Evaluative Outcome</span>
+    <span>— Apply before any workflow goes live.</span>
+  </div>
+
+  <!-- Prompt Library Table -->
+  <div class="library-section">
+    <div class="library-header">
+      <div>
+        <h2>Your Prompt Library — Starter Template</h2>
+        <p>Copy this structure into a shared doc. Fill one row before you leave.</p>
+      </div>
+    </div>
+    <div class="library-inner">
+      <table>
+        <thead>
+          <tr>
+            <th>Task Name</th>
+            <th>Best Prompt (copy-paste ready)</th>
+            <th>Tier</th>
+            <th>Time Saved</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Meeting notes → action items</strong></td>
+            <td>"Act as a nonprofit coordinator. Review these notes [paste]. Output: decisions table, action items with owners, follow-up email draft. Flag missing context. Do not include participant last names."</td>
+            <td><span class="tier-dot best"></span>Best</td>
+            <td>~40 min</td>
+          </tr>
+          <tr>
+            <td><strong>Inbox triage + response</strong></td>
+            <td>"Act as a scholarship coordinator. Here are 5 applicant inquiry summaries [paste]. For each: identify the core question, draft a 60-word response. Flag any requiring a policy check. Do not invent policy details."</td>
+            <td><span class="tier-dot best"></span>Best</td>
+            <td>~30 min</td>
+          </tr>
+          <tr>
+            <td><strong>Follow-up email (missing docs)</strong></td>
+            <td>"Act as scholarship coordinator. Write compassionate follow-up to [First Name] missing [Items]. Deadline [Date]. Under 120 words. Warm, action-oriented. Variation 1: standard. Variation 2: second reminder, more urgent."</td>
+            <td><span class="tier-dot better"></span>Better</td>
+            <td>~15 min</td>
+          </tr>
+          <tr>
+            <td><strong>Rejection letter</strong></td>
+            <td>"Draft 3 rejection letter versions (under 150 words each): general, encourage reapply, ineligible. Flag any language that could be misread as judgmental. Use [First Name] as the only variable."</td>
+            <td><span class="tier-dot better"></span>Better</td>
+            <td>~30 min</td>
+          </tr>
+          <tr>
+            <td><strong>Award notification (chained)</strong></td>
+            <td>Step 1: "Give me a 5-point outline for an award notification email." → Step 2: "Draft 150 words for [First Name], [Award], [Donor]." → Step 3: "Revise for warmth. Flag generic-sounding sentences."</td>
+            <td><span class="tier-dot best"></span>Best</td>
+            <td>~45 min</td>
+          </tr>
+          <tr>
+            <td><strong>[Your task here]</strong></td>
+            <td style="color:#94A3B8;">[Your prompt here]</td>
+            <td style="color:#94A3B8;">—</td>
+            <td style="color:#94A3B8;">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="lib-teal">Share this doc with your team. A shared prompt library is a team asset — not a personal one.</div>
+  </div>
+
+</main>
+
+<!-- ── FOOTER ───────────────────────────────────────────── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-nspa">National Scholarship Providers Association</div>
+    <p>
+      <a href="mailto:mguhlin@tcea.org">Miguel Guhlin (mguhlin@tcea.org)</a>
+      <span class="divider">|</span>
+      <a href="https://tcea.org" target="_blank">TCEA.org</a>
+      <span class="divider">|</span>
+      <a href="https://mguhlin.org/nspa" target="_blank">MGuhlin.org/nspa</a>
+    </p>
+    <p class="footer-copy">Workflow Prompting Workshop · Automating Office Tasks with AI · March 4, 2026</p>
+  </div>
+</footer>
+
+<!-- ── SCENARIO DATA + JS ──────────────────────────────── -->
+<script>
+const scenarios = [
+  {
+    id: 0,
+    num: 1,
+    theme: "task",
+    themeLabel: "Task Management",
+    title: "Meeting Notes to Action Items",
+    taskLabel: "Meeting Notes → Action Item Table",
+    time: "8 min",
+    scenario: "You just finished your scholarship review committee kickoff. Your notes are rough: three pages of bullet points, side conversations, and half-finished decisions. You need a clean summary and action item table before your follow-up email goes out by end of day.",
+    good: {
+      label: "GOOD — Fast Draft",
+      desc: "One-shot, no structure. Quick but shallow.",
+      prompt: `"Summarize these meeting notes into: (1) key decisions, (2) action items. [paste notes]"`
+    },
+    better: {
+      label: "BETTER — Structured Output",
+      desc: "Adds role, format, and a verification flag.",
+      prompt: `"Act as a nonprofit program coordinator. Review these meeting notes [paste]. Produce: (1) a 3-sentence summary, (2) a table of action items with: Item | Owner | Due Date | Status. Flag any decisions that still need confirmation."`
+    },
+    best: {
+      label: "BEST — Governed Workflow",
+      desc: "Full chain: extract → table → draft email → flag gaps. Privacy guardrail included.",
+      prompt: `"Act as a nonprofit program coordinator. Review these meeting notes [paste]. Step 1: Extract decisions made. Step 2: List action items (owner, due date). Step 3: Draft a 100-word follow-up email for staff. Step 4: Flag any missing context or ambiguous owners. Do not include participant last names."`
+    },
+    guardrails: {
+      will: [
+        "Use fictional names in practice — real names in production after review",
+        "Verify AI-assigned owners against your actual team list",
+        "Review the follow-up email draft before sending to any stakeholder",
+        "Measure time saved vs. manual write-up this cycle"
+      ],
+      willnot: [
+        "Paste raw notes containing applicant PII into consumer AI tools",
+        "Send any AI-drafted email without staff editing and approval",
+        "Assume AI correctly attributed action items without checking"
+      ]
+    },
+    reflect: "Which tier gave you the most usable output? What one change would improve it further?"
+  },
+  {
+    id: 1,
+    num: 2,
+    theme: "task",
+    themeLabel: "Task Management",
+    title: "Taming the Inbox — Prioritization and Drafting",
+    taskLabel: "Inbox Triage + Response Drafting",
+    time: "8 min",
+    scenario: "You returned from a 3-day conference to 94 emails. About 40 are applicant inquiries, 20 are from school counselors, 15 are internal, and 19 are noise. You need to triage, prioritize, and draft responses to the top-priority items — fast.",
+    good: {
+      label: "GOOD — Quick Triage",
+      desc: "Sorts a list. No drafts, no nuance.",
+      prompt: `"Review this list of email subjects and senders [paste list]. Sort them into: Urgent, Important, Low Priority, and Delete/Archive."`
+    },
+    better: {
+      label: "BETTER — Triage + Draft",
+      desc: "Adds role, priority logic, and one-sentence action per email.",
+      prompt: `"Act as a scholarship program coordinator. I'll paste 5 email subjects and brief summaries. For each: (1) assign priority (High/Medium/Low), (2) suggest a one-sentence reply or action. [paste] Keep language professional and brief."`
+    },
+    best: {
+      label: "BEST — Batch Response Workflow",
+      desc: "Chained: identify question → draft response → flag policy checks.",
+      prompt: `"Act as a scholarship coordinator. Here are 5 applicant inquiry summaries [paste]. For each: Step 1 — identify the core question. Step 2 — draft a 60-word response using compassionate, clear language. Step 3 — flag any that require a policy check before sending. Do not invent policy details."`
+    },
+    guardrails: {
+      will: [
+        "Paste subject lines and paraphrased summaries only — not full email text",
+        "Remove sender names and contact info before pasting",
+        "Flag AI responses that reference policy before sending — verify first",
+        "Use AI drafts as starting points; personalize before sending"
+      ],
+      willnot: [
+        "Paste applicant names, email addresses, or full email bodies into prompts",
+        "Send any AI-drafted response without reading it fully",
+        "Rely on AI to know your organization's policies — always verify"
+      ]
+    },
+    reflect: "Did removing contact details from the input affect output quality? How would you adapt this for your highest-volume email type?"
+  },
+  {
+    id: 2,
+    num: 3,
+    theme: "comms",
+    themeLabel: "Drafting Communications",
+    title: "Follow-Up Email Fast Draft",
+    taskLabel: "Missing Document Follow-Up",
+    time: "10 min",
+    scenario: "An applicant submitted their application 3 days before the deadline but is missing their financial verification form and one teacher recommendation. The deadline is in 5 days. You need a warm, clear, action-oriented follow-up — and you have 47 more just like it.",
+    good: {
+      label: "GOOD — Fast Draft",
+      desc: "Gets a draft quickly. Generic tone likely.",
+      prompt: `"Write a follow-up email to a scholarship applicant who is missing their financial verification form and one teacher recommendation. Deadline is in 5 days. Keep it under 120 words."`
+    },
+    better: {
+      label: "BETTER — Tone-Matched",
+      desc: "Adds role, tone, specific missing items, and word count constraint.",
+      prompt: `"Act as a scholarship program coordinator at a nonprofit. Write a compassionate follow-up email to [First Name] who is missing: (1) financial verification form, (2) one teacher recommendation. Deadline: [Date]. Tone: warm, encouraging, action-oriented. Under 120 words. Include a clear call to action."`
+    },
+    best: {
+      label: "BEST — Batch-Ready Template",
+      desc: "Three variations for three urgency levels. Human selects and personalizes.",
+      prompt: `"Act as a scholarship coordinator. Using the template below [paste template], draft 3 variations of a missing-document follow-up. Variable fields: [First Name], [Missing Items], [Deadline]. Each under 120 words. Variation 1: standard. Variation 2: second reminder, more urgent. Variation 3: final notice. Flag any language that may feel punitive."`
+    },
+    guardrails: {
+      will: [
+        "Use [First Name] only — remove last names and applicant IDs from prompts",
+        "Staff personalizes and approves every email before it sends",
+        "Test all three variations and pick the one that fits your voice",
+        "Track how many applicants responded per variation to refine next cycle"
+      ],
+      willnot: [
+        "Include applicant last names, IDs, or sensitive data in any prompt",
+        "Send AI output directly from the tool — always paste into your email system first",
+        "Use 'final notice' language without confirming this is actually the final notice"
+      ]
+    },
+    reflect: "Did the AI match the tone you'd actually use? What word or phrase would you change? How much time did this save versus copying last year's letter?"
+  },
+  {
+    id: 3,
+    num: 4,
+    theme: "comms",
+    themeLabel: "Drafting Communications",
+    title: "Rejection Letter with Compassion",
+    taskLabel: "Honest, Consistent, Compassionate Rejection",
+    time: "10 min",
+    scenario: "Your committee has finalized decisions. 180 applicants were not selected. You need rejection letters that are honest, respectful, and consistent — without revealing committee deliberation or ranking details. You also want to encourage reapplication where appropriate.",
+    good: {
+      label: "GOOD — Basic Draft",
+      desc: "Gets you a draft. Tone will be generic.",
+      prompt: `"Write a scholarship rejection letter that is kind and professional. Do not reveal selection criteria details."`
+    },
+    better: {
+      label: "BETTER — Context-Rich",
+      desc: "Adds role, word count, tone parameters, and equity check.",
+      prompt: `"Act as a scholarship program director. Write a 150-word rejection letter for applicants not selected this cycle. Tone: warm, respectful, forward-looking. Include: acknowledgment of their effort, a brief non-specific reason, encouragement to reapply next cycle, and where to find future opportunities. Do not include ranking or score references."`
+    },
+    best: {
+      label: "BEST — Multi-Version Governed",
+      desc: "Three versions for three situations. Bias and language flagging built in.",
+      prompt: `"Act as a scholarship program director. Draft 3 rejection letter versions (under 150 words each): Version A — general rejection. Version B — encourages reapplication next cycle. Version C — applicant is ineligible and cannot reapply (different reason). For each: (1) draft the letter, (2) flag any language that could be misread as judgmental or exclusionary. Use [First Name] as the only variable."`
+    },
+    guardrails: {
+      will: [
+        "Review each version for tone before approving for mass send",
+        "Check that Version C clearly avoids implying personal failure",
+        "Ask: would a first-generation applicant read this and feel respected?",
+        "Have at least one staff member who is not the author review each version"
+      ],
+      willnot: [
+        "Include applicant scores, rankings, or committee commentary in letters",
+        "Let AI select which version goes to which applicant — that's a human decision",
+        "Use Version C language for applicants who can and should reapply"
+      ]
+    },
+    reflect: "Does the output reinforce dignity? Would a first-generation applicant feel respected by this letter? Which version required the most editing — and why?",
+    care: true
+  },
+  {
+    id: 4,
+    num: 5,
+    theme: "workflow",
+    themeLabel: "Custom Workflows",
+    title: "Repeatable Award Notification Workflow",
+    taskLabel: "Prompt Chaining — 3-Step Award Letter",
+    time: "12 min",
+    scenario: "Every cycle you draft 60–300 personalized award notification letters. Currently: copy/paste from last year, find-and-replace names, fix errors, send. It takes hours and tone feels flat. Your goal: build a 3-step chained prompt workflow you can reuse every cycle.",
+    good: {
+      label: "GOOD — Single Prompt",
+      desc: "One shot. Faster than manual, but often generic.",
+      prompt: `"Write a 150-word award notification email for a scholarship recipient. Warm and professional tone. Include: congratulations, award name, donor acknowledgment, and next steps."`
+    },
+    better: {
+      label: "BETTER — Context + Variables",
+      desc: "Adds recipient details and donor context for personalization.",
+      prompt: `"Act as a scholarship program coordinator. Write a 150-word award notification email for [First Name] who received the [Award Name] scholarship made possible by [Donor Name]. Tone: warm, celebratory, professional. Include congratulations, why this donor invests in students, and what happens next."`
+    },
+    best: {
+      label: "BEST — 3-Step Prompt Chain",
+      desc: "Outline → Draft → Polish. Most reliable for batch production.",
+      prompt: `STEP 1 — OUTLINE:
+"Give me a 5-point outline for a scholarship award notification email. Include: congratulations, award name, donor acknowledgment, next steps, and closing."
+
+STEP 2 — DRAFT:
+"Using your outline, write a 150-word award notification email for [First Name] who received the [Award Name] scholarship made possible by [Donor Name]. Tone: warm, celebratory, professional."
+
+STEP 3 — POLISH + CHECK:
+"Revise the draft for: (1) clarity, (2) warmth, (3) any language that feels generic or impersonal. Keep all factual details unchanged. Flag any sentence that sounds AI-generated."`
+    },
+    guardrails: {
+      will: [
+        "Save this 3-step chain in your team prompt library after today",
+        "Run Step 3 every time — the polish step catches what Steps 1–2 miss",
+        "Staff spot-checks 10% of letters against the prompt output for accuracy",
+        "Update variable fields ([Award Name], [Donor Name]) carefully — verify each"
+      ],
+      willnot: [
+        "Skip the polish step when under time pressure — that's when errors happen",
+        "Mass-send letters without a human spot-check of at least a sample",
+        "Reuse last cycle's chain without reviewing it for updated program details"
+      ]
+    },
+    reflect: "Did chaining improve quality versus the single prompt? How many minutes did the full 3-step workflow take? What would you add to Step 3?"
+  },
+  {
+    id: 5,
+    num: 6,
+    theme: "workflow",
+    themeLabel: "Custom Workflows",
+    title: "RAG Knowledge Base Prompt",
+    taskLabel: "Your Documents → Grounded AI Answers",
+    time: "12 min",
+    scenario: "You've uploaded three documents to a Project or Custom GPT: (1) your eligibility FAQ, (2) your scoring rubric, (3) a sample award letter from last cycle. Now you want to query them accurately — without re-reading the docs every time a question comes up.",
+    good: {
+      label: "GOOD — Basic Query",
+      desc: "Asks a direct question. May get generic answers if context isn't clear.",
+      prompt: `"Based on the documents I've uploaded, what are the top 3 eligibility requirements for this scholarship?"`
+    },
+    better: {
+      label: "BETTER — Targeted Retrieval",
+      desc: "Specifies which document and asks for explicit flagging of gaps.",
+      prompt: `"Using the FAQ document I uploaded: (1) list all eligibility criteria that could disqualify an applicant, (2) list any criteria that are flexible or require additional documentation. Format as two separate bullet lists. If the document doesn't address something, say so — do not invent an answer."`
+    },
+    best: {
+      label: "BEST — Cross-Document Synthesis",
+      desc: "Finds inconsistencies across docs. Cites sources. Flags reviewer risk.",
+      prompt: `"Using the FAQ, rubric, and sample award letter I've uploaded: Step 1 — identify any language inconsistencies between the FAQ eligibility criteria and the rubric scoring categories. Step 2 — flag criteria that reviewers might interpret differently. Step 3 — suggest one sentence of clarifying language for each flagged item. Cite the source document for each finding."`
+    },
+    guardrails: {
+      will: [
+        "Upload anonymized versions of documents — remove applicant data before upload",
+        "Verify AI citations against the actual source document before acting",
+        "Update your knowledge base docs at the start of each new cycle",
+        "Use RAG for policy lookups and drafting; human confirms final decisions"
+      ],
+      willnot: [
+        "Upload documents containing applicant PII to any consumer-tier AI tool",
+        "Trust AI-generated policy summaries without checking the source text",
+        "Assume the AI read the whole document accurately — always spot-check",
+        "Share a RAG knowledge base built on one organization's data with another"
+      ]
+    },
+    reflect: "Did the AI cite its sources accurately? Where did it confuse or conflate documents? How would you use this to prep your reviewer committee?",
+    note: "If you don't have docs uploaded yet: paste the text of a one-page FAQ directly into the prompt. RAG logic still applies."
+  }
+];
+
+let activeFilter = 'all';
+let currentScenario = null;
+
+function setFilter(filter, btn) {
+  activeFilter = filter;
+  document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  // Dim map cards not in filter
+  document.querySelectorAll('.map-card').forEach(card => {
+    const theme = card.getAttribute('data-theme');
+    const show = filter === 'all' || theme === filter;
+    card.style.opacity = show ? '1' : '0.3';
+    card.style.pointerEvents = show ? 'auto' : 'none';
+  });
+}
+
+function loadRandom() {
+  const pool = activeFilter === 'all'
+    ? scenarios
+    : scenarios.filter(s => s.theme === activeFilter);
+  if (!pool.length) return;
+
+  // Avoid repeating same scenario
+  let pick;
+  do { pick = pool[Math.floor(Math.random() * pool.length)]; }
+  while (pool.length > 1 && pick.id === currentScenario);
+
+  loadScenario(pick.id);
+}
+
+function loadScenario(id) {
+  currentScenario = id;
+  const s = scenarios[id];
+
+  // Update active map card
+  document.querySelectorAll('.map-card').forEach(c => {
+    c.classList.toggle('active', parseInt(c.getAttribute('data-id')) === id);
+  });
+
+  const themeColors = { task: '#1A2B5E', comms: '#0D9488', workflow: '#4C1D95' };
+  const color = themeColors[s.theme];
+
+  let guardrailHtml = '';
+  if (s.guardrails) {
+    const willItems = s.guardrails.will.map(i => `<li>${i}</li>`).join('');
+    const wontItems = s.guardrails.willnot.map(i => `<li>${i}</li>`).join('');
+    guardrailHtml = `
+    <div class="guardrail">
+      <div class="guardrail-col will">
+        <h4>✓ We Will</h4>
+        <ul>${willItems}</ul>
+      </div>
+      <div class="guardrail-col willnot">
+        <h4>✗ We Will Not</h4>
+        <ul>${wontItems}</ul>
+      </div>
+    </div>`;
+  }
+
+  const noteHtml = s.note ? `<div style="background:#EFF6FF;border:1px solid #93C5FD;border-radius:5px;padding:0.7rem 1rem;margin-bottom:1rem;font-size:0.85rem;color:#1E40AF;"><strong>Note:</strong> ${s.note}</div>` : '';
+  const careHtml = s.care ? `<div style="background:#F0FDF9;border:1.5px solid #86EFAC;border-radius:5px;padding:0.65rem 1rem;margin-bottom:1rem;font-size:0.85rem;color:#065F46;"><strong>C.A.R.E. Equity Check:</strong> Does this output reinforce dignity? Would a first-generation applicant read this and feel respected?</div>` : '';
+
+  const html = `
+    <div class="scenario-header">
+      <div class="scenario-num" style="background:${color};color:#fff;">${s.num}</div>
+      <div class="scenario-title-group">
+        <h2>${s.title}</h2>
+        <div class="scenario-meta">
+          <span class="tag tag-theme" style="background:${color};">${s.themeLabel}</span>
+          <span class="tag tag-task">${s.taskLabel}</span>
+          <span class="tag tag-time">⏱ ${s.time}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="scenario-card">
+      <p>${s.scenario}</p>
+    </div>
+
+    <div class="prompt-tiers">
+      ${makeTierCard('good', s.good)}
+      ${makeTierCard('better', s.better)}
+      ${makeTierCard('best', s.best)}
+    </div>
+
+    ${careHtml}
+    ${noteHtml}
+    ${guardrailHtml}
+
+    <div class="reflection">
+      <div class="reflect-icon">💬</div>
+      <p><strong>Reflect:</strong> ${s.reflect}</p>
+    </div>
+  `;
+
+  const display = document.getElementById('scenarioDisplay');
+  display.innerHTML = html;
+  display.classList.add('visible');
+
+  // Scroll to display
+  setTimeout(() => display.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+}
+
+function makeTierCard(tier, data) {
+  const escapedPrompt = data.prompt
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+  const badgeLabel = tier === 'good' ? 'Fast Draft' : tier === 'better' ? 'Context-Rich' : 'Governed';
+  return `
+  <div class="tier-card ${tier}">
+    <div class="tier-header">
+      <span class="tier-label">${data.label}</span>
+      <span class="tier-badge">${badgeLabel}</span>
+    </div>
+    <div class="tier-desc">${data.desc}</div>
+    <div class="tier-body">
+      <div class="prompt-text" id="prompt-${tier}-${Math.random().toString(36).slice(2,7)}">
+        <button class="copy-btn" onclick="copyPrompt(this, event)"">Copy</button>${escapedPrompt}
+      </div>
+    </div>
+  </div>`;
+}
+
+function copyPrompt(btn, e) {
+  e.stopPropagation();
+  const box = btn.parentElement;
+  const text = box.innerText.replace('Copy', '').replace('Copied!', '').trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1800);
+  });
+}
+
+// Load first scenario on page load
+document.addEventListener('DOMContentLoaded', () => loadScenario(0));
+</script>
+</body>
+</html>

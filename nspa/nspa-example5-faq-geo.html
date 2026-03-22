@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NSPA 2/2/2 Framework | Example 5: FAQ &amp; Eligibility Page Optimization</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{--teal:#237683;--teal-light:#2d8f9e;--teal-pale:#e6f2f4;--gold:#FDB414;--gold-text:#b08a00;--gold-pale:#fff6d6;--gold-border:#e8c84a;--gray-mid:#A5A9AD;--navy:#1a2e4a;--navy-dark:#111f33;--bg:#f4f6f7;--white:#ffffff;--border:#d8dde0;--text:#1e2a35;--success:#27695a;--success-pale:#eaf4f0;--guardrail-bg:#fffbe6;--info-bg:#e6f2f4;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Source Sans 3','Calibri',sans-serif;background:var(--bg);color:var(--text);line-height:1.65;font-size:16px;}
+
+  /* HEADER */
+  .site-header{background:var(--teal);color:white;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.25);overflow:hidden;}
+  .site-header::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:var(--gold);opacity:.18;pointer-events:none;}
+  .header-top{background:rgba(0,0,0,.18);padding:7px 40px;display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--gold);position:relative;z-index:1;}
+  .nspa-badge{font-family:'Playfair Display',Georgia,serif;font-size:13px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;}
+  .header-divider{color:var(--gold);opacity:.6;}
+  .series-label{font-size:12px;color:rgba(255,255,255,.75);letter-spacing:1px;text-transform:uppercase;}
+  .header-main{padding:20px 40px;display:flex;align-items:center;justify-content:space-between;gap:20px;position:relative;z-index:1;}
+  .header-title-group h1{font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:700;color:white;line-height:1.2;}
+  .header-title-group .subtitle{font-size:14px;color:rgba(255,255,255,.85);margin-top:4px;}
+  .framework-badge{background:var(--gold);color:var(--navy-dark);font-weight:700;font-size:13px;padding:6px 16px;border-radius:20px;white-space:nowrap;letter-spacing:.5px;}
+  .toc-nav{background:rgba(0,0,0,.15);padding:0 40px;display:flex;overflow-x:auto;border-top:1px solid rgba(255,255,255,.15);position:relative;z-index:1;scrollbar-width:none;}
+  .toc-nav::-webkit-scrollbar{display:none;}
+  .toc-nav a{color:rgba(255,255,255,.8);text-decoration:none;font-size:13px;font-weight:600;padding:11px 16px;white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s;}
+  .toc-nav a:hover{color:var(--gold);border-bottom-color:var(--gold);background:rgba(255,255,255,.05);}
+
+  .page-wrap{max-width:1100px;margin:0 auto;padding:48px 40px 80px;}
+
+  .overview-bar{background:var(--teal);color:white;border-radius:8px;padding:24px 28px;margin-bottom:40px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;position:relative;overflow:hidden;}
+  .overview-bar::after{content:'';position:absolute;bottom:-30px;right:-30px;width:130px;height:130px;border-radius:50%;background:var(--gold);opacity:.18;pointer-events:none;}
+  .overview-item label{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);font-weight:700;display:block;margin-bottom:4px;}
+  .overview-item p{font-size:15px;color:rgba(255,255,255,.92);line-height:1.4;}
+
+  .sprint-divider{height:1px;background:var(--gray-mid);opacity:.35;margin:44px 0;}
+  .sprint-header{display:flex;align-items:center;gap:16px;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid var(--border);}
+  .sprint-num{background:var(--teal);color:white;font-family:'Playfair Display',serif;font-size:26px;font-weight:700;width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:3px solid var(--gold);}
+  .sprint-header-text h2{font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:var(--teal);}
+  .sprint-header-text .sprint-weeks{font-size:13px;color:var(--gold-text);font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+  section{scroll-margin-top:120px;}
+
+  .section-title{font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:600;color:var(--teal);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+  .section-title::before{content:'';display:inline-block;width:4px;height:20px;background:var(--gold);border-radius:2px;flex-shrink:0;}
+
+  .card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:28px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+  .card-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--teal);margin-bottom:14px;}
+
+  .policy-block{background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:20px;}
+  .policy-header{background:var(--teal);color:white;padding:14px 24px;font-family:'Playfair Display',serif;font-size:16px;font-weight:700;}
+  .policy-cols{display:grid;grid-template-columns:1fr 1fr;}
+  .policy-col{padding:20px 24px;}
+  .policy-col:first-child{border-right:1px solid var(--border);}
+  .policy-col-header{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;}
+  .will{color:var(--success);}
+  .will-not{color:#c0392b;}
+  .policy-col ul{list-style:none;display:flex;flex-direction:column;gap:8px;}
+  .policy-col li{font-size:14px;line-height:1.5;padding-left:22px;position:relative;}
+  .will li::before{content:'✓';position:absolute;left:0;color:var(--success);font-weight:700;}
+  .will-not li::before{content:'✕';position:absolute;left:0;color:#c0392b;font-weight:700;}
+
+  .alert{border-radius:6px;padding:13px 18px;margin-bottom:16px;font-size:14px;display:flex;gap:10px;align-items:flex-start;line-height:1.5;}
+  .alert-icon{font-size:18px;flex-shrink:0;}
+  .alert-guardrail{background:var(--guardrail-bg);border-left:4px solid var(--gold);}
+  .alert-info{background:var(--info-bg);border-left:4px solid var(--teal);}
+  .alert-success{background:var(--success-pale);border-left:4px solid var(--success);}
+
+  .prompt-tier{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px;}
+  .prompt-tier-header{padding:12px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  .tier-good .prompt-tier-header{background:#f0faf5;border-bottom:1px solid #c3e6d8;}
+  .tier-better .prompt-tier-header{background:var(--gold-pale);border-bottom:1px solid var(--gold-border);}
+  .tier-best .prompt-tier-header{background:#eef4fd;border-bottom:1px solid #b8d0f0;}
+  .tier-label{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:1px;}
+  .tier-good .tier-label{color:var(--success);}
+  .tier-better .tier-label{color:var(--gold-text);}
+  .tier-best .tier-label{color:#2563b0;}
+  .tier-name{font-size:13px;color:var(--gray-mid);}
+  .copy-btn{background:var(--teal);color:white;border:none;padding:6px 14px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s;font-family:'Source Sans 3',sans-serif;min-height:32px;}
+  .copy-btn:hover{background:var(--teal-light);}
+  .copy-btn.copied{background:var(--success);}
+  .prompt-body{background:#f9fafb;padding:20px;font-family:'Source Code Pro',monospace;font-size:13px;line-height:1.7;color:#2d3748;white-space:pre-wrap;overflow-x:auto;}
+  .prompt-note{background:#f5f5f3;padding:10px 20px;font-size:13px;color:var(--gray-mid);border-top:1px solid var(--border);font-style:italic;}
+
+  .checklist{list-style:none;display:flex;flex-direction:column;gap:8px;}
+  .checklist li{display:flex;align-items:flex-start;gap:10px;font-size:14px;line-height:1.5;padding:8px 12px;background:var(--white);border:1px solid var(--border);border-radius:6px;}
+  .check-box{width:20px;height:20px;border:2px solid var(--border);border-radius:3px;flex-shrink:0;margin-top:1px;background:white;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;}
+  .checklist li.critical{border-left:3px solid #c0392b;}
+  .checklist li.important{border-left:3px solid var(--gold);}
+  .checklist li.standard{border-left:3px solid var(--teal);}
+  .priority-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:2px 6px;border-radius:3px;white-space:nowrap;flex-shrink:0;}
+  .badge-critical{background:#fdf0ee;color:#c0392b;}
+  .badge-important{background:var(--gold-pale);color:var(--gold-text);border:1px solid var(--gold-border);}
+  .badge-standard{background:var(--teal-pale);color:var(--teal);}
+
+  .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:0;}
+  .data-table{width:100%;border-collapse:collapse;font-size:14px;min-width:480px;}
+  .data-table th{background:var(--teal);color:white;padding:10px 14px;text-align:left;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+  .data-table td{padding:10px 14px;border-bottom:1px solid var(--border);line-height:1.4;vertical-align:top;}
+  .data-table tr:last-child td{border-bottom:none;}
+  .data-table tr:nth-child(even) td{background:#f7f9fa;}
+
+  .outputs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:20px;}
+  .output-chip{background:var(--white);border:1px solid var(--border);border-left:3px solid var(--teal);border-radius:6px;padding:12px 16px;font-size:14px;display:flex;align-items:center;gap:8px;}
+  .output-icon{font-size:18px;flex-shrink:0;}
+
+  .metrics-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;}
+  .metric-card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:20px;text-align:center;}
+  .metric-label{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--gray-mid);font-weight:700;margin-bottom:8px;}
+  .metric-value{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--teal);}
+  .metric-desc{font-size:13px;color:var(--gray-mid);margin-top:4px;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .mt-4{margin-top:16px;}
+  .mt-8{margin-top:32px;}
+  .mb-4{margin-bottom:16px;}
+  .text-sm{font-size:14px;}
+  .text-muted{color:var(--gray-mid);}
+  .step-list{list-style:none;counter-reset:steps;display:flex;flex-direction:column;gap:10px;}
+  .step-list li{counter-increment:steps;display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.5;}
+  .step-list li::before{content:counter(steps);background:var(--teal);color:white;font-size:12px;font-weight:700;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+
+  /* GEO PRINCIPLE CARDS */
+  .geo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-bottom:20px;}
+  .geo-card{background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+  .geo-card-header{background:var(--teal);color:white;padding:12px 18px;display:flex;align-items:center;gap:10px;}
+  .geo-icon{font-size:20px;}
+  .geo-card-title{font-weight:700;font-size:14px;}
+  .geo-card-body{padding:16px 18px;font-size:14px;line-height:1.6;}
+  .geo-card-body ul{padding-left:18px;margin-top:6px;}
+  .geo-card-body li{margin-bottom:4px;}
+
+  /* BEFORE/AFTER COMPARISON */
+  .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:20px;}
+  .compare-col{padding:20px;}
+  .compare-col:first-child{border-right:1px solid var(--border);}
+  .compare-header{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--border);}
+  .compare-before .compare-header{color:#c0392b;}
+  .compare-after .compare-header{color:var(--success);}
+  .compare-before{background:#fef9f9;}
+  .compare-after{background:#f4fbf8;}
+  .compare-col p,.compare-col ul{font-size:14px;line-height:1.6;}
+  .compare-col ul{padding-left:18px;margin-top:8px;}
+  .compare-col li{margin-bottom:4px;}
+  .compare-label{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:2px 8px;border-radius:3px;margin-bottom:8px;}
+  .lbl-before{background:#fdf0ee;color:#c0392b;}
+  .lbl-after{background:var(--success-pale);color:var(--success);}
+
+  /* FAQ EXAMPLE */
+  .faq-example{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px;}
+  .faq-question{background:var(--teal-pale);padding:12px 20px;font-weight:700;font-size:15px;color:var(--teal);border-bottom:1px solid var(--border);}
+  .faq-answer{padding:16px 20px;font-size:14px;line-height:1.7;background:var(--white);}
+  .faq-answer .position-zero{background:var(--gold-pale);border-left:4px solid var(--gold);padding:10px 16px;border-radius:4px;margin-bottom:12px;font-weight:600;font-size:14px;}
+  .faq-answer ul{padding-left:20px;margin-top:8px;}
+  .faq-answer li{margin-bottom:4px;}
+
+  /* PAGE STRUCTURE BLOCK */
+  .page-structure{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:20px;}
+  .ps-header{background:var(--teal);color:white;padding:12px 20px;font-weight:700;font-size:14px;}
+  .ps-section{border-bottom:1px solid var(--border);}
+  .ps-section:last-child{border-bottom:none;}
+  .ps-section-header{padding:12px 20px;background:#f7f9fa;font-weight:700;font-size:13px;color:var(--teal);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+  .ps-section-body{padding:14px 20px;font-size:13px;line-height:1.6;color:var(--text);}
+  .ps-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:2px 8px;border-radius:3px;}
+  .tag-required{background:var(--success-pale);color:var(--success);}
+  .tag-ai{background:var(--gold-pale);color:var(--gold-text);border:1px solid var(--gold-border);}
+  .tag-human{background:var(--teal-pale);color:var(--teal);}
+
+  /* FOOTER */
+  .page-footer{background:var(--teal);color:rgba(255,255,255,.85);text-align:center;padding:28px 40px;font-size:13px;margin-top:64px;line-height:1.9;}
+  .page-footer strong{color:white;}
+  .page-footer a{color:var(--gold);text-decoration:underline;text-underline-offset:2px;}
+  .page-footer a:hover{color:white;}
+  .footer-sep{border:none;border-top:1px solid var(--gray-mid);opacity:.4;margin:12px auto;max-width:400px;}
+
+  /* RESPONSIVE */
+  @media(max-width:900px){
+    .overview-bar{grid-template-columns:1fr 1fr;}
+    .metrics-grid{grid-template-columns:1fr 1fr;}
+    .geo-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media(max-width:768px){
+    .page-wrap{padding:24px 16px 60px;}
+    .header-main{padding:16px 20px;flex-direction:column;align-items:flex-start;gap:12px;}
+    .header-top{padding:7px 16px;}
+    .toc-nav{padding:0 12px;}
+    .toc-nav a{padding:10px 12px;font-size:12px;}
+    .overview-bar{grid-template-columns:1fr;}
+    .policy-cols{grid-template-columns:1fr;}
+    .policy-col:first-child{border-right:none;border-bottom:1px solid var(--border);}
+    .two-col{grid-template-columns:1fr;}
+    .metrics-grid{grid-template-columns:1fr;}
+    .geo-grid{grid-template-columns:1fr;}
+    .compare-grid{grid-template-columns:1fr;}
+    .compare-col:first-child{border-right:none;border-bottom:1px solid var(--border);}
+    .outputs-grid{grid-template-columns:1fr 1fr;}
+    .card{padding:20px 16px;}
+    .prompt-body{font-size:12px;padding:14px;}
+    .page-footer{padding:24px 16px;text-align:left;}
+    .footer-sep{margin:12px 0;}
+  }
+  @media(max-width:520px){
+    .header-title-group h1{font-size:20px;}
+    .framework-badge{font-size:12px;padding:5px 12px;}
+    .sprint-num{width:44px;height:44px;font-size:20px;}
+    .sprint-header-text h2{font-size:18px;}
+    .section-title{font-size:16px;}
+    .outputs-grid{grid-template-columns:1fr;}
+    .check-box{width:24px;height:24px;}
+    .data-table{font-size:12px;}
+    .data-table th,.data-table td{padding:8px 10px;}
+    .metric-value{font-size:22px;}
+    .faq-question{font-size:14px;}
+    .sprint-header{gap:10px;}
+  }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-top">
+    <span class="nspa-badge">NSPA</span>
+    <span class="header-divider">|</span>
+    <span class="series-label">AI Implementation Series &mdash; 2/2/2 Framework</span>
+  </div>
+  <div class="header-main">
+    <div class="header-title-group">
+      <h1>Example 5: FAQ &amp; Eligibility Page Optimization</h1>
+      <div class="subtitle">6-Week Implementation Package &mdash; GEO-Ready Public Pages for AI Search Tools</div>
+    </div>
+    <div class="framework-badge">Weeks 1&ndash;6 / Sprint 5</div>
+  </div>
+  <nav class="toc-nav">
+    <a href="#overview">Overview</a>
+    <a href="#policy">Policy Statement</a>
+    <a href="#geo">GEO Principles</a>
+    <a href="#planning">Weeks 1&ndash;2</a>
+    <a href="#building">Weeks 3&ndash;4</a>
+    <a href="#review">Weeks 5&ndash;6</a>
+    <a href="#prompts">Prompt Pack</a>
+    <a href="#before-after">Before / After</a>
+    <a href="#faq-example">FAQ Example</a>
+    <a href="#page-structure">Page Structure</a>
+    <a href="#metrics">Metrics</a>
+  </nav>
+</header>
+
+<main class="page-wrap">
+
+  <section id="overview">
+    <div class="overview-bar">
+      <div class="overview-item">
+        <label>Milestone Goal</label>
+        <p>Rewrite the program FAQ and eligibility page so that AI search tools (ChatGPT, Gemini, Perplexity, AI Overviews) accurately repeat your program's answers when prospective applicants ask about eligibility, deadlines, and awards.</p>
+      </div>
+      <div class="overview-item">
+        <label>Team Pod</label>
+        <p>Communications lead + program coordinator + web admin. Organized around the prospective applicant experience.</p>
+      </div>
+      <div class="overview-item">
+        <label>AI Role in This Workflow</label>
+        <p>AI restructures and rewrites existing approved content into GEO-optimized formats. It does not create new eligibility rules or policy language. All published content is verified against official program documents before going live.</p>
+      </div>
+    </div>
+    <div class="alert alert-info">
+      <span class="alert-icon">🔍</span>
+      <div><strong>What is GEO?</strong> Generative Engine Optimization is the practice of structuring public-facing content so that AI search tools (ChatGPT search, Gemini, Perplexity, Google AI Overviews) read it accurately and repeat it correctly when users ask questions. The same principles that help AI tools also help human readers: direct answers first, clear headings, scannable structure, verified facts.</div>
+    </div>
+    <div class="alert alert-guardrail">
+      <span class="alert-icon">⚠</span>
+      <div><strong>Non-negotiable accuracy rule:</strong> AI tools will repeat whatever your public pages say. If your FAQ has outdated deadlines, incorrect eligibility criteria, or ambiguous language, AI will amplify those errors to thousands of prospective applicants. Every page that goes live in this cycle must be verified against current official program documents before publication.</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="policy">
+    <div class="section-title">Program Policy Statement</div>
+    <div class="policy-block">
+      <div class="policy-header">FAQ &amp; Eligibility Page Optimization &mdash; We Will / We Will Not</div>
+      <div class="policy-cols">
+        <div class="policy-col will">
+          <div class="policy-col-header will">&#10003; We Will</div>
+          <ul>
+            <li>Use AI to restructure and rewrite existing approved content into clear, GEO-optimized formats.</li>
+            <li>Verify every published fact (deadline, award amount, eligibility criterion) against the official program document before the page goes live.</li>
+            <li>Use a "position zero" summary at the top of each FAQ answer so AI tools can extract a direct, accurate response.</li>
+            <li>Structure eligibility criteria as a scannable list with clear Yes/No/Contact-us guidance for each requirement.</li>
+            <li>Update all optimized pages whenever program criteria, deadlines, or awards change.</li>
+            <li>Monitor whether AI tools are repeating accurate information after publication; correct the source page if they are not.</li>
+          </ul>
+        </div>
+        <div class="policy-col will-not">
+          <div class="policy-col-header will-not">&#10005; We Will Not</div>
+          <ul>
+            <li>Allow AI to generate new eligibility criteria, deadlines, or award amounts. All substantive facts come from official program documents.</li>
+            <li>Publish any AI-rewritten page without staff verification against the source document.</li>
+            <li>Use vague or hedged language on public-facing eligibility pages (e.g., "roughly," "approximately," "students who are kind of eligible").</li>
+            <li>Create separate optimized pages for AI tools and humans. One accurate, well-structured page serves both.</li>
+            <li>Leave outdated information on live pages if criteria or deadlines have changed.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="geo">
+    <div class="section-title">GEO Principles Applied to Scholarship Pages</div>
+    <div class="geo-grid">
+      <div class="geo-card">
+        <div class="geo-card-header"><span class="geo-icon">🎯</span><span class="geo-card-title">Lead with the answer</span></div>
+        <div class="geo-card-body">
+          AI tools extract the first clear answer in a section. Put the direct answer first, then add context.
+          <ul>
+            <li>Start every FAQ answer with a complete sentence that stands alone.</li>
+            <li>Avoid preamble: "Great question! We get this a lot..." loses the answer before AI can find it.</li>
+            <li>Use "position zero" summaries: 1&ndash;2 sentences that answer the question completely.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="geo-card">
+        <div class="geo-card-header"><span class="geo-icon">📋</span><span class="geo-card-title">Use headings and structure</span></div>
+        <div class="geo-card-body">
+          AI tools index pages by headings. Logical headings help both AI and humans navigate.
+          <ul>
+            <li>Each FAQ entry needs a heading that is the actual question applicants ask.</li>
+            <li>Eligibility criteria belong in a numbered or bulleted list, not buried in prose.</li>
+            <li>Break long sections into sub-headings: Eligibility, Deadlines, Award Details, How to Apply.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="geo-card">
+        <div class="geo-card-header"><span class="geo-icon">✅</span><span class="geo-card-title">Be specific and verifiable</span></div>
+        <div class="geo-card-body">
+          AI tools repeat what they find. Vague language gets repeated vaguely; specific language gets repeated accurately.
+          <ul>
+            <li>Use exact figures: "$5,000 per year" not "generous financial support."</li>
+            <li>Use exact dates: "February 15, 2026" not "mid-February."</li>
+            <li>Use binary eligibility statements: "Applicants must be..." not "We prefer applicants who..."</li>
+          </ul>
+        </div>
+      </div>
+      <div class="geo-card">
+        <div class="geo-card-header"><span class="geo-icon">🔄</span><span class="geo-card-title">Keep it current</span></div>
+        <div class="geo-card-body">
+          AI tools cache and resurface content. Outdated pages get repeated as current fact.
+          <ul>
+            <li>Include the cycle year in deadlines: "The 2025&ndash;26 application deadline is..."</li>
+            <li>Add a "Last updated" date to FAQ and eligibility pages.</li>
+            <li>Set a calendar reminder to review all optimized pages when criteria or deadlines change.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="planning">
+    <div class="sprint-header">
+      <div class="sprint-num">1</div>
+      <div class="sprint-header-text">
+        <div class="sprint-weeks">Weeks 1&ndash;2</div>
+        <h2>Planning: Content Audit, Question Mining, and Page Scope</h2>
+      </div>
+    </div>
+    <div class="alert alert-success">
+      <span class="alert-icon">🎯</span>
+      <div><strong>Sprint goal:</strong> Leave Weeks 1&ndash;2 with a content accuracy audit of existing pages, a list of the 10&ndash;15 most common applicant questions (sourced from real data), and a clear scope of which two pages are rewritten in this cycle.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Task 1 &mdash; Content Accuracy Audit of Existing Pages</div>
+      <p class="text-sm mb-4">Before rewriting anything, check what is currently live against current official documents. Do not rely on memory. Pull the official program document and compare it to what the website actually says.</p>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr><th>Page / Section</th><th>Current Content</th><th>Official Document Says</th><th>Accurate?</th><th>Action</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Application deadline</td><td><em>Paste from website</em></td><td><em>Paste from official doc</em></td><td></td><td></td></tr>
+            <tr><td>Award amount</td><td><em>Paste from website</em></td><td><em>Paste from official doc</em></td><td></td><td></td></tr>
+            <tr><td>GPA requirement</td><td><em>Paste from website</em></td><td><em>Paste from official doc</em></td><td></td><td></td></tr>
+            <tr><td>Residency requirement</td><td><em>Paste from website</em></td><td><em>Paste from official doc</em></td><td></td><td></td></tr>
+            <tr><td>Reapplication policy</td><td><em>Paste from website</em></td><td><em>Paste from official doc</em></td><td></td><td></td></tr>
+            <tr><td>Number of awards offered</td><td><em>Paste from website</em></td><td><em>Paste from official doc</em></td><td></td><td></td></tr>
+            <tr><td>Required application materials</td><td><em>Paste from website</em></td><td><em>Paste from official doc</em></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert alert-guardrail mt-4">
+        <span class="alert-icon">⚠</span>
+        <div>Correct any inaccurate content in this table before writing a single AI prompt. If you optimize a page that contains inaccurate information, you will amplify those inaccuracies to AI search tools at scale.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Task 2 &mdash; Question Mining (Real Applicant Questions First)</div>
+      <p class="text-sm mb-4">Effective FAQ pages answer the questions applicants actually ask, not the questions you wish they would ask. Mine these sources before writing any new content.</p>
+      <ol class="step-list">
+        <li>Pull the last 3&ndash;6 months of applicant emails and inquiry form submissions. Extract every unique question asked. Group duplicates.</li>
+        <li>Check your organization's Google Search Console data (if available): what search queries are bringing people to your program pages? These are the questions AI tools are being asked.</li>
+        <li>Have two staff members independently complete this prompt in a private AI tool session: "I am a high school student interested in applying for a scholarship. What would I ask an AI chatbot about this type of program?" Compare the lists.</li>
+        <li>Combine all sources into a master question list. Rank by frequency (how often is this asked?) and risk (what happens if an AI tool answers this wrong?).</li>
+        <li>Select the top 10&ndash;15 questions. These become the FAQ entries rewritten in Weeks 3&ndash;4.</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Task 3 &mdash; Scope: Two Pages for This Cycle</div>
+      <div class="two-col">
+        <div>
+          <strong style="font-size:14px;display:block;margin-bottom:10px;">Page 1: FAQ Page</strong>
+          <ul class="checklist">
+            <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Lock</span>Covers the 10&ndash;15 questions identified in the question mining task.</li>
+            <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Set</span>Each answer follows the position-zero structure: direct answer first, detail second.</li>
+            <li class="standard"><span class="check-box"></span><span class="priority-badge badge-standard">Note</span>Includes a "Last updated" date and links to the official application portal.</li>
+          </ul>
+        </div>
+        <div>
+          <strong style="font-size:14px;display:block;margin-bottom:10px;">Page 2: Eligibility Page</strong>
+          <ul class="checklist">
+            <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Lock</span>All eligibility criteria in a numbered list with binary Yes/No/Contact-us guidance.</li>
+            <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Set</span>Exact figures only: no ranges, no approximations, no "typically."</li>
+            <li class="standard"><span class="check-box"></span><span class="priority-badge badge-standard">Note</span>Includes a brief position-zero summary paragraph at the top that answers "Am I eligible?" in 2&ndash;3 sentences.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Sprint 1 Deliverable Checklist</div>
+    <div class="outputs-grid">
+      <div class="output-chip"><span class="output-icon">✅</span>Content accuracy audit (completed)</div>
+      <div class="output-chip"><span class="output-icon">❓</span>Top 10&ndash;15 question list (ranked)</div>
+      <div class="output-chip"><span class="output-icon">📄</span>Page scope document (2 pages)</div>
+      <div class="output-chip"><span class="output-icon">📋</span>Official source documents on file</div>
+      <div class="output-chip"><span class="output-icon">📝</span>Policy statement (signed)</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="building">
+    <div class="sprint-header">
+      <div class="sprint-num">2</div>
+      <div class="sprint-header-text">
+        <div class="sprint-weeks">Weeks 3&ndash;4</div>
+        <h2>Building: Rewrite Both Pages with GEO Structure</h2>
+      </div>
+    </div>
+    <div class="alert alert-success">
+      <span class="alert-icon">🎯</span>
+      <div><strong>Sprint goal:</strong> Produce reviewed, GEO-structured drafts of both in-scope pages, verified against official program documents, with web admin sign-off before publication.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Task 4 &mdash; Rewrite Protocol</div>
+      <p class="text-sm mb-4">Use the prompts in the Prompt Pack section to rewrite each FAQ answer and the eligibility page. Follow this protocol for every section produced.</p>
+      <ol class="step-list">
+        <li>Run the appropriate prompt tier for each FAQ question or page section. Provide the official source text as the only input; do not let AI invent details.</li>
+        <li>For each AI-produced answer, locate the specific sentence or figure in the official source document that supports it. Highlight it. If a claim in the AI output cannot be located in the source doc, delete it.</li>
+        <li>Check the position-zero summary sentence (the first sentence of each FAQ answer): Can it be read aloud as a complete, accurate answer to the question without any additional context? If not, rewrite it.</li>
+        <li>Review the eligibility criteria list: is each item in binary form ("You must be..." / "You are not eligible if...")? Convert any hedged language to binary before publishing.</li>
+        <li>Web admin reviews the full draft against the website's current CMS structure. Flag any headings or links that will break on publication.</li>
+      </ol>
+    </div>
+
+    <div class="section-title">Sprint 2 Deliverable Checklist</div>
+    <div class="outputs-grid">
+      <div class="output-chip"><span class="output-icon">📝</span>FAQ page draft (verified)</div>
+      <div class="output-chip"><span class="output-icon">📋</span>Eligibility page draft (verified)</div>
+      <div class="output-chip"><span class="output-icon">🔗</span>Source document citation for each claim</div>
+      <div class="output-chip"><span class="output-icon">👤</span>Web admin sign-off before publication</div>
+      <div class="output-chip"><span class="output-icon">📅</span>"Last updated" date on both pages</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="review">
+    <div class="sprint-header">
+      <div class="sprint-num">3</div>
+      <div class="sprint-header-text">
+        <div class="sprint-weeks">Weeks 5&ndash;6</div>
+        <h2>Review &amp; Wrap-Up: Test AI Accuracy, Measure Inquiry Volume, and Plan Maintenance</h2>
+      </div>
+    </div>
+    <div class="alert alert-success">
+      <span class="alert-icon">🎯</span>
+      <div><strong>Sprint goal:</strong> Test whether AI tools are now repeating accurate information from your pages, measure the change in repetitive applicant inquiries, and set up a maintenance schedule to keep the pages current.</div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">AI Accuracy Test Protocol</div>
+        <p class="text-sm mb-4">After pages are live for at least 2 weeks, test whether AI search tools are repeating accurate information from your pages.</p>
+        <ol class="step-list">
+          <li>Open a private/incognito browser session. Ask ChatGPT search, Gemini, or Perplexity: "What are the eligibility requirements for [PROGRAM NAME]?"</li>
+          <li>Compare the AI response to your published eligibility page. Is the answer accurate? Does it cite your page?</li>
+          <li>Ask 3&ndash;5 of the exact question headings from your FAQ. Score: Accurate / Partially Accurate / Inaccurate / No Answer.</li>
+          <li>If an AI tool repeats an inaccuracy, identify whether the source page is accurate (if so, the AI tool may need time to re-index). If the page has an error, correct the page immediately.</li>
+          <li>Document results. Share with communications lead and program director.</li>
+        </ol>
+        <div class="alert alert-guardrail mt-4">
+          <span class="alert-icon">⚠</span>
+          <div>If AI tools are repeating inaccurate information, the fix is almost always on your page, not the AI tool. You cannot control AI tool behavior; you can control the accuracy of your source content.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Maintenance Schedule Protocol</div>
+        <p class="text-sm mb-4">GEO-optimized pages are not "set and forget." Build a maintenance schedule before closing this cycle.</p>
+        <ul class="checklist">
+          <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Required</span>Identify the staff member responsible for updating the FAQ and eligibility pages when program criteria or deadlines change.</li>
+          <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Required</span>Set a calendar event 30 days before next cycle's application period to review and update all optimized pages.</li>
+          <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Set</span>Build a "page update trigger list": which internal events (new award announced, deadline changed, eligibility criteria revised) require an immediate public page update?</li>
+          <li class="standard"><span class="check-box"></span><span class="priority-badge badge-standard">Note</span>Re-run the AI accuracy test quarterly during the active application season. Log results.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section-title mt-8">Sprint 3 Deliverable Checklist</div>
+    <div class="outputs-grid">
+      <div class="output-chip"><span class="output-icon">🔍</span>AI accuracy test results</div>
+      <div class="output-chip"><span class="output-icon">📊</span>Inquiry volume before/after</div>
+      <div class="output-chip"><span class="output-icon">📅</span>Maintenance schedule (set)</div>
+      <div class="output-chip"><span class="output-icon">📋</span>Page update trigger list</div>
+      <div class="output-chip"><span class="output-icon">📝</span>Next milestone brief</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="prompts">
+    <div class="section-title">Full Prompt Pack &mdash; FAQ and Eligibility Page Rewrites</div>
+    <div class="alert alert-info">
+      <span class="alert-icon">ℹ️</span>
+      <div>All prompts receive only <strong>existing approved content from official program documents</strong>. AI restructures and rewrites existing language; it does not create new policy, new deadlines, or new eligibility criteria.</div>
+    </div>
+
+    <div class="prompt-tier tier-good">
+      <div class="prompt-tier-header">
+        <div><span class="tier-label">Good</span> <span class="tier-name">&mdash; Fast Draft: Single FAQ answer in GEO-ready format</span></div>
+        <button class="copy-btn" onclick="copyPrompt(this,'p1')">Copy</button>
+      </div>
+      <pre class="prompt-body" id="p1">You are a web content writer helping a nonprofit scholarship program optimize their FAQ page for clarity and accuracy.
+
+Your task: Rewrite the following question and answer in a GEO-optimized format that AI search tools can read accurately.
+
+Question: [PASTE THE FAQ QUESTION EXACTLY AS APPLICANTS ASK IT]
+Current answer (or relevant section from official program document):
+[PASTE EXISTING CONTENT OR RELEVANT PROGRAM DOCUMENT EXCERPT]
+
+Rewrite requirements:
+1. First sentence: A direct, complete answer to the question in 1–2 sentences. Must stand alone as a complete answer.
+2. Detail paragraph: 2–4 sentences of supporting context or nuance, using only information from the source above.
+3. Format: Question as a heading, answer as plain prose (no preamble like "Great question!")
+4. Language: Specific and binary where possible ("You must be..." not "Students who are typically...")
+5. Do not add information not in the source text above.
+
+Output: The rewritten FAQ entry, ready for staff to verify against the official document.</pre>
+      <div class="prompt-note">Use for: individual FAQ entries. Verify every fact in the output against the official source document before publishing. Run once per question.</div>
+    </div>
+
+    <div class="prompt-tier tier-better">
+      <div class="prompt-tier-header">
+        <div><span class="tier-label">Better</span> <span class="tier-name">&mdash; High-Accuracy: Full FAQ section with self-check and uncertainty flags</span></div>
+        <button class="copy-btn" onclick="copyPrompt(this,'p2')">Copy</button>
+      </div>
+      <pre class="prompt-body" id="p2">You are a web content writer helping a nonprofit scholarship program create a GEO-optimized FAQ page.
+
+Your task: Rewrite a batch of FAQ answers from the source content below into a structured, AI-readable format.
+
+Official program source content (verified):
+[PASTE RELEVANT SECTIONS FROM OFFICIAL PROGRAM DOCUMENTS — eligibility criteria, deadlines, award details, application process]
+
+Questions to answer (use only the source content above for each):
+1. [QUESTION 1]
+2. [QUESTION 2]
+3. [QUESTION 3]
+(Add more as needed)
+
+For each question, produce:
+- A heading: the question as applicants would ask it
+- Position-zero summary: 1–2 sentence direct answer that stands alone
+- Detail: 2–4 sentences of supporting context
+- If any part of the question cannot be answered from the source content, write [STAFF: VERIFY OR WRITE THIS] rather than guessing
+
+Language rules:
+- Specific over vague: exact figures, exact dates, exact criteria
+- Binary over hedged: "must be" not "should be," "are not eligible" not "may face challenges"
+- No preamble, no filler sentences
+
+Output: Each FAQ entry as a heading + two-part answer. List of [STAFF: VERIFY] flags at the end.</pre>
+      <div class="prompt-note">Use for: rewriting a full batch of FAQ entries in one session. Efficient for the Weeks 3&ndash;4 build sprint. All [STAFF: VERIFY] flags must be resolved before publication.</div>
+    </div>
+
+    <div class="prompt-tier tier-best">
+      <div class="prompt-tier-header">
+        <div><span class="tier-label">Best</span> <span class="tier-name">&mdash; Governed Workflow: Full eligibility page rewrite with position-zero summary and audit trail</span></div>
+        <button class="copy-btn" onclick="copyPrompt(this,'p3')">Copy</button>
+      </div>
+      <pre class="prompt-body" id="p3">You are a web content writer for a nonprofit scholarship program. This is a governed workflow for rewriting the program's public eligibility page. Follow all steps in order.
+
+STEP 1 — Acknowledge scope:
+Confirm: (a) you will use only the official document content provided below, (b) you will not invent new eligibility criteria, deadlines, or award amounts, (c) you will flag any gap between the questions to answer and the source content.
+
+STEP 2 — Produce the eligibility page using only this official source content:
+[PASTE CURRENT ELIGIBILITY PAGE AND/OR OFFICIAL PROGRAM DOCUMENT CRITERIA SECTION]
+
+The rewritten page must include:
+
+A. POSITION-ZERO SUMMARY (top of page):
+2–3 sentences that answer "Am I eligible for this scholarship?" as directly as possible. Mention the key requirements: institution type, enrollment status, GPA, residency, and any major hard cutoffs.
+
+B. ELIGIBILITY CRITERIA LIST (numbered):
+Each criterion as a complete, binary statement:
+- "You must be..." (qualifying requirement)
+- "You are not eligible if..." (disqualifying condition)
+- "Contact us if..." (edge case that requires human review)
+
+C. DEADLINES AND AWARD DETAILS SECTION:
+Exact figures only. No ranges. Include the cycle year.
+
+D. HOW TO APPLY (brief):
+3–5 numbered steps. Link placeholder: [LINK TO APPLICATION PORTAL]
+
+E. LAST UPDATED LINE:
+"Last updated: [DATE — staff to fill in before publishing]"
+
+STEP 3 — Self-audit before outputting:
+- [ ] Every figure in the draft traces to the official source content above?
+- [ ] Every eligibility statement is in binary form (no hedging)?
+- [ ] Position-zero summary answers the eligibility question completely in 2–3 sentences?
+- [ ] No new criteria, deadlines, or award amounts introduced?
+- [ ] [STAFF: VERIFY] flags inserted for any gap or uncertainty?
+
+STEP 4 — Output format:
+A. Self-audit results (one line per check)
+B. Full eligibility page draft
+C. List of [STAFF: VERIFY] flags with the specific gap or ambiguity for each</pre>
+      <div class="prompt-note">Use for: the full eligibility page rewrite. Retain the self-audit output as part of the publication record. Director and web admin review before the page goes live.</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="before-after">
+    <div class="section-title">Before / After: Eligibility Language</div>
+    <p class="text-sm text-muted mb-4">This comparison shows how the same eligibility information reads before and after GEO optimization. The "after" version is what AI tools need to repeat your requirements accurately.</p>
+
+    <div class="compare-grid">
+      <div class="compare-col compare-before">
+        <div class="compare-header">Before &mdash; Original Page</div>
+        <span class="compare-label lbl-before">Not GEO-ready</span>
+        <p>We welcome applications from a wide range of students who demonstrate financial need and a commitment to their communities. To be considered, applicants should generally be enrolled or planning to enroll in a post-secondary program and have shown strong academic performance throughout their high school years.</p>
+        <p style="margin-top:12px;">Preference may be given to students from rural backgrounds or who are the first in their family to attend college. The selection committee takes a holistic approach and considers many factors in the award process.</p>
+      </div>
+      <div class="compare-col compare-after">
+        <div class="compare-header">After &mdash; GEO-Optimized</div>
+        <span class="compare-label lbl-after">GEO-ready</span>
+        <p style="font-weight:600;margin-bottom:8px;">To be eligible for the [PROGRAM NAME] scholarship, you must meet all of the following requirements:</p>
+        <ul style="padding-left:18px;">
+          <li>You must be a graduating high school senior or current undergraduate student.</li>
+          <li>You must be enrolled or planning to enroll full-time at an accredited two- or four-year institution.</li>
+          <li>You must have a cumulative GPA of 3.0 or higher on a 4.0 scale.</li>
+          <li>You must be a resident of [STATE/REGION] at the time of application.</li>
+          <li>You must demonstrate financial need through the FAFSA or a need-based statement.</li>
+        </ul>
+        <p style="margin-top:12px;font-size:13px;color:var(--gray-mid);font-style:italic;">Priority consideration is given to first-generation college students and applicants from rural communities, though all eligible applicants are reviewed.</p>
+      </div>
+    </div>
+    <div class="alert alert-info">
+      <span class="alert-icon">🔍</span>
+      <div>The "before" version will cause AI tools to say vague things like "the scholarship is for students who have shown academic performance." The "after" version will cause AI tools to say "applicants must have a 3.0 GPA and reside in [STATE]" &mdash; which is what you want prospective applicants to hear.</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="faq-example">
+    <div class="section-title">GEO-Optimized FAQ Examples</div>
+    <p class="text-sm text-muted mb-4">Each entry follows the position-zero structure: direct answer first, supporting detail second. The first sentence is designed to be extracted by AI tools and read aloud as a complete, accurate answer.</p>
+
+    <div class="faq-example">
+      <div class="faq-question">Can I apply if I am already enrolled in college?</div>
+      <div class="faq-answer">
+        <div class="position-zero">Yes. The [PROGRAM NAME] scholarship is open to current undergraduate students in good standing, not only graduating high school seniors.</div>
+        <p>Undergraduate applicants must be enrolled full-time at an accredited two- or four-year institution and must meet the same GPA, residency, and financial need requirements as high school applicants. Students in their first, second, or third year of undergraduate study are eligible. Students who have already earned a bachelor's degree are not eligible to apply.</p>
+      </div>
+    </div>
+
+    <div class="faq-example">
+      <div class="faq-question">What is the application deadline for the 2025&ndash;26 award cycle?</div>
+      <div class="faq-answer">
+        <div class="position-zero">The 2025&ndash;26 application deadline is February 15, 2026 at 11:59 p.m. [TIME ZONE]. Late applications are not accepted.</div>
+        <p>All required materials &mdash; including transcripts, letters of recommendation, and the personal essay &mdash; must be submitted through the online portal by the deadline. Materials received after February 15, 2026 will not be reviewed, regardless of the reason for the delay. If you experience a technical problem with the portal before the deadline, contact [CONTACT EMAIL] immediately.</p>
+      </div>
+    </div>
+
+    <div class="faq-example">
+      <div class="faq-question">Can I reapply if I was not selected last year?</div>
+      <div class="faq-answer">
+        <div class="position-zero">Yes. Students who applied in a previous cycle and were not selected are encouraged to reapply in future cycles, provided they still meet all eligibility requirements.</div>
+        <p>There is no limit on the number of times an eligible student may apply. Previous applicants do not receive preferential consideration; each application cycle is reviewed independently by the selection committee. Students who previously received an award are not eligible to reapply unless the program guidelines specify otherwise.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="page-structure">
+    <div class="section-title">Recommended Page Structure for Both Optimized Pages</div>
+
+    <div class="page-structure">
+      <div class="ps-header">Eligibility Page &mdash; Required Structure</div>
+      <div class="ps-section">
+        <div class="ps-section-header"><span class="ps-tag tag-required">Required</span> Position-Zero Summary</div>
+        <div class="ps-section-body">2&ndash;3 sentences answering "Am I eligible?" Includes the key hard requirements. Written by staff from official document; AI drafts, staff verify.</div>
+      </div>
+      <div class="ps-section">
+        <div class="ps-section-header"><span class="ps-tag tag-ai">AI-drafted</span> Eligibility Criteria List (numbered, binary)</div>
+        <div class="ps-section-body">Each criterion as "You must be..." / "You are not eligible if..." / "Contact us if..." format. Staff verify every item against official document before publishing.</div>
+      </div>
+      <div class="ps-section">
+        <div class="ps-section-header"><span class="ps-tag tag-human">Human-written</span> Deadlines and Award Details</div>
+        <div class="ps-section-body">Exact dollar amounts, exact dates including the cycle year. Staff write this section directly from official records. No AI involvement; too high-stakes for draft errors.</div>
+      </div>
+      <div class="ps-section">
+        <div class="ps-section-header"><span class="ps-tag tag-ai">AI-drafted</span> Edge Case Guidance</div>
+        <div class="ps-section-body">Brief answers to common edge-case situations (dual enrollment, part-time students, international students, gap year). Staff verify each against current policy; director approves edge-case language.</div>
+      </div>
+      <div class="ps-section">
+        <div class="ps-section-header"><span class="ps-tag tag-human">Human-written</span> Contact and Apply CTA</div>
+        <div class="ps-section-body">Link to application portal, contact email, and "Last updated: [DATE]" line. Staff write and maintain. Updated whenever the page is revised.</div>
+      </div>
+    </div>
+
+    <div class="page-structure">
+      <div class="ps-header">FAQ Page &mdash; Required Structure</div>
+      <div class="ps-section">
+        <div class="ps-section-header"><span class="ps-tag tag-required">Required</span> Grouped by Topic</div>
+        <div class="ps-section-body">Questions organized under topic headings: About the Scholarship, Eligibility, How to Apply, Deadlines, Awards, After You Apply. Topic groupings help AI tools index by category, not just by individual question.</div>
+      </div>
+      <div class="ps-section">
+        <div class="ps-section-header"><span class="ps-tag tag-ai">AI-drafted</span> Each FAQ Entry (Position-Zero Format)</div>
+        <div class="ps-section-body">Question as heading + two-part answer: position-zero summary sentence, then supporting detail. AI drafts from official source content; staff verify all facts before publishing.</div>
+      </div>
+      <div class="ps-section">
+        <div class="ps-section-header"><span class="ps-tag tag-human">Human-written</span> Edge Case and Sensitive Questions</div>
+        <div class="ps-section-body">Questions about financial hardship, special circumstances, appeals, or disabilities are written by staff. These carry relationship and legal considerations that AI draft language may underserve.</div>
+      </div>
+      <div class="ps-section">
+        <div class="ps-section-header"><span class="ps-tag tag-human">Human-written</span> Last Updated and Contact Line</div>
+        <div class="ps-section-body">"Last updated: [DATE]" and contact information. Required for AI tools to identify content freshness. Staff update the date every time any FAQ answer is revised.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="metrics">
+    <div class="section-title">Measurement Framework</div>
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-label">AI Accuracy</div>
+        <div class="metric-value">Test Score</div>
+        <div class="metric-desc">% of FAQ questions answered accurately by AI search tools after pages go live. Test quarterly. Target: 80%+ accurate on core eligibility questions.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Efficiency Metric</div>
+        <div class="metric-value">Inquiry Drop</div>
+        <div class="metric-desc">Change in repetitive eligibility and deadline inquiry volume after optimized pages go live. Measure over a full application cycle.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Content Quality</div>
+        <div class="metric-value">Accuracy Rate</div>
+        <div class="metric-desc">% of AI-drafted content items that passed verification without errors during the build sprint. Target: zero undetected errors in published content.</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="page-footer">
+  <strong>NSPA AI Implementation Series</strong> &mdash; 2/2/2 Framework &mdash; Example 5: FAQ &amp; Eligibility Page Optimization
+  <hr class="footer-sep">
+  Produced for the "Automating Office Tasks with AI" session &mdash; March 4, 2026<br>
+  Contact: <a href="mailto:mguhlin@tcea.org">mguhlin@tcea.org</a> &nbsp;|&nbsp; <strong><a href="https://go.mgpd.org/nspa3">Return to Session Resources</a></strong>
+</footer>
+
+<script>
+function copyPrompt(btn,id){
+  navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>{
+    btn.textContent='Copied!';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied');},2000);
+  });
+}
+document.querySelectorAll('.check-box').forEach(b=>{
+  b.addEventListener('click',()=>{
+    const on=b.dataset.c==='1';b.dataset.c=on?'0':'1';
+    b.style.background=on?'':'#237683';b.style.borderColor=on?'':'#237683';
+  });
+});
+</script>
+</body>
+</html>

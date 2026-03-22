@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NSPA 2/2/2 Framework | Example 4: Donor &amp; Board Reporting</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{--teal:#237683;--teal-light:#2d8f9e;--teal-pale:#e6f2f4;--gold:#FDB414;--gold-text:#b08a00;--gold-pale:#fff6d6;--gold-border:#e8c84a;--gray-mid:#A5A9AD;--navy:#1a2e4a;--navy-dark:#111f33;--bg:#f4f6f7;--white:#ffffff;--border:#d8dde0;--text:#1e2a35;--success:#27695a;--success-pale:#eaf4f0;--guardrail-bg:#fffbe6;--info-bg:#e6f2f4;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Source Sans 3','Calibri',sans-serif;background:var(--bg);color:var(--text);line-height:1.65;font-size:16px;}
+
+  /* HEADER */
+  .site-header{background:var(--teal);color:white;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.25);overflow:hidden;}
+  .site-header::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:var(--gold);opacity:.18;pointer-events:none;}
+  .header-top{background:rgba(0,0,0,.18);padding:7px 40px;display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--gold);position:relative;z-index:1;}
+  .nspa-badge{font-family:'Playfair Display',Georgia,serif;font-size:13px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;}
+  .header-divider{color:var(--gold);opacity:.6;}
+  .series-label{font-size:12px;color:rgba(255,255,255,.75);letter-spacing:1px;text-transform:uppercase;}
+  .header-main{padding:20px 40px;display:flex;align-items:center;justify-content:space-between;gap:20px;position:relative;z-index:1;}
+  .header-title-group h1{font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:700;color:white;line-height:1.2;}
+  .header-title-group .subtitle{font-size:14px;color:rgba(255,255,255,.85);margin-top:4px;}
+  .framework-badge{background:var(--gold);color:var(--navy-dark);font-weight:700;font-size:13px;padding:6px 16px;border-radius:20px;white-space:nowrap;letter-spacing:.5px;}
+  .toc-nav{background:rgba(0,0,0,.15);padding:0 40px;display:flex;overflow-x:auto;border-top:1px solid rgba(255,255,255,.15);position:relative;z-index:1;scrollbar-width:none;}
+  .toc-nav::-webkit-scrollbar{display:none;}
+  .toc-nav a{color:rgba(255,255,255,.8);text-decoration:none;font-size:13px;font-weight:600;padding:11px 16px;white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s;}
+  .toc-nav a:hover{color:var(--gold);border-bottom-color:var(--gold);background:rgba(255,255,255,.05);}
+
+  /* LAYOUT */
+  .page-wrap{max-width:1100px;margin:0 auto;padding:48px 40px 80px;}
+
+  /* OVERVIEW */
+  .overview-bar{background:var(--teal);color:white;border-radius:8px;padding:24px 28px;margin-bottom:40px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;position:relative;overflow:hidden;}
+  .overview-bar::after{content:'';position:absolute;bottom:-30px;right:-30px;width:130px;height:130px;border-radius:50%;background:var(--gold);opacity:.18;pointer-events:none;}
+  .overview-item label{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);font-weight:700;display:block;margin-bottom:4px;}
+  .overview-item p{font-size:15px;color:rgba(255,255,255,.92);line-height:1.4;}
+
+  /* SPRINT */
+  .sprint-divider{height:1px;background:var(--gray-mid);opacity:.35;margin:44px 0;}
+  .sprint-header{display:flex;align-items:center;gap:16px;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid var(--border);}
+  .sprint-num{background:var(--teal);color:white;font-family:'Playfair Display',serif;font-size:26px;font-weight:700;width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:3px solid var(--gold);}
+  .sprint-header-text h2{font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:var(--teal);}
+  .sprint-header-text .sprint-weeks{font-size:13px;color:var(--gold-text);font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+  section{scroll-margin-top:120px;}
+
+  .section-title{font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:600;color:var(--teal);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+  .section-title::before{content:'';display:inline-block;width:4px;height:20px;background:var(--gold);border-radius:2px;flex-shrink:0;}
+
+  /* CARDS */
+  .card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:28px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+  .card-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--teal);margin-bottom:14px;}
+
+  /* POLICY */
+  .policy-block{background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:20px;}
+  .policy-header{background:var(--teal);color:white;padding:14px 24px;font-family:'Playfair Display',serif;font-size:16px;font-weight:700;}
+  .policy-cols{display:grid;grid-template-columns:1fr 1fr;}
+  .policy-col{padding:20px 24px;}
+  .policy-col:first-child{border-right:1px solid var(--border);}
+  .policy-col-header{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;}
+  .will{color:var(--success);}
+  .will-not{color:#c0392b;}
+  .policy-col ul{list-style:none;display:flex;flex-direction:column;gap:8px;}
+  .policy-col li{font-size:14px;line-height:1.5;padding-left:22px;position:relative;}
+  .will li::before{content:'✓';position:absolute;left:0;color:var(--success);font-weight:700;}
+  .will-not li::before{content:'✕';position:absolute;left:0;color:#c0392b;font-weight:700;}
+
+  /* ALERTS */
+  .alert{border-radius:6px;padding:13px 18px;margin-bottom:16px;font-size:14px;display:flex;gap:10px;align-items:flex-start;line-height:1.5;}
+  .alert-icon{font-size:18px;flex-shrink:0;}
+  .alert-guardrail{background:var(--guardrail-bg);border-left:4px solid var(--gold);}
+  .alert-info{background:var(--info-bg);border-left:4px solid var(--teal);}
+  .alert-success{background:var(--success-pale);border-left:4px solid var(--success);}
+
+  /* PROMPTS */
+  .prompt-tier{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px;}
+  .prompt-tier-header{padding:12px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  .tier-good .prompt-tier-header{background:#f0faf5;border-bottom:1px solid #c3e6d8;}
+  .tier-better .prompt-tier-header{background:var(--gold-pale);border-bottom:1px solid var(--gold-border);}
+  .tier-best .prompt-tier-header{background:#eef4fd;border-bottom:1px solid #b8d0f0;}
+  .tier-label{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:1px;}
+  .tier-good .tier-label{color:var(--success);}
+  .tier-better .tier-label{color:var(--gold-text);}
+  .tier-best .tier-label{color:#2563b0;}
+  .tier-name{font-size:13px;color:var(--gray-mid);}
+  .copy-btn{background:var(--teal);color:white;border:none;padding:6px 14px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s;font-family:'Source Sans 3',sans-serif;min-height:32px;}
+  .copy-btn:hover{background:var(--teal-light);}
+  .copy-btn.copied{background:var(--success);}
+  .prompt-body{background:#f9fafb;padding:20px;font-family:'Source Code Pro',monospace;font-size:13px;line-height:1.7;color:#2d3748;white-space:pre-wrap;overflow-x:auto;}
+  .prompt-note{background:#f5f5f3;padding:10px 20px;font-size:13px;color:var(--gray-mid);border-top:1px solid var(--border);font-style:italic;}
+
+  /* CHECKLIST */
+  .checklist{list-style:none;display:flex;flex-direction:column;gap:8px;}
+  .checklist li{display:flex;align-items:flex-start;gap:10px;font-size:14px;line-height:1.5;padding:8px 12px;background:var(--white);border:1px solid var(--border);border-radius:6px;}
+  .check-box{width:20px;height:20px;border:2px solid var(--border);border-radius:3px;flex-shrink:0;margin-top:1px;background:white;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;}
+  .checklist li.critical{border-left:3px solid #c0392b;}
+  .checklist li.important{border-left:3px solid var(--gold);}
+  .checklist li.standard{border-left:3px solid var(--teal);}
+  .priority-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:2px 6px;border-radius:3px;white-space:nowrap;flex-shrink:0;}
+  .badge-critical{background:#fdf0ee;color:#c0392b;}
+  .badge-important{background:var(--gold-pale);color:var(--gold-text);border:1px solid var(--gold-border);}
+  .badge-standard{background:var(--teal-pale);color:var(--teal);}
+
+  /* TABLE */
+  .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:0;}
+  .data-table{width:100%;border-collapse:collapse;font-size:14px;min-width:500px;}
+  .data-table th{background:var(--teal);color:white;padding:10px 14px;text-align:left;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+  .data-table td{padding:10px 14px;border-bottom:1px solid var(--border);line-height:1.4;vertical-align:top;}
+  .data-table tr:last-child td{border-bottom:none;}
+  .data-table tr:nth-child(even) td{background:#f7f9fa;}
+
+  /* CHIPS */
+  .outputs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:20px;}
+  .output-chip{background:var(--white);border:1px solid var(--border);border-left:3px solid var(--teal);border-radius:6px;padding:12px 16px;font-size:14px;display:flex;align-items:center;gap:8px;}
+  .output-icon{font-size:18px;flex-shrink:0;}
+
+  /* METRICS */
+  .metrics-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;}
+  .metric-card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:20px;text-align:center;}
+  .metric-label{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--gray-mid);font-weight:700;margin-bottom:8px;}
+  .metric-value{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--teal);}
+  .metric-desc{font-size:13px;color:var(--gray-mid);margin-top:4px;}
+
+  /* UTILS */
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;}
+  .mt-4{margin-top:16px;}
+  .mt-8{margin-top:32px;}
+  .mb-4{margin-bottom:16px;}
+  .text-sm{font-size:14px;}
+  .text-muted{color:var(--gray-mid);}
+  .step-list{list-style:none;counter-reset:steps;display:flex;flex-direction:column;gap:10px;}
+  .step-list li{counter-increment:steps;display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.5;}
+  .step-list li::before{content:counter(steps);background:var(--teal);color:white;font-size:12px;font-weight:700;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+
+  /* Report types */
+  .report-type-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+  .report-type-card{background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+  .report-type-header{padding:12px 20px;font-weight:700;font-size:14px;color:white;}
+  .rt-donor{background:var(--teal);}
+  .rt-board{background:var(--navy);}
+  .report-type-body{padding:16px 20px;font-size:14px;line-height:1.6;}
+  .report-type-body ul{padding-left:18px;margin-top:8px;}
+  .report-type-body li{margin-bottom:4px;}
+
+  /* Sample report */
+  .sample-report{background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:20px;}
+  .sample-report-header{background:var(--teal);color:white;padding:12px 24px;font-weight:700;font-size:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+  .sample-report-label{background:var(--gold);color:var(--navy-dark);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:1px;}
+  .sample-report-body{padding:24px;font-size:14px;line-height:1.8;}
+  .sample-report-body p{margin-bottom:14px;}
+  .sample-report-body p:last-child{margin-bottom:0;}
+  .data-highlight{background:var(--gold-pale);border-left:3px solid var(--gold);padding:10px 16px;border-radius:4px;margin:12px 0;font-size:13px;}
+
+  /* FOOTER */
+  .page-footer{background:var(--teal);color:rgba(255,255,255,.85);text-align:center;padding:28px 40px;font-size:13px;margin-top:64px;line-height:1.9;}
+  .page-footer strong{color:white;}
+  .page-footer a{color:var(--gold);text-decoration:underline;text-underline-offset:2px;}
+  .page-footer a:hover{color:white;}
+  .footer-sep{border:none;border-top:1px solid var(--gray-mid);opacity:.4;margin:12px auto;max-width:400px;}
+
+  /* RESPONSIVE */
+  @media(max-width:900px){
+    .overview-bar{grid-template-columns:1fr 1fr;}
+    .metrics-grid{grid-template-columns:1fr 1fr;}
+    .three-col{grid-template-columns:1fr 1fr;}
+    .report-type-grid{grid-template-columns:1fr;}
+  }
+  @media(max-width:768px){
+    .page-wrap{padding:24px 16px 60px;}
+    .header-main{padding:16px 20px;flex-direction:column;align-items:flex-start;gap:12px;}
+    .header-top{padding:7px 16px;}
+    .toc-nav{padding:0 12px;}
+    .toc-nav a{padding:10px 12px;font-size:12px;}
+    .overview-bar{grid-template-columns:1fr;}
+    .policy-cols{grid-template-columns:1fr;}
+    .policy-col:first-child{border-right:none;border-bottom:1px solid var(--border);}
+    .two-col{grid-template-columns:1fr;}
+    .metrics-grid{grid-template-columns:1fr;}
+    .three-col{grid-template-columns:1fr;}
+    .outputs-grid{grid-template-columns:1fr 1fr;}
+    .card{padding:20px 16px;}
+    .prompt-body{font-size:12px;padding:14px;}
+    .sample-report-body{padding:16px;}
+    .page-footer{padding:24px 16px;text-align:left;}
+    .footer-sep{margin:12px 0;}
+  }
+  @media(max-width:520px){
+    .header-title-group h1{font-size:20px;}
+    .framework-badge{font-size:12px;padding:5px 12px;}
+    .sprint-num{width:44px;height:44px;font-size:20px;}
+    .sprint-header-text h2{font-size:18px;}
+    .section-title{font-size:16px;}
+    .outputs-grid{grid-template-columns:1fr;}
+    .check-box{width:24px;height:24px;}
+    .data-table{font-size:12px;}
+    .data-table th,.data-table td{padding:8px 10px;}
+    .metric-value{font-size:22px;}
+    .sprint-header{gap:10px;}
+  }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-top">
+    <span class="nspa-badge">NSPA</span>
+    <span class="header-divider">|</span>
+    <span class="series-label">AI Implementation Series &mdash; 2/2/2 Framework</span>
+  </div>
+  <div class="header-main">
+    <div class="header-title-group">
+      <h1>Example 4: Donor &amp; Board Reporting Drafts</h1>
+      <div class="subtitle">6-Week Implementation Package &mdash; Impact Updates, Program Summaries &amp; Board Reports</div>
+    </div>
+    <div class="framework-badge">Weeks 1&ndash;6 / Sprint 4</div>
+  </div>
+  <nav class="toc-nav">
+    <a href="#overview">Overview</a>
+    <a href="#policy">Policy Statement</a>
+    <a href="#planning">Weeks 1&ndash;2</a>
+    <a href="#building">Weeks 3&ndash;4</a>
+    <a href="#review">Weeks 5&ndash;6</a>
+    <a href="#prompts">Prompt Pack</a>
+    <a href="#sample-output">Sample Output</a>
+    <a href="#checklist">Verification Checklist</a>
+    <a href="#metrics">Metrics</a>
+  </nav>
+</header>
+
+<main class="page-wrap">
+
+  <section id="overview">
+    <div class="overview-bar">
+      <div class="overview-item">
+        <label>Milestone Goal</label>
+        <p>Build a verified, staff-operated pipeline for drafting donor impact updates and one board report section from structured program data, before expanding to additional report types.</p>
+      </div>
+      <div class="overview-item">
+        <label>Team Pod</label>
+        <p>Development coordinator + program director + board liaison. Organized around the donor and board relationship.</p>
+      </div>
+      <div class="overview-item">
+        <label>AI Role in This Workflow</label>
+        <p>AI converts structured program data into narrative paragraphs. Humans supply all data, review every draft, and personalize before sending. AI does not generate data or make claims about program impact.</p>
+      </div>
+    </div>
+    <div class="alert alert-guardrail">
+      <span class="alert-icon">🔒</span>
+      <div><strong>Data rule for this cycle:</strong> Prompts receive only anonymized, aggregated data points. No individual scholar names, financial records, family details, or personally identifiable information enters any AI prompt. All data is verified against source records before the prompt is run.</div>
+    </div>
+    <div class="alert alert-info">
+      <span class="alert-icon">ℹ️</span>
+      <div><strong>Scope for this cycle:</strong> One donor update format (individual major donor) and one board report section (program outcomes summary). All other report types carry to future cycles after this pilot is measured and stable.</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="policy">
+    <div class="section-title">Program Policy Statement</div>
+    <div class="policy-block">
+      <div class="policy-header">AI-Assisted Donor &amp; Board Reporting &mdash; We Will / We Will Not</div>
+      <div class="policy-cols">
+        <div class="policy-col will">
+          <div class="policy-col-header will">&#10003; We Will</div>
+          <ul>
+            <li>Use AI to convert verified, anonymized program data into narrative first drafts for donor updates and board sections.</li>
+            <li>Supply all data points to the AI ourselves from verified source records before any prompt is run.</li>
+            <li>Require staff and program director review of every AI draft before it leaves the organization.</li>
+            <li>Personalize donor updates with specific relationship context added by development staff after AI drafts the narrative baseline.</li>
+            <li>Log which reports used AI assistance and retain the data input sheet as part of the documentation record.</li>
+            <li>Measure time savings and error rate against last cycle's reports before expanding to additional formats.</li>
+          </ul>
+        </div>
+        <div class="policy-col will-not">
+          <div class="policy-col-header will-not">&#10005; We Will Not</div>
+          <ul>
+            <li>Include individual scholar names, family financial information, or any PII in any AI prompt.</li>
+            <li>Allow AI to generate or extrapolate data. Every number in an AI draft must trace to a verified source record.</li>
+            <li>Send any AI-drafted report without staff and director review and explicit approval.</li>
+            <li>Use AI to draft reports for high-stakes, legally sensitive, or complex narrative situations (governance disputes, audit findings, funding shortfalls).</li>
+            <li>Expand to additional report types (annual reports, grant reports, federal filings) until this pilot is measured.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="planning">
+    <div class="sprint-header">
+      <div class="sprint-num">1</div>
+      <div class="sprint-header-text">
+        <div class="sprint-weeks">Weeks 1&ndash;2</div>
+        <h2>Planning: Audit Reports, Map Data Sources, and Define Scope</h2>
+      </div>
+    </div>
+    <div class="alert alert-success">
+      <span class="alert-icon">🎯</span>
+      <div><strong>Sprint goal:</strong> Leave Weeks 1&ndash;2 with a report type inventory, a verified data source map, a prompt-ready data template for each in-scope report, and a policy statement on file.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Task 1 &mdash; Report Type Inventory and Time Audit</div>
+      <p class="text-sm mb-4">Map every donor and board report your program produces. Identify where time is lost and where AI can convert structured data into narrative with the lowest risk.</p>
+
+      <div class="report-type-grid">
+        <div class="report-type-card">
+          <div class="report-type-header rt-donor">Donor-Facing Reports</div>
+          <div class="report-type-body">
+            <ul>
+              <li>Individual major donor impact update (in scope for this cycle)</li>
+              <li>Annual fund appeal letter</li>
+              <li>Named scholarship report to family</li>
+              <li>Grant progress report (funder-specific format)</li>
+              <li>Acknowledgment and stewardship letter</li>
+            </ul>
+          </div>
+        </div>
+        <div class="report-type-card">
+          <div class="report-type-header rt-board">Board-Facing Reports</div>
+          <div class="report-type-body">
+            <ul>
+              <li>Program outcomes summary section (in scope for this cycle)</li>
+              <li>Full board meeting packet</li>
+              <li>Annual report narrative</li>
+              <li>Strategic dashboard commentary</li>
+              <li>Audit summary narrative</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr><th>Report Type</th><th>Frequency</th><th>Avg. Draft Time (hrs)</th><th>Primary Challenge</th><th>AI Pilot Candidate?</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Individual donor impact update</td><td>Per cycle</td><td><em>Fill in</em></td><td>Personalizing from generic program data</td><td style="color:var(--success);font-weight:700;">YES &mdash; Start here</td></tr>
+            <tr><td>Board outcomes summary section</td><td>Quarterly</td><td><em>Fill in</em></td><td>Converting data tables into readable narrative</td><td style="color:var(--success);font-weight:700;">YES &mdash; Start here</td></tr>
+            <tr><td>Named scholarship report</td><td>Per cycle</td><td><em>Fill in</em></td><td>Scholar-specific narrative without PII risk</td><td style="color:var(--gold-text);">Cycle 2</td></tr>
+            <tr><td>Grant progress report</td><td>Per grant</td><td><em>Fill in</em></td><td>Funder-specific format; compliance language</td><td style="color:var(--gold-text);">Cycle 3</td></tr>
+            <tr><td>Audit summary narrative</td><td>Annual</td><td><em>Fill in</em></td><td>Legal sensitivity; board governance risk</td><td style="color:#c0392b;font-weight:700;">Human-only</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Task 2 &mdash; Data Source Map and Verification Protocol</div>
+      <p class="text-sm mb-4">Before any prompt work begins, map exactly which data points go into each in-scope report and where they come from. Every data point must be verifiable against a source record before it enters a prompt.</p>
+      <ol class="step-list">
+        <li>List every data point your standard donor impact update contains (total awards, average award, cohort demographics in aggregate, outcomes data such as enrollment rates or GPA averages, quotes or vignettes if anonymized).</li>
+        <li>For each data point, identify the source system: scholarship management platform, registrar data, survey results, or program records.</li>
+        <li>Assign a verification owner (the staff member who confirms accuracy before each report cycle).</li>
+        <li>Create a prompt-ready data input template: a short, structured form that staff fill in with verified numbers before running any prompt. This form is the only input the AI receives.</li>
+        <li>Have the program director review the data input template before the first prompt run. Any field that cannot be verified from a source system is removed from the template.</li>
+      </ol>
+      <div class="alert alert-guardrail mt-4">
+        <span class="alert-icon">⚠</span>
+        <div><strong>Critical step:</strong> The AI draft is only as accurate as the data you provide. If the data input template has errors, the AI will amplify them. Verify first, then prompt.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Task 3 &mdash; Prompt-Ready Data Input Template (Donor Update)</div>
+      <p class="text-sm mb-4">Staff fill this template with verified data before running any prompt. This is the only source of program-specific information in the prompt. Keep it short and factual.</p>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr><th>Data Field</th><th>Example Input</th><th>Source System</th><th>Verified By</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Award cycle year</td><td>2025&ndash;26</td><td>Program records</td><td></td></tr>
+            <tr><td>Number of scholars supported</td><td>42</td><td>Scholarship platform</td><td></td></tr>
+            <tr><td>Total amount awarded</td><td>$185,000</td><td>Financial records</td><td></td></tr>
+            <tr><td>Average award per scholar</td><td>$4,405</td><td>Calculated from above</td><td></td></tr>
+            <tr><td>Cohort demographic summary (aggregate %)</td><td>68% first-generation, 54% rural</td><td>Application survey</td><td></td></tr>
+            <tr><td>Outcome data point 1</td><td>92% enrolled full-time (prior cohort)</td><td>Registrar / follow-up survey</td><td></td></tr>
+            <tr><td>Outcome data point 2</td><td><em>Fill in or write "none verified"</em></td><td></td><td></td></tr>
+            <tr><td>Donor-specific giving history</td><td>[DO NOT INCLUDE IN AI PROMPT &mdash; add manually post-draft]</td><td>Development CRM</td><td></td></tr>
+            <tr><td>Approved program mission statement</td><td>[PASTE APPROVED TEXT]</td><td>Organization website</td><td></td></tr>
+            <tr><td>Tone / relationship note</td><td>Long-term major donor; personal; avoid jargon</td><td>Development staff</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert alert-guardrail mt-4">
+        <span class="alert-icon">⚠</span>
+        <div>The "Donor-specific giving history" row is marked <strong>DO NOT INCLUDE</strong> in the AI prompt. This is added by development staff manually after the AI draft is reviewed. It should never be pasted into any AI tool.</div>
+      </div>
+    </div>
+
+    <div class="section-title">Sprint 1 Deliverable Checklist</div>
+    <div class="outputs-grid">
+      <div class="output-chip"><span class="output-icon">📋</span>Report type inventory with time log</div>
+      <div class="output-chip"><span class="output-icon">🗺️</span>Data source map (verified)</div>
+      <div class="output-chip"><span class="output-icon">📄</span>Prompt-ready data input template</div>
+      <div class="output-chip"><span class="output-icon">🔒</span>Data handling agreement</div>
+      <div class="output-chip"><span class="output-icon">📝</span>Policy statement (signed)</div>
+      <div class="output-chip"><span class="output-icon">👤</span>Director sign-off on data template</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="building">
+    <div class="sprint-header">
+      <div class="sprint-num">2</div>
+      <div class="sprint-header-text">
+        <div class="sprint-weeks">Weeks 3&ndash;4</div>
+        <h2>Building: Prompts, Test Drafts, and Calibration</h2>
+      </div>
+    </div>
+    <div class="alert alert-success">
+      <span class="alert-icon">🎯</span>
+      <div><strong>Sprint goal:</strong> Produce a tested, three-tier prompt set for both in-scope report types, a calibration log, a post-draft verification checklist, and a one-page workflow reference for development staff.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Task 4 &mdash; Calibration Protocol (Test Drafts)</div>
+      <p class="text-sm mb-4">Before using the prompts on real reports, run 3&ndash;5 test drafts using last cycle's verified data (already public or safely aggregated). Compare outputs to the actual reports sent last cycle.</p>
+      <ol class="step-list">
+        <li>Use last cycle's verified data to fill in the prompt-ready data input template. All figures must already be public or anonymized.</li>
+        <li>Run the Fast Draft prompt. Compare the output to the actual donor update sent last cycle.</li>
+        <li>Document differences: where did the AI add language not in the data input? Where did it miss key program language? Where did the tone drift?</li>
+        <li>Each documented failure becomes a constraint added to the High-Accuracy prompt (e.g., "Do not use the word 'transform' unless it appears in the approved mission statement.").</li>
+        <li>Run the revised prompt. Calibration is complete when development staff can get from prompt output to a send-ready draft in under 15 minutes of editing.</li>
+      </ol>
+      <div class="mt-4">
+        <strong style="font-size:14px;display:block;margin-bottom:10px;">Calibration Log Template</strong>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr><th>Test Draft #</th><th>Report Type</th><th>Invented Data?</th><th>Tone Drift?</th><th>Mission Language Accurate?</th><th>Edit Time (min)</th><th>Action Taken</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>Donor update</td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr><td>2</td><td>Donor update</td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr><td>3</td><td>Board outcomes section</td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr><td>4</td><td>Board outcomes section</td><td></td><td></td><td></td><td></td><td></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Sprint 2 Deliverable Checklist</div>
+    <div class="outputs-grid">
+      <div class="output-chip"><span class="output-icon">🧾</span>Three-tier prompt set (both report types)</div>
+      <div class="output-chip"><span class="output-icon">📊</span>Calibration log (completed)</div>
+      <div class="output-chip"><span class="output-icon">✅</span>Post-draft verification checklist</div>
+      <div class="output-chip"><span class="output-icon">📄</span>One-page workflow reference</div>
+      <div class="output-chip"><span class="output-icon">👤</span>Director sign-off on prompt version</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="review">
+    <div class="sprint-header">
+      <div class="sprint-num">3</div>
+      <div class="sprint-header-text">
+        <div class="sprint-weeks">Weeks 5&ndash;6</div>
+        <h2>Review &amp; Wrap-Up: Measure, Audit for Accuracy, and Scope Next Cycle</h2>
+      </div>
+    </div>
+    <div class="alert alert-success">
+      <span class="alert-icon">🎯</span>
+      <div><strong>Sprint goal:</strong> Produce a before/after time log, a factual accuracy audit across the live batch, and a next-cycle brief. Identify which report types are strong candidates for Cycle 5.</div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">Factual Accuracy Audit Protocol</div>
+        <p class="text-sm mb-4">Pull 5&ndash;10 AI-drafted reports that were reviewed and sent. Verify each data claim against the original source record.</p>
+        <ul class="checklist">
+          <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Check</span>Every number in the sent report traces to the verified data input template. No invented figures.</li>
+          <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Check</span>No individual scholar names, specific school names, or personal details appeared in any sent report.</li>
+          <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Check</span>Mission language matches the approved organization statement. No paraphrased variants were introduced by AI and left uncorrected.</li>
+          <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Check</span>Outcome claims (enrollment rates, GPA data, etc.) are from the correct cohort year and labeled correctly.</li>
+          <li class="standard"><span class="check-box"></span><span class="priority-badge badge-standard">Note</span>Were any donor-relationship personalizations missed (i.e., staff forgot to add the manual CRM layer)?</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Tone and Relationship Audit</div>
+        <p class="text-sm mb-4">Report inaccuracies are the highest risk, but tone misalignment damages donor relationships. Audit a sample against each recipient relationship type.</p>
+        <ul class="checklist">
+          <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Check</span>Was the tone appropriate to the relationship level (major donor vs. annual fund vs. institutional funder)?</li>
+          <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Check</span>Did any language imply outcomes or impact the program cannot verify or substantiate?</li>
+          <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Check</span>Were any phrases overly generic or interchangeable with reports from other organizations (signal that AI filled space without your program's data)?</li>
+          <li class="standard"><span class="check-box"></span><span class="priority-badge badge-standard">Note</span>Did board members or donors respond with clarifying questions about specific claims? Log these as prompt-improvement signals.</li>
+        </ul>
+        <div class="alert alert-guardrail mt-4">
+          <span class="alert-icon">⚠</span>
+          <div><strong>Carry-forward rule:</strong> Any report where the AI invented a data point that staff missed in review must be documented and escalated before expanding to additional report formats.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title mt-8">Sprint 3 Deliverable Checklist</div>
+    <div class="outputs-grid">
+      <div class="output-chip"><span class="output-icon">⏱️</span>Before/after time log</div>
+      <div class="output-chip"><span class="output-icon">✅</span>Factual accuracy audit summary</div>
+      <div class="output-chip"><span class="output-icon">📋</span>Error log (invented data, tone drift)</div>
+      <div class="output-chip"><span class="output-icon">🔄</span>Revised prompt pack (if needed)</div>
+      <div class="output-chip"><span class="output-icon">📝</span>Next milestone brief</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="prompts">
+    <div class="section-title">Full Prompt Pack &mdash; Donor Impact Updates &amp; Board Outcomes Section</div>
+    <div class="alert alert-info">
+      <span class="alert-icon">ℹ️</span>
+      <div>All prompts receive only the <strong>verified data input template</strong> as input. No names, no CRM data, no unverified figures. The data template is filled in and reviewed by staff before any prompt is run.</div>
+    </div>
+
+    <div class="prompt-tier tier-good">
+      <div class="prompt-tier-header">
+        <div><span class="tier-label">Good</span> <span class="tier-name">&mdash; Fast Draft: Donor impact update from verified data block</span></div>
+        <button class="copy-btn" onclick="copyPrompt(this,'p1')">Copy</button>
+      </div>
+      <pre class="prompt-body" id="p1">You are a development writer for a nonprofit scholarship program.
+
+Your task: Draft a donor impact update using only the verified data below. Convert the data into 2–3 warm, readable paragraphs that communicate program impact to a major donor.
+
+Verified program data for this update:
+[PASTE YOUR COMPLETED DATA INPUT TEMPLATE HERE]
+
+Writing requirements:
+- Tone: warm, personal, grateful — not transactional or corporate
+- Length: 250–350 words
+- Format: 3 short paragraphs (program context, impact data narrative, forward-looking close)
+- Use only data provided above; do not extrapolate, estimate, or invent outcomes
+- Do not include: donor name, giving amount, or relationship history (these will be added by staff)
+
+Output: One complete narrative draft, ready for staff to personalize with relationship context.</pre>
+      <div class="prompt-note">Use for: standard major donor impact update. Staff add the personalization layer (relationship context, specific gift acknowledgment) manually before review and send.</div>
+    </div>
+
+    <div class="prompt-tier tier-better">
+      <div class="prompt-tier-header">
+        <div><span class="tier-label">Better</span> <span class="tier-name">&mdash; High-Accuracy: Adds self-check, flags invented data, verifies mission language</span></div>
+        <button class="copy-btn" onclick="copyPrompt(this,'p2')">Copy</button>
+      </div>
+      <pre class="prompt-body" id="p2">You are a development writer for a nonprofit scholarship program.
+
+Your task: Draft a donor impact update narrative from the verified data block below.
+
+Verified program data:
+[PASTE COMPLETED DATA INPUT TEMPLATE]
+
+Tone context: [e.g., "Long-term major donor, conversational, mission-connected" OR "Institutional funder, formal, outcomes-focused"]
+
+Writing requirements:
+- Tone: warm, personal, grateful
+- Length: 250–350 words
+- Format: 3 paragraphs (context, impact, forward close)
+- Use only data I have provided; cite only figures that appear in the data block above
+- If you are uncertain whether a claim is supported by the data, write [STAFF: VERIFY THIS] inline
+
+Self-check before outputting:
+1. Does any sentence include a figure not in the data block? Remove it.
+2. Does any sentence include a scholar name or any PII? Remove it.
+3. Does the mission language match the approved statement in the data block?
+4. Is the tone consistent with the tone context provided?
+
+Output: Draft narrative followed by a list of any [STAFF: VERIFY] flags with the specific concern for each.</pre>
+      <div class="prompt-note">Use for: standard cycle updates where accuracy verification matters. Review all [STAFF: VERIFY] flags before the personalization step.</div>
+    </div>
+
+    <div class="prompt-tier tier-best">
+      <div class="prompt-tier-header">
+        <div><span class="tier-label">Best</span> <span class="tier-name">&mdash; Governed Workflow: Full audit trail for board and high-stakes reports</span></div>
+        <button class="copy-btn" onclick="copyPrompt(this,'p3')">Copy</button>
+      </div>
+      <pre class="prompt-body" id="p3">You are a development writer for a nonprofit scholarship program. This is a governed workflow. Follow all steps in order.
+
+STEP 1 — Acknowledge scope:
+Confirm: (a) no PII or individual scholar data is present in this prompt, (b) your output is a narrative draft for staff review only — not a final document, (c) you will flag any claim you cannot trace to the data block rather than inventing language.
+
+STEP 2 — Draft the narrative using only this verified data:
+[PASTE COMPLETED DATA INPUT TEMPLATE]
+
+Report type: [DONOR IMPACT UPDATE or BOARD OUTCOMES SECTION]
+Audience: [MAJOR DONOR / BOARD MEMBER / OTHER — describe relationship briefly]
+Length and format: [e.g., "3 paragraphs, 300 words, warm and personal" or "4 bullet points + 1 summary paragraph, formal, outcomes-focused"]
+
+STEP 3 — Self-audit before outputting:
+- [ ] Every number in the draft traces to a field in the data block above?
+- [ ] No scholar names, family details, or individual PII present?
+- [ ] Mission language matches the approved statement provided?
+- [ ] No outcome claimed that is not in the verified data?
+- [ ] [STAFF: VERIFY THIS] inserted wherever any claim is uncertain?
+
+STEP 4 — Output format:
+A. Self-audit results (one line per check above)
+B. Complete narrative draft
+C. List of [STAFF: VERIFY] flags with the specific data gap for each
+D. Personalization reminder: list the 2–3 fields staff should add manually from the CRM before finalizing</pre>
+      <div class="prompt-note">Use for: board reports, high-stakes donor updates, and any time full audit documentation is required. Retain the self-audit output as part of the report documentation record.</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="sample-output">
+    <div class="section-title">Sample AI Draft Output &mdash; Donor Impact Update</div>
+    <p class="text-sm text-muted mb-4">This is what a completed, staff-reviewed AI draft should look like before personalization. All figures trace to the verified data input template. The [PERSONALIZATION] markers are removed and replaced by development staff from CRM data before the letter is sent.</p>
+
+    <div class="sample-report">
+      <div class="sample-report-header">
+        Sample Donor Impact Update &mdash; AI Draft (Post-Review, Pre-Personalization)
+        <span class="sample-report-label">Staff-reviewed draft</span>
+      </div>
+      <div class="sample-report-body">
+        <p>[PERSONALIZATION: Opening with specific acknowledgment of donor's relationship and history &mdash; added by development staff from CRM]</p>
+        <p>The 2025&ndash;26 award cycle marked another year of meaningful reach for [PROGRAM NAME]. Forty-two scholars received awards totaling $185,000, with an average award of $4,405 per student. Nearly seven in ten scholars are the first in their families to pursue higher education, and more than half come from rural communities where access to scholarship support remains limited.</p>
+        <div class="data-highlight">All figures above are from the verified 2025&ndash;26 program records. Verify before finalizing: cohort demographics are from the application survey (not registrar-confirmed).</div>
+        <p>The outcomes from prior cohorts continue to affirm the program's core purpose. Ninety-two percent of scholars from the previous award cycle enrolled full-time in their first year, a figure that speaks to both the students' commitment and the stability that scholarship support provides during a critical transition.</p>
+        <p>[PERSONALIZATION: Closing that connects donor's specific contribution to program outcomes and expresses specific gratitude for their partnership &mdash; added by development staff from CRM]</p>
+        <p style="font-size:13px;color:var(--gray-mid);font-style:italic;">Staff flags: One [STAFF: VERIFY] note inserted at cohort demographics sentence. Data input template lists this as "Application survey" source &mdash; confirm with program coordinator that this figure is current before finalizing. No other invented data found.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="checklist">
+    <div class="section-title">Staff Verification Checklist &mdash; Before Any Report Is Sent</div>
+    <p class="text-sm text-muted mb-4">Required for every AI-assisted report during the pilot. Staff initials and date required before the report moves to the director approval queue.</p>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">Section 1 &mdash; Data Accuracy</div>
+        <ul class="checklist">
+          <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Required</span>Every figure in the report has been traced back to the verified data input template and confirmed accurate.</li>
+          <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Required</span>No individual scholar names, family financial data, or PII appears anywhere in the report.</li>
+          <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Required</span>All [STAFF: VERIFY] flags from the governed workflow have been resolved or corrected.</li>
+          <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Review</span>Mission language matches the current approved organizational statement.</li>
+          <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Review</span>Outcome data is labeled with the correct cohort year (e.g., "prior cohort," "2024&ndash;25 cycle").</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Section 2 &mdash; Personalization and Relationship</div>
+        <ul class="checklist">
+          <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Required</span>Donor-specific relationship context has been added manually (not generated by AI) from the CRM.</li>
+          <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Required</span>Tone is appropriate to this specific donor relationship (not a generic template voice).</li>
+          <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Review</span>No language implies outcomes or projections the program cannot substantiate.</li>
+          <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Review</span>Call to action or next steps (if included) are accurate for this donor's stage in the relationship.</li>
+          <li class="standard"><span class="check-box"></span><span class="priority-badge badge-standard">Log</span>Report logged as AI-assisted in the development tracking sheet for end-of-cycle audit.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Section 3 &mdash; Director Approval Sign-Off</div>
+      <ul class="checklist">
+        <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Required</span>Development staff reviewer: _______________ &nbsp; Date: _______________</li>
+        <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Required</span>Program director approval: _______________ &nbsp; Date: _______________</li>
+        <li class="standard"><span class="check-box"></span><span class="priority-badge badge-standard">Board</span>For board reports: board liaison reviewed and confirmed accuracy of board-specific framing before distribution.</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="metrics">
+    <div class="section-title">Measurement Framework</div>
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-label">Primary Metric</div>
+        <div class="metric-value">Draft Time</div>
+        <div class="metric-desc">Hours from data verification to send-ready report. Track before and after across the full batch.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Accuracy Metric</div>
+        <div class="metric-value">Error Rate</div>
+        <div class="metric-desc">Count of invented or unverified data points found during staff review. Target: zero in any sent report.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Relationship Metric</div>
+        <div class="metric-value">Follow-up Qs</div>
+        <div class="metric-desc">Clarifying questions from donors or board members after receiving the report. Unexpected questions signal AI fill-in or accuracy issues.</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="page-footer">
+  <strong>NSPA AI Implementation Series</strong> &mdash; 2/2/2 Framework &mdash; Example 4: Donor &amp; Board Reporting
+  <hr class="footer-sep">
+  Produced for the "Automating Office Tasks with AI" session &mdash; March 4, 2026<br>
+  Contact: <a href="mailto:mguhlin@tcea.org">mguhlin@tcea.org</a> &nbsp;|&nbsp; <strong><a href="https://go.mgpd.org/nspa3">Return to Session Resources</a></strong>
+</footer>
+
+<script>
+function copyPrompt(btn,id){
+  navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>{
+    btn.textContent='Copied!';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied');},2000);
+  });
+}
+document.querySelectorAll('.check-box').forEach(b=>{
+  b.addEventListener('click',()=>{
+    const on=b.dataset.c==='1';b.dataset.c=on?'0':'1';
+    b.style.background=on?'':'#237683';b.style.borderColor=on?'':'#237683';
+  });
+});
+</script>
+</body>
+</html>

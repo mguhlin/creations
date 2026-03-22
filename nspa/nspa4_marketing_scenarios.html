@@ -1,0 +1,1967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NSPA AI Marketing Scenarios — Prompt Toolkit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ── TOKENS ──────────────────────────────────────────────── */
+  :root {
+    --teal:     #237683;
+    --teal-dk:  #1a5861;
+    --teal-lt:  #e4f3f5;
+    --gold:     #FDB414;
+    --gold-lt:  #fff6d6;
+    --gold-dk:  #b08a00;
+    --navy:     #1A2B4A;
+    --navy-lt:  #d4dde8;
+    --slate:    #4a5e6d;
+    --ink:      #1e293b;
+    --mist:     #f4f7f8;
+    --white:    #ffffff;
+    --border:   #d1dce2;
+    --radius:   8px;
+    --shadow:   0 2px 12px rgba(26,43,74,.1);
+    --shadow-md:0 4px 20px rgba(26,43,74,.15);
+  }
+
+  /* ── RESET ───────────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--mist);
+    color: var(--ink);
+    line-height: 1.65;
+    font-size: 16px;
+  }
+
+  /* ── HEADER ──────────────────────────────────────────────── */
+  .site-header {
+    background: var(--navy);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px rgba(0,0,0,.3);
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    height: 58px;
+  }
+  .header-inner .logo-mark {
+    width: 8px;
+    height: 38px;
+    background: var(--gold);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .header-inner h1 {
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--white);
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+  .header-inner .badge {
+    margin-left: auto;
+    background: var(--teal);
+    color: var(--white);
+    font-size: .72rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* ── HERO ────────────────────────────────────────────────── */
+  .hero {
+    background: linear-gradient(135deg, var(--teal-dk) 0%, var(--teal) 55%, #2a8e9e 100%);
+    padding: 64px 24px 56px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-inner { max-width: 780px; margin: 0 auto; position: relative; }
+  .hero-eyebrow {
+    display: inline-block;
+    background: rgba(253,180,20,.15);
+    border: 1px solid rgba(253,180,20,.4);
+    color: var(--gold);
+    font-size: .8rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  .hero h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.18;
+    margin-bottom: 16px;
+  }
+  .hero h2 em { color: var(--gold); font-style: normal; }
+  .hero p {
+    color: rgba(255,255,255,.82);
+    font-size: 1.05rem;
+    max-width: 620px;
+    margin: 0 auto 28px;
+  }
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .hero-stat {
+    text-align: center;
+    color: var(--white);
+  }
+  .hero-stat strong {
+    display: block;
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .hero-stat span { font-size: .8rem; opacity: .75; letter-spacing: .05em; text-transform: uppercase; }
+
+  /* ── FILTER BAR ──────────────────────────────────────────── */
+  .filter-bar {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    position: sticky;
+    top: 58px;
+    z-index: 90;
+  }
+  .filter-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .filter-label {
+    font-size: .78rem;
+    font-weight: 700;
+    color: var(--slate);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-right: 4px;
+    white-space: nowrap;
+  }
+  .filter-btn {
+    background: var(--mist);
+    border: 1px solid var(--border);
+    color: var(--slate);
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: .82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .18s ease;
+    font-family: 'Source Sans 3', sans-serif;
+    white-space: nowrap;
+  }
+  .filter-btn:hover { border-color: var(--teal); color: var(--teal); background: var(--teal-lt); }
+  .filter-btn.active { background: var(--teal); border-color: var(--teal); color: var(--white); }
+  .search-wrap {
+    margin-left: auto;
+    position: relative;
+  }
+  .search-wrap input {
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 14px 5px 34px;
+    font-size: .85rem;
+    font-family: 'Source Sans 3', sans-serif;
+    color: var(--ink);
+    background: var(--mist);
+    outline: none;
+    width: 200px;
+    transition: border-color .18s;
+  }
+  .search-wrap input:focus { border-color: var(--teal); background: var(--white); }
+  .search-icon {
+    position: absolute;
+    left: 11px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--slate);
+    font-size: .85rem;
+    pointer-events: none;
+  }
+
+  /* ── MAIN LAYOUT ─────────────────────────────────────────── */
+  .main {
+    max-width: 1100px;
+    margin: 36px auto 80px;
+    padding: 0 24px;
+  }
+  .results-count {
+    font-size: .82rem;
+    color: var(--slate);
+    margin-bottom: 20px;
+  }
+  .results-count strong { color: var(--teal); }
+
+  /* ── SCENARIO CARD ───────────────────────────────────────── */
+  .scenario-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: box-shadow .2s, transform .2s;
+  }
+  .scenario-card:hover { box-shadow: var(--shadow-md); }
+  .scenario-card.hidden { display: none; }
+
+  /* Card header / trigger */
+  .card-trigger {
+    display: grid;
+    grid-template-columns: 48px 1fr auto;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 20px;
+    cursor: pointer;
+    user-select: none;
+    transition: background .15s;
+  }
+  .card-trigger:hover { background: var(--mist); }
+  .card-num {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .card-meta { min-width: 0; }
+  .card-title {
+    font-weight: 700;
+    font-size: 1.02rem;
+    color: var(--navy);
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  .card-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag {
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 10px;
+    white-space: nowrap;
+  }
+  .tag-audience  { background: var(--teal-lt); color: var(--teal-dk); }
+  .tag-type      { background: var(--gold-lt); color: var(--gold-dk); }
+  .tag-technique { background: var(--navy-lt); color: var(--navy); }
+
+  .card-chevron {
+    color: var(--teal);
+    font-size: 1.1rem;
+    transition: transform .25s ease;
+    flex-shrink: 0;
+  }
+  .scenario-card.open .card-chevron { transform: rotate(180deg); }
+
+  /* Card body */
+  .card-body {
+    display: none;
+    border-top: 1px solid var(--border);
+  }
+  .scenario-card.open .card-body { display: block; }
+
+  /* Context strip */
+  .context-strip {
+    background: var(--teal-lt);
+    border-left: 4px solid var(--teal);
+    padding: 14px 20px;
+    font-size: .92rem;
+    color: var(--teal-dk);
+  }
+  .context-strip strong { color: var(--teal-dk); font-weight: 700; }
+
+  /* Prompt tabs */
+  .prompt-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .ptab {
+    padding: 11px 18px;
+    font-size: .82rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    color: var(--slate);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all .15s;
+    white-space: nowrap;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    font-family: 'Source Sans 3', sans-serif;
+  }
+  .ptab:hover { color: var(--teal); }
+  .ptab.active { color: var(--teal); border-bottom-color: var(--teal); background: var(--teal-lt); }
+
+  /* Prompt panels */
+  .prompt-panel { display: none; padding: 20px; }
+  .prompt-panel.active { display: block; }
+
+  .prompt-technique-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--navy);
+    color: var(--gold);
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 3px 12px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  .technique-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+
+  .technique-explainer {
+    font-size: .88rem;
+    color: var(--slate);
+    font-style: italic;
+    margin-bottom: 14px;
+    line-height: 1.55;
+    border-left: 3px solid var(--gold);
+    padding-left: 12px;
+  }
+
+  .prompt-block {
+    position: relative;
+    background: #0f1c2e;
+    border-radius: var(--radius);
+    padding: 18px 52px 18px 18px;
+    margin-bottom: 14px;
+  }
+  .prompt-block pre {
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    font-size: .82rem;
+    line-height: 1.7;
+    color: #c9e1e4;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .prompt-block pre .ph {
+    color: #fdb414;
+    font-style: italic;
+  }
+  .copy-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.2);
+    color: rgba(255,255,255,.7);
+    border-radius: 4px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: .85rem;
+    transition: all .15s;
+    flex-shrink: 0;
+  }
+  .copy-btn:hover { background: var(--teal); border-color: var(--teal); color: white; }
+  .copy-btn.copied { background: #2ecc71; border-color: #2ecc71; color: white; }
+
+  .verify-note {
+    background: var(--gold-lt);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 10px 14px;
+    font-size: .84rem;
+    color: #5a3d00;
+    margin-top: 4px;
+  }
+  .verify-note strong { font-weight: 700; }
+
+  /* ── FOOTER ──────────────────────────────────────────────── */
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,.7);
+    text-align: center;
+    padding: 28px 24px;
+    font-size: .85rem;
+  }
+  footer a { color: var(--gold); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  /* ── UTILITIES ───────────────────────────────────────────── */
+  .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+  @media (max-width: 600px) {
+    .hero h2 { font-size: 1.7rem; }
+    .hero-stats { gap: 20px; }
+    .card-trigger { grid-template-columns: 38px 1fr auto; gap: 12px; padding: 14px 14px; }
+    .search-wrap input { width: 140px; }
+    .filter-inner { gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo-mark"></div>
+    <h1>NSPA AI Prompt Toolkit — Marketing &amp; Engagement</h1>
+    <span class="badge">20 Scenarios</span>
+  </div>
+</header>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="filter-inner">
+    <span class="filter-label">Filter:</span>
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="applicants">Applicants</button>
+    <button class="filter-btn" data-filter="donors">Donors</button>
+    <button class="filter-btn" data-filter="partners">Partners</button>
+    <button class="filter-btn" data-filter="public">Public-Facing</button>
+    <button class="filter-btn" data-filter="internal">Internal</button>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search-input" placeholder="Search scenarios…" aria-label="Search scenarios">
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">NSPA 2026 Session Resource</div>
+    <h2>AI Marketing Scenarios<br>for <em>Scholarship Programs</em></h2>
+    <p>Click any scenario to see ready-to-copy prompts using different AI techniques. All prompts are platform-agnostic — use them in ChatGPT, Claude, Gemini, or Copilot.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><strong>20</strong><span>Scenarios</span></div>
+      <div class="hero-stat"><strong>60+</strong><span>Prompts</span></div>
+      <div class="hero-stat"><strong>7</strong><span>Techniques</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN -->
+<main class="main">
+  <p class="results-count"><strong id="visible-count">20</strong> of 20 scenarios shown</p>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SCENARIOS DATA
+  ══════════════════════════════════════════════════════════ -->
+
+  <!-- 1 -->
+  <div class="scenario-card" data-audience="applicants" data-title="scholarship application announcement email">
+    <div class="card-trigger" onclick="toggleCard(this)">
+      <div class="card-num">01</div>
+      <div class="card-meta">
+        <div class="card-title">Scholarship Application Cycle Opening Email</div>
+        <div class="card-tags">
+          <span class="tag tag-audience">Applicants</span>
+          <span class="tag tag-type">Email</span>
+          <span class="tag tag-technique">Few-Shot</span>
+        </div>
+      </div>
+      <span class="card-chevron">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="context-strip"><strong>Goal:</strong> Announce the opening of applications to prospective students and families. Must feel encouraging, not transactional.</div>
+      <div class="prompt-tabs">
+        <button class="ptab active" onclick="switchTab(this, 'p1-a')">Few-Shot (Fast)</button>
+        <button class="ptab" onclick="switchTab(this, 'p1-b')">Chain-of-Thought</button>
+        <button class="ptab" onclick="switchTab(this, 'p1-c')">Governed Workflow</button>
+      </div>
+      <div id="p1-a" class="prompt-panel active">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>FEW-SHOT PROMPTING</div>
+        <div class="technique-explainer">Provide one or two example emails so the AI learns your tone before writing the real one. This prevents generic output.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>You are a scholarship communications coordinator. Below is an example of the email style we use. Write a new email announcing the opening of our 2026 scholarship application cycle using the same tone and structure.
+
+EXAMPLE EMAIL:
+Subject: Applications Now Open — Don't Miss Your Chance
+Dear [First Name],
+Every year, the [Program Name] scholarship changes lives. This year, it could change yours. We're proud to open applications for our 2026 cycle — and we want you to apply.
+[Award amount], [deadline], [eligibility in one sentence].
+Apply at [link]. Questions? Reply to this email.
+With hope for your future,
+[Staff Name]
+
+NOW WRITE A NEW VERSION with these details:
+- Award: <span class="ph">[your award amount]</span>
+- Deadline: <span class="ph">[your deadline]</span>
+- Eligibility: <span class="ph">[your eligibility criteria]</span>
+- Link: <span class="ph">[your application link]</span>
+- Tone: warm, encouraging, under 150 words</pre>
+        </div>
+        <div class="verify-note"><strong>Verify before sending:</strong> Award amount, deadline, eligibility language, and application link against your source document.</div>
+      </div>
+      <div id="p1-b" class="prompt-panel">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>CHAIN-OF-THOUGHT</div>
+        <div class="technique-explainer">Ask AI to reason through the audience's mindset before writing. This surfaces the emotional triggers that make an announcement feel worth opening.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>Before writing this email, reason through these questions:
+1. What is the biggest barrier a first-generation student faces when they see a scholarship announcement?
+2. What one sentence would make them feel like this award is meant for them?
+3. What action step is clearest and least intimidating?
+
+Then write an application opening email using your reasoning above.
+Details: Award = <span class="ph">[amount]</span>, Deadline = <span class="ph">[date]</span>, Audience = high school seniors, Tone = hopeful and direct, Max length = 175 words.
+End with: "What question did you have to assume? Flag it for staff review."</pre>
+        </div>
+        <div class="verify-note"><strong>Review:</strong> Check that the "biggest barrier" reasoning doesn't introduce assumptions about specific applicant demographics that could affect equity.</div>
+      </div>
+      <div id="p1-c" class="prompt-panel">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>GOVERNED WORKFLOW</div>
+        <div class="technique-explainer">Adds a built-in review checklist to the output so staff know exactly what to verify before sending — no extra step required.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>Act as a scholarship communications manager. Write an application announcement email for our 2026 cycle.
+
+Inputs:
+- Award: <span class="ph">[amount]</span>
+- Deadline: <span class="ph">[date]</span>
+- Audience: first-generation college students, grades 10–12
+- Brand voice: encouraging, plain language, grade 8 reading level
+- Max length: 200 words
+
+After the email draft, add a section titled "STAFF VERIFICATION CHECKLIST" with these items to confirm before sending:
+□ Award amount matches current program documentation
+□ Deadline matches the application platform settings
+□ Application link is live and tested
+□ Eligibility language reviewed by program director
+□ Email tested in mobile view before sending</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="scenario-card" data-audience="applicants" data-title="scholarship deadline reminder sequence">
+    <div class="card-trigger" onclick="toggleCard(this)">
+      <div class="card-num">02</div>
+      <div class="card-meta">
+        <div class="card-title">Deadline Reminder Email Sequence (3-Part)</div>
+        <div class="card-tags">
+          <span class="tag tag-audience">Applicants</span>
+          <span class="tag tag-type">Email Sequence</span>
+          <span class="tag tag-technique">Prompt Chaining</span>
+        </div>
+      </div>
+      <span class="card-chevron">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="context-strip"><strong>Goal:</strong> Drive applications in the final 3 weeks before deadline without sounding like spam. Each email needs a distinct tone and urgency level.</div>
+      <div class="prompt-tabs">
+        <button class="ptab active" onclick="switchTab(this, 'p2-a')">Prompt Chaining</button>
+        <button class="ptab" onclick="switchTab(this, 'p2-b')">Constraint-Based</button>
+      </div>
+      <div id="p2-a" class="prompt-panel active">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>PROMPT CHAINING</div>
+        <div class="technique-explainer">Break a multi-part task into linked steps. Each prompt builds on the previous output so tone escalates naturally across the sequence.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>PROMPT 1 — Write the first email in a 3-part deadline reminder sequence. This is the "early reminder" sent 3 weeks out.
+Tone: informational and encouraging. No urgency yet.
+Details: Deadline = <span class="ph">[date]</span>, Award = <span class="ph">[amount]</span>, Link = <span class="ph">[link]</span>
+Max: 100 words. Subject line included.
+
+---
+PROMPT 2 — Take the email above. Write a "one week left" version. Increase urgency without being alarmist. Add one concrete action tip (e.g., "Gather your transcripts this weekend").
+Max: 110 words.
+
+---
+PROMPT 3 — Write the final "48 hours" version. Short, punchy, human. One sentence of stakes ("This application takes 20 minutes. The award lasts a lifetime."). No new information — just the link and deadline.
+Max: 70 words.</pre>
+        </div>
+        <div class="verify-note"><strong>Verify:</strong> Run all three emails side-by-side to confirm tone escalates naturally and that no factual details changed between versions.</div>
+      </div>
+      <div id="p2-b" class="prompt-panel">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>CONSTRAINT-BASED PROMPTING</div>
+        <div class="technique-explainer">Tight constraints force precision. Useful when a small team needs to reuse the same sequence with different program details each cycle.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>Write a 3-part deadline reminder email sequence. Constraints:
+- Each email: subject line + body, max 100 words per email
+- Email 1 (3 weeks out): tone = informational. End with "Apply at [link]."
+- Email 2 (1 week out): tone = motivating. Include one action tip.
+- Email 3 (48 hours): tone = urgent but warm. Body = 2 sentences max.
+- Never use the word "urgent" or "don't miss out"
+- Reading level: grade 8 or below
+- No assumptions about applicant income, school type, or family background
+Program details: Deadline = <span class="ph">[date]</span>, Award = <span class="ph">[amount]</span>, Link = <span class="ph">[link]</span></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="scenario-card" data-audience="donors" data-title="donor impact update annual report">
+    <div class="card-trigger" onclick="toggleCard(this)">
+      <div class="card-num">03</div>
+      <div class="card-meta">
+        <div class="card-title">Annual Donor Impact Update</div>
+        <div class="card-tags">
+          <span class="tag tag-audience">Donors</span>
+          <span class="tag tag-type">Report / Letter</span>
+          <span class="tag tag-technique">Triple-Check</span>
+        </div>
+      </div>
+      <span class="card-chevron">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="context-strip"><strong>Goal:</strong> Show donors that their gift made a measurable difference. Use aggregate program data only — never named applicants without consent.</div>
+      <div class="prompt-tabs">
+        <button class="ptab active" onclick="switchTab(this, 'p3-a')">Triple-Check (3 Perspectives)</button>
+        <button class="ptab" onclick="switchTab(this, 'p3-b')">Chain-of-Thought</button>
+        <button class="ptab" onclick="switchTab(this, 'p3-c')">Governed Workflow</button>
+      </div>
+      <div id="p3-a" class="prompt-panel active">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>TRIPLE-CHECK / PERSPECTIVE FORCING</div>
+        <div class="technique-explainer">Ask AI to write from 3 different viewpoints, then merge the best elements. Prevents the report from being one-dimensional — donors respond to data AND story AND trust signals.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>Write a donor impact update from three different perspectives, then merge them:
+
+VIEWPOINT A — DATA-DRIVEN: Lead with aggregate numbers. Show scale and efficiency. (e.g., "32 awards, $160K invested, 94% of recipients enrolled fall semester")
+
+VIEWPOINT B — STORY-BASED: Lead with a brief composite student story (anonymized). Show emotional stakes.
+
+VIEWPOINT C — TRUST-BUILDING: Lead with what the program does to ensure fair, equitable selection. Reinforce that the donor's gift is handled with care.
+
+Program data (do NOT include any student names or identifiers):
+<span class="ph">[Paste your aggregate stats here]</span>
+
+Merge the strongest elements from all three into one 250-word impact update.
+Then list: "Facts that require staff verification before sending."</pre>
+        </div>
+        <div class="verify-note"><strong>Privacy rule:</strong> Never paste named student data, application details, or financial records into any AI prompt. Use totals, percentages, and anonymized composites only.</div>
+      </div>
+      <div id="p3-b" class="prompt-panel">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>CHAIN-OF-THOUGHT</div>
+        <div class="technique-explainer">Guide the AI to identify the most compelling data points before writing, so the letter leads with evidence that actually moves donors.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>Before writing a donor impact letter, reason through:
+1. Of the stats below, which 2-3 are most compelling to a donor who prioritizes equity and access?
+2. What is the single most human moment you can reference without identifying any individual?
+3. What call to action would feel natural at the end — not transactional?
+
+Program data: <span class="ph">[paste aggregate stats — no names]</span>
+
+Now write a 200-word donor impact letter using your reasoning above.
+Tone: grateful, specific, human. Not a press release.
+End with your reasoning summary so staff can review your logic.</pre>
+        </div>
+      </div>
+      <div id="p3-c" class="prompt-panel">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>GOVERNED WORKFLOW</div>
+        <div class="technique-explainer">Produces both the letter draft AND a staff sign-off checklist in one prompt run — ensuring nothing is sent without review.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>Act as a nonprofit communications director. Using the aggregate data below, draft a 200-word year-end donor impact letter. Do not invent statistics or student stories.
+
+Data: <span class="ph">[paste aggregate program data — no names or identifiers]</span>
+
+Tone: Warm, specific, honest. Avoid corporate language.
+
+After the draft, output a "PRE-SEND CHECKLIST" with:
+□ All statistics verified against program records
+□ No named students or identifying information included
+□ Letter reviewed by program director for accuracy
+□ Approved by development/communications lead
+□ Sent from a staff email, not a no-reply address</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="scenario-card" data-audience="applicants" data-title="award notification congratulations letter recipient">
+    <div class="card-trigger" onclick="toggleCard(this)">
+      <div class="card-num">04</div>
+      <div class="card-meta">
+        <div class="card-title">Award Notification Letter to Recipients</div>
+        <div class="card-tags">
+          <span class="tag tag-audience">Applicants</span>
+          <span class="tag tag-type">Letter</span>
+          <span class="tag tag-technique">Few-Shot</span>
+        </div>
+      </div>
+      <span class="card-chevron">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="context-strip"><strong>Goal:</strong> Communicate award decisions with warmth and specificity. The letter should celebrate the recipient, acknowledge the donor, and outline next steps.</div>
+      <div class="prompt-tabs">
+        <button class="ptab active" onclick="switchTab(this, 'p4-a')">Few-Shot</button>
+        <button class="ptab" onclick="switchTab(this, 'p4-b')">Role Prompting</button>
+      </div>
+      <div id="p4-a" class="prompt-panel active">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>FEW-SHOT PROMPTING</div>
+        <div class="technique-explainer">Supply a strong example letter so AI matches your specific celebratory tone — especially important here because generic "congratulations" letters feel hollow.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>Act as a scholarship communications manager. Using the example below as a tone model, write a personalized award notification email (120–150 words) that celebrates the recipient, thanks the donor, and outlines next steps.
+
+EXAMPLE (tone model):
+Subject: You've Been Selected — 2025 Smith Family Scholar Award
+Dear Jordan,
+On behalf of the Smith Family Scholarship Committee, I'm delighted to congratulate you on your 2025 award. Your leadership in the campus food pantry and commitment to first-generation students stood out in a highly competitive pool.
+This award — made possible through the generosity of the Smith family — will support your studies in biology. In the coming weeks you'll receive details on accepting the award and connecting with your donor.
+We're honored to invest in your potential.
+Warmly, [Staff Name]
+
+NOW WRITE for this recipient:
+- Recipient first name: <span class="ph">[first name only — no last name]</span>
+- Award name: <span class="ph">[award name]</span>
+- Award amount: <span class="ph">[amount]</span>
+- One specific strength to highlight: <span class="ph">[e.g., "community service leadership"]</span>
+- Donor acknowledgment: <span class="ph">[donor name/family name if appropriate]</span>
+- Next step: <span class="ph">[e.g., "complete acceptance form by [date]"]</span></pre>
+        </div>
+        <div class="verify-note"><strong>Privacy note:</strong> Use first names only in prompts. Do not paste full student names, IDs, SSNs, financial data, or application essays into AI tools.</div>
+      </div>
+      <div id="p4-b" class="prompt-panel">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>ROLE PROMPTING</div>
+        <div class="technique-explainer">Assign AI a specific professional identity that shapes every word choice — "scholarship communications manager who has sent 500 of these letters" produces very different output than a generic request.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>You are a scholarship communications manager who has spent 10 years writing award letters for first-generation college students. You know that the right letter can be the most affirming thing a student receives all year.
+
+Write a 140-word award notification email for a 2026 recipient. The letter should:
+1. Open with genuine celebration (not "We are pleased to inform you")
+2. Reference one specific thing the student demonstrated (provided below)
+3. Connect the award to the donor's mission in one sentence
+4. State next steps clearly
+
+Recipient first name: <span class="ph">[first name]</span>
+Specific strength: <span class="ph">[e.g., "perseverance through a gap year to support your family"]</span>
+Donor/award name: <span class="ph">[name]</span>
+Award amount: <span class="ph">[amount]</span>
+Next step + deadline: <span class="ph">[action + date]</span>
+Tone: personal, celebratory, warm</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="scenario-card" data-audience="applicants" data-title="compassionate rejection waitlist letter">
+    <div class="card-trigger" onclick="toggleCard(this)">
+      <div class="card-num">05</div>
+      <div class="card-meta">
+        <div class="card-title">Compassionate Non-Selection Letter</div>
+        <div class="card-tags">
+          <span class="tag tag-audience">Applicants</span>
+          <span class="tag tag-type">Letter</span>
+          <span class="tag tag-technique">Constraint-Based</span>
+        </div>
+      </div>
+      <span class="card-chevron">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="context-strip"><strong>Goal:</strong> Communicate non-selection with care and dignity. The letter must not diminish the applicant's effort, leave the door closed permanently, or use hollow platitudes.</div>
+      <div class="prompt-tabs">
+        <button class="ptab active" onclick="switchTab(this, 'p5-a')">Constraint-Based</button>
+        <button class="ptab" onclick="switchTab(this, 'p5-b')">Chain-of-Thought</button>
+      </div>
+      <div id="p5-a" class="prompt-panel active">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>CONSTRAINT-BASED PROMPTING</div>
+        <div class="technique-explainer">Define what the letter must NOT do as clearly as what it should do. Negative constraints are especially useful for sensitive communications where a wrong word can cause harm.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>Write a scholarship non-selection letter. Follow these constraints exactly:
+
+MUST include:
+- Sincere acknowledgment of the applicant's effort
+- One sentence affirming their potential without condescending
+- Clear information about reapplying next cycle (if applicable)
+- One concrete alternative resource (e.g., financial aid office, other scholarship list)
+- Staff name and direct contact
+
+MUST NOT include:
+- "We regret to inform you" (too cold)
+- "You were a strong candidate" without specifics (hollow)
+- Explanation of selection criteria or comparison to other applicants
+- Any language that implies permanent ineligibility unless true
+- Any references to specific application content (legal risk)
+
+Program name: <span class="ph">[name]</span>
+Reapply next year? <span class="ph">[yes / no]</span>
+Alternative resource: <span class="ph">[e.g., "your school counselor's scholarship list"]</span>
+Tone: warm, honest, brief. Max 120 words.</pre>
+        </div>
+        <div class="verify-note"><strong>Review:</strong> Have program director or legal counsel approve the template before using it for the first time. Non-selection letters can carry legal implications.</div>
+      </div>
+      <div id="p5-b" class="prompt-panel">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>CHAIN-OF-THOUGHT</div>
+        <div class="technique-explainer">Ask AI to reason about the emotional experience of the reader before drafting — produces more empathetic, human output for high-stakes communications.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>Before writing this non-selection letter, reason through:
+1. What does a first-generation student fear most when opening this email?
+2. What one thing could this letter say that would leave them feeling respected, not dismissed?
+3. What should this letter explicitly NOT say to avoid legal or equity concerns?
+
+Then write a 110-word non-selection letter using your reasoning.
+Constraints: No hollow praise, no comparison to others, one concrete next step.
+Program name: <span class="ph">[name]</span>
+Reapply eligibility: <span class="ph">[yes/no + cycle]</span>
+Tone: kind, brief, professional.
+
+End with: "Assumptions made that staff should verify: [list]"</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="scenario-card" data-audience="donors" data-title="year-end donor appeal fundraising email">
+    <div class="card-trigger" onclick="toggleCard(this)">
+      <div class="card-num">06</div>
+      <div class="card-meta">
+        <div class="card-title">Year-End Donor Appeal</div>
+        <div class="card-tags">
+          <span class="tag tag-audience">Donors</span>
+          <span class="tag tag-type">Email Appeal</span>
+          <span class="tag tag-technique">Role Prompting</span>
+        </div>
+      </div>
+      <span class="card-chevron">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="context-strip"><strong>Goal:</strong> Inspire renewed or increased giving before the December 31 tax deadline. Needs both emotional resonance and a clear, low-friction ask.</div>
+      <div class="prompt-tabs">
+        <button class="ptab active" onclick="switchTab(this, 'p6-a')">Role Prompting</button>
+        <button class="ptab" onclick="switchTab(this, 'p6-b')">Few-Shot + Tiers</button>
+      </div>
+      <div id="p6-a" class="prompt-panel active">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>ROLE PROMPTING</div>
+        <div class="technique-explainer">Assign AI the role of an experienced nonprofit fundraiser who understands the psychology of year-end giving — specificity in the role produces specificity in the output.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>You are a nonprofit development director who has written year-end appeals for 15 years. You know that the most effective appeals are specific, brief, and human — not corporate.
+
+Write a year-end giving appeal email for our scholarship program. Use the following structure:
+1. Open with a single, specific impact moment (anonymized composite — no real names)
+2. Bridge from that moment to the donor's role in making it possible
+3. One clear ask with a giving link and December 31 deadline
+4. P.S. line: add a single compelling stat ("Last year, 94% of our scholars enrolled for their sophomore year")
+
+Program name: <span class="ph">[name]</span>
+Aggregate impact data: <span class="ph">[paste totals — no names]</span>
+Giving link: <span class="ph">[link]</span>
+One stat to include in P.S.: <span class="ph">[stat]</span>
+Max: 200 words (excluding P.S.)</pre>
+        </div>
+        <div class="verify-note"><strong>Verify:</strong> P.S. stat and all aggregate figures against current program records. Confirm giving link is live and routes to the correct fund.</div>
+      </div>
+      <div id="p6-b" class="prompt-panel">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>FEW-SHOT + TIERED ASK</div>
+        <div class="technique-explainer">Combine an example with tiered giving levels so AI produces copy that makes each giving amount feel meaningful and deliberate.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>Using the example below as a tone model, write a year-end appeal with three giving tiers that each feel meaningful.
+
+EXAMPLE TIER LANGUAGE:
+- $500 covers one student's textbooks for a semester
+- $1,000 covers transportation to campus for a year
+- $2,500 funds one complete scholarship award
+
+Write a 180-word appeal email for our program.
+Then create 3 giving tier descriptions (one sentence each) using our actual award breakdown.
+
+Program data (aggregates only): <span class="ph">[paste cost breakdown by category — no names]</span>
+Giving link: <span class="ph">[link]</span>
+Deadline: December 31, <span class="ph">[year]</span>
+Tone: specific, warm, urgent without being pushy</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="scenario-card" data-audience="public" data-title="scholarship FAQ page website GEO eligibility">
+    <div class="card-trigger" onclick="toggleCard(this)">
+      <div class="card-num">07</div>
+      <div class="card-meta">
+        <div class="card-title">Scholarship FAQ Page (GEO-Optimized)</div>
+        <div class="card-tags">
+          <span class="tag tag-audience">Public-Facing</span>
+          <span class="tag tag-type">Web Content</span>
+          <span class="tag tag-technique">GEO / Structured</span>
+        </div>
+      </div>
+      <span class="card-chevron">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="context-strip"><strong>Goal:</strong> Create a FAQ page that answers common questions clearly enough that AI tools like ChatGPT or Gemini will quote your page accurately when students ask about your scholarship.</div>
+      <div class="prompt-tabs">
+        <button class="ptab active" onclick="switchTab(this, 'p7-a')">GEO Structured</button>
+        <button class="ptab" onclick="switchTab(this, 'p7-b')">Iterative Refinement</button>
+      </div>
+      <div id="p7-a" class="prompt-panel active">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>GEO (GENERATIVE ENGINE OPTIMIZATION)</div>
+        <div class="technique-explainer">Structure content so AI search tools cite it accurately. Lead with direct answers, use H2/H3 headers, avoid burying key facts in paragraphs.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>Write a scholarship FAQ page using GEO best practices so AI tools will cite our information accurately.
+
+Rules:
+- Each question gets a direct, single-sentence answer first, then elaboration
+- Use H2 for major categories (Eligibility, Award, Application, Decisions)
+- Use H3 for individual questions
+- Never bury key facts (deadline, amount, eligibility) inside long paragraphs
+- Include a "Position Zero" summary box at the top: program name, award amount, deadline, who is eligible, and application link — all in 5 bullet points
+
+Program details:
+- Program name: <span class="ph">[name]</span>
+- Award amount: <span class="ph">[amount]</span>
+- Application deadline: <span class="ph">[date]</span>
+- Eligibility: <span class="ph">[criteria]</span>
+- Application link: <span class="ph">[link]</span>
+- Contact email: <span class="ph">[email]</span>
+
+Write 10–12 FAQ items covering: eligibility, award amount, how to apply, selection process, notification timeline, renewability, and contact info.</pre>
+        </div>
+        <div class="verify-note"><strong>Before publishing:</strong> Have program director review every factual claim. Outdated or inaccurate FAQ content will be cited incorrectly by AI tools — potentially for months.</div>
+      </div>
+      <div id="p7-b" class="prompt-panel">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>ITERATIVE REFINEMENT</div>
+        <div class="technique-explainer">Run a first draft, then use a second prompt to stress-test it from the applicant's perspective. Catches gaps your team's familiarity hides.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>PASS 1 — Write a 10-question FAQ for our scholarship program. Cover: eligibility, deadline, award amount, how to apply, selection process, notification timeline, renewal.
+Program details: <span class="ph">[paste your program details]</span>
+
+---
+PASS 2 — Read the FAQ above as a first-generation high school junior who has never applied for a scholarship. List:
+1. Three questions the FAQ doesn't answer that I would have
+2. Two places where the language assumes knowledge I might not have
+3. One thing that would make me unsure if I'm eligible
+
+Then revise the FAQ to address all gaps identified.</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8 -->
+  <div class="scenario-card" data-audience="partners" data-title="school counselor outreach email partnership">
+    <div class="card-trigger" onclick="switchTab(this, 'p8') || toggleCard(this)">
+      <div class="card-num">08</div>
+      <div class="card-meta">
+        <div class="card-title">School Counselor Outreach Email</div>
+        <div class="card-tags">
+          <span class="tag tag-audience">Partners</span>
+          <span class="tag tag-type">Email</span>
+          <span class="tag tag-technique">Role Prompting</span>
+        </div>
+      </div>
+      <span class="card-chevron">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="context-strip"><strong>Goal:</strong> Get school counselors to share your scholarship with eligible students. Counselors receive hundreds of scholarship announcements — yours needs to make their job easier, not harder.</div>
+      <div class="prompt-tabs">
+        <button class="ptab active" onclick="switchTab(this, 'p8-a')">Role Prompting</button>
+        <button class="ptab" onclick="switchTab(this, 'p8-b')">Constraint-Based</button>
+      </div>
+      <div id="p8-a" class="prompt-panel active">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>ROLE PROMPTING</div>
+        <div class="technique-explainer">Write from the counselor's frame of reference. What does a counselor with 300 students need to be able to do with this email in under 60 seconds?</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>You are a high school guidance counselor with 300 students and 50 scholarship emails in your inbox. You forward scholarships only if they are: easy to understand in 30 seconds, clearly relevant to students you serve, and have a shareable one-pager or flyer.
+
+Now write an outreach email FROM our scholarship program TO counselors like you. The email should:
+1. State who is eligible in the first sentence
+2. Tell the counselor exactly what to do (forward this email / share the flyer / post on the board)
+3. Include a one-paragraph "forward to students" blurb they can copy-paste
+4. Offer a contact for questions
+
+Our program: <span class="ph">[program name]</span>
+Eligibility: <span class="ph">[criteria]</span>
+Award: <span class="ph">[amount]</span>
+Deadline: <span class="ph">[date]</span>
+Flyer/link: <span class="ph">[link]</span>
+Max email length: 150 words</pre>
+        </div>
+      </div>
+      <div id="p8-b" class="prompt-panel">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>CONSTRAINT-BASED</div>
+        <div class="technique-explainer">Set strict format rules to produce a scannable email a counselor can act on immediately — no long prose, no jargon.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>Write a scholarship announcement email for school counselors. Constraints:
+- Subject line: include [scholarship name] and deadline year
+- Line 1: who is eligible (one sentence, plain English)
+- Line 2: award amount and deadline (one sentence)
+- Lines 3–5: what to do (3 action options: forward this email / print the flyer / add to bulletin board)
+- Paragraph at end: a 2-sentence "forward to students" blurb in quotes
+- Closing: staff name, email, phone
+- No jargon, no educational acronyms the counselor must decode
+- Max: 120 words total
+
+Program details: <span class="ph">[name, eligibility, amount, deadline, link]</span></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9 -->
+  <div class="scenario-card" data-audience="public" data-title="social media posts instagram facebook linkedin scholarship winners announcement">
+    <div class="card-trigger" onclick="toggleCard(this)">
+      <div class="card-num">09</div>
+      <div class="card-meta">
+        <div class="card-title">Scholar Announcement Social Media Posts</div>
+        <div class="card-tags">
+          <span class="tag tag-audience">Public-Facing</span>
+          <span class="tag tag-type">Social Media</span>
+          <span class="tag tag-technique">Prompt Chaining</span>
+        </div>
+      </div>
+      <span class="card-chevron">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="context-strip"><strong>Goal:</strong> Celebrate award recipients across channels while protecting student privacy. Must get consent before naming students publicly and tailor copy per platform.</div>
+      <div class="prompt-tabs">
+        <button class="ptab active" onclick="switchTab(this, 'p9-a')">Prompt Chaining (Multi-Platform)</button>
+        <button class="ptab" onclick="switchTab(this, 'p9-b')">Privacy-First Template</button>
+      </div>
+      <div id="p9-a" class="prompt-panel active">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>PROMPT CHAINING — MULTI-PLATFORM</div>
+        <div class="technique-explainer">One brief, three platform-specific posts. Each platform has its own voice, character limit, and audience expectation — chain the outputs so they stay consistent in substance but not in format.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>PROMPT 1 — Write a brief factual statement about our 2026 scholar cohort (no names unless consent confirmed). Include: number of scholars, total awarded, one aggregate impact stat.
+Program data (no individual names): <span class="ph">[paste aggregate info]</span>
+
+---
+PROMPT 2 — Using the statement above, write three platform-specific social posts:
+
+INSTAGRAM (under 150 words): Celebratory, visual-forward, 3–4 relevant hashtags, CTA to link in bio
+
+LINKEDIN (under 200 words): Professional, program-impact focused, connects scholarship to workforce/community, 1–2 hashtags
+
+FACEBOOK (under 120 words): Warm community announcement, shareable tone, tag prompt ("Know a student who should apply next year? Share this post")
+
+Tone across all: celebratory but not boastful. We celebrate students, not ourselves.</pre>
+        </div>
+        <div class="verify-note"><strong>Privacy first:</strong> Never post student names, photos, school names, or identifying details without written consent from the student (and parent/guardian if under 18).</div>
+      </div>
+      <div id="p9-b" class="prompt-panel">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>PRIVACY-FIRST TEMPLATE APPROACH</div>
+        <div class="technique-explainer">Build a reusable post template that keeps the spotlight on the program's mission rather than individual students — safer, more scalable, and effective year after year.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>Write a social media post template for announcing scholarship recipients that protects student privacy by default. The template should:
+- Celebrate the cohort as a group, not individuals
+- Highlight aggregate impact (total dollars, number of scholars, first-gen percentage if available)
+- Include a [CUSTOMIZABLE] placeholder wherever staff can optionally add a consented student quote or first name
+- End with a "applications open next cycle" awareness hook
+
+Produce versions for: Instagram, LinkedIn, Facebook
+Each under 150 words. Include placeholder hashtags that staff should replace with program-specific tags.
+Program name: <span class="ph">[name]</span></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10 -->
+  <div class="scenario-card" data-audience="donors" data-title="donor stewardship thank you major gift first gift">
+    <div class="card-trigger" onclick="toggleCard(this)">
+      <div class="card-num">10</div>
+      <div class="card-meta">
+        <div class="card-title">Donor Stewardship Thank-You (First Gift)</div>
+        <div class="card-tags">
+          <span class="tag tag-audience">Donors</span>
+          <span class="tag tag-type">Letter</span>
+          <span class="tag tag-technique">Chain-of-Thought</span>
+        </div>
+      </div>
+      <span class="card-chevron">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="context-strip"><strong>Goal:</strong> Convert a first-time donor into a long-term partner by making their initial gift feel impactful and personally received — within 48 hours of the donation.</div>
+      <div class="prompt-tabs">
+        <button class="ptab active" onclick="switchTab(this, 'p10-a')">Chain-of-Thought</button>
+        <button class="ptab" onclick="switchTab(this, 'p10-b')">Role Prompting</button>
+      </div>
+      <div id="p10-a" class="prompt-panel active">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>CHAIN-OF-THOUGHT</div>
+        <div class="technique-explainer">Ask AI to reason about what a first-time donor needs to feel before writing the letter — this surfaces the trust-building elements that convert one-time givers to recurring donors.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>Before writing this thank-you letter, reason through:
+1. What does a first-time donor to a scholarship program most need to feel after their gift?
+2. What would make this letter feel personal rather than templated (without using details we don't have)?
+3. What one sentence plants the seed for a second gift without being transactional?
+
+Then write a 150-word first-gift thank-you letter using your reasoning.
+Inputs:
+- Donor first name: <span class="ph">[first name only]</span>
+- Gift amount: <span class="ph">[amount]</span>
+- Gift date: <span class="ph">[date]</span>
+- Program name: <span class="ph">[name]</span>
+- One aggregate impact line: <span class="ph">[e.g., "Last year, 32 students received awards totaling $160,000"]</span>
+- Signatory: <span class="ph">[name and title]</span>
+Tone: genuine, not corporate. Do not use "We are grateful" as the opening.</pre>
+        </div>
+      </div>
+      <div id="p10-b" class="prompt-panel">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>ROLE PROMPTING</div>
+        <div class="technique-explainer">Assign the role of a development director who personally signs every first-gift letter — produces a warmer, more specific voice than generic "nonprofit communications."</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>You are the executive director of a scholarship nonprofit. You personally sign every first-gift thank-you letter because you believe the first thank-you sets the relationship. You never use "on behalf of" and you never open with "We are grateful."
+
+Write a first-gift thank-you letter (140 words) that:
+- Opens with a specific, human observation about why their gift matters this year
+- Names one concrete thing their gift will help fund
+- Ends with a personal invitation to learn more (not a donation ask)
+
+Inputs:
+- Donor first name: <span class="ph">[name]</span>
+- Gift: <span class="ph">[amount]</span>
+- Program: <span class="ph">[name]</span>
+- Concrete use of funds: <span class="ph">[e.g., "covers textbooks for one semester"]</span>
+- Your name and title: <span class="ph">[name, title]</span></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11 -->
+  <div class="scenario-card" data-audience="applicants" data-title="incomplete application follow up nudge email">
+    <div class="card-trigger" onclick="toggleCard(this)">
+      <div class="card-num">11</div>
+      <div class="card-meta">
+        <div class="card-title">Incomplete Application Follow-Up</div>
+        <div class="card-tags">
+          <span class="tag tag-audience">Applicants</span>
+          <span class="tag tag-type">Email</span>
+          <span class="tag tag-technique">Constraint-Based</span>
+        </div>
+      </div>
+      <span class="card-chevron">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="context-strip"><strong>Goal:</strong> Gently remind applicants who started but haven't submitted to complete their application — without making them feel surveilled or pressured.</div>
+      <div class="prompt-tabs">
+        <button class="ptab active" onclick="switchTab(this, 'p11-a')">Constraint-Based</button>
+        <button class="ptab" onclick="switchTab(this, 'p11-b')">Few-Shot</button>
+      </div>
+      <div id="p11-a" class="prompt-panel active">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>CONSTRAINT-BASED PROMPTING</div>
+        <div class="technique-explainer">Define what makes this email go wrong (surveillance tone, guilt-tripping, pressure) and constrain AI away from those failure modes before drafting.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>Write a follow-up email to applicants who started but haven't completed their scholarship application.
+
+MUST include:
+- Warm, helpful opening (not "We noticed you haven't…")
+- One practical tip for the most commonly incomplete section
+- Deadline reminder with specific date
+- Offer to help (reply to this email)
+- Direct link to resume application
+
+MUST NOT include:
+- Language that feels like surveillance ("We can see your application…")
+- Guilt ("You worked so hard to start — don't let it go to waste")
+- Urgency tactics that could pressure vulnerable applicants
+- Assumptions about why they haven't finished
+
+Program: <span class="ph">[name]</span>, Deadline: <span class="ph">[date]</span>, Resume link: <span class="ph">[link]</span>
+Most commonly incomplete section: <span class="ph">[e.g., "essay question 2"]</span>
+Max: 120 words. Tone: helpful neighbor, not debt collector.</pre>
+        </div>
+      </div>
+      <div id="p11-b" class="prompt-panel">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>FEW-SHOT</div>
+        <div class="technique-explainer">Provide two tone examples — one that feels wrong and one that feels right — so AI calibrates precisely to the register you want.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>Here are two examples of follow-up email openings. Write an email that matches the GOOD example's tone.
+
+BAD (avoid this tone):
+"We noticed you started your application on [date] but haven't submitted it yet. Don't let this opportunity pass you by — the deadline is approaching fast!"
+
+GOOD (match this tone):
+"Finishing a scholarship application takes focus, and sometimes life gets in the way. If you started an application for the [Program] award, there's still time — and we're here if you have questions."
+
+Now write a complete 100-word follow-up email in the GOOD tone.
+Program: <span class="ph">[name]</span>
+Deadline: <span class="ph">[date]</span>
+Resume link: <span class="ph">[link]</span>
+Contact: <span class="ph">[email]</span></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12 -->
+  <div class="scenario-card" data-audience="applicants" data-title="welcome letter new scholars cohort orientation">
+    <div class="card-trigger" onclick="toggleCard(this)">
+      <div class="card-num">12</div>
+      <div class="card-meta">
+        <div class="card-title">Welcome Letter to New Scholar Cohort</div>
+        <div class="card-tags">
+          <span class="tag tag-audience">Applicants</span>
+          <span class="tag tag-type">Letter</span>
+          <span class="tag tag-technique">Few-Shot</span>
+        </div>
+      </div>
+      <span class="card-chevron">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="context-strip"><strong>Goal:</strong> Onboard new scholars into your community. The welcome letter sets expectations, communicates belonging, and launches the relationship on the right foot.</div>
+      <div class="prompt-tabs">
+        <button class="ptab active" onclick="switchTab(this, 'p12-a')">Few-Shot</button>
+        <button class="ptab" onclick="switchTab(this, 'p12-b')">Role Prompting</button>
+      </div>
+      <div id="p12-a" class="prompt-panel active">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>FEW-SHOT PROMPTING</div>
+        <div class="technique-explainer">Provide an example that models the community-building voice you want — welcome letters live or die on authentic warmth, which few-shot examples establish quickly.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>Using the tone and structure of the example below, write a welcome letter for our incoming scholar cohort.
+
+EXAMPLE (tone model):
+"Welcome to the [Program Name] scholar community — you belong here.
+Over the next year, you'll meet students from across the state who share your drive. This scholarship isn't just financial support; it's an invitation into something bigger.
+Here's what comes next: [3 bullet action items].
+We're in your corner. Reply to this email anytime.
+With pride,
+[Staff Name]"
+
+NOW WRITE for our cohort:
+- Program name: <span class="ph">[name]</span>
+- Cohort size (approximate): <span class="ph">[number]</span>
+- What they receive beyond the award: <span class="ph">[e.g., mentorship, networking events, renewal criteria]</span>
+- 3 immediate next steps: <span class="ph">[list them]</span>
+- Staff signatory: <span class="ph">[name, title]</span>
+- Max: 200 words. Tone: community-first, not transactional.</pre>
+        </div>
+      </div>
+      <div id="p12-b" class="prompt-panel">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>ROLE PROMPTING</div>
+        <div class="technique-explainer">Frame the writer as a program alumni turned staff member — someone who was once in the scholar's shoes. This produces a voice that reads as lived experience, not institutional messaging.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>You are a scholarship program coordinator who was once a recipient of this exact scholarship as a first-generation college student. You now write every welcome letter knowing what it meant to receive one.
+
+Write a 180-word welcome letter to the incoming 2026 scholar cohort. The letter should:
+1. Open with a sentence that makes the student feel seen, not processed
+2. Name one thing that will be hard in the coming year and acknowledge it without being patronizing
+3. Describe what this community means (not just the money)
+4. List next steps clearly
+5. End with your personal contact info and an explicit invitation to reach out
+
+Program name: <span class="ph">[name]</span>
+Next steps: <span class="ph">[list 2–3 actions]</span>
+What they receive: <span class="ph">[award + any extras]</span>
+Your name and title: <span class="ph">[name, title]</span></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 13 -->
+  <div class="scenario-card" data-audience="internal" data-title="board report program summary executive briefing">
+    <div class="card-trigger" onclick="toggleCard(this)">
+      <div class="card-num">13</div>
+      <div class="card-meta">
+        <div class="card-title">Board Report: Program Cycle Summary</div>
+        <div class="card-tags">
+          <span class="tag tag-audience">Internal</span>
+          <span class="tag tag-type">Report</span>
+          <span class="tag tag-technique">Triple-Check</span>
+        </div>
+      </div>
+      <span class="card-chevron">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="context-strip"><strong>Goal:</strong> Translate program metrics into a board-ready narrative that speaks to governance, equity, and sustainability — not just activity counts.</div>
+      <div class="prompt-tabs">
+        <button class="ptab active" onclick="switchTab(this, 'p13-a')">Triple-Check Perspectives</button>
+        <button class="ptab" onclick="switchTab(this, 'p13-b')">Chain-of-Thought</button>
+      </div>
+      <div id="p13-a" class="prompt-panel active">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>TRIPLE-CHECK / PERSPECTIVE FORCING</div>
+        <div class="technique-explainer">Board members have three frames of reference: fiduciary responsibility, mission impact, and reputational risk. Force all three perspectives before synthesizing.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>Summarize our scholarship program's 2025–26 cycle for a board report from three perspectives:
+
+FIDUCIARY: What does the data say about cost efficiency, budget adherence, and return on investment per scholar?
+
+MISSION IMPACT: What does the data say about how well we served our stated equity and access goals?
+
+RISK: What gaps, equity concerns, or operational issues should the board be aware of?
+
+Program data (aggregate only — no student names):
+<span class="ph">[paste your program metrics here]</span>
+
+Then synthesize into a 300-word board report narrative with three labeled sections.
+End with: "Metrics that require source verification before board presentation: [list]"
+
+Note: Do not speculate on causes or trends not supported by the data provided.</pre>
+        </div>
+        <div class="verify-note"><strong>Board governance note:</strong> Verify all statistics against official program records before presenting. Board materials carry governance accountability — AI drafts are starting points, not final documents.</div>
+      </div>
+      <div id="p13-b" class="prompt-panel">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>CHAIN-OF-THOUGHT</div>
+        <div class="technique-explainer">Ask AI to identify which metrics matter most to governance audiences — prevents staff from leading with operational details that bore or confuse board members.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>Before writing a board summary for our scholarship program, reason through:
+1. Of the metrics below, which 3–4 are most relevant to a board member's fiduciary and mission oversight responsibilities?
+2. Which metrics might raise questions or concerns the board needs context for?
+3. What is the one headline finding from this cycle?
+
+Data: <span class="ph">[paste aggregate program data]</span>
+
+Write a 250-word board summary using your reasoning. Use headers: Headline Finding, By the Numbers, Equity Lens, Looking Ahead.
+Flag any metric where you had to make an interpretive assumption.</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 14 -->
+  <div class="scenario-card" data-audience="partners" data-title="corporate sponsor partnership proposal letter">
+    <div class="card-trigger" onclick="toggleCard(this)">
+      <div class="card-num">14</div>
+      <div class="card-meta">
+        <div class="card-title">Corporate Sponsor Partnership Proposal</div>
+        <div class="card-tags">
+          <span class="tag tag-audience">Partners</span>
+          <span class="tag tag-type">Proposal</span>
+          <span class="tag tag-technique">Role Prompting</span>
+        </div>
+      </div>
+      <span class="card-chevron">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="context-strip"><strong>Goal:</strong> Invite a local business or corporation to sponsor an award or event. Must connect their CSR goals to your program's mission without sounding transactional.</div>
+      <div class="prompt-tabs">
+        <button class="ptab active" onclick="switchTab(this, 'p14-a')">Role Prompting</button>
+        <button class="ptab" onclick="switchTab(this, 'p14-b')">Chain-of-Thought</button>
+      </div>
+      <div id="p14-a" class="prompt-panel active">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>ROLE PROMPTING</div>
+        <div class="technique-explainer">Write the letter from the perspective of a development professional who has closed corporate sponsorships — not a generic nonprofit fundraiser.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>You are a nonprofit development professional who specializes in corporate partnerships. You know that corporate CSR officers receive dozens of sponsorship requests. The ones that get meetings connect the sponsor's business goals to the organization's mission — not just "do good."
+
+Write a sponsorship proposal letter for our scholarship program to send to a local business.
+
+The letter should:
+1. Open with one sentence connecting the company's known focus area to our students (use placeholder below)
+2. State the partnership opportunity clearly (what they give, what they get)
+3. Include one quantified impact example (aggregate data only)
+4. Propose a specific next step (15-minute call, not "consider partnering")
+
+Company's known focus area: <span class="ph">[e.g., "workforce development in healthcare"]</span>
+Our program: <span class="ph">[name, mission summary]</span>
+Sponsorship level: <span class="ph">[amount and what it funds]</span>
+Named benefit for sponsor: <span class="ph">[e.g., "named award, logo on materials, recognition at ceremony"]</span>
+Max: 200 words</pre>
+        </div>
+      </div>
+      <div id="p14-b" class="prompt-panel">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>CHAIN-OF-THOUGHT</div>
+        <div class="technique-explainer">Reason through what this specific company cares about before writing — prevents the generic "invest in the next generation" language that every nonprofit sends.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>Before writing a partnership letter to [Company Name], reason through:
+1. What CSR goals does a company in [industry] typically prioritize?
+2. How does our scholarship program's student population connect to their talent pipeline or community investment interests?
+3. What is the single most compelling reason THIS company should partner with us specifically?
+
+Company industry: <span class="ph">[industry]</span>
+Our program data (aggregate): <span class="ph">[paste relevant stats]</span>
+Sponsorship ask: <span class="ph">[amount and what it funds]</span>
+
+Write a 180-word partnership letter using your reasoning. 
+Flag: "Assumed facts about this company that should be verified before sending: [list]"</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 15 -->
+  <div class="scenario-card" data-audience="public" data-title="event promo scholarship ceremony awards gala announcement">
+    <div class="card-trigger" onclick="toggleCard(this)">
+      <div class="card-num">15</div>
+      <div class="card-meta">
+        <div class="card-title">Scholarship Ceremony Event Promo</div>
+        <div class="card-tags">
+          <span class="tag tag-audience">Public-Facing</span>
+          <span class="tag tag-type">Event Promo</span>
+          <span class="tag tag-technique">Prompt Chaining</span>
+        </div>
+      </div>
+      <span class="card-chevron">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="context-strip"><strong>Goal:</strong> Promote the annual scholarship ceremony or awards event to scholars, families, donors, and the community. One brief should produce multiple formats.</div>
+      <div class="prompt-tabs">
+        <button class="ptab active" onclick="switchTab(this, 'p15-a')">One Brief, Many Formats</button>
+        <button class="ptab" onclick="switchTab(this, 'p15-b')">Constraint-Based</button>
+      </div>
+      <div id="p15-a" class="prompt-panel active">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>PROMPT CHAINING — ONE BRIEF, MANY FORMATS</div>
+        <div class="technique-explainer">Write your event details once and chain AI to reformat them for each channel. Saves hours across your communications calendar.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>EVENT BRIEF (fill in once, use everywhere):
+- Event name: <span class="ph">[name]</span>
+- Date + time: <span class="ph">[date and time]</span>
+- Location: <span class="ph">[address or virtual link]</span>
+- Who is invited: <span class="ph">[scholars, families, donors, public]</span>
+- Key highlight: <span class="ph">[e.g., "recognition of 32 scholars, keynote by alumni"]</span>
+- RSVP by: <span class="ph">[date]</span> | RSVP link: <span class="ph">[link]</span>
+
+Using the brief above, write all five formats in one response:
+
+1. EMAIL ANNOUNCEMENT (scholars/families): 150 words, warm, specific, RSVP CTA
+2. EMAIL ANNOUNCEMENT (donors): 150 words, emphasize impact, frame as celebration of their investment
+3. INSTAGRAM POST: Under 120 words, celebratory, 4 hashtags, CTA to bio link
+4. LINKEDIN POST: 100 words, professional, community impact angle
+5. WEBSITE EVENT BLURB: 50 words, direct answer format, date/location/RSVP link prominent</pre>
+        </div>
+        <div class="verify-note"><strong>Verify:</strong> RSVP link, date, location, and maximum attendance capacity before sending. Confirm separate donor and family lists are correctly segmented in your email platform.</div>
+      </div>
+      <div id="p15-b" class="prompt-panel">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>CONSTRAINT-BASED</div>
+        <div class="technique-explainer">Tight constraints on what each audience segment needs to know prevents one-size-fits-all event copy that fails to motivate any specific group.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>Write three event announcement paragraphs — one per audience. Each must lead with what that audience cares about most.
+
+SCHOLARS (what they care about most: being celebrated, knowing the schedule, feeling proud):
+50 words, opens with "This is your night."
+
+FAMILIES (what they care about most: logistics, being included, seeing their student honored):
+60 words, includes parking/location note, opens with something that makes a parent feel welcome.
+
+DONORS (what they care about most: seeing the impact of their investment, recognition, mission alignment):
+60 words, opens with a program impact line, frames their attendance as witnessing what they made possible.
+
+Event details: <span class="ph">[name, date, time, location, RSVP link]</span></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 16 -->
+  <div class="scenario-card" data-audience="applicants" data-title="scholarship renewal notification returning scholars">
+    <div class="card-trigger" onclick="toggleCard(this)">
+      <div class="card-num">16</div>
+      <div class="card-meta">
+        <div class="card-title">Scholarship Renewal Notification</div>
+        <div class="card-tags">
+          <span class="tag tag-audience">Applicants</span>
+          <span class="tag tag-type">Letter</span>
+          <span class="tag tag-technique">Chain-of-Thought</span>
+        </div>
+      </div>
+      <span class="card-chevron">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="context-strip"><strong>Goal:</strong> Communicate renewal status (approved, denied, or pending) to returning scholars. For denied renewals, the letter must be handled with the same care as non-selection letters.</div>
+      <div class="prompt-tabs">
+        <button class="ptab active" onclick="switchTab(this, 'p16-a')">Chain-of-Thought (All 3 Outcomes)</button>
+        <button class="ptab" onclick="switchTab(this, 'p16-b')">Constraint-Based</button>
+      </div>
+      <div id="p16-a" class="prompt-panel active">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>CHAIN-OF-THOUGHT — THREE OUTCOMES</div>
+        <div class="technique-explainer">Build all three renewal letter versions in one session so tone and factual consistency is maintained across outcomes.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>Write three scholarship renewal letters: approved, not approved, and pending review.
+
+For each, reason through:
+1. What is this student's primary emotional need when opening this letter?
+2. What action does she need to take next?
+3. What tone failure would make this letter feel harmful?
+
+Then write each letter (max 130 words each).
+
+ALL THREE MUST:
+- Use first name only (not full name)
+- State the outcome clearly in the first sentence
+- Include the specific next step and deadline
+- Close with a named staff contact
+
+APPROVED: Celebratory but not over-the-top. Include renewal amount and disbursement date.
+NOT APPROVED: Compassionate. Do not cite GPA or specific criteria. Offer a meeting.
+PENDING: Reassuring. Clear timeline. No vague language ("we'll be in touch").
+
+Renewal criteria summary: <span class="ph">[your GPA/enrollment/other criteria]</span>
+Disbursement date (approved): <span class="ph">[date]</span>
+Decision timeline (pending): <span class="ph">[date]</span>
+Staff contact: <span class="ph">[name, email]</span></pre>
+        </div>
+        <div class="verify-note"><strong>Legal note:</strong> Have program attorney review the "not approved" template before use. Renewal denial communications can have legal implications depending on scholarship agreement terms.</div>
+      </div>
+      <div id="p16-b" class="prompt-panel">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>CONSTRAINT-BASED</div>
+        <div class="technique-explainer">Explicit constraints prevent common errors in renewal communications — especially the mistake of inadvertently comparing renewal-eligible and ineligible scholars.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>Write scholarship renewal approval and non-approval letter templates. Constraints:
+
+APPROVAL LETTER:
+- Lead with outcome in sentence 1
+- State award amount and disbursement date
+- Thank the scholar for meeting renewal criteria (without listing criteria)
+- One sentence about continuing the relationship
+- Max 100 words
+
+NON-APPROVAL LETTER:
+- Lead with outcome in sentence 1 (do not bury it)
+- Do not cite specific criteria, scores, or comparisons
+- Offer a 15-minute call to discuss next steps
+- Mention any alternative support resources available
+- No hollow consolation ("You should be proud")
+- Max 110 words
+
+Program name: <span class="ph">[name]</span>
+Disbursement date: <span class="ph">[date]</span>
+Staff contact: <span class="ph">[name, email]</span>
+Alternative resources: <span class="ph">[e.g., "campus financial aid office"]</span></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 17 -->
+  <div class="scenario-card" data-audience="public" data-title="newsletter scholars current program update community">
+    <div class="card-trigger" onclick="toggleCard(this)">
+      <div class="card-num">17</div>
+      <div class="card-meta">
+        <div class="card-title">Scholar Community Newsletter</div>
+        <div class="card-tags">
+          <span class="tag tag-audience">Applicants</span>
+          <span class="tag tag-type">Newsletter</span>
+          <span class="tag tag-technique">Iterative Refinement</span>
+        </div>
+      </div>
+      <span class="card-chevron">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="context-strip"><strong>Goal:</strong> Keep current scholars engaged with the program and community between disbursements. Must feel like it comes from people who know them, not a bulk mail system.</div>
+      <div class="prompt-tabs">
+        <button class="ptab active" onclick="switchTab(this, 'p17-a')">Iterative Refinement</button>
+        <button class="ptab" onclick="switchTab(this, 'p17-b')">Role Prompting</button>
+      </div>
+      <div id="p17-a" class="prompt-panel active">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>ITERATIVE REFINEMENT</div>
+        <div class="technique-explainer">Run a full draft, then run a second prompt that reads it as a busy college student — cuts what would get skipped and identifies what was missing.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>PASS 1 — Write a 250-word scholar community newsletter for [Month]. Include:
+- Personal opening from program staff (2 sentences)
+- Scholar spotlight section (placeholder for a consented quote)
+- 2–3 upcoming opportunities or deadlines
+- One "resource of the month" (relevant to college students)
+- Warm closing with staff contact
+
+Program: <span class="ph">[name]</span>
+Upcoming items: <span class="ph">[list 2–3 dates/deadlines/events]</span>
+Resource suggestion: <span class="ph">[e.g., "campus writing center, FAFSA renewal reminder"]</span>
+
+---
+PASS 2 — Read the newsletter above as a busy college sophomore who checks email twice a week on their phone. 
+Answer:
+1. What would you skim or skip entirely?
+2. What would make you actually click something?
+3. What important thing is buried that should be at the top?
+
+Then rewrite the newsletter using your feedback. Max 220 words.</pre>
+        </div>
+      </div>
+      <div id="p17-b" class="prompt-panel">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>ROLE PROMPTING</div>
+        <div class="technique-explainer">Frame the writer as someone who was a first-generation college student — this produces a newsletter voice that reads as peer support, not institutional communication.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>You are a scholarship program coordinator who was a first-generation college student. You write newsletters for current scholars because you remember what it felt like to receive them — and what it felt like to delete them without reading.
+
+Write a 200-word monthly newsletter that scholars will actually open. Rules:
+- Open with something human, not institutional
+- Include at least one thing that is genuinely useful for a student this week
+- Include one deadline or action item (with date)
+- Keep each section scannable — short paragraphs, headers, or bold labels
+- Close with your name and an invitation to reply (not a no-reply address)
+
+This month's items: <span class="ph">[list your 2–3 program updates, deadlines, or resources]</span>
+Program name: <span class="ph">[name]</span></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 18 -->
+  <div class="scenario-card" data-audience="public" data-title="eligibility criteria page plain language website accessibility">
+    <div class="card-trigger" onclick="toggleCard(this)">
+      <div class="card-num">18</div>
+      <div class="card-meta">
+        <div class="card-title">Eligibility Page Plain-Language Rewrite</div>
+        <div class="card-tags">
+          <span class="tag tag-audience">Public-Facing</span>
+          <span class="tag tag-type">Web Content</span>
+          <span class="tag tag-technique">Equity Audit</span>
+        </div>
+      </div>
+      <span class="card-chevron">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="context-strip"><strong>Goal:</strong> Rewrite dense eligibility language so first-generation students, multilingual families, and applicants unfamiliar with scholarship jargon can self-determine eligibility in under 60 seconds.</div>
+      <div class="prompt-tabs">
+        <button class="ptab active" onclick="switchTab(this, 'p18-a')">Equity-First Rewrite</button>
+        <button class="ptab" onclick="switchTab(this, 'p18-b')">Iterative + Equity Audit</button>
+      </div>
+      <div id="p18-a" class="prompt-panel active">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>EQUITY-FIRST REWRITE</div>
+        <div class="technique-explainer">Force AI to actively surface jargon and exclusionary assumptions in existing eligibility language before rewriting — don't let it produce clean prose that reproduces the same equity barriers.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>Before rewriting this eligibility page, analyze the existing text for:
+1. Jargon or acronyms that assume institutional knowledge (e.g., "EFC," "FAFSA SAR," "unweighted GPA")
+2. Language that assumes access to specific resources (e.g., "submit a counselor letter of recommendation" in a school with no counselor)
+3. Any criteria that may unintentionally screen out otherwise-qualified first-gen or multilingual applicants
+
+Existing eligibility text:
+<span class="ph">[paste your current eligibility section here]</span>
+
+Then rewrite at a grade 7–8 reading level. Use:
+- "Yes/No/Maybe" format: 3 clear scenarios of who qualifies
+- Plain English for all criteria
+- A callout box: "Not sure if you qualify? Email us at [contact]."
+
+Flag any criteria that should be reviewed by program leadership for equity implications before publishing.</pre>
+        </div>
+        <div class="verify-note"><strong>Important:</strong> Have legal counsel review final eligibility language. AI rewrites may inadvertently change the meaning of eligibility criteria — compare carefully against original policy documents.</div>
+      </div>
+      <div id="p18-b" class="prompt-panel">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>ITERATIVE + EQUITY AUDIT</div>
+        <div class="technique-explainer">Two-pass approach: write the plain-language version, then run an equity audit pass to catch what bias the clean prose might still contain.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>PASS 1 — Rewrite the eligibility criteria below in plain English at a grade 8 reading level. Use short sentences. No jargon.
+Original text: <span class="ph">[paste existing eligibility language]</span>
+
+---
+PASS 2 — Read the rewritten version as:
+a) A student whose parents have never attended college and don't know what a scholarship is
+b) A student who is DREAMer-eligible but uncertain about her status
+c) A student at a school without a dedicated guidance counselor
+
+For each reader, list:
+1. One phrase that might make them think they don't qualify when they do
+2. One assumption embedded in the language
+3. One addition that would make the page more welcoming
+
+Revise the eligibility language to address all findings.</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 19 -->
+  <div class="scenario-card" data-audience="internal" data-title="staff talking points media inquiry press mention scholarship">
+    <div class="card-trigger" onclick="toggleCard(this)">
+      <div class="card-num">19</div>
+      <div class="card-meta">
+        <div class="card-title">Staff Talking Points for Media or Partner Inquiries</div>
+        <div class="card-tags">
+          <span class="tag tag-audience">Internal</span>
+          <span class="tag tag-type">Talking Points</span>
+          <span class="tag tag-technique">Chain-of-Thought</span>
+        </div>
+      </div>
+      <span class="card-chevron">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="context-strip"><strong>Goal:</strong> Prepare staff to respond consistently and confidently to external questions about the program — from journalists, potential donors, or community partners — without over-sharing or under-selling.</div>
+      <div class="prompt-tabs">
+        <button class="ptab active" onclick="switchTab(this, 'p19-a')">Chain-of-Thought</button>
+        <button class="ptab" onclick="switchTab(this, 'p19-b')">Role Prompting</button>
+      </div>
+      <div id="p19-a" class="prompt-panel active">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>CHAIN-OF-THOUGHT</div>
+        <div class="technique-explainer">Ask AI to anticipate the hardest questions before writing the talking points — produces preparation for the 20% of questions that most one-pagers miss.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>Before writing staff talking points, reason through:
+1. What are the 3–4 most common questions a journalist or community partner would ask about our program?
+2. What is the one question staff are most likely to answer poorly without preparation?
+3. What is the single most compelling fact about our program that belongs in every conversation?
+
+Program overview: <span class="ph">[paste 2–3 sentence mission statement and key stats]</span>
+
+Now write a one-page talking points document with:
+- 3-sentence program description (the "elevator pitch")
+- 5 key facts with sources noted
+- Answers to the 4 most common questions
+- One "hard question" section: how to handle questions about selection criteria, equity, or funding
+- "Refer to leadership" list: questions that should never be answered without director sign-off</pre>
+        </div>
+      </div>
+      <div id="p19-b" class="prompt-panel">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>ROLE PROMPTING</div>
+        <div class="technique-explainer">Frame AI as a communications consultant who has prepped nonprofit spokespeople for tough interviews — produces more robust talking points than a generic "list" request.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>You are a nonprofit communications consultant preparing a scholarship program's frontline staff for media and partner inquiries. Staff may be asked about selection fairness, funding sources, student privacy, or program results.
+
+Write a talking points briefing that:
+1. Gives staff 3 versions of the program pitch: 10-second, 30-second, 2-minute
+2. Provides 6 Q&A pairs including at least 2 "difficult" questions (e.g., "How do you ensure selection is fair?")
+3. Lists 5 things staff should NEVER say without director approval
+4. Includes a bridge phrase for when staff don't know the answer
+
+Program: <span class="ph">[name, mission, key stats — aggregate only]</span>
+Tone: professional, plain English, confident but not defensive</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 20 -->
+  <div class="scenario-card" data-audience="donors" data-title="campaign crowdfunding matching gift social proof donor">
+    <div class="card-trigger" onclick="toggleCard(this)">
+      <div class="card-num">20</div>
+      <div class="card-meta">
+        <div class="card-title">Matching Gift Campaign Launch</div>
+        <div class="card-tags">
+          <span class="tag tag-audience">Donors</span>
+          <span class="tag tag-type">Campaign</span>
+          <span class="tag tag-technique">Few-Shot + Chaining</span>
+        </div>
+      </div>
+      <span class="card-chevron">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="context-strip"><strong>Goal:</strong> Launch a matching gift campaign with urgency and social proof. Must communicate the mechanics of matching clearly (many donors don't understand it) while creating emotional momentum.</div>
+      <div class="prompt-tabs">
+        <button class="ptab active" onclick="switchTab(this, 'p20-a')">Few-Shot + Chaining</button>
+        <button class="ptab" onclick="switchTab(this, 'p20-b')">Governed Workflow</button>
+      </div>
+      <div id="p20-a" class="prompt-panel active">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>FEW-SHOT + PROMPT CHAINING</div>
+        <div class="technique-explainer">Provide a matching gift explanation example, then chain to campaign launch, progress update, and final push emails — three messages, one coherent campaign arc.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>EXAMPLE of clear matching gift language:
+"A generous donor has agreed to match every dollar we raise — up to $25,000. That means your $100 gift becomes $200 for our scholars. No extra steps required. Just give before [deadline]."
+
+Using the explanation style above, write three campaign emails:
+
+EMAIL 1 — LAUNCH (Day 1):
+Announce the match. Explain mechanics clearly. State goal + deadline.
+150 words. Subject line included. CTA: "Double your impact today."
+
+EMAIL 2 — PROGRESS UPDATE (Day 5 of 7):
+Show progress toward goal with a placeholder: "[X% of $[goal] raised]"
+Create urgency without panic. 100 words.
+
+EMAIL 3 — FINAL PUSH (Day 7 — 24 hours left):
+Short. Specific. Human. Reference what matching dollars will fund.
+70 words. One CTA. One stat.
+
+Match details: Total match: <span class="ph">[amount]</span> | Match funder: <span class="ph">[anonymous or named]</span> | Campaign deadline: <span class="ph">[date]</span> | Giving link: <span class="ph">[link]</span></pre>
+        </div>
+        <div class="verify-note"><strong>Verify before launch:</strong> Match funder has signed formal matching gift agreement. Campaign deadline and giving link confirmed live. Legal team reviewed match terms for any conditions.</div>
+      </div>
+      <div id="p20-b" class="prompt-panel">
+        <div class="prompt-technique-label"><span class="technique-dot"></span>GOVERNED WORKFLOW</div>
+        <div class="technique-explainer">For a campaign involving financial commitments and legal agreements, the governed workflow approach ensures every message has a built-in sign-off checklist before it goes to donors.</div>
+        <div class="prompt-block">
+          <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">📋</button>
+          <pre>Write a matching gift campaign launch email for our scholarship program.
+
+Match details:
+- Match amount: <span class="ph">[total]</span>
+- Match funder: <span class="ph">[name or "an anonymous donor"]</span>
+- Campaign window: <span class="ph">[start date]</span> to <span class="ph">[end date]</span>
+- Goal: <span class="ph">[total campaign goal]</span>
+- Giving link: <span class="ph">[link]</span>
+
+Write a 160-word launch email that explains matching clearly and creates genuine urgency.
+
+Then add a "PRE-SEND GOVERNANCE CHECKLIST":
+□ Matching gift agreement signed and on file
+□ Match funder approves use of their name (or "anonymous" confirmed)
+□ Campaign goal reviewed by development director
+□ Giving link tested and routes to correct fund
+□ Email reviewed by legal/finance before sending to major donors
+□ Unsubscribe link and mailing address present in email footer
+□ Communications director has final approval</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- END SCENARIOS -->
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <p>NSPA AI Marketing &amp; Engagement Session Resource &nbsp;|&nbsp; All prompts are platform-agnostic: ChatGPT, Claude, Gemini, Copilot, BoodleBox</p>
+  <p style="margin-top:6px"><a href="https://go.mgpd.org/nspa3">go.mgpd.org/nspa3</a> &nbsp;|&nbsp; Questions: <a href="mailto:mguhlin@tcea.org">mguhlin@tcea.org</a> &nbsp;|&nbsp; <a href="https://tcea.org">TCEA.org</a></p>
+  <p style="margin-top:10px; font-size:.78rem; opacity:.55">AI outputs require human review before sending. Do not paste applicant names, donor data, or staff PII into AI prompts. These scenarios are starting points — not final communications.</p>
+</footer>
+
+<!-- ── JAVASCRIPT ─────────────────────────────────────────── -->
+<script>
+  /* Toggle card open/close */
+  function toggleCard(trigger) {
+    const card = trigger.closest('.scenario-card');
+    const isOpen = card.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.scenario-card.open').forEach(c => c.classList.remove('open'));
+    // Open this one if it was closed
+    if (!isOpen) {
+      card.classList.add('open');
+      setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+    }
+  }
+
+  /* Switch prompt tabs */
+  function switchTab(tabBtn, panelId) {
+    const body = tabBtn.closest('.card-body') || tabBtn.closest('.scenario-card').querySelector('.card-body');
+    if (!body) return;
+    body.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
+    body.querySelectorAll('.prompt-panel').forEach(p => p.classList.remove('active'));
+    tabBtn.classList.add('active');
+    const panel = document.getElementById(panelId);
+    if (panel) panel.classList.add('active');
+  }
+
+  /* Fix: tabs are inside card-body, need to find sibling panels */
+  document.querySelectorAll('.ptab').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+    });
+  });
+
+  /* Copy prompt */
+  function copyPrompt(btn) {
+    const pre = btn.closest('.prompt-block').querySelector('pre');
+    const text = pre.innerText || pre.textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.classList.add('copied');
+      btn.textContent = '✓';
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.textContent = '📋';
+      }, 2000);
+    });
+  }
+
+  /* Filter buttons */
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      applyFilters();
+    });
+  });
+
+  /* Search */
+  document.getElementById('search-input').addEventListener('input', applyFilters);
+
+  function applyFilters() {
+    const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+    const searchTerm = document.getElementById('search-input').value.toLowerCase().trim();
+    const cards = document.querySelectorAll('.scenario-card');
+    let visible = 0;
+
+    cards.forEach(card => {
+      const audience = card.dataset.audience || '';
+      const title = card.dataset.title || '';
+      const titleEl = card.querySelector('.card-title');
+      const bodyText = titleEl ? titleEl.textContent.toLowerCase() : '';
+
+      const matchesFilter = activeFilter === 'all' || audience.includes(activeFilter);
+      const matchesSearch = !searchTerm || title.includes(searchTerm) || bodyText.includes(searchTerm);
+
+      if (matchesFilter && matchesSearch) {
+        card.classList.remove('hidden');
+        visible++;
+      } else {
+        card.classList.add('hidden');
+        // Close hidden cards
+        card.classList.remove('open');
+      }
+    });
+
+    document.getElementById('visible-count').textContent = visible;
+  }
+
+  /* Keyboard shortcut: Escape closes all cards */
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.scenario-card.open').forEach(c => c.classList.remove('open'));
+    }
+  });
+</script>
+</body>
+</html>

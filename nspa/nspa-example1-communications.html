@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NSPA 2/2/2 Framework | Example 1: Applicant Communications Pilot</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal:         #237683;
+    --teal-light:   #2d8f9e;
+    --teal-pale:    #e6f2f4;
+    --gold:         #FDB414;
+    --gold-text:    #b08a00;
+    --gold-pale:    #fff6d6;
+    --gold-border:  #e8c84a;
+    --gray-mid:     #A5A9AD;
+    --navy:         #1a2e4a;
+    --navy-dark:    #111f33;
+    --bg:           #f4f6f7;
+    --white:        #ffffff;
+    --border:       #d8dde0;
+    --text:         #1e2a35;
+    --success:      #27695a;
+    --success-pale: #eaf4f0;
+    --guardrail-bg: #fffbe6;
+    --info-bg:      #e6f2f4;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Source Sans 3','Calibri',sans-serif;background:var(--bg);color:var(--text);line-height:1.65;font-size:16px;}
+
+  /* HEADER */
+  .site-header{background:var(--teal);color:white;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.25);overflow:hidden;}
+  .site-header::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:var(--gold);opacity:.18;pointer-events:none;}
+  .header-top{background:rgba(0,0,0,.18);padding:7px 40px;display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--gold);position:relative;z-index:1;}
+  .nspa-badge{font-family:'Playfair Display',Georgia,serif;font-size:13px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;}
+  .header-divider{color:var(--gold);opacity:.6;}
+  .series-label{font-size:12px;color:rgba(255,255,255,.75);letter-spacing:1px;text-transform:uppercase;}
+  .header-main{padding:20px 40px;display:flex;align-items:center;justify-content:space-between;gap:20px;position:relative;z-index:1;}
+  .header-title-group h1{font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:700;color:white;line-height:1.2;}
+  .header-title-group .subtitle{font-size:14px;color:rgba(255,255,255,.85);margin-top:4px;}
+  .framework-badge{background:var(--gold);color:var(--navy-dark);font-weight:700;font-size:13px;padding:6px 16px;border-radius:20px;white-space:nowrap;letter-spacing:.5px;}
+  .toc-nav{background:rgba(0,0,0,.15);padding:0 40px;display:flex;overflow-x:auto;border-top:1px solid rgba(255,255,255,.15);position:relative;z-index:1;}
+  .toc-nav a{color:rgba(255,255,255,.8);text-decoration:none;font-size:13px;font-weight:600;padding:11px 16px;white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s;}
+  .toc-nav a:hover{color:var(--gold);border-bottom-color:var(--gold);background:rgba(255,255,255,.05);}
+
+  /* LAYOUT */
+  .page-wrap{max-width:1100px;margin:0 auto;padding:48px 40px 80px;}
+
+  /* OVERVIEW */
+  .overview-bar{background:var(--teal);color:white;border-radius:8px;padding:24px 28px;margin-bottom:40px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;position:relative;overflow:hidden;}
+  .overview-bar::after{content:'';position:absolute;bottom:-30px;right:-30px;width:130px;height:130px;border-radius:50%;background:var(--gold);opacity:.18;pointer-events:none;}
+  .overview-item label{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);font-weight:700;display:block;margin-bottom:4px;}
+  .overview-item p{font-size:15px;color:rgba(255,255,255,.92);line-height:1.4;}
+
+  /* SPRINT */
+  .sprint-divider{height:1px;background:var(--gray-mid);opacity:.35;margin:44px 0;}
+  .sprint-header{display:flex;align-items:center;gap:16px;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid var(--border);}
+  .sprint-num{background:var(--teal);color:white;font-family:'Playfair Display',serif;font-size:26px;font-weight:700;width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:3px solid var(--gold);}
+  .sprint-header-text h2{font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:var(--teal);}
+  .sprint-header-text .sprint-weeks{font-size:13px;color:var(--gold-text);font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+  section{scroll-margin-top:120px;}
+
+  .section-title{font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:600;color:var(--teal);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+  .section-title::before{content:'';display:inline-block;width:4px;height:20px;background:var(--gold);border-radius:2px;flex-shrink:0;}
+
+  /* CARDS */
+  .card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:28px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+  .card-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--teal);margin-bottom:14px;}
+
+  /* POLICY */
+  .policy-block{background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:20px;}
+  .policy-header{background:var(--teal);color:white;padding:14px 24px;font-family:'Playfair Display',serif;font-size:16px;font-weight:700;}
+  .policy-cols{display:grid;grid-template-columns:1fr 1fr;}
+  .policy-col{padding:20px 24px;}
+  .policy-col:first-child{border-right:1px solid var(--border);}
+  .policy-col-header{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;}
+  .will{color:var(--success);}
+  .will-not{color:#c0392b;}
+  .policy-col ul{list-style:none;display:flex;flex-direction:column;gap:8px;}
+  .policy-col li{font-size:14px;line-height:1.5;padding-left:22px;position:relative;}
+  .will li::before{content:'✓';position:absolute;left:0;color:var(--success);font-weight:700;}
+  .will-not li::before{content:'✕';position:absolute;left:0;color:#c0392b;font-weight:700;}
+
+  /* ALERTS */
+  .alert{border-radius:6px;padding:13px 18px;margin-bottom:16px;font-size:14px;display:flex;gap:10px;align-items:flex-start;line-height:1.5;}
+  .alert-icon{font-size:18px;flex-shrink:0;}
+  .alert-guardrail{background:var(--guardrail-bg);border-left:4px solid var(--gold);}
+  .alert-info{background:var(--info-bg);border-left:4px solid var(--teal);}
+  .alert-success{background:var(--success-pale);border-left:4px solid var(--success);}
+
+  /* PROMPTS */
+  .prompt-tier{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px;}
+  .prompt-tier-header{padding:12px 20px;display:flex;align-items:center;justify-content:space-between;}
+  .tier-good .prompt-tier-header{background:#f0faf5;border-bottom:1px solid #c3e6d8;}
+  .tier-better .prompt-tier-header{background:var(--gold-pale);border-bottom:1px solid var(--gold-border);}
+  .tier-best .prompt-tier-header{background:#eef4fd;border-bottom:1px solid #b8d0f0;}
+  .tier-label{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:1px;}
+  .tier-good .tier-label{color:var(--success);}
+  .tier-better .tier-label{color:var(--gold-text);}
+  .tier-best .tier-label{color:#2563b0;}
+  .tier-name{font-size:13px;color:var(--gray-mid);}
+  .copy-btn{background:var(--teal);color:white;border:none;padding:5px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s;font-family:'Source Sans 3',sans-serif;}
+  .copy-btn:hover{background:var(--teal-light);}
+  .copy-btn.copied{background:var(--success);}
+  .prompt-body{background:#f9fafb;padding:20px;font-family:'Source Code Pro',monospace;font-size:13px;line-height:1.7;color:#2d3748;white-space:pre-wrap;}
+  .prompt-note{background:#f5f5f3;padding:10px 20px;font-size:13px;color:var(--gray-mid);border-top:1px solid var(--border);font-style:italic;}
+
+  /* CHECKLIST */
+  .checklist{list-style:none;display:flex;flex-direction:column;gap:8px;}
+  .checklist li{display:flex;align-items:flex-start;gap:10px;font-size:14px;line-height:1.5;padding:8px 12px;background:var(--white);border:1px solid var(--border);border-radius:6px;}
+  .check-box{width:18px;height:18px;border:2px solid var(--border);border-radius:3px;flex-shrink:0;margin-top:1px;background:white;cursor:pointer;transition:all .15s;}
+  .checklist li.critical{border-left:3px solid #c0392b;}
+  .checklist li.important{border-left:3px solid var(--gold);}
+  .checklist li.standard{border-left:3px solid var(--teal);}
+  .priority-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:2px 6px;border-radius:3px;white-space:nowrap;flex-shrink:0;}
+  .badge-critical{background:#fdf0ee;color:#c0392b;}
+  .badge-important{background:var(--gold-pale);color:var(--gold-text);border:1px solid var(--gold-border);}
+  .badge-standard{background:var(--teal-pale);color:var(--teal);}
+
+  /* TABLE */
+  .data-table{width:100%;border-collapse:collapse;font-size:14px;}
+  .data-table th{background:var(--teal);color:white;padding:10px 14px;text-align:left;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+  .data-table td{padding:10px 14px;border-bottom:1px solid var(--border);line-height:1.4;}
+  .data-table tr:last-child td{border-bottom:none;}
+  .data-table tr:nth-child(even) td{background:#f7f9fa;}
+
+  /* CHIPS */
+  .outputs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:20px;}
+  .output-chip{background:var(--white);border:1px solid var(--border);border-left:3px solid var(--teal);border-radius:6px;padding:12px 16px;font-size:14px;display:flex;align-items:center;gap:8px;}
+  .output-icon{font-size:18px;}
+
+  /* METRICS */
+  .metrics-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;}
+  .metric-card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:20px;text-align:center;}
+  .metric-label{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--gray-mid);font-weight:700;margin-bottom:8px;}
+  .metric-value{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--teal);}
+  .metric-desc{font-size:13px;color:var(--gray-mid);margin-top:4px;}
+
+  /* UTILS */
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .mt-4{margin-top:16px;}
+  .mt-8{margin-top:32px;}
+  .mb-4{margin-bottom:16px;}
+  .text-sm{font-size:14px;}
+  .text-muted{color:var(--gray-mid);}
+  .step-list{list-style:none;counter-reset:steps;display:flex;flex-direction:column;gap:10px;}
+  .step-list li{counter-increment:steps;display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.5;}
+  .step-list li::before{content:counter(steps);background:var(--teal);color:white;font-size:12px;font-weight:700;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+
+  /* FOOTER */
+  .page-footer{background:var(--teal);color:rgba(255,255,255,.85);text-align:center;padding:28px 40px;font-size:13px;margin-top:64px;line-height:1.9;}
+  .page-footer strong{color:white;}
+  .page-footer a{color:var(--gold);text-decoration:underline;text-underline-offset:2px;}
+  .page-footer a:hover{color:white;}
+  .footer-sep{border:none;border-top:1px solid var(--gray-mid);opacity:.4;margin:12px auto;max-width:400px;}
+
+  @media(max-width:900px){
+    .overview-bar{grid-template-columns:1fr 1fr;}
+    .metrics-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media(max-width:768px){
+    .page-wrap{padding:24px 16px 60px;}
+    .header-main{padding:16px 20px;flex-direction:column;align-items:flex-start;gap:12px;}
+    .header-top{padding:7px 16px;}
+    .toc-nav{padding:0 12px;}
+    .toc-nav a{padding:10px 12px;font-size:12px;}
+    .overview-bar{grid-template-columns:1fr;}
+    .policy-cols{grid-template-columns:1fr;}
+    .policy-col:first-child{border-right:none;border-bottom:1px solid var(--border);}
+    .two-col{grid-template-columns:1fr;}
+    .metrics-grid{grid-template-columns:1fr;}
+    .outputs-grid{grid-template-columns:1fr 1fr;}
+    .card{padding:20px 16px;}
+    .sprint-header{gap:12px;}
+    .prompt-body{font-size:12px;padding:16px;}
+    .page-footer{padding:24px 16px;text-align:left;}
+    .footer-sep{margin:12px 0;}
+  }
+  @media(max-width:520px){
+    .header-title-group h1{font-size:20px;}
+    .framework-badge{font-size:12px;padding:5px 12px;}
+    .sprint-num{width:44px;height:44px;font-size:20px;}
+    .sprint-header-text h2{font-size:18px;}
+    .section-title{font-size:16px;}
+    .outputs-grid{grid-template-columns:1fr;}
+    .check-box{width:22px;height:22px;}
+    .data-table{font-size:12px;}
+    .data-table th,.data-table td{padding:8px 10px;}
+    .metric-value{font-size:22px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-top">
+    <span class="nspa-badge">NSPA</span>
+    <span class="header-divider">|</span>
+    <span class="series-label">AI Implementation Series &mdash; 2/2/2 Framework</span>
+  </div>
+  <div class="header-main">
+    <div class="header-title-group">
+      <h1>Example 1: AI-Assisted Applicant Communications Pilot</h1>
+      <div class="subtitle">6-Week Implementation Package &mdash; Rejection &amp; Acceptance Letter Workflows</div>
+    </div>
+    <div class="framework-badge">Weeks 1&ndash;6 / Sprint 1</div>
+  </div>
+  <nav class="toc-nav">
+    <a href="#overview">Overview</a>
+    <a href="#policy">Policy Statement</a>
+    <a href="#planning">Weeks 1&ndash;2</a>
+    <a href="#building">Weeks 3&ndash;4</a>
+    <a href="#review">Weeks 5&ndash;6</a>
+    <a href="#prompts">Prompt Pack</a>
+    <a href="#checklist">Verification Checklist</a>
+    <a href="#metrics">Metrics</a>
+  </nav>
+</header>
+
+<main class="page-wrap">
+
+  <section id="overview">
+    <div class="overview-bar">
+      <div class="overview-item">
+        <label>Milestone Goal</label>
+        <p>Build a verified, staff-operated AI drafting pipeline for one letter type before expanding further.</p>
+      </div>
+      <div class="overview-item">
+        <label>Team Pod</label>
+        <p>Program coordinator + 1 communications lead + 2 staff reviewers + supervisor (approval role). Organized around the applicant experience.</p>
+      </div>
+      <div class="overview-item">
+        <label>Starting Letter Type</label>
+        <p>Rejection letters: high-volume, emotionally high-stakes, highest ROI for a first pilot with mandatory approval gates.</p>
+      </div>
+    </div>
+    <div class="alert alert-guardrail">
+      <span class="alert-icon">⚠</span>
+      <div><strong>Scope boundary:</strong> This pilot covers one letter type only. No expansion to acceptance, waitlist, or scholarship-specific acknowledgments until the rejection letter workflow is stable and measured. If the workflow runs over, it carries to the next 6-week cycle.</div>
+    </div>
+    <div class="alert alert-guardrail">
+      <span class="alert-icon">🔒</span>
+      <div><strong>Data rule in force for this entire cycle:</strong> No applicant names, IDs, financial data, or personally identifiable information enter any AI prompt at any stage. All sample letters used for benchmarking must be anonymized before use.</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="policy">
+    <div class="section-title">Program Policy Statement</div>
+    <div class="policy-block">
+      <div class="policy-header">AI-Assisted Applicant Communications &mdash; We Will / We Will Not</div>
+      <div class="policy-cols">
+        <div class="policy-col will">
+          <div class="policy-col-header will">&#10003; We Will</div>
+          <ul>
+            <li>Use AI to generate a consistent first-draft rejection letter from an approved, anonymized tone template.</li>
+            <li>Require staff review and personalization of every AI-generated draft before sending.</li>
+            <li>Maintain a supervisor approval gate for all outgoing letters during the pilot cycle.</li>
+            <li>Anonymize all benchmark sample letters before using them as reference inputs.</li>
+            <li>Log and audit AI-generated drafts to identify hallucinations or off-tone language.</li>
+            <li>Measure time per letter before and after the pilot to establish a real baseline.</li>
+            <li>Pause the workflow and reassess if accuracy or equity issues emerge.</li>
+          </ul>
+        </div>
+        <div class="policy-col will-not">
+          <div class="policy-col-header will-not">&#10005; We Will Not</div>
+          <ul>
+            <li>Include applicant names, IDs, financial data, or any PII in any AI prompt.</li>
+            <li>Send an AI-generated letter without staff review and explicit approval.</li>
+            <li>Treat AI output as a final draft. It is always a starting point.</li>
+            <li>Use AI to generate the final decision rationale or scoring explanation.</li>
+            <li>Expand to additional letter types until this pilot is stable and measured.</li>
+            <li>Allow AI-generated language to override program equity or compassionate communication standards.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="alert alert-info">
+      <span class="alert-icon">📋</span>
+      <div>This policy statement should be reviewed and signed off by the program director before Weeks 3&ndash;4 begin. It becomes part of the pilot documentation and is retained for board reporting if requested.</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="planning">
+    <div class="sprint-header">
+      <div class="sprint-num">1</div>
+      <div class="sprint-header-text">
+        <div class="sprint-weeks">Weeks 1&ndash;2</div>
+        <h2>Planning: Define the Problem Before Touching Any Tool</h2>
+      </div>
+    </div>
+    <div class="alert alert-success">
+      <span class="alert-icon">🎯</span>
+      <div><strong>Sprint goal:</strong> Leave Weeks 1&ndash;2 with a scoped problem statement, anonymized benchmark samples, a data handling agreement, and a policy statement on file. No prompts are written yet.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Task 1 &mdash; Communications Workflow Audit</div>
+      <p class="text-sm mb-4">Before building anything, audit where time is being lost and where errors cluster. Fill in this table using last cycle's data.</p>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead>
+            <tr><th>Letter Type</th><th>Avg. Volume / Cycle</th><th>Avg. Time per Letter (min)</th><th>Common Errors or Delays</th><th>AI Pilot Candidate?</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Rejection letter</td><td><em>Fill in</em></td><td><em>Fill in</em></td><td>Tone inconsistency, delayed sends</td><td style="color:var(--success);font-weight:700;">YES &mdash; Start here</td></tr>
+            <tr><td>Waitlist notification</td><td><em>Fill in</em></td><td><em>Fill in</em></td><td>Status confusion, multiple edits</td><td style="color:var(--gold-text);">Cycle 2</td></tr>
+            <tr><td>Award acceptance packet</td><td><em>Fill in</em></td><td><em>Fill in</em></td><td>Details vary by award type</td><td style="color:var(--gold-text);">Cycle 3</td></tr>
+            <tr><td>Follow-up / missing docs</td><td><em>Fill in</em></td><td><em>Fill in</em></td><td><em>Fill in</em></td><td style="color:var(--gray-mid);">Evaluate later</td></tr>
+            <tr><td>Special circumstances</td><td><em>Fill in</em></td><td><em>Fill in</em></td><td>High sensitivity, low volume</td><td style="color:#c0392b;font-weight:700;">Human-only</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Task 2 &mdash; Benchmark Sample Collection</div>
+      <p class="text-sm mb-4">Pull 5&ndash;10 approved rejection letters from the previous award cycle. These become your quality baseline and few-shot reference examples.</p>
+      <ol class="step-list">
+        <li>Pull 5&ndash;10 approved rejection letters from last cycle's sent folder.</li>
+        <li>Remove all applicant names, IDs, school names, and identifying details. Replace with placeholders: [APPLICANT], [SCHOOL], [PROGRAM NAME].</li>
+        <li>Select 3 representing the range of tone and scenario (standard, borderline, special circumstances). Label them HIGH, MID, EDGE.</li>
+        <li>Have program director confirm these three represent your quality standard. Document approval with date and initials.</li>
+        <li>Store anonymized samples: <strong>Benchmark_Letters_Cycle_[YEAR]_Anonymized</strong>. Restrict access to pilot team only.</li>
+      </ol>
+      <div class="alert alert-guardrail mt-4">
+        <span class="alert-icon">⚠</span>
+        <div>Do not skip the director approval step. These samples become the reference point for evaluating AI outputs throughout the pilot. If the samples are substandard, the AI will mirror that quality.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Task 3 &mdash; Pilot Scope Document and Handoff Protocol</div>
+      <p class="text-sm mb-4">Document the following decisions in writing before building begins.</p>
+      <div class="two-col">
+        <div>
+          <strong style="font-size:14px;display:block;margin-bottom:8px;">Scope decisions to lock in:</strong>
+          <ul class="checklist">
+            <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Lock</span>One letter type only: rejection letters.</li>
+            <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Lock</span>AI output is always a draft. Staff edit and approve before send.</li>
+            <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Lock</span>Supervisor approval required for all letters in the pilot cycle.</li>
+            <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Set</span>Maximum turnaround time for AI-assisted letters (e.g., 48 hours).</li>
+            <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Set</span>Identify primary staff member who runs the prompt and the reviewer.</li>
+          </ul>
+        </div>
+        <div>
+          <strong style="font-size:14px;display:block;margin-bottom:8px;">Handoff protocol decisions to lock in:</strong>
+          <ul class="checklist">
+            <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Lock</span>Who contacts applicants when a letter is flagged for special circumstances?</li>
+            <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Lock</span>Escalation path for letters requiring special circumstances language.</li>
+            <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Set</span>Where do approved AI drafts live before they are sent (shared doc, CRM)?</li>
+            <li class="standard"><span class="check-box"></span><span class="priority-badge badge-standard">Note</span>How will the team log which letters were AI-assisted during the pilot?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Sprint 1 Deliverable Checklist</div>
+    <div class="outputs-grid">
+      <div class="output-chip"><span class="output-icon">📄</span>Scoped problem statement (1 page)</div>
+      <div class="output-chip"><span class="output-icon">📁</span>Anonymized benchmark samples (3&ndash;5)</div>
+      <div class="output-chip"><span class="output-icon">📋</span>Letter type inventory with time log</div>
+      <div class="output-chip"><span class="output-icon">🔒</span>Data handling agreement (signed)</div>
+      <div class="output-chip"><span class="output-icon">📝</span>Policy statement (We Will / We Will Not)</div>
+      <div class="output-chip"><span class="output-icon">🗺️</span>Handoff protocol document</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="building">
+    <div class="sprint-header">
+      <div class="sprint-num">2</div>
+      <div class="sprint-header-text">
+        <div class="sprint-weeks">Weeks 3&ndash;4</div>
+        <h2>Building: Prompt Pipeline, Calibration, and Staff Reference</h2>
+      </div>
+    </div>
+    <div class="alert alert-success">
+      <span class="alert-icon">🎯</span>
+      <div><strong>Sprint goal:</strong> Leave Weeks 3&ndash;4 with a tested, three-tier prompt set, a calibration log, a human review checklist, and a one-page workflow reference staff can use without re-reading this document.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Task 4 &mdash; Calibration Session Protocol</div>
+      <p class="text-sm mb-4">Before finalizing any prompt, run a calibration session with two staff members. This catches AI drift before it becomes a pattern.</p>
+      <ol class="step-list">
+        <li>Each staff member independently uses the same Fast Draft prompt to generate 5 rejection letter drafts using the same anonymized scenario inputs.</li>
+        <li>Compare outputs side by side. Flag: tone inconsistencies, generic language, missing program-specific details, hallucinated award names or deadlines.</li>
+        <li>Document specific failures in the Calibration Log. Each failure becomes a constraint added to the High-Accuracy prompt.</li>
+        <li>Repeat with the revised prompt. Calibration is complete when both staff members independently produce outputs meeting the benchmark sample standard.</li>
+        <li>Director spot-checks 2 outputs from each staff member and signs off on the prompt version for the pilot.</li>
+      </ol>
+      <div class="mt-4">
+        <strong style="font-size:14px;display:block;margin-bottom:10px;">Calibration Log Template</strong>
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead>
+              <tr><th>Output #</th><th>Staff Member</th><th>Tone Issue?</th><th>Hallucination?</th><th>Missing Detail?</th><th>Action Taken</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr><td>2</td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr><td>3</td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr><td>4</td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr><td>5</td><td></td><td></td><td></td><td></td><td></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Sprint 2 Deliverable Checklist</div>
+    <div class="outputs-grid">
+      <div class="output-chip"><span class="output-icon">🧾</span>Tiered prompt set (all 3 tiers)</div>
+      <div class="output-chip"><span class="output-icon">📊</span>Calibration log (completed)</div>
+      <div class="output-chip"><span class="output-icon">✅</span>Human review checklist</div>
+      <div class="output-chip"><span class="output-icon">📄</span>One-page workflow reference</div>
+      <div class="output-chip"><span class="output-icon">✍️</span>Outreach template (staff-approved)</div>
+      <div class="output-chip"><span class="output-icon">👤</span>Director sign-off on prompt version</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="review">
+    <div class="sprint-header">
+      <div class="sprint-num">3</div>
+      <div class="sprint-header-text">
+        <div class="sprint-weeks">Weeks 5&ndash;6</div>
+        <h2>Review &amp; Wrap-Up: Measure, Audit, and Scope the Next Cycle</h2>
+      </div>
+    </div>
+    <div class="alert alert-success">
+      <span class="alert-icon">🎯</span>
+      <div><strong>Sprint goal:</strong> Produce a complete before/after time log, an equity audit summary, and a next-milestone brief. Do not expand to a second letter type until this sprint closes with a clean audit.</div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">Equity Audit Protocol</div>
+        <p class="text-sm mb-4">Pull 10&ndash;15 AI-drafted letters that were approved and sent. Review each against these equity checks:</p>
+        <ul class="checklist">
+          <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Check</span>Did language shift in tone or warmth across applicants from different school types (public vs. private, urban vs. rural)?</li>
+          <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Check</span>Did any letter include language interpretable as tied to zip code, demographics, or socioeconomic signals?</li>
+          <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Check</span>Are letters consistent in length and detail regardless of application quality?</li>
+          <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Check</span>Did any letter hallucinate program-specific details (award amounts, deadlines, named reviewers)?</li>
+          <li class="standard"><span class="check-box"></span><span class="priority-badge badge-standard">Note</span>Were any edge cases handled by AI drafts that should have been escalated to human-only?</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Failure Documentation Protocol</div>
+        <p class="text-sm mb-4">Document every case where AI output was inadequate. These become prompt constraints or human-only designations for the next cycle.</p>
+        <ul class="checklist">
+          <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Log</span>Prompts that produced hallucinated content (note specific hallucination).</li>
+          <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Log</span>Scenarios where staff rejected the AI draft entirely and wrote from scratch.</li>
+          <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Log</span>Letters requiring more than 2 rounds of staff editing (flag as high-maintenance).</li>
+          <li class="standard"><span class="check-box"></span><span class="priority-badge badge-standard">Note</span>Edge cases not anticipated in the scope document.</li>
+        </ul>
+        <div class="alert alert-guardrail mt-4">
+          <span class="alert-icon">⚠</span>
+          <div><strong>Carry-forward rule:</strong> If the equity audit surfaces tone inconsistency across applicant groups, do not advance to a second letter type. Address the root cause first.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title mt-8">Sprint 3 Deliverable Checklist</div>
+    <div class="outputs-grid">
+      <div class="output-chip"><span class="output-icon">⏱️</span>Before/after time log</div>
+      <div class="output-chip"><span class="output-icon">⚖️</span>Equity audit summary</div>
+      <div class="output-chip"><span class="output-icon">📋</span>Failure and edge case log</div>
+      <div class="output-chip"><span class="output-icon">🔄</span>Revised prompt pack (if needed)</div>
+      <div class="output-chip"><span class="output-icon">📝</span>Next milestone brief</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="prompts">
+    <div class="section-title">Full Prompt Pack &mdash; Rejection Letter Drafts</div>
+    <div class="alert alert-info">
+      <span class="alert-icon">ℹ️</span>
+      <div>All three prompts assume <strong>no PII is included in the input</strong>. Staff provide the program context block and a brief scenario summary only. The AI is never told who the applicant is.</div>
+    </div>
+
+    <div class="prompt-tier tier-good">
+      <div class="prompt-tier-header">
+        <div><span class="tier-label">Good</span> <span class="tier-name">&mdash; Fast Draft: Quick first pass, familiar scenarios</span></div>
+        <button class="copy-btn" onclick="copyPrompt(this,'p1')">Copy</button>
+      </div>
+      <pre class="prompt-body" id="p1">You are a professional communications writer for a nonprofit scholarship program.
+
+Your task: Draft a compassionate, brief rejection letter for an applicant who was not selected for this award cycle.
+
+Program context:
+- Program name: [PROGRAM NAME]
+- Award cycle: [YEAR]
+- Selection was competitive; many strong applicants were not funded
+- The applicant may reapply in future cycles if still eligible
+
+Letter requirements:
+- Tone: warm, respectful, encouraging — not clinical or dismissive
+- Length: 150–200 words
+- Format: standard letter format with [APPLICANT] as the salutation placeholder
+- Do not include: specific scores, reviewer comments, comparisons to other applicants, or financial details
+- Do not invent: deadlines, award amounts, or named staff
+
+Output: One complete letter draft, ready for staff to personalize.</pre>
+      <div class="prompt-note">Use for: standard, high-volume rejection letters where the scenario is clear. Staff replace [APPLICANT] and [PROGRAM NAME] before review.</div>
+    </div>
+
+    <div class="prompt-tier tier-better">
+      <div class="prompt-tier-header">
+        <div><span class="tier-label">Better</span> <span class="tier-name">&mdash; High-Accuracy Draft: Adds checks, flags uncertainty</span></div>
+        <button class="copy-btn" onclick="copyPrompt(this,'p2')">Copy</button>
+      </div>
+      <pre class="prompt-body" id="p2">You are a professional communications writer for a nonprofit scholarship program.
+
+Your task: Draft a compassionate rejection letter for an applicant not selected in this award cycle.
+
+Program context block (provide all that apply):
+- Program name: [PROGRAM NAME]
+- Award cycle: [YEAR]
+- Reapplication eligibility: [YES / NO / CONDITIONAL — specify]
+- Approved program language to include: [PASTE OR WRITE "NONE"]
+
+Letter requirements:
+- Tone: warm, respectful, encouraging — not clinical or dismissive
+- Length: 175–225 words
+- Format: standard letter with [APPLICANT] as the salutation placeholder
+- Cite only information I have provided above; do not invent details
+- If uncertain about any program-specific claim, write [STAFF: VERIFY THIS] inline
+
+Quality checks to apply before outputting:
+1. Does any sentence reference scores, comparisons, or reviewer notes? Remove it.
+2. Does any sentence contain invented details not found in the context block? Remove it.
+3. Is the tone consistent throughout?
+
+Output: One complete letter draft followed by a brief list of any [STAFF: VERIFY] flags inserted.</pre>
+      <div class="prompt-note">Use for: situations where program-specific language matters and you want the AI to self-audit before outputting. Review flags before finalizing.</div>
+    </div>
+
+    <div class="prompt-tier tier-best">
+      <div class="prompt-tier-header">
+        <div><span class="tier-label">Best</span> <span class="tier-name">&mdash; Governed Workflow: Full audit trail, mandatory review gates</span></div>
+        <button class="copy-btn" onclick="copyPrompt(this,'p3')">Copy</button>
+      </div>
+      <pre class="prompt-body" id="p3">You are a professional communications writer for a nonprofit scholarship program. This prompt is part of a governed workflow. Follow all steps in order.
+
+STEP 1 — Acknowledge scope:
+Confirm: (a) no applicant PII has been or should be included, (b) you will flag uncertainty rather than invent details, (c) your output is a staff draft, not a final letter.
+
+STEP 2 — Generate the draft using only this context:
+- Program name: [PROGRAM NAME]
+- Award cycle: [YEAR]
+- Reapplication eligibility: [YES / NO / CONDITIONAL]
+- Approved program language to include: [PASTE OR WRITE "NONE"]
+- Any edge-case notes for this batch: [e.g., "some applicants withdrew midway"]
+
+Letter requirements:
+- Tone: warm, respectful, encouraging
+- Length: 175–225 words
+- Salutation placeholder: [APPLICANT]
+- Do not invent any details not supplied above
+- Flag uncertainty inline: [STAFF: VERIFY THIS]
+
+STEP 3 — Self-audit before outputting:
+- [ ] Tone consistent throughout (no clinical shift)?
+- [ ] No invented award names, deadlines, or staff names?
+- [ ] No comparison to other applicants or reference to scores?
+- [ ] No language readable as tied to demographics or socioeconomic status?
+- [ ] Any [STAFF: VERIFY] flags inserted where needed?
+
+STEP 4 — Output format:
+A. Self-audit results (one line per check above)
+B. Complete letter draft
+C. List of [STAFF: VERIFY] flags with the specific concern for each</pre>
+      <div class="prompt-note">Use for: pilot launch, batch processing, or any time a full audit trail is required. Director sign-off recommended before using this version in production.</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="checklist">
+    <div class="section-title">Staff Verification Checklist &mdash; Before Every Letter Is Sent</div>
+    <p class="text-sm text-muted mb-4">Mandatory for every AI-assisted letter during the pilot cycle. Staff initials and date required before the letter moves to the supervisor approval queue.</p>
+
+    <div class="card">
+      <div class="card-title">Section 1 &mdash; Accuracy Checks</div>
+      <ul class="checklist">
+        <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Required</span>All placeholders ([APPLICANT], [PROGRAM NAME], etc.) have been replaced with correct information.</li>
+        <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Required</span>No invented award amounts, deadlines, or reviewer names appear in the letter.</li>
+        <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Required</span>Reapplication eligibility statement (if present) matches current program policy.</li>
+        <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Review</span>All [STAFF: VERIFY] flags from the governed workflow have been resolved or removed.</li>
+        <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Review</span>Contact information for questions or appeals (if included) is accurate and current.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Section 2 &mdash; Tone and Equity Checks</div>
+      <ul class="checklist">
+        <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Required</span>Tone is warm and respectful throughout. No clinical, bureaucratic, or dismissive language.</li>
+        <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Required</span>No language referencing the applicant's score, rank, or comparison to other applicants.</li>
+        <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Review</span>Language does not reference school type, geography, or any characteristic that could read as demographic bias.</li>
+        <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Review</span>If encouragement to reapply is included, applicant is actually eligible to reapply.</li>
+        <li class="standard"><span class="check-box"></span><span class="priority-badge badge-standard">Note</span>Letter length is appropriate (not notably longer or shorter than others in the batch).</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Section 3 &mdash; Approval Sign-Off</div>
+      <ul class="checklist">
+        <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Required</span>Staff reviewer name and initials: _______________ &nbsp; Date: _______________</li>
+        <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Required</span>Supervisor approval received: _______________ &nbsp; Date: _______________</li>
+        <li class="standard"><span class="check-box"></span><span class="priority-badge badge-standard">Log</span>Letter logged as AI-assisted in the pilot tracking sheet (required for audit at end of cycle).</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="metrics">
+    <div class="section-title">Measurement Framework</div>
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-label">Primary Metric</div>
+        <div class="metric-value">Time/Letter</div>
+        <div class="metric-desc">Minutes from draft start to supervisor approval. Track before and after for comparison.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Quality Metric</div>
+        <div class="metric-value">Edit Rounds</div>
+        <div class="metric-desc">Number of staff revision cycles per letter. Target: 1&ndash;2 rounds. 3+ signals prompt needs revision.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Accuracy Metric</div>
+        <div class="metric-value">Flag Rate</div>
+        <div class="metric-desc">Percentage of AI drafts with a [STAFF: VERIFY] flag or factual error caught during review.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Measurement Tracking Sheet Template</div>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead>
+            <tr><th>Letter #</th><th>Date Drafted</th><th>Prompt Tier Used</th><th>Draft Time (min)</th><th>Review Rounds</th><th>Flags Found</th><th>Equity Issue?</th><th>Sent Date</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>2</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>3</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td colspan="8" style="text-align:center;color:var(--gray-mid);font-style:italic;font-size:13px;">Continue for full batch. Compile summary at end of Weeks 5&ndash;6.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="alert alert-info mt-4">
+      <span class="alert-icon">📈</span>
+      <div><strong>Baseline note:</strong> Before the pilot begins, time 10 letters produced the traditional way. Record draft time, edit rounds, and any errors caught before send. This baseline is the comparison point at the end of the cycle.</div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="page-footer">
+  <strong>NSPA AI Implementation Series</strong> &mdash; 2/2/2 Framework &mdash; Example 1: Applicant Communications Pilot
+  <hr class="footer-sep">
+  Produced for the "Automating Office Tasks with AI" session &mdash; March 4, 2026<br>
+  Contact: <a href="/cdn-cgi/l/email-protection#39545e4c51555057794d5a5c5817564b5e"><span class="__cf_email__" data-cfemail="711c1604191d181f31051214105f1e0316">[email&#160;protected]</span></a> &nbsp;|&nbsp; <strong><a href="https://go.mgpd.org/nspa3">Return to Session Resources</a></strong>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+function copyPrompt(btn,id){
+  navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>{
+    btn.textContent='Copied!';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied');},2000);
+  });
+}
+document.querySele

@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scholarship Program AI Task Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg: #f4f6f7;
+    --surface: #ffffff;
+    --surface2: #e8edef;
+    --ink: #1a2a2e;
+    --ink2: #4a5a5e;
+    --accent: #237683;
+    --accent2: #FDB414;
+    --rag: #237683;
+    --single: #b08a00;
+    --both: #A5A9AD;
+    --border: #cdd4d6;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+    --display: 'Syne', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* Header */
+  header {
+    background: #237683;
+    color: #ffffff;
+    padding: 48px 60px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: #FDB414;
+    opacity: 0.18;
+  }
+  header h1 {
+    font-family: var(--display);
+    font-size: 2.6rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    position: relative;
+  }
+  header p {
+    margin-top: 12px;
+    font-size: 0.95rem;
+    color: #c8e4e7;
+    max-width: 620px;
+    position: relative;
+  }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    gap: 24px;
+    padding: 16px 60px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .legend-label {
+    font-family: var(--display);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink2);
+    margin-right: 4px;
+  }
+  .badge {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .badge.sp  { background: #fff6d6; color: var(--single); border: 1px solid #FDB414; }
+  .badge.rag { background: #daeef0; color: var(--rag);    border: 1px solid #237683; }
+  .badge.both{ background: #ebebec; color: #5a5e62;       border: 1px solid #A5A9AD; }
+
+  .legend-item { display: flex; align-items: center; gap: 8px; }
+
+  /* Main layout */
+  main { padding: 40px 60px 80px; }
+
+  /* Section heading */
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin: 48px 0 12px;
+  }
+  .section-head:first-of-type { margin-top: 0; }
+  .section-head h2 {
+    font-family: var(--display);
+    font-size: 1.05rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+  }
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Table */
+  .task-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    table-layout: fixed;
+  }
+  .task-table thead th {
+    background: #237683;
+    color: #ffffff;
+    font-family: var(--display);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    padding: 10px 14px;
+    text-align: left;
+  }
+  .task-table thead th:nth-child(1) { width: 22%; }
+  .task-table thead th:nth-child(2) { width: 14%; }
+  .task-table thead th:nth-child(3) { width: 40%; }
+  .task-table thead th:nth-child(4) { width: 24%; }
+
+  .task-table tbody tr {
+    border-top: 1px solid var(--border);
+    transition: background 0.12s;
+  }
+  .task-table tbody tr:hover { background: #eef5f7; }
+  .task-table td {
+    padding: 11px 14px;
+    vertical-align: top;
+    font-size: 0.85rem;
+    color: var(--ink);
+  }
+  .task-table td:first-child {
+    font-weight: 500;
+  }
+
+  /* prompt examples */
+  .prompt-example {
+    display: block;
+    margin-top: 5px;
+    font-family: var(--mono);
+    font-size: 0.73rem;
+    color: var(--ink2);
+    background: var(--surface2);
+    border-left: 3px solid var(--border);
+    padding: 5px 8px;
+    border-radius: 0 3px 3px 0;
+    line-height: 1.45;
+  }
+
+  /* rag links */
+  a.rag-link {
+    color: var(--rag);
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 0.73rem;
+    border-bottom: 1px dashed var(--rag);
+    cursor: pointer;
+  }
+  a.rag-link:hover { background: #d4edd9; }
+
+  .tools-list {
+    font-size: 0.78rem;
+    color: var(--ink2);
+    line-height: 1.7;
+  }
+
+  /* RAG Instructions section */
+  #rag-instructions {
+    margin-top: 72px;
+    padding-top: 36px;
+    border-top: 3px solid #237683;
+  }
+  #rag-instructions > h2 {
+    font-family: var(--display);
+    font-size: 1.7rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  #rag-instructions > p {
+    color: var(--ink2);
+    font-size: 0.88rem;
+    max-width: 680px;
+    margin-bottom: 48px;
+  }
+
+  .rag-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 36px;
+    overflow: hidden;
+  }
+  .rag-card-header {
+    background: var(--rag);
+    color: #fff;
+    padding: 14px 20px;
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+  .rag-card-header h3 {
+    font-family: var(--display);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+  .rag-card-header .rag-id {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    opacity: 0.7;
+  }
+  .rag-card-body {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 800px) {
+    .rag-card-body { grid-template-columns: 1fr; }
+    main, header, .legend { padding-left: 20px; padding-right: 20px; }
+    header h1 { font-size: 1.8rem; }
+  }
+
+  .rag-section h4 {
+    font-family: var(--display);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink2);
+    margin-bottom: 8px;
+  }
+  .rag-section p, .rag-section li {
+    font-size: 0.83rem;
+    color: var(--ink);
+    line-height: 1.65;
+  }
+  .rag-section ul {
+    padding-left: 16px;
+  }
+  .rag-section li { margin-bottom: 3px; }
+
+  .system-prompt-box {
+    background: #1a1a18;
+    color: #c8c4bc;
+    border-radius: 4px;
+    padding: 14px 16px;
+    font-family: var(--mono);
+    font-size: 0.73rem;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    word-break: break-word;
+    grid-column: 1 / -1;
+  }
+  .system-prompt-box .comment { color: #6a7a5a; }
+  .system-prompt-box .keyword { color: #c8aa6a; }
+  .system-prompt-box .value   { color: #7ab5d8; }
+
+  .back-top {
+    display: inline-block;
+    margin-top: 10px;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--rag);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--rag);
+  }
+  .back-top:hover { background: #daeef0; }
+  /* Footer */
+  footer {
+    background: #237683;
+    color: #ffffff;
+    padding: 20px 60px;
+    font-family: var(--sans);
+    font-size: 0.82rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  footer a {
+    color: #FDB414;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(253,180,20,0.4);
+  }
+  footer a:hover {
+    border-bottom-color: #FDB414;
+    background: rgba(253,180,20,0.1);
+  }
+  @media (max-width: 800px) {
+    footer { padding-left: 20px; padding-right: 20px; }
+  }
+
+  .guardrail-note {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.75rem;
+    color: #7a5a00;
+    background: #fff8e1;
+    border-left: 3px solid #FDB414;
+    padding: 4px 8px;
+    border-radius: 0 3px 3px 0;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Scholarship Program AI<br>Task Reference Guide</h1>
+  <p>A practical reference mapping common scholarship administration tasks to single-prompt AI solutions and Retrieval-Augmented Generation (RAG) setups with custom instructions. Designed for NSPA member programs: platform-agnostic, privacy-first, human-oversight built in.</p>
+</header>
+
+<div class="legend">
+  <span class="legend-label">Key:</span>
+  <div class="legend-item"><span class="badge sp">Single Prompt</span> <span style="font-size:0.8rem;color:#4a4a45">One-shot prompt, no external data needed</span></div>
+  <div class="legend-item"><span class="badge rag">RAG</span> <span style="font-size:0.8rem;color:#4a4a45">Requires retrieval from program documents or knowledge base</span></div>
+  <div class="legend-item"><span class="badge both">Both</span> <span style="font-size:0.8rem;color:#4a4a45">Can work either way; RAG improves accuracy and consistency</span></div>
+</div>
+
+<main id="top">
+
+  <!-- ─────────────────────────────────────────────── APPLICANT COMMUNICATIONS -->
+  <div class="section-head"><h2>Applicant Communications</h2><div class="section-line"></div></div>
+  <table class="task-table">
+    <thead>
+      <tr>
+        <th>Task</th>
+        <th>Approach</th>
+        <th>AI Automation Method</th>
+        <th>Suggested Tools / Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Drafting award and congratulations letters</td>
+        <td><span class="badge both">Both</span></td>
+        <td>Single prompt for one-off letters. RAG to enforce approved voice, program-specific language, and award conditions.
+          <span class="prompt-example">"Draft a congratulations letter for a scholarship recipient. Tone: warm and encouraging. Mention the award amount [X], next steps for acceptance, and program contact. 3 short paragraphs. Do not include the applicant's name or ID."</span>
+          <a class="rag-link" href="javascript:void(0)" data-scroll="rag-applicant-comms">→ RAG: Applicant Communications (templates + voice)</a>
+          <span class="guardrail-note">Staff must personalize and verify award amount before sending. AI draft is a starting point only.</span>
+        </td>
+        <td class="tools-list">Claude Project, Custom GPT<br>Mail merge integration (Word, Google Docs)<br>BoodleBox</td>
+      </tr>
+      <tr>
+        <td>Drafting declination / non-selection letters</td>
+        <td><span class="badge both">Both</span></td>
+        <td>Single prompt from a compassionate template. RAG to apply program-specific language and ensure consistency across all declinations.
+          <span class="prompt-example">"Draft a respectful, compassionate non-selection letter for a scholarship applicant. Do not cite specific reasons for the decision. Acknowledge effort, encourage reapplication if eligible. Under 150 words. Use second-person ('you') but do not include the applicant's name."</span>
+          <a class="rag-link" href="javascript:void(0)" data-scroll="rag-applicant-comms">→ RAG: Applicant Communications (templates + voice)</a>
+          <span class="guardrail-note">Never paste applicant names or ID numbers into a prompt. Staff approve every letter before sending.</span>
+        </td>
+        <td class="tools-list">Claude Project, BoodleBox<br>Scholarship management platform (Submittable, Salesforce Scholarships)</td>
+      </tr>
+      <tr>
+        <td>Responding to common applicant questions</td>
+        <td><span class="badge rag">RAG</span></td>
+        <td>Ground responses in your program's eligibility rules, deadline FAQs, and requirements documentation so answers are accurate and consistent.
+          <a class="rag-link" href="javascript:void(0)" data-scroll="rag-program-faq">→ RAG: Program Eligibility &amp; FAQ Knowledge Base</a>
+        </td>
+        <td class="tools-list">Website chatbot (Tidio, Intercom)<br>Claude Project loaded with program docs<br>BoodleBox with program knowledge</td>
+      </tr>
+      <tr>
+        <td>Drafting waitlist notification letters</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Prompt for a clear, honest letter that explains waitlist status without implying guaranteed selection.
+          <span class="prompt-example">"Draft a waitlist notification letter. Acknowledge the applicant's strong application. Explain they are on the waitlist and will be contacted if a position opens. Do not promise a specific timeline. Compassionate, direct tone. Under 120 words. No applicant identifiers."</span>
+          <span class="guardrail-note">Staff review each draft before sending. Do not input applicant names or demographic details.</span>
+        </td>
+        <td class="tools-list">Any LLM (Claude, ChatGPT, Gemini, Copilot)</td>
+      </tr>
+      <tr>
+        <td>Proofreading outgoing applicant-facing emails</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Paste draft (with any names or IDs removed); prompt the model to check tone, clarity, and equity of language.
+          <span class="prompt-example">"Review this applicant communication for clarity, compassionate tone, and any language that could feel dismissive or inequitable. Flag passive-aggressive phrases, jargon, or assumptions about applicant background. Do not alter meaning."</span>
+        </td>
+        <td class="tools-list">Claude, Grammarly Business, Copilot</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ─────────────────────────────────────────────── REVIEW & SCORING -->
+  <div class="section-head"><h2>Application Review &amp; Scoring</h2><div class="section-line"></div></div>
+  <table class="task-table">
+    <thead>
+      <tr>
+        <th>Task</th>
+        <th>Approach</th>
+        <th>AI Automation Method</th>
+        <th>Suggested Tools / Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Summarizing applicant essays for triage</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Paste a single, anonymized essay (remove name, school, location); prompt for a neutral factual summary only. Summary supports triage, not final decisions.
+          <span class="prompt-example">"Summarize this scholarship essay in 3-4 sentences. Report only what the applicant wrote. Note the central theme, any specific examples given, and the stated goal. Do not evaluate quality, make inferences about the applicant, or add interpretation."</span>
+          <span class="guardrail-note">Staff must read the original before scoring. AI summary is for orientation only, not a substitute for full review.</span>
+        </td>
+        <td class="tools-list">Claude, ChatGPT, BoodleBox<br>Remove all PII before pasting</td>
+      </tr>
+      <tr>
+        <td>Checking essays against rubric criteria</td>
+        <td><span class="badge both">Both</span></td>
+        <td>Single prompt when rubric is pasted inline. RAG when rubric lives in a knowledge base and should be retrieved automatically.
+          <span class="prompt-example">"Using the rubric criteria below, identify which criteria this anonymized essay directly addresses and which it does not. Quote only brief phrases as evidence. Do not assign a score. Flag criteria where evidence is weak or absent. [Paste rubric. Paste anonymized essay.]"</span>
+          <a class="rag-link" href="javascript:void(0)" data-scroll="rag-reviewer">→ RAG: Reviewer Knowledge Base (rubrics + scoring guides)</a>
+          <span class="guardrail-note">AI analysis is a first-pass aid only. Reviewers make all scoring decisions independently.</span>
+        </td>
+        <td class="tools-list">Claude Project, BoodleBox<br>Scholarship management platforms with AI integrations</td>
+      </tr>
+      <tr>
+        <td>Flagging potential completeness issues</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Prompt the model to compare a submitted application checklist against required components. No essay content or PII needed.
+          <span class="prompt-example">"Compare this list of submitted components to the required checklist below. List any required items that appear missing or incomplete. Do not evaluate quality. Output as a simple checklist. [Paste required list. Paste submitted components list.]"</span>
+        </td>
+        <td class="tools-list">Any LLM, Excel Copilot for batch review</td>
+      </tr>
+      <tr>
+        <td>Calibrating reviewer scoring consistency</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Paste anonymized score distributions (no applicant IDs); prompt the model to surface patterns, outliers, or potential calibration issues for staff review.
+          <span class="prompt-example">"Review this anonymized reviewer score distribution table. Identify reviewers with scores more than 1.5 standard deviations from the group mean, and note any rubric categories with high inter-rater variance. Do not suggest any individual applicant outcome. Output a brief summary for program staff."</span>
+          <span class="guardrail-note">Use aggregate data only. No individual applicant identifiers in this prompt.</span>
+        </td>
+        <td class="tools-list">Claude, ChatGPT, Excel Copilot</td>
+      </tr>
+      <tr>
+        <td>Generating reviewer debrief summaries</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Paste anonymized reviewer panel notes after deliberation; prompt for a structured debrief summary for program records.
+          <span class="prompt-example">"Summarize these anonymized reviewer panel notes into a structured debrief. Include: key themes noted across applications, rubric categories where the pool was strongest/weakest, and any process concerns raised. Do not reference individual applicants. Under 300 words."</span>
+        </td>
+        <td class="tools-list">Claude, Otter.ai (for live meeting notes) + Claude for summary</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ─────────────────────────────────────────────── REVIEWER ONBOARDING -->
+  <div class="section-head"><h2>Reviewer Onboarding &amp; Support</h2><div class="section-line"></div></div>
+  <table class="task-table">
+    <thead>
+      <tr>
+        <th>Task</th>
+        <th>Approach</th>
+        <th>AI Automation Method</th>
+        <th>Suggested Tools / Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Preparing reviewer orientation packets</td>
+        <td><span class="badge rag">RAG</span></td>
+        <td>AI assembles role-specific onboarding packets from the rubric, program policies, conflict-of-interest guidelines, and scoring instructions.
+          <a class="rag-link" href="javascript:void(0)" data-scroll="rag-reviewer">→ RAG: Reviewer Knowledge Base (rubrics + policies)</a>
+        </td>
+        <td class="tools-list">Claude Project, BoodleBox<br>Loaded with current-cycle reviewer docs</td>
+      </tr>
+      <tr>
+        <td>Drafting reviewer welcome and instruction emails</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Provide reviewer role, cycle dates, platform name, and key instructions; model drafts a clear, welcoming onboarding email.
+          <span class="prompt-example">"Draft a welcome email to a volunteer scholarship reviewer. Include: their role, the review window dates [X to Y], how to access the scoring platform [Platform Name], the conflict-of-interest policy reminder, and who to contact with questions. Friendly, professional tone. Under 200 words."</span>
+        </td>
+        <td class="tools-list">Any LLM</td>
+      </tr>
+      <tr>
+        <td>Answering reviewer questions about rubric or process</td>
+        <td><span class="badge rag">RAG</span></td>
+        <td>Chatbot or Claude Project grounded in the current cycle's rubric, scoring guide, training materials, and FAQs.
+          <a class="rag-link" href="javascript:void(0)" data-scroll="rag-reviewer">→ RAG: Reviewer Knowledge Base</a>
+        </td>
+        <td class="tools-list">Claude Project, BoodleBox</td>
+      </tr>
+      <tr>
+        <td>Creating reviewer training scenarios and calibration examples</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Prompt the model to generate synthetic (fictional) applicant essay excerpts that illustrate different rubric performance levels for training purposes.
+          <span class="prompt-example">"Create three short synthetic scholarship essay excerpts (100 words each) illustrating three different performance levels on this rubric criterion: [paste criterion]. Label them Level 1, Level 3, and Level 5. Make them realistic but entirely fictional. Include a brief annotation explaining the score for each."</span>
+          <span class="guardrail-note">Use only synthetic examples for training. Never use real applicant essays as calibration samples without explicit policy approval.</span>
+        </td>
+        <td class="tools-list">Claude, ChatGPT, Gemini</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ─────────────────────────────────────────────── DONOR & BOARD REPORTING -->
+  <div class="section-head"><h2>Donor &amp; Board Reporting</h2><div class="section-line"></div></div>
+  <table class="task-table">
+    <thead>
+      <tr>
+        <th>Task</th>
+        <th>Approach</th>
+        <th>AI Automation Method</th>
+        <th>Suggested Tools / Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Drafting donor impact reports</td>
+        <td><span class="badge both">Both</span></td>
+        <td>Single prompt when staff paste anonymized aggregate stats and key themes. RAG when donor history, fund-specific data, and prior report language live in a knowledge base.
+          <span class="prompt-example">"Draft a one-page donor impact report section for a named scholarship fund. Use these anonymized aggregate stats: [awards made, total dollars, fields of study, geographic reach]. Write in a warm, narrative tone. Do not name individual recipients. Highlight impact themes only. ~250 words."</span>
+          <a class="rag-link" href="javascript:void(0)" data-scroll="rag-donor-board">→ RAG: Donor &amp; Board Reporting</a>
+          <span class="guardrail-note">Staff verify all statistics against source data before sharing with donors. AI draft is a first pass.</span>
+        </td>
+        <td class="tools-list">Claude Project, BoodleBox<br>Loaded with prior donor reports and fund summaries</td>
+      </tr>
+      <tr>
+        <td>Summarizing program outcomes for board packets</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Paste anonymized program-level data (totals, averages, demographics in aggregate); prompt for an executive narrative for governance review.
+          <span class="prompt-example">"Summarize this scholarship cycle's aggregate outcome data for a board packet. Structure: Program Snapshot (3 sentences), Key Highlights (3 bullets), and Equity Indicators (2 sentences noting any demographic patterns visible in aggregate data). Audience: board members, not program staff. Under 200 words. Data: [paste aggregate stats only]."</span>
+        </td>
+        <td class="tools-list">Claude, ChatGPT, Copilot in Word</td>
+      </tr>
+      <tr>
+        <td>Drafting thank-you letters from award recipients to donors</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Prompt for a template recipients can personalize, or draft a lightly personalized version from recipient-provided talking points (no PII in prompt).
+          <span class="prompt-example">"Draft a scholarship thank-you letter template that recipients can personalize. Tone: genuine and specific, not generic. Structure: opening (gratitude), middle (what the award makes possible), closing (forward-looking). Provide [brackets] for recipient to insert personal details. Under 200 words."</span>
+        </td>
+        <td class="tools-list">Any LLM</td>
+      </tr>
+      <tr>
+        <td>Writing narrative summaries of review cycle for stewardship</td>
+        <td><span class="badge both">Both</span></td>
+        <td>Single prompt from a structured debrief notes input. RAG to align with prior cycle language and donor-specific fund guidelines.
+          <span class="prompt-example">"Using these anonymized review debrief notes, write a 200-word narrative summary of this cycle's applicant pool and selection process for a donor stewardship report. Highlight pool strengths, committee themes, and selection criteria emphasis. Do not reference individual applicants."</span>
+          <a class="rag-link" href="javascript:void(0)" data-scroll="rag-donor-board">→ RAG: Donor &amp; Board Reporting</a>
+        </td>
+        <td class="tools-list">Claude Project, BoodleBox</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ─────────────────────────────────────────────── PROGRAM OPERATIONS -->
+  <div class="section-head"><h2>Program Operations &amp; Content</h2><div class="section-line"></div></div>
+  <table class="task-table">
+    <thead>
+      <tr>
+        <th>Task</th>
+        <th>Approach</th>
+        <th>AI Automation Method</th>
+        <th>Suggested Tools / Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Building and updating program FAQs</td>
+        <td><span class="badge both">Both</span></td>
+        <td>Single prompt to draft FAQ from eligibility rules and policy docs pasted inline. RAG for ongoing updates that draw from a living program knowledge base.
+          <span class="prompt-example">"Using the eligibility rules and requirements below, draft a 10-question FAQ for prospective scholarship applicants. Write questions as applicants would ask them. Keep answers under 60 words each. Plain language, no jargon. Flag any question where the answer is ambiguous in the source docs. [Paste program rules]."</span>
+          <a class="rag-link" href="javascript:void(0)" data-scroll="rag-program-faq">→ RAG: Program Eligibility &amp; FAQ Knowledge Base</a>
+        </td>
+        <td class="tools-list">Claude Project, BoodleBox<br>Website CMS integration</td>
+      </tr>
+      <tr>
+        <td>Drafting program web page copy</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Prompt for GEO-optimized (answer-first) web copy from program details. Front-load eligibility, deadlines, and key facts so AI tools and search can surface accurate info.
+          <span class="prompt-example">"Write a scholarship program web page. Lead with a one-sentence description of who is eligible. Follow with: award amount, application deadline, eligibility requirements (bulleted), how to apply (numbered steps), and a contact line. Plain language, scannable format. No fluff. Details: [paste program details]."</span>
+        </td>
+        <td class="tools-list">Claude, ChatGPT, Copilot<br>Review against source documents before publishing</td>
+      </tr>
+      <tr>
+        <td>Summarizing reviewer comment themes for program improvement</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Paste anonymized open-text reviewer comments (remove any applicant identifiers); prompt for thematic analysis to inform next cycle.
+          <span class="prompt-example">"Analyze these anonymized reviewer comments for recurring themes. Identify: (1) what reviewers found most compelling in strong applications, (2) common weaknesses noted, (3) any rubric criteria that generated confusion. Output 3-5 themes per category. Under 300 words total. Source: reviewer comment export with all applicant names and IDs removed."</span>
+        </td>
+        <td class="tools-list">Claude, ChatGPT, NotebookLM</td>
+      </tr>
+      <tr>
+        <td>Drafting program policy documents and SOPs</td>
+        <td><span class="badge both">Both</span></td>
+        <td>Single prompt for first drafts from staff notes. RAG to check alignment with existing program policies and governance requirements.
+          <span class="prompt-example">"Using these staff notes, draft a standard operating procedure for [program task, e.g., conflict-of-interest recusal]. Format: Purpose, Scope, Step-by-step process, Escalation path. Plain language. Include an 'Effective Date' and 'Owner' field. ~300 words."</span>
+          <a class="rag-link" href="javascript:void(0)" data-scroll="rag-reviewer">→ RAG: Reviewer Knowledge Base (policy alignment)</a>
+        </td>
+        <td class="tools-list">Claude Project, Notion AI, Google Docs with AI</td>
+      </tr>
+      <tr>
+        <td>Translating applicant-facing materials</td>
+        <td><span class="badge both">Both</span></td>
+        <td>Single prompt for direct translation of program-level content. RAG to apply an approved terminology glossary for program-specific terms.
+          <span class="prompt-example">"Translate this scholarship eligibility page into Spanish. Maintain formal register. Preserve all bullet structure, headings, and numbered steps. Flag any English-language terms with no direct equivalent and suggest options. [Paste eligibility page text]."</span>
+          <span class="guardrail-note">A bilingual staff member or community partner should review translations before publication.</span>
+        </td>
+        <td class="tools-list">Claude, DeepL, GPT-4o<br>Community partner review required before publishing</td>
+      </tr>
+      <tr>
+        <td>Generating scholarship program social media content</td>
+        <td><span class="badge both">Both</span></td>
+        <td>Single prompt for deadline reminders, cycle announcements, and recipient spotlights. RAG to enforce approved program voice and messaging.
+          <span class="prompt-example">"Write 3 social media post options announcing the opening of our scholarship application cycle. Include the deadline [date], eligibility summary (1 sentence), and a link placeholder. Tone: encouraging and inclusive. Under 150 words each. LinkedIn and Instagram versions. Do not name specific recipients."</span>
+          <a class="rag-link" href="javascript:void(0)" data-scroll="rag-donor-board">→ RAG: Program Voice &amp; External Messaging</a>
+        </td>
+        <td class="tools-list">Claude, BoodleBox<br>Review before posting; verify all facts against source docs</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ─────────────────────────────────────────────── AWARD & FINANCE TRACKING -->
+  <div class="section-head"><h2>Award Administration &amp; Finance Tracking</h2><div class="section-line"></div></div>
+  <table class="task-table">
+    <thead>
+      <tr>
+        <th>Task</th>
+        <th>Approach</th>
+        <th>AI Automation Method</th>
+        <th>Suggested Tools / Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Categorizing and auditing disbursement records</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Paste anonymized disbursement export; prompt to flag discrepancies, missing fields, or amounts outside expected ranges.
+          <span class="prompt-example">"Review this anonymized disbursement log. Flag: (1) records missing required fields (recipient ID, fund code, amount, date), (2) amounts outside the award range of [$X to $Y], (3) duplicate entries. Output a summary table of flagged records. Do not interpret or make decisions; flag only."</span>
+        </td>
+        <td class="tools-list">Excel Copilot, Claude, ChatGPT<br>Remove all recipient names before use</td>
+      </tr>
+      <tr>
+        <td>Summarizing fund utilization for leadership</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Paste aggregate fund-level data; prompt for a narrative summary for an internal leadership or finance report.
+          <span class="prompt-example">"Summarize this scholarship fund utilization data for a finance committee report. Audience: non-program leadership. Highlight: total awarded vs. budgeted, number of awards made, average award size, and any underspend or overspend. 150 words max. Data: [paste aggregate fund totals only]."</span>
+        </td>
+        <td class="tools-list">Claude, ChatGPT, Excel Copilot</td>
+      </tr>
+      <tr>
+        <td>Drafting disbursement confirmation emails to recipients</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Prompt for a clear confirmation template that staff personalize before sending.
+          <span class="prompt-example">"Draft a scholarship disbursement confirmation email template. Include placeholders for: award amount, disbursement date, fund name, and recipient institution. Explain what to do if the payment is not received within [X] business days. Professional, warm tone. Under 150 words."</span>
+          <span class="guardrail-note">Staff must verify disbursement details against records before sending. Never auto-send without review.</span>
+        </td>
+        <td class="tools-list">Any LLM; mail merge for batch sending after staff review</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <!-- RAG INSTRUCTIONS -->
+  <!-- ════════════════════════════════════════════════════════════ -->
+
+  <section id="rag-instructions">
+    <h2>RAG Custom Instructions Reference</h2>
+    <p>Each configuration below describes the knowledge sources to index, the system prompt to load into your AI assistant, and example queries. Designed for Claude Projects, BoodleBox, custom GPTs, or LlamaIndex pipelines. All configurations assume no applicant PII is stored in the knowledge base unless your program has explicit policy approval and appropriate data governance in place.</p>
+
+
+    <!-- ── RAG: Applicant Comms ── -->
+    <div class="rag-card" id="rag-applicant-comms">
+      <div class="rag-card-header">
+        <h3>Applicant Communications — Templates &amp; Voice</h3>
+        <span class="rag-id">rag-applicant-comms</span>
+      </div>
+      <div class="rag-card-body">
+        <div class="rag-section">
+          <h4>Knowledge Sources to Index</h4>
+          <ul>
+            <li>Program voice and tone guide</li>
+            <li>Approved letter templates: award, declination, waitlist, disbursement confirmation</li>
+            <li>Prior cycle communications (reviewed and approved versions only)</li>
+            <li>Equity and inclusive language guidelines</li>
+            <li>Program-specific terminology and award conditions</li>
+          </ul>
+        </div>
+        <div class="rag-section">
+          <h4>Example Queries</h4>
+          <ul>
+            <li>"Draft a declination letter for this cycle's non-selected applicants."</li>
+            <li>"Update the congratulations letter template for the new award amount."</li>
+            <li>"Check this draft letter against our inclusive language guidelines."</li>
+          </ul>
+        </div>
+        <div class="system-prompt-box"><span class="comment"># SYSTEM PROMPT — Applicant Communications Assistant</span>
+
+You draft scholarship applicant communications for <span class="value">[Program Name]</span>. 
+Use retrieved templates and the voice guide to produce accurate, 
+compassionate, on-brand drafts.
+
+<span class="keyword">ALWAYS:</span>
+- Match the tone in the voice guide: warm, direct, equity-aware
+- Use the closest retrieved template as your structural starting point
+- Keep letters under 200 words unless a template specifies otherwise
+- Preserve all approved legal and compliance language from templates
+
+<span class="keyword">NEVER:</span>
+- Include applicant names, ID numbers, or demographic details
+- Speculate about selection rationale in declination letters
+- Promise outcomes, timelines, or award conditions not in the source docs
+- Deviate from approved declination language
+
+<span class="keyword">FORMAT:</span> Return the draft letter body only.
+Flag any assumptions or gaps in [brackets] at the end.
+Note which template was used as the base.</div>
+        <a class="back-top" href="javascript:void(0)" data-scroll="top">↑ Back to table</a>
+      </div>
+    </div>
+
+
+    <!-- ── RAG: Program FAQ ── -->
+    <div class="rag-card" id="rag-program-faq">
+      <div class="rag-card-header">
+        <h3>Program Eligibility &amp; FAQ Knowledge Base</h3>
+        <span class="rag-id">rag-program-faq</span>
+      </div>
+      <div class="rag-card-body">
+        <div class="rag-section">
+          <h4>Knowledge Sources to Index</h4>
+          <ul>
+            <li>Eligibility requirements (current cycle)</li>
+            <li>Application instructions and required materials</li>
+            <li>Deadline and timeline documentation</li>
+            <li>Previously answered applicant FAQ (staff-reviewed)</li>
+            <li>Award conditions, disbursement process, renewal criteria (if applicable)</li>
+          </ul>
+        </div>
+        <div class="rag-section">
+          <h4>Example Queries</h4>
+          <ul>
+            <li>"Can part-time students apply?"</li>
+            <li>"What GPA is required to be eligible?"</li>
+            <li>"When is the application deadline and can I get an extension?"</li>
+            <li>"What happens after I submit my application?"</li>
+          </ul>
+        </div>
+        <div class="system-prompt-box"><span class="comment"># SYSTEM PROMPT — Program FAQ Assistant</span>
+
+You answer questions about <span class="value">[Program Name]</span> scholarship eligibility, 
+requirements, and process using only the program's official documents.
+
+<span class="keyword">RULES:</span>
+- Answer only from retrieved documents. If the answer is not in the 
+  knowledge base, say: "I don't have that information — please contact 
+  [program contact email] for assistance."
+- Never interpret or expand eligibility beyond what is written in 
+  the source documents
+- For deadline questions, always cite the specific date from the docs 
+  and remind the user to verify at [program website URL]
+- Do not confirm or deny an individual's eligibility; refer them to 
+  the eligibility checklist and program contact
+
+<span class="keyword">TONE:</span> Helpful, clear, and encouraging. Prospective applicants 
+may be navigating this process for the first time.</div>
+        <a class="back-top" href="javascript:void(0)" data-scroll="top">↑ Back to table</a>
+      </div>
+    </div>
+
+
+    <!-- ── RAG: Reviewer Knowledge Base ── -->
+    <div class="rag-card" id="rag-reviewer">
+      <div class="rag-card-header">
+        <h3>Reviewer Knowledge Base — Rubrics, Policies &amp; Training</h3>
+        <span class="rag-id">rag-reviewer</span>
+      </div>
+      <div class="rag-card-body">
+        <div class="rag-section">
+          <h4>Knowledge Sources to Index</h4>
+          <ul>
+            <li>Current cycle scoring rubric and criteria definitions</li>
+            <li>Reviewer orientation and training materials</li>
+            <li>Conflict-of-interest policy and recusal procedures</li>
+            <li>Platform access and submission instructions</li>
+            <li>Prior cycle calibration examples (synthetic only)</li>
+            <li>Review timeline and deadline schedule</li>
+          </ul>
+        </div>
+        <div class="rag-section">
+          <h4>Example Queries</h4>
+          <ul>
+            <li>"What does a score of 4 on the Leadership criterion look like?"</li>
+            <li>"How do I flag a conflict of interest with an applicant?"</li>
+            <li>"When are my reviews due and how do I submit them?"</li>
+            <li>"What should I do if an essay seems AI-generated?"</li>
+          </ul>
+        </div>
+        <div class="system-prompt-box"><span class="comment"># SYSTEM PROMPT — Reviewer Support Assistant</span>
+
+You support volunteer scholarship reviewers for <span class="value">[Program Name]</span>. 
+Answer questions about the rubric, review process, and policies using 
+only the current cycle's official reviewer documents.
+
+<span class="keyword">ALWAYS:</span>
+- Cite the specific rubric section or document when answering scoring 
+  questions
+- Remind reviewers that AI analysis of essays is an aid only; 
+  all scoring decisions are theirs alone
+- For conflict-of-interest questions, err toward caution and direct 
+  reviewers to the program contact for confirmation
+- Note if reviewer training materials are from a prior cycle 
+  and flag for staff verification
+
+<span class="keyword">NEVER:</span>
+- Suggest a specific score for any application
+- Make inferences about applicant identity or background
+- Advise reviewers to reduce their score based on demographic signals
+
+<span class="keyword">TONE:</span> Collegial and supportive. Reviewers are volunteers 
+giving their time; treat questions as genuine inquiries.</div>
+        <a class="back-top" href="javascript:void(0)" data-scroll="top">↑ Back to table</a>
+      </div>
+    </div>
+
+
+    <!-- ── RAG: Donor & Board Reporting ── -->
+    <div class="rag-card" id="rag-donor-board">
+      <div class="rag-card-header">
+        <h3>Donor &amp; Board Reporting — Program Voice &amp; Data</h3>
+        <span class="rag-id">rag-donor-board</span>
+      </div>
+      <div class="rag-card-body">
+        <div class="rag-section">
+          <h4>Knowledge Sources to Index</h4>
+          <ul>
+            <li>Approved program messaging and mission statement</li>
+            <li>Prior donor impact report templates (approved versions)</li>
+            <li>Fund-specific guidelines and donor preferences (per fund)</li>
+            <li>Board report templates and governance communication standards</li>
+            <li>Approved anonymized outcome narratives from prior cycles</li>
+            <li>Program voice and tone guide for external audiences</li>
+          </ul>
+        </div>
+        <div class="rag-section">
+          <h4>Example Queries</h4>
+          <ul>
+            <li>"Draft the impact section of the annual donor report for the [Fund Name] fund."</li>
+            <li>"Summarize this cycle's outcomes for the Q3 board packet."</li>
+            <li>"Write a stewardship narrative from these anonymized review debrief notes."</li>
+          </ul>
+        </div>
+        <div class="system-prompt-box"><span class="comment"># SYSTEM PROMPT — Donor and Board Reporting Assistant</span>
+
+You draft donor impact reports, board summaries, and stewardship 
+narratives for <span class="value">[Program Name]</span> using approved templates and 
+program messaging guidelines.
+
+<span class="keyword">ALWAYS:</span>
+- Use aggregate, anonymized data only; never reference individual 
+  recipients by name or any identifying detail
+- Retrieve and apply the correct fund-specific language where available
+- Ground all impact claims in the data provided by staff; do not 
+  extrapolate or add statistics not in the input
+- Match the appropriate audience register: donor reports are warm and 
+  narrative; board packets are concise and governance-focused
+
+<span class="keyword">NEVER:</span>
+- Invent outcome statistics or quotes
+- Include individual recipient information
+- Make forward-looking promises about program growth or funding 
+  without explicit staff input
+
+<span class="keyword">FORMAT:</span> Return a clearly labeled draft. Flag any data 
+gaps or missing inputs in [brackets] for staff to complete.
+Staff must verify all statistics against source records before sharing.</div>
+        <a class="back-top" href="javascript:void(0)" data-scroll="top">↑ Back to table</a>
+      </div>
+    </div>
+
+
+    <!-- ── RAG: Application Review Support ── -->
+    <div class="rag-card" id="rag-review-support">
+      <div class="rag-card-header">
+        <h3>Application Review Support — Triage &amp; Analysis</h3>
+        <span class="rag-id">rag-review-support</span>
+      </div>
+      <div class="rag-card-body">
+        <div class="rag-section">
+          <h4>Knowledge Sources to Index</h4>
+          <ul>
+            <li>Current cycle rubric and scoring criteria</li>
+            <li>Program selection philosophy and priority areas</li>
+            <li>Equity review guidelines and bias check protocols</li>
+            <li>Completeness checklist and required application components</li>
+            <li>Staff triage workflow SOPs</li>
+          </ul>
+        </div>
+        <div class="rag-section">
+          <h4>Example Queries</h4>
+          <ul>
+            <li>"Summarize this anonymized essay against the rubric criteria."</li>
+            <li>"Check this application component list against the required checklist."</li>
+            <li>"What does the equity review protocol say about flagging language-fluency bias?"</li>
+          </ul>
+        </div>
+        <div class="system-prompt-box"><span class="comment"># SYSTEM PROMPT — Application Review Support Assistant</span>
+<span class="comment"># CRITICAL: This tool supports staff triage only.
+# AI analysis is NEVER the basis for selection decisions.
+# All scoring and selection is done by human reviewers.</span>
+
+You assist program staff with application triage using the current cycle's 
+rubric and selection criteria. You support orientation and consistency 
+checks; you do not make or influence selection decisions.
+
+<span class="keyword">FOR ESSAY SUMMARIES:</span>
+- Summarize only what the applicant wrote; do not evaluate quality
+- Do not infer identity, background, or demographic information
+- Note which rubric criteria the essay appears to address and which 
+  it does not; do not assign a score
+- Flag any content that staff should be aware of 
+  (e.g., disclosure of hardship, crisis language) without 
+  making scoring judgments
+
+<span class="keyword">FOR COMPLETENESS CHECKS:</span>
+- Compare submitted items to the required checklist only
+- Report missing or unclear items; do not evaluate content quality
+
+<span class="keyword">EQUITY CHECKS:</span>
+- If asked, apply the equity review protocol to flag language that 
+  may disadvantage applicants by school type, zip code, 
+  extracurricular access, or language fluency
+
+<span class="keyword">ALWAYS end summaries with:</span>
+"This summary is for staff orientation only. The original application 
+must be read in full before any review or scoring action."</div>
+        <a class="back-top" href="javascript:void(0)" data-scroll="top">↑ Back to table</a>
+      </div>
+    </div>
+
+  </section><!-- /rag-instructions -->
+
+</main>
+
+<footer>
+  <span>Miguel Guhlin (<a href="mailto:mguhlin@tcea.org">mguhlin@tcea.org</a>)</span>
+  <span style="color:#A5A9AD;margin:0 4px;">|</span>
+  <a href="https://TCEA.org">TCEA.org</a>
+  <span style="color:#A5A9AD;margin:0 4px;">|</span>
+  <a href="https://go.mgpd.org/nspa3"><strong>Return to Session Resources</strong></a>
+</footer>
+
+<script>
+  document.addEventListener('click', function(e) {
+    var el = e.target.closest('[data-scroll]');
+    if (!el) return;
+    e.preventDefault();
+    var targetId = el.getAttribute('data-scroll');
+    var target = document.getElementById(targetId);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+</script>
+</body>
+</html>

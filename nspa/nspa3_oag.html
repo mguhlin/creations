@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Office Task Automation Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg: #f5f2eb;
+    --surface: #ffffff;
+    --surface2: #eeeae0;
+    --ink: #1a1a18;
+    --ink2: #4a4a45;
+    --accent: #c84b2e;
+    --accent2: #2e6bc8;
+    --rag: #1a6640;
+    --single: #2e6bc8;
+    --both: #7a3fb5;
+    --border: #d4cfc2;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+    --display: 'Syne', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 48px 60px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.12;
+  }
+  header h1 {
+    font-family: var(--display);
+    font-size: 2.6rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    position: relative;
+  }
+  header p {
+    margin-top: 12px;
+    font-size: 0.95rem;
+    color: #b0aca0;
+    max-width: 620px;
+    position: relative;
+  }
+
+  /* ── Legend ── */
+  .legend {
+    display: flex;
+    gap: 24px;
+    padding: 16px 60px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .legend-label {
+    font-family: var(--display);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink2);
+    margin-right: 4px;
+  }
+  .badge {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .badge.sp  { background: #ddeaff; color: var(--single); border: 1px solid #b8d0f5; }
+  .badge.rag { background: #d4edd9; color: var(--rag);    border: 1px solid #9fd4ac; }
+  .badge.both{ background: #ecddf7; color: var(--both);   border: 1px solid #caa8e8; }
+
+  .legend-item { display: flex; align-items: center; gap: 8px; }
+
+  /* ── Main layout ── */
+  main { padding: 40px 60px 80px; }
+
+  /* ── Section heading ── */
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin: 48px 0 12px;
+  }
+  .section-head:first-of-type { margin-top: 0; }
+  .section-head h2 {
+    font-family: var(--display);
+    font-size: 1.05rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+  }
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── Table ── */
+  .task-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    table-layout: fixed;
+  }
+  .task-table thead th {
+    background: var(--ink);
+    color: var(--bg);
+    font-family: var(--display);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    padding: 10px 14px;
+    text-align: left;
+  }
+  .task-table thead th:nth-child(1) { width: 22%; }
+  .task-table thead th:nth-child(2) { width: 14%; }
+  .task-table thead th:nth-child(3) { width: 40%; }
+  .task-table thead th:nth-child(4) { width: 24%; }
+
+  .task-table tbody tr {
+    border-top: 1px solid var(--border);
+    transition: background 0.12s;
+  }
+  .task-table tbody tr:hover { background: #faf8f3; }
+  .task-table td {
+    padding: 11px 14px;
+    vertical-align: top;
+    font-size: 0.85rem;
+    color: var(--ink);
+  }
+  .task-table td:first-child {
+    font-weight: 500;
+  }
+
+  /* prompt examples */
+  .prompt-example {
+    display: block;
+    margin-top: 5px;
+    font-family: var(--mono);
+    font-size: 0.73rem;
+    color: var(--ink2);
+    background: var(--surface2);
+    border-left: 3px solid var(--border);
+    padding: 5px 8px;
+    border-radius: 0 3px 3px 0;
+    line-height: 1.45;
+  }
+
+  /* rag links */
+  a.rag-link {
+    color: var(--rag);
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 0.73rem;
+    border-bottom: 1px dashed var(--rag);
+    cursor: pointer;
+  }
+  a.rag-link:hover { background: #d4edd9; }
+
+  .tools-list {
+    font-size: 0.78rem;
+    color: var(--ink2);
+    line-height: 1.7;
+  }
+
+  /* ── RAG Instructions section ── */
+  #rag-instructions {
+    margin-top: 72px;
+    padding-top: 36px;
+    border-top: 3px solid var(--ink);
+  }
+  #rag-instructions > h2 {
+    font-family: var(--display);
+    font-size: 1.7rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  #rag-instructions > p {
+    color: var(--ink2);
+    font-size: 0.88rem;
+    max-width: 680px;
+    margin-bottom: 48px;
+  }
+
+  .rag-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 36px;
+    overflow: hidden;
+  }
+  .rag-card-header {
+    background: var(--rag);
+    color: #fff;
+    padding: 14px 20px;
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+  .rag-card-header h3 {
+    font-family: var(--display);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+  .rag-card-header .rag-id {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    opacity: 0.7;
+  }
+  .rag-card-body {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 800px) {
+    .rag-card-body { grid-template-columns: 1fr; }
+    main, header, .legend { padding-left: 20px; padding-right: 20px; }
+    header h1 { font-size: 1.8rem; }
+  }
+
+  .rag-section h4 {
+    font-family: var(--display);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink2);
+    margin-bottom: 8px;
+  }
+  .rag-section p, .rag-section li {
+    font-size: 0.83rem;
+    color: var(--ink);
+    line-height: 1.65;
+  }
+  .rag-section ul {
+    padding-left: 16px;
+  }
+  .rag-section li { margin-bottom: 3px; }
+
+  .system-prompt-box {
+    background: #1a1a18;
+    color: #c8c4bc;
+    border-radius: 4px;
+    padding: 14px 16px;
+    font-family: var(--mono);
+    font-size: 0.73rem;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    word-break: break-word;
+    grid-column: 1 / -1;
+  }
+  .system-prompt-box .comment { color: #6a7a5a; }
+  .system-prompt-box .keyword { color: #c8aa6a; }
+  .system-prompt-box .value   { color: #7ab5d8; }
+
+  .back-top {
+    display: inline-block;
+    margin-top: 10px;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--rag);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--rag);
+  }
+  .back-top:hover { background: #d4edd9; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Office Task Automation<br>with AI</h1>
+  <p>A practical reference mapping common administrative and knowledge-worker tasks to single-prompt AI solutions and Retrieval-Augmented Generation (RAG) setups with custom instructions.</p>
+</header>
+
+<div class="legend">
+  <span class="legend-label">Key:</span>
+  <div class="legend-item"><span class="badge sp">Single Prompt</span> <span style="font-size:0.8rem;color:#4a4a45">One-shot prompt, no external data needed</span></div>
+  <div class="legend-item"><span class="badge rag">RAG</span> <span style="font-size:0.8rem;color:#4a4a45">Requires retrieval from documents or knowledge base</span></div>
+  <div class="legend-item"><span class="badge both">Both</span> <span style="font-size:0.8rem;color:#4a4a45">Can work either way; RAG improves quality</span></div>
+</div>
+
+<main id="top">
+
+  <!-- ─────────────────────────────────────────────── COMMUNICATION -->
+  <div class="section-head"><h2>Communication</h2><div class="section-line"></div></div>
+  <table class="task-table">
+    <thead>
+      <tr>
+        <th>Task</th>
+        <th>Approach</th>
+        <th>AI Automation Method</th>
+        <th>Suggested Tools / Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Drafting emails to clients or colleagues</td>
+        <td><span class="badge both">Both</span></td>
+        <td>Single prompt for one-off emails. RAG for brand voice, templates, and prior correspondence context.
+          <span class="prompt-example">"Draft a professional follow-up email to a client who missed our 2pm call. Tone: warm but direct. 3 sentences."</span>
+          <a class="rag-link" href="javascript:void(0)" data-scroll="rag-email">→ RAG: Email Drafting (brand voice + templates)</a>
+        </td>
+        <td class="tools-list">Gmail / Outlook AI plugins<br>Custom GPT or Claude Project</td>
+      </tr>
+      <tr>
+        <td>Summarising phone call transcripts</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Paste transcript; prompt the model to extract action items, key decisions, and follow-ups.
+          <span class="prompt-example">"Summarise this call transcript. Output: (1) 3-sentence summary, (2) action items with owners, (3) open questions."</span>
+        </td>
+        <td class="tools-list">Otter.ai, Fireflies, Fathom<br>+ GPT/Claude API</td>
+      </tr>
+      <tr>
+        <td>Responding to common customer queries</td>
+        <td><span class="badge rag">RAG</span></td>
+        <td>Ground responses in your product documentation, pricing, and policy docs so answers are accurate and on-brand.
+          <a class="rag-link" href="javascript:void(0)" data-scroll="rag-customer">→ RAG: Customer Service Knowledge Base</a>
+        </td>
+        <td class="tools-list">Intercom Fin, Zendesk AI<br>Custom chatbot on LlamaIndex / LangChain</td>
+      </tr>
+      <tr>
+        <td>Handling complaints</td>
+        <td><span class="badge both">Both</span></td>
+        <td>Single prompt for empathetic reply structure. RAG to verify entitlements, warranties, and escalation procedures.
+          <span class="prompt-example">"Draft a de-escalating reply to this customer complaint. Acknowledge the issue, apologise sincerely, and offer a clear next step."</span>
+        </td>
+        <td class="tools-list">CRM-integrated AI assistant</td>
+      </tr>
+      <tr>
+        <td>Drafting internal status updates</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Paste bullet-point notes; ask the model to write a structured update for Slack, Teams, or email.
+          <span class="prompt-example">"Turn these notes into a concise project status update for a non-technical manager. Use: Status, Progress, Blockers, Next Steps."</span>
+        </td>
+        <td class="tools-list">Slack AI, Teams Copilot</td>
+      </tr>
+      <tr>
+        <td>Proofreading and tone-checking outgoing messages</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Paste draft; ask model to flag tone issues, grammar errors, and clarity problems.
+          <span class="prompt-example">"Review this email for clarity, grammar, and professional tone. Flag any phrases that may come across as passive-aggressive or unclear."</span>
+        </td>
+        <td class="tools-list">Grammarly Business, Claude, Copilot</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ─────────────────────────────────────────────── SCHEDULING -->
+  <div class="section-head"><h2>Scheduling &amp; Events</h2><div class="section-line"></div></div>
+  <table class="task-table">
+    <thead>
+      <tr>
+        <th>Task</th>
+        <th>Approach</th>
+        <th>AI Automation Method</th>
+        <th>Suggested Tools / Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Drafting scheduling emails &amp; meeting requests</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Provide context (participants, purpose, preferred times); model drafts a polite coordination email.
+          <span class="prompt-example">"Write a meeting request email to three senior managers to align on Q3 budget. Suggest three times next week (Mon–Wed). Professional tone."</span>
+        </td>
+        <td class="tools-list">Calendly AI, Microsoft Copilot<br>Reclaim.ai</td>
+      </tr>
+      <tr>
+        <td>Building event run-of-show / agenda</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Describe event type, duration, attendees; model produces a timed agenda draft.
+          <span class="prompt-example">"Create a run-of-show for a 2-hour all-hands meeting for 150 employees. Include welcome, 3 department updates, Q&amp;A, and closing."</span>
+        </td>
+        <td class="tools-list">Google Docs / Notion + AI plugin</td>
+      </tr>
+      <tr>
+        <td>Planning large all-hands or town-halls</td>
+        <td><span class="badge both">Both</span></td>
+        <td>Single prompt for agenda and logistics checklist. RAG to pull in approved messaging, leadership talking points, and previous meeting templates.
+          <a class="rag-link" href="javascript:void(0)" data-scroll="rag-events">→ RAG: Event &amp; Meeting Planning</a>
+        </td>
+        <td class="tools-list">Notion AI, Confluence AI</td>
+      </tr>
+      <tr>
+        <td>Automated meeting notes &amp; minutes</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Feed transcript to model with a structured output prompt.
+          <span class="prompt-example">"Convert this meeting transcript into formal minutes. Format: Attendees, Agenda Items, Decisions Made, Action Items (owner + due date)."</span>
+        </td>
+        <td class="tools-list">Fathom, Otter, Fireflies<br>Teams/Zoom AI summaries</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ─────────────────────────────────────────────── ONBOARDING -->
+  <div class="section-head"><h2>Onboarding</h2><div class="section-line"></div></div>
+  <table class="task-table">
+    <thead>
+      <tr>
+        <th>Task</th>
+        <th>Approach</th>
+        <th>AI Automation Method</th>
+        <th>Suggested Tools / Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Preparing onboarding document packets</td>
+        <td><span class="badge rag">RAG</span></td>
+        <td>AI assembles role-specific onboarding packs from HR policy library, benefits docs, and team-specific guides.
+          <a class="rag-link" href="javascript:void(0)" data-scroll="rag-onboarding">→ RAG: Onboarding Document Assembly</a>
+        </td>
+        <td class="tools-list">Notion AI, SharePoint Copilot<br>Custom HR chatbot</td>
+      </tr>
+      <tr>
+        <td>Drafting welcome emails to new hires</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Provide new hire name, role, start date, manager; model drafts a warm, informative welcome email.
+          <span class="prompt-example">"Draft a welcome email to a new marketing coordinator starting Monday. Mention their manager is Sarah, office is on Floor 3, and they should bring ID. Friendly and concise."</span>
+        </td>
+        <td class="tools-list">HRIS integrations (Rippling, BambooHR)</td>
+      </tr>
+      <tr>
+        <td>Answering new employee HR questions</td>
+        <td><span class="badge rag">RAG</span></td>
+        <td>HR chatbot grounded in your employee handbook, benefits summaries, and policy documents.
+          <a class="rag-link" href="javascript:void(0)" data-scroll="rag-onboarding">→ RAG: Onboarding Document Assembly</a>
+        </td>
+        <td class="tools-list">Leena AI, Workday Assistant<br>Custom chatbot on handbook PDFs</td>
+      </tr>
+      <tr>
+        <td>Creating software tutorial guides</td>
+        <td><span class="badge both">Both</span></td>
+        <td>Single prompt for generic SaaS tools. RAG for internal or custom tools using internal documentation.
+          <span class="prompt-example">"Write a step-by-step guide for a new employee on how to request time off in Workday. Assume no prior experience. Include screenshots placeholders."</span>
+        </td>
+        <td class="tools-list">Notion, Confluence, Guru</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ─────────────────────────────────────────────── BOOKKEEPING -->
+  <div class="section-head"><h2>Bookkeeping &amp; Finance</h2><div class="section-line"></div></div>
+  <table class="task-table">
+    <thead>
+      <tr>
+        <th>Task</th>
+        <th>Approach</th>
+        <th>AI Automation Method</th>
+        <th>Suggested Tools / Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Categorising transactions from a CSV export</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Paste transaction list; ask model to suggest expense categories per line.
+          <span class="prompt-example">"Categorise each of these transactions as: Office Supplies, Travel, Software, Meals, or Other. Return as a table with your reasoning for ambiguous items."</span>
+        </td>
+        <td class="tools-list">Excel Copilot, QuickBooks AI<br>Code Interpreter</td>
+      </tr>
+      <tr>
+        <td>Drafting invoices</td>
+        <td><span class="badge both">Both</span></td>
+        <td>Single prompt for one-off invoices. RAG to pull client-specific rates, payment terms, and billing history.
+          <a class="rag-link" href="javascript:void(0)" data-scroll="rag-invoicing">→ RAG: Invoice &amp; Billing Automation</a>
+        </td>
+        <td class="tools-list">FreshBooks, Xero, Wave AI</td>
+      </tr>
+      <tr>
+        <td>Summarising financial reports for leadership</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Paste P&amp;L or balance sheet data; ask for an executive-readable narrative summary.
+          <span class="prompt-example">"Summarise this P&amp;L statement for a non-financial audience. Highlight top 3 variances vs last quarter and flag any concerns. 150 words max."</span>
+        </td>
+        <td class="tools-list">Excel Copilot, Tableau AI<br>ChatGPT Code Interpreter</td>
+      </tr>
+      <tr>
+        <td>Extracting data from receipts &amp; invoices</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Use a vision-capable model to extract vendor, date, amount, and category from uploaded images.
+          <span class="prompt-example">"Extract: vendor name, date, total amount, currency, and expense category from this receipt image. Output as JSON."</span>
+        </td>
+        <td class="tools-list">Expensify AI, Dext, Klippa<br>GPT-4o / Claude vision</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ─────────────────────────────────────────────── IT & OPERATIONS -->
+  <div class="section-head"><h2>IT &amp; Operations</h2><div class="section-line"></div></div>
+  <table class="task-table">
+    <thead>
+      <tr>
+        <th>Task</th>
+        <th>Approach</th>
+        <th>AI Automation Method</th>
+        <th>Suggested Tools / Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Answering internal IT helpdesk tickets</td>
+        <td><span class="badge rag">RAG</span></td>
+        <td>AI triage and first-response grounded in your IT knowledge base, device policies, and common-fix documentation.
+          <a class="rag-link" href="javascript:void(0)" data-scroll="rag-itdesk">→ RAG: IT Helpdesk Assistant</a>
+        </td>
+        <td class="tools-list">ServiceNow AI, Freshservice AI<br>Atlassian Intelligence</td>
+      </tr>
+      <tr>
+        <td>Writing equipment &amp; supply order requests</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Describe need; model drafts a formatted purchase request with justification.
+          <span class="prompt-example">"Write a purchase request for 5 ergonomic keyboards at ~$80 each. Include business justification (RSI complaints) and cost-center code: 4420."</span>
+        </td>
+        <td class="tools-list">Procurement systems (Coupa, SAP Ariba)</td>
+      </tr>
+      <tr>
+        <td>Migrating content from analogue to digital</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>After OCR, use prompts to clean, format, and structure extracted text into digital documents.
+          <span class="prompt-example">"Clean and structure this OCR-extracted text into a formatted policy document with headings, numbered sections, and a table of contents."</span>
+        </td>
+        <td class="tools-list">Adobe Acrobat AI, Google Docs AI<br>AWS Textract + Claude</td>
+      </tr>
+      <tr>
+        <td>Drafting SOP and system setup documentation</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Describe a process step-by-step; model turns it into a formatted SOP.
+          <span class="prompt-example">"Turn these notes into a formal Standard Operating Procedure for setting up a new employee's laptop. Include sections: Purpose, Scope, Prerequisites, Steps, Troubleshooting."</span>
+        </td>
+        <td class="tools-list">Confluence, Notion, SharePoint</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ─────────────────────────────────────────────── KNOWLEDGE WORKER -->
+  <div class="section-head"><h2>Knowledge Worker Tasks</h2><div class="section-line"></div></div>
+  <table class="task-table">
+    <thead>
+      <tr>
+        <th>Task</th>
+        <th>Approach</th>
+        <th>AI Automation Method</th>
+        <th>Suggested Tools / Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Contract review &amp; redlining</td>
+        <td><span class="badge rag">RAG</span></td>
+        <td>Ground the model in your standard contract playbook and approved clause library to flag deviations and suggest redlines.
+          <a class="rag-link" href="javascript:void(0)" data-scroll="rag-contracts">→ RAG: Contract Review Playbook</a>
+        </td>
+        <td class="tools-list">Harvey AI, Ironclad AI<br>Spellbook, custom LLM on contract PDFs</td>
+      </tr>
+      <tr>
+        <td>Drafting job descriptions</td>
+        <td><span class="badge both">Both</span></td>
+        <td>Single prompt for general roles. RAG to match internal leveling frameworks, approved language, and pay-band context.
+          <a class="rag-link" href="javascript:void(0)" data-scroll="rag-hr">→ RAG: HR Policy &amp; Leveling Framework</a>
+          <span class="prompt-example">"Write a job description for a mid-level UX Designer. Include: summary, responsibilities (6), qualifications (required + preferred), and a one-paragraph company pitch."</span>
+        </td>
+        <td class="tools-list">Workday, Greenhouse, Ashby with AI</td>
+      </tr>
+      <tr>
+        <td>Writing performance review summaries</td>
+        <td><span class="badge both">Both</span></td>
+        <td>Single prompt to turn bullet notes into polished narrative. RAG to align with your competency framework and rating rubric.
+          <a class="rag-link" href="javascript:void(0)" data-scroll="rag-hr">→ RAG: HR Policy &amp; Leveling Framework</a>
+          <span class="prompt-example">"Using these manager notes, write a balanced performance review for a software engineer rated 'Meets Expectations.' Tone: constructive and specific. ~200 words."</span>
+        </td>
+        <td class="tools-list">Lattice AI, Culture Amp, 15Five</td>
+      </tr>
+      <tr>
+        <td>Research briefs for leadership</td>
+        <td><span class="badge both">Both</span></td>
+        <td>Single prompt with web search for external topics. RAG to layer in internal strategy docs and competitive intelligence.
+          <span class="prompt-example">"Write a 1-page research brief on the current state of warehouse automation robotics. Structure: Market Size, Key Players, Risks, Opportunities."</span>
+        </td>
+        <td class="tools-list">Perplexity Pro, Claude with search<br>Internal knowledge base integration</td>
+      </tr>
+      <tr>
+        <td>RFP / proposal responses</td>
+        <td><span class="badge rag">RAG</span></td>
+        <td>AI answers RFP questions by retrieving relevant passages from your capabilities library, case studies, and prior proposals.
+          <a class="rag-link" href="javascript:void(0)" data-scroll="rag-rfp">→ RAG: RFP &amp; Proposal Response</a>
+        </td>
+        <td class="tools-list">Loopio, RFPIO (Responsive)<br>Custom retrieval on past proposals</td>
+      </tr>
+      <tr>
+        <td>Drafting internal policy documents</td>
+        <td><span class="badge both">Both</span></td>
+        <td>Single prompt for first drafts. RAG to check alignment with existing policies, legal requirements, and style guides.
+          <span class="prompt-example">"Draft a remote work policy covering: eligibility, equipment, expected availability hours, expense reimbursement, and security requirements. Professional, clear, ~500 words."</span>
+          <a class="rag-link" href="javascript:void(0)" data-scroll="rag-hr">→ RAG: HR Policy &amp; Leveling Framework</a>
+        </td>
+        <td class="tools-list">Notion AI, SharePoint Copilot</td>
+      </tr>
+      <tr>
+        <td>Social media content drafting</td>
+        <td><span class="badge both">Both</span></td>
+        <td>Single prompt for generic posts. RAG to enforce brand voice guide, content calendar themes, and approved messaging.
+          <a class="rag-link" href="javascript:void(0)" data-scroll="rag-brand">→ RAG: Brand Voice &amp; Social Content</a>
+          <span class="prompt-example">"Write 3 LinkedIn post options announcing our new ISO 27001 certification. Tone: confident but not boastful. Include a call to action. Under 150 words each."</span>
+        </td>
+        <td class="tools-list">Jasper, Copy.ai, Buffer AI<br>Custom Claude Project with brand guide</td>
+      </tr>
+      <tr>
+        <td>Summarising lengthy reports or documents</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Paste or upload document; prompt for executive summary at specified detail level.
+          <span class="prompt-example">"Summarise this 40-page industry report. Output: (1) 5-sentence executive summary, (2) top 5 findings with one-line explanations, (3) 3 strategic implications."</span>
+        </td>
+        <td class="tools-list">Claude, ChatGPT, NotebookLM<br>Copilot in Word</td>
+      </tr>
+      <tr>
+        <td>Generating data analysis narratives</td>
+        <td><span class="badge sp">Single Prompt</span></td>
+        <td>Paste data or chart descriptions; ask model to write the narrative interpretation.
+          <span class="prompt-example">"Interpret this sales data table and write a 150-word narrative for an investor update. Highlight growth, seasonal patterns, and top 2 underperforming segments."</span>
+        </td>
+        <td class="tools-list">Excel Copilot, Tableau Pulse<br>ChatGPT Code Interpreter</td>
+      </tr>
+      <tr>
+        <td>Translating documents &amp; communications</td>
+        <td><span class="badge both">Both</span></td>
+        <td>Single prompt for direct translation. RAG to maintain industry-specific terminology and internal glossary.
+          <span class="prompt-example">"Translate this client proposal into French. Maintain formal register. Preserve all formatting, headings, and bullet structure."</span>
+        </td>
+        <td class="tools-list">DeepL, Claude, GPT-4o<br>Custom glossary-grounded translation</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <!-- RAG INSTRUCTIONS -->
+  <!-- ════════════════════════════════════════════════════════════ -->
+
+  <section id="rag-instructions">
+    <h2>RAG Custom Instructions Reference</h2>
+    <p>Each RAG configuration below describes the knowledge sources to index, the system prompt to load into your AI assistant, and example queries. These are designed for tools like Claude Projects, custom GPTs, LangChain agents, or LlamaIndex pipelines.</p>
+
+
+    <!-- ── RAG: Email Drafting ── -->
+    <div class="rag-card" id="rag-email">
+      <div class="rag-card-header">
+        <h3>Email Drafting — Brand Voice &amp; Templates</h3>
+        <span class="rag-id">rag-email</span>
+      </div>
+      <div class="rag-card-body">
+        <div class="rag-section">
+          <h4>Knowledge Sources to Index</h4>
+          <ul>
+            <li>Brand voice and tone guide (PDF or doc)</li>
+            <li>Approved email templates (client-facing, internal, escalation)</li>
+            <li>Past high-quality sent emails (curated sample set)</li>
+            <li>Customer segment definitions</li>
+          </ul>
+        </div>
+        <div class="rag-section">
+          <h4>Example Queries</h4>
+          <ul>
+            <li>"Draft a follow-up to an enterprise prospect who went quiet after the demo."</li>
+            <li>"Write a renewal reminder for a customer on our legacy plan."</li>
+            <li>"Respond to a client complaint about a delayed delivery."</li>
+          </ul>
+        </div>
+        <div class="system-prompt-box"><span class="comment"># SYSTEM PROMPT — Email Drafting Assistant</span>
+
+You are an email drafting assistant for <span class="value">[Company Name]</span>. Your role is to draft 
+professional, on-brand emails for the user based on retrieved email templates 
+and the company voice guide.
+
+<span class="keyword">ALWAYS:</span>
+- Match the tone in our voice guide: <span class="value">[e.g. "direct, warm, jargon-free"]</span>
+- Use the closest retrieved template as a structural starting point
+- Keep subject lines under 50 characters
+- End client emails with the approved sign-off block
+
+<span class="keyword">NEVER:</span>
+- Promise timelines, refunds, or commitments not approved in policy docs
+- Use first-person plural ("we will...") for legal commitments
+- Deviate from approved escalation language when handling complaints
+
+<span class="keyword">FORMAT:</span> Return Subject Line, then email body. 
+Flag any assumptions you made in [brackets] at the end.</div>
+        <a class="back-top" href="javascript:void(0)" data-scroll="top">↑ Back to table</a>
+      </div>
+    </div>
+
+
+    <!-- ── RAG: Customer Service ── -->
+    <div class="rag-card" id="rag-customer">
+      <div class="rag-card-header">
+        <h3>Customer Service Knowledge Base</h3>
+        <span class="rag-id">rag-customer</span>
+      </div>
+      <div class="rag-card-body">
+        <div class="rag-section">
+          <h4>Knowledge Sources to Index</h4>
+          <ul>
+            <li>Product/service documentation and FAQs</li>
+            <li>Return, refund, and warranty policies</li>
+            <li>Pricing and plan comparison sheets</li>
+            <li>Escalation procedures and SLA commitments</li>
+            <li>Known issues / bug tracker summary (refreshed weekly)</li>
+          </ul>
+        </div>
+        <div class="rag-section">
+          <h4>Example Queries</h4>
+          <ul>
+            <li>"How do I cancel my subscription?"</li>
+            <li>"My order hasn't arrived — what are my options?"</li>
+            <li>"Does the Pro plan include API access?"</li>
+          </ul>
+        </div>
+        <div class="system-prompt-box"><span class="comment"># SYSTEM PROMPT — Customer Service Agent</span>
+
+You are a helpful customer service agent for <span class="value">[Company Name]</span>. Answer customer 
+questions accurately using only information retrieved from our knowledge base.
+
+<span class="keyword">RULES:</span>
+- If the answer is in retrieved documents, answer confidently and cite the 
+  source section (e.g. "Per our Returns Policy...")
+- If the answer is NOT in the knowledge base, say: "I don't have that 
+  information available — let me connect you with a specialist."
+- Do NOT invent policies, prices, or timelines
+- For complaints, always begin with an acknowledgement before resolving
+- If a customer appears frustrated (3+ messages without resolution), 
+  offer to escalate to a human agent
+
+<span class="keyword">TONE:</span> Friendly, calm, solution-focused. Never defensive.</div>
+        <a class="back-top" href="javascript:void(0)" data-scroll="top">↑ Back to table</a>
+      </div>
+    </div>
+
+
+    <!-- ── RAG: Events ── -->
+    <div class="rag-card" id="rag-events">
+      <div class="rag-card-header">
+        <h3>Event &amp; Meeting Planning</h3>
+        <span class="rag-id">rag-events</span>
+      </div>
+      <div class="rag-card-body">
+        <div class="rag-section">
+          <h4>Knowledge Sources to Index</h4>
+          <ul>
+            <li>Previous event run-of-show templates</li>
+            <li>Approved vendor and venue lists</li>
+            <li>Leadership communication guidelines and approved messaging</li>
+            <li>Budget approval thresholds by event type</li>
+          </ul>
+        </div>
+        <div class="rag-section">
+          <h4>Example Queries</h4>
+          <ul>
+            <li>"Create a run-of-show for our Q2 all-hands (2hr, 200 people)."</li>
+            <li>"Draft the CEO's opening remarks for the annual company kickoff."</li>
+            <li>"List approved caterers and AV vendors for our Chicago office."</li>
+          </ul>
+        </div>
+        <div class="system-prompt-box"><span class="comment"># SYSTEM PROMPT — Event Planning Assistant</span>
+
+You are an internal event planning assistant. Help the user plan company 
+events and meetings using our approved templates, vendor lists, and 
+messaging guidelines.
+
+<span class="keyword">ALWAYS:</span>
+- Use retrieved run-of-show templates as structure; adapt timing for the 
+  specific event
+- Flag if a planned expense likely exceeds budget thresholds from policy docs
+- For all-hands or external events, include a "comms checklist" 
+  (internal announcement, calendar invites, AV check)
+
+<span class="keyword">OUTPUT FORMAT for run-of-show:</span>
+| Time | Segment | Owner | Notes |
+List open action items at the end, with suggested owners.</div>
+        <a class="back-top" href="javascript:void(0)" data-scroll="top">↑ Back to table</a>
+      </div>
+    </div>
+
+
+    <!-- ── RAG: Onboarding ── -->
+    <div class="rag-card" id="rag-onboarding">
+      <div class="rag-card-header">
+        <h3>Onboarding Document Assembly &amp; HR Q&amp;A</h3>
+        <span class="rag-id">rag-onboarding</span>
+      </div>
+      <div class="rag-card-body">
+        <div class="rag-section">
+          <h4>Knowledge Sources to Index</h4>
+          <ul>
+            <li>Employee handbook (current version)</li>
+            <li>Benefits enrollment guides</li>
+            <li>Role-specific onboarding checklists (by department)</li>
+            <li>IT setup procedures and software access request forms</li>
+            <li>Health, safety, and compliance training requirements</li>
+          </ul>
+        </div>
+        <div class="rag-section">
+          <h4>Example Queries</h4>
+          <ul>
+            <li>"What documents does a new engineer in London need to sign?"</li>
+            <li>"How do I enrol in the dental plan within my first 30 days?"</li>
+            <li>"Create an onboarding checklist for a Sales Director starting next Monday."</li>
+          </ul>
+        </div>
+        <div class="system-prompt-box"><span class="comment"># SYSTEM PROMPT — HR Onboarding Assistant</span>
+
+You are an HR onboarding assistant for <span class="value">[Company Name]</span>. Help new employees 
+and HR admins navigate the onboarding process using our official documents.
+
+<span class="keyword">RULES:</span>
+- Only cite information from the indexed documents; do not guess at policies
+- When creating onboarding checklists, retrieve the correct department 
+  template and personalise for the role and location provided
+- For benefits questions, cite the specific plan document and page number 
+  if available
+- Remind users that policy documents are updated periodically and to 
+  verify critical details with HR directly
+
+<span class="keyword">TONE:</span> Warm and helpful. New employees may be nervous — be clear and reassuring.</div>
+        <a class="back-top" href="javascript:void(0)" data-scroll="top">↑ Back to table</a>
+      </div>
+    </div>
+
+
+    <!-- ── RAG: Invoicing ── -->
+    <div class="rag-card" id="rag-invoicing">
+      <div class="rag-card-header">
+        <h3>Invoice &amp; Billing Automation</h3>
+        <span class="rag-id">rag-invoicing</span>
+      </div>
+      <div class="rag-card-body">
+        <div class="rag-section">
+          <h4>Knowledge Sources to Index</h4>
+          <ul>
+            <li>Client contracts and rate cards</li>
+            <li>Invoice templates by service type</li>
+            <li>Payment terms per client (net 30, net 60, etc.)</li>
+            <li>Tax rates and applicable codes by jurisdiction</li>
+            <li>Outstanding invoice log (refreshed daily)</li>
+          </ul>
+        </div>
+        <div class="rag-section">
+          <h4>Example Queries</h4>
+          <ul>
+            <li>"Generate an invoice for Acme Corp for 40hrs of consulting in March."</li>
+            <li>"Draft a payment reminder for Invoice #1042, now 14 days overdue."</li>
+            <li>"What are Globex's payment terms and preferred currency?"</li>
+          </ul>
+        </div>
+        <div class="system-prompt-box"><span class="comment"># SYSTEM PROMPT — Billing Assistant</span>
+
+You assist with invoicing and billing tasks using retrieved client contracts, 
+rate cards, and invoice templates.
+
+<span class="keyword">ALWAYS:</span>
+- Retrieve the client's current rate card before calculating totals
+- Apply the correct payment terms from the client contract
+- Flag any discrepancies between quoted scope and hours/items being billed
+- Use the correct invoice template for the service type (project, retainer, 
+  one-time)
+
+<span class="keyword">NEVER:</span>
+- Apply a rate not found in a retrieved contract
+- Omit tax line items where applicable per jurisdiction rules
+
+<span class="keyword">OUTPUT:</span> Structured invoice fields (not formatted as a final doc unless asked). 
+Include a confidence note if any retrieved data is older than 90 days.</div>
+        <a class="back-top" href="javascript:void(0)" data-scroll="top">↑ Back to table</a>
+      </div>
+    </div>
+
+
+    <!-- ── RAG: IT Helpdesk ── -->
+    <div class="rag-card" id="rag-itdesk">
+      <div class="rag-card-header">
+        <h3>IT Helpdesk Assistant</h3>
+        <span class="rag-id">rag-itdesk</span>
+      </div>
+      <div class="rag-card-body">
+        <div class="rag-section">
+          <h4>Knowledge Sources to Index</h4>
+          <ul>
+            <li>IT knowledge base articles (Confluence, ServiceNow KB)</li>
+            <li>Device and OS support matrix</li>
+            <li>Software approved list and licence availability</li>
+            <li>Network and VPN setup guides</li>
+            <li>Escalation contacts by issue category</li>
+          </ul>
+        </div>
+        <div class="rag-section">
+          <h4>Example Queries</h4>
+          <ul>
+            <li>"I can't connect to the VPN from Windows 11 — what should I try?"</li>
+            <li>"How do I request a software licence for Adobe Acrobat?"</li>
+            <li>"My laptop won't boot — what's the escalation path?"</li>
+          </ul>
+        </div>
+        <div class="system-prompt-box"><span class="comment"># SYSTEM PROMPT — IT Helpdesk First-Response Agent</span>
+
+You are a Tier 1 IT support agent. Triage and resolve common IT issues 
+using the company knowledge base. Escalate when needed.
+
+<span class="keyword">PROCESS:</span>
+1. Identify the issue category (connectivity, hardware, software, access)
+2. Retrieve the most relevant KB article(s)
+3. Provide step-by-step resolution instructions from the KB
+4. If steps fail or issue is not in KB: provide the escalation contact 
+   for that category and log the ticket details
+
+<span class="keyword">ALWAYS:</span>
+- Ask for OS version and device type if not provided and it's relevant
+- Number your troubleshooting steps clearly
+- Note if a KB article was last updated more than 6 months ago
+
+<span class="keyword">ESCALATION TRIGGER:</span> Escalate immediately for: data loss, security incidents, 
+complete system outage, or any issue affecting 3+ users.</div>
+        <a class="back-top" href="javascript:void(0)" data-scroll="top">↑ Back to table</a>
+      </div>
+    </div>
+
+
+    <!-- ── RAG: Contracts ── -->
+    <div class="rag-card" id="rag-contracts">
+      <div class="rag-card-header">
+        <h3>Contract Review Playbook</h3>
+        <span class="rag-id">rag-contracts</span>
+      </div>
+      <div class="rag-card-body">
+        <div class="rag-section">
+          <h4>Knowledge Sources to Index</h4>
+          <ul>
+            <li>Your company's standard contract playbook (fallback positions)</li>
+            <li>Pre-approved clause library (NDAs, MSAs, SOWs, SaaS agreements)</li>
+            <li>Approved deviations log</li>
+            <li>Legal escalation thresholds (what requires lawyer review)</li>
+          </ul>
+        </div>
+        <div class="rag-section">
+          <h4>Example Queries</h4>
+          <ul>
+            <li>"Review this NDA and flag any clauses that deviate from our standard."</li>
+            <li>"What is our fallback position on limitation of liability?"</li>
+            <li>"Does this MSA include an acceptable IP ownership clause?"</li>
+          </ul>
+        </div>
+        <div class="system-prompt-box"><span class="comment"># SYSTEM PROMPT — Contract Review Assistant</span>
+<span class="comment"># NOTE: This tool is for pre-legal review and internal guidance only.
+# All contracts must be reviewed by qualified legal counsel before signing.</span>
+
+You assist with first-pass contract review against our standard playbook 
+and approved clause library.
+
+<span class="keyword">FOR EACH CONTRACT REVIEW:</span>
+1. Identify contract type (NDA, MSA, SOW, SaaS, etc.)
+2. Retrieve the relevant playbook section and approved clauses
+3. Compare each key clause against our standard position
+4. Output a redline summary table:
+   | Clause | Contract Language | Our Standard | Risk Level | Recommended Action |
+
+<span class="keyword">RISK LEVELS:</span> Low / Medium / High / Escalate to Legal
+
+<span class="keyword">ALWAYS flag for legal escalation:</span>
+- Unlimited liability or indemnification
+- IP assignment that includes pre-existing IP
+- Exclusivity provisions over 12 months
+- Governing law outside of approved jurisdictions
+
+<span class="keyword">ALWAYS end with:</span> "This is a preliminary review only. Please consult legal 
+counsel before executing this agreement."</div>
+        <a class="back-top" href="javascript:void(0)" data-scroll="top">↑ Back to table</a>
+      </div>
+    </div>
+
+
+    <!-- ── RAG: HR Policy ── -->
+    <div class="rag-card" id="rag-hr">
+      <div class="rag-card-header">
+        <h3>HR Policy &amp; Leveling Framework</h3>
+        <span class="rag-id">rag-hr</span>
+      </div>
+      <div class="rag-card-body">
+        <div class="rag-section">
+          <h4>Knowledge Sources to Index</h4>
+          <ul>
+            <li>Job leveling framework and competency rubrics (by department)</li>
+            <li>Approved job description templates</li>
+            <li>Performance review scoring guides</li>
+            <li>Pay band and compensation philosophy doc (access-controlled)</li>
+            <li>EEO and inclusive language guidelines</li>
+          </ul>
+        </div>
+        <div class="rag-section">
+          <h4>Example Queries</h4>
+          <ul>
+            <li>"Write a job description for a Level 4 Software Engineer."</li>
+            <li>"What competencies should a Manager-level role demonstrate?"</li>
+            <li>"Turn these bullet notes into a performance review for 'Exceeds Expectations.'"</li>
+          </ul>
+        </div>
+        <div class="system-prompt-box"><span class="comment"># SYSTEM PROMPT — HR Writing Assistant</span>
+
+You assist HR teams and managers with drafting job descriptions, performance 
+reviews, and policy documents aligned to our internal frameworks.
+
+<span class="keyword">JOB DESCRIPTIONS:</span>
+- Retrieve the correct level and role template from the library
+- Apply EEO and inclusive language guidelines
+- Do not include salary/compensation details unless explicitly authorised
+
+<span class="keyword">PERFORMANCE REVIEWS:</span>
+- Retrieve the competency rubric for the employee's role and level
+- Map the manager's notes to specific competencies
+- Balance developmental feedback with recognition; avoid vague praise
+- Flag if notes seem inconsistent with the rating selected
+
+<span class="keyword">POLICY DOCUMENTS:</span>
+- Check all drafted policy against existing policies for conflicts
+- Use plain language; aim for Flesch reading ease score above 60
+- Include an "Effective Date" and "Owner" field in every policy doc</div>
+        <a class="back-top" href="javascript:void(0)" data-scroll="top">↑ Back to table</a>
+      </div>
+    </div>
+
+
+    <!-- ── RAG: RFP ── -->
+    <div class="rag-card" id="rag-rfp">
+      <div class="rag-card-header">
+        <h3>RFP &amp; Proposal Response</h3>
+        <span class="rag-id">rag-rfp</span>
+      </div>
+      <div class="rag-card-body">
+        <div class="rag-section">
+          <h4>Knowledge Sources to Index</h4>
+          <ul>
+            <li>Company capabilities and service descriptions</li>
+            <li>Case studies and client references (sanitised)</li>
+            <li>Approved "about us" boilerplate paragraphs</li>
+            <li>Technical specifications and certifications (ISO, SOC 2, etc.)</li>
+            <li>Past winning proposals (with confidential details stripped)</li>
+          </ul>
+        </div>
+        <div class="rag-section">
+          <h4>Example Queries</h4>
+          <ul>
+            <li>"Answer question 4.2: Describe your data security practices."</li>
+            <li>"Find a relevant case study for a manufacturing client."</li>
+            <li>"Draft the executive summary section for this RFP."</li>
+          </ul>
+        </div>
+        <div class="system-prompt-box"><span class="comment"># SYSTEM PROMPT — RFP Response Assistant</span>
+
+You help the bid team respond to RFP questions accurately and efficiently 
+using our capabilities library, case studies, and past proposals.
+
+<span class="keyword">PROCESS:</span>
+1. Parse the RFP question to identify the information category needed
+2. Retrieve the most relevant content from the knowledge base
+3. Draft a response that directly answers the question using retrieved content
+4. Note the source document(s) used in [brackets] for human review
+
+<span class="keyword">QUALITY RULES:</span>
+- Never invent capabilities, certifications, or client references
+- If no relevant content exists in the KB, state: "Content gap identified — 
+  requires input from [team/person]"
+- Responses should be clear, confident, and free of filler language
+- Match the word count guidance in the RFP if specified
+
+<span class="keyword">ALWAYS flag:</span> Questions touching on pricing, SLAs, or legal commitments 
+for human review before submission.</div>
+        <a class="back-top" href="javascript:void(0)" data-scroll="top">↑ Back to table</a>
+      </div>
+    </div>
+
+
+    <!-- ── RAG: Brand Voice ── -->
+    <div class="rag-card" id="rag-brand">
+      <div class="rag-card-header">
+        <h3>Brand Voice &amp; Social Content</h3>
+        <span class="rag-id">rag-brand</span>
+      </div>
+      <div class="rag-card-body">
+        <div class="rag-section">
+          <h4>Knowledge Sources to Index</h4>
+          <ul>
+            <li>Brand voice and tone guide</li>
+            <li>Approved messaging pillars and key claims</li>
+            <li>Content calendar themes by quarter</li>
+            <li>Platform-specific style notes (LinkedIn vs. X vs. Instagram)</li>
+            <li>Competitor positioning (what to avoid saying)</li>
+          </ul>
+        </div>
+        <div class="rag-section">
+          <h4>Example Queries</h4>
+          <ul>
+            <li>"Write 3 LinkedIn post options for our new product launch."</li>
+            <li>"Draft a tweet announcing our partnership with [Partner]."</li>
+            <li>"Does this caption align with our brand voice? What would you change?"</li>
+          </ul>
+        </div>
+        <div class="system-prompt-box"><span class="comment"># SYSTEM PROMPT — Social Media &amp; Brand Writing Assistant</span>
+
+You create and review social media content and marketing copy for 
+<span class="value">[Company Name]</span> using our brand voice guide and approved messaging.
+
+<span class="keyword">ALWAYS:</span>
+- Retrieve and apply the brand voice guide before drafting
+- Check messaging claims against approved key claims document
+- Adapt format and length for the requested platform:
+    LinkedIn: 150–300 words, professional, insight-led
+    X/Twitter: under 280 chars, punchy, no jargon
+    Instagram: 100–150 words, visual-first framing
+
+<span class="keyword">NEVER:</span>
+- Make comparative claims about competitors
+- Use superlatives ("best", "#1") without an approved citation
+- Post anything touching on legal proceedings, HR matters, 
+  or financial performance without explicit comms approval
+
+<span class="keyword">OUTPUT:</span> Provide 2–3 options with a one-line rationale for each variant.</div>
+        <a class="back-top" href="javascript:void(0)" data-scroll="top">↑ Back to table</a>
+      </div>
+    </div>
+
+  </section><!-- /rag-instructions -->
+
+</main>
+
+<script>
+  document.addEventListener('click', function(e) {
+    var el = e.target.closest('[data-scroll]');
+    if (!el) return;
+    e.preventDefault();
+    var targetId = el.getAttribute('data-scroll');
+    var target = document.getElementById(targetId);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+</script>
+</body>
+</html>

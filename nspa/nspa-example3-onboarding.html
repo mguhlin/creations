@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NSPA 2/2/2 Framework | Example 3: Reviewer Onboarding &amp; Calibration</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{--teal:#237683;--teal-light:#2d8f9e;--teal-pale:#e6f2f4;--gold:#FDB414;--gold-text:#b08a00;--gold-pale:#fff6d6;--gold-border:#e8c84a;--gray-mid:#A5A9AD;--navy:#1a2e4a;--navy-dark:#111f33;--bg:#f4f6f7;--white:#ffffff;--border:#d8dde0;--text:#1e2a35;--success:#27695a;--success-pale:#eaf4f0;--guardrail-bg:#fffbe6;--info-bg:#e6f2f4;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Source Sans 3','Calibri',sans-serif;background:var(--bg);color:var(--text);line-height:1.65;font-size:16px;}
+  .site-header{background:var(--teal);color:white;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.25);overflow:hidden;}
+  .site-header::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:var(--gold);opacity:.18;pointer-events:none;}
+  .header-top{background:rgba(0,0,0,.18);padding:7px 40px;display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--gold);position:relative;z-index:1;}
+  .nspa-badge{font-family:'Playfair Display',Georgia,serif;font-size:13px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;}
+  .header-divider{color:var(--gold);opacity:.6;}
+  .series-label{font-size:12px;color:rgba(255,255,255,.75);letter-spacing:1px;text-transform:uppercase;}
+  .header-main{padding:20px 40px;display:flex;align-items:center;justify-content:space-between;gap:20px;position:relative;z-index:1;}
+  .header-title-group h1{font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:700;color:white;line-height:1.2;}
+  .header-title-group .subtitle{font-size:14px;color:rgba(255,255,255,.85);margin-top:4px;}
+  .framework-badge{background:var(--gold);color:var(--navy-dark);font-weight:700;font-size:13px;padding:6px 16px;border-radius:20px;white-space:nowrap;letter-spacing:.5px;}
+  .toc-nav{background:rgba(0,0,0,.15);padding:0 40px;display:flex;overflow-x:auto;border-top:1px solid rgba(255,255,255,.15);position:relative;z-index:1;}
+  .toc-nav a{color:rgba(255,255,255,.8);text-decoration:none;font-size:13px;font-weight:600;padding:11px 16px;white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s;}
+  .toc-nav a:hover{color:var(--gold);border-bottom-color:var(--gold);background:rgba(255,255,255,.05);}
+  .page-wrap{max-width:1100px;margin:0 auto;padding:48px 40px 80px;}
+  .overview-bar{background:var(--teal);color:white;border-radius:8px;padding:24px 28px;margin-bottom:40px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;position:relative;overflow:hidden;}
+  .overview-bar::after{content:'';position:absolute;bottom:-30px;right:-30px;width:130px;height:130px;border-radius:50%;background:var(--gold);opacity:.18;pointer-events:none;}
+  .overview-item label{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);font-weight:700;display:block;margin-bottom:4px;}
+  .overview-item p{font-size:15px;color:rgba(255,255,255,.92);line-height:1.4;}
+  .sprint-divider{height:1px;background:var(--gray-mid);opacity:.35;margin:44px 0;}
+  .sprint-header{display:flex;align-items:center;gap:16px;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid var(--border);}
+  .sprint-num{background:var(--teal);color:white;font-family:'Playfair Display',serif;font-size:26px;font-weight:700;width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:3px solid var(--gold);}
+  .sprint-header-text h2{font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:var(--teal);}
+  .sprint-header-text .sprint-weeks{font-size:13px;color:var(--gold-text);font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+  section{scroll-margin-top:120px;}
+  .section-title{font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:600;color:var(--teal);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+  .section-title::before{content:'';display:inline-block;width:4px;height:20px;background:var(--gold);border-radius:2px;flex-shrink:0;}
+  .card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:28px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+  .card-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--teal);margin-bottom:14px;}
+  .policy-block{background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:20px;}
+  .policy-header{background:var(--teal);color:white;padding:14px 24px;font-family:'Playfair Display',serif;font-size:16px;font-weight:700;}
+  .policy-cols{display:grid;grid-template-columns:1fr 1fr;}
+  .policy-col{padding:20px 24px;}
+  .policy-col:first-child{border-right:1px solid var(--border);}
+  .policy-col-header{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;}
+  .will{color:var(--success);}
+  .will-not{color:#c0392b;}
+  .policy-col ul{list-style:none;display:flex;flex-direction:column;gap:8px;}
+  .policy-col li{font-size:14px;line-height:1.5;padding-left:22px;position:relative;}
+  .will li::before{content:'✓';position:absolute;left:0;color:var(--success);font-weight:700;}
+  .will-not li::before{content:'✕';position:absolute;left:0;color:#c0392b;font-weight:700;}
+  .alert{border-radius:6px;padding:13px 18px;margin-bottom:16px;font-size:14px;display:flex;gap:10px;align-items:flex-start;line-height:1.5;}
+  .alert-icon{font-size:18px;flex-shrink:0;}
+  .alert-guardrail{background:var(--guardrail-bg);border-left:4px solid var(--gold);}
+  .alert-info{background:var(--info-bg);border-left:4px solid var(--teal);}
+  .alert-success{background:var(--success-pale);border-left:4px solid var(--success);}
+  .prompt-tier{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px;}
+  .prompt-tier-header{padding:12px 20px;display:flex;align-items:center;justify-content:space-between;}
+  .tier-good .prompt-tier-header{background:#f0faf5;border-bottom:1px solid #c3e6d8;}
+  .tier-better .prompt-tier-header{background:var(--gold-pale);border-bottom:1px solid var(--gold-border);}
+  .tier-best .prompt-tier-header{background:#eef4fd;border-bottom:1px solid #b8d0f0;}
+  .tier-label{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:1px;}
+  .tier-good .tier-label{color:var(--success);}
+  .tier-better .tier-label{color:var(--gold-text);}
+  .tier-best .tier-label{color:#2563b0;}
+  .tier-name{font-size:13px;color:var(--gray-mid);}
+  .copy-btn{background:var(--teal);color:white;border:none;padding:5px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s;font-family:'Source Sans 3',sans-serif;}
+  .copy-btn:hover{background:var(--teal-light);}
+  .copy-btn.copied{background:var(--success);}
+  .prompt-body{background:#f9fafb;padding:20px;font-family:'Source Code Pro',monospace;font-size:13px;line-height:1.7;color:#2d3748;white-space:pre-wrap;}
+  .prompt-note{background:#f5f5f3;padding:10px 20px;font-size:13px;color:var(--gray-mid);border-top:1px solid var(--border);font-style:italic;}
+  .checklist{list-style:none;display:flex;flex-direction:column;gap:8px;}
+  .checklist li{display:flex;align-items:flex-start;gap:10px;font-size:14px;line-height:1.5;padding:8px 12px;background:var(--white);border:1px solid var(--border);border-radius:6px;}
+  .check-box{width:18px;height:18px;border:2px solid var(--border);border-radius:3px;flex-shrink:0;margin-top:1px;background:white;cursor:pointer;transition:all .15s;}
+  .checklist li.critical{border-left:3px solid #c0392b;}
+  .checklist li.important{border-left:3px solid var(--gold);}
+  .checklist li.standard{border-left:3px solid var(--teal);}
+  .priority-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:2px 6px;border-radius:3px;white-space:nowrap;flex-shrink:0;}
+  .badge-critical{background:#fdf0ee;color:#c0392b;}
+  .badge-important{background:var(--gold-pale);color:var(--gold-text);border:1px solid var(--gold-border);}
+  .badge-standard{background:var(--teal-pale);color:var(--teal);}
+  .data-table{width:100%;border-collapse:collapse;font-size:14px;}
+  .data-table th{background:var(--teal);color:white;padding:10px 14px;text-align:left;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+  .data-table td{padding:10px 14px;border-bottom:1px solid var(--border);line-height:1.4;}
+  .data-table tr:last-child td{border-bottom:none;}
+  .data-table tr:nth-child(even) td{background:#f7f9fa;}
+  .outputs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:20px;}
+  .output-chip{background:var(--white);border:1px solid var(--border);border-left:3px solid var(--teal);border-radius:6px;padding:12px 16px;font-size:14px;display:flex;align-items:center;gap:8px;}
+  .output-icon{font-size:18px;}
+  .metrics-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;}
+  .metric-card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:20px;text-align:center;}
+  .metric-label{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--gray-mid);font-weight:700;margin-bottom:8px;}
+  .metric-value{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--teal);}
+  .metric-desc{font-size:13px;color:var(--gray-mid);margin-top:4px;}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .mt-4{margin-top:16px;}
+  .mt-8{margin-top:32px;}
+  .mb-4{margin-bottom:16px;}
+  .text-sm{font-size:14px;}
+  .text-muted{color:var(--gray-mid);}
+  .step-list{list-style:none;counter-reset:steps;display:flex;flex-direction:column;gap:10px;}
+  .step-list li{counter-increment:steps;display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.5;}
+  .step-list li::before{content:counter(steps);background:var(--teal);color:white;font-size:12px;font-weight:700;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+  /* Rubric card */
+  .rubric-card{background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px;}
+  .rubric-header{background:var(--teal);color:white;padding:12px 20px;font-weight:700;font-size:15px;}
+  .rubric-body{padding:0;}
+  .score-grid{display:grid;grid-template-columns:90px 1fr 1fr 1fr;}
+  .score-hdr{background:#f0f4f8;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text);padding:8px 12px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);}
+  .score-hdr:last-child{border-right:none;}
+  .score-cell{padding:12px;font-size:13px;line-height:1.5;border-bottom:1px solid var(--border);border-right:1px solid var(--border);vertical-align:top;}
+  .score-cell:last-child{border-right:none;}
+  .score-num{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;display:block;margin-bottom:2px;}
+  .score-high{color:var(--success);}
+  .score-mid{color:var(--gold-text);}
+  .score-low{color:#c0392b;}
+  .equity-tag{display:inline-block;background:var(--gold-pale);color:var(--gold-text);border:1px solid var(--gold-border);border-radius:4px;font-size:11px;font-weight:700;padding:2px 8px;margin-top:6px;text-transform:uppercase;letter-spacing:.5px;}
+  /* Packet sections */
+  .packet-block{background:var(--white);border:1px solid var(--border);border-radius:8px;margin-bottom:16px;overflow:hidden;}
+  .packet-block-header{background:var(--teal-pale);border-bottom:1px solid #b8cfd4;padding:12px 20px;font-weight:700;font-size:14px;color:var(--teal);display:flex;align-items:center;gap:8px;}
+  .packet-block-body{padding:20px;font-size:14px;line-height:1.6;}
+  /* Calibration exercise */
+  .calibration-scenario{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px;}
+  .cal-header{background:var(--gold-pale);border-bottom:1px solid var(--gold-border);padding:10px 20px;display:flex;align-items:center;gap:12px;}
+  .cal-level{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:3px 10px;border-radius:20px;}
+  .cal-high{background:var(--success-pale);color:var(--success);}
+  .cal-mid{background:var(--gold-pale);color:var(--gold-text);border:1px solid var(--gold-border);}
+  .cal-edge{background:#f0e8fa;color:#6b2fa0;border:1px solid #d8b8f5;}
+  .cal-body{padding:20px;font-size:14px;line-height:1.6;}
+  .page-footer{background:var(--teal);color:rgba(255,255,255,.85);text-align:center;padding:28px 40px;font-size:13px;margin-top:64px;line-height:1.9;}
+  .page-footer strong{color:white;}
+  .page-footer a{color:var(--gold);text-decoration:underline;text-underline-offset:2px;}
+  .page-footer a:hover{color:white;}
+  .footer-sep{border:none;border-top:1px solid var(--gray-mid);opacity:.4;margin:12px auto;max-width:400px;}
+  @media(max-width:900px){
+    .overview-bar{grid-template-columns:1fr 1fr;}
+    .metrics-grid{grid-template-columns:1fr 1fr;}
+    .score-grid{grid-template-columns:80px 1fr 1fr;}
+  }
+  @media(max-width:768px){
+    .page-wrap{padding:24px 16px 60px;}
+    .header-main{padding:16px 20px;flex-direction:column;align-items:flex-start;gap:12px;}
+    .header-top{padding:7px 16px;}
+    .toc-nav{padding:0 12px;}
+    .toc-nav a{padding:10px 12px;font-size:12px;}
+    .overview-bar{grid-template-columns:1fr;}
+    .policy-cols{grid-template-columns:1fr;}
+    .policy-col:first-child{border-right:none;border-bottom:1px solid var(--border);}
+    .two-col{grid-template-columns:1fr;}
+    .metrics-grid{grid-template-columns:1fr;}
+    .outputs-grid{grid-template-columns:1fr 1fr;}
+    .card{padding:20px 16px;}
+    .prompt-body{font-size:12px;padding:16px;}
+    .page-footer{padding:24px 16px;text-align:left;}
+    .footer-sep{margin:12px 0;}
+    .score-grid{grid-template-columns:1fr;}
+    .score-hdr:not(:first-child){display:none;}
+    .score-cell{border-right:none;}
+    .score-hdr{border-right:none;}
+    .cal-header{flex-direction:column;align-items:flex-start;gap:6px;}
+  }
+  @media(max-width:520px){
+    .header-title-group h1{font-size:20px;}
+    .framework-badge{font-size:12px;padding:5px 12px;}
+    .sprint-num{width:44px;height:44px;font-size:20px;}
+    .sprint-header-text h2{font-size:18px;}
+    .section-title{font-size:16px;}
+    .outputs-grid{grid-template-columns:1fr;}
+    .check-box{width:22px;height:22px;}
+    .data-table{font-size:12px;}
+    .data-table th,.data-table td{padding:8px 10px;}
+    .metric-value{font-size:22px;}
+  }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-top">
+    <span class="nspa-badge">NSPA</span>
+    <span class="header-divider">|</span>
+    <span class="series-label">AI Implementation Series &mdash; 2/2/2 Framework</span>
+  </div>
+  <div class="header-main">
+    <div class="header-title-group">
+      <h1>Example 3: Reviewer Onboarding &amp; Calibration</h1>
+      <div class="subtitle">6-Week Implementation Package &mdash; Rubric Explanations, Anchor Examples &amp; Calibration Exercises</div>
+    </div>
+    <div class="framework-badge">Weeks 1&ndash;6 / Sprint 3</div>
+  </div>
+  <nav class="toc-nav">
+    <a href="#overview">Overview</a>
+    <a href="#policy">Policy Statement</a>
+    <a href="#planning">Weeks 1&ndash;2</a>
+    <a href="#building">Weeks 3&ndash;4</a>
+    <a href="#review">Weeks 5&ndash;6</a>
+    <a href="#prompts">Prompt Pack</a>
+    <a href="#rubric">Rubric Example</a>
+    <a href="#calibration">Calibration Exercise</a>
+    <a href="#packet">Onboarding Packet</a>
+    <a href="#metrics">Metrics</a>
+  </nav>
+</header>
+
+<main class="page-wrap">
+
+  <section id="overview">
+    <div class="overview-bar">
+      <div class="overview-item">
+        <label>Milestone Goal</label>
+        <p>Produce a consistent, program-specific onboarding packet for review volunteers and run a calibration session that measurably narrows scoring variance before review begins.</p>
+      </div>
+      <div class="overview-item">
+        <label>Team Pod</label>
+        <p>Program director + 2 returning reviewers + communications lead. Organized around the first-time reviewer experience.</p>
+      </div>
+      <div class="overview-item">
+        <label>AI Role in This Workflow</label>
+        <p>AI drafts rubric explanations in plain language, generates FAQ answers, and writes calibration debrief questions. Humans select and approve anchor examples. AI never scores any application.</p>
+      </div>
+    </div>
+    <div class="alert alert-guardrail">
+      <span class="alert-icon">🔒</span>
+      <div><strong>Data rule:</strong> Anchor examples used for calibration are anonymized before use. No applicant names, school identifiers, or demographic details appear in any AI prompt or onboarding material.</div>
+    </div>
+    <div class="alert alert-info">
+      <span class="alert-icon">ℹ️</span>
+      <div><strong>What AI does here:</strong> Drafts plain-language rubric explanations, generates FAQ answers, writes debrief questions for the calibration session. <strong>What it does not do:</strong> Select anchor examples, score applications, or make final judgment calls on rubric interpretation.</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="policy">
+    <div class="section-title">Program Policy Statement</div>
+    <div class="policy-block">
+      <div class="policy-header">Reviewer Onboarding &amp; Calibration &mdash; We Will / We Will Not</div>
+      <div class="policy-cols">
+        <div class="policy-col will">
+          <div class="policy-col-header will">&#10003; We Will</div>
+          <ul>
+            <li>Use AI to draft plain-language rubric explanations for staff to review and approve.</li>
+            <li>Use AI to generate calibration debrief questions based on program criteria.</li>
+            <li>Use AI to draft the FAQ section of the onboarding packet from approved source text.</li>
+            <li>Select and anonymize anchor examples ourselves; AI does not choose what gets used in calibration.</li>
+            <li>Have program director approve all rubric explanation language before distribution to reviewers.</li>
+            <li>Include an equity watch note for each scoring criterion flagging common privilege-marker inflation risks.</li>
+          </ul>
+        </div>
+        <div class="policy-col will-not">
+          <div class="policy-col-header will-not">&#10005; We Will Not</div>
+          <ul>
+            <li>Use AI to score any application, including anchor examples used in calibration.</li>
+            <li>Include applicant names, school names, or demographic data in any AI prompt.</li>
+            <li>Distribute AI-drafted rubric language to reviewers without director sign-off.</li>
+            <li>Use AI to resolve disagreements between reviewers during the review period (program director function).</li>
+            <li>Imply to reviewers that AI was used to create any final policy or decision guidance.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="planning">
+    <div class="sprint-header">
+      <div class="sprint-num">1</div>
+      <div class="sprint-header-text">
+        <div class="sprint-weeks">Weeks 1&ndash;2</div>
+        <h2>Planning: Variance Audit, Scope, and Anchor Example Selection</h2>
+      </div>
+    </div>
+    <div class="alert alert-success">
+      <span class="alert-icon">🎯</span>
+      <div><strong>Sprint goal:</strong> Leave Weeks 1&ndash;2 with a variance audit, packet scope, three approved anchor examples (anonymized), and a logistics plan for calibration delivery.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Task 1 &mdash; Scoring Variance Audit (Last Cycle)</div>
+      <p class="text-sm mb-4">Pull individual reviewer scores by criterion from last cycle. For each criterion, calculate the spread between the highest and lowest score across reviewers for the same application. High variance is your onboarding target.</p>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead>
+            <tr><th>Criterion</th><th>Score Range (Last Cycle)</th><th>Avg. Spread</th><th>Common Reviewer Confusion</th><th>Onboarding Priority</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Community impact / leadership</td><td><em>Fill in</em></td><td><em>Fill in</em></td><td>Distinguishing "participation" from "leadership"; privilege-marker inflation</td><td style="color:#c0392b;font-weight:700;">High</td></tr>
+            <tr><td>Academic achievement</td><td><em>Fill in</em></td><td><em>Fill in</em></td><td>Weighted vs. unweighted GPA; rigor context</td><td style="color:var(--gold-text);font-weight:700;">Medium</td></tr>
+            <tr><td>Essay quality / written expression</td><td><em>Fill in</em></td><td><em>Fill in</em></td><td>Language fluency vs. idea quality; editing access</td><td style="color:#c0392b;font-weight:700;">High</td></tr>
+            <tr><td>Financial need / context</td><td><em>Fill in</em></td><td><em>Fill in</em></td><td>Interpreting narrative vs. documentation</td><td style="color:var(--gold-text);font-weight:700;">Medium</td></tr>
+            <tr><td>Future goals / mission alignment</td><td><em>Fill in</em></td><td><em>Fill in</em></td><td>Vague goals vs. specific vision; writing polish</td><td style="color:var(--gold-text);font-weight:700;">Medium</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert alert-guardrail mt-4">
+        <span class="alert-icon">⚠</span>
+        <div>Build the onboarding packet around <strong>High priority</strong> criteria first. If the rubric itself is ambiguous (not just the explanations), flag this for the program director before building any AI-drafted content. AI cannot fix an unclear rubric.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Task 2 &mdash; Anchor Example Selection</div>
+      <p class="text-sm mb-4">Staff (not AI) select three anchor examples from last cycle. These represent the scoring range and become the calibration exercise material. Complete all anonymization steps before any AI prompt work begins.</p>
+      <ol class="step-list">
+        <li>Pull essays/applications for the two high-priority criteria from last cycle's reviewer score data.</li>
+        <li>Select three: one scored consistently HIGH (strong agreement), one consistently MID, and one that generated the most reviewer disagreement (EDGE).</li>
+        <li>Remove all identifying information: applicant name, school name, city, specific program or club names, demographic details. Replace with generic placeholders.</li>
+        <li>Have two returning reviewers confirm the anonymization is complete. Document their initials and the date.</li>
+        <li>Program director approves the three anchor examples for use in calibration. Record approval in writing.</li>
+        <li>Store in shared drive: <strong>Calibration_Anchors_[YEAR]_Anonymized</strong>. Access: pilot team only.</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Task 3 &mdash; Calibration Logistics Plan</div>
+      <div class="two-col">
+        <div>
+          <strong style="font-size:14px;display:block;margin-bottom:10px;">Delivery format decision:</strong>
+          <ul class="checklist">
+            <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Decide</span>Live calibration session (30&ndash;45 min) with facilitated debrief: recommended for first-time use or new reviewer cohort.</li>
+            <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Decide</span>Asynchronous calibration (reviewers score independently, share via form): works for experienced cohorts when live sessions are impractical.</li>
+            <li class="standard"><span class="check-box"></span><span class="priority-badge badge-standard">Note</span>If asynchronous, build an explicit debrief step: share anonymized score distributions before the review period opens.</li>
+          </ul>
+        </div>
+        <div>
+          <strong style="font-size:14px;display:block;margin-bottom:10px;">Timing requirements:</strong>
+          <ul class="checklist">
+            <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Set</span>Onboarding packet distributed at least 5 business days before review period opens.</li>
+            <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Set</span>Calibration completed before any live applications are scored.</li>
+            <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Set</span>Debrief results shared with all reviewers within 24 hours of calibration close.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Sprint 1 Deliverable Checklist</div>
+    <div class="outputs-grid">
+      <div class="output-chip"><span class="output-icon">📊</span>Variance audit (by criterion)</div>
+      <div class="output-chip"><span class="output-icon">📄</span>Packet scope document</div>
+      <div class="output-chip"><span class="output-icon">📁</span>3 approved anchor examples (anonymized)</div>
+      <div class="output-chip"><span class="output-icon">🔒</span>Data handling agreement</div>
+      <div class="output-chip"><span class="output-icon">📝</span>Policy statement (signed)</div>
+      <div class="output-chip"><span class="output-icon">📅</span>Calibration logistics plan</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="building">
+    <div class="sprint-header">
+      <div class="sprint-num">2</div>
+      <div class="sprint-header-text">
+        <div class="sprint-weeks">Weeks 3&ndash;4</div>
+        <h2>Building: Rubric Explanations, FAQ, and Calibration Exercise</h2>
+      </div>
+    </div>
+    <div class="alert alert-success">
+      <span class="alert-icon">🎯</span>
+      <div><strong>Sprint goal:</strong> Produce a director-approved onboarding packet (rubric explanations, anchor examples with annotator notes, FAQ, bias awareness one-pager) and a calibration exercise with AI-generated debrief questions.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Task 4 &mdash; Building the Calibration Exercise</div>
+      <p class="text-sm mb-4">The calibration exercise uses the three approved anchor examples. Reviewers score them independently before seeing any discussion. The exercise is designed to surface scoring differences before live applications are assigned.</p>
+      <ol class="step-list">
+        <li>Distribute the three anchor examples (anonymized) to all reviewers with the scoring rubric but without annotations or expected scores.</li>
+        <li>Ask reviewers to score each anchor on the two high-priority criteria only (highest variance from the audit).</li>
+        <li>Collect scores before the calibration session. Do not share individual scores until the session debrief begins.</li>
+        <li>In the debrief, share the distribution of scores (not individual reviewer names). Use AI-generated debrief questions to guide discussion.</li>
+        <li>For each criterion where variance remains above the threshold after discussion, program director clarifies the rubric interpretation. Document the clarification; add it to the FAQ.</li>
+        <li>After calibration, share a one-page score distribution summary with all reviewers so they can see where they landed relative to the group.</li>
+      </ol>
+    </div>
+
+    <div class="section-title">Sprint 2 Deliverable Checklist</div>
+    <div class="outputs-grid">
+      <div class="output-chip"><span class="output-icon">📝</span>Rubric explanation set (all criteria)</div>
+      <div class="output-chip"><span class="output-icon">🎯</span>Calibration exercise with debrief questions</div>
+      <div class="output-chip"><span class="output-icon">📦</span>Full onboarding packet (draft)</div>
+      <div class="output-chip"><span class="output-icon">❓</span>FAQ (AI-drafted, staff-reviewed)</div>
+      <div class="output-chip"><span class="output-icon">⚖️</span>Bias awareness one-pager</div>
+      <div class="output-chip"><span class="output-icon">✅</span>Reviewer self-check step</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="review">
+    <div class="sprint-header">
+      <div class="sprint-num">3</div>
+      <div class="sprint-header-text">
+        <div class="sprint-weeks">Weeks 5&ndash;6</div>
+        <h2>Review &amp; Wrap-Up: Measure Variance, Update FAQ, and Document for Next Cycle</h2>
+      </div>
+    </div>
+    <div class="alert alert-success">
+      <span class="alert-icon">🎯</span>
+      <div><strong>Sprint goal:</strong> Compare scoring variance before and after, update the FAQ from live review questions, document which AI-drafted sections needed the most editing, and determine whether the rubric itself needs revision.</div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">Variance Comparison Protocol</div>
+        <ul class="checklist">
+          <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Measure</span>Pull criterion-level scoring data from the current cycle. Calculate spread between reviewers on the two high-priority criteria.</li>
+          <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Compare</span>Compare to last cycle's variance baseline. Did the spread narrow? By how much?</li>
+          <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Survey</span>Post-review confidence survey: ask reviewers how confident they felt applying each criterion.</li>
+          <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Review</span>Did the calibration anchor examples generate useful debrief discussion, or were they too easy? Note for next cycle.</li>
+        </ul>
+        <div class="alert alert-guardrail mt-4">
+          <span class="alert-icon">⚠</span>
+          <div>If variance did not narrow, the problem may be the rubric itself, not the onboarding materials. AI-drafted explanations cannot fix an ambiguous rubric. Flag for the program director.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">FAQ and Packet Update Protocol</div>
+        <ul class="checklist">
+          <li class="critical"><span class="check-box"></span><span class="priority-badge badge-critical">Audit</span>What questions did reviewers ask during the review period that the FAQ should have covered? Add them now while they are fresh.</li>
+          <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Log</span>Which AI-drafted rubric explanation sections required the most staff editing? Consider whether human-written versions serve better for those sections.</li>
+          <li class="important"><span class="check-box"></span><span class="priority-badge badge-important">Update</span>Any rubric clarifications made during the calibration debrief must be formalized in the official rubric document, not just in the FAQ.</li>
+          <li class="standard"><span class="check-box"></span><span class="priority-badge badge-standard">Note</span>Review the bias awareness one-pager for relevance. Update examples if they did not resonate with this cycle's reviewers.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section-title mt-8">Sprint 3 Deliverable Checklist</div>
+    <div class="outputs-grid">
+      <div class="output-chip"><span class="output-icon">📊</span>Variance comparison report</div>
+      <div class="output-chip"><span class="output-icon">❓</span>Revised FAQ</div>
+      <div class="output-chip"><span class="output-icon">📁</span>Anchor example notes for next cycle</div>
+      <div class="output-chip"><span class="output-icon">🖊️</span>Prompt quality log</div>
+      <div class="output-chip"><span class="output-icon">📋</span>Rubric feedback summary for leadership</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="prompts">
+    <div class="section-title">Full Prompt Pack &mdash; Onboarding and Calibration Content</div>
+
+    <div class="prompt-tier tier-good">
+      <div class="prompt-tier-header">
+        <div><span class="tier-label">Good</span> <span class="tier-name">&mdash; Fast Draft: Plain-language rubric explanation for one criterion</span></div>
+        <button class="copy-btn" onclick="copyPrompt(this,'p1')">Copy</button>
+      </div>
+      <pre class="prompt-body" id="p1">You are a training writer helping a nonprofit scholarship program create plain-language rubric explanations for volunteer reviewers.
+
+Your task: Explain the following scoring criterion in clear, accessible language that a first-time reviewer can apply without ambiguity.
+
+Criterion name: [CRITERION NAME — e.g., Community Leadership]
+Official rubric language: [PASTE RUBRIC TEXT FOR THIS CRITERION]
+Score scale: [e.g., 1–5 / 1–10 / Exemplary / Proficient / Developing]
+
+Write a plain-language explanation that includes:
+1. What this criterion is measuring in plain terms (1 short paragraph)
+2. What a HIGH score looks like (2–3 bullet points using "A high score shows..." sentence starters)
+3. What a LOW score looks like (2–3 bullet points using "A low score shows..." sentence starters)
+4. One common mistake reviewers make when applying this criterion
+
+Do not invent scoring examples or applicant scenarios. Use only the rubric language provided above.</pre>
+      <div class="prompt-note">Use for: drafting initial plain-language explanations for each criterion. Staff edit and add program-specific examples before distribution to reviewers.</div>
+    </div>
+
+    <div class="prompt-tier tier-better">
+      <div class="prompt-tier-header">
+        <div><span class="tier-label">Better</span> <span class="tier-name">&mdash; High-Accuracy: Adds equity watch notes and common error flags</span></div>
+        <button class="copy-btn" onclick="copyPrompt(this,'p2')">Copy</button>
+      </div>
+      <pre class="prompt-body" id="p2">You are a training writer helping a nonprofit scholarship program create reviewer onboarding materials.
+
+Your task: Produce a complete rubric explanation card for the criterion below, including equity watch notes.
+
+Criterion name: [CRITERION NAME]
+Official rubric language: [PASTE RUBRIC TEXT]
+Score scale: [e.g., 1–5]
+Program context: [BRIEF DESCRIPTION — e.g., "This scholarship serves first-generation college students from rural communities"]
+
+Produce the following sections:
+
+1. PLAIN-LANGUAGE DEFINITION (1 paragraph): What is this criterion actually measuring?
+
+2. SCORE LEVEL GUIDE:
+   - High score looks like: (2–3 bullets)
+   - Mid score looks like: (2–3 bullets)
+   - Low score looks like: (2–3 bullets)
+
+3. COMMON ERRORS (2–3 bullets): Where do reviewers typically go wrong on this criterion?
+
+4. EQUITY WATCH (2–3 bullets): What privilege markers or socioeconomic factors might unfairly inflate or deflate scores on this criterion? What should reviewers watch for?
+
+5. SELF-CHECK QUESTION: One question a reviewer should ask themselves before finalizing their score on this criterion.
+
+Cite only the rubric language provided. Do not invent applicant scenarios or scoring examples.</pre>
+      <div class="prompt-note">Use for: the two highest-variance criteria where equity risks are most likely. Director must review the EQUITY WATCH section before distribution.</div>
+    </div>
+
+    <div class="prompt-tier tier-best">
+      <div class="prompt-tier-header">
+        <div><span class="tier-label">Best</span> <span class="tier-name">&mdash; Governed Workflow: Calibration debrief questions with self-audit</span></div>
+        <button class="copy-btn" onclick="copyPrompt(this,'p3')">Copy</button>
+      </div>
+      <pre class="prompt-body" id="p3">You are helping a nonprofit scholarship program facilitate a reviewer calibration session. This is a governed workflow. Follow all steps in order.
+
+STEP 1 — Acknowledge scope:
+Confirm: (a) no applicant PII is present in this prompt, (b) you are generating facilitation questions only — you are not scoring or evaluating any application, (c) you will flag any uncertainty rather than speculate.
+
+STEP 2 — Generate calibration debrief questions using only this context:
+
+Criterion being calibrated: [CRITERION NAME]
+Rubric language for this criterion: [PASTE RUBRIC TEXT]
+Score scale: [e.g., 1–5]
+Typical sources of reviewer disagreement on this criterion: [PASTE FROM YOUR VARIANCE AUDIT — or write "unknown"]
+Program context: [BRIEF DESCRIPTION]
+
+Generate the following:
+
+A. OPENING QUESTION (1): A warm-up question that invites reviewers to share their score and initial reasoning without defensiveness.
+
+B. DIVERGENCE QUESTIONS (2–3): Questions for when scores are spread across the range. Focus on helping reviewers articulate what evidence they were looking for.
+
+C. EQUITY PROBE QUESTIONS (2): Questions that prompt reviewers to examine whether privilege markers (unpaid internships, travel, private school resources, polished writing) may have influenced their score.
+
+D. CONSENSUS CLOSE (1): A closing question that helps the group arrive at a shared interpretation of the criterion for this review cycle.
+
+STEP 3 — Self-audit:
+- [ ] Do any questions suggest a "correct" score? (If yes, revise to be neutral.)
+- [ ] Do equity probe questions name specific applicants or schools? (They must not.)
+- [ ] Is any question based on information not in the rubric text I provided? (If yes, flag it.)
+
+STEP 4 — Output format:
+A. Self-audit results
+B. Debrief questions (labeled A through D as above)
+C. Facilitator notes: one practical tip for each question section</pre>
+      <div class="prompt-note">Use for: the live calibration session facilitation guide. Program director reviews before the session. The self-audit output is retained as part of the session record.</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="rubric">
+    <div class="section-title">Sample Rubric Explanation Card</div>
+    <p class="text-sm text-muted mb-4">This is what an AI-drafted, staff-reviewed rubric explanation card should look like. Use as the benchmark for evaluating AI output quality. All program-specific examples are added by staff, not AI.</p>
+
+    <div class="rubric-card">
+      <div class="rubric-header">Community Leadership &mdash; Sample Explanation Card (Staff-Reviewed Draft)</div>
+      <div class="rubric-body">
+        <div class="score-grid">
+          <div class="score-hdr">Score</div>
+          <div class="score-hdr">What it measures</div>
+          <div class="score-hdr">Looks like</div>
+          <div class="score-hdr">Does not look like</div>
+
+          <div class="score-cell"><span class="score-num score-high">4&ndash;5</span>High</div>
+          <div class="score-cell">Initiating or sustaining meaningful impact for others in a community setting, with evidence of sustained effort.</div>
+          <div class="score-cell">Organized a recurring event; mentored younger students over time; built something that continued without them.</div>
+          <div class="score-cell">One-time club participation; being elected to a position without described action; activities tied to family resources alone.</div>
+
+          <div class="score-cell"><span class="score-num score-mid">2&ndash;3</span>Mid</div>
+          <div class="score-cell">Active participation in community activities with some evidence of contribution, though leadership role is unclear or limited.</div>
+          <div class="score-cell">Volunteered consistently; contributed to a team effort; took on a defined responsibility.</div>
+          <div class="score-cell">Listed activities without describing impact; leadership asserted but not evidenced.</div>
+
+          <div class="score-cell"><span class="score-num score-low">1</span>Low</div>
+          <div class="score-cell">Minimal or unclear community involvement; activities listed without description of role or impact.</div>
+          <div class="score-cell">Single mention of club membership with no detail; activity listed on a form without explanation.</div>
+          <div class="score-cell">No evidence provided; activity description is entirely vague.</div>
+        </div>
+        <div style="padding:16px 12px 12px;border-top:1px solid var(--border);">
+          <span class="equity-tag">⚠ Equity Watch</span>
+          <ul style="margin-top:10px;padding-left:20px;font-size:13px;line-height:1.7;color:var(--text);">
+            <li>Unpaid internships, international service trips, and private-school leadership roles may reflect family resources rather than individual initiative. Score the evidence of action, not the prestige of the opportunity.</li>
+            <li>Students from rural or under-resourced communities may describe leadership in informal settings (caring for siblings, translating for family, supporting a faith community). These count.</li>
+            <li>If the essay is highly polished and describes prominent activities, ask: "Would a student with fewer resources describe this same quality of engagement?" Score the engagement, not the presentation.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="calibration">
+    <div class="section-title">Calibration Exercise &mdash; Sample Structure</div>
+    <p class="text-sm text-muted mb-4">Three anchor examples are used. Reviewers score independently before any debrief begins. Scoring forms are collected before the session opens to prevent anchoring.</p>
+
+    <div class="calibration-scenario">
+      <div class="cal-header">
+        <span class="cal-level cal-high">Anchor: High</span>
+        <span style="font-size:14px;font-weight:600;">Consistent agreement expected &mdash; used to establish the upper end of the scale</span>
+      </div>
+      <div class="cal-body">
+        <p style="margin-bottom:12px;"><strong>What reviewers receive:</strong> Anonymized essay excerpt (150&ndash;200 words) describing community engagement. No school name, applicant name, or identifying details.</p>
+        <p style="margin-bottom:8px;"><strong>Staff annotator notes (not shared with reviewers until debrief):</strong></p>
+        <ul style="padding-left:20px;font-size:14px;line-height:1.7;color:var(--text);">
+          <li>This applicant organized a recurring tutoring program that continued after their graduation.</li>
+          <li>Leadership is evidenced by described action, not by title or organization prestige.</li>
+          <li>No privilege markers present; activity was self-initiated in a public school setting.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="calibration-scenario">
+      <div class="cal-header">
+        <span class="cal-level cal-mid">Anchor: Mid</span>
+        <span style="font-size:14px;font-weight:600;">Some disagreement expected &mdash; used to test rubric application at the boundary</span>
+      </div>
+      <div class="cal-body">
+        <p style="margin-bottom:12px;"><strong>What reviewers receive:</strong> Anonymized essay excerpt describing consistent volunteering without a described leadership role.</p>
+        <p style="margin-bottom:8px;"><strong>Staff annotator notes (not shared until debrief):</strong></p>
+        <ul style="padding-left:20px;font-size:14px;line-height:1.7;color:var(--text);">
+          <li>Reviewer disagreement on this anchor is expected and intentional. The debrief should surface what "contribution" means vs. "leadership."</li>
+          <li>Watch for reviewers who scored high because the writing is polished (essay quality artifact).</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="calibration-scenario">
+      <div class="cal-header">
+        <span class="cal-level cal-edge">Anchor: Edge Case</span>
+        <span style="font-size:14px;font-weight:600;">High disagreement expected &mdash; surfaces equity blind spots and rubric ambiguity</span>
+      </div>
+      <div class="cal-body">
+        <p style="margin-bottom:12px;"><strong>What reviewers receive:</strong> Anonymized essay excerpt describing informal caregiving and family support responsibilities in a non-institutional setting.</p>
+        <p style="margin-bottom:8px;"><strong>Staff annotator notes (not shared until debrief):</strong></p>
+        <ul style="padding-left:20px;font-size:14px;line-height:1.7;color:var(--text);">
+          <li>Some reviewers will score this low because no "organization" is named. The debrief should challenge whether the rubric requires institutional affiliation.</li>
+          <li>This is the equity probe anchor. Listen for language that privileges formal leadership structures over informal community roles.</li>
+          <li>If the rubric does not clearly address informal community roles, the director must clarify before the review period opens.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="packet">
+    <div class="section-title">Onboarding Packet Structure</div>
+    <p class="text-sm text-muted mb-4">The complete onboarding packet contains five sections. AI drafts sections 1, 3, and 4. Staff write sections 2 and 5. Director approves the full packet before distribution.</p>
+
+    <div class="packet-block">
+      <div class="packet-block-header"><span>📄</span> Section 1 &mdash; Welcome and Program Overview <em style="font-size:12px;font-weight:400;color:var(--gray-mid);">(AI-drafted, staff-reviewed)</em></div>
+      <div class="packet-block-body">Brief introduction to the program mission, award cycle, and reviewer responsibilities. Includes a one-paragraph plain-language statement of what reviewers are evaluating and why their role matters. Staff personalize with program name and director signature.</div>
+    </div>
+
+    <div class="packet-block">
+      <div class="packet-block-header"><span>📊</span> Section 2 &mdash; Rubric and Scoring Instructions <em style="font-size:12px;font-weight:400;color:var(--gray-mid);">(Human-written: official rubric)</em></div>
+      <div class="packet-block-body">The official program rubric is reproduced here verbatim. AI does not rewrite the rubric itself. The plain-language explanation card (from the prompt pack) is attached as a companion reference, clearly labeled as a supplementary guide rather than a replacement for the official rubric.</div>
+    </div>
+
+    <div class="packet-block">
+      <div class="packet-block-header"><span>❓</span> Section 3 &mdash; FAQ <em style="font-size:12px;font-weight:400;color:var(--gray-mid);">(AI-drafted from approved source text, staff-reviewed)</em></div>
+      <div class="packet-block-body">Answers to the most common reviewer questions from past cycles. AI drafts answers using approved source documents only. Staff verify every answer against current policy. Any answer the AI cannot source from provided text is flagged [STAFF: WRITE THIS] and completed by hand.</div>
+    </div>
+
+    <div class="packet-block">
+      <div class="packet-block-header"><span>⚖️</span> Section 4 &mdash; Bias Awareness One-Pager <em style="font-size:12px;font-weight:400;color:var(--gray-mid);">(AI-drafted, director-reviewed)</em></div>
+      <div class="packet-block-body">A one-page reference listing common bias patterns in scholarship review: privilege-marker inflation, language fluency conflation with intelligence, institutional prestige bias, and recency bias. Includes the equity watch self-check question for each criterion. Director must approve language before distribution.</div>
+    </div>
+
+    <div class="packet-block">
+      <div class="packet-block-header"><span>✅</span> Section 5 &mdash; Reviewer Self-Check and Sign-Off <em style="font-size:12px;font-weight:400;color:var(--gray-mid);">(Human-written: policy document)</em></div>
+      <div class="packet-block-body">A brief attestation form confirming the reviewer has read the rubric and onboarding materials, understands the conflict of interest policy, and commits to the equity self-check step for each application scored. Reviewers sign before receiving application assignments.</div>
+    </div>
+  </section>
+
+  <div class="sprint-divider"></div>
+  <section id="metrics">
+    <div class="section-title">Measurement Framework</div>
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-label">Primary Metric</div>
+        <div class="metric-value">Variance</div>
+        <div class="metric-desc">Score spread between reviewers on the same application for high-priority criteria. Track before and after calibration.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Quality Metric</div>
+        <div class="metric-value">Confidence</div>
+        <div class="metric-desc">Post-review self-reported reviewer confidence per criterion. Survey takes under 3 minutes. Compare to pre-calibration baseline.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Equity Metric</div>
+        <div class="metric-value">Drift Check</div>
+        <div class="metric-desc">Did score patterns differ by school type or applicant background in ways not attributable to criterion evidence? Flag for director if yes.</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="page-footer">
+  <strong>NSPA AI Implementation Series</strong> &mdash; 2/2/2 Framework &mdash; Example 3: Reviewer Onboarding &amp; Calibration
+  <hr class="footer-sep">
+  Produced for the "Automating Office Tasks with AI" session &mdash; March 4, 2026<br>
+  Contact: <a href="/cdn-cgi/l/email-protection#c7aaa0b2afabaea987b3a4a2a6e9a8b5a0"><span class="__cf_email__" data-cfemail="b3ded4c6dbdfdaddf3c7d0d6d29ddcc1d4">[email&#160;protected]</span></a> &nbsp;|&nbsp; <strong><a href="https://go.mgpd.org/nspa3">Return to Session Resources</a></strong>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+function copyPrompt(btn,id){
+  navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>{
+    btn.textContent='Copied!';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied');},2000);
+  });
+}
+document.querySele
