@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCEA26 Coaching: Notice-Wonder-Next</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --light: #f4f7f6;
+            --white: #ffffff;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--primary);
+            background-color: var(--light);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 { text-align: center; color: var(--primary); margin-bottom: 10px; }
+        h2 { border-bottom: 2px solid var(--accent); padding-bottom: 10px; margin-top: 40px; }
+        
+        .protocol-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .nwn-card {
+            background: #ebf5fb;
+            padding: 15px;
+            border-left: 5px solid var(--accent);
+            border-radius: 4px;
+        }
+        .nwn-card strong { display: block; font-size: 1.2em; color: var(--accent); }
+
+        #scenario-box {
+            background: #fdfefe;
+            border: 2px solid #bdc3c7;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 8px;
+            min-height: 250px;
+        }
+        .btn-container { text-align: center; }
+        button {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.1em;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background 0.2s, transform 0.1s;
+        }
+        button:hover { background-color: #2980b9; }
+        button:active { transform: scale(0.98); }
+        .udl-ref {
+            font-size: 0.9em;
+            background: #f8f9f9;
+            padding: 12px;
+            margin-top: 20px;
+            border-left: 3px solid #e67e22;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>TCEA26 Coaching for Every Learner</h1>
+    <center><img src="wwyd.png" alt="What Would You Do? image" style="width:200px;height:200px;"></center>
+
+    <h2>The Notice-Wonder-Next Protocol</h2>
+    <div class="protocol-grid">
+        <div class="nwn-card">
+            <strong>Notice</strong>
+            Observe specific evidence or data. "I notice that when we use text-only slides, certain students disengage."
+        </div>
+        <div class="nwn-card">
+            <strong>Wonder</strong>
+            Pose an inquiry based on UDL goals. "I wonder what would happen if we provided a visual scaffold or choice in how they respond?"
+        </div>
+        <div class="nwn-card">
+            <strong>Next</strong>
+            Determine the immediate small step. "Next time, let's trial a graphic organizer or a 'Plus One' visual."
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="btn-container">
+        <button onclick="showRandomScenario()">Generate Random Scenario</button>
+    </div>
+
+    <div id="scenario-box">
+        <p style="text-align: center; color: #7f8c8d;">Click the button to load a scenario using the Notice-Wonder-Next framework.</p>
+    </div>
+
+    <h2>UDL 3.0 Reference</h2>
+    <p>Use these principles to guide your "Wondering":</p>
+    <ul>
+        <li><strong>Engagement:</strong> Is the design welcoming interests and identities? [cite: 147]</li>
+        <li><strong>Representation:</strong> Are we supporting multiple ways to perceive information? [cite: 154]</li>
+        <li><strong>Action & Expression:</strong> Are we varying the methods for response and navigation? [cite: 157]</li>
+    </ul>
+</div>
+
+<script>
+    const scenarios = [
+        {
+            id: 1, title: "The 'Fairness' Dilemma",
+            situation: "Teacher refuses speech-to-text, calling it 'cheating' for a student with dysgraphia. [cite: 37]",
+            udl: "Action & Expression: Firm Goals, Flexible Means [cite: 37]",
+            nwn: "<strong>Notice:</strong> I notice the student's storytelling is strong but the handwriting is a significant barrier. <br><strong>Wonder:</strong> I wonder if separating the 'means' from the 'goal' would reveal what the student truly knows? <br><strong>Next:</strong> Let's trial the tool for one assignment and compare the content quality. [cite: 37]"
+        },
+        {
+            id: 3, title: "The 'One-Way' Lecture",
+            situation: "High school biology teacher lectures for 45 mins with text-heavy slides. [cite: 47]",
+            udl: "Representation: Multiple Media [cite: 47]",
+            nwn: "<strong>Notice:</strong> I notice students are compliant but struggling to transfer concepts to the lab. <br><strong>Wonder:</strong> I wonder who this design excludes, such as our ELL students? <br><strong>Next:</strong> Let's add 1 visual or video for the next lecture. [cite: 47]"
+        },
+        {
+            id: 5, title: "The 'Compliance vs. Learning' Trap",
+            situation: "Classroom is orderly, but work is low-level recall. Teacher resists change because behavior is good. [cite: 57]",
+            udl: "Engagement: Developing Expert Learners [cite: 57]",
+            nwn: "<strong>Notice:</strong> I notice the kids are behaving, but the work is primarily recall-based. <br><strong>Wonder:</strong> I wonder if this is evidence of deep learning or just compliance? <br><strong>Next:</strong> Try Reciprocal Teaching to shift the cognitive load to the students. [cite: 57]"
+        },
+        {
+            id: 12, title: "The 'Gifted' Student Boredom",
+            situation: "Gifted students finish early; teacher gives extra worksheets but they complain. [cite: 92]",
+            udl: "Action & Expression: Optimize Challenge & Support [cite: 92]",
+            nwn: "<strong>Notice:</strong> I notice high-ability learners are finishing early and disengaging. <br><strong>Wonder:</strong> I wonder if 'more work' feels like a punishment rather than an extension? <br><strong>Next:</strong> Create a 'Genius Hour' or Passion Project option. [cite: 92]"
+        },
+        {
+            id: 15, title: "The 'Feedback' Delay",
+            situation: "Teacher returns graded tests 2 weeks later; students throw them away immediately. [cite: 107]",
+            udl: "Engagement: Mastery-Oriented Feedback [cite: 107]",
+            nwn: "<strong>Notice:</strong> I notice students look at the grade, not the comments, before discarding the test. <br><strong>Wonder:</strong> I wonder if this feedback is for the gradebook or for actual learning? <br><strong>Next:</strong> Use a digital tool for instant feedback on the next quiz. [cite: 107]"
+        },
+        {
+            id: 21, title: "The 'Executive Function' Fail",
+            situation: "Large project due in 3 weeks; students procrastinate and fail. [cite: 127]",
+            udl: "Action & Expression: Support Planning & Strategy [cite: 127]",
+            nwn: "<strong>Notice:</strong> I notice students are overwhelmed by the 3-week timeline. <br><strong>Wonder:</strong> I wonder if they have the specific EF skills to plan that far out yet? <br><strong>Next:</strong> Break the project into 3 graded checkpoints. [cite: 127]"
+        }
+    ];
+
+    function showRandomScenario() {
+        const scenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+        const box = document.getElementById('scenario-box');
+        box.innerHTML = `
+            <h3 style="margin-top:0;">Scenario #${scenario.id}: ${scenario.title}</h3>
+            <p><strong>The Situation:</strong> ${scenario.situation}</p>
+            <div style="background: white; padding: 20px; border: 1px solid #ddd; border-radius: 4px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);">
+                ${scenario.nwn}
+            </div>
+            <div class="udl-ref"><strong>UDL Alignment:</strong> ${scenario.udl}</div>
+        `;
+    }
+</script>
+<hr>
+<center>
+    <strong><a href="https://mguhlin.github.io/cudl/index.html">ARC</a></strong> | 
+    <strong><a href="https://mguhlin.github.io/cudl/nwn.html">Notice-Wonder-Next</a></strong> | 
+    <strong><a href="https://mguhlin.github.io/cudl/viva.html">VIVA</a></strong> | 
+    <strong><a href="https://mguhlin.org">Return to Miguel Guhlin's website</a></strong>
+</center>
+</body>
+</html>
