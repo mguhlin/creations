@@ -1,1 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Prompt Architect & Workflow Guide</title>
+    <style>
+        :root {
+            --primary: #2563eb; /* Royal Blue */
+            --secondary: #1e293b; /* Slate Dark */
+            --accent: #f59e0b; /* Gold/Amber */
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #334155;
+            --pbl-color: #2980b9;
+            --usecase-color: #16a085;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--bg);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--card);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.1);
+        }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 20px;
+        }
+        h1 { color: var(--primary); margin-bottom: 10px; }
+        h2 { color: var(--secondary); margin-top: 0; }
+        .subtitle { color: #64748b; font-size: 1.1em; }
+        
+        /* Tool Styles */
+        .tool-section {
+            background: #f1f5f9;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 50px;
+            border: 1px solid #e2e8f0;
+        }
+        .input-group { margin-bottom: 25px; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; color: var(--secondary); }
+        
+        textarea, select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+        textarea:focus, select:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        button.generate-btn {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 18px;
+            width: 100%;
+            transition: background 0.3s, transform 0.1s;
+        }
+        button.generate-btn:hover { background-color: #1d4ed8; }
+        button.generate-btn:active { transform: scale(0.98); }
 
+        #output-area {
+            margin-top: 30px;
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .output-card {
+            background: #ffffff;
+            border-left: 6px solid var(--primary);
+            border-radius: 8px;
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+        
+        pre {
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            color: #0f172a;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .copy-btn:hover { background: #e2e8f0; }
+
+        .recommendation-box {
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .recommendation-box h3 { margin-top: 0; color: #9a3412; display: flex; align-items: center; gap: 10px; }
+
+        /* Glossary Styles */
+        .glossary {
+            margin-top: 40px;
+            margin-bottom: 60px;
+            background: #f8fafc;
+            border-top: 2px solid #e2e8f0;
+            padding-top: 20px;
+        }
+        .glossary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .glossary-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .term { font-weight: bold; color: var(--primary); display: block; margin-bottom: 5px; }
+        .def { font-size: 0.9em; color: #475569; }
+
+        /* Models Section Styles */
+        .models-section {
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 4px solid #e2e8f0;
+        }
+        .models-container { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 30px; }
+        .model-card { 
+            flex: 1; 
+            min-width: 300px; 
+            background: #fff; 
+            padding: 25px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+            border-top: 8px solid #2c3e50; 
+        }
+        .pbl-header { border-color: var(--pbl-color); }
+        .usecase-header { border-color: var(--usecase-color); }
+        
+        .model-card h2 { border-bottom: 2px solid #eee; padding-bottom: 10px; font-size: 1.5em; }
+        .pbl-header h2 { color: var(--pbl-color); }
+        .usecase-header h2 { color: var(--usecase-color); }
+        
+        .model-card h3 { font-size: 1.1em; margin-top: 20px; color: #444; }
+        .model-card ul { padding-left: 20px; }
+        .model-card li { margin-bottom: 15px; }
+        
+        .value-prop { 
+            background: #e8f4fd; 
+            padding: 8px 12px; 
+            border-left: 4px solid var(--pbl-color); 
+            font-style: italic; 
+            margin-top: 5px; 
+            font-size: 0.9em;
+            color: #334155;
+        }
+        .pillar-tag { 
+            display: inline-block; 
+            background: var(--usecase-color); 
+            color: white; 
+            padding: 4px 10px; 
+            border-radius: 20px; 
+            font-size: 0.85em; 
+            margin-right: 5px; 
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        /* Footer Styles */
+        .footer {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+            color: #64748b;
+        }
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+            margin: 0 10px;
+            transition: color 0.2s;
+        }
+        .footer a:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>AI Prompt Architect & Workflow Guide</h1>
+        <p class="subtitle">Transform basic ideas into engineered prompts and identify high-value AI workflows.</p>
+    </header>
+
+    <!-- PROMPT TOOL SECTION -->
+    <div class="tool-section">
+        <h2 style="text-align: center; margin-bottom: 20px;">🛠️ Prompt Architect Tool</h2>
+        <div class="input-group">
+            <label for="userPrompt">1. Enter your basic request:</label>
+            <textarea id="userPrompt" rows="4" placeholder="Example: Write a lesson plan about the water cycle for 5th graders."></textarea>
+        </div>
+
+        <div class="input-group">
+            <label for="promptType">2. Select a Prompt Framework:</label>
+            <select id="promptType">
+                <option value="triple-check">Triple-Check Prompting (Analyze/Criticize/Perspectives)</option>
+                <option value="few-shot">Few-Shot (Learning by Example)</option>
+                <option value="cot">Chain-of-Thought (Step-by-Step Reasoning)</option>
+                <option value="tot">Tree-of-Thought (Exploring Multiple Paths)</option>
+                <option value="chaining">Prompt Chaining (Multi-Step Workflow)</option>
+                <option value="rag">RAG Organization (Knowledge-Based)</option>
+            </select>
+        </div>
+
+        <button class="generate-btn" onclick="generatePrompt()">✨ Generate Optimized Prompt</button>
+
+        <div id="output-area">
+            <h3>🚀 Optimized Prompt</h3>
+            <div class="output-card">
+                <button class="copy-btn" onclick="copyToClipboard()">Copy Text</button>
+                <pre id="output-text"></pre>
+            </div>
+
+            <div class="recommendation-box">
+                <h3>🤖 Recommended Model & Tool</h3>
+                <p id="model-rec"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- GLOSSARY SECTION -->
+    <div class="glossary">
+        <h2>📚 Glossary of Concepts</h2>
+        <div class="glossary-grid">
+            <div class="glossary-item">
+                <span class="term">Triple-Check Prompting</span>
+                <span class="def">A rigorous framework that forces the AI to analyze variables, criticize its own draft, and adopt multiple expert perspectives before finalizing an answer.</span>
+            </div>
+            <div class="glossary-item">
+                <span class="term">Few-Shot Prompting</span>
+                <span class="def">Providing the AI with a few examples (shots) of the input and desired output to set a specific pattern or style.</span>
+            </div>
+            <div class="glossary-item">
+                <span class="term">Chain-of-Thought (CoT)</span>
+                <span class="def">Instructing the AI to "think step-by-step" or show its reasoning process, which significantly reduces errors in logic and math.</span>
+            </div>
+            <div class="glossary-item">
+                <span class="term">Tree-of-Thought (ToT)</span>
+                <span class="def">Asking the AI to simulate multiple experts exploring different "branches" of solutions and voting on the best one.</span>
+            </div>
+            <div class="glossary-item">
+                <span class="term">Prompt Chaining</span>
+                <span class="def">Breaking a complex task into a sequence of smaller prompts, where the output of one becomes the input for the next.</span>
+            </div>
+            <div class="glossary-item">
+                <span class="term">RAG (Retrieval-Augmented Generation)</span>
+                <span class="def">Grounding the AI's response in specific, uploaded documents (Knowledge) rather than its general training data.</span>
+            </div>
+            <div class="glossary-item">
+                <span class="term">Bot Stacking</span>
+                <span class="def">A BoodleBox feature where you use different AI models (e.g., Perplexity for research, Claude for writing) in the same chat context.</span>
+            </div>
+            <div class="glossary-item">
+                <span class="term">Nano Banana</span>
+                <span class="def">Google's Gemini Flash Image generator. Fast, watermark-free, and ideal for creating educational visuals.</span>
+            </div>
+            <div class="glossary-item">
+                <span class="term">Star Docs</span>
+                <span class="def">Documents you "star" in BoodleBox to automatically attach them to every new chat (e.g., Style Guides, Policies).</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- STRATEGIC MODELS SECTION (MOVED TO BOTTOM) -->
+    <div class="models-section">
+        <h1 style="text-align: center;">Identifying AI Workflows: Two Strategic Models</h1>
+        <p style="text-align: center; max-width: 700px; margin: 0 auto; color: #64748b;">Not sure what to prompt for? Use these two models to identify high-impact opportunities in your organization.</p>
+
+        <div class="models-container">
+            <!-- Problem-Based Learning Model -->
+            <div class="model-card pbl-header">
+                <h2>Problem-Based Learning (PBL)</h2>
+                <p><strong>Focus:</strong> Identifying known pain points and challenges that can be solved more intelligently with AI. This model starts with the "Why" and focuses on measurable value and ROI.</p>
+                
+                <h3>🏫 K-16 Education Examples</h3>
+                <ul>
+                    <li>
+                        <strong>Problem:</strong> IEP paperwork takes 15+ hours/week.
+                        <div class="value-prop">Value: Reduce drafting time by 50%, saving $200k in turnover costs.</div>
+                    </li>
+                    <li>
+                        <strong>Problem:</strong> Feedback on writing takes 2 weeks to return.
+                        <div class="value-prop">Value: Instant AI-assisted feedback loops improve proficiency scores by 15%.</div>
+                    </li>
+                </ul>
+
+                <h3>🏢 Organization Examples</h3>
+                <ul>
+                    <li>
+                        <strong>Problem:</strong> Low donor retention due to generic "blast" emails.
+                        <div class="value-prop">Value: Personalized AI impact reports increase retention by 20%.</div>
+                    </li>
+                    <li>
+                        <strong>Problem:</strong> Directors spend 40% of time on manual report formatting.
+                        <div class="value-prop">Value: Automating "raw data to presentation" recovers 15 hours/week per director.</div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Use Case Model -->
+            <div class="model-card usecase-header">
+                <h2>Use Case Model</h2>
+                <p><strong>Focus:</strong> Identifying "quick-win" pilot projects with high success probabilities. This model unbundles jobs into specific tasks based on four identifying characteristics.</p>
+                
+                <h3>The Four Pillars</h3>
+                <p>
+                    <span class="pillar-tag">Data-Driven</span>
+                    <span class="pillar-tag">Repetitive</span>
+                    <span class="pillar-tag">Predictive</span>
+                    <span class="pillar-tag">Generative</span>
+                </p>
+
+                <h3>🏫 K-16 Education Examples</h3>
+                <ul>
+                    <li><strong>Generative:</strong> Creating watermark-free visual aids or diagrams via <em>Nano Banana</em>.</li>
+                    <li><strong>Repetitive:</strong> Using <em>Custom Bots</em> to answer Syllabus/Handbook FAQs 24/7.</li>
+                    <li><strong>Data-Driven:</strong> Analyzing CSV test scores via <em>Code Interpreter</em> to identify learning gaps.</li>
+                </ul>
+
+                <h3>🏢 Organization Examples</h3>
+                <ul>
+                    <li><strong>Repetitive:</strong> Automating meeting minutes using <em>Star Docs</em> and a style guide.</li>
+                    <li><strong>Generative:</strong> Repurposing one grant report into a month of social content via <em>Bot Stacking</em>.</li>
+                    <li><strong>Data-Driven:</strong> Creating vendor comparison matrices from multiple PDF proposals.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER SECTION -->
+    <footer class="footer">
+        <p>
+            <a href="https://mguhlin.org/about-miguel/" target="_blank"><strong>Miguel Guhlin</strong></a>
+            |
+            <a href="https://mguhlin.org/?s=tsae" target="_blank"><strong>Session Resources</strong></a>
+        </p>
+    </footer>
+</div>
+
+<script>
+    function generatePrompt() {
+        const input = document.getElementById('userPrompt').value;
+        const type = document.getElementById('promptType').value;
+        const outputDiv = document.getElementById('output-text');
+        const modelDiv = document.getElementById('model-rec');
+        const outputArea = document.getElementById('output-area');
+
+        if (!input.trim()) {
+            alert("Please enter a prompt idea first!");
+            return;
+        }
+
+        let optimizedPrompt = "";
+        let recommendation = "";
+
+        switch(type) {
+            case 'triple-check':
+                optimizedPrompt = `Task: ${input}\n\nPlease follow this Triple-Check process to ensure the highest quality output:\n\n1. MAKE IT ANALYZE FIRST:\n"Before giving an answer, break down key variables that matter for this question. Then compare multiple possible solutions before choosing the best one."\n\n2. LET IT SELF-CRITICIZE:\n"Now analyze your response. What weaknesses, assumptions, or missing expectations/perspectives could be improved? Refine the answer accordingly."\n\n3. FORCE PERSPECTIVES:\n"Answer this from 3 different viewpoints: a) an industry expert b) a data-driven researcher c) a contrarian innovator. Then combine the best insights into a final answer."`;
+                recommendation = "<strong>Best Model:</strong> Gemini 1.5 Pro or Claude 3.5 Sonnet.<br><strong>Why:</strong> These models have large context windows and excellent instruction-following capabilities to handle the multi-step 'self-correction' required here.";
+                break;
+
+            case 'few-shot':
+                optimizedPrompt = `I need you to perform the following task: ${input}\n\nTo ensure you match the specific format and style I need, please follow these examples:\n\nExample 1 Input: [Insert similar task here]\nExample 1 Output: [Insert perfect example response here]\n\nExample 2 Input: [Insert similar task here]\nExample 2 Output: [Insert perfect example response here]\n\nNow, please process my request following this exact pattern.`;
+                recommendation = "<strong>Best Model:</strong> ChatGPT-4o or Claude 3.5 Sonnet.<br><strong>Why:</strong> These models are highly steerable and excellent at mimicking patterns provided in examples.";
+                break;
+
+            case 'cot':
+                optimizedPrompt = `Task: ${input}\n\nInstructions: Do not give me the answer immediately. Instead, I want you to think through this step-by-step.\n1. Break down the problem into its core components.\n2. Analyze each component logically.\n3. Show your reasoning for each step.\n4. Only then provide the final conclusion based on this reasoning.`;
+                recommendation = "<strong>Best Model:</strong> OpenAI o3 or Claude 3.5 Sonnet.<br><strong>Why:</strong> These 'reasoning' models excel at logic puzzles, math, and complex coding tasks where showing work is essential.";
+                break;
+
+            case 'tot':
+                optimizedPrompt = `Task: ${input}\n\nInstructions: Imagine three different experts are collaborating on this problem.\n- Expert A is a creative visionary.\n- Expert B is a pragmatic realist.\n- Expert C is a detail-oriented critic.\n\nPlease have them debate the best approach, critique each other's ideas, and then come to a consensus on the single best solution.`;
+                recommendation = "<strong>Best Model:</strong> Claude 3 Opus.<br><strong>Why:</strong> Opus is known for its nuance and ability to maintain distinct 'personas' within a single response, making it perfect for simulated debates.";
+                break;
+
+            case 'chaining':
+                optimizedPrompt = `We are going to complete this in steps. \n\nStep 1: Research/Analyze the following topic: ${input}\n(Stop and wait for my approval)\n\nStep 2: Based on the research, draft an outline.\n\nStep 3: Expand the outline into a final deliverable.\n\nStep 4: Create a visual representation of the key points.`;
+                recommendation = "<strong>Best Tool:</strong> BoodleBox Bot Stacking.<br><strong>Why:</strong> Use @perplexity for Step 1 (Research), @claude45-sonnet for Steps 2-3 (Writing), and @nano-banana for Step 4 (Image Gen) — all in one chat.";
+                break;
+
+            case 'rag':
+                optimizedPrompt = `Using ONLY the documents I have uploaded/attached, please answer the following: ${input}\n\nRules:\n- Do not use outside knowledge.\n- Cite the specific document and section for every claim.\n- If the answer is not in the documents, state "I cannot find this information in the provided text."`;
+                recommendation = "<strong>Best Tool:</strong> BoodleBox Knowledge Bank or Google NotebookLM.<br><strong>Why:</strong> These tools are specifically architected to 'ground' answers in your files, reducing hallucinations.";
+                break;
+        }
+
+        outputDiv.innerText = optimizedPrompt;
+        modelDiv.innerHTML = recommendation;
+        outputArea.style.display = 'block';
+        
+        // Scroll to output
+        outputArea.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function copyToClipboard() {
+        const text = document.getElementById('output-text').innerText;
+        navigator.clipboard.writeText(text).then(() => {
+            const btn = document.querySelector('.copy-btn');
+            const originalText = btn.innerText;
+            btn.innerText = "Copied! ✓";
+            setTimeout(() => {
+                btn.innerText = originalText;
+            }, 2000);
+        });
+    }
+</script>
+
+</body>
+</html>
