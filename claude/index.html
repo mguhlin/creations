@@ -1,1 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TCEA AI Skills Suite — Nonprofit Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0A3476;--navy-dark:#071f4a;--navy-mid:#12428f;
+  --gold:#FCB040;--gold-light:#fdd17a;--gold-pale:#FEF0D0;
+  --pale-navy:#D0D8F0;--white:#ffffff;--off-white:#f7f8fc;
+  --text:#1a1a2e;--text-muted:#5a6680;--border:#e2e7f5;--teal:#0e6b8a;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;color:var(--text);background:var(--white);line-height:1.6;overflow-x:hidden}
 
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(7,31,74,.97);backdrop-filter:blur(12px);border-bottom:2px solid var(--gold);padding:0 1.5rem;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{display:flex;align-items:center;gap:.6rem;text-decoration:none}
+.nav-logo{width:32px;height:32px;background:var(--gold);border-radius:6px;display:grid;place-items:center;flex-shrink:0}
+.nav-title{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--white)}
+.nav-title span{color:var(--gold)}
+.nav-links{display:flex;align-items:center;gap:.1rem;list-style:none;flex-wrap:wrap}
+.nav-links a{color:rgba(255,255,255,.75);text-decoration:none;font-size:.75rem;font-weight:500;padding:.3rem .5rem;border-radius:6px;transition:all .2s;white-space:nowrap}
+.nav-links a:hover{color:var(--gold);background:rgba(252,176,64,.1)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;background:none;border:none}
+.hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px;transition:all .3s}
+@media(max-width:900px){.hamburger{display:flex}.nav-links{display:none;position:fixed;top:60px;left:0;right:0;background:var(--navy-dark);flex-direction:column;padding:1rem;gap:.2rem;border-bottom:2px solid var(--gold);z-index:199}.nav-links.open{display:flex}.nav-links a{width:100%;padding:.65rem 1rem;font-size:.9rem}}
+
+/* HERO */
+#home{min-height:100vh;background:var(--navy-dark);background-image:radial-gradient(ellipse 80% 60% at 70% 40%,rgba(252,176,64,.07) 0%,transparent 60%),radial-gradient(ellipse 50% 50% at 10% 80%,rgba(18,66,143,.4) 0%,transparent 50%);display:flex;align-items:center;padding:80px 1.5rem 3rem;position:relative;overflow:hidden}
+.hero-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);background-size:48px 48px;pointer-events:none}
+.hero-inner{max-width:920px;margin:0 auto;position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.5rem;background:rgba(252,176,64,.12);border:1px solid rgba(252,176,64,.28);color:var(--gold-light);font-size:.75rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:.35rem .85rem;border-radius:100px;margin-bottom:1.5rem;animation:fadeUp .6s ease both}
+.hero-eyebrow::before{content:'';width:6px;height:6px;background:var(--gold);border-radius:50%}
+.hero-headline{font-family:'DM Serif Display',serif;font-size:clamp(2.2rem,5.5vw,3.8rem);line-height:1.14;color:var(--white);margin-bottom:1.25rem;animation:fadeUp .6s .1s ease both}
+.hero-headline em{font-style:italic;color:var(--gold)}
+.hero-sub{font-size:clamp(.95rem,1.8vw,1.15rem);color:rgba(255,255,255,.68);max-width:640px;margin-bottom:2.5rem;line-height:1.75;animation:fadeUp .6s .2s ease both}
+.hero-cta-row{display:flex;gap:.75rem;flex-wrap:wrap;animation:fadeUp .6s .3s ease both}
+.btn-gold{background:var(--gold);color:var(--navy-dark);font-weight:700;font-size:.9rem;padding:.75rem 1.6rem;border-radius:8px;text-decoration:none;transition:all .2s;display:inline-block}
+.btn-gold:hover{background:var(--gold-light);transform:translateY(-2px);box-shadow:0 6px 24px rgba(252,176,64,.35)}
+.btn-outline{background:transparent;color:var(--white);font-weight:600;font-size:.9rem;padding:.75rem 1.6rem;border-radius:8px;border:1.5px solid rgba(255,255,255,.28);text-decoration:none;transition:all .2s;display:inline-block}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+.hero-stats{display:flex;gap:1.5rem 2.5rem;flex-wrap:wrap;margin-top:3.5rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,.1);animation:fadeUp .6s .4s ease both}
+.hero-stat-num{font-family:'DM Serif Display',serif;font-size:2rem;color:var(--gold);line-height:1}
+.hero-stat-label{font-size:.78rem;color:rgba(255,255,255,.45);margin-top:.2rem;text-transform:uppercase;letter-spacing:.06em}
+
+/* SHARED */
+section{scroll-margin-top:60px}
+.section-label{font-size:.73rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);margin-bottom:.55rem}
+.section-title{font-family:'DM Serif Display',serif;font-size:clamp(1.7rem,3.5vw,2.5rem);color:var(--navy);line-height:1.2;margin-bottom:.75rem}
+.section-desc{color:var(--text-muted);font-size:.95rem;max-width:580px;line-height:1.7;margin-bottom:1rem}
+sup.cite{font-size:.65rem;color:var(--gold);font-weight:700;cursor:pointer;text-decoration:none}
+sup.cite:hover{color:var(--navy)}
+
+/* SKILLS OVERVIEW GRID */
+#skills{padding:5rem 1.5rem;background:var(--off-white)}
+.skills-header{text-align:center;margin-bottom:3rem}
+.skills-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;max-width:1100px;margin:0 auto}
+@media(max-width:960px){.skills-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:500px){.skills-grid{grid-template-columns:1fr}}
+.skill-card{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:1.5rem 1.25rem;transition:all .25s;text-decoration:none;color:inherit;display:block;position:relative;overflow:hidden}
+.skill-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--gold);border-radius:4px 0 0 4px;transform:scaleY(0);transition:transform .25s;transform-origin:bottom}
+.skill-card:hover{border-color:var(--pale-navy);box-shadow:0 8px 28px rgba(10,52,118,.1);transform:translateY(-3px)}
+.skill-card:hover::before{transform:scaleY(1)}
+.skill-icon{width:44px;height:44px;border-radius:10px;background:var(--gold-pale);display:grid;place-items:center;margin-bottom:.9rem}
+.skill-icon svg{width:24px;height:24px}
+.skill-card h3{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.4rem}
+.skill-card p{font-size:.82rem;color:var(--text-muted);line-height:1.55}
+.skill-tag{display:inline-block;margin-top:.9rem;font-size:.68rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--navy-mid);background:var(--pale-navy);padding:.2rem .55rem;border-radius:4px}
+
+/* FEATURE SECTIONS */
+.feature-section{padding:5rem 1.5rem}
+.feature-section.alt{background:var(--off-white)}
+.feature-layout{max-width:1060px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.feature-layout.rev{direction:rtl}
+.feature-layout.rev>*{direction:ltr}
+@media(max-width:780px){.feature-layout,.feature-layout.rev{grid-template-columns:1fr;direction:ltr;gap:2rem}}
+.feature-list{list-style:none;margin-top:1.5rem;display:flex;flex-direction:column;gap:.7rem}
+.feature-list li{display:flex;gap:.75rem;align-items:flex-start;font-size:.88rem;color:var(--text-muted);line-height:1.5}
+.feature-list li::before{content:'';display:block;width:18px;height:18px;min-width:18px;background:var(--gold-pale);border:1.5px solid var(--gold);border-radius:50%;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 6l2.5 2.5 4.5-4.5' stroke='%23FCB040' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center;background-size:12px;margin-top:1px}
+
+/* MOCK CARDS */
+.mock-card{background:var(--off-white);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 10px 40px rgba(10,52,118,.08)}
+.mock-hdr{background:var(--navy);padding:.85rem 1.2rem;display:flex;align-items:center;gap:.5rem}
+.mdot{width:10px;height:10px;border-radius:50%}
+.mock-ttl{color:rgba(255,255,255,.82);font-size:.78rem;font-weight:600;margin-left:.4rem}
+.mock-body{padding:1.25rem}
+.ml{height:9px;background:var(--border);border-radius:5px;margin-bottom:.55rem}
+.ml.w{width:90%}.ml.m{width:72%}.ml.s{width:50%}.ml.g{background:rgba(252,176,64,.28);width:38%}
+.mhl{height:15px;background:rgba(10,52,118,.13);border-radius:5px;margin-bottom:.85rem;width:65%}
+.mtbl{margin-top:1rem;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.mtbl-h{background:var(--navy);display:grid;grid-template-columns:1fr 1fr 1fr}
+.mtbl-h span{color:rgba(255,255,255,.78);padding:.38rem .55rem;font-weight:600;font-size:.68rem}
+.mtbl-r{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--border);background:var(--white)}
+.mtbl-r span{padding:.38rem .55rem;color:var(--text-muted);font-size:.72rem}
+
+/* DARK SECTION */
+.dark-sec{background:var(--navy-dark);position:relative;overflow:hidden;padding:5rem 1.5rem}
+.dark-sec::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:40px 40px;pointer-events:none}
+.dark-sec .section-title{color:var(--white)}
+.dark-sec .section-label{color:var(--gold-light)}
+.dark-sec .section-desc{color:rgba(255,255,255,.58)}
+.slide-preview{background:#1a2a4a;border:1px solid rgba(255,255,255,.1);border-radius:12px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.35);aspect-ratio:16/9;display:flex;flex-direction:column;position:relative}
+.s-acc{position:absolute;left:0;top:0;bottom:0;width:8px;background:var(--gold)}
+.s-top{background:var(--navy);height:14%;padding:0 1.5rem;display:flex;align-items:center}
+.s-tl{height:7px;background:rgba(255,255,255,.65);border-radius:3px}
+.s-body{flex:1;padding:.75rem 1.2rem .75rem 1.5rem;display:flex;gap:.75rem}
+.s-col{flex:1;display:flex;flex-direction:column;gap:.4rem}
+.s-bul{height:6px;background:rgba(255,255,255,.12);border-radius:3px;position:relative;padding-left:10px}
+.s-bul::before{content:'';position:absolute;left:2px;width:4px;height:4px;background:var(--gold);border-radius:50%;top:50%;transform:translateY(-50%)}
+.s-foot{background:rgba(0,0,0,.18);height:8%;display:flex;align-items:center;padding:0 1rem;gap:.5rem}
+.s-fl{height:4px;background:rgba(255,255,255,.1);border-radius:2px}
+.pfl{list-style:none;margin-top:1.5rem;display:flex;flex-direction:column;gap:1rem}
+.pfl li{display:flex;gap:.85rem;align-items:flex-start;color:rgba(255,255,255,.72);font-size:.88rem;line-height:1.55}
+.pfi{width:30px;height:30px;min-width:30px;background:rgba(252,176,64,.14);border:1px solid rgba(252,176,64,.28);border-radius:7px;display:grid;place-items:center;margin-top:1px}
+.pfi svg{width:15px;height:15px}
+
+/* MERMAID MOCK */
+.mm-mock{background:#1e1e2e;border:1px solid rgba(255,255,255,.1);border-radius:12px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,.25)}
+.mm-hdr{background:#111120;padding:.65rem 1rem;display:flex;align-items:center;gap:.5rem;border-bottom:1px solid rgba(255,255,255,.07)}
+.mm-dot{width:9px;height:9px;border-radius:50%}
+.mm-lbl{color:rgba(255,255,255,.45);font-size:.7rem;font-family:'DM Mono',monospace;margin-left:.4rem}
+.mm-body{padding:1.25rem;display:flex;flex-direction:column;align-items:center;gap:0}
+.mm-node{padding:.45rem 1rem;border-radius:8px;font-size:.72rem;font-weight:600;white-space:nowrap;position:relative;z-index:1}
+.mm-node.p{background:var(--navy);color:var(--white);border:1.5px solid var(--gold)}
+.mm-node.d{background:var(--gold);color:var(--navy-dark);border:1.5px solid var(--gold-light);clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);width:110px;height:55px;display:grid;place-items:center}
+.mm-node.s{background:var(--navy-mid);color:var(--white);border:1.5px solid rgba(252,176,64,.3)}
+.mm-node.t{background:var(--navy-dark);color:var(--gold);border:1.5px solid var(--gold);border-radius:100px;padding:.35rem 1.2rem}
+.mm-arr{width:2px;height:22px;background:var(--gold);margin:0 auto;position:relative}
+.mm-arr::after{content:'';position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid var(--gold)}
+
+/* DRAW.IO MOCK */
+.dio-mock{background:var(--white);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 8px 32px rgba(10,52,118,.08)}
+.dio-hdr{background:#f0f0f0;border-bottom:1px solid #ddd;padding:.5rem .75rem;display:flex;align-items:center;gap:.5rem}
+.dio-mi{font-size:.68rem;color:#444;padding:.2rem .4rem;border-radius:3px}
+.dio-canvas{padding:1rem;position:relative;background:#fff;height:185px}
+.dn{position:absolute;border:1.5px solid var(--navy);border-radius:6px;background:var(--gold-pale);font-size:.65rem;font-weight:600;color:var(--navy);display:grid;place-items:center;text-align:center;padding:4px}
+.dn.dk{background:var(--navy);color:var(--white)}
+.dn.gf{background:var(--gold);color:var(--navy-dark);border-color:var(--gold-light)}
+
+/* RUBRIC MOCK */
+.rub-mock{background:var(--white);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 8px 32px rgba(10,52,118,.07)}
+.rub-hdr{background:var(--navy);padding:.75rem 1rem}
+.rub-title{color:var(--white);font-family:'DM Serif Display',serif;font-size:1rem}
+.rub-sub{color:var(--gold-light);font-size:.7rem;margin-top:.1rem}
+.rtbl{width:100%;border-collapse:collapse;font-size:.72rem}
+.rtbl th{background:var(--navy-mid);color:var(--white);padding:.45rem .6rem;font-weight:600;text-align:left;border:1px solid rgba(255,255,255,.15)}
+.rtbl td{padding:.45rem .6rem;border:1px solid var(--border);vertical-align:top;line-height:1.4;color:var(--text-muted)}
+.rtbl tr:nth-child(even) td{background:var(--off-white)}
+.rtbl td:first-child{font-weight:600;color:var(--navy);background:var(--pale-navy)!important}
+.sbadge{display:inline-block;background:var(--gold);color:var(--navy-dark);font-weight:700;font-size:.65rem;padding:1px 5px;border-radius:4px;margin-right:3px}
+
+/* LESSON / TRAINING PLAN MOCK */
+.lp-mock{background:var(--white);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 8px 32px rgba(10,52,118,.07)}
+.lp-hdr{background:var(--navy);padding:.75rem 1rem;display:flex;align-items:center;justify-content:space-between}
+.lp-ttl{color:var(--white);font-family:'DM Serif Display',serif;font-size:.95rem}
+.lp-badge{background:var(--gold);color:var(--navy-dark);font-size:.65rem;font-weight:700;padding:.2rem .5rem;border-radius:4px}
+.lp-body{padding:1rem;display:flex;flex-direction:column;gap:.65rem}
+.lp-ph{background:var(--off-white);border:1px solid var(--border);border-radius:8px;padding:.6rem .75rem;display:flex;gap:.75rem;align-items:flex-start}
+.lp-time{background:var(--navy);color:var(--gold);font-size:.62rem;font-weight:700;padding:.2rem .45rem;border-radius:4px;white-space:nowrap;margin-top:1px}
+.lp-pn{font-size:.72rem;font-weight:600;color:var(--navy);margin-bottom:.15rem}
+.lp-pd{font-size:.68rem;color:var(--text-muted);line-height:1.4}
+
+/* HOW CLAUDE WORKS — FEATURE TABLE */
+#how-claude{padding:5rem 1.5rem;background:var(--white)}
+.htable-wrap{max-width:1100px;margin:0 auto;overflow-x:auto}
+.htable{width:100%;border-collapse:collapse;font-size:.85rem}
+.htable thead th{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);padding:.6rem 1rem .75rem;text-align:left;border-bottom:2px solid var(--border)}
+.htable thead th:first-child{padding-left:0;width:130px}
+.htable tbody tr{border-bottom:1px solid var(--border);transition:background .15s}
+.htable tbody tr:hover{background:rgba(252,176,64,.04)}
+.htable td{padding:1.1rem 1rem;vertical-align:top;line-height:1.55}
+.htable td:first-child{padding-left:0}
+.feat-name{display:flex;align-items:center;gap:.5rem;font-weight:700;font-size:.92rem;color:var(--navy)}
+.feat-icon{width:28px;height:28px;background:var(--gold-pale);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
+.tip-box{background:rgba(252,176,64,.09);border-left:3px solid var(--gold);padding:.55rem .8rem;border-radius:0 4px 4px 0;font-size:.8rem;color:var(--text);margin-top:.45rem}
+.tip-box strong{color:var(--navy);font-weight:700}
+.mistake-box{background:var(--off-white);border-left:3px solid var(--border);padding:.55rem .8rem;border-radius:0 4px 4px 0;font-size:.8rem;color:var(--text-muted);margin-top:.45rem}
+.mistake-box strong{color:var(--text-muted);font-weight:700}
+
+/* COWORK SETUP */
+#cowork{padding:5rem 1.5rem;background:var(--off-white)}
+.cowork-inner{max-width:1100px;margin:0 auto}
+.cowork-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1.4rem;margin-top:2.5rem}
+.cowork-card{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:1.5rem;transition:transform .2s,box-shadow .2s}
+.cowork-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(10,52,118,.1)}
+.cowork-num{width:34px;height:34px;background:var(--navy);border:2px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:.95rem;color:var(--gold);margin-bottom:.9rem}
+.cowork-card h3{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.5rem}
+.cowork-card p{font-size:.83rem;color:var(--text-muted);line-height:1.6;margin-bottom:.4rem}
+.cowork-note{font-style:italic;color:var(--gold);font-size:.78rem}
+.cowork-bullets{list-style:none;margin-top:.5rem}
+.cowork-bullets li{font-size:.81rem;color:var(--text-muted);padding:.22rem 0 .22rem 1rem;position:relative;line-height:1.5}
+.cowork-bullets li::before{content:'•';position:absolute;left:0;color:var(--gold);font-weight:bold}
+.code-snip{background:var(--off-white);border:1px solid var(--border);border-radius:5px;padding:.7rem .85rem;font-family:'DM Mono',monospace;font-size:.73rem;color:var(--text);margin-top:.7rem;line-height:1.7;white-space:pre-wrap}
+
+/* ASK FIRST */
+#ask-first{padding:5rem 1.5rem;background:var(--white)}
+.ask-inner{max-width:1060px;margin:0 auto}
+.method-flow{display:grid;grid-template-columns:1fr 1fr 1fr;border:1.5px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:2.5rem}
+.method-step{padding:1.75rem 1.5rem;border-right:1px solid var(--border)}
+.method-step:last-child{border-right:none}
+.method-step-lbl{font-size:.68rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);margin-bottom:.35rem}
+.method-step h3{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.6rem}
+.method-step p{font-size:.84rem;color:var(--text-muted);line-height:1.6;margin-bottom:.6rem}
+@media(max-width:720px){.method-flow{grid-template-columns:1fr}.method-step{border-right:none;border-bottom:1px solid var(--border)}.method-step:last-child{border-bottom:none}}
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2.5rem}
+@media(max-width:560px){.why-grid{grid-template-columns:1fr}}
+.why-card{background:var(--off-white);border:1.5px solid var(--border);border-radius:10px;padding:1.25rem 1.4rem;display:flex;gap:.85rem;align-items:flex-start}
+.why-icon{color:var(--gold);font-size:1.1rem;line-height:1;flex-shrink:0;margin-top:3px}
+.why-card p{font-size:.88rem;color:var(--text);font-weight:500;line-height:1.5}
+.mid-box{background:var(--navy-dark);border-radius:12px;padding:2.25rem;display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:start}
+@media(max-width:680px){.mid-box{grid-template-columns:1fr;gap:1.75rem}}
+.mid-box h3{font-family:'DM Serif Display',serif;font-size:1.35rem;font-weight:700;margin-bottom:.6rem;color:var(--white)}
+.mid-box p{color:rgba(255,255,255,.6);font-size:.88rem;line-height:1.65;margin-bottom:1.1rem}
+.paste-block{background:#0c1428;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:1.15rem;font-family:'DM Mono',monospace;font-size:.75rem;color:#ddd;line-height:1.75;white-space:pre-wrap}
+.paste-block strong{color:var(--gold-light);font-style:normal;font-family:'DM Mono',monospace}
+
+/* CLAUDE SKILLS (advanced) */
+#claude-skills{padding:5rem 1.5rem;background:var(--navy-dark);position:relative;overflow:hidden}
+#claude-skills::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px);background-size:40px 40px;pointer-events:none}
+#claude-skills .section-title{color:var(--white)}
+#claude-skills .section-label{color:var(--gold-light)}
+#claude-skills .section-desc{color:rgba(255,255,255,.55)}
+.cs-intro{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:1.5rem 1.75rem;margin-bottom:2.5rem;font-size:.92rem;color:rgba(255,255,255,.75);line-height:1.75;max-width:1060px}
+.cs-intro strong{color:var(--gold-light)}
+.cs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.2rem;max-width:1060px}
+.cs-card{background:#1b2b47;border:1px solid rgba(255,255,255,.1);border-radius:10px;overflow:hidden;transition:transform .2s,border-color .2s}
+.cs-card:hover{transform:translateY(-3px);border-color:var(--gold)}
+.cs-hdr{background:var(--gold);padding:1.1rem 1.35rem}
+.cs-tag{font-size:.6rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:.3rem}
+.cs-hdr h3{font-family:'DM Mono',monospace;font-size:1.2rem;font-weight:500;color:#fff;line-height:1.2}
+.cs-body{padding:1.1rem 1.35rem}
+.cs-body p{font-size:.81rem;color:rgba(255,255,255,.65);line-height:1.65;margin-bottom:.9rem}
+.cs-link{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--gold-light);text-decoration:none;word-break:break-all;opacity:.8;transition:opacity .2s}
+.cs-link:hover{opacity:1}
+
+/* COURSES */
+#courses{padding:5rem 1.5rem;background:var(--off-white)}
+.courses-inner{max-width:1060px;margin:0 auto}
+.courses-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.2rem;margin-top:2.5rem}
+.course-card{background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:1.4rem;display:flex;flex-direction:column;gap:.7rem;transition:transform .2s,box-shadow .2s}
+.course-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(10,52,118,.09)}
+.course-icon{width:42px;height:42px;background:var(--gold-pale);border:1px solid rgba(252,176,64,.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.course-card h3{font-family:'DM Serif Display',serif;font-size:.98rem;color:var(--navy);line-height:1.3}
+.course-card p{font-size:.81rem;color:var(--text-muted);line-height:1.5;flex:1}
+.course-url{font-size:.7rem;color:var(--gold);font-family:'DM Mono',monospace;text-decoration:none}
+
+/* HOW IT WORKS */
+#how-it-works{padding:5rem 1.5rem;background:var(--white)}
+.hiw-inner{max-width:880px;margin:0 auto}
+.hiw-hdr{text-align:center;margin-bottom:3.5rem}
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;position:relative}
+.steps-grid::before{content:'';position:absolute;top:28px;left:calc(16.6% + 16px);right:calc(16.6% + 16px);height:2px;background-image:repeating-linear-gradient(90deg,var(--gold) 0 8px,transparent 8px 16px)}
+@media(max-width:600px){.steps-grid{grid-template-columns:1fr}.steps-grid::before{display:none}}
+.step-card{text-align:center;padding:1.25rem 1rem}
+.step-num{width:56px;height:56px;background:var(--navy);border:3px solid var(--gold);border-radius:50%;display:grid;place-items:center;margin:0 auto 1rem;font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--gold);position:relative;z-index:1}
+.step-title{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy);margin-bottom:.4rem}
+.step-desc{font-size:.84rem;color:var(--text-muted);line-height:1.6}
+
+/* GET STARTED */
+#get-started{padding:5rem 1.5rem;background:var(--navy);text-align:center;position:relative;overflow:hidden}
+#get-started::after{content:'';position:absolute;bottom:-60px;right:-60px;width:240px;height:240px;border-radius:50%;background:rgba(252,176,64,.07);pointer-events:none}
+.cta-inner{max-width:640px;margin:0 auto;position:relative;z-index:1}
+.cta-inner .section-title{color:var(--white);margin-bottom:1rem}
+.cta-inner .section-desc{color:rgba(255,255,255,.58);margin:0 auto 2rem}
+.cta-chips{display:flex;gap:.45rem;flex-wrap:wrap;justify-content:center;margin-bottom:2rem}
+.cta-chip-link{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.8);font-size:.75rem;padding:.3rem .75rem;border-radius:100px;font-weight:500;text-decoration:none;transition:all .2s;display:inline-block}
+.cta-chip-link:hover{background:rgba(252,176,64,.2);border-color:rgba(252,176,64,.5);color:var(--gold-light)}
+
+/* REFERENCES */
+#references{padding:3rem 1.5rem;background:var(--off-white);border-top:2px solid var(--border)}
+.ref-inner{max-width:900px;margin:0 auto}
+.ref-inner h2{font-family:'DM Serif Display',serif;font-size:1.35rem;color:var(--navy);margin-bottom:1.25rem}
+.ref-list{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+.ref-list li{font-size:.82rem;color:var(--text-muted);line-height:1.6;display:flex;gap:.6rem}
+.ref-num{font-weight:700;color:var(--gold);flex-shrink:0;min-width:22px}
+.ref-list a{color:var(--navy-mid);text-decoration:none;font-family:'DM Mono',monospace;font-size:.78rem}
+.ref-list a:hover{color:var(--gold)}
+
+/* FOOTER */
+footer{background:var(--navy-dark);border-top:1px solid rgba(255,255,255,.07);padding:2rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.ft-brand{font-family:'DM Serif Display',serif;color:var(--white);font-size:.95rem}
+.ft-brand span{color:var(--gold)}
+.ft-links{display:flex;gap:1.25rem;flex-wrap:wrap}
+.ft-links a{color:rgba(255,255,255,.38);font-size:.78rem;text-decoration:none;transition:color .2s}
+.ft-links a:hover{color:var(--gold)}
+
+/* DL BUTTON */
+.dl-btn{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.5rem;background:var(--navy);color:var(--white);font-size:.82rem;font-weight:600;padding:.6rem 1.1rem;border-radius:8px;text-decoration:none;transition:all .2s;border:1.5px solid transparent}
+.dl-btn:hover{background:var(--navy-mid);transform:translateY(-2px);box-shadow:0 4px 16px rgba(10,52,118,.25)}
+.dl-btn svg{width:15px;height:15px;flex-shrink:0}
+.dark-sec .dl-btn{background:var(--gold);color:var(--navy-dark)}
+.dark-sec .dl-btn:hover{background:var(--gold-light)}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.fade-in{opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .5s ease}
+.fade-in.visible{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#home" class="nav-brand">
+    <div class="nav-logo">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <path d="M12 2L2 7v10l10 5 10-5V7L12 2z" fill="#071f4a"/>
+        <path d="M12 2l10 5-10 5L2 7l10-5z" fill="#FCB040"/>
+      </svg>
+    </div>
+    <span class="nav-title">TCEA <span>AI Skills</span></span>
+  </a>
+  <button class="hamburger" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links">
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#how-claude">How Claude Works</a></li>
+    <li><a href="#cowork">Cowork Setup</a></li>
+    <li><a href="#ask-first">Ask First</a></li>
+    <li><a href="#claude-skills">Claude Skills</a></li>
+    <li><a href="#courses">Courses</a></li>
+    <li><a href="#how-it-works">How It Works</a></li>
+    <li><a href="#references">Sources</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">TCEA Skill Suite &middot; Claude-Powered &middot; Nonprofit Edition</div>
+    <h1 class="hero-headline">
+      Seven skills that <em>write,</em><br>
+      <em>design,</em> <em>diagram,</em> and<br>
+      <em>plan</em> for mission-driven orgs.
+    </h1>
+    <p class="hero-sub">Purpose-built AI skills for nonprofits and education-adjacent organizations &mdash; craft donor communications, build board decks, design impact infographics, map workflows, generate org charts, evaluate programs, and architect volunteer training. Powered by Claude.<sup><a href="#ref1" class="cite">1</a></sup></p>
+    <div class="hero-cta-row">
+      <a href="#skills" class="btn-gold">Explore All Skills</a>
+      <a href="#how-claude" class="btn-outline">How Claude Works</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="hero-stat-num">7</div><div class="hero-stat-label">Skills</div></div>
+      <div><div class="hero-stat-num">8</div><div class="hero-stat-label">Cowork Steps</div></div>
+      <div><div class="hero-stat-num">Claude</div><div class="hero-stat-label">Powered</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS OVERVIEW GRID -->
+<section id="skills">
+  <div class="skills-header fade-in">
+    <div class="section-label">What&rsquo;s Included</div>
+    <h2 class="section-title">Seven skills. One workflow.</h2>
+    <p class="section-desc" style="margin:0 auto">Each skill is a precision-engineered instruction set directing Claude to produce professional, mission-ready output &mdash; no prompt guesswork required.</p>
+  </div>
+  <div class="skills-grid">
+    <a href="#blog-writer" class="skill-card fade-in">
+      <div class="skill-icon"><svg viewBox="0 0 26 26" fill="none"><path d="M4 5h18M4 10h18M4 15h12" stroke="#0A3476" stroke-width="1.8" stroke-linecap="round"/><circle cx="19" cy="19" r="4.5" fill="#FCB040"/><path d="M19 17v4M17 19h4" stroke="#071f4a" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <h3>Blog Writer</h3>
+      <p>Impact stories, donor updates, and advocacy posts in a consistent nonprofit voice.</p>
+      <span class="skill-tag">Content &middot; Nonprofits</span>
+    </a>
+    <a href="#pptx-builder" class="skill-card fade-in">
+      <div class="skill-icon"><svg viewBox="0 0 26 26" fill="none"><rect x="3" y="4" width="20" height="14" rx="2.5" stroke="#0A3476" stroke-width="1.8"/><path d="M10 18l3 4 3-4" stroke="#0A3476" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="7" y="8" width="5" height="6" rx="1" fill="#FCB040"/><path d="M14 9h5M14 12h4" stroke="#0A3476" stroke-width="1.4" stroke-linecap="round"/></svg></div>
+      <h3>PPTX Builder</h3>
+      <p>Download-ready board and funder decks via PptxGenJS &mdash; branded, with speaker notes.</p>
+      <span class="skill-tag">Presentations &middot; .pptx</span>
+    </a>
+    <a href="#infographic-designer" class="skill-card fade-in">
+      <div class="skill-icon"><svg viewBox="0 0 26 26" fill="none"><rect x="3" y="14" width="4" height="9" rx="1" fill="#FCB040"/><rect x="9" y="9" width="4" height="14" rx="1" fill="#0A3476"/><rect x="15" y="5" width="4" height="18" rx="1" fill="#12428f"/><rect x="21" y="11" width="4" height="12" rx="1" fill="#0e6b8a"/></svg></div>
+      <h3>Infographics</h3>
+      <p>Blueprint-first workflow rendering publication-ready PNG impact visuals from program data.</p>
+      <span class="skill-tag">Visualization &middot; PNG</span>
+    </a>
+    <a href="#mermaid-designer" class="skill-card fade-in">
+      <div class="skill-icon"><svg viewBox="0 0 26 26" fill="none"><circle cx="13" cy="5" r="3" fill="#FCB040"/><circle cx="5" cy="20" r="3" fill="#0A3476"/><circle cx="21" cy="20" r="3" fill="#12428f"/><path d="M13 8v5M13 13l-5.5 4.5M13 13l5.5 4.5" stroke="#FCB040" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+      <h3>Mermaid Designer</h3>
+      <p>Grant intake, case management, and volunteer onboarding flows with TCEA color theming.</p>
+      <span class="skill-tag">Diagrams &middot; Code</span>
+    </a>
+    <a href="#drawio-builder" class="skill-card fade-in">
+      <div class="skill-icon"><svg viewBox="0 0 26 26" fill="none"><rect x="2" y="2" width="9" height="9" rx="2" fill="#0A3476"/><rect x="15" y="2" width="9" height="9" rx="2" fill="#FCB040"/><rect x="2" y="15" width="9" height="9" rx="2" fill="#12428f"/><rect x="15" y="15" width="9" height="9" rx="2" fill="#0e6b8a"/><path d="M11 6.5h4M19.5 11v4M6.5 11v4M11 19.5h4" stroke="#FCB040" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <h3>Draw.io XML</h3>
+      <p>Importable mxGraph XML for org structures, service delivery maps, and program flowcharts.</p>
+      <span class="skill-tag">Diagrams &middot; XML</span>
+    </a>
+    <a href="#rubric-builder" class="skill-card fade-in">
+      <div class="skill-icon"><svg viewBox="0 0 26 26" fill="none"><rect x="3" y="3" width="20" height="20" rx="3" stroke="#0A3476" stroke-width="1.7"/><path d="M3 9h20M3 15h20M9 9v14M17 9v14" stroke="#0A3476" stroke-width="1.4"/><path d="M6 6h2M6 12h2M6 18h2" stroke="#FCB040" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <h3>Rubric Builder</h3>
+      <p>Grant proposal, program evaluation, and volunteer performance rubrics &mdash; observable and measurable.</p>
+      <span class="skill-tag">Evaluation &middot; Nonprofits</span>
+    </a>
+    <a href="#lesson-plan" class="skill-card fade-in">
+      <div class="skill-icon"><svg viewBox="0 0 26 26" fill="none"><rect x="4" y="2" width="18" height="22" rx="3" stroke="#0A3476" stroke-width="1.7"/><path d="M8 8h10M8 12h10M8 16h6" stroke="#0A3476" stroke-width="1.4" stroke-linecap="round"/><circle cx="20" cy="20" r="4.5" fill="#FCB040"/><path d="M20 18v4M18 20h4" stroke="#071f4a" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <h3>Training Architect</h3>
+      <p>Structured volunteer and staff training session plans &mdash; specific enough for any facilitator to deliver.</p>
+      <span class="skill-tag">Training &middot; Capacity Building</span>
+    </a>
+  </div>
+</section>
+
+<!-- HOW CLAUDE WORKS -->
+<section id="how-claude">
+  <div class="htable-wrap fade-in">
+    <div style="max-width:1100px;margin:0 auto 2.5rem">
+      <div class="section-label">Claude Features</div>
+      <h2 class="section-title">How to use Claude</h2>
+      <p class="section-desc">Eight surfaces — each with a specific purpose, a nonprofit-ready first prompt, and common mistakes to avoid.<sup><a href="#ref2" class="cite">2</a></sup></p>
+    </div>
+    <table class="htable">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>What it does &amp; first prompt</th>
+          <th>Pro tip</th>
+          <th>Common mistake</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="feat-name"><span class="feat-icon">💬</span> Chat</div></td>
+          <td>The starting point for most users.<br><em style="font-size:.82rem;color:var(--text-muted)">"Rewrite this donor appeal so it leads with impact, not need."</em></td>
+          <td><div class="tip-box"><strong>Pro tip:</strong> Turn on Extended Thinking + Search before every prompt — two clicks that change everything.</div></td>
+          <td><div class="mistake-box"><strong>Mistake:</strong> Pasting your mission statement into every new chat. That's what Projects are for.</div></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name"><span class="feat-icon">⚡</span> Cowork</div></td>
+          <td>Reads your files and creates real documents — Word, Excel, PDF — directly into your folder.<br><em style="font-size:.82rem;color:var(--text-muted)">"Read my files first. Then ask me questions before you start."</em></td>
+          <td><div class="tip-box"><strong>Pro tip:</strong> Write one .md file about your org — mission, tone, key programs. Claude stops producing generic language.</div></td>
+          <td><div class="mistake-box"><strong>Mistake:</strong> Dumping your entire grants folder. 5 focused files beat 50 unorganized ones.</div></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name"><span class="feat-icon">📁</span> Projects</div></td>
+          <td>Save instructions and context files once. Every chat inside that Project inherits them.<br><em style="font-size:.82rem;color:var(--text-muted)">Create a "Grant Writing" project → upload 3 awarded proposals → every new draft matches your voice.</em></td>
+          <td><div class="tip-box"><strong>Pro tip:</strong> One Project per recurring task type — grant writing, donor comms, board reports. Don't build one mega-Project.</div></td>
+          <td><div class="mistake-box"><strong>Mistake:</strong> Uploading 30 reference docs. You curate the best — not the AI.</div></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name"><span class="feat-icon">🧩</span> Artifacts</div></td>
+          <td>Claude builds interactive files you can use, edit, and download inside the chat.<br><em style="font-size:.82rem;color:var(--text-muted)">"Build a volunteer tracking dashboard with hours by program area — totals update in real time."</em></td>
+          <td><div class="tip-box"><strong>Pro tip:</strong> Ask for changes after it builds. Artifacts are live — iterate inside the same chat.</div></td>
+          <td><div class="mistake-box"><strong>Mistake:</strong> Thinking Artifacts are just demos. Ask for what you'd normally build in a spreadsheet or Canva.</div></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name"><span class="feat-icon">📊</span> Excel</div></td>
+          <td>An add-in that reads your actual formulas, tabs, and cell references — not flattened screenshots.<br><em style="font-size:.82rem;color:var(--text-muted)">"Why is my budget vs. actual formula showing #REF? Trace the error."</em></td>
+          <td><div class="tip-box"><strong>Pro tip:</strong> Install → Insert → Get Add-ins → search "Claude by Anthropic." Open with Ctrl+Alt+C.</div></td>
+          <td><div class="mistake-box"><strong>Mistake:</strong> Expecting it to automate button clicks. It builds, cleans, and explains — not VBA macros.</div></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name"><span class="feat-icon">🔗</span> Connectors</div></td>
+          <td>Link Google Drive, Notion, Slack, and 50+ tools. Claude searches them mid-conversation.<br><em style="font-size:.82rem;color:var(--text-muted)">"Find our Q3 program report in Drive" — no uploading, no screenshots.</em></td>
+          <td><div class="tip-box"><strong>Pro tip:</strong> Use the Gamma connector in Cowork to go prompt → outline → finished funder presentation slides.</div></td>
+          <td><div class="mistake-box"><strong>Mistake:</strong> Thinking it syncs live. Claude searches your tools on demand — it doesn't watch them 24/7.</div></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name"><span class="feat-icon">🔌</span> Plugins</div></td>
+          <td>One-click skill packs that add slash commands for Communications, Data, Legal, and more.<br><em style="font-size:.82rem;color:var(--text-muted)">Install Marketing plugin → type /draft-post → get a LinkedIn post announcing your annual appeal.</em></td>
+          <td><div class="tip-box"><strong>Pro tip:</strong> Type / in any chat to see every slash command available.</div></td>
+          <td><div class="mistake-box"><strong>Mistake:</strong> Installing all 11 plugins. Each adds context Claude must process. Pick 2 that match your actual work.</div></td>
+        </tr>
+        <tr>
+          <td><div class="feat-name"><span class="feat-icon">📚</span> Skills</div></td>
+          <td>Reusable instruction packs that make Claude better at specific tasks — automatically.<br><em style="font-size:.82rem;color:var(--text-muted)">Settings → enable Code Execution → browse Skills library → install one.</em></td>
+          <td><div class="tip-box"><strong>Pro tip:</strong> Write your own Skill.md — org tone rules, grant writing checklist, impact reporting format.</div></td>
+          <td><div class="mistake-box"><strong>Mistake:</strong> Confusing Skills with Projects. Projects hold your files. Skills teach Claude how to do a task.</div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- BLOG WRITER -->
+<section id="blog-writer" class="feature-section alt">
+  <div class="feature-layout">
+    <div class="feature-content fade-in">
+      <div class="section-label">Skill 01</div>
+      <h2 class="section-title">Blog Writer</h2>
+      <p class="section-desc">Write impact stories, donor updates, and advocacy posts for nonprofit audiences — conversational, structured, and mission-aligned.</p>
+      <ul class="feature-list">
+        <li>Opens with a human story, pivots to the systemic issue, then to the org's response</li>
+        <li>Structured format: opening scenario, pivot, H2 sections, data table, call to action</li>
+        <li>Readability rules built in — short paragraphs, active voice, no jargon</li>
+        <li>Tool roundup rules when applicable: name specific platforms, note cost and access</li>
+        <li>Banned-words list eliminates filler phrases and AI-sounding language automatically</li>
+      </ul>
+      <a href="skills/blog-writer.skill" download class="dl-btn">
+        <svg viewBox="0 0 16 16" fill="none"><path d="M8 2v8M5 7l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Download blog-writer.skill
+      </a>
+    </div>
+    <div class="fade-in">
+      <div class="mock-card">
+        <div class="mock-hdr">
+          <div class="mdot" style="background:#ff5f57"></div>
+          <div class="mdot" style="background:#febc2e"></div>
+          <div class="mdot" style="background:#28c840"></div>
+          <span class="mock-ttl">Nonprofit Impact Post Draft</span>
+        </div>
+        <div class="mock-body">
+          <div class="mhl"></div>
+          <div class="ml w"></div><div class="ml m"></div><div class="ml w"></div><div class="ml s"></div>
+          <div class="ml g" style="margin-top:1rem"></div>
+          <div class="ml m" style="margin-top:.75rem"></div><div class="ml w"></div>
+          <div class="mtbl">
+            <div class="mtbl-h"><span>Program</span><span>Reach</span><span>FY</span></div>
+            <div class="mtbl-r"><span style="color:var(--navy);font-weight:600">Food Access</span><span>2,400 families</span><span>2024</span></div>
+            <div class="mtbl-r"><span style="color:var(--navy);font-weight:600">Job Training</span><span>318 graduates</span><span>2024</span></div>
+            <div class="mtbl-r"><span style="color:var(--navy);font-weight:600">Youth Mentorship</span><span>540 youth</span><span>2024</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PPTX BUILDER -->
+<section id="pptx-builder" class="dark-sec">
+  <div style="max-width:1060px;margin:0 auto;position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center" id="pptx-grid">
+    <div class="fade-in">
+      <div class="slide-preview">
+        <div class="s-acc"></div>
+        <div class="s-top"><div class="s-tl" style="width:38%"></div></div>
+        <div class="s-body">
+          <div class="s-col">
+            <div style="height:9px;background:rgba(252,176,64,.48);border-radius:3px;width:80%"></div>
+            <div style="height:6px;background:rgba(255,255,255,.07);border-radius:3px;width:90%"></div>
+            <div class="s-bul" style="width:85%"></div>
+            <div class="s-bul" style="width:72%"></div>
+            <div class="s-bul" style="width:79%"></div>
+            <div class="s-bul" style="width:65%"></div>
+          </div>
+          <div style="flex:.85;background:rgba(255,255,255,.04);border-radius:8px;border:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="4" y="24" width="5" height="12" rx="1.5" fill="rgba(252,176,64,.6)"/><rect x="12" y="18" width="5" height="18" rx="1.5" fill="rgba(10,52,118,.6)"/><rect x="20" y="12" width="5" height="24" rx="1.5" fill="rgba(255,255,255,.4)"/><rect x="28" y="8" width="5" height="28" rx="1.5" fill="rgba(14,107,138,.6)"/></svg>
+          </div>
+        </div>
+        <div class="s-foot">
+          <div class="s-fl" style="width:15%"></div><div class="s-fl" style="width:30%"></div>
+          <div style="flex:1"></div><div class="s-fl" style="width:8%"></div>
+        </div>
+      </div>
+    </div>
+    <div class="fade-in">
+      <div class="section-label">Skill 02</div>
+      <h2 class="section-title">PPTX Builder</h2>
+      <p class="section-desc">Professional board and funder decks built with PptxGenJS — download-ready .pptx files, never just outlines.</p>
+      <ul class="pfl">
+        <li><div class="pfi"><svg viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="1.5" stroke="#FCB040" stroke-width="1.3"/><path d="M5 7h6M5 9.5h4" stroke="#FCB040" stroke-width="1.2" stroke-linecap="round"/></svg></div><span>16&times;9 layouts with title, divider, and content slide types — all visually consistent with org branding</span></li>
+        <li><div class="pfi"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke="#FCB040" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Speaker notes auto-included so board presentations work without a live presenter</span></li>
+        <li><div class="pfi"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5" stroke="#FCB040" stroke-width="1.3"/><path d="M8 5v3l2 2" stroke="#FCB040" stroke-width="1.3" stroke-linecap="round"/></svg></div><span>First prompt: "Build a 10-slide board deck showing Q3 program outcomes and budget variance."</span></li>
+      </ul>
+      <a href="skills/pptx-builder.skill" download class="dl-btn">
+        <svg viewBox="0 0 16 16" fill="none"><path d="M8 2v8M5 7l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Download pptx-builder.skill
+      </a>
+    </div>
+  </div>
+</section>
+<style>@media(max-width:780px){#pptx-grid{grid-template-columns:1fr!important;gap:2rem!important}}</style>
+
+<!-- INFOGRAPHIC DESIGNER -->
+<section id="infographic-designer" class="feature-section">
+  <div class="feature-layout rev">
+    <div class="feature-content fade-in">
+      <div class="section-label">Skill 03</div>
+      <h2 class="section-title">Infographic Designer</h2>
+      <p class="section-desc">Converts program data or impact narratives into a structured blueprint, then renders publication-ready PNG infographics for annual reports and grant submissions.</p>
+      <ul class="feature-list">
+        <li>Blueprint-first: hierarchy, layout, and text confirmed before rendering begins</li>
+        <li>Bar charts, icon grids, flow diagrams, comparison tables, and radial charts</li>
+        <li>Splits complex topics into 2–3 panels automatically when needed</li>
+        <li>All text clean, typo-free, and optimized for print and digital distribution</li>
+      </ul>
+      <a href="skills/infographic-designer.skill" download class="dl-btn">
+        <svg viewBox="0 0 16 16" fill="none"><path d="M8 2v8M5 7l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Download infographic-designer.skill
+      </a>
+    </div>
+    <div class="fade-in">
+      <div class="mock-card">
+        <div class="mock-hdr">
+          <div class="mdot" style="background:#ff5f57"></div>
+          <div class="mdot" style="background:#febc2e"></div>
+          <div class="mdot" style="background:#28c840"></div>
+          <span class="mock-ttl">Blueprint &rarr; PNG · Annual Report</span>
+        </div>
+        <div class="mock-body" style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+          <div style="background:var(--off-white);border:1px solid var(--border);border-radius:8px;padding:.75rem">
+            <div style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--navy);margin-bottom:.5rem">Volunteer Hours</div>
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <div style="display:flex;align-items:center;gap:5px"><div style="flex:1;height:7px;background:var(--border);border-radius:4px;overflow:hidden"><div style="height:100%;width:82%;background:var(--navy);border-radius:4px"></div></div><span style="font-size:.6rem;color:var(--text-muted)">12,400</span></div>
+              <div style="display:flex;align-items:center;gap:5px"><div style="flex:1;height:7px;background:var(--border);border-radius:4px;overflow:hidden"><div style="height:100%;width:61%;background:var(--gold);border-radius:4px"></div></div><span style="font-size:.6rem;color:var(--text-muted)">9,200</span></div>
+              <div style="display:flex;align-items:center;gap:5px"><div style="flex:1;height:7px;background:var(--border);border-radius:4px;overflow:hidden"><div style="height:100%;width:44%;background:var(--teal);border-radius:4px"></div></div><span style="font-size:.6rem;color:var(--text-muted)">6,600</span></div>
+            </div>
+          </div>
+          <div style="background:var(--off-white);border:1px solid var(--border);border-radius:8px;padding:.75rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem">
+            <div style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--navy)">Donor Split</div>
+            <div style="display:flex;gap:.6rem">
+              <div style="text-align:center"><div style="width:34px;height:34px;border-radius:50%;border:6px solid var(--border);border-top-color:var(--navy);border-right-color:var(--navy)"></div><div style="font-size:.58rem;color:var(--text-muted);margin-top:3px">Major</div></div>
+              <div style="text-align:center"><div style="width:34px;height:34px;border-radius:50%;border:6px solid var(--border);border-top-color:var(--gold);border-right-color:var(--gold);border-bottom-color:var(--gold)"></div><div style="font-size:.58rem;color:var(--text-muted);margin-top:3px">Mid</div></div>
+              <div style="text-align:center"><div style="width:34px;height:34px;border-radius:50%;border:6px solid var(--border);border-top-color:var(--teal)"></div><div style="font-size:.58rem;color:var(--text-muted);margin-top:3px">Annual</div></div>
+            </div>
+          </div>
+          <div style="grid-column:span 2;background:var(--gold-pale);border:1px solid rgba(252,176,64,.35);border-radius:8px;padding:.65rem .75rem">
+            <div style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--navy);margin-bottom:.4rem">Workflow</div>
+            <div style="display:flex;gap:5px;align-items:center">
+              <div style="flex:1;text-align:center;font-size:.6rem;font-weight:600;color:var(--navy);background:var(--white);border-radius:5px;padding:4px">Data</div>
+              <div style="color:var(--gold);font-size:.8rem">&rarr;</div>
+              <div style="flex:1;text-align:center;font-size:.6rem;font-weight:600;color:var(--navy);background:var(--pale-navy);border-radius:5px;padding:4px">Blueprint</div>
+              <div style="color:var(--gold);font-size:.8rem">&rarr;</div>
+              <div style="flex:1;text-align:center;font-size:.6rem;font-weight:600;color:var(--navy);background:var(--white);border-radius:5px;padding:4px">Render PNG</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MERMAID DESIGNER -->
+<section id="mermaid-designer" class="feature-section alt">
+  <div class="feature-layout">
+    <div class="feature-content fade-in">
+      <div class="section-label">Skill 04</div>
+      <h2 class="section-title">Mermaid Designer</h2>
+      <p class="section-desc">Generates branded Mermaid diagram code — grant intake flows, case management sequences, volunteer onboarding paths, and program logic models — with TCEA color theming applied automatically.</p>
+      <ul class="feature-list">
+        <li>Selects the right diagram type from context: flow, sequence, ER, Gantt, state, mindmap</li>
+        <li>Three built-in themes: Navy/Gold (TCEA brand), Slate/Teal (neutral), Light/Accessible (print)</li>
+        <li>Node, edge, and subgraph style rules applied consistently — no manual formatting</li>
+        <li>Copy-paste-ready for GitHub, Notion, Confluence, or mermaid.live</li>
+      </ul>
+      <a href="skills/mermaid-designer.skill" download class="dl-btn">
+        <svg viewBox="0 0 16 16" fill="none"><path d="M8 2v8M5 7l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Download mermaid-designer.skill
+      </a>
+    </div>
+    <div class="fade-in">
+      <div class="mm-mock">
+        <div class="mm-hdr">
+          <div class="mm-dot" style="background:#ff5f57"></div>
+          <div class="mm-dot" style="background:#febc2e"></div>
+          <div class="mm-dot" style="background:#28c840"></div>
+          <span class="mm-lbl">flowchart TD &middot; Grant Intake Flow</span>
+        </div>
+        <div class="mm-body" style="padding:1.25rem;gap:0">
+          <div class="mm-node p">Application Received</div>
+          <div class="mm-arr"></div>
+          <div class="mm-node d" style="font-size:.62rem">Eligible?</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;width:100%;margin-top:4px">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0">
+              <div class="mm-arr"></div>
+              <div class="mm-node s" style="font-size:.65rem;width:100%;text-align:center">Program Review</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0">
+              <div class="mm-arr"></div>
+              <div class="mm-node t" style="font-size:.65rem">Decline &amp; Refer</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DRAW.IO BUILDER -->
+<section id="drawio-builder" class="feature-section">
+  <div class="feature-layout rev">
+    <div class="feature-content fade-in">
+      <div class="section-label">Skill 05</div>
+      <h2 class="section-title">Draw.io XML Builder</h2>
+      <p class="section-desc">Produces complete, importable mxGraph XML for draw.io and diagrams.net — org structures, service delivery networks, and program logic maps ready to open and edit.</p>
+      <ul class="feature-list">
+        <li>Full mxGraphModel XML output — paste into draw.io via Extras &rarr; Edit Diagram</li>
+        <li>Color palette locked to TCEA brand values — no arbitrary hex codes</li>
+        <li>Layout grid and node sizing rules ensure readable, consistent diagrams every time</li>
+        <li>Recipes for org charts, service maps, program logic models, and swimlane workflows</li>
+      </ul>
+      <a href="skills/drawio-xml-builder.skill" download class="dl-btn">
+        <svg viewBox="0 0 16 16" fill="none"><path d="M8 2v8M5 7l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Download drawio-xml-builder.skill
+      </a>
+    </div>
+    <div class="fade-in">
+      <div class="dio-mock">
+        <div class="dio-hdr">
+          <span style="font-size:.68rem;color:#555;font-weight:600">draw.io</span>
+          <span style="color:#ccc;font-size:.7rem">|</span>
+          <span class="dio-mi">File</span><span class="dio-mi">Extras</span><span class="dio-mi">View</span>
+          <span style="flex:1"></span>
+          <span style="font-size:.62rem;color:var(--teal);font-weight:600">&larr; Edit Diagram</span>
+        </div>
+        <div class="dio-canvas">
+          <div class="dn dk" style="left:88px;top:14px;width:90px;height:32px">Executive Dir.</div>
+          <div class="dn gf" style="left:12px;top:78px;width:80px;height:32px">Programs</div>
+          <div class="dn" style="left:165px;top:78px;width:80px;height:32px">Development</div>
+          <div class="dn dk" style="left:55px;top:142px;width:80px;height:32px">Volunteers</div>
+          <div class="dn" style="left:155px;top:142px;width:80px;height:32px">Grants Mgr</div>
+          <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none">
+            <defs><marker id="arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0A3476"/></marker></defs>
+            <line x1="120" y1="46" x2="52" y2="78" stroke="#0A3476" stroke-width="1.4" marker-end="url(#arr)"/>
+            <line x1="148" y1="46" x2="204" y2="78" stroke="#0A3476" stroke-width="1.4" marker-end="url(#arr)"/>
+            <line x1="52" y1="110" x2="88" y2="142" stroke="#FCB040" stroke-width="1.4" marker-end="url(#arr)"/>
+            <line x1="204" y1="110" x2="195" y2="142" stroke="#0A3476" stroke-width="1.4" marker-end="url(#arr)"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RUBRIC BUILDER -->
+<section id="rubric-builder" class="feature-section alt">
+  <div class="feature-layout">
+    <div class="feature-content fade-in">
+      <div class="section-label">Skill 06</div>
+      <h2 class="section-title">Rubric Builder</h2>
+      <p class="section-desc">Builds analytic, holistic, and single-point rubrics for grant proposal scoring, program evaluation, and volunteer performance review — observable and measurable every time.</p>
+      <ul class="feature-list">
+        <li>Three formats: Analytic (criteria &times; levels), Holistic (level paragraphs), Single-Point (mastery column)</li>
+        <li>Performance indicators matched to the evaluation's purpose and cognitive level</li>
+        <li>Enforces observable language — no vague terms like "good," "appropriate," or "understands"</li>
+        <li>Header block included: evaluation name, type, total points, and scoring notes</li>
+      </ul>
+      <a href="skills/rubric-builder.skill" download class="dl-btn">
+        <svg viewBox="0 0 16 16" fill="none"><path d="M8 2v8M5 7l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Download rubric-builder.skill
+      </a>
+    </div>
+    <div class="fade-in">
+      <div class="rub-mock">
+        <div class="rub-hdr">
+          <div class="rub-title">Grant Proposal Scoring Rubric</div>
+          <div class="rub-sub">Program Officer Review &middot; 20 pts &middot; Analytic</div>
+        </div>
+        <table class="rtbl">
+          <thead>
+            <tr>
+              <th>Criterion</th>
+              <th><span class="sbadge">4</span>Exceeds</th>
+              <th><span class="sbadge">3</span>Meets</th>
+              <th><span class="sbadge">2</span>Approaching</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Need Statement</td><td>Data-driven, local, specific population named</td><td>Clear need; some local data</td><td>Need present but broad or anecdotal</td></tr>
+            <tr><td>Logic Model</td><td>Activities, outputs, outcomes clearly linked</td><td>Outcomes tied to activities</td><td>Outcomes vague or missing</td></tr>
+            <tr><td>Evaluation Plan</td><td>Named measures, timeline, and data owner</td><td>2+ measures; collection noted</td><td>1 measure; no collection plan</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRAINING ARCHITECT (was Lesson Plan) -->
+<section id="lesson-plan" class="feature-section">
+  <div class="feature-layout rev">
+    <div class="feature-content fade-in">
+      <div class="section-label">Skill 07</div>
+      <h2 class="section-title">Training Session Architect</h2>
+      <p class="section-desc">Complete volunteer and staff training plans for single sessions or full onboarding sequences — specific enough for any facilitator to deliver without additional guidance.</p>
+      <ul class="feature-list">
+        <li>Performance verbs matched to objectives — no vague "understand" goals</li>
+        <li>Five-phase sequence: Hook, Direct Instruction, Guided Practice, Independent Work, Closure</li>
+        <li>Differentiation built in: scaffolding for new volunteers, extension for experienced staff</li>
+        <li>Unit plan variant: learning pathway, essential questions, and session sequence table</li>
+      </ul>
+      <a href="skills/lesson-plan-architect.skill" download class="dl-btn">
+        <svg viewBox="0 0 16 16" fill="none"><path d="M8 2v8M5 7l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Download lesson-plan-architect.skill
+      </a>
+    </div>
+    <div class="fade-in">
+      <div class="lp-mock">
+        <div class="lp-hdr">
+          <div class="lp-ttl">Volunteer Intake &amp; Safety Training</div>
+          <div class="lp-badge">New Volunteers &middot; 60 min</div>
+        </div>
+        <div class="lp-body">
+          <div class="lp-ph"><div class="lp-time">0–8 min</div><div><div class="lp-pn">Hook / Activation</div><div class="lp-pd">Share a client story (anonymized). Ask: "What would you need to feel prepared for this?"</div></div></div>
+          <div class="lp-ph"><div class="lp-time">8–22 min</div><div><div class="lp-pn">Direct Instruction</div><div class="lp-pd">Model client intake process using a sample scenario. Check for understanding at step 3.</div></div></div>
+          <div class="lp-ph"><div class="lp-time">22–40 min</div><div><div class="lp-pn">Guided Practice</div><div class="lp-pd">Pairs complete a mock intake together. Facilitator circulates and addresses questions.</div></div></div>
+          <div class="lp-ph"><div class="lp-time">50–60 min</div><div><div class="lp-pn">Closure</div><div class="lp-pd">Exit ticket: "Name one thing you'll do differently in your first shift based on today."</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COWORK SETUP -->
+<section id="cowork">
+  <div class="cowork-inner fade-in">
+    <div class="section-label">Setup Guide</div>
+    <h2 class="section-title">8 Steps to Set Up Your Entire Claude Cowork</h2>
+    <p class="section-desc">Do these once. They run forever. Requires Claude Pro ($20/mo) and the macOS or Windows desktop app.<sup><a href="#ref3" class="cite">3</a></sup></p>
+    <div class="cowork-grid">
+      <div class="cowork-card">
+        <div class="cowork-num">1</div>
+        <h3>Download The App</h3>
+        <p>Go to claude.com/download. You need a <strong>Pro plan</strong>. macOS or Windows only. Open the app.</p>
+        <p class="cowork-note">2 minutes. Don't overthink it.</p>
+      </div>
+      <div class="cowork-card">
+        <div class="cowork-num">2</div>
+        <h3>Click The Cowork Tab</h3>
+        <p>Open the app. Click <strong>Cowork</strong> at the top. Select <strong>Opus 4.6</strong>. Turn on <strong>Extended Thinking.</strong></p>
+        <p class="cowork-note">Wrong model = bad output.</p>
+      </div>
+      <div class="cowork-card">
+        <div class="cowork-num">3</div>
+        <h3>Build This Exact Folder</h3>
+        <p>Create one folder: <strong>"Claude-Work."</strong> Inside it, 4 subfolders:</p>
+        <ul class="cowork-bullets">
+          <li><strong>ABOUT ME</strong> — your org, mission, and how you write</li>
+          <li><strong>PROJECTS</strong> — one subfolder per active grant or initiative</li>
+          <li><strong>TEMPLATES</strong> — awarded proposals, strong reports</li>
+          <li><strong>OUTPUTS</strong> — where Claude saves finished documents</li>
+        </ul>
+        <p style="margin-top:.65rem;font-size:.81rem;color:var(--text-muted)">Cowork has <strong>read/write access.</strong> Keep it tight.</p>
+      </div>
+      <div class="cowork-card">
+        <div class="cowork-num">4</div>
+        <h3>Create 3 Context Files</h3>
+        <p>Inside <strong>ABOUT ME</strong>, create:</p>
+        <ul class="cowork-bullets">
+          <li><strong>about-org.md</strong> — mission, programs, population served</li>
+          <li><strong>our-voice.md</strong> — communication tone, 2–3 writing samples</li>
+          <li><strong>our-rules.md</strong> — ask before starting, show a plan, never delete</li>
+        </ul>
+        <p class="cowork-note" style="margin-top:.5rem;">One great file beats 50 random uploads.</p>
+      </div>
+      <div class="cowork-card">
+        <div class="cowork-num">5</div>
+        <h3>Set Instructions</h3>
+        <p>Settings → Cowork → Edit Instructions. Paste:</p>
+        <div class="code-snip">"I'm [Name] at [Org], [Role]. Read my files before every task. Ask questions before executing. Show a plan. Never delete without approval."</div>
+        <p class="cowork-note" style="margin-top:.6rem;">Set once. Runs forever.</p>
+      </div>
+      <div class="cowork-card">
+        <div class="cowork-num">6</div>
+        <h3>Stop Prompting. Start Clicking.</h3>
+        <p>Paste this for every task:</p>
+        <div class="code-snip">"I want to [TASK]. Read all files first. Ask me questions using AskUserQuestion before you execute. If something is off, generate new questions. Do not guess."</div>
+        <p class="cowork-note" style="margin-top:.5rem;">Claude forces you to be clear — you don't have to be.</p>
+      </div>
+      <div class="cowork-card">
+        <div class="cowork-num">7</div>
+        <h3>Install Your First Plugin</h3>
+        <p>Customize → Browse Plugins → Install. Type <strong>/</strong> to see slash commands.</p>
+        <ul class="cowork-bullets">
+          <li>Marketing → /marketing:draft-content</li>
+          <li>Data → /data:explore</li>
+          <li>Legal → "Review this MOU."</li>
+        </ul>
+        <p class="cowork-note" style="margin-top:.5rem;">Start with 2.</p>
+      </div>
+      <div class="cowork-card">
+        <div class="cowork-num">8</div>
+        <h3>Connect Your Tools</h3>
+        <p>Settings → Connectors → Browse → Add. <strong>Google Drive, Notion, Slack.</strong> 50+ more. Free on all plans.</p>
+        <p style="font-size:.81rem;color:var(--text-muted);margin-top:.4rem;">Claude reads your tools mid-conversation. No copy-pasting.</p>
+        <p class="cowork-note">Claude stops being a chatbot. Starts being a coworker.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ASK FIRST -->
+<section id="ask-first">
+  <div class="ask-inner">
+    <div class="fade-in" style="margin-bottom:2.5rem">
+      <div class="section-label">The Method</div>
+      <h2 class="section-title">Make Claude Ask YOU First</h2>
+      <p class="section-desc">Stop writing perfect prompts. Use this 3-step pattern to get outputs built on your exact context — not generic assumptions.<sup><a href="#ref4" class="cite">4</a></sup></p>
+    </div>
+    <div class="method-flow fade-in">
+      <div class="method-step">
+        <div class="method-step-lbl">Step 1</div>
+        <h3>Start with any task</h3>
+        <p>Template for every nonprofit task:</p>
+        <div class="code-snip">I want to [TASK] so that [SUCCESS].
+
+First, read uploaded files.
+
+DO NOT start yet. Ask me clarifying questions (use AskUserQuestion) to refine the approach.
+
+Only begin once we've aligned.</div>
+        <p style="font-size:.78rem;color:var(--text-muted);margin-top:.6rem;font-style:italic">Example: "I want to write a foundation appeal letter so that we secure $25K for our food access program."</p>
+      </div>
+      <div class="method-step">
+        <div class="method-step-lbl">Step 2</div>
+        <h3>Claude creates a form</h3>
+        <p>Claude generates an interactive AskUserQuestion form with clickable options. No typing required. Example questions it might ask:</p>
+        <ul class="cowork-bullets" style="margin-top:.5rem">
+          <li>What foundation is this for?</li>
+          <li>What program area does the grant cover?</li>
+          <li>Do you have a prior relationship with this funder?</li>
+          <li>Do you have an awarded proposal to use as a template?</li>
+        </ul>
+      </div>
+      <div class="method-step">
+        <div class="method-step-lbl">Step 3</div>
+        <h3>Answer the questions</h3>
+        <p>Claude processes your answers, confirms a plan, and only then begins writing. The output reflects your org, your funder relationship, and your program — not a generic template.</p>
+        <p style="font-size:.8rem;color:var(--text-muted);margin-top:.5rem;font-style:italic">"Perfect — I have everything I need. Here's the plan…"</p>
+      </div>
+    </div>
+
+    <h3 style="font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--navy);margin-bottom:1.1rem;">Why this works<sup><a href="#ref4" class="cite">4</a></sup></h3>
+    <div class="why-grid fade-in">
+      <div class="why-card"><div class="why-icon">◆</div><p>You stop writing perfect prompts — Claude forces clarity instead.</p></div>
+      <div class="why-card"><div class="why-icon">◆</div><p>Iterate through questions, not through editing bad outputs.</p></div>
+      <div class="why-card"><div class="why-icon">◆</div><p>With 1M+ token context, hallucinations drop significantly.<sup><a href="#ref5" class="cite">5</a></sup></p></div>
+      <div class="why-card"><div class="why-icon">◆</div><p>Claude generates clickable buttons. You click. It executes.</p></div>
+    </div>
+
+    <div class="mid-box fade-in">
+      <div>
+        <h3>When to reset mid-conversation</h3>
+        <p>If a grant draft or donor letter is going in the wrong direction, paste this to reset without losing context.</p>
+        <p style="font-size:.78rem;color:rgba(255,255,255,.4)">Works in Cowork and standard Chat.</p>
+      </div>
+      <div>
+        <div style="font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.45rem;">Copy–paste this</div>
+        <div class="paste-block">We are getting sidetracked. We need to <strong>start over without losing context.</strong>
+
+<strong>First, generate an AskUserQuestion</strong> form so we decide what went wrong and where we must go instead.
+
+From my answer, generate a <strong>second AskUserQuestion</strong> form to complete the task.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLAUDE SKILLS (advanced installs) -->
+<section id="claude-skills">
+  <div style="max-width:1060px;margin:0 auto;position:relative;z-index:1">
+    <div class="section-label fade-in">Advanced: Claude Skills</div>
+    <h2 class="section-title fade-in">Reusable capabilities for Claude agents</h2>
+    <p class="section-desc fade-in">Install with a single command. Bundle slash commands, agents, hooks, and MCP servers into shareable packages that work across Claude Code, Cowork, and Claude.ai.<sup><a href="#ref6" class="cite">6</a></sup></p>
+    <div class="cs-intro fade-in">
+      <strong>Claude skills</strong> are reusable capabilities for AI agents, easily installed with a single command. They bundle slash commands, agents, hooks, and <strong>MCP</strong> servers into shareable packages that work across <strong>Claude Code, Cowork &amp; Claude AI.</strong> Nonprofit teams can install skills that pull live documentation, manage long coding sessions, or add persistent memory — without re-explaining context every session.
+    </div>
+    <div class="cs-grid">
+      <div class="cs-card fade-in">
+        <div class="cs-hdr"><div class="cs-tag">Skill</div><h3>context7</h3></div>
+        <div class="cs-body">
+          <p>Pulls version-specific documentation from source repos directly into Claude's context. Claude gets live, accurate API docs — no outdated training data. Useful for nonprofits building custom tools or integrations.<sup><a href="#ref7" class="cite" style="color:var(--gold)">7</a></sup></p>
+          <a href="https://github.com/upstash/context7" class="cs-link" target="_blank">github.com/upstash/context7</a>
+        </div>
+      </div>
+      <div class="cs-card fade-in">
+        <div class="cs-hdr"><div class="cs-tag">Skill</div><h3>ralph-loop</h3></div>
+        <div class="cs-body">
+          <p>Turns Claude into a self-driving development agent. Implements a stop-hook pattern for long-running, multi-hour autonomous coding sessions — resets context between tasks automatically.<sup><a href="#ref8" class="cite" style="color:var(--gold)">8</a></sup></p>
+          <a href="https://github.com/anthropics/claude-plugins-official" class="cs-link" target="_blank">github.com/anthropics/claude-plugins-official</a>
+        </div>
+      </div>
+      <div class="cs-card fade-in">
+        <div class="cs-hdr"><div class="cs-tag">Skill</div><h3>claude-mem</h3></div>
+        <div class="cs-body">
+          <p>Adds long-term memory to Claude so it carries context and preferences across sessions. No more re-explaining your org's programs, funders, or voice every conversation.<sup><a href="#ref9" class="cite" style="color:var(--gold)">9</a></sup></p>
+          <a href="https://github.com/anthropics/claude-mem" class="cs-link" target="_blank">github.com/anthropics/claude-mem</a>
+        </div>
+      </div>
+      <div class="cs-card fade-in">
+        <div class="cs-hdr"><div class="cs-tag">Skill · 96K+ installs</div><h3>frontend-design</h3></div>
+        <div class="cs-body">
+          <p>The most popular Claude skill. Transforms Claude's UI output from generic defaults into distinctive, production-grade interfaces. Ideal for building donor portals or volunteer dashboards.<sup><a href="#ref10" class="cite" style="color:var(--gold)">10</a></sup></p>
+          <a href="https://claude.com/plugins" class="cs-link" target="_blank">claude.com/plugins</a>
+        </div>
+      </div>
+      <div class="cs-card fade-in">
+        <div class="cs-hdr"><div class="cs-tag">Skill</div><h3>code-review-agents</h3></div>
+        <div class="cs-body">
+          <p>Automated PR review using multiple parallel specialized agents — comment analysis, test coverage, silent failure detection, confidence scoring. Useful for lean tech teams.<sup><a href="#ref11" class="cite" style="color:var(--gold)">11</a></sup></p>
+          <a href="https://github.com/anthropics/claude-code/tree/main/skills" class="cs-link" target="_blank">github.com/anthropics/claude-code/tree/main/skills</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ANTHROPIC COURSES -->
+<section id="courses">
+  <div class="courses-inner fade-in">
+    <div class="section-label">Official Learning</div>
+    <h2 class="section-title">Anthropic Courses</h2>
+    <p class="section-desc">Free official training from Anthropic — from basic fluency to building with the Claude API. All courses available at <a href="https://anthropic.skilljar.com" target="_blank" style="color:var(--navy);font-family:'DM Mono',monospace;font-size:.82rem;">anthropic.skilljar.com</a>.<sup><a href="#ref12" class="cite">12</a></sup></p>
+    <div class="courses-grid">
+      <div class="course-card"><div class="course-icon">📘</div><h3>Claude 101</h3><p>Learn to use Claude for everyday work tasks, understand core features, and explore resources for more advanced learning.</p><a href="https://anthropic.skilljar.com" class="course-url" target="_blank">anthropic.skilljar.com</a></div>
+      <div class="course-card"><div class="course-icon">💻</div><h3>Claude Code in Action</h3><p>Integrate Claude Code into your development workflow and build autonomous coding agents.</p><a href="https://anthropic.skilljar.com" class="course-url" target="_blank">anthropic.skilljar.com</a></div>
+      <div class="course-card"><div class="course-icon">🔧</div><h3>Building with the Claude API</h3><p>The full spectrum of working with Claude's API — from basic calls to advanced agentic patterns.</p><a href="https://anthropic.skilljar.com" class="course-url" target="_blank">anthropic.skilljar.com</a></div>
+      <div class="course-card"><div class="course-icon">🧩</div><h3>Introduction to MCP</h3><p>Build Model Context Protocol servers and clients from scratch using Python.</p><a href="https://anthropic.skilljar.com" class="course-url" target="_blank">anthropic.skilljar.com</a></div>
+      <div class="course-card"><div class="course-icon">🎓</div><h3>AI Fluency for Students</h3><p>Develop AI fluency skills that enhance learning and career planning.</p><a href="https://anthropic.skilljar.com" class="course-url" target="_blank">anthropic.skilljar.com</a></div>
+      <div class="course-card"><div class="course-icon">🏫</div><h3>AI Fluency for Educators</h3><p>Empowers faculty, instructional designers, and educational leaders to apply AI.</p><a href="https://anthropic.skilljar.com" class="course-url" target="_blank">anthropic.skilljar.com</a></div>
+      <div class="course-card"><div class="course-icon">🌐</div><h3>AI Fluency: Framework &amp; Foundations</h3><p>Learn to collaborate with AI systems effectively, efficiently, and ethically.</p><a href="https://anthropic.skilljar.com" class="course-url" target="_blank">anthropic.skilljar.com</a></div>
+      <div class="course-card"><div class="course-icon">⚙️</div><h3>Introduction to Agent Skills</h3><p>Build, configure, and share Skills in Claude Code — reusable markdown instruction sets for agents.</p><a href="https://anthropic.skilljar.com" class="course-url" target="_blank">anthropic.skilljar.com</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how-it-works">
+  <div class="hiw-inner">
+    <div class="hiw-hdr fade-in">
+      <div class="section-label">Process</div>
+      <h2 class="section-title">How TCEA skills work</h2>
+      <p class="section-desc" style="margin:0 auto">Add a skill file to your Claude Project's knowledge base. From that point forward, Claude reads it automatically and applies its rules to every matching request in that project.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card fade-in">
+        <div class="step-num">1</div>
+        <div class="step-title">Upload the skill</div>
+        <p class="step-desc">Add the .skill file to your Claude Project. One upload covers every future conversation in that project.</p>
+      </div>
+      <div class="step-card fade-in">
+        <div class="step-num">2</div>
+        <div class="step-title">Describe your task</div>
+        <p class="step-desc">Natural trigger phrases — "write a donor update about…", "draw a flowchart of our intake process…", "build a rubric for evaluating…" — activate the right skill automatically.</p>
+      </div>
+      <div class="step-card fade-in">
+        <div class="step-num">3</div>
+        <div class="step-title">Get a finished file</div>
+        <p class="step-desc">Receive a complete deliverable — blog draft, .pptx deck, PNG infographic, Mermaid diagram, XML, rubric, or training plan — ready to use immediately.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GET STARTED -->
+<section id="get-started">
+  <div class="cta-inner fade-in">
+    <div class="section-label" style="color:var(--gold-light)">Get Started</div>
+    <h2 class="section-title">Ready to use all seven?</h2>
+    <p class="section-desc">Upload each skill file to a Claude Project and start producing professional content, diagrams, and evaluations in minutes.</p>
+    <div class="cta-chips">
+      <a href="skills/blog-writer.skill" download class="cta-chip-link">blog-writer.skill</a>
+      <a href="skills/pptx-builder.skill" download class="cta-chip-link">pptx-builder.skill</a>
+      <a href="skills/infographic-designer.skill" download class="cta-chip-link">infographic-designer.skill</a>
+      <a href="skills/mermaid-designer.skill" download class="cta-chip-link">mermaid-designer.skill</a>
+      <a href="skills/drawio-xml-builder.skill" download class="cta-chip-link">drawio-xml-builder.skill</a>
+      <a href="skills/rubric-builder.skill" download class="cta-chip-link">rubric-builder.skill</a>
+      <a href="skills/lesson-plan-architect.skill" download class="cta-chip-link">lesson-plan-architect.skill</a>
+    </div>
+    <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap">
+      <a href="#skills" class="btn-gold">View All Skills</a>
+      <a href="#how-it-works" class="btn-outline">How It Works</a>
+    </div>
+  </div>
+</section>
+
+<!-- REFERENCES -->
+<section id="references">
+  <div class="ref-inner">
+    <h2>Sources &amp; References</h2>
+    <ol class="ref-list">
+      <li id="ref1"><span class="ref-num">1</span>TCEA AI Skills Suite — original site content. TCEA, 2024–2025.</li>
+      <li id="ref2"><span class="ref-num">2</span>"How to use Claude" feature overview including Chat, Cowork, Projects, Artifacts, Excel, Connectors, Plugins, and Skills. Original graphic content, circulated 2025. See also: <a href="https://docs.claude.ai" target="_blank">docs.claude.ai</a></li>
+      <li id="ref3"><span class="ref-num">3</span>"8 Steps to Set Up Your Entire Claude Cowork." Instructional content from circulated social media guide, 2025. Desktop app available at <a href="https://claude.com/download" target="_blank">claude.com/download</a></li>
+      <li id="ref4"><span class="ref-num">4</span>"Make Claude Ask YOU First." AskUserQuestion method guide, including Steps 1–3 and "Why This Works" rationale. Circulated social media content, 2025.</li>
+      <li id="ref5"><span class="ref-num">5</span>"With 1M+ token context, hallucinations drop." Claim from source guide content, 2025. Anthropic's extended context window documentation: <a href="https://docs.anthropic.com" target="_blank">docs.anthropic.com</a></li>
+      <li id="ref6"><span class="ref-num">6</span>"Claude skills are reusable capabilities for AI agents." Official Anthropic description. Skills library: <a href="https://github.com/anthropics/claude-code/tree/main/skills" target="_blank">github.com/anthropics/claude-code/tree/main/skills</a></li>
+      <li id="ref7"><span class="ref-num">7</span>context7 MCP skill. Upstash, MIT License. <a href="https://github.com/upstash/context7" target="_blank">github.com/upstash/context7</a></li>
+      <li id="ref8"><span class="ref-num">8</span>ralph-loop (Ralph for Claude Code). Autonomous development loop with intelligent exit detection. <a href="https://github.com/frankbria/ralph-claude-code" target="_blank">github.com/frankbria/ralph-claude-code</a></li>
+      <li id="ref9"><span class="ref-num">9</span>claude-mem. Persistent memory compression for Claude Code. <a href="https://github.com/anthropics/claude-mem" target="_blank">github.com/anthropics/claude-mem</a></li>
+      <li id="ref10"><span class="ref-num">10</span>frontend-design skill — 96K+ installs as reported at <a href="https://claude.com/plugins" target="_blank">claude.com/plugins</a>. Anthropic, 2025.</li>
+      <li id="ref11"><span class="ref-num">11</span>code-review-agents (Code Review Plugin). Anthropic official skills repository. <a href="https://github.com/anthropics/claude-code/tree/main/skills" target="_blank">github.com/anthropics/claude-code/tree/main/skills</a></li>
+      <li id="ref12"><span class="ref-num">12</span>Anthropic official course catalog. Courses include Claude 101, Claude Code in Action, Building with the Claude API, Introduction to MCP, AI Fluency series, and Introduction to Agent Skills. <a href="https://anthropic.skilljar.com" target="_blank">anthropic.skilljar.com</a></li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <div style="display:flex;align-items:center;gap:.75rem">
+    <div class="nav-logo" style="width:28px;height:28px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7v10l10 5 10-5V7L12 2z" fill="#071f4a"/><path d="M12 2l10 5-10 5L2 7l10-5z" fill="#FCB040"/></svg>
+    </div>
+    <span class="ft-brand">TCEA <span>AI Skills</span> — Nonprofit Edition</span>
+  </div>
+  <div class="ft-links">
+    <a href="#skills">Skills</a>
+    <a href="#how-claude">How Claude Works</a>
+    <a href="#cowork">Cowork</a>
+    <a href="#ask-first">Ask First</a>
+    <a href="#claude-skills">Claude Skills</a>
+    <a href="#courses">Courses</a>
+    <a href="#references">Sources</a>
+  </div>
+</footer>
+
+<script>
+const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');obs.unobserve(x.target)}})},{threshold:.1});
+document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
+document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>document.querySelector('.nav-links').classList.remove('open')));
+</script>
+</body>
+</html>
