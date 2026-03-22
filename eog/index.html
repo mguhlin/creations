@@ -1,1 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Onboarding Guide Generator — Claude Project Instructions</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:       #0f1117;
+      --surface:  #181c27;
+      --card:     #1e2333;
+      --border:   #2a3046;
+      --accent:   #5b6af0;
+      --accent2:  #00d4aa;
+      --warn:     #f59e0b;
+      --red:      #ef4444;
+      --white:    #e8ecf4;
+      --muted:    #7b86a8;
+      --code-bg:  #141720;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background: var(--bg);
+      color: var(--white);
+      font-size: 15px;
+      line-height: 1.7;
+    }
 
+    /* HEADER */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1.1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-icon {
+      width: 36px; height: 36px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0;
+    }
+    .header-title { font-weight: 700; font-size: 1rem; color: var(--white); }
+    .header-sub { font-size: 0.78rem; color: var(--muted); margin-top: 1px; }
+    header nav { margin-left: auto; display: flex; gap: 0.2rem; }
+    header nav a {
+      color: var(--muted); text-decoration: none; font-size: 0.78rem;
+      font-weight: 500; padding: 0.3rem 0.6rem; border-radius: 4px;
+      transition: background 0.15s, color 0.15s;
+    }
+    header nav a:hover { background: var(--border); color: var(--white); }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, #0f1117 0%, #151929 50%, #0c1020 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 4rem 2rem 3rem;
+      position: relative; overflow: hidden;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; top: 0; right: 0;
+      width: 55%; height: 100%;
+      background: radial-gradient(ellipse at 80% 40%, rgba(91,106,240,0.12) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-inner { max-width: 740px; position: relative; z-index: 1; }
+    .pill {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: rgba(91,106,240,0.12);
+      border: 1px solid rgba(91,106,240,0.3);
+      color: #a5adff; font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.25rem 0.75rem; border-radius: 999px; margin-bottom: 1.25rem;
+    }
+    .pill::before { content: '⬡'; }
+    h1 {
+      font-size: clamp(2rem, 4.5vw, 3.2rem);
+      font-weight: 700; line-height: 1.1;
+      color: var(--white); margin-bottom: 1rem;
+    }
+    h1 em { color: var(--accent); font-style: normal; }
+    .hero p { color: var(--muted); font-size: 1rem; max-width: 580px; font-weight: 300; }
+    .hero-meta {
+      display: flex; gap: 2rem; margin-top: 2rem; flex-wrap: wrap;
+    }
+    .meta-item { font-size: 0.82rem; color: var(--muted); }
+    .meta-item strong { color: var(--white); display: block; font-size: 1rem; }
+
+    /* LAYOUT */
+    .layout {
+      max-width: 1080px; margin: 0 auto;
+      padding: 3rem 2rem;
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 3rem; align-items: start;
+    }
+
+    /* SIDEBAR */
+    .toc {
+      position: sticky; top: 74px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px; padding: 1.1rem;
+    }
+    .toc-label {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 0.85rem; padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .toc ul { list-style: none; }
+    .toc ul li { margin-bottom: 0.05rem; }
+    .toc ul li a {
+      color: var(--muted); text-decoration: none; font-size: 0.8rem;
+      display: block; padding: 0.28rem 0.4rem; border-radius: 4px;
+      transition: background 0.12s, color 0.12s; line-height: 1.35;
+    }
+    .toc ul li a:hover { background: var(--border); color: var(--white); }
+    .toc ul li a.sub { padding-left: 1rem; font-size: 0.74rem; color: #4a5270; }
+    .toc ul li a.sub:hover { color: var(--muted); }
+
+    /* CONTENT */
+    .content section { margin-bottom: 3.5rem; scroll-margin-top: 84px; }
+
+    .section-eyebrow {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--accent2);
+      margin-bottom: 0.5rem;
+    }
+    h2 {
+      font-size: 1.5rem; font-weight: 700; color: var(--white);
+      margin-bottom: 1rem; padding-bottom: 0.65rem;
+      border-bottom: 1px solid var(--border);
+    }
+    h3 { font-size: 1.05rem; font-weight: 600; color: var(--white); margin: 1.25rem 0 0.4rem; }
+    p { color: var(--muted); margin-bottom: 0.85rem; font-size: 0.93rem; }
+    strong { color: var(--white); }
+
+    /* CARDS */
+    .card-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 0.85rem; margin-top: 1rem;
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1.1rem;
+      border-top: 2px solid var(--accent);
+    }
+    .card.green { border-top-color: var(--accent2); }
+    .card.amber { border-top-color: var(--warn); }
+    .card.red   { border-top-color: var(--red); }
+    .card h4 { font-size: 0.88rem; font-weight: 600; color: var(--white); margin-bottom: 0.3rem; }
+    .card p { font-size: 0.8rem; margin: 0; color: var(--muted); line-height: 1.5; }
+
+    /* ALERT */
+    .alert {
+      background: rgba(91,106,240,0.07);
+      border: 1px solid rgba(91,106,240,0.22);
+      border-left: 3px solid var(--accent);
+      border-radius: 6px; padding: 0.9rem 1.1rem;
+      font-size: 0.88rem; color: var(--muted); margin: 1rem 0;
+    }
+    .alert.warn {
+      background: rgba(245,158,11,0.07);
+      border-color: rgba(245,158,11,0.22);
+      border-left-color: var(--warn);
+    }
+    .alert strong { color: #a5adff; }
+    .alert.warn strong { color: #fcd34d; }
+
+    /* STEP LIST */
+    .steps { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; margin: 0.75rem 0; }
+    .steps li {
+      display: grid; grid-template-columns: 28px 1fr;
+      gap: 0.6rem; align-items: start;
+      font-size: 0.9rem; color: var(--muted);
+    }
+    .step-num {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: rgba(91,106,240,0.2); color: #a5adff;
+      font-size: 0.7rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 2px;
+    }
+
+    /* CODE BLOCK */
+    .code-wrap {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px; overflow: hidden;
+      margin: 1rem 0;
+    }
+    .code-header {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 0.55rem 1rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .code-lang {
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--accent2);
+    }
+    .copy-btn {
+      background: var(--border); border: none; color: var(--muted);
+      font-size: 0.72rem; font-weight: 600; cursor: pointer;
+      padding: 0.25rem 0.65rem; border-radius: 4px;
+      font-family: inherit; letter-spacing: 0.04em;
+      transition: background 0.15s, color 0.15s;
+    }
+    .copy-btn:hover { background: var(--accent); color: #fff; }
+    .copy-btn.copied { background: var(--accent2); color: #001a14; }
+    pre {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.78rem; line-height: 1.65;
+      color: #c9d1e8;
+      padding: 1.25rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    /* Syntax tints inside <pre> */
+    .kw  { color: #a5adff; }
+    .str { color: #80e8c0; }
+    .cm  { color: #4a5270; font-style: italic; }
+    .hl  { color: #fcd34d; }
+
+    /* VARIABLE TABLE */
+    .var-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.85rem; }
+    .var-table th {
+      background: var(--card); color: var(--muted);
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; padding: 0.5rem 0.75rem;
+      text-align: left; border-bottom: 2px solid var(--border);
+    }
+    .var-table td {
+      padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border);
+      color: var(--muted); vertical-align: top;
+    }
+    .var-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .var-table td:first-child { font-family: 'IBM Plex Mono', monospace; color: #a5adff; font-size: 0.78rem; }
+    .var-table td.req { color: var(--red); font-weight: 700; font-size: 0.75rem; }
+    .var-table td.opt { color: var(--accent2); font-size: 0.75rem; }
+
+    /* EXAMPLE PROMPTS */
+    .prompt-box {
+      background: var(--code-bg); border: 1px solid var(--border);
+      border-left: 3px solid var(--accent2);
+      border-radius: 6px; padding: 0.85rem 1rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.8rem; color: #c9d1e8;
+      margin: 0.6rem 0; line-height: 1.6;
+    }
+
+    /* SECTION DIVIDER */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+
+    /* BACK TOP */
+    a.back-top {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      color: var(--muted); font-size: 0.78rem; text-decoration: none;
+      margin-top: 1.5rem; transition: color 0.15s;
+    }
+    a.back-top:hover { color: var(--white); }
+
+    /* FOOTER */
+    footer {
+      background: var(--surface); border-top: 1px solid var(--border);
+      padding: 2rem; text-align: center;
+      font-size: 0.8rem; color: var(--muted);
+    }
+
+    @media (max-width: 680px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+      header nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header id="top">
+  <div class="header-icon">⬡</div>
+  <div>
+    <div class="header-title">Onboarding Guide Generator</div>
+    <div class="header-sub">Claude Project Instructions &amp; Reference</div>
+  </div>
+  <nav>
+    <a href="#overview">Overview</a>
+    <a href="#prompt">System Prompt</a>
+    <a href="#variables">Variables</a>
+    <a href="#usage">Usage</a>
+    <a href="#examples">Examples</a>
+    <a href="#output">Output Spec</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="pill">Claude Project · Custom Instructions</div>
+    <h1>Employee Onboarding<br/><em>Guide Generator</em></h1>
+    <p>A Claude Project configuration that turns a single prompt into a complete, branded, all-in-one HTML onboarding website for any organization — researched, styled, and ready to deploy.</p>
+    <div class="hero-meta">
+      <div class="meta-item"><strong>Output</strong>Single-file HTML</div>
+      <div class="meta-item"><strong>Research</strong>Live web search</div>
+      <div class="meta-item"><strong>Customization</strong>Colors, branding, structure</div>
+      <div class="meta-item"><strong>Effort</strong>One prompt → full site</div>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="toc">
+    <div class="toc-label">On this page</div>
+    <ul>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#how-it-works">How It Works</a></li>
+      <li><a href="#prompt">System Prompt</a>
+        <ul>
+          <li><a href="#prompt" class="sub">Copy full prompt</a></li>
+        </ul>
+      </li>
+      <li><a href="#variables">Input Variables</a></li>
+      <li><a href="#usage">Step-by-Step Usage</a></li>
+      <li><a href="#examples">Example Prompts</a></li>
+      <li><a href="#output">Output Specification</a></li>
+      <li><a href="#tips">Tips &amp; Customization</a></li>
+    </ul>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <!-- OVERVIEW -->
+    <section id="overview">
+      <div class="section-eyebrow">What this is</div>
+      <h2>Overview</h2>
+      <p>This document contains the custom instructions (system prompt) you paste into a <strong>Claude Project</strong> to create a reusable onboarding guide generator. Once configured, anyone in your organization can drop in a company name and a few details and receive a complete, polished, single-file HTML onboarding site — no design or coding skills needed.</p>
+
+      <div class="card-row">
+        <div class="card">
+          <h4>🔍 Live Research</h4>
+          <p>Claude searches the web for brand colors, locations, phone numbers, and organizational context before writing a single line of HTML.</p>
+        </div>
+        <div class="card green">
+          <h4>🎨 Auto-Branded</h4>
+          <p>Colors, typography, and visual tone are derived from what Claude finds about the organization — not a generic template.</p>
+        </div>
+        <div class="card amber">
+          <h4>📄 Single-File HTML</h4>
+          <p>The output is one self-contained .html file: no dependencies, no CDN required, deployable anywhere or shared as an attachment.</p>
+        </div>
+        <div class="card red">
+          <h4>⚠️ Fill-In Placeholders</h4>
+          <p>Any data Claude cannot verify is left as a clearly marked amber placeholder — HR fills these in before distribution.</p>
+        </div>
+      </div>
+
+      <div class="alert" style="margin-top:1.5rem;">
+        <strong>How to set up:</strong> In Claude.ai, create a new Project → open Project Settings → paste the system prompt below into the "Custom Instructions" field → save. Every conversation in that Project will inherit this behavior.
+      </div>
+      <a class="back-top" href="#top">↑ Top</a>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section id="how-it-works">
+      <div class="section-eyebrow">Process</div>
+      <h2>How It Works</h2>
+      <ol class="steps">
+        <li><span class="step-num">1</span><span><strong>User sends a prompt</strong> — minimum: organization name and location. Optional: source documents, list of systems, department names, staff contacts.</span></li>
+        <li><span class="step-num">2</span><span><strong>Claude searches the web</strong> for the organization's website, brand colors, logo colors, address(es), phone numbers, hours, and any publicly available operational context.</span></li>
+        <li><span class="step-num">3</span><span><strong>Claude extracts brand variables</strong> — primary color, secondary color, font preferences, and overall visual tone — and maps them to CSS variables.</span></li>
+        <li><span class="step-num">4</span><span><strong>Claude builds the content outline</strong> using any source data provided, then fills gaps with industry-standard onboarding sections for that organization type (dealership, school, hospital, nonprofit, etc.).</span></li>
+        <li><span class="step-num">5</span><span><strong>Claude generates the HTML file</strong> — fully styled, anchor-navigated, with sticky header, sidebar TOC, and clearly marked placeholders for unverifiable data.</span></li>
+        <li><span class="step-num">6</span><span><strong>User downloads and fills placeholders</strong> (highlighted in amber) — staff contacts, internal URLs, credentials, pay schedules, and any other private information not publicly available.</span></li>
+      </ol>
+      <a class="back-top" href="#top">↑ Top</a>
+    </section>
+
+    <!-- SYSTEM PROMPT -->
+    <section id="prompt">
+      <div class="section-eyebrow">Copy this into your Claude Project</div>
+      <h2>System Prompt</h2>
+      <p>Copy the entire block below and paste it into your Claude Project's <strong>Custom Instructions</strong> field. Do not modify the prompt unless you understand the downstream effects — most customization should happen via user prompts, not by editing this.</p>
+
+      <div class="code-wrap">
+        <div class="code-header">
+          <span class="code-lang">Plain Text — Claude Project Custom Instructions</span>
+          <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+        </div>
+        <pre id="system-prompt-text">You are an Employee Onboarding Guide Generator. Your purpose is to produce a complete, professional, single-file HTML employee onboarding website for any organization a user describes.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+RESEARCH PHASE — Always do this first
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Before writing any HTML, use web search to find the following for the organization:
+
+1. Official website and "About" page
+2. Brand / logo primary and secondary colors (check CSS stylesheets, brand pages, or dominant colors on their homepage)
+3. Physical address(es) and phone number(s)
+4. Business hours
+5. Organizational structure clues (departments, roles mentioned on site)
+6. Industry type (healthcare, education, automotive, nonprofit, retail, government, etc.)
+7. Any specific software systems, platforms, or tools mentioned publicly
+8. Any mission statement or values language to use in welcome copy
+
+Extract hex color codes when possible. If colors cannot be determined precisely, make a reasonable judgment from the visual palette of their website. Note your sources briefly before generating HTML.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SOURCE DATA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The user may supply source data: existing onboarding documents, a list of systems, staff contacts, department names, or partial drafts. Prioritize all user-supplied data over anything you find via search. Merge research findings with source data; do not discard either.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+HTML OUTPUT SPECIFICATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Produce ONE self-contained HTML file with ALL CSS and JS embedded. No external dependencies except Google Fonts (which loads from CDN). The file must work when opened locally with no internet connection (except fonts).
+
+REQUIRED PAGE STRUCTURE:
+- <header> — sticky top bar with organization name/logo text and anchor nav links
+- Hero section — organization name, welcome message, location badges
+- Two-column layout: left sidebar with sticky Table of Contents (anchor links), right main content area
+- Numbered content sections (see CONTENT SECTIONS below)
+- <footer> with address, phone, and internal note about placeholders
+
+ANCHOR NAVIGATION:
+Every section must have an id attribute (e.g., id="hr", id="operations", id="safety"). The TOC sidebar and header nav must link to these with href="#sectionid". Include scroll-margin-top: [header height]px on all sections so anchors clear the sticky header.
+
+DESIGN REQUIREMENTS:
+- Use CSS custom properties (variables) for all brand colors extracted during research
+- Primary color: organization's dominant brand color
+- Accent/secondary color: complementary color from their palette
+- Background: dark or light depending on the organization's tone (professional services = light or navy; creative/tech = dark; education = light; automotive = dark navy)
+- Typography: choose two Google Fonts that match the organization's personality. Avoid Inter, Roboto, and Arial. Pair a display/heading font with a readable body font.
+- Cards with colored left-border accents for each system/platform listed
+- Colored tag/badge labels on each card (e.g., "DMS", "CRM", "LMS", "Portal")
+- Section number badges (colored circles/squares) in section headers
+- Responsive: collapses sidebar to top of page on mobile
+- Subtle background texture or gradient appropriate to the organization's tone
+- "Back to top" links at the bottom of each section
+
+PLACEHOLDER CONVENTION:
+Any data that cannot be verified via public sources must be marked with a styled placeholder:
+  <span class="placeholder">[Description of what goes here]</span>
+Style: inline-block, amber/yellow background tint, dashed border, italic text.
+Include a footer note explaining that amber placeholders must be completed before distribution.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CONTENT SECTIONS — Adapt to organization type
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Always include these core sections, adapting terminology to the organization's industry:
+
+1. HUMAN RESOURCES & PAYROLL
+   - Employee portal / HR system
+   - Benefits enrollment (timeline and provider)
+   - Time & attendance system
+   - Pay schedule and direct deposit
+   - I-9 / employment eligibility
+
+2. OPERATIONAL SYSTEMS
+   - Primary software platform(s) for the organization's core function
+   - Any CRM, ERP, or management platform
+   - Scheduling or dispatch tools
+   - Inventory or asset management (if applicable)
+   - Industry-specific tools (EMR for healthcare, LMS for education, DMS for auto, etc.)
+
+3. SAFETY & COMPLIANCE
+   - Required safety training platform (e.g., KPA, Relias, Vector Solutions, SafeSchools)
+   - Initial certification requirements and deadlines
+   - Annual re-certification obligations
+   - Key policies (workplace conduct, harassment, social media)
+
+4. COMMUNICATION & IT
+   - Internal messaging platform (Teams, Slack, etc.)
+   - Company email format
+   - IT help desk / ticketing
+   - Password and account setup process
+
+5. SYSTEMS / PLATFORM-SPECIFIC (role-based)
+   - Any certification portals, vendor training, or licensing requirements
+   - Brand-specific training for franchises or licensed organizations
+
+6. LOCATIONS & CONTACT INFO
+   - Table of all locations with address, phone, hours (from research)
+   - Parent organization / corporate info if applicable
+
+7. FIRST WEEK CHECKLIST
+   - Actionable checkbox list of every onboarding task
+   - Deadlines noted where applicable (Day 1, Day 3, Day 10, etc.)
+
+8. KEY CONTACTS
+   - Table with role, name (placeholder if unknown), phone, email
+   - Always include: HR, IT/Help Desk, direct supervisor, department manager
+
+Add additional sections as appropriate for the specific organization (e.g., Patient Care Standards for healthcare, Curriculum & Gradebook for education, Lot Safety for automotive).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TONE & COPY GUIDELINES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Welcome copy should be warm, direct, and professional — not corporate-stiff
+- Use the organization's own mission/values language if found during research
+- Second person ("You will..." / "Your first step...") throughout
+- Avoid excessive bullet nesting — prefer cards and tables for dense information
+- Headings use title case; body copy uses sentence case
+- Do not editorialize or invent facts about the organization — stick to verified or placeholdered content
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BEFORE DELIVERING OUTPUT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Briefly summarize (3-5 bullet points) what you found in research and what sources you used
+2. Note any key details you could NOT find and have placeholdered
+3. Ask if the user wants to adjust anything BEFORE you generate the file
+4. Then generate the complete HTML file and present it for download
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ITERATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+If the user asks for changes after seeing the output:
+- Re-generate the full HTML file with the requested changes applied
+- Do not deliver partial code snippets — always output the complete file
+- Maintain all previously filled-in content unless specifically asked to change it</pre>
+      </div>
+
+      <div class="alert warn">
+        <strong>Note:</strong> This prompt is intentionally verbose. Each section heading tells Claude exactly what to do and when. Removing sections may cause Claude to skip research, skip placeholders, or use generic styling. Customize by adding org-specific context at the END of the prompt, not by removing existing instructions.
+      </div>
+      <a class="back-top" href="#top">↑ Top</a>
+    </section>
+
+    <!-- VARIABLES -->
+    <section id="variables">
+      <div class="section-eyebrow">What to tell Claude</div>
+      <h2>Input Variables</h2>
+      <p>The system prompt handles the <em>how</em>. Your user prompt provides the <em>what</em>. Here is every piece of information Claude can use, from required to optional.</p>
+
+      <table class="var-table">
+        <thead>
+          <tr>
+            <th>Variable</th>
+            <th>Required?</th>
+            <th>Description</th>
+            <th>Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Organization name</td>
+            <td class="req">Required</td>
+            <td>Full legal or trade name of the organization</td>
+            <td>Mac Haik Georgetown</td>
+          </tr>
+          <tr>
+            <td>Location / city</td>
+            <td class="req">Required</td>
+            <td>City and state help Claude search the right entity</td>
+            <td>Georgetown, TX</td>
+          </tr>
+          <tr>
+            <td>Website URL</td>
+            <td class="opt">Optional</td>
+            <td>Speeds up research significantly</td>
+            <td>machaikfordlincoln.com</td>
+          </tr>
+          <tr>
+            <td>Industry / org type</td>
+            <td class="opt">Optional</td>
+            <td>Helps Claude choose appropriate section names and systems</td>
+            <td>Automotive dealership (Ford, Lincoln, CDJR)</td>
+          </tr>
+          <tr>
+            <td>Core software systems</td>
+            <td class="opt">Optional</td>
+            <td>List any platforms you know the org uses</td>
+            <td>CDK Global (DMS), KPA (LMS), TrueSpot</td>
+          </tr>
+          <tr>
+            <td>Departments / roles</td>
+            <td class="opt">Optional</td>
+            <td>Helps Claude tailor role-specific sections</td>
+            <td>Sales, Service, Parts, F&I, BDC</td>
+          </tr>
+          <tr>
+            <td>Key contacts</td>
+            <td class="opt">Optional</td>
+            <td>Names and titles for the contacts table</td>
+            <td>HR Manager: Jane Smith (ext. 201)</td>
+          </tr>
+          <tr>
+            <td>Source documents</td>
+            <td class="opt">Optional</td>
+            <td>Upload or paste existing onboarding content to merge</td>
+            <td>Paste old Word doc or policy text</td>
+          </tr>
+          <tr>
+            <td>Brand colors</td>
+            <td class="opt">Optional</td>
+            <td>Override research if you know exact hex codes</td>
+            <td>#c8102e (red), #0d1b2a (navy)</td>
+          </tr>
+          <tr>
+            <td>Tone preference</td>
+            <td class="opt">Optional</td>
+            <td>Adjust the visual/copy personality</td>
+            <td>"More formal" / "Friendly and casual" / "Dark theme"</td>
+          </tr>
+          <tr>
+            <td>Additional sections</td>
+            <td class="opt">Optional</td>
+            <td>Request sections beyond the default set</td>
+            <td>"Add a section on student data privacy (FERPA)"</td>
+          </tr>
+        </tbody>
+      </table>
+      <a class="back-top" href="#top">↑ Top</a>
+    </section>
+
+    <!-- USAGE -->
+    <section id="usage">
+      <div class="section-eyebrow">Step by step</div>
+      <h2>Step-by-Step Usage</h2>
+
+      <h3>1. Set up the Project</h3>
+      <ol class="steps">
+        <li><span class="step-num">1</span><span>Go to <strong>claude.ai</strong> → click <strong>Projects</strong> in the left sidebar → <strong>New Project</strong></span></li>
+        <li><span class="step-num">2</span><span>Name it something like <em>"Onboarding Guide Generator"</em></span></li>
+        <li><span class="step-num">3</span><span>Open <strong>Project Settings</strong> (gear icon) → paste the full system prompt above into <strong>Custom Instructions</strong> → Save</span></li>
+        <li><span class="step-num">4</span><span>Optionally upload a sample/reference HTML onboarding file to the Project's knowledge base so Claude can see the expected style</span></li>
+      </ol>
+
+      <h3>2. Start a new conversation</h3>
+      <p>Every new conversation inside the Project inherits the custom instructions automatically. One conversation = one organization's onboarding guide.</p>
+
+      <h3>3. Send your opening prompt</h3>
+      <p>The minimum viable prompt is just an organization name and city. Add more for better results. See the examples section below.</p>
+
+      <h3>4. Review the research summary</h3>
+      <p>Claude will briefly list what it found before generating HTML. This is your chance to correct errors or add missing info before the full output is produced.</p>
+
+      <h3>5. Download and fill placeholders</h3>
+      <p>Save the HTML file. Open it in a browser to see placeholders highlighted in amber. Edit the raw HTML in any text editor — no coding skills needed for placeholder fill-in. Search for <code>[</code> to jump to each one.</p>
+
+      <div class="alert">
+        <strong>Tip:</strong> Use VS Code or Notepad++ with "Find All" on <code>class="placeholder"</code> to quickly locate every item needing completion before distribution.
+      </div>
+      <a class="back-top" href="#top">↑ Top</a>
+    </section>
+
+    <!-- EXAMPLES -->
+    <section id="examples">
+      <div class="section-eyebrow">Sample user prompts</div>
+      <h2>Example Prompts</h2>
+      <p>These are ready-to-use prompts — paste one into a conversation in your Project and adjust as needed.</p>
+
+      <h3>Minimal (research-heavy)</h3>
+      <div class="prompt-box">Create an employee onboarding guide for Round Rock ISD in Round Rock, Texas. Their website is roundrockisd.org.</div>
+
+      <h3>With systems list</h3>
+      <div class="prompt-box">Create an employee onboarding guide for Ascension Seton Medical Center in Austin, TX. They use Epic (EMR), Kronos (timekeeping), Relias (compliance training), and Microsoft Teams. Include a section on HIPAA compliance training requirements.</div>
+
+      <h3>With source data pasted in</h3>
+      <div class="prompt-box">Create an employee onboarding guide for Thinkery Children's Museum in Austin, TX (thinkeryaustin.org). Here's our existing onboarding checklist to work from:
+
+[paste your existing content here]
+
+Add sections for volunteer coordination, exhibit safety, and donor database (Bloomerang).</div>
+
+      <h3>With brand override and tone</h3>
+      <div class="prompt-box">Create an employee onboarding guide for Georgetown ISD (georgetownisd.org). Brand colors are #003087 (blue) and #FFB81C (gold). Use a light background theme. The tone should be warm and welcoming, appropriate for educators. Include a section on the Frontline HR system and Google Workspace for Education.</div>
+
+      <h3>With uploaded document</h3>
+      <div class="prompt-box">[Attach a Word doc or PDF to the message]
+
+Create an employee onboarding guide for Williamson County, TX (wilco.org). I've attached our current paper onboarding packet. Convert this to the HTML format, fill in any gaps with research, and add a section on the county's ethics and public records obligations.</div>
+
+      <a class="back-top" href="#top">↑ Top</a>
+    </section>
+
+    <!-- OUTPUT SPEC -->
+    <section id="output">
+      <div class="section-eyebrow">What you get</div>
+      <h2>Output Specification</h2>
+      <p>Every generated file follows this structure consistently, regardless of the organization.</p>
+
+      <div class="card-row">
+        <div class="card">
+          <h4>Sticky Header</h4>
+          <p>Organization name + anchor nav links to each major section. Collapses on mobile.</p>
+        </div>
+        <div class="card green">
+          <h4>Hero Section</h4>
+          <p>Welcome headline, brief description, location badges pulled from research.</p>
+        </div>
+        <div class="card amber">
+          <h4>Sidebar TOC</h4>
+          <p>Sticky numbered table of contents with anchor links. Auto-hides on mobile.</p>
+        </div>
+        <div class="card">
+          <h4>Section Cards</h4>
+          <p>Each system/platform gets a card with a colored tag badge and description.</p>
+        </div>
+        <div class="card green">
+          <h4>Tables</h4>
+          <p>Location info and Key Contacts in formatted tables. Easy to scan and fill.</p>
+        </div>
+        <div class="card amber">
+          <h4>First Week Checklist</h4>
+          <p>Printable checkbox list with deadlines. Every item is actionable.</p>
+        </div>
+        <div class="card red">
+          <h4>Amber Placeholders</h4>
+          <p>Every gap is styled and labeled — no blank fields, no hidden omissions.</p>
+        </div>
+        <div class="card">
+          <h4>Footer</h4>
+          <p>Address, phone, and a distribution warning note about placeholders.</p>
+        </div>
+      </div>
+
+      <h3>File size and compatibility</h3>
+      <p>The output is typically 30–80 KB of HTML. It opens in any modern browser. It can be hosted on any web server, shared as an email attachment, or converted to PDF via browser print. No build tools, no frameworks, no server required.</p>
+
+      <a class="back-top" href="#top">↑ Top</a>
+    </section>
+
+    <!-- TIPS -->
+    <section id="tips">
+      <div class="section-eyebrow">Getting more from the generator</div>
+      <h2>Tips &amp; Customization</h2>
+
+      <h3>Add a knowledge base file</h3>
+      <p>Upload the Mac Haik Georgetown onboarding HTML to your Project's knowledge base (Project Settings → Add Content). Claude will use it as a structural reference and style benchmark for all future guides.</p>
+
+      <h3>Organization-specific system prompt additions</h3>
+      <p>If your organization always uses the same systems (e.g., you're generating guides only for school districts), append a block at the end of the system prompt:</p>
+      <div class="code-wrap">
+        <div class="code-header">
+          <span class="code-lang">Append to system prompt (example: K-12 districts)</span>
+          <button class="copy-btn" onclick="copyBlock(this, 'k12-block')">Copy</button>
+        </div>
+        <pre id="k12-block">ORGANIZATION-SPECIFIC CONTEXT:
+All organizations in this Project are Texas K-12 school districts.
+Always include sections for:
+- Frontline HR (time and absence management)
+- Google Workspace for Education (email, Classroom, Drive)
+- Region 13 / TASB professional development portals
+- TEA educator certification requirements
+- FERPA compliance training
+- Kronos / UKG timekeeping (if applicable)
+Default to a light theme with the district's school colors.</pre>
+      </div>
+
+      <h3>Adjusting placeholder density</h3>
+      <p>Claude will use more or fewer placeholders depending on how much source data you provide. Providing a list of actual system names, staff names, and phone numbers upfront eliminates most placeholders in the first pass.</p>
+
+      <h3>Iterating on a single guide</h3>
+      <p>Within one conversation, you can ask Claude to: add a new section, change the color scheme, expand a specific platform description, add your mission statement to the hero, or re-generate with a lighter theme. Claude will always return the complete updated HTML file — never just a snippet.</p>
+
+      <h3>Converting to PDF</h3>
+      <p>Open the HTML in Chrome → File → Print → Save as PDF. Set margins to "None" or "Minimum" for best results. The design includes print-aware CSS for readable output.</p>
+
+      <div class="alert">
+        <strong>Privacy reminder:</strong> Do not include private employee data (SSNs, salary details, medical information) in prompts sent to Claude. Use placeholders for all sensitive information and fill those in locally after the file is generated.
+      </div>
+
+      <a class="back-top" href="#top">↑ Top</a>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  <p><strong>Onboarding Guide Generator</strong> — Claude Project Custom Instructions</p>
+  <p style="margin-top:0.4rem;">Designed for use with Claude Projects on claude.ai. Paste the system prompt into Project Custom Instructions to activate.</p>
+  <p style="margin-top:0.75rem; color:#2a3046;">Internal reference document. Update this guide whenever the system prompt is revised.</p>
+</footer>
+
+<script>
+  function copyPrompt(btn) {
+    const text = document.getElementById('system-prompt-text').innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  function copyBlock(btn, id) {
+    const text = document.getElementById(id).innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+</script>
+
+</body>
+</html>
