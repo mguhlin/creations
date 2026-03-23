@@ -459,5 +459,4 @@ All projects in this repository are released under the [CC0 1.0 Universal](LICEN
 ## Contact
 
 **Miguel Guhlin**  
-Director of Professional Development, TCEA  
-[mguhlin.org](https://mguhlin.org) · [mguhlin@tcea.org](mailto:mguhlin@tcea.org) · [blog.tcea.org](https://blog.tcea.org)
+[mguhlin.org](https://mguhlin.org)
