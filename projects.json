@@ -1,0 +1,334 @@
+{
+  "meta": {
+    "author": "Miguel Guhlin",
+    "site": "MGuhlin.org",
+    "byline": "Miguel Guhlin",
+    "description": "A curated portfolio of AI-powered tools, reference guides, coaching frameworks, and interactive resources built for educators, administrators, and knowledge workers.",
+    "tallies": [
+      { "num": "10",  "label": "Projects" },
+      { "num": "35+", "label": "AI Bots"  },
+      { "num": "7",   "label": "Skills"   },
+      { "num": "CC0", "label": "Open License" }
+    ],
+    "footerLinks": [
+      { "label": "MGuhlin.org",    "href": "https://mguhlin.org"       },
+      { "label": "TCEA TechNotes", "href": "https://blog.tcea.org"     },
+      { "label": "TCEA.org",       "href": "https://tcea.org"          }
+    ]
+  },
+
+  "projects": [
+
+    {
+      "num": "01",
+      "id": "acl",
+      "section": "AI Productivity &amp; Self-Assessment",
+      "category": "Assessment Tool",
+      "title": "AI Capability Ladder",
+      "subtitle": "Self-assessment quiz for AI fluency in workplace contexts",
+      "stat": "4",
+      "statLabel": "Fluency Levels",
+      "panelGradient": "linear-gradient(160deg, #1B4332 0%, #2D6A4F 100%)",
+      "catStyle": "background:rgba(116,198,157,0.2);color:#74C69D;",
+      "statColor": "#B7E4C7",
+      "btnBg": "#40916C",
+      "btnColor": "#fff",
+      "btnHoverBg": "#74C69D",
+      "btnHoverColor": "#1B4332",
+      "description": "A five-question interactive self-assessment that scores your AI fluency and places you on the Capability Ladder — from Disconnected through Foundational, Integrated, to Strategic. Automatically logs responses to a data endpoint. Results include a full reference grid of what each level looks like in practice.",
+      "features": [
+        "5-Question Quiz",
+        "Automated Scoring",
+        "Data Logging",
+        "Level Grid Reference",
+        "Scholarship Workflow Context"
+      ],
+      "links": [
+        { "label": "Open Assessment →", "href": "acl/index.html", "primary": true }
+      ]
+    },
+
+    {
+      "num": "02",
+      "id": "aici",
+      "section": "AI Productivity &amp; Self-Assessment",
+      "category": "Reference Library",
+      "title": "AI Custom Instructions Library",
+      "subtitle": "Purpose-built AI assistants for educators &amp; administrators",
+      "stat": "35+",
+      "statLabel": "Custom Bots",
+      "panelGradient": "linear-gradient(160deg, #1a2a1a 0%, #2D4A3E 100%)",
+      "catStyle": "background:rgba(116,198,157,0.15);color:#74C69D;",
+      "statColor": "#B7E4C7",
+      "btnBg": "#2D6A4F",
+      "btnColor": "#fff",
+      "btnHoverBg": "#40916C",
+      "btnHoverColor": "#fff",
+      "description": "A browsable library of copy-paste custom instructions deployable in any major Gen AI platform — ChatGPT, Claude Projects, Google Gems, BoodleBox, Copilot, or NotebookLM. Eight organized categories spanning productivity, communications, education, analysis, classroom bots, and specialty tools. Grew from the TCEA session on Automating Office Tasks with AI (March 2026).",
+      "features": [
+        "BLUF Bot",
+        "Meeting Minutes",
+        "PD Announcements",
+        "SIFT / PRISM / FLOATER",
+        "Essay Reviser",
+        "TCEA PROTECT",
+        "Lesson Plan Assistant",
+        "Rubric Builder"
+      ],
+      "links": [
+        { "label": "Browse Library →", "href": "aici/index.html",                          "primary": true  },
+        { "label": "Live Site ↗",      "href": "https://mguhlin.github.io/aici/index.html", "primary": false, "external": true }
+      ]
+    },
+
+    {
+      "num": "03",
+      "id": "architect",
+      "section": "Prompt Engineering",
+      "category": "Interactive Tool",
+      "title": "AI Prompt Architect",
+      "subtitle": "Transform basic ideas into engineered prompts; identify high-value AI workflows",
+      "stat": "6",
+      "statLabel": "Prompt Frameworks",
+      "panelGradient": "linear-gradient(160deg, #1a1f1a 0%, #253025 100%)",
+      "catStyle": "background:rgba(116,198,157,0.12);color:#74C69D;",
+      "statColor": "#B7E4C7",
+      "btnBg": "#1B4332",
+      "btnColor": "#D8F3DC",
+      "btnHoverBg": "#2D6A4F",
+      "btnHoverColor": "#fff",
+      "description": "An interactive prompt optimizer that takes any basic request and transforms it using one of six evidence-backed frameworks: Triple-Check, Few-Shot, Chain-of-Thought, Tree-of-Thought, Prompt Chaining, and RAG. Each framework includes a recommended model, a ready-to-copy optimized prompt, and rationale. Includes a glossary and two strategic workflow models (Problem-Based Learning and Use Case) for identifying high-impact AI opportunities.",
+      "features": [
+        "Triple-Check Prompting",
+        "Chain-of-Thought",
+        "Tree-of-Thought",
+        "RAG Organization",
+        "PBL &amp; Use Case Models",
+        "Copy-to-Clipboard"
+      ],
+      "links": [
+        { "label": "Open Tool →", "href": "architect/index.html", "primary": true }
+      ]
+    },
+
+    {
+      "num": "04",
+      "id": "claude-suite",
+      "section": "Claude Skills &amp; Nonprofit AI",
+      "category": "Skill Suite · Nonprofit",
+      "title": "TCEA AI Skills Suite",
+      "subtitle": "Seven Claude-powered skills for mission-driven organizations",
+      "stat": "7",
+      "statLabel": "Downloadable Skills",
+      "panelGradient": "linear-gradient(160deg, #0f2318 0%, #1B4332 100%)",
+      "catStyle": "background:rgba(116,198,157,0.18);color:#74C69D;",
+      "statColor": "#B7E4C7",
+      "btnBg": "#40916C",
+      "btnColor": "#fff",
+      "btnHoverBg": "#52B788",
+      "btnHoverColor": "#1B4332",
+      "description": "Production-ready Claude skills (downloadable .skill files) for nonprofits and education-adjacent organizations. Each skill is a precision-engineered instruction set — install once in a Claude Project and Claude applies it to every matching request automatically. Includes an 8-step Cowork setup guide and the \"Ask First\" method for dramatically better outputs from the start.",
+      "features": [
+        "Blog Writer",
+        "PPTX Builder (.pptx)",
+        "Infographic Designer (PNG)",
+        "Mermaid Designer",
+        "Draw.io XML Builder",
+        "Rubric Builder",
+        "Training Architect"
+      ],
+      "links": [
+        { "label": "View Skills →",       "href": "claude/index.html",       "primary": true  },
+        { "label": "Copywriting Visual ↗", "href": "claude/copywriting.html", "primary": false }
+      ]
+    },
+
+    {
+      "num": "05",
+      "id": "cudl",
+      "section": "Coaching &amp; Professional Development",
+      "category": "Coaching Framework · UDL",
+      "title": "Coaching for Every Learner",
+      "subtitle": "Three UDL coaching protocols for instructional coaches and teachers",
+      "stat": "3",
+      "statLabel": "Coaching Protocols",
+      "panelGradient": "linear-gradient(160deg, #1e3020 0%, #2A4A2E 100%)",
+      "catStyle": "background:rgba(116,198,157,0.14);color:#74C69D;",
+      "statColor": "#B7E4C7",
+      "btnBg": "#2D6A4F",
+      "btnColor": "#fff",
+      "btnHoverBg": "#40916C",
+      "btnHoverColor": "#fff",
+      "description": "An interactive scenario-based coaching tool grounded in CAST UDL Guidelines 3.0. Coaches and teachers work through real classroom challenges using three structured frameworks: ARC (Acknowledge–Reframe–Commit), Notice-Wonder-Next, and VIVA (Verify–Illustrate–Validate–Apply). Each protocol includes randomized scenario cards drawn from genuine instructional challenges, with UDL element alignment displayed for every response.",
+      "features": [
+        "ARC Protocol",
+        "Notice-Wonder-Next",
+        "VIVA Framework",
+        "Random Scenario Generator",
+        "UDL 3.0 Reference",
+        "TCEA26 Session Tool"
+      ],
+      "links": [
+        { "label": "ARC Protocol →",     "href": "cudl/index.html", "primary": true  },
+        { "label": "Notice-Wonder-Next", "href": "cudl/nwn.html",   "primary": false },
+        { "label": "VIVA",               "href": "cudl/viva.html",  "primary": false }
+      ]
+    },
+
+    {
+      "num": "06",
+      "id": "eog",
+      "section": "Onboarding &amp; HR Tools",
+      "category": "Claude Project · Generator",
+      "title": "Onboarding Guide Generator",
+      "subtitle": "One prompt → a complete branded HTML employee onboarding site",
+      "stat": "8",
+      "statLabel": "Required Sections",
+      "panelGradient": "linear-gradient(160deg, #141f14 0%, #1E3520 100%)",
+      "catStyle": "background:rgba(116,198,157,0.13);color:#74C69D;",
+      "statColor": "#B7E4C7",
+      "btnBg": "#1B4332",
+      "btnColor": "#B7E4C7",
+      "btnHoverBg": "#2D6A4F",
+      "btnHoverColor": "#fff",
+      "description": "A Claude Project system prompt that turns a company name into a complete, single-file HTML onboarding website. Claude searches the web for brand colors, locations, hours, and org structure before writing a line of HTML. The output includes a sticky header, sidebar table of contents, 8 structured content sections, a first-week checklist, and amber-highlighted placeholders for any data Claude could not verify. Ships with two live examples: Mac Haik Georgetown (automotive) and TCEA.",
+      "features": [
+        "Live Web Research",
+        "Auto Brand Colors",
+        "Single-File HTML Output",
+        "Amber Placeholders",
+        "First-Week Checklist",
+        "Mac Haik Example",
+        "TCEA Example"
+      ],
+      "links": [
+        { "label": "System Prompt &amp; Docs →", "href": "eog/index.html",    "primary": true  },
+        { "label": "TCEA Example",               "href": "eog/tcea.html",     "primary": false },
+        { "label": "Mac Haik Example",           "href": "eog/example1.html", "primary": false }
+      ]
+    },
+
+    {
+      "num": "07",
+      "id": "twc",
+      "section": "Claude Orientation &amp; AI Literacy",
+      "category": "K–12 Educator Series",
+      "title": "Think with Claude",
+      "subtitle": "Technical orientation screencasts for educators new to Claude",
+      "stat": "4",
+      "statLabel": "Screencasts · ~40 min",
+      "panelGradient": "linear-gradient(160deg, #0E2A1A 0%, #1A3D28 100%)",
+      "catStyle": "background:rgba(116,198,157,0.15);color:#74C69D;",
+      "statColor": "#B7E4C7",
+      "btnBg": "#2D6A4F",
+      "btnColor": "#fff",
+      "btnHoverBg": "#40916C",
+      "btnHoverColor": "#fff",
+      "description": "A TCEA Knowledge Booster orientation series — four screencasts that get K–12 educators confident with Claude's interface before the deeper series begins. Covers account setup and navigation, Projects and file uploads, personalizing Claude with custom instructions, model selection, mobile app, and a full set of power habits including Julian date naming, session summaries, the Deep Re-Prompt method, and role assignment strategies.",
+      "features": [
+        "SC1: Account &amp; Interface",
+        "SC2: Projects &amp; Artifacts",
+        "SC3: Personalization &amp; Mobile",
+        "SC4: Power Habits",
+        "Copyable Prompts",
+        "2.0 CPE Credits"
+      ],
+      "links": [
+        { "label": "Open Orientation →", "href": "twc/index.html", "primary": true }
+      ]
+    },
+
+    {
+      "num": "08",
+      "id": "txca",
+      "section": "Claude Orientation &amp; AI Literacy",
+      "category": "Webinar + Reference Guide",
+      "title": "BoodleBox Basics &amp; Beyond",
+      "subtitle": "AI office automation guide for the Texas Counseling Association",
+      "stat": "90",
+      "statLabel": "Min Webinar · 8 RAG Configs",
+      "panelGradient": "linear-gradient(160deg, #162218 0%, #243828 100%)",
+      "catStyle": "background:rgba(116,198,157,0.14);color:#74C69D;",
+      "statColor": "#B7E4C7",
+      "btnBg": "#2D6A4F",
+      "btnColor": "#fff",
+      "btnHoverBg": "#52B788",
+      "btnHoverColor": "#1B4332",
+      "description": "A dual-purpose reference: a structured 6-part webinar guide on BoodleBox for educators, and a comprehensive office automation guide mapping TxCA administrative tasks to AI workflows. The automation guide covers 40+ tasks across seven categories (Member Communication, Events, Advocacy, Membership, CE Administration, Marketing, and Finance), each with approach type (Single Prompt vs. RAG), automation methods, and eight fully specified RAG configurations with system prompts.",
+      "features": [
+        "Knowledge Bank Mastery",
+        "Bot Stacking",
+        "40+ Office Tasks Mapped",
+        "8 RAG System Prompts",
+        "Member Comms · Events · CE",
+        "Advocacy &amp; Grants"
+      ],
+      "links": [
+        { "label": "Open Guide →", "href": "txca/index.html", "primary": true }
+      ]
+    },
+
+    {
+      "num": "09",
+      "id": "visuals",
+      "section": "Data Visualization &amp; Evidence-Based Practice",
+      "category": "Data Visualization",
+      "title": "Career Longevity in EdTech",
+      "subtitle": "Individual analysis vs. industry benchmarks — 1994 to present",
+      "stat": "32",
+      "statLabel": "Years · 6.2 yr avg tenure",
+      "panelGradient": "linear-gradient(160deg, #1C2B1C 0%, #2A3F2A 100%)",
+      "catStyle": "background:rgba(116,198,157,0.12);color:#74C69D;",
+      "statColor": "#B7E4C7",
+      "btnBg": "#40916C",
+      "btnColor": "#fff",
+      "btnHoverBg": "#52B788",
+      "btnHoverColor": "#1B4332",
+      "description": "An interactive data visualization comparing one EdTech leader's career tenure data against national benchmarks for K–12, nonprofit, and public sector positions. Features an animated career timeline, comparative bar charts, and four key takeaways. Built with scroll-triggered animations and a fixed navigation dot system — demonstrates what AI-assisted data storytelling looks like when applied to personal career data rather than abstract organizational metrics.",
+      "features": [
+        "Animated Timeline",
+        "Industry Benchmarks",
+        "Head-to-Head Comparison",
+        "Scroll Animations",
+        "Collapsible Sections",
+        "Nav Dot System"
+      ],
+      "links": [
+        { "label": "View Visualization →", "href": "visuals/career.html", "primary": true }
+      ]
+    },
+
+    {
+      "num": "10",
+      "id": "vlet",
+      "section": "Data Visualization &amp; Evidence-Based Practice",
+      "category": "Instructional Reference · K–16",
+      "title": "Visible Learning with Ed Tech",
+      "subtitle": "Evidence-based teaching strategies, SOLO Taxonomy, and AI guidance",
+      "stat": "0.92",
+      "statLabel": "Jigsaw Effect Size · Hattie",
+      "panelGradient": "linear-gradient(160deg, #0F1F0F 0%, #1E3320 100%)",
+      "catStyle": "background:rgba(116,198,157,0.2);color:#74C69D;",
+      "statColor": "#B7E4C7",
+      "btnBg": "#2D6A4F",
+      "btnColor": "#fff",
+      "btnHoverBg": "#40916C",
+      "btnHoverColor": "#fff",
+      "description": "A comprehensive strategy reference grounded in John Hattie's Visible Learning research, Mike Bell's memory science, and CAST's UDL 3.0 Guidelines. Covers the three phases of learning (Surface, Deep, Transfer), the SOLO Taxonomy with detailed level descriptors, a sortable strategy table with effect sizes, and deep dives into Jigsaw (ES: 0.92), Reciprocal Teaching (ES: 0.74), Concept Mapping (ES: 0.66), and Transfer Learning. Includes six instructional frameworks and a SOLO-mapped guide to responsible AI use at each level.",
+      "features": [
+        "Effect Size Reference",
+        "SOLO Taxonomy",
+        "Jigsaw · Reciprocal Teaching",
+        "ALDO · EIIR · RISE Goals",
+        "FLOATER · SIFT",
+        "AI Use by SOLO Level",
+        "BoodleBox Strategy Partner"
+      ],
+      "links": [
+        { "label": "Open Reference →", "href": "vlet/index.html",                  "primary": true  },
+        { "label": "Live Site ↗",      "href": "https://mglearn.github.io/vlet/",  "primary": false, "external": true }
+      ]
+    }
+
+  ]
+}

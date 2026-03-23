@@ -62,7 +62,6 @@ body::before {
   padding: 0 32px;
   gap: 8px;
 }
-
 .topnav-brand {
   font-family: 'Playfair Display', serif;
   font-size: 1rem;
@@ -72,9 +71,7 @@ body::before {
   white-space: nowrap;
   margin-right: 16px;
 }
-
 .topnav-brand span { color: var(--forest-light); }
-
 .topnav-scroll {
   display: flex;
   gap: 2px;
@@ -83,7 +80,6 @@ body::before {
   flex: 1;
 }
 .topnav-scroll::-webkit-scrollbar { display: none; }
-
 .topnav-scroll a {
   color: rgba(212,228,199,0.65);
   text-decoration: none;
@@ -99,7 +95,6 @@ body::before {
   background: rgba(116,198,157,0.15);
   color: var(--forest-pale);
 }
-
 .topnav-back {
   margin-left: auto;
   font-size: 0.7rem;
@@ -131,8 +126,6 @@ body::before {
     radial-gradient(ellipse 40% 40% at 15% 75%, rgba(27,67,50,0.45) 0%, transparent 55%),
     radial-gradient(ellipse 30% 35% at 85% 20%, rgba(64,145,108,0.15) 0%, transparent 50%);
 }
-
-/* Grid lines bg */
 .hero::after {
   content: '';
   position: absolute;
@@ -143,9 +136,7 @@ body::before {
   background-size: 56px 56px;
   pointer-events: none;
 }
-
 .hero-inner { position: relative; z-index: 1; max-width: 820px; }
-
 .hero-eyebrow {
   display: inline-flex;
   align-items: center;
@@ -173,7 +164,6 @@ body::before {
   0%,100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.4; transform: scale(0.7); }
 }
-
 .hero-title {
   font-family: 'Playfair Display', serif;
   font-size: clamp(3rem, 8vw, 6.5rem);
@@ -184,11 +174,7 @@ body::before {
   margin-bottom: 10px;
   animation: fadeDown 0.7s 0.1s ease both;
 }
-.hero-title em {
-  font-style: italic;
-  color: var(--forest-light);
-}
-
+.hero-title em { font-style: italic; color: var(--forest-light); }
 .hero-byline {
   font-family: 'Playfair Display', serif;
   font-size: clamp(1.1rem, 2.5vw, 1.6rem);
@@ -198,7 +184,6 @@ body::before {
   margin-bottom: 28px;
   animation: fadeDown 0.7s 0.18s ease both;
 }
-
 .hero-desc {
   font-size: 1rem;
   color: rgba(212,228,199,0.65);
@@ -208,7 +193,6 @@ body::before {
   font-weight: 300;
   animation: fadeDown 0.7s 0.25s ease both;
 }
-
 .hero-tally {
   display: flex;
   justify-content: center;
@@ -235,7 +219,6 @@ body::before {
   margin-top: 4px;
 }
 .tally-divider { width: 1px; background: rgba(116,198,157,0.15); align-self: stretch; }
-
 .hero-scroll {
   animation: fadeDown 0.7s 0.38s ease both;
   display: flex;
@@ -265,7 +248,7 @@ body::before {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ─── INDEX ROW ─── */
+/* ─── INDEX STRIP ─── */
 .index-strip {
   position: relative;
   z-index: 1;
@@ -312,7 +295,7 @@ body::before {
   opacity: 0.8;
 }
 
-/* ─── MAIN CONTENT ─── */
+/* ─── MAIN ─── */
 main { position: relative; z-index: 1; }
 
 /* ─── SECTION DIVIDER ─── */
@@ -333,7 +316,7 @@ main { position: relative; z-index: 1; }
   color: rgba(116,198,157,0.4);
 }
 
-/* ─── SLIDE CARDS ─── */
+/* ─── SLIDES ─── */
 .slides-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -342,8 +325,6 @@ main { position: relative; z-index: 1; }
   flex-direction: column;
   gap: 32px;
 }
-
-/* Each slide mimics a deck card — wide, landscape */
 .slide {
   position: relative;
   border-radius: 16px;
@@ -357,19 +338,12 @@ main { position: relative; z-index: 1; }
   transform: translateY(28px);
   transition: opacity 0.6s ease, transform 0.6s ease;
   scroll-margin-top: 72px;
-  text-decoration: none;
-  color: inherit;
 }
-.slide.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+.slide.visible { opacity: 1; transform: translateY(0); }
 .slide:hover {
   border-color: rgba(116,198,157,0.28);
   box-shadow: 0 16px 60px rgba(0,0,0,0.35);
 }
-
-/* Left accent panel */
 .slide-panel {
   position: relative;
   padding: 40px 36px;
@@ -378,8 +352,6 @@ main { position: relative; z-index: 1; }
   justify-content: space-between;
   overflow: hidden;
 }
-
-/* Right content panel */
 .slide-content {
   padding: 40px 44px 40px 40px;
   display: flex;
@@ -387,8 +359,6 @@ main { position: relative; z-index: 1; }
   justify-content: space-between;
   border-left: 1px solid rgba(116,198,157,0.08);
 }
-
-/* Slide number watermark */
 .slide-wm {
   position: absolute;
   bottom: -24px; right: -10px;
@@ -401,8 +371,6 @@ main { position: relative; z-index: 1; }
   pointer-events: none;
   user-select: none;
 }
-
-/* Category / type tag */
 .slide-cat {
   font-family: 'DM Mono', monospace;
   font-size: 0.6rem;
@@ -414,8 +382,6 @@ main { position: relative; z-index: 1; }
   margin-bottom: 18px;
   align-self: flex-start;
 }
-
-/* Title */
 .slide-title {
   font-family: 'Playfair Display', serif;
   font-size: 1.6rem;
@@ -424,20 +390,13 @@ main { position: relative; z-index: 1; }
   color: var(--white);
   margin-bottom: 8px;
 }
-
-/* Subtitle */
 .slide-sub {
   font-size: 0.8rem;
   opacity: 0.6;
   font-style: italic;
   line-height: 1.4;
 }
-
-/* ES / key stat box */
-.slide-stat {
-  margin-top: auto;
-  padding-top: 20px;
-}
+.slide-stat { margin-top: auto; padding-top: 20px; }
 .slide-stat-num {
   font-family: 'Playfair Display', serif;
   font-size: 2.4rem;
@@ -452,8 +411,6 @@ main { position: relative; z-index: 1; }
   opacity: 0.55;
   margin-top: 3px;
 }
-
-/* Right side */
 .slide-desc {
   font-size: 0.9rem;
   color: rgba(212,228,199,0.7);
@@ -461,7 +418,6 @@ main { position: relative; z-index: 1; }
   margin-bottom: 22px;
   font-weight: 300;
 }
-
 .slide-features {
   display: flex;
   flex-wrap: wrap;
@@ -476,7 +432,6 @@ main { position: relative; z-index: 1; }
   color: rgba(183,228,199,0.75);
   background: rgba(45,106,79,0.1);
 }
-
 .slide-actions {
   display: flex;
   gap: 10px;
@@ -492,9 +447,10 @@ main { position: relative; z-index: 1; }
   font-size: 0.82rem;
   font-weight: 600;
   text-decoration: none;
-  transition: all 0.2s;
+  transition: filter 0.2s, transform 0.15s;
   letter-spacing: 0.02em;
 }
+.btn-primary:hover { filter: brightness(1.15); transform: translateY(-1px); }
 .btn-secondary {
   display: inline-flex;
   align-items: center;
@@ -514,91 +470,16 @@ main { position: relative; z-index: 1; }
   border-color: rgba(116,198,157,0.4);
 }
 
-/* ─── COLOR THEMES PER SLIDE ─── */
-
-/* 1. ACL - Self-Assessment */
-.slide-1 .slide-panel { background: linear-gradient(160deg, #1B4332 0%, #2D6A4F 100%); }
-.slide-1 .slide-cat { background: rgba(116,198,157,0.2); color: var(--forest-light); }
-.slide-1 .slide-stat-num { color: var(--forest-pale); }
-.slide-1 .btn-primary { background: var(--forest-mid); color: #fff; }
-.slide-1 .btn-primary:hover { background: var(--forest-light); color: var(--forest-deep); }
-
-/* 2. AICI - Custom Instructions Library */
-.slide-2 .slide-panel { background: linear-gradient(160deg, #1a2a1a 0%, #2D4A3E 100%); }
-.slide-2 .slide-cat { background: rgba(116,198,157,0.15); color: #74C69D; }
-.slide-2 .slide-stat-num { color: var(--forest-pale); }
-.slide-2 .btn-primary { background: #2D6A4F; color: #fff; }
-.slide-2 .btn-primary:hover { background: #40916C; color: #fff; }
-
-/* 3. Architect - Prompt Engineering */
-.slide-3 .slide-panel { background: linear-gradient(160deg, #1a1f1a 0%, #253025 100%); }
-.slide-3 .slide-cat { background: rgba(116,198,157,0.12); color: #74C69D; }
-.slide-3 .slide-stat-num { color: var(--forest-pale); }
-.slide-3 .btn-primary { background: #1B4332; color: #D8F3DC; }
-.slide-3 .btn-primary:hover { background: #2D6A4F; color: #fff; }
-
-/* 4. Claude / TCEA AI Skills */
-.slide-4 .slide-panel { background: linear-gradient(160deg, #0f2318 0%, #1B4332 100%); }
-.slide-4 .slide-cat { background: rgba(116,198,157,0.18); color: var(--forest-light); }
-.slide-4 .slide-stat-num { color: var(--forest-pale); }
-.slide-4 .btn-primary { background: #40916C; color: #fff; }
-.slide-4 .btn-primary:hover { background: #52B788; color: var(--forest-deep); }
-
-/* 5. CUDL - UDL Coaching */
-.slide-5 .slide-panel { background: linear-gradient(160deg, #1e3020 0%, #2A4A2E 100%); }
-.slide-5 .slide-cat { background: rgba(116,198,157,0.14); color: #74C69D; }
-.slide-5 .slide-stat-num { color: var(--forest-pale); }
-.slide-5 .btn-primary { background: #2D6A4F; color: #fff; }
-.slide-5 .btn-primary:hover { background: #40916C; color: #fff; }
-
-/* 6. EOG - Onboarding Generator */
-.slide-6 .slide-panel { background: linear-gradient(160deg, #141f14 0%, #1E3520 100%); }
-.slide-6 .slide-cat { background: rgba(116,198,157,0.13); color: #74C69D; }
-.slide-6 .slide-stat-num { color: var(--forest-pale); }
-.slide-6 .btn-primary { background: #1B4332; color: var(--forest-pale); }
-.slide-6 .btn-primary:hover { background: #2D6A4F; color: #fff; }
-
-/* 7. TWC - Think with Claude */
-.slide-7 .slide-panel { background: linear-gradient(160deg, #0E2A1A 0%, #1A3D28 100%); }
-.slide-7 .slide-cat { background: rgba(116,198,157,0.15); color: #74C69D; }
-.slide-7 .slide-stat-num { color: var(--forest-pale); }
-.slide-7 .btn-primary { background: #2D6A4F; color: #fff; }
-.slide-7 .btn-primary:hover { background: #40916C; color: #fff; }
-
-/* 8. TxCA - BoodleBox */
-.slide-8 .slide-panel { background: linear-gradient(160deg, #162218 0%, #243828 100%); }
-.slide-8 .slide-cat { background: rgba(116,198,157,0.14); color: #74C69D; }
-.slide-8 .slide-stat-num { color: var(--forest-pale); }
-.slide-8 .btn-primary { background: #2D6A4F; color: #fff; }
-.slide-8 .btn-primary:hover { background: #52B788; color: var(--forest-deep); }
-
-/* 9. Visuals / Career */
-.slide-9 .slide-panel { background: linear-gradient(160deg, #1C2B1C 0%, #2A3F2A 100%); }
-.slide-9 .slide-cat { background: rgba(116,198,157,0.12); color: #74C69D; }
-.slide-9 .slide-stat-num { color: var(--forest-pale); }
-.slide-9 .btn-primary { background: #40916C; color: #fff; }
-.slide-9 .btn-primary:hover { background: #52B788; color: var(--forest-deep); }
-
-/* 10. VLET - Visible Learning */
-.slide-10 .slide-panel { background: linear-gradient(160deg, #0F1F0F 0%, #1E3320 100%); }
-.slide-10 .slide-cat { background: rgba(116,198,157,0.2); color: var(--forest-light); }
-.slide-10 .slide-stat-num { color: var(--forest-pale); }
-.slide-10 .btn-primary { background: var(--forest); color: #fff; }
-.slide-10 .btn-primary:hover { background: var(--forest-mid); color: #fff; }
-
 /* ─── BACK TO TOP ─── */
 #back-to-top {
   position: fixed;
-  bottom: 28px;
-  right: 28px;
+  bottom: 28px; right: 28px;
   z-index: 300;
   width: 44px; height: 44px;
   border-radius: 50%;
   background: var(--forest);
   border: 1px solid rgba(116,198,157,0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   color: var(--forest-pale);
   font-size: 1.1rem;
   cursor: pointer;
@@ -608,18 +489,12 @@ main { position: relative; z-index: 1; }
   transition: opacity 0.3s, transform 0.3s, background 0.2s;
   box-shadow: 0 4px 20px rgba(0,0,0,0.4);
 }
-#back-to-top.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-#back-to-top:hover {
-  background: var(--forest-mid);
-}
+#back-to-top.visible { opacity: 1; transform: translateY(0); }
+#back-to-top:hover { background: var(--forest-mid); }
 
 /* ─── FOOTER ─── */
 footer {
-  position: relative;
-  z-index: 1;
+  position: relative; z-index: 1;
   background: var(--forest-deep);
   border-top: 1px solid rgba(116,198,157,0.12);
   padding: 36px 32px;
@@ -629,46 +504,40 @@ footer {
   gap: 16px;
   flex-wrap: wrap;
 }
-.footer-brand {
-  font-family: 'Playfair Display', serif;
-  font-size: 0.95rem;
-  color: var(--forest-pale);
-}
+.footer-brand { font-family: 'Playfair Display', serif; font-size: 0.95rem; color: var(--forest-pale); }
 .footer-brand span { color: var(--forest-light); font-style: italic; }
-.footer-links {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-.footer-links a {
-  font-size: 0.78rem;
-  color: rgba(183,228,199,0.45);
-  text-decoration: none;
-  transition: color 0.15s;
-}
+.footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+.footer-links a { font-size: 0.78rem; color: rgba(183,228,199,0.45); text-decoration: none; transition: color 0.15s; }
 .footer-links a:hover { color: var(--forest-pale); }
-.footer-copy {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.62rem;
-  color: rgba(116,198,157,0.3);
-  letter-spacing: 0.06em;
+.footer-copy { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: rgba(116,198,157,0.3); letter-spacing: 0.06em; }
+
+/* ─── LOADING STATE ─── */
+#loading {
+  position: fixed; inset: 0; z-index: 500;
+  background: var(--charcoal);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 16px;
+  transition: opacity 0.4s;
 }
+#loading.hidden { opacity: 0; pointer-events: none; }
+.loading-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--forest-light);
+  display: inline-block; margin: 0 4px;
+  animation: ldot 1.2s ease infinite;
+}
+.loading-dot:nth-child(2) { animation-delay: 0.2s; }
+.loading-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes ldot {
+  0%,80%,100% { transform: scale(0.6); opacity: 0.4; }
+  40% { transform: scale(1.1); opacity: 1; }
+}
+.loading-lbl { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(116,198,157,0.4); }
 
 /* ─── RESPONSIVE ─── */
 @media (max-width: 860px) {
-  .slide {
-    grid-template-columns: 1fr;
-    min-height: auto;
-  }
-  .slide-content {
-    border-left: none;
-    border-top: 1px solid rgba(116,198,157,0.08);
-    padding: 28px 24px;
-  }
-  .slide-panel {
-    padding: 28px 24px 24px;
-    min-height: 180px;
-  }
+  .slide { grid-template-columns: 1fr; min-height: auto; }
+  .slide-content { border-left: none; border-top: 1px solid rgba(116,198,157,0.08); padding: 28px 24px; }
+  .slide-panel { padding: 28px 24px 24px; min-height: 180px; }
   .topnav { padding: 0 16px; }
   .hero { padding: 90px 20px 60px; }
   .index-strip { padding: 12px 16px; }
@@ -682,61 +551,31 @@ footer {
 </head>
 <body>
 
-<!-- ──────────── STICKY TOP NAV ──────────── -->
+<!-- Loading overlay -->
+<div id="loading">
+  <div>
+    <span class="loading-dot"></span>
+    <span class="loading-dot"></span>
+    <span class="loading-dot"></span>
+  </div>
+  <div class="loading-lbl">Loading projects</div>
+</div>
+
+<!-- Nav — populated by JS -->
 <nav class="topnav" id="topnav">
   <a href="#top" class="topnav-brand">MG<span>uhlin</span></a>
-  <div class="topnav-scroll">
-    <a href="#acl"><span class="pnum">01</span> ACL</a>
-    <a href="#aici"><span class="pnum">02</span> AI Library</a>
-    <a href="#architect"><span class="pnum">03</span> Architect</a>
-    <a href="#claude-suite"><span class="pnum">04</span> AI Skills</a>
-    <a href="#cudl"><span class="pnum">05</span> UDL</a>
-    <a href="#eog"><span class="pnum">06</span> Onboarding</a>
-    <a href="#twc"><span class="pnum">07</span> Think w/ Claude</a>
-    <a href="#txca"><span class="pnum">08</span> BoodleBox</a>
-    <a href="#visuals"><span class="pnum">09</span> Career</a>
-    <a href="#vlet"><span class="pnum">10</span> Visible Learning</a>
-  </div>
+  <div class="topnav-scroll" id="nav-links"></div>
   <a href="#top" class="topnav-back">↑ Top</a>
 </nav>
 
-<!-- ──────────── HERO ──────────── -->
+<!-- Hero — populated by JS -->
 <section class="hero" id="top">
   <div class="hero-inner">
     <div class="hero-eyebrow">MGuhlin.org · Digital Creations</div>
-
-    <h1 class="hero-title">
-      Creative<br><em>Works</em>
-    </h1>
-
-    <p class="hero-byline">Miguel Guhlin</p>
-
-    <p class="hero-desc">
-      A curated portfolio of AI-powered tools, reference guides, coaching frameworks, and interactive resources built for educators, administrators, and knowledge workers.
-    </p>
-
-    <div class="hero-tally">
-      <div class="tally-item">
-        <span class="tally-num">10</span>
-        <span class="tally-label">Projects</span>
-      </div>
-      <div class="tally-divider"></div>
-      <div class="tally-item">
-        <span class="tally-num">35+</span>
-        <span class="tally-label">AI Bots</span>
-      </div>
-      <div class="tally-divider"></div>
-      <div class="tally-item">
-        <span class="tally-num">7</span>
-        <span class="tally-label">Skills</span>
-      </div>
-      <div class="tally-divider"></div>
-      <div class="tally-item">
-        <span class="tally-num">CC0</span>
-        <span class="tally-label">Open License</span>
-      </div>
-    </div>
-
+    <h1 class="hero-title">Creative<br><em>Works</em></h1>
+    <p class="hero-byline" id="hero-byline"></p>
+    <p class="hero-desc" id="hero-desc"></p>
+    <div class="hero-tally" id="hero-tally"></div>
     <div class="hero-scroll">
       <span>Explore Projects</span>
       <div class="scroll-ring">↓</div>
@@ -744,487 +583,175 @@ footer {
   </div>
 </section>
 
-<!-- ──────────── QUICK INDEX STRIP ──────────── -->
-<div class="index-strip">
+<!-- Index strip — populated by JS -->
+<div class="index-strip" id="index-strip">
   <span class="index-label">Jump to</span>
-  <a href="#acl" class="index-pill"><span class="pnum">01</span> AI Capability Ladder</a>
-  <a href="#aici" class="index-pill"><span class="pnum">02</span> Custom Instructions Library</a>
-  <a href="#architect" class="index-pill"><span class="pnum">03</span> Prompt Architect</a>
-  <a href="#claude-suite" class="index-pill"><span class="pnum">04</span> AI Skills Suite</a>
-  <a href="#cudl" class="index-pill"><span class="pnum">05</span> UDL Coaching</a>
-  <a href="#eog" class="index-pill"><span class="pnum">06</span> Onboarding Generator</a>
-  <a href="#twc" class="index-pill"><span class="pnum">07</span> Think with Claude</a>
-  <a href="#txca" class="index-pill"><span class="pnum">08</span> BoodleBox + TxCA</a>
-  <a href="#visuals" class="index-pill"><span class="pnum">09</span> Career Visuals</a>
-  <a href="#vlet" class="index-pill"><span class="pnum">10</span> Visible Learning</a>
 </div>
 
-<!-- ──────────── SLIDES ──────────── -->
-<main>
+<!-- Main slides — populated by JS -->
+<main id="main-content"></main>
 
-<div class="sec-divider">
-  <div class="sec-divider-line"></div>
-  <span class="sec-divider-lbl">AI Productivity &amp; Self-Assessment</span>
-  <div class="sec-divider-line"></div>
-</div>
+<!-- Footer — populated by JS -->
+<footer id="site-footer"></footer>
 
-<div class="slides-container">
-
-  <!-- ── SLIDE 1: ACL ── -->
-  <div class="slide slide-1" id="acl">
-    <div class="slide-panel">
-      <div>
-        <span class="slide-cat">Assessment Tool</span>
-        <h2 class="slide-title">AI Capability Ladder</h2>
-        <p class="slide-sub">Self-assessment quiz for AI fluency in workplace contexts</p>
-      </div>
-      <div class="slide-stat">
-        <div class="slide-stat-num">4</div>
-        <div class="slide-stat-lbl">Fluency Levels</div>
-      </div>
-      <div class="slide-wm">01</div>
-    </div>
-    <div class="slide-content">
-      <div>
-        <p class="slide-desc">
-          A five-question interactive self-assessment that scores your AI fluency and places you on the Capability Ladder — from Disconnected through Foundational, Integrated, to Strategic. Automatically logs responses to a data endpoint. Results include a full reference grid of what each level looks like in practice.
-        </p>
-        <div class="slide-features">
-          <span class="feat-chip">5-Question Quiz</span>
-          <span class="feat-chip">Automated Scoring</span>
-          <span class="feat-chip">Data Logging</span>
-          <span class="feat-chip">Level Grid Reference</span>
-          <span class="feat-chip">Scholarship Workflow Context</span>
-        </div>
-      </div>
-      <div class="slide-actions">
-        <a href="acl/index.html" class="btn-primary">Open Assessment →</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── SLIDE 2: AICI ── -->
-  <div class="slide slide-2" id="aici">
-    <div class="slide-panel">
-      <div>
-        <span class="slide-cat">Reference Library</span>
-        <h2 class="slide-title">AI Custom Instructions Library</h2>
-        <p class="slide-sub">Purpose-built AI assistants for educators &amp; administrators</p>
-      </div>
-      <div class="slide-stat">
-        <div class="slide-stat-num">35+</div>
-        <div class="slide-stat-lbl">Custom Bots</div>
-      </div>
-      <div class="slide-wm">02</div>
-    </div>
-    <div class="slide-content">
-      <div>
-        <p class="slide-desc">
-          A browsable library of copy-paste custom instructions deployable in any major Gen AI platform — ChatGPT, Claude Projects, Google Gems, BoodleBox, Copilot, or NotebookLM. Eight organized categories spanning productivity, communications, education, analysis, classroom bots, and specialty tools. Grew from the TCEA session on Automating Office Tasks with AI (March 2026).
-        </p>
-        <div class="slide-features">
-          <span class="feat-chip">BLUF Bot</span>
-          <span class="feat-chip">Meeting Minutes</span>
-          <span class="feat-chip">PD Announcements</span>
-          <span class="feat-chip">SIFT / PRISM / FLOATER</span>
-          <span class="feat-chip">Essay Reviser</span>
-          <span class="feat-chip">TCEA PROTECT</span>
-          <span class="feat-chip">Lesson Plan Assistant</span>
-          <span class="feat-chip">Rubric Builder</span>
-        </div>
-      </div>
-      <div class="slide-actions">
-        <a href="aici/index.html" class="btn-primary">Browse Library →</a>
-        <a href="https://mguhlin.github.io/aici/index.html" class="btn-secondary" target="_blank">Live Site ↗</a>
-      </div>
-    </div>
-  </div>
-
-</div><!-- /slides-container -->
-
-<div class="sec-divider">
-  <div class="sec-divider-line"></div>
-  <span class="sec-divider-lbl">Prompt Engineering</span>
-  <div class="sec-divider-line"></div>
-</div>
-
-<div class="slides-container">
-
-  <!-- ── SLIDE 3: ARCHITECT ── -->
-  <div class="slide slide-3" id="architect">
-    <div class="slide-panel">
-      <div>
-        <span class="slide-cat">Interactive Tool</span>
-        <h2 class="slide-title">AI Prompt Architect</h2>
-        <p class="slide-sub">Transform basic ideas into engineered prompts; identify high-value AI workflows</p>
-      </div>
-      <div class="slide-stat">
-        <div class="slide-stat-num">6</div>
-        <div class="slide-stat-lbl">Prompt Frameworks</div>
-      </div>
-      <div class="slide-wm">03</div>
-    </div>
-    <div class="slide-content">
-      <div>
-        <p class="slide-desc">
-          An interactive prompt optimizer that takes any basic request and transforms it using one of six evidence-backed frameworks: Triple-Check, Few-Shot, Chain-of-Thought, Tree-of-Thought, Prompt Chaining, and RAG. Each framework includes a recommended model, a ready-to-copy optimized prompt, and rationale. Includes a glossary and two strategic workflow models (Problem-Based Learning and Use Case) for identifying high-impact AI opportunities.
-        </p>
-        <div class="slide-features">
-          <span class="feat-chip">Triple-Check Prompting</span>
-          <span class="feat-chip">Chain-of-Thought</span>
-          <span class="feat-chip">Tree-of-Thought</span>
-          <span class="feat-chip">RAG Organization</span>
-          <span class="feat-chip">PBL &amp; Use Case Models</span>
-          <span class="feat-chip">Copy-to-Clipboard</span>
-        </div>
-      </div>
-      <div class="slide-actions">
-        <a href="architect/index.html" class="btn-primary">Open Tool →</a>
-      </div>
-    </div>
-  </div>
-
-</div>
-
-<div class="sec-divider">
-  <div class="sec-divider-line"></div>
-  <span class="sec-divider-lbl">Claude Skills &amp; Nonprofit AI</span>
-  <div class="sec-divider-line"></div>
-</div>
-
-<div class="slides-container">
-
-  <!-- ── SLIDE 4: CLAUDE / AI SKILLS ── -->
-  <div class="slide slide-4" id="claude-suite">
-    <div class="slide-panel">
-      <div>
-        <span class="slide-cat">Skill Suite · Nonprofit</span>
-        <h2 class="slide-title">TCEA AI Skills Suite</h2>
-        <p class="slide-sub">Seven Claude-powered skills for mission-driven organizations</p>
-      </div>
-      <div class="slide-stat">
-        <div class="slide-stat-num">7</div>
-        <div class="slide-stat-lbl">Downloadable Skills</div>
-      </div>
-      <div class="slide-wm">04</div>
-    </div>
-    <div class="slide-content">
-      <div>
-        <p class="slide-desc">
-          Production-ready Claude skills (downloadable .skill files) for nonprofits and education-adjacent organizations. Each skill is a precision-engineered instruction set — install once in a Claude Project and Claude applies it to every matching request automatically. Includes an 8-step Cowork setup guide and the "Ask First" method for dramatically better outputs from the start.
-        </p>
-        <div class="slide-features">
-          <span class="feat-chip">Blog Writer</span>
-          <span class="feat-chip">PPTX Builder (.pptx)</span>
-          <span class="feat-chip">Infographic Designer (PNG)</span>
-          <span class="feat-chip">Mermaid Designer</span>
-          <span class="feat-chip">Draw.io XML Builder</span>
-          <span class="feat-chip">Rubric Builder</span>
-          <span class="feat-chip">Training Architect</span>
-        </div>
-      </div>
-      <div class="slide-actions">
-        <a href="claude/index.html" class="btn-primary">View Skills →</a>
-        <a href="claude/copywriting.html" class="btn-secondary">Copywriting Visual ↗</a>
-      </div>
-    </div>
-  </div>
-
-</div>
-
-<div class="sec-divider">
-  <div class="sec-divider-line"></div>
-  <span class="sec-divider-lbl">Coaching &amp; Professional Development</span>
-  <div class="sec-divider-line"></div>
-</div>
-
-<div class="slides-container">
-
-  <!-- ── SLIDE 5: CUDL ── -->
-  <div class="slide slide-5" id="cudl">
-    <div class="slide-panel">
-      <div>
-        <span class="slide-cat">Coaching Framework · UDL</span>
-        <h2 class="slide-title">Coaching for Every Learner</h2>
-        <p class="slide-sub">Three UDL coaching protocols for instructional coaches and teachers</p>
-      </div>
-      <div class="slide-stat">
-        <div class="slide-stat-num">3</div>
-        <div class="slide-stat-lbl">Coaching Protocols</div>
-      </div>
-      <div class="slide-wm">05</div>
-    </div>
-    <div class="slide-content">
-      <div>
-        <p class="slide-desc">
-          An interactive scenario-based coaching tool grounded in CAST UDL Guidelines 3.0. Coaches and teachers work through real classroom challenges using three structured frameworks: ARC (Acknowledge–Reframe–Commit), Notice-Wonder-Next, and VIVA (Verify–Illustrate–Validate–Apply). Each protocol includes randomized scenario cards drawn from genuine instructional challenges, with UDL element alignment displayed for every response.
-        </p>
-        <div class="slide-features">
-          <span class="feat-chip">ARC Protocol</span>
-          <span class="feat-chip">Notice-Wonder-Next</span>
-          <span class="feat-chip">VIVA Framework</span>
-          <span class="feat-chip">Random Scenario Generator</span>
-          <span class="feat-chip">UDL 3.0 Reference</span>
-          <span class="feat-chip">TCEA26 Session Tool</span>
-        </div>
-      </div>
-      <div class="slide-actions">
-        <a href="cudl/index.html" class="btn-primary">ARC Protocol →</a>
-        <a href="cudl/nwn.html" class="btn-secondary">Notice-Wonder-Next</a>
-        <a href="cudl/viva.html" class="btn-secondary">VIVA</a>
-      </div>
-    </div>
-  </div>
-
-</div>
-
-<div class="sec-divider">
-  <div class="sec-divider-line"></div>
-  <span class="sec-divider-lbl">Onboarding &amp; HR Tools</span>
-  <div class="sec-divider-line"></div>
-</div>
-
-<div class="slides-container">
-
-  <!-- ── SLIDE 6: EOG ── -->
-  <div class="slide slide-6" id="eog">
-    <div class="slide-panel">
-      <div>
-        <span class="slide-cat">Claude Project · Generator</span>
-        <h2 class="slide-title">Onboarding Guide Generator</h2>
-        <p class="slide-sub">One prompt → a complete branded HTML employee onboarding site</p>
-      </div>
-      <div class="slide-stat">
-        <div class="slide-stat-num">8</div>
-        <div class="slide-stat-lbl">Required Sections</div>
-      </div>
-      <div class="slide-wm">06</div>
-    </div>
-    <div class="slide-content">
-      <div>
-        <p class="slide-desc">
-          A Claude Project system prompt that turns a company name into a complete, single-file HTML onboarding website. Claude searches the web for brand colors, locations, hours, and org structure before writing a line of HTML. The output includes a sticky header, sidebar table of contents, 8 structured content sections, a first-week checklist, and amber-highlighted placeholders for any data Claude could not verify. Ships with two live examples: Mac Haik Georgetown (automotive) and TCEA.
-        </p>
-        <div class="slide-features">
-          <span class="feat-chip">Live Web Research</span>
-          <span class="feat-chip">Auto Brand Colors</span>
-          <span class="feat-chip">Single-File HTML Output</span>
-          <span class="feat-chip">Amber Placeholders</span>
-          <span class="feat-chip">First-Week Checklist</span>
-          <span class="feat-chip">Mac Haik Example</span>
-          <span class="feat-chip">TCEA Example</span>
-        </div>
-      </div>
-      <div class="slide-actions">
-        <a href="eog/index.html" class="btn-primary">System Prompt &amp; Docs →</a>
-        <a href="eog/tcea.html" class="btn-secondary">TCEA Example</a>
-        <a href="eog/example1.html" class="btn-secondary">Mac Haik Example</a>
-      </div>
-    </div>
-  </div>
-
-</div>
-
-<div class="sec-divider">
-  <div class="sec-divider-line"></div>
-  <span class="sec-divider-lbl">Claude Orientation &amp; AI Literacy</span>
-  <div class="sec-divider-line"></div>
-</div>
-
-<div class="slides-container">
-
-  <!-- ── SLIDE 7: TWC ── -->
-  <div class="slide slide-7" id="twc">
-    <div class="slide-panel">
-      <div>
-        <span class="slide-cat">K–12 Educator Series</span>
-        <h2 class="slide-title">Think with Claude</h2>
-        <p class="slide-sub">Technical orientation screencasts for educators new to Claude</p>
-      </div>
-      <div class="slide-stat">
-        <div class="slide-stat-num">4</div>
-        <div class="slide-stat-lbl">Screencasts · ~40 min</div>
-      </div>
-      <div class="slide-wm">07</div>
-    </div>
-    <div class="slide-content">
-      <div>
-        <p class="slide-desc">
-          A TCEA Knowledge Booster orientation series — four screencasts that get K–12 educators confident with Claude's interface before the deeper series begins. Covers account setup and navigation, Projects and file uploads, personalizing Claude with custom instructions, model selection, mobile app, and a full set of power habits including Julian date naming, session summaries, the Deep Re-Prompt method, and role assignment strategies.
-        </p>
-        <div class="slide-features">
-          <span class="feat-chip">SC1: Account &amp; Interface</span>
-          <span class="feat-chip">SC2: Projects &amp; Artifacts</span>
-          <span class="feat-chip">SC3: Personalization &amp; Mobile</span>
-          <span class="feat-chip">SC4: Power Habits</span>
-          <span class="feat-chip">Copyable Prompts</span>
-          <span class="feat-chip">2.0 CPE Credits</span>
-        </div>
-      </div>
-      <div class="slide-actions">
-        <a href="twc/index.html" class="btn-primary">Open Orientation →</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── SLIDE 8: TXCA ── -->
-  <div class="slide slide-8" id="txca">
-    <div class="slide-panel">
-      <div>
-        <span class="slide-cat">Webinar + Reference Guide</span>
-        <h2 class="slide-title">BoodleBox Basics &amp; Beyond</h2>
-        <p class="slide-sub">AI office automation guide for the Texas Counseling Association</p>
-      </div>
-      <div class="slide-stat">
-        <div class="slide-stat-num">90</div>
-        <div class="slide-stat-lbl">Min Webinar · 8 RAG Configs</div>
-      </div>
-      <div class="slide-wm">08</div>
-    </div>
-    <div class="slide-content">
-      <div>
-        <p class="slide-desc">
-          A dual-purpose reference: a structured 6-part webinar guide on BoodleBox for educators, and a comprehensive office automation guide mapping TxCA administrative tasks to AI workflows. The automation guide covers 40+ tasks across seven categories (Member Communication, Events, Advocacy, Membership, CE Administration, Marketing, and Finance), each with approach type (Single Prompt vs. RAG), automation methods, and eight fully specified RAG configurations with system prompts.
-        </p>
-        <div class="slide-features">
-          <span class="feat-chip">Knowledge Bank Mastery</span>
-          <span class="feat-chip">Bot Stacking</span>
-          <span class="feat-chip">40+ Office Tasks Mapped</span>
-          <span class="feat-chip">8 RAG System Prompts</span>
-          <span class="feat-chip">Member Comms · Events · CE</span>
-          <span class="feat-chip">Advocacy &amp; Grants</span>
-        </div>
-      </div>
-      <div class="slide-actions">
-        <a href="txca/index.html" class="btn-primary">Open Guide →</a>
-      </div>
-    </div>
-  </div>
-
-</div>
-
-<div class="sec-divider">
-  <div class="sec-divider-line"></div>
-  <span class="sec-divider-lbl">Data Visualization &amp; Evidence-Based Practice</span>
-  <div class="sec-divider-line"></div>
-</div>
-
-<div class="slides-container">
-
-  <!-- ── SLIDE 9: VISUALS/CAREER ── -->
-  <div class="slide slide-9" id="visuals">
-    <div class="slide-panel">
-      <div>
-        <span class="slide-cat">Data Visualization</span>
-        <h2 class="slide-title">Career Longevity in EdTech</h2>
-        <p class="slide-sub">Individual analysis vs. industry benchmarks — 1994 to present</p>
-      </div>
-      <div class="slide-stat">
-        <div class="slide-stat-num">32</div>
-        <div class="slide-stat-lbl">Years · 6.2 yr avg tenure</div>
-      </div>
-      <div class="slide-wm">09</div>
-    </div>
-    <div class="slide-content">
-      <div>
-        <p class="slide-desc">
-          An interactive data visualization comparing one EdTech leader's career tenure data against national benchmarks for K–12, nonprofit, and public sector positions. Features an animated career timeline, comparative bar charts, and four key takeaways. Built with scroll-triggered animations and a fixed navigation dot system — demonstrates what AI-assisted data storytelling looks like when applied to personal career data rather than abstract organizational metrics.
-        </p>
-        <div class="slide-features">
-          <span class="feat-chip">Animated Timeline</span>
-          <span class="feat-chip">Industry Benchmarks</span>
-          <span class="feat-chip">Head-to-Head Comparison</span>
-          <span class="feat-chip">Scroll Animations</span>
-          <span class="feat-chip">Collapsible Sections</span>
-          <span class="feat-chip">Nav Dot System</span>
-        </div>
-      </div>
-      <div class="slide-actions">
-        <a href="visuals/career.html" class="btn-primary">View Visualization →</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── SLIDE 10: VLET ── -->
-  <div class="slide slide-10" id="vlet">
-    <div class="slide-panel">
-      <div>
-        <span class="slide-cat">Instructional Reference · K–16</span>
-        <h2 class="slide-title">Visible Learning with Ed Tech</h2>
-        <p class="slide-sub">Evidence-based teaching strategies, SOLO Taxonomy, and AI guidance</p>
-      </div>
-      <div class="slide-stat">
-        <div class="slide-stat-num">0.92</div>
-        <div class="slide-stat-lbl">Jigsaw Effect Size · Hattie</div>
-      </div>
-      <div class="slide-wm">10</div>
-    </div>
-    <div class="slide-content">
-      <div>
-        <p class="slide-desc">
-          A comprehensive strategy reference grounded in John Hattie's Visible Learning research, Mike Bell's memory science, and CAST's UDL 3.0 Guidelines. Covers the three phases of learning (Surface, Deep, Transfer), the SOLO Taxonomy with detailed level descriptors, a sortable strategy table with effect sizes, and deep dives into Jigsaw (ES: 0.92), Reciprocal Teaching (ES: 0.74), Concept Mapping (ES: 0.66), and Transfer Learning. Includes six instructional frameworks and a SOLO-mapped guide to responsible AI use at each level.
-        </p>
-        <div class="slide-features">
-          <span class="feat-chip">Effect Size Reference</span>
-          <span class="feat-chip">SOLO Taxonomy</span>
-          <span class="feat-chip">Jigsaw · Reciprocal Teaching</span>
-          <span class="feat-chip">ALDO · EIIR · RISE Goals</span>
-          <span class="feat-chip">FLOATER · SIFT</span>
-          <span class="feat-chip">AI Use by SOLO Level</span>
-          <span class="feat-chip">BoodleBox Strategy Partner</span>
-        </div>
-      </div>
-      <div class="slide-actions">
-        <a href="vlet/index.html" class="btn-primary">Open Reference →</a>
-        <a href="https://mglearn.github.io/vlet/" class="btn-secondary" target="_blank">Live Site ↗</a>
-      </div>
-    </div>
-  </div>
-
-</div>
-</main>
-
-<!-- ──────────── FOOTER ──────────── -->
-<footer>
-  <div class="footer-brand">MG<span>uhlin</span>.org — Creations</div>
-  <div class="footer-links">
-    <a href="https://mguhlin.org" target="_blank">MGuhlin.org</a>
-    <a href="https://blog.tcea.org" target="_blank">TCEA TechNotes</a>
-    <a href="https://tcea.org" target="_blank">TCEA.org</a>
-  </div>
-  <div class="footer-copy">CC0 1.0 Universal · Open for reuse</div>
-</footer>
-
-<!-- ──────────── BACK TO TOP ──────────── -->
+<!-- Back to top -->
 <a href="#top" id="back-to-top" title="Back to top">↑</a>
 
 <script>
-  // ── Back-to-top visibility
+/* ═══════════════════════════════════════════════
+   RENDERER — reads projects.json, builds the page
+   ═══════════════════════════════════════════════ */
+
+async function loadAndRender() {
+  let data;
+  try {
+    const res = await fetch('projects.json');
+    if (!res.ok) throw new Error('fetch failed');
+    data = await res.json();
+  } catch (e) {
+    document.getElementById('loading').innerHTML =
+      '<p style="color:#74C69D;font-family:DM Mono,monospace;font-size:.8rem;">Could not load projects.json — make sure it lives in the same folder as index.html.</p>';
+    return;
+  }
+
+  buildHero(data.meta);
+  buildNav(data.projects);
+  buildIndexStrip(data.projects);
+  buildSlides(data.projects);
+  buildFooter(data.meta);
+
+  // Hide loading overlay
+  const loader = document.getElementById('loading');
+  loader.classList.add('hidden');
+  setTimeout(() => loader.remove(), 500);
+
+  // Scroll-in observer
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.slide').forEach(s => io.observe(s));
+
+  // Back-to-top
   const btt = document.getElementById('back-to-top');
   window.addEventListener('scroll', () => {
-    if (window.scrollY > 500) {
-      btt.classList.add('visible');
-    } else {
-      btt.classList.remove('visible');
-    }
+    btt.classList.toggle('visible', window.scrollY > 500);
   }, { passive: true });
+}
 
-  // ── Scroll-in animations for slides
-  const slides = document.querySelectorAll('.slide');
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        io.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.08 });
-  slides.forEach(s => io.observe(s));
+/* ── HERO ── */
+function buildHero(meta) {
+  document.getElementById('hero-byline').textContent = meta.byline;
+  document.getElementById('hero-desc').textContent = meta.description;
 
-  // ── Stagger entrance slightly per slide
-  slides.forEach((slide, i) => {
-    slide.style.transitionDelay = '0.05s';
+  const tallyEl = document.getElementById('hero-tally');
+  meta.tallies.forEach((t, i) => {
+    if (i > 0) {
+      const div = document.createElement('div');
+      div.className = 'tally-divider';
+      tallyEl.appendChild(div);
+    }
+    tallyEl.insertAdjacentHTML('beforeend', `
+      <div class="tally-item">
+        <span class="tally-num">${t.num}</span>
+        <span class="tally-label">${t.label}</span>
+      </div>`);
   });
+}
+
+/* ── TOP NAV ── */
+function buildNav(projects) {
+  const el = document.getElementById('nav-links');
+  projects.forEach(p => {
+    el.insertAdjacentHTML('beforeend',
+      `<a href="#${p.id}"><span class="pnum">${p.num}</span> ${stripTags(p.title)}</a>`);
+  });
+}
+
+/* ── INDEX STRIP ── */
+function buildIndexStrip(projects) {
+  const el = document.getElementById('index-strip');
+  projects.forEach(p => {
+    el.insertAdjacentHTML('beforeend',
+      `<a href="#${p.id}" class="index-pill"><span class="pnum">${p.num}</span> ${p.title}</a>`);
+  });
+}
+
+/* ── SLIDES ── */
+function buildSlides(projects) {
+  const main = document.getElementById('main-content');
+  let currentSection = null;
+  let container = null;
+
+  projects.forEach((p, idx) => {
+    // New section divider
+    if (p.section !== currentSection) {
+      currentSection = p.section;
+      main.insertAdjacentHTML('beforeend', `
+        <div class="sec-divider">
+          <div class="sec-divider-line"></div>
+          <span class="sec-divider-lbl">${p.section}</span>
+          <div class="sec-divider-line"></div>
+        </div>`);
+      container = document.createElement('div');
+      container.className = 'slides-container';
+      main.appendChild(container);
+    }
+
+    // Feature chips
+    const chips = p.features.map(f => `<span class="feat-chip">${f}</span>`).join('');
+
+    // Action buttons
+    const btns = p.links.map(l => {
+      if (l.primary) {
+        return `<a href="${l.href}" class="btn-primary"
+          style="background:${p.btnBg};color:${p.btnColor};"
+          ${l.external ? 'target="_blank" rel="noopener"' : ''}>${l.label}</a>`;
+      }
+      return `<a href="${l.href}" class="btn-secondary"
+        ${l.external ? 'target="_blank" rel="noopener"' : ''}>${l.label}</a>`;
+    }).join('');
+
+    container.insertAdjacentHTML('beforeend', `
+      <div class="slide" id="${p.id}" style="transition-delay:0.05s">
+        <div class="slide-panel" style="background:${p.panelGradient}">
+          <div>
+            <span class="slide-cat" style="${p.catStyle}">${p.category}</span>
+            <h2 class="slide-title">${p.title}</h2>
+            <p class="slide-sub">${p.subtitle}</p>
+          </div>
+          <div class="slide-stat">
+            <div class="slide-stat-num" style="color:${p.statColor}">${p.stat}</div>
+            <div class="slide-stat-lbl">${p.statLabel}</div>
+          </div>
+          <div class="slide-wm">${p.num}</div>
+        </div>
+        <div class="slide-content">
+          <div>
+            <p class="slide-desc">${p.description}</p>
+            <div class="slide-features">${chips}</div>
+          </div>
+          <div class="slide-actions">${btns}</div>
+        </div>
+      </div>`);
+  });
+}
+
+/* ── FOOTER ── */
+function buildFooter(meta) {
+  const links = meta.footerLinks
+    .map(l => `<a href="${l.href}" target="_blank">${l.label}</a>`)
+    .join('');
+  document.getElementById('site-footer').innerHTML = `
+    <div class="footer-brand">MG<span>uhlin</span>.org — Creations</div>
+    <div class="footer-links">${links}</div>
+    <div class="footer-copy">CC0 1.0 Universal · Open for reuse</div>`;
+}
+
+/* ── UTIL ── */
+function stripTags(str) { return str.replace(/<[^>]*>/g, ''); }
+
+/* ── KICK OFF ── */
+loadAndRender();
 </script>
 </body>
 </html>
