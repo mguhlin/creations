@@ -2,7 +2,7 @@
 
 A portfolio of AI-powered tools, reference guides, coaching frameworks, and interactive resources built for educators, administrators, and knowledge workers.
 
-**Author:** Miguel Guhlin · [MGuhlin.org](https://mguhlin.org) · [TCEA TechNotes](https://blog.tcea.org)  
+**Author:** Miguel Guhlin · [MGuhlin.org](https://mguhlin.org)
 **License:** [CC0 1.0 Universal](LICENSE) — open for reuse without restriction
 
 ---
@@ -12,9 +12,9 @@ A portfolio of AI-powered tools, reference guides, coaching frameworks, and inte
 | # | Folder | Project | Type |
 |---|--------|---------|------|
 | 01 | [`acl/`](#01-ai-capability-ladder) | AI Capability Ladder Self-Assessment | Interactive Quiz |
-| 02 | [`aici/`](#02-tcea-ai-custom-instructions-library) | TCEA AI Custom Instructions Library | Reference Library |
+| 02 | [`aici/`](#02-tcea-ai-custom-instructions-library) | AI Custom Instructions Library | Reference Library |
 | 03 | [`architect/`](#03-ai-prompt-architect--workflow-guide) | AI Prompt Architect & Workflow Guide | Interactive Tool |
-| 04 | [`claude/`](#04-tcea-ai-skills-suite--nonprofit-edition) | TCEA AI Skills Suite — Nonprofit Edition | Claude Skills |
+| 04 | [`claude/`](#04-tcea-ai-skills-suite--nonprofit-edition) | AI Skills Suite — Nonprofit Edition | Claude Skills |
 | 05 | [`cudl/`](#05-coaching-for-every-learner--udl-protocols) | Coaching for Every Learner — UDL Protocols | Coaching Tool |
 | 06 | [`eog/`](#06-employee-onboarding-guide-generator) | Employee Onboarding Guide Generator | Claude Project |
 | 07 | [`twc/`](#07-think-with-claude--technical-orientation) | Think with Claude — Technical Orientation | Screencast Guide |
