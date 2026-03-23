@@ -1,0 +1,23 @@
+{
+  "num": "11",
+  "id": "myfolder",
+  "section": "New Section Name",
+  "category": "Tool Type",
+  "title": "My New Project",
+  "subtitle": "One-line description",
+  "stat": "5",
+  "statLabel": "Key Metric",
+  "panelGradient": "linear-gradient(160deg, #0F2318 0%, #1B4332 100%)",
+  "catStyle": "background:rgba(116,198,157,0.15);color:#74C69D;",
+  "statColor": "#B7E4C7",
+  "btnBg": "#40916C",
+  "btnColor": "#fff",
+  "btnHoverBg": "#52B788",
+  "btnHoverColor": "#1B4332",
+  "description": "Full description paragraph here.",
+  "features": ["Feature One", "Feature Two", "Feature Three"],
+  "links": [
+    { "label": "Open →",   "href": "myfolder/index.html", "primary": true },
+    { "label": "Live ↗",   "href": "https://...",          "primary": false, "external": true }
+  ]
+}
