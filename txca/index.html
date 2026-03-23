@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoodleBox Basics & Beyond — TxCA Office Automation Guide</title>
+<title>BoodleBox Basics & Beyond — TxCA Webinar Guide</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -19,18 +19,15 @@
     --bb-purple-light: #ede8fa;
     --bb-blue: #00A1E3;
     --bb-blue-light: #e0f3fc;
-    --rag: #6b54b8;
-    --single: #00A1E3;
-    --both: #9981E2;
     --border: #d4d0e2;
     --mono: 'IBM Plex Mono', monospace;
     --sans: 'IBM Plex Sans', sans-serif;
     --display: 'Syne', sans-serif;
-    --webinar: #9981E2;
-    --webinar-light: #ede8fa;
+    --sidebar-w: 252px;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
 
   body {
     background: var(--bg);
@@ -38,1631 +35,1327 @@
     font-family: var(--sans);
     font-size: 14px;
     line-height: 1.6;
+    min-height: 100vh;
   }
 
-  /* ── Top Nav ── */
-  .top-nav {
+  /* ── LAYOUT ── */
+  .layout { display: flex; min-height: 100vh; }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: var(--sidebar-w);
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
     background: var(--ink);
     display: flex;
-    align-items: center;
-    padding: 0 40px;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    flex-direction: column;
+    overflow-y: auto;
+    z-index: 200;
+    scrollbar-width: thin;
+    scrollbar-color: var(--bb-purple) transparent;
   }
-  .top-nav-brand {
-    font-family: var(--display);
-    font-weight: 800;
-    font-size: 0.85rem;
-    color: #fff;
-    padding: 14px 0;
-    margin-right: 32px;
-    white-space: nowrap;
-    letter-spacing: -0.01em;
-  }
-  .top-nav-brand span { color: var(--bb-purple); }
-  .top-nav-tabs {
-    display: flex;
-    overflow-x: auto;
-    scrollbar-width: none;
-    gap: 0;
-  }
-  .top-nav-tabs::-webkit-scrollbar { display: none; }
-  .nav-tab {
-    padding: 14px 18px;
-    font-family: var(--display);
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: rgba(255,255,255,0.55);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    cursor: pointer;
-    white-space: nowrap;
-    border-bottom: 3px solid transparent;
-    transition: color 0.2s, border-color 0.2s;
-    text-decoration: none;
-  }
-  .nav-tab:hover { color: rgba(255,255,255,0.85); }
-  .nav-tab.active {
-    color: #fff;
-    border-bottom-color: var(--bb-purple);
-  }
+  .sidebar::-webkit-scrollbar { width: 3px; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--bb-purple); border-radius: 3px; }
 
-  /* ── Pages ── */
-  .page { display: none; }
-  .page.active { display: block; }
-
-  /* ── Page Header ── */
-  .page-header {
-    padding: 44px 60px 36px;
-    position: relative;
-    overflow: hidden;
-  }
-  .page-header::before {
-    content: '';
-    position: absolute;
-    top: -60px; right: -60px;
-    width: 360px; height: 360px;
-    border-radius: 50%;
-    opacity: 0.08;
-  }
-  .page-header.webinar-header {
-    background: linear-gradient(135deg, #2a1a3a 0%, #1a1a2a 100%);
-    color: var(--bg);
-  }
-  .page-header.webinar-header::before { background: var(--bb-purple); }
-  .page-header.oag-header {
-    background: linear-gradient(135deg, #1a1a3a 0%, #1a1a2a 100%);
-    color: var(--bg);
-  }
-  .page-header.oag-header::before { background: var(--bb-blue); }
-  .page-header h1 {
-    font-family: var(--display);
-    font-size: 2.4rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-    position: relative;
-  }
-  .page-header .subtitle {
-    margin-top: 10px;
-    font-size: 0.92rem;
-    opacity: 0.6;
-    max-width: 620px;
-    position: relative;
-  }
-  .page-header .tag {
-    display: inline-block;
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 3px 10px;
-    border-radius: 3px;
-    margin-bottom: 12px;
-    position: relative;
-  }
-  .tag-webinar { background: var(--bb-purple); color: #fff; }
-  .tag-oag { background: var(--bb-blue); color: #fff; }
-
-  /* ── Sub-navigation for webinar parts ── */
-  .sub-nav {
-    display: flex;
-    gap: 0;
-    padding: 0 60px;
-    background: var(--surface2);
-    border-bottom: 1px solid var(--border);
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .sub-nav::-webkit-scrollbar { display: none; }
-  .sub-tab {
-    padding: 11px 18px;
-    font-family: var(--display);
-    font-size: 0.68rem;
-    font-weight: 600;
-    color: var(--ink2);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    cursor: pointer;
-    white-space: nowrap;
-    border-bottom: 2px solid transparent;
-    transition: color 0.15s, border-color 0.15s;
-  }
-  .sub-tab:hover { color: var(--ink); }
-  .sub-tab.active {
-    color: var(--bb-purple);
-    border-bottom-color: var(--bb-purple);
-  }
-
-  /* ── Content ── */
-  main { padding: 36px 60px 80px; }
-
-  .sub-page { display: none; }
-  .sub-page.active { display: block; }
-
-  /* ── Content Cards ── */
-  .content-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    margin-bottom: 20px;
-    overflow: hidden;
-  }
-  .content-card-header {
-    padding: 16px 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
-    transition: background 0.12s;
-  }
-  .content-card-header:hover { background: #f6f4fa; }
-  .content-card-header .card-icon {
-    font-size: 1.4rem;
+  .sidebar-brand {
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
     flex-shrink: 0;
   }
-  .content-card-header h3 {
+  .brand-name {
     font-family: var(--display);
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--ink);
-    flex: 1;
+    font-weight: 800;
+    font-size: 0.9rem;
+    color: #fff;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+    line-height: 1.25;
   }
-  .content-card-header .chevron {
-    font-size: 0.75rem;
-    color: var(--ink2);
-    transition: transform 0.2s;
+  .brand-name span { color: var(--bb-purple); }
+  .brand-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+  .brand-pill {
+    display: inline-flex; align-items: center;
+    padding: 2px 8px; border-radius: 3px;
+    font-family: var(--mono); font-size: 0.58rem; font-weight: 500; letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
+  .brand-pill.purple { background: var(--bb-purple); color: #fff; }
+  .brand-pill.outline { background: transparent; color: rgba(255,255,255,0.45); border: 1px solid rgba(255,255,255,0.18); }
+
+  .sidebar-nav { flex: 1; padding: 12px 0 8px; }
+  .nav-group { margin-bottom: 2px; }
+  .nav-group-label {
+    font-family: var(--display); font-size: 0.58rem; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(255,255,255,0.3); padding: 10px 18px 5px;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 9px;
+    padding: 8px 18px;
+    font-family: var(--sans); font-size: 0.77rem; font-weight: 500;
+    color: rgba(255,255,255,0.55);
+    text-decoration: none; cursor: pointer;
+    border-left: 2px solid transparent;
+    transition: all 0.15s ease;
+  }
+  .nav-item:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.05); }
+  .nav-item.active {
+    color: #fff; background: rgba(153,129,226,0.18);
+    border-left-color: var(--bb-purple);
+  }
+  .nav-item.resource {
+    color: rgba(0,161,227,0.8);
+  }
+  .nav-item.resource:hover {
+    color: var(--bb-blue); background: rgba(0,161,227,0.08);
+    border-left-color: var(--bb-blue);
+  }
+  .nav-icon { font-size: 0.85rem; width: 16px; text-align: center; flex-shrink: 0; }
+  .nav-badge {
+    margin-left: auto; font-family: var(--mono); font-size: 0.56rem;
+    padding: 1px 6px; border-radius: 2px;
+    background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.35);
+  }
+
+  .sidebar-footer {
+    padding: 14px 18px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    flex-shrink: 0;
+  }
+  .sidebar-footer a {
+    display: flex; align-items: center; gap: 7px;
+    font-family: var(--mono); font-size: 0.67rem;
+    color: rgba(255,255,255,0.35); text-decoration: none;
+    padding: 5px 0; transition: color 0.15s;
+  }
+  .sidebar-footer a:hover { color: var(--bb-purple); }
+
+  /* ── MOBILE TOGGLE ── */
+  .mobile-toggle {
+    display: none; position: fixed; top: 13px; left: 13px; z-index: 300;
+    width: 36px; height: 36px; border-radius: 4px;
+    background: var(--ink); border: 1px solid rgba(255,255,255,0.15);
+    color: #fff; font-size: 1rem; cursor: pointer;
+    align-items: center; justify-content: center;
+  }
+
+  /* ── MAIN ── */
+  .main { margin-left: var(--sidebar-w); flex: 1; }
+
+  /* ── BACK TO TOP ── */
+  #btt {
+    position: fixed; bottom: 24px; right: 24px; z-index: 150;
+    width: 40px; height: 40px; border-radius: 4px;
+    background: var(--bb-purple-dark); border: none;
+    color: #fff; font-size: 1rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transform: translateY(8px);
+    transition: all 0.25s ease; box-shadow: 0 4px 14px rgba(122,96,201,0.4);
+  }
+  #btt.visible { opacity: 1; transform: translateY(0); }
+  #btt:hover { background: var(--bb-purple); transform: translateY(-2px); }
+
+  /* ── PAGE HEADER ── */
+  #top {
+    background: linear-gradient(135deg, #2a1a3a 0%, #1a1a2a 100%);
+    padding: 44px 56px 36px;
+    position: relative; overflow: hidden;
+    color: var(--bg);
+  }
+  #top::before {
+    content: ''; position: absolute; top: -60px; right: -60px;
+    width: 360px; height: 360px; border-radius: 50%;
+    background: var(--bb-purple); opacity: 0.08;
+  }
+  .header-tag {
+    display: inline-block; font-family: var(--mono); font-size: 0.65rem; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 3px;
+    background: var(--bb-purple); color: #fff; margin-bottom: 14px; position: relative;
+  }
+  #top h1 {
+    font-family: var(--display); font-size: 2.2rem; font-weight: 800;
+    letter-spacing: -0.02em; line-height: 1.1; position: relative; margin-bottom: 10px;
+  }
+  #top .subtitle {
+    font-size: 0.92rem; opacity: 0.6; max-width: 580px; position: relative; margin-bottom: 22px;
+  }
+  .header-meta { display: flex; gap: 10px; flex-wrap: wrap; }
+  .header-meta-pill {
+    display: flex; align-items: center; gap: 6px; padding: 6px 13px;
+    border-radius: 3px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+    font-size: 0.78rem; color: rgba(255,255,255,0.7);
+  }
+
+  /* ── SECTION HEADER ── */
+  .section-hdr { padding: 40px 56px 8px; }
+  .section-tag {
+    font-family: var(--mono); font-size: 0.62rem; font-weight: 500; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--bb-purple-dark); margin-bottom: 6px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-tag::before { content: ''; width: 20px; height: 2px; background: var(--bb-purple-dark); }
+  .section-hdr h2 {
+    font-family: var(--display); font-size: 1.4rem; font-weight: 800; color: var(--ink); margin-bottom: 4px;
+  }
+  .section-hdr p { font-size: 0.85rem; color: var(--ink2); max-width: 600px; line-height: 1.6; }
+  .section-duration {
+    display: inline-flex; align-items: center; gap: 5px; margin-top: 8px;
+    font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.06em;
+    color: var(--bb-purple-dark); padding: 3px 9px; border-radius: 3px;
+    border: 1px solid var(--bb-purple); background: var(--bb-purple-light);
+  }
+
+  .divider {
+    height: 1px; margin: 8px 56px 0;
+    background: linear-gradient(90deg, var(--bb-purple), transparent);
+    opacity: 0.3;
+  }
+
+  /* ── CONTENT AREA ── */
+  .content-area { padding: 24px 56px 56px; }
+
+  /* ── CONTENT CARDS (accordion) ── */
+  .content-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 6px; margin-bottom: 16px; overflow: hidden;
+  }
+  .content-card-header {
+    padding: 15px 18px; display: flex; align-items: center; gap: 11px;
+    cursor: pointer; transition: background 0.12s;
+  }
+  .content-card-header:hover { background: #f6f4fa; }
+  .card-icon { font-size: 1.3rem; flex-shrink: 0; }
+  .content-card-header h3 {
+    font-family: var(--display); font-size: 0.92rem; font-weight: 700; color: var(--ink); flex: 1;
+  }
+  .chevron { font-size: 0.72rem; color: var(--ink2); transition: transform 0.2s; }
   .content-card.open .chevron { transform: rotate(90deg); }
   .content-card-body {
-    display: none;
-    padding: 0 20px 20px;
-    font-size: 0.85rem;
-    color: var(--ink);
-    line-height: 1.7;
+    display: none; padding: 0 18px 18px;
+    font-size: 0.84rem; color: var(--ink); line-height: 1.7;
   }
   .content-card.open .content-card-body { display: block; }
-
   .content-card-body ul { padding-left: 18px; margin: 8px 0; }
   .content-card-body li { margin-bottom: 4px; }
   .content-card-body strong { color: var(--ink); }
+  .content-card-body h4 {
+    font-family: var(--display); font-size: 0.8rem; font-weight: 700;
+    color: var(--ink); margin: 14px 0 7px;
+  }
+  .content-card-body p { margin-bottom: 8px; }
 
   .tip-box {
-    background: var(--bb-blue-light);
-    border-left: 3px solid var(--bb-blue);
-    padding: 10px 14px;
-    border-radius: 0 4px 4px 0;
-    margin: 12px 0;
-    font-size: 0.82rem;
+    background: var(--bb-blue-light); border-left: 3px solid var(--bb-blue);
+    padding: 10px 13px; border-radius: 0 4px 4px 0; margin: 11px 0; font-size: 0.81rem;
   }
   .tip-box .tip-label {
-    font-family: var(--display);
-    font-size: 0.68rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--bb-blue);
-    margin-bottom: 4px;
+    font-family: var(--display); font-size: 0.66rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.06em; color: var(--bb-blue); margin-bottom: 3px;
   }
-
   .warn-box {
-    background: var(--bb-purple-light);
-    border-left: 3px solid var(--bb-purple);
-    padding: 10px 14px;
-    border-radius: 0 4px 4px 0;
-    margin: 12px 0;
-    font-size: 0.82rem;
+    background: var(--bb-purple-light); border-left: 3px solid var(--bb-purple);
+    padding: 10px 13px; border-radius: 0 4px 4px 0; margin: 11px 0; font-size: 0.81rem;
   }
   .warn-box .warn-label {
-    font-family: var(--display);
-    font-size: 0.68rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--bb-purple-dark);
-    margin-bottom: 4px;
+    font-family: var(--display); font-size: 0.66rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.06em; color: var(--bb-purple-dark); margin-bottom: 3px;
   }
-
-  .mode-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin: 12px 0;
-  }
+  .mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin: 11px 0; }
   .mode-card {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 12px 14px;
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 11px 13px;
   }
-  .mode-card h4 {
-    font-family: var(--display);
-    font-size: 0.78rem;
-    font-weight: 700;
-    color: var(--ink);
-    margin-bottom: 4px;
-  }
-  .mode-card p {
-    font-size: 0.78rem;
-    color: var(--ink2);
-    line-height: 1.5;
-  }
-
-  .bot-compare {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin: 12px 0;
-  }
-  .bot-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 12px 14px;
-  }
-  .bot-card h4 {
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--bb-blue);
-    margin-bottom: 4px;
-  }
-  .bot-card p {
-    font-size: 0.78rem;
-    color: var(--ink2);
-    line-height: 1.5;
-  }
-
-  .step-list {
-    counter-reset: step;
-    list-style: none;
-    padding-left: 0;
-    margin: 12px 0;
-  }
+  .mode-card h4 { font-family: var(--display); font-size: 0.76rem; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+  .mode-card p { font-size: 0.77rem; color: var(--ink2); line-height: 1.5; margin: 0; }
+  .bot-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin: 11px 0; }
+  .bot-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 11px 13px; }
+  .bot-card h4 { font-family: var(--mono); font-size: 0.73rem; font-weight: 500; color: var(--bb-blue); margin-bottom: 3px; }
+  .bot-card p { font-size: 0.77rem; color: var(--ink2); line-height: 1.5; margin: 0; }
+  .step-list { counter-reset: step; list-style: none; padding-left: 0; margin: 11px 0; }
   .step-list li {
-    counter-increment: step;
-    padding: 10px 14px 10px 48px;
-    position: relative;
-    background: var(--surface2);
-    border-radius: 4px;
-    margin-bottom: 6px;
-    font-size: 0.83rem;
+    counter-increment: step; padding: 9px 13px 9px 44px; position: relative;
+    background: var(--surface2); border-radius: 4px; margin-bottom: 5px; font-size: 0.82rem;
   }
   .step-list li::before {
-    content: counter(step);
-    position: absolute;
-    left: 14px;
-    top: 10px;
-    width: 22px;
-    height: 22px;
-    background: var(--ink);
-    color: var(--bg);
-    border-radius: 50%;
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    content: counter(step); position: absolute; left: 12px; top: 9px;
+    width: 21px; height: 21px; background: var(--ink); color: var(--bg);
+    border-radius: 50%; font-family: var(--mono); font-size: 0.68rem; font-weight: 500;
+    display: flex; align-items: center; justify-content: center;
   }
 
-  /* ── OAG Table Styles (from NSPA3) ── */
-  .legend {
-    display: flex;
-    gap: 24px;
-    padding: 14px 60px;
-    background: var(--surface2);
-    border-bottom: 1px solid var(--border);
-    flex-wrap: wrap;
-    align-items: center;
+  /* ── SLIDES ── */
+  #slides { padding: 0 56px 56px; }
+  .slides-box { border-radius: 6px; overflow: hidden; border: 1px solid var(--border); background: var(--ink); }
+  .slides-toolbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.04);
   }
-  .legend-label {
-    font-family: var(--display);
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--ink2);
+  .slides-label {
+    font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
   }
-  .badge {
-    display: inline-block;
-    padding: 3px 9px;
-    border-radius: 3px;
-    font-family: var(--mono);
-    font-size: 0.68rem;
-    font-weight: 500;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    white-space: nowrap;
+  .slides-controls { display: flex; align-items: center; gap: 8px; }
+  .sl-btn {
+    display: flex; align-items: center; justify-content: center;
+    width: 30px; height: 30px; border-radius: 4px;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14);
+    color: #fff; font-size: 0.82rem; cursor: pointer; transition: background 0.15s;
   }
-  .badge.sp  { background: var(--bb-blue-light); color: var(--single); border: 1px solid #a0d8f0; }
-  .badge.rag { background: var(--bb-purple-light); color: var(--rag);    border: 1px solid #c4b5e8; }
-  .badge.both{ background: #e8e0fa; color: var(--both);   border: 1px solid #c4b5e8; }
-  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--ink2); }
+  .sl-btn:hover { background: rgba(255,255,255,0.16); }
+  .sl-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+  .sl-counter { font-family: var(--mono); font-size: 0.68rem; color: rgba(255,255,255,0.4); min-width: 44px; text-align: center; }
+  .sl-fs-btn {
+    display: flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 3px;
+    background: rgba(153,129,226,0.2); border: 1px solid rgba(153,129,226,0.45);
+    color: var(--bb-purple); font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.06em;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .sl-fs-btn:hover { background: rgba(153,129,226,0.35); }
 
-  .section-head {
-    display: flex;
-    align-items: baseline;
-    gap: 16px;
-    margin: 40px 0 12px;
-  }
-  .section-head:first-of-type { margin-top: 0; }
-  .section-head h2 {
-    font-family: var(--display);
-    font-size: 1.05rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--bb-purple-dark);
-  }
-  .section-line { flex: 1; height: 1px; background: var(--border); }
+  .slides-viewport { position: relative; aspect-ratio: 16/9; overflow: hidden; }
+  .slide { position: absolute; inset: 0; display: none; padding: 44px 52px; flex-direction: column; justify-content: center; }
+  .slide.active { display: flex; }
 
-  .task-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    overflow: hidden;
-    table-layout: fixed;
+  .sl-cover {
+    align-items: center; text-align: center;
+    background: linear-gradient(135deg, #2a1a3a 0%, #1a1a2a 100%);
   }
-  .task-table thead th {
-    background: var(--ink);
-    color: var(--bg);
-    font-family: var(--display);
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    padding: 10px 14px;
-    text-align: left;
-  }
-  .task-table thead th:nth-child(1) { width: 22%; }
-  .task-table thead th:nth-child(2) { width: 12%; }
-  .task-table thead th:nth-child(3) { width: 42%; }
-  .task-table thead th:nth-child(4) { width: 24%; }
-  .task-table tbody tr {
-    border-top: 1px solid var(--border);
-    transition: background 0.12s;
-  }
-  .task-table tbody tr:hover { background: #f6f4fa; }
-  .task-table td {
-    padding: 11px 14px;
-    vertical-align: top;
-    font-size: 0.85rem;
-    color: var(--ink);
-  }
-  .task-table td:first-child { font-weight: 500; }
+  .sl-cover::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 70% at 50% 50%, rgba(153,129,226,0.25) 0%, transparent 70%); }
+  .sl-eyebrow { font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--bb-purple); margin-bottom: 14px; position: relative; z-index: 1; }
+  .sl-h1 { font-family: var(--display); font-size: clamp(1.8rem,4vw,3rem); font-weight: 800; color: #fff; line-height: 1.05; margin-bottom: 10px; position: relative; z-index: 1; letter-spacing: -0.02em; }
+  .sl-h1 .accent { color: var(--bb-purple); }
+  .sl-h2 { font-family: var(--display); font-size: clamp(0.9rem,1.7vw,1.3rem); font-weight: 600; color: var(--bb-blue); margin-bottom: 18px; position: relative; z-index: 1; }
+  .sl-body { font-size: clamp(0.72rem,1.1vw,0.88rem); line-height: 1.65; color: rgba(255,255,255,0.6); max-width: 540px; position: relative; z-index: 1; }
+  .sl-pills { display: flex; gap: 10px; justify-content: center; margin-top: 20px; flex-wrap: wrap; position: relative; z-index: 1; }
+  .sl-pill { padding: 6px 13px; border-radius: 3px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); font-size: 0.72rem; color: rgba(255,255,255,0.65); }
 
-  .prompt-example {
-    display: block;
-    margin-top: 5px;
-    font-family: var(--mono);
-    font-size: 0.73rem;
-    color: var(--ink2);
-    background: var(--surface2);
-    border-left: 3px solid var(--border);
-    padding: 5px 8px;
-    border-radius: 0 3px 3px 0;
-    line-height: 1.45;
+  .sl-content { background: #1a1a2a; }
+  .sl-content::before { content: ''; position: absolute; top: -60px; right: -60px; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, rgba(153,129,226,0.12) 0%, transparent 70%); }
+  .sl-tag-badge {
+    font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--bb-purple); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
   }
+  .sl-tag-badge::before { content: ''; width: 18px; height: 2px; background: var(--bb-purple); }
+  .sl-ctitle { font-family: var(--display); font-size: clamp(1.1rem,2.4vw,1.75rem); font-weight: 800; color: #fff; margin-bottom: 18px; line-height: 1.15; letter-spacing: -0.01em; }
+  .sl-points { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .sl-points li { display: flex; align-items: flex-start; gap: 10px; font-size: clamp(0.7rem,1.1vw,0.84rem); color: rgba(255,255,255,0.7); line-height: 1.5; }
+  .sl-points li::before { content: '▸'; color: var(--bb-purple); flex-shrink: 0; font-size: 0.75em; margin-top: 2px; }
+  .sl-points li strong { color: #fff; font-weight: 600; }
 
-  a.rag-link {
-    color: var(--bb-purple-dark);
-    text-decoration: none;
-    font-family: var(--mono);
-    font-size: 0.73rem;
-    border-bottom: 1px dashed var(--bb-purple-dark);
-    cursor: pointer;
-  }
-  a.rag-link:hover { background: var(--bb-purple-light); }
+  .sl-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; width: 100%; }
+  .sl-col { padding: 14px 16px; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); }
+  .sl-col h5 { font-family: var(--display); font-size: 0.78rem; font-weight: 700; color: var(--bb-blue); margin-bottom: 8px; }
+  .sl-col ul { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+  .sl-col ul li { font-size: 0.71rem; color: rgba(255,255,255,0.65); padding-left: 10px; position: relative; line-height: 1.45; }
+  .sl-col ul li::before { content: '·'; position: absolute; left: 0; color: var(--bb-purple); }
 
-  .tools-list {
-    font-size: 0.78rem;
-    color: var(--ink2);
-    line-height: 1.7;
-  }
+  .sl-code { background: rgba(0,0,0,0.4); border: 1px solid rgba(153,129,226,0.3); border-radius: 4px; padding: 11px 14px; font-family: var(--mono); font-size: clamp(0.63rem,1vw,0.75rem); line-height: 1.6; color: rgba(255,255,255,0.78); white-space: pre-wrap; margin-top: 12px; }
 
-  /* ── RAG Cards ── */
-  #rag-instructions {
-    margin-top: 60px;
-    padding-top: 32px;
-    border-top: 3px solid var(--ink);
-  }
-  #rag-instructions > h2 {
-    font-family: var(--display);
-    font-size: 1.6rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    margin-bottom: 6px;
-  }
-  #rag-instructions > p {
-    color: var(--ink2);
-    font-size: 0.86rem;
-    max-width: 680px;
-    margin-bottom: 40px;
-  }
+  .slide-progress { display: flex; gap: 5px; padding: 11px 20px; border-top: 1px solid rgba(255,255,255,0.06); justify-content: center; flex-wrap: wrap; }
+  .sdot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.15); cursor: pointer; transition: background 0.15s, transform 0.15s; }
+  .sdot.active { background: var(--bb-purple); transform: scale(1.3); }
+  .sdot:hover { background: rgba(255,255,255,0.38); }
 
-  .rag-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    margin-bottom: 32px;
-    overflow: hidden;
+  /* ── RESOURCES ── */
+  #resources { padding: 0 56px 80px; }
+  .res-banner {
+    border-radius: 6px; border: 1px solid var(--border);
+    background: linear-gradient(135deg, rgba(153,129,226,0.08), var(--surface));
+    padding: 24px 28px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 20px;
   }
-  .rag-card-header {
-    background: var(--bb-purple-dark);
-    color: #fff;
-    padding: 14px 20px;
-    display: flex;
-    align-items: baseline;
-    gap: 14px;
+  .res-banner-icon { font-size: 2rem; flex-shrink: 0; }
+  .res-banner-text h3 { font-family: var(--display); font-size: 1rem; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+  .res-banner-text p { font-size: 0.83rem; color: var(--ink2); line-height: 1.6; }
+  .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .res-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+    text-decoration: none; display: block; overflow: hidden;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
   }
-  .rag-card-header h3 {
-    font-family: var(--display);
-    font-size: 1rem;
-    font-weight: 700;
-  }
-  .rag-card-header .rag-id {
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    opacity: 0.7;
-  }
-  .rag-card-body {
-    padding: 20px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-  }
-  .rag-section h4 {
-    font-family: var(--display);
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--ink2);
-    margin-bottom: 8px;
-  }
-  .rag-section p, .rag-section li {
-    font-size: 0.83rem;
-    color: var(--ink);
-    line-height: 1.65;
-  }
-  .rag-section ul { padding-left: 16px; }
-  .rag-section li { margin-bottom: 3px; }
+  .res-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .res-card.rc-oag::before { background: var(--bb-blue); }
+  .res-card.rc-prompt::before { background: var(--bb-purple); }
+  .res-card:hover { transform: translateY(-3px); border-color: var(--bb-purple); box-shadow: 0 8px 28px rgba(153,129,226,0.18); }
+  .res-card-header { padding: 22px 22px 14px; display: flex; align-items: center; gap: 13px; }
+  .res-icon { width: 44px; height: 44px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; transition: transform 0.2s; }
+  .rc-oag .res-icon { background: var(--bb-blue-light); }
+  .rc-prompt .res-icon { background: var(--bb-purple-light); }
+  .res-card:hover .res-icon { transform: scale(1.08) rotate(-4deg); }
+  .res-title { font-family: var(--display); font-size: 1rem; font-weight: 700; color: var(--ink); line-height: 1.2; }
+  .res-desc { padding: 0 22px; font-size: 0.82rem; line-height: 1.65; color: var(--ink2); margin-bottom: 16px; }
+  .res-chips { padding: 0 22px; display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+  .res-chip { padding: 3px 9px; border-radius: 3px; font-family: var(--mono); font-size: 0.65rem; background: var(--surface2); border: 1px solid var(--border); color: var(--ink2); }
+  .res-card-footer { padding: 14px 22px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .res-type { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.06em; color: var(--ink2); }
+  .res-cta { font-family: var(--display); font-size: 0.74rem; font-weight: 700; display: flex; align-items: center; gap: 5px; transition: gap 0.15s; }
+  .rc-oag .res-cta { color: var(--bb-blue); }
+  .rc-prompt .res-cta { color: var(--bb-purple-dark); }
+  .res-card:hover .res-cta { gap: 9px; }
 
-  .system-prompt-box {
-    background: #1a1a18;
-    color: #c8c4bc;
-    border-radius: 4px;
-    padding: 14px 16px;
-    font-family: var(--mono);
-    font-size: 0.73rem;
-    line-height: 1.65;
-    white-space: pre-wrap;
-    word-break: break-word;
-    grid-column: 1 / -1;
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink); color: rgba(255,255,255,0.45);
+    padding: 20px 56px; display: flex; align-items: center; justify-content: space-between;
+    gap: 14px; flex-wrap: wrap;
   }
-  .system-prompt-box .comment { color: #8a7abf; }
-  .system-prompt-box .keyword { color: #c8aa6a; }
-  .system-prompt-box .value   { color: #7ab5d8; }
+  .footer-brand { font-family: var(--display); font-size: 0.78rem; font-weight: 700; color: rgba(255,255,255,0.55); }
+  .footer-brand span { color: var(--bb-purple); }
+  .footer-credit { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.04em; }
 
-  .back-top {
-    display: inline-block;
-    margin-top: 10px;
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    color: var(--bb-purple-dark);
-    text-decoration: none;
-    border-bottom: 1px dashed var(--bb-purple-dark);
-    cursor: pointer;
+  /* ── VIDEO EMBED ── */
+  #videos { padding: 0 56px 56px; }
+  .video-embed-wrap {
+    border-radius: 6px; overflow: hidden; border: 1px solid var(--border);
+    background: var(--ink); position: relative;
   }
-  .back-top:hover { background: var(--bb-purple-light); }
+  .video-embed-wrap iframe { display: block; width: 100%; aspect-ratio: 16/9; border: none; }
+  .video-caption {
+    padding: 12px 18px; background: rgba(255,255,255,0.03);
+    border-top: 1px solid rgba(255,255,255,0.07);
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+  }
+  .video-caption-text { font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+  .video-caption a { font-family: var(--mono); font-size: 0.64rem; color: var(--bb-purple); text-decoration: none; border-bottom: 1px dashed var(--bb-purple); }
+  .video-caption a:hover { color: #fff; }
+  .support-links-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 11px; margin-top: 20px; }
+  .support-link-card {
+    display: flex; align-items: flex-start; gap: 11px; padding: 13px;
+    border-radius: 5px; background: var(--surface); border: 1px solid var(--border);
+    text-decoration: none; transition: border-color 0.15s, transform 0.15s;
+  }
+  .support-link-card:hover { border-color: var(--bb-purple); transform: translateY(-2px); }
+  .slc-icon { font-size: 1.2rem; flex-shrink: 0; }
+  .slc-text strong { display: block; font-family: var(--display); font-size: 0.8rem; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+  .slc-text span { font-size: 0.75rem; color: var(--ink2); line-height: 1.45; }
 
-  /* ── Responsive ── */
-  @media (max-width: 860px) {
-    main, .page-header, .legend, .sub-nav { padding-left: 20px; padding-right: 20px; }
-    .top-nav { padding: 0 16px; }
-    .page-header h1 { font-size: 1.7rem; }
-    .mode-grid, .bot-compare { grid-template-columns: 1fr; }
-    .rag-card-body { grid-template-columns: 1fr; }
-    .task-table { font-size: 0.8rem; }
+  /* ── SECURITY BADGES ── */
+  .security-row { display: flex; flex-wrap: wrap; gap: 7px; margin: 11px 0; }
+  .sec-badge {
+    display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px;
+    border-radius: 3px; font-family: var(--mono); font-size: 0.62rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
+    background: rgba(22,160,133,0.1); border: 1px solid rgba(22,160,133,0.28); color: #16a085;
   }
+  .sec-badge::before { content: '✓'; font-weight: 700; }
+
+  /* ── CUSTOM BOT SECTION ── */
+  .bot-build-steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: 11px; margin: 12px 0; }
+  .bbs-card { background: var(--surface); border: 1px solid var(--border); border-radius: 5px; padding: 13px; }
+  .bbs-num { display: inline-flex; align-items: center; justify-content: center; width: 21px; height: 21px; border-radius: 50%; background: var(--bb-purple); color: #fff; font-family: var(--mono); font-size: 0.66rem; font-weight: 500; margin-bottom: 7px; }
+  .bbs-card h4 { font-family: var(--display); font-size: 0.79rem; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+  .bbs-card p { font-size: 0.77rem; color: var(--ink2); line-height: 1.5; }
+  .model-table { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--border); border-radius: 5px; overflow: hidden; margin: 12px 0; }
+  .model-table thead th { background: var(--ink); color: var(--bg); font-family: var(--display); font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; padding: 8px 13px; text-align: left; }
+  .model-table tbody tr { border-top: 1px solid var(--border); }
+  .model-table tbody tr:hover { background: #f6f4fa; }
+  .model-table td { padding: 9px 13px; font-size: 0.82rem; color: var(--ink); vertical-align: top; }
+  .model-table td:first-child { font-family: var(--mono); font-size: 0.76rem; color: var(--bb-blue); font-weight: 500; }
+  .model-table td:nth-child(2) { color: var(--ink2); font-size: 0.79rem; }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width: 900px) {
+    .sl-cols { grid-template-columns: 1fr; }
+    .bot-compare, .mode-grid { grid-template-columns: 1fr; }
+    .res-grid { grid-template-columns: 1fr; }
+  }
+  @media(max-width: 768px) {
+    .sidebar { transform: translateX(-100%); transition: transform 0.3s ease; }
+    .sidebar.open { transform: translateX(0); }
+    .mobile-toggle { display: flex; }
+    .main { margin-left: 0; }
+    #top, .section-hdr, .content-area, #slides, #resources, #videos-content { padding-left: 20px; padding-right: 20px; }
+    .divider { margin-left: 20px; margin-right: 20px; }
+    #top h1 { font-size: 1.6rem; }
+    footer { padding: 16px 20px; }
+    .support-links-grid { grid-template-columns: 1fr; }
+    .bot-build-steps { grid-template-columns: 1fr; }
+    .model-table { font-size: 0.76rem; }
+  }
+  [id] { scroll-margin-top: 24px; }
 </style>
 </head>
 <body>
 
-<!-- ═══════════════ TOP NAVIGATION ═══════════════ -->
-<nav class="top-nav">
-  <div class="top-nav-brand">BoodleBox <span>&</span> TxCA</div>
-  <div class="top-nav-tabs">
-    <a class="nav-tab active" data-page="webinar">Webinar Guide</a>
-    <a class="nav-tab" data-page="oag">Office Automation Guide</a>
+<button class="mobile-toggle" id="mobToggle">☰</button>
+<button id="btt" onclick="document.getElementById('top').scrollIntoView({behavior:'smooth'})">↑</button>
+
+<div class="layout">
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-name">BoodleBox <span>&</span> TxCA</div>
+    <div class="brand-pills">
+      <span class="brand-pill purple">90-Min Webinar</span>
+      <span class="brand-pill outline">TxCA.org</span>
+    </div>
   </div>
-</nav>
 
-<!-- ═══════════════════════════════════════════════ -->
-<!-- PAGE 1: WEBINAR GUIDE                          -->
-<!-- ═══════════════════════════════════════════════ -->
-<div class="page active" id="page-webinar">
+  <nav class="sidebar-nav">
 
-  <div class="page-header webinar-header">
-    <div class="tag tag-webinar">90-Minute Webinar</div>
+    <div class="nav-group">
+      <div class="nav-group-label">Session</div>
+      <a class="nav-item active" href="#top"><span class="nav-icon">🏠</span>Overview</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Webinar Parts</div>
+      <a class="nav-item" href="#part1"><span class="nav-icon">🎯</span>Part 1 — The Why <span class="nav-badge">10 min</span></a>
+      <a class="nav-item" href="#part2"><span class="nav-icon">🖥️</span>Part 2 — Interface <span class="nav-badge">15 min</span></a>
+      <a class="nav-item" href="#part3"><span class="nav-icon">🧠</span>Part 3 — Knowledge Bank <span class="nav-badge">15 min</span></a>
+      <a class="nav-item" href="#part4"><span class="nav-icon">🔀</span>Part 4 — Modes <span class="nav-badge">15 min</span></a>
+      <a class="nav-item" href="#part5"><span class="nav-icon">⚡</span>Part 5 — Bot Stacking <span class="nav-badge">20 min</span></a>
+      <a class="nav-item" href="#part6"><span class="nav-icon">🏁</span>Part 6 — Wrap-Up <span class="nav-badge">15 min</span></a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Deep Dives</div>
+      <a class="nav-item" href="#custom-bots"><span class="nav-icon">🤖</span>Custom Bot Builder</a>
+      <a class="nav-item" href="#videos"><span class="nav-icon">▶️</span>Video Tutorials</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Slides</div>
+      <a class="nav-item" href="#slides"><span class="nav-icon">📊</span>Session Slide Deck</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Resources</div>
+      <a class="nav-item" href="#resources"><span class="nav-icon">📦</span>All Resources</a>
+      <a class="nav-item resource" href="office-automation.html" target="_blank"><span class="nav-icon">⚡</span>Office Automation Guide ↗</a>
+      <a class="nav-item resource" href="prompt-architect.html" target="_blank"><span class="nav-icon">🛠️</span>AI Prompt Architect ↗</a>
+    </div>
+
+  </nav>
+
+  <div class="sidebar-footer">
+    <a href="https://boodlebox.ai/blog/support/" target="_blank" rel="noopener">📖 BoodleBox Support Docs</a>
+    <a href="https://www.youtube.com/@boodleAI" target="_blank" rel="noopener">▶️ BoodleBox YouTube</a>
+    <a href="#top">↑ Back to Top</a>
+  </div>
+</aside>
+
+<!-- ── MAIN ── -->
+<main class="main">
+
+  <!-- HERO -->
+  <section id="top">
+    <div class="header-tag">90-Minute Webinar</div>
     <h1>BoodleBox Basics &amp; Beyond:<br>Augmenting Human Capability</h1>
     <p class="subtitle">For educators, administrators, and beginners — move past basic prompting to become AI workflow experts.</p>
+    <div class="header-meta">
+      <div class="header-meta-pill">🎯 6 Parts</div>
+      <div class="header-meta-pill">⏱ 90 Minutes Total</div>
+      <div class="header-meta-pill">🏫 K–16 Educators</div>
+      <div class="header-meta-pill">🏢 Administrators</div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════
+       PART 1 — THE WHY
+  ════════════════════════════════ -->
+  <div id="part1">
+    <div class="section-hdr">
+      <div class="section-tag">Part 1</div>
+      <h2>Welcome &amp; The "Why" of BoodleBox</h2>
+      <p>Moving past basic prompting to become AI workflow experts. The focus is on outcomes, not technology for its own sake.</p>
+      <span class="section-duration">⏱ 10 minutes</span>
+    </div>
   </div>
-
-  <div class="sub-nav">
-    <a class="sub-tab active" data-sub="part1">Part 1 — The Why</a>
-    <a class="sub-tab" data-sub="part2">Part 2 — Interface</a>
-    <a class="sub-tab" data-sub="part3">Part 3 — Knowledge Bank</a>
-    <a class="sub-tab" data-sub="part4">Part 4 — Modes</a>
-    <a class="sub-tab" data-sub="part5">Part 5 — Bot Stacking</a>
-    <a class="sub-tab" data-sub="part6">Part 6 — Wrap-Up</a>
-  </div>
-
-  <main>
-
-    <!-- ── PART 1 ── -->
-    <div class="sub-page active" id="sub-part1">
-      <div class="content-card open">
-        <div class="content-card-header">
-          <span class="card-icon">🎯</span>
-          <h3>Welcome &amp; The "Why" of BoodleBox</h3>
-          <span class="chevron">▶</span>
+  <div class="divider"></div>
+  <div class="content-area">
+    <div class="content-card open">
+      <div class="content-card-header">
+        <span class="card-icon">🎯</span>
+        <h3>Welcome &amp; The "Why" of BoodleBox</h3>
+        <span class="chevron">▶</span>
+      </div>
+      <div class="content-card-body">
+        <p>This session is about moving past basic prompting to become AI workflow experts. The focus is on outcomes, not technology for its own sake.</p>
+        <div class="tip-box">
+          <div class="tip-label">The ROI of AI in Education</div>
+          Reclaiming teacher hours, increasing student engagement, and improving learning outcomes.
         </div>
-        <div class="content-card-body">
-          <p><strong>Duration:</strong> 10 minutes</p>
-          <p>This session is about moving past basic prompting to become AI workflow experts. The focus is on outcomes, not technology for its own sake.</p>
+        <div class="warn-box">
+          <div class="warn-label">Critical — Free vs. Enterprise</div>
+          <strong>Never</strong> put PII, FERPA, or HIPAA information into free/consumer AI tools. BoodleBox provides a secure, enterprise environment for these tasks.
+        </div>
+        <p><strong>What makes BoodleBox different?</strong> All your AI tools, bots, and knowledge live in one unified interface — no tab-switching between different AI platforms. Over 1,000 AI models and pre-trained BoodleBots available. 650+ institutions, 100+ organizations, 20,000+ users.</p>
 
-          <div class="tip-box">
-            <div class="tip-label">The ROI of AI in Education</div>
-            Reclaiming teacher hours, increasing student engagement, and improving learning outcomes.
-          </div>
+        <h4>Enterprise Security — Non-Negotiable for Educators</h4>
+        <div class="security-row">
+          <span class="sec-badge">FERPA Compliant</span>
+          <span class="sec-badge">SOC 2 Certified</span>
+          <span class="sec-badge">HECVAT Available</span>
+          <span class="sec-badge">VPAT AA</span>
+          <span class="sec-badge">Anonymized Prompts</span>
+          <span class="sec-badge">No AI Training on Your Data</span>
+        </div>
+        <p>When using third-party AI models, prompts are anonymized — they cannot be connected back to you as an individual. BoodleBox controls the encryption keys. Your intellectual property stays yours.</p>
 
-          <div class="warn-box">
-            <div class="warn-label">Critical — Free vs. Enterprise</div>
-            <strong>Never</strong> put PII, FERPA, or HIPAA information into free/consumer AI tools. BoodleBox provides a secure, enterprise environment for these tasks.
-          </div>
-
-          <p><strong>What makes BoodleBox different?</strong> All your AI tools, bots, and knowledge live in one unified interface — no tab-switching between different AI platforms.</p>
+        <div class="tip-box">
+          <div class="tip-label">Sign-Up</div>
+          Go to <strong>box.boodle.ai</strong> → Click "Sign Up" → Enter email (use your institutional/work email) → Verify → Select "Teach," "Work," or "Learn" to tailor your experience. Google sign-up available for one-click access.
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- ── PART 2 ── -->
-    <div class="sub-page" id="sub-part2">
-      <div class="content-card open">
-        <div class="content-card-header">
-          <span class="card-icon">🖥️</span>
-          <h3>Interface Tour &amp; Quick Wins</h3>
-          <span class="chevron">▶</span>
+  <!-- ════════════════════════════════
+       PART 2 — INTERFACE
+  ════════════════════════════════ -->
+  <div id="part2">
+    <div class="section-hdr">
+      <div class="section-tag">Part 2</div>
+      <h2>Interface Tour &amp; Quick Wins</h2>
+      <p>Navigate the dashboard, discover key controls, and adjust the interface to your needs.</p>
+      <span class="section-duration">⏱ 15 minutes</span>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="content-area">
+    <div class="content-card open">
+      <div class="content-card-header">
+        <span class="card-icon">🖥️</span>
+        <h3>Interface Tour &amp; Quick Wins</h3>
+        <span class="chevron">▶</span>
+      </div>
+      <div class="content-card-body">
+        <h4>Main Navigation Bar (Left → Right)</h4>
+        <ul>
+          <li><strong>BoodleBox Logo:</strong> Click at any time to return to the chat window</li>
+          <li><strong>Team Dropdown:</strong> Switch between personal and team workspaces</li>
+          <li><strong>Get Started:</strong> Access a checklist tailored to Teach / Work / Learn</li>
+          <li><strong>Chats (message bubbles):</strong> Return to chat window from anywhere</li>
+          <li><strong>Knowledge Bank (brain icon):</strong> Open personal Knowledge Bank — manage, star, rename, delete files</li>
+          <li><strong>Support (? icon):</strong> Launches the Resource Hub — blog, QuickStart Guide, and feedback form</li>
+        </ul>
+
+        <h4>Chats Sidebar (Top → Bottom)</h4>
+        <ul>
+          <li><strong>+ Start New Chat:</strong> Click any time to open a fresh conversation</li>
+          <li><strong>Chat Search Bar:</strong> Search chats by name across your history</li>
+          <li><strong>My Folders:</strong> View, create, and manage folders — share folder links with students or colleagues</li>
+          <li><strong>Folders Shared With Me:</strong> Appear here after opening a shared folder link</li>
+          <li><strong>All Chats:</strong> View all individual and group chats</li>
+        </ul>
+
+        <h4>Chat Window Controls</h4>
+        <ul>
+          <li><strong>Add Members (+ icon):</strong> Copy chat link to invite collaborators into a group chat</li>
+          <li><strong>Paperclip (Attach Knowledge):</strong> Upload files or attach items from your Knowledge Bank</li>
+          <li><strong>Three-Dot Menu:</strong> Copy link, rename, add chat to Knowledge Bank, move to folder, or delete</li>
+          <li><strong>Shift + Enter:</strong> New line without submitting — avoids accidental sends</li>
+          <li><strong>@ in chat bar:</strong> Pulls up your 5 most recently used bots; type @keyword to filter</li>
+        </ul>
+
+        <div class="tip-box">
+          <div class="tip-label">Pro Tip — Favoriting Bots</div>
+          Click the three-dot (meatball) menu next to a bot in the chat bar or Bot Garage and select "Favorite this bot." It pins the bot to the left sidebar for instant access.
         </div>
-        <div class="content-card-body">
-          <p><strong>Duration:</strong> 15 minutes</p>
 
-          <h4 style="font-family:var(--display);font-size:0.82rem;font-weight:700;margin:14px 0 8px;color:var(--ink)">Navigating the Dashboard</h4>
-          <ul>
-            <li><strong>Top Navigation &amp; Left Sidebar:</strong> Bot Garage, Team Menu, and Help Center</li>
-            <li><strong>The Chat Bar:</strong> Use the Bot Avatar selector to browse and switch bots quickly</li>
-            <li><strong>Accessibility Menu:</strong> Adjust the interface to your needs — supports Universal Design for Learning (UDL)</li>
+        <div class="tip-box">
+          <div class="tip-label">Pro Tip — AI Tools Tab</div>
+          The AI Tools tab gives you ready-made one-click experiences — over 1,000 pre-made prompts organized by use case (teach, work, learn). Perfect starting point before you write your own prompts.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       PART 3 — KNOWLEDGE BANK
+  ════════════════════════════════ -->
+  <div id="part3">
+    <div class="section-hdr">
+      <div class="section-tag">Part 3</div>
+      <h2>Mastering the Knowledge Bank</h2>
+      <p>Upload, star, and manage your documents — ground every AI response in your own materials.</p>
+      <span class="section-duration">⏱ 15 minutes</span>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="content-area">
+    <div class="content-card open">
+      <div class="content-card-header">
+        <span class="card-icon">🧠</span>
+        <h3>Mastering the Knowledge Bank</h3>
+        <span class="chevron">▶</span>
+      </div>
+      <div class="content-card-body">
+        <div class="tip-box">
+          <div class="tip-label">The "Water in a Glass" Analogy</div>
+          An AI's context window is like a glass of water. The documents you upload take up space — keep them modular and relevant. One topic per file whenever possible.
+        </div>
+
+        <h4>Supported File Formats</h4>
+        <p>Knowledge Bank accepts: <strong>.pdf, .docx, .txt, .csv, .png, .jpg, .xlsx</strong> — up to 100 MB per file. Text files (.txt) are the most token-efficient format for the AI to process.</p>
+
+        <h4>Adding Knowledge</h4>
+        <ul>
+          <li><strong>Drag and drop</strong> files directly into the chat window</li>
+          <li><strong>Paperclip icon</strong> → "Attach" to upload or "Add Knowledge to Bank" to store permanently</li>
+          <li>When knowledge is attached, a number appears next to the paperclip showing how many files are active</li>
+          <li>All bots and all members in the chat can reference attached knowledge — but members cannot download your files</li>
+        </ul>
+
+        <h4>The Knowledge Bank</h4>
+        <ul>
+          <li>All uploaded files are automatically stored in your personal Knowledge Bank (brain icon)</li>
+          <li>Files are encrypted — no third parties can access without your explicit authorization</li>
+          <li>Organize, rename, filter, and delete files at any time</li>
+        </ul>
+
+        <div class="tip-box">
+          <div class="tip-label">Pro Tip — Starring Items</div>
+          Open the Knowledge Bank (brain icon). Click the <strong>Star</strong> next to a file to <em>automatically attach it to every new chat</em>. Perfect for custom instructions, grading rubrics, or district policies you use daily.
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">Pro Tip — MY PREFERENCES File</div>
+          Create a text file called "MY PREFERENCES" that contains your name, role, school/organization, writing style preferences, and any standing instructions. Star it. Every new chat starts with BoodleBox already knowing who you are.
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">Pro Tip — Saving Chats as Knowledge</div>
+          Use the three-dot menu on a successful chat and select "Add chat to knowledge bank" — future bots can learn from past successful outputs. Chat exports appear with a speech-bubble icon in your Knowledge Bank.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       PART 4 — MODES
+  ════════════════════════════════ -->
+  <div id="part4">
+    <div class="section-hdr">
+      <div class="section-tag">Part 4</div>
+      <h2>Modes &amp; Collaborative Group Chats</h2>
+      <p>Four distinct interaction modes and how to leverage group chats for transparent student collaboration.</p>
+      <span class="section-duration">⏱ 15 minutes</span>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="content-area">
+    <div class="content-card open">
+      <div class="content-card-header">
+        <span class="card-icon">🔀</span>
+        <h3>Modes &amp; Collaborative Group Chats</h3>
+        <span class="chevron">▶</span>
+      </div>
+      <div class="content-card-body">
+        <h4>BoodleBox Modes</h4>
+        <div class="mode-grid">
+          <div class="mode-card">
+            <h4>🤖 Bot Mode</h4>
+            <p>Standard 1-on-1 interaction with an AI. The default mode for all new chats.</p>
+          </div>
+          <div class="mode-card">
+            <h4>💬 Message Mode</h4>
+            <p>Communicate with human team members. Type <strong>/</strong> before a message in the chat bar to switch, or use the three-dot menu → "Switch to Message Mode." Switch back the same way.</p>
+          </div>
+          <div class="mode-card">
+            <h4>📄 Knowledge to Context Mode</h4>
+            <p>Forces the AI to strictly use only attached documents. Enable via the three-dot menu in the chat bar. Use when the <em>entire</em> content of a document is required — complex analyses, pattern identification across documents. Zero hallucination risk.</p>
+          </div>
+          <div class="mode-card">
+            <h4>🎓 Coach Mode</h4>
+            <p>AI teaches you how to use the platform and build better prompts. Great for onboarding new staff or students.</p>
+          </div>
+        </div>
+
+        <h4>The Magic of Group Chats</h4>
+        <p>Multiple students (or colleagues) can be in a BoodleBox group chat with one or more AI bots simultaneously. Share via link through email, Slack, or your LMS.</p>
+
+        <div class="warn-box">
+          <div class="warn-label">Teacher Superpower</div>
+          Teachers can jump into the chat to offer suggestions. <strong>The chatbot cannot see the teacher's participation — only the students can.</strong> This provides a transparent, auditable record of student thinking and prompt refinement. Teachers can monitor folders to view total chats, prompts, messages, and bots per student.
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">Classroom Feature — Folders</div>
+          Instructors can share a folder link with an entire class. BoodleBox records individual and group activity inside — useful for assessing AI usage, identifying participation gaps, and applying rubrics. Add any folder or chat to your Knowledge Bank and ask a bot to identify learning gaps.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       PART 5 — BOT STACKING
+  ════════════════════════════════ -->
+  <div id="part5">
+    <div class="section-hdr">
+      <div class="section-tag">Part 5</div>
+      <h2>Bot Stacking &amp; App Smashing</h2>
+      <p>Chain multiple AI models in a single conversation — research, writing, and image generation without ever leaving BoodleBox.</p>
+      <span class="section-duration">⏱ 20 minutes</span>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="content-area">
+    <div class="content-card open">
+      <div class="content-card-header">
+        <span class="card-icon">⚡</span>
+        <h3>Bot Stacking &amp; App Smashing</h3>
+        <span class="chevron">▶</span>
+      </div>
+      <div class="content-card-body">
+        <p><strong>Bot Stacking</strong> = "app smashing" within a single interface. Instead of copying/pasting between websites, you give the AI a to-do list and switch models mid-conversation. The entire chat history carries forward — every bot you switch to can see what happened before.</p>
+
+        <h4>Live Workflow Demonstration</h4>
+        <ol class="step-list">
+          <li><strong>Heavy Lifting:</strong> Use Gemini 3 Pro or ChatGPT 5 to summarize a large uploaded document. These handle massive context best.</li>
+          <li><strong>Refining:</strong> Switch to Claude 4.5 Sonnet <em>in the same chat</em> to turn that summary into a lesson plan, rubric, or quiz. Claude excels at structured writing.</li>
+          <li><strong>Fact-Check:</strong> Switch to Perplexity — type @ in the chat bar, select Perplexity. Ask it to verify claims from Step 2 with citations. Click the globe icon to see sources.</li>
+          <li><strong>Visuals:</strong> Switch to Nano Banana Pro or Flux 2 Pro to create a graphic for the lesson — no watermarks, no design skills required.</li>
+        </ol>
+
+        <h4>Current Bot Reference Guide</h4>
+        <table class="model-table">
+          <thead><tr><th>Bot</th><th>Best For</th></tr></thead>
+          <tbody>
+            <tr><td>ChatGPT 5.1</td><td>Most sophisticated reasoning, detailed analysis, accurate information</td></tr>
+            <tr><td>ChatGPT 4.1</td><td>Large document analysis, second opinions, clean formatting</td></tr>
+            <tr><td>Gemini 3 Pro</td><td>Most demanding analysis, advanced research, complex problem-solving</td></tr>
+            <tr><td>Gemini 2.5 Pro</td><td>Very large context windows — processing extensive content</td></tr>
+            <tr><td>Claude 4.5 Opus</td><td>Highly complex reasoning, nuanced writing, strategic planning</td></tr>
+            <tr><td>Claude 4.5 Sonnet</td><td>Everyday tasks, quick formatting, rapid responses — daily workhorse</td></tr>
+            <tr><td>Perplexity</td><td>Real-time web research, fact-checking with citations (click globe icon)</td></tr>
+            <tr><td>Semantic Scholar</td><td>Academic research — 214M+ scientific papers with citation networks</td></tr>
+            <tr><td>Nano Banana Pro</td><td>High-fidelity, photorealistic visuals and complex design planning</td></tr>
+            <tr><td>Nano Banana 2</td><td>Quick stylized graphics, icons, and simple lesson infographics</td></tr>
+            <tr><td>Flux 2 Pro</td><td>High-quality images of people; strong prompt adherence</td></tr>
+          </tbody>
+        </table>
+
+        <div class="tip-box">
+          <div class="tip-label">Pro Tip — Selecting Bots</div>
+          Open the Bot Selector dropdown in your chat bar. Models, BoodleBots, and custom bots are separated by category. Use the search box with a keyword (e.g., "marketing," "rubric") to filter instantly. Three-dot menu on any bot → View Bot Profile to learn its expertise before switching.
+        </div>
+
+        <div class="warn-box">
+          <div class="warn-label">Bot vs. Chat + Knowledge Bank</div>
+          A chat with Knowledge Bank attached is similar to a Claude Project or Perplexity Space — context for a conversation. A <strong>custom bot</strong> is more like a Custom GPT — it has its own instructions, knowledge, and persona that persist across all conversations. Both are powerful; know which you need.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       PART 6 — WRAP-UP
+  ════════════════════════════════ -->
+  <div id="part6">
+    <div class="section-hdr">
+      <div class="section-tag">Part 6</div>
+      <h2>Wrap-Up, Q&amp;A, and Next Steps</h2>
+      <p>The SHINE Framework, your first Bot Stack challenge, and open Q&amp;A.</p>
+      <span class="section-duration">⏱ 15 minutes</span>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="content-area">
+    <div class="content-card open">
+      <div class="content-card-header">
+        <span class="card-icon">🏁</span>
+        <h3>Wrap-Up, Q&amp;A, and Next Steps</h3>
+        <span class="chevron">▶</span>
+      </div>
+      <div class="content-card-body">
+        <div class="warn-box">
+          <div class="warn-label">SHINE Framework Reminder</div>
+          The AI is the co-pilot, not the pilot. Always maintain human oversight.
+        </div>
+        <div class="tip-box">
+          <div class="tip-label">Call to Action</div>
+          Create your first "Bot Stack" workflow before the end of the week.
+        </div>
+        <p>Open the floor for specific use-case questions from attendees.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       CUSTOM BOT BUILDER
+  ════════════════════════════════ -->
+  <div id="custom-bots">
+    <div class="section-hdr">
+      <div class="section-tag">Deep Dive</div>
+      <h2>Building Your Custom Bot</h2>
+      <p>Move from user to creator. Custom bots have their own instructions, knowledge, and persona — persistent across every conversation, shareable with your team or students.</p>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="content-area">
+    <div class="content-card open">
+      <div class="content-card-header">
+        <span class="card-icon">🤖</span>
+        <h3>Bot Builder — Step by Step</h3>
+        <span class="chevron">▶</span>
+      </div>
+      <div class="content-card-body">
+        <p>Custom bots are built in the <strong>Bot Garage</strong> — the toolbox icon in the top right navigation. Each bot gets its own instructions, knowledge base, and AI model.</p>
+
+        <h4>Before You Open the Bot Builder</h4>
+        <div class="bot-build-steps">
+          <div class="bbs-card">
+            <div class="bbs-num">1</div>
+            <h4>Define the Bot's Purpose</h4>
+            <p>Write out: "You are an expert in [X]. Your role is to [Y]. Your audience is [Z]." This becomes your opening custom instruction.</p>
+          </div>
+          <div class="bbs-card">
+            <div class="bbs-num">2</div>
+            <h4>Gather Knowledge Files</h4>
+            <p>Collect documents into a folder first. Group related content into single text files — easier to update later. Convert PDFs to .txt where possible to save tokens.</p>
+          </div>
+          <div class="bbs-card">
+            <div class="bbs-num">3</div>
+            <h4>Generate a Greeting</h4>
+            <p>Draft what your bot says when someone opens it. Include 2–3 conversation starter examples so users know what to ask.</p>
+          </div>
+          <div class="bbs-card">
+            <div class="bbs-num">4</div>
+            <h4>Generate an Icon Prompt</h4>
+            <p>Ask an AI to write a Flux 2 Pro or Nano Banana prompt describing your bot's icon before you build. Have the image ready.</p>
+          </div>
+        </div>
+
+        <h4>Inside the Bot Builder</h4>
+        <ol class="step-list">
+          <li>Toolbox icon (top right nav) → <strong>+ Build Bot</strong> → Name and describe your bot</li>
+          <li>Write <strong>Custom Instructions</strong>: role, audience, outcome goals, and step-by-step interaction process ("Step 1: First, ask the user… Step 2: After they respond, then…")</li>
+          <li>Select your <strong>AI Model</strong> — bots have access to the full model library, including premium models not available in free chats</li>
+          <li>Upload <strong>Knowledge</strong> — supported: .pdf, .docx, .txt, .png, .jpg (manage, delete, and update at any time)</li>
+          <li><strong>Test</strong> in the bot builder test window — reference uploaded materials, check response quality and tone</li>
+          <li>Click <strong>Publish</strong> — copy the share link. Test it in a new tab before distributing.</li>
+        </ol>
+
+        <div class="tip-box">
+          <div class="tip-label">Pro Tip — Iterative Improvement</div>
+          After publishing, test your bot with real questions. If a response isn't ideal, create that question + ideal answer as a text file and add it to the bot's Knowledge Bank as an example. Use the "Add chat to knowledge bank" option on successful interactions.
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">Pro Tip — Feedback Loop</div>
+          Add this to your custom instructions: "After every three interactions, ask the user to fill out a feedback form" and include a Google Form link. Continuous improvement without manual checking.
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-label">TxCA Use Cases for Custom Bots</div>
+          Member FAQ bot (trained on your bylaws and benefits guide) · Conference submission reviewer · CE program standards checker · Legislative action alert drafter · Chapter leader onboarding assistant · Grant writing assistant grounded in your program data
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ════════════════════════════════
+       VIDEO TUTORIALS
+  ════════════════════════════════ -->
+  <div id="videos">
+    <div class="section-hdr">
+      <div class="section-tag">Video Tutorials</div>
+      <h2>BoodleBox Official Video Playlist</h2>
+      <p>Quick-start tutorials direct from the BoodleBox team. Watch in order for a complete orientation, or jump to the topic you need.</p>
+    </div>
+  </div>
+  <div class="divider"></div>
+
+  <div id="videos-content" style="padding:0 56px 56px;">
+    <div class="video-embed-wrap">
+      <iframe
+        src="https://www.youtube.com/embed/videoseries?list=PLNBuqr8Jql2wHuVVpWqq8GR0s0gJy2jvI&rel=0&modestbranding=1"
+        title="BoodleBox Tutorial Playlist"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+      <div class="video-caption">
+        <span class="video-caption-text">▶ BoodleBox Official Tutorial Playlist · Use the playlist menu (top-right of player) to jump between videos</span>
+        <a href="https://www.youtube.com/playlist?list=PLNBuqr8Jql2wHuVVpWqq8GR0s0gJy2jvI" target="_blank" rel="noopener">Open on YouTube ↗</a>
+      </div>
+    </div>
+
+    <div class="support-links-grid">
+      <a class="support-link-card" href="https://boodlebox.ai/blog/support/get-started-with-boodlebox/" target="_blank" rel="noopener">
+        <span class="slc-icon">🚀</span>
+        <div class="slc-text"><strong>Get Started Guide</strong><span>Account setup, chats, bots, Knowledge Bank, and group chats — the complete written walkthrough.</span></div>
+      </a>
+      <a class="support-link-card" href="https://boodlebox.ai/blog/support/navigate-boodlebox/" target="_blank" rel="noopener">
+        <span class="slc-icon">🗺️</span>
+        <div class="slc-text"><strong>Navigate the Interface</strong><span>Detailed walkthrough of every navigation element — sidebar, chat window, chat bar, and main nav.</span></div>
+      </a>
+      <a class="support-link-card" href="https://boodlebox.ai/blog/support/boodlebox-guide-to-genai-models-bots/" target="_blank" rel="noopener">
+        <span class="slc-icon">🤖</span>
+        <div class="slc-text"><strong>Guide to GenAI Models &amp; Bots</strong><span>Every major model in BoodleBox explained — when to use ChatGPT, Claude, Gemini, Perplexity, and image generators.</span></div>
+      </a>
+      <a class="support-link-card" href="https://boodlebox.ai/blog/support/creating-custom-bots/" target="_blank" rel="noopener">
+        <span class="slc-icon">🔧</span>
+        <div class="slc-text"><strong>Creating Custom Bots</strong><span>Complete guide to building, configuring, testing, and publishing your own BoodleBot with custom knowledge.</span></div>
+      </a>
+      <a class="support-link-card" href="https://boodlebox.ai/blog/support/make-the-most-of-boodlebox/" target="_blank" rel="noopener">
+        <span class="slc-icon">💡</span>
+        <div class="slc-text"><strong>Make the Most of BoodleBox</strong><span>Prompting strategies, responsible AI use, choosing the right use cases, and optimizing outputs.</span></div>
+      </a>
+      <a class="support-link-card" href="https://boodlebox.ai/faq/" target="_blank" rel="noopener">
+        <span class="slc-icon">❓</span>
+        <div class="slc-text"><strong>FAQ</strong><span>Security, pricing, LMS integration, classroom features, and technical support contact (success@boodle.ai).</span></div>
+      </a>
+      <a class="support-link-card" href="https://boodlebox.ai/blog/support/build-your-course-on-boodlebox/" target="_blank" rel="noopener">
+        <span class="slc-icon">📚</span>
+        <div class="slc-text"><strong>Build Your Course</strong><span>How to set up folders, share with students, add syllabi to knowledge, and integrate with your LMS.</span></div>
+      </a>
+      <a class="support-link-card" href="https://www.youtube.com/@boodleAI" target="_blank" rel="noopener">
+        <span class="slc-icon">▶️</span>
+        <div class="slc-text"><strong>BoodleBox YouTube Channel</strong><span>Full library of video tutorials — grading essays, rubric makers, literature reviews, humanizing AI content, and more.</span></div>
+      </a>
+    </div>
+  </div>
+
+
+  <!-- ════════════════════════════════
+       SLIDES
+  ════════════════════════════════ -->
+  <div id="slides-hdr">
+    <div class="section-hdr">
+      <div class="section-tag">Session Slides</div>
+      <h2>Digital Slide Deck</h2>
+      <p>Key concepts in presentation format. Use controls to advance, click dots to jump, or press ← → arrow keys.</p>
+    </div>
+  </div>
+  <div class="divider"></div>
+
+  <div id="slides">
+    <div class="slides-box">
+      <div class="slides-toolbar">
+        <span class="slides-label">BoodleBox Basics &amp; Beyond · TxCA Session Slides</span>
+        <div class="slides-controls">
+          <button class="sl-btn" id="prevBtn" onclick="changeSlide(-1)" disabled>←</button>
+          <span class="sl-counter" id="slCounter">1 / 11</span>
+          <button class="sl-btn" id="nextBtn" onclick="changeSlide(1)">→</button>
+          <button class="sl-fs-btn" onclick="toggleFS()">⛶ Fullscreen</button>
+        </div>
+      </div>
+
+      <div class="slides-viewport" id="slidesVP">
+
+        <!-- Slide 1: Cover -->
+        <div class="slide sl-cover active">
+          <p class="sl-eyebrow">TxCA · 90-Minute Webinar</p>
+          <h1 class="sl-h1">BoodleBox <span class="accent">Basics</span> &amp; Beyond</h1>
+          <p class="sl-h2">Augmenting Human Capability</p>
+          <p class="sl-body">For educators, administrators, and beginners — move past basic prompting to become AI workflow experts.</p>
+          <div class="sl-pills">
+            <div class="sl-pill">🎯 6 Parts</div>
+            <div class="sl-pill">⏱ 90 Minutes</div>
+            <div class="sl-pill">🏫 K–16 Educators</div>
+            <div class="sl-pill">🏢 Administrators</div>
+          </div>
+        </div>
+
+        <!-- Slide 2: The Why -->
+        <div class="slide sl-content">
+          <span class="sl-tag-badge">Part 1 · The Why</span>
+          <h2 class="sl-ctitle">Why BoodleBox?</h2>
+          <ul class="sl-points">
+            <li><strong>One unified interface</strong> — all your AI tools, bots, and knowledge in one place. No tab-switching.</li>
+            <li><strong>Enterprise security</strong> — PII, FERPA, and HIPAA data stays protected. Never use free/consumer tools for sensitive data.</li>
+            <li><strong>ROI focus</strong> — reclaim teacher hours, increase student engagement, improve learning outcomes</li>
+            <li><strong>The shift</strong>: from basic prompting → AI workflow expertise</li>
           </ul>
+        </div>
 
-          <div class="tip-box">
-            <div class="tip-label">Pro Tip — Favoriting Bots</div>
-            Click the three-dot (meatball) menu next to a bot in the chat bar or Bot Garage and select "Favorite this bot." It pins the bot to the left sidebar for instant access.
+        <!-- Slide 3: Interface -->
+        <div class="slide sl-content">
+          <span class="sl-tag-badge">Part 2 · Interface</span>
+          <h2 class="sl-ctitle">Dashboard Tour</h2>
+          <div class="sl-cols">
+            <div class="sl-col">
+              <h5>Finding Your Way Around</h5>
+              <ul>
+                <li>Top Nav &amp; Left Sidebar: Bot Garage, Team Menu, Help Center</li>
+                <li>Chat Bar: Bot Avatar selector to browse and switch bots</li>
+                <li>Accessibility Menu: UDL-aligned interface adjustments</li>
+              </ul>
+            </div>
+            <div class="sl-col">
+              <h5>⭐ Pro Tip: Favoriting Bots</h5>
+              <ul>
+                <li>Three-dot (meatball) menu → "Favorite this bot"</li>
+                <li>Pins the bot to your left sidebar for instant access</li>
+                <li>Works in both chat bar and Bot Garage</li>
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- ── PART 3 ── -->
-    <div class="sub-page" id="sub-part3">
-      <div class="content-card open">
-        <div class="content-card-header">
-          <span class="card-icon">🧠</span>
-          <h3>Mastering the Knowledge Bank</h3>
-          <span class="chevron">▶</span>
-        </div>
-        <div class="content-card-body">
-          <p><strong>Duration:</strong> 15 minutes</p>
-
-          <div class="tip-box">
-            <div class="tip-label">The "Water in a Glass" Analogy</div>
-            An AI's context window is like a glass of water. The documents you upload take up space — keep them modular and relevant!
-          </div>
-
-          <h4 style="font-family:var(--display);font-size:0.82rem;font-weight:700;margin:14px 0 8px;color:var(--ink)">Adding Knowledge</h4>
-          <ul>
-            <li>Drag and drop files directly into the chat</li>
-            <li>Use the paperclip icon ("Attach Knowledge") to upload syllabi, rubrics, or policy documents</li>
+        <!-- Slide 4: Knowledge Bank -->
+        <div class="slide sl-content">
+          <span class="sl-tag-badge">Part 3 · Knowledge Bank</span>
+          <h2 class="sl-ctitle">The Knowledge Bank</h2>
+          <ul class="sl-points">
+            <li><strong>"Water in a Glass"</strong> — context windows have limits. Keep documents modular and relevant.</li>
+            <li><strong>Adding knowledge:</strong> drag-and-drop files or use the paperclip "Attach Knowledge" icon</li>
+            <li><strong>Star a file</strong> to auto-attach it to every new chat — perfect for rubrics, policies, and style guides</li>
+            <li><strong>Save chats as knowledge:</strong> three-dot menu → "Add chat to knowledge bank" — future bots learn from past wins</li>
           </ul>
+        </div>
 
-          <div class="tip-box">
-            <div class="tip-label">Pro Tip — Starring Items</div>
-            Open the Knowledge Bank (brain icon). Click the <strong>Star</strong> next to a file to <em>automatically attach it to every new chat</em>. Perfect for custom instructions, grading rubrics, or district policies you use daily.
-          </div>
-
-          <div class="tip-box">
-            <div class="tip-label">Pro Tip — Saving Chats as Knowledge</div>
-            Use the three-dot menu on a successful chat and select "Add chat to knowledge bank" — future bots can learn from past successful outputs.
+        <!-- Slide 5: Modes -->
+        <div class="slide sl-content">
+          <span class="sl-tag-badge">Part 4 · Modes</span>
+          <h2 class="sl-ctitle">Four BoodleBox Modes</h2>
+          <div class="sl-cols">
+            <div class="sl-col">
+              <h5>🤖 Bot Mode</h5>
+              <ul><li>Standard 1-on-1 interaction with an AI</li></ul>
+              <h5 style="margin-top:10px;">💬 Message Mode</h5>
+              <ul><li>Communicate with human team members</li></ul>
+            </div>
+            <div class="sl-col">
+              <h5>📄 Knowledge to Context Mode</h5>
+              <ul><li>Forces AI to use only attached documents — zero hallucination</li></ul>
+              <h5 style="margin-top:10px;">🎓 Coach Mode</h5>
+              <ul><li>AI teaches you how to use the platform and build better prompts</li></ul>
+            </div>
           </div>
         </div>
-      </div>
+
+        <!-- Slide 6: Group Chats -->
+        <div class="slide sl-content">
+          <span class="sl-tag-badge">Part 4 · Group Chats</span>
+          <h2 class="sl-ctitle">The Teacher Superpower</h2>
+          <ul class="sl-points">
+            <li>Multiple students can share a BoodleBox group chat with an AI</li>
+            <li>Teachers can <strong>jump in and offer suggestions</strong> — the chatbot cannot see teacher participation, only students can</li>
+            <li>Result: transparent, <strong>auditable record</strong> of student thinking and prompt refinement</li>
+            <li>Surfaces misconceptions in real time without putting students on the spot</li>
+          </ul>
+        </div>
+
+        <!-- Slide 7: Bot Stacking -->
+        <div class="slide sl-content">
+          <span class="sl-tag-badge">Part 5 · Bot Stacking</span>
+          <h2 class="sl-ctitle">Bot Stacking = App Smashing</h2>
+          <ul class="sl-points">
+            <li>Chain multiple AI models in a <strong>single conversation</strong> — no copy/paste between tabs</li>
+            <li><strong>Step 1 — Heavy Lifting:</strong> Use Gemini-31-Pro to summarize a large uploaded document</li>
+            <li><strong>Step 2 — Refining:</strong> Switch to Claude 4.5 Sonnet in the same chat → lesson plan or quiz</li>
+            <li><strong>Step 3 — Visuals:</strong> Switch to Nano Banana → create a graphic for the lesson</li>
+          </ul>
+        </div>
+
+        <!-- Slide 8: Bot Guide -->
+        <div class="slide sl-content">
+          <span class="sl-tag-badge">Part 5 · Right Bot, Right Task</span>
+          <h2 class="sl-ctitle">Current BoodleBox Model Guide</h2>
+          <div class="sl-cols">
+            <div class="sl-col">
+              <h5>🔬 Research &amp; Analysis</h5>
+              <ul>
+                <li><strong>Gemini 3 Pro / ChatGPT 5.1</strong> — demanding analysis, massive docs</li>
+                <li><strong>Perplexity</strong> — real-time web research with citations</li>
+                <li><strong>Semantic Scholar</strong> — 214M+ academic papers</li>
+              </ul>
+            </div>
+            <div class="sl-col">
+              <h5>✍️ Writing &amp; Visuals</h5>
+              <ul>
+                <li><strong>Claude 4.5 Sonnet</strong> — everyday writing, formatting, speed</li>
+                <li><strong>Claude 4.5 Opus</strong> — complex reasoning &amp; nuanced writing</li>
+                <li><strong>Nano Banana Pro / Flux 2 Pro</strong> — image generation</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 9: Custom Bot -->
+        <div class="slide sl-content">
+          <span class="sl-tag-badge">Deep Dive · Custom Bots</span>
+          <h2 class="sl-ctitle">Building Your Custom Bot</h2>
+          <ul class="sl-points">
+            <li>Toolbox icon → <strong>+ Build Bot</strong> — give it a name and description</li>
+            <li><strong>Custom Instructions:</strong> "You are an expert in [X]. Your role is [Y]. Your audience is [Z]."</li>
+            <li><strong>Add Knowledge:</strong> upload your own documents — the bot references them in every conversation</li>
+            <li><strong>Choose your model</strong> — bots have access to the full model library including premium options</li>
+            <li><strong>Test → Publish</strong> — copy the share link; distribute to students, members, or staff</li>
+            <li>A chat + Knowledge Bank = a project space. A <strong>custom bot</strong> = a persistent, shareable AI assistant</li>
+          </ul>
+        </div>
+
+        <!-- Slide 10: Wrap-Up -->
+        <div class="slide sl-cover">
+          <p class="sl-eyebrow">Part 6 · Wrap-Up</p>
+          <h1 class="sl-h1">The AI is the <span class="accent">Co-Pilot</span></h1>
+          <p class="sl-h2">SHINE Framework — Always Maintain Human Oversight</p>
+          <p class="sl-body">Your challenge: create your first Bot Stack workflow before the end of the week.</p>
+          <div class="sl-pills">
+            <div class="sl-pill">⚡ Office Automation Guide</div>
+            <div class="sl-pill">🛠️ AI Prompt Architect</div>
+            <div class="sl-pill">🏢 TxCA.org</div>
+          </div>
+        </div>
+
+      </div><!-- /slides-viewport -->
+      <div class="slide-progress" id="slideProgress"></div>
     </div>
-
-    <!-- ── PART 4 ── -->
-    <div class="sub-page" id="sub-part4">
-      <div class="content-card open">
-        <div class="content-card-header">
-          <span class="card-icon">🔀</span>
-          <h3>Modes &amp; Collaborative Group Chats</h3>
-          <span class="chevron">▶</span>
-        </div>
-        <div class="content-card-body">
-          <p><strong>Duration:</strong> 15 minutes</p>
-
-          <h4 style="font-family:var(--display);font-size:0.82rem;font-weight:700;margin:14px 0 8px;color:var(--ink)">BoodleBox Modes</h4>
-          <div class="mode-grid">
-            <div class="mode-card">
-              <h4>🤖 Bot Mode</h4>
-              <p>Standard 1-on-1 interaction with an AI.</p>
-            </div>
-            <div class="mode-card">
-              <h4>💬 Message Mode</h4>
-              <p>Communicate with human team members.</p>
-            </div>
-            <div class="mode-card">
-              <h4>📄 Knowledge to Context Mode</h4>
-              <p>Forces the AI to strictly use attached documents. Perfect for analyzing reading materials without hallucination.</p>
-            </div>
-            <div class="mode-card">
-              <h4>🎓 Coach Mode</h4>
-              <p>AI teaches you how to use the platform and build better prompts.</p>
-            </div>
-          </div>
-
-          <h4 style="font-family:var(--display);font-size:0.82rem;font-weight:700;margin:14px 0 8px;color:var(--ink)">The Magic of Group Chats</h4>
-          <p>Multiple students can be in a BoodleBox group chat with an AI.</p>
-
-          <div class="warn-box">
-            <div class="warn-label">Teacher Superpower</div>
-            Teachers can jump into the chat to offer suggestions. <strong>The chatbot cannot see the teacher's participation — only the students can.</strong> This provides a transparent, auditable record of student thinking and prompt refinement.
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── PART 5 ── -->
-    <div class="sub-page" id="sub-part5">
-      <div class="content-card open">
-        <div class="content-card-header">
-          <span class="card-icon">⚡</span>
-          <h3>Bot Stacking &amp; App Smashing</h3>
-          <span class="chevron">▶</span>
-        </div>
-        <div class="content-card-body">
-          <p><strong>Duration:</strong> 20 minutes</p>
-          <p><strong>Bot Stacking</strong> = "app smashing" within a single interface. Instead of copying/pasting between websites, you give the AI a to-do list and switch models mid-conversation.</p>
-
-          <h4 style="font-family:var(--display);font-size:0.82rem;font-weight:700;margin:14px 0 8px;color:var(--ink)">Live Workflow Demonstration</h4>
-          <ol class="step-list">
-            <li><strong>Heavy Lifting:</strong> Use a powerhouse model to summarize a large uploaded document.</li>
-            <li><strong>Refining:</strong> Switch to a different bot <em>in the same chat</em> to turn that summary into a lesson plan or quiz.</li>
-            <li><strong>Visuals:</strong> Switch to an image generator bot to create a graphic for the lesson.</li>
-          </ol>
-
-          <h4 style="font-family:var(--display);font-size:0.82rem;font-weight:700;margin:18px 0 8px;color:var(--ink)">Choosing the Right Bot</h4>
-          <div class="bot-compare">
-            <div class="bot-card">
-              <h4>Gemini-31-Pro</h4>
-              <p>Your go-to for huge projects, massive document analysis, and deep context retention. The heavy lifter.</p>
-            </div>
-            <div class="bot-card">
-              <h4>Claude 4.5 Opus</h4>
-              <p>Highly complex reasoning, nuanced writing, and strategic planning.</p>
-            </div>
-            <div class="bot-card">
-              <h4>Claude 4.5 Sonnet</h4>
-              <p>Everyday tasks, quick formatting, and rapid responses.</p>
-            </div>
-            <div class="bot-card">
-              <h4>Nano Banana Pro</h4>
-              <p>High-fidelity, photorealistic, or complex visual design planning.</p>
-            </div>
-          </div>
-          <div class="bot-compare">
-            <div class="bot-card">
-              <h4>Nano Banana 2</h4>
-              <p>Quick stylized graphics, icons, or simple lesson infographics.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── PART 6 ── -->
-    <div class="sub-page" id="sub-part6">
-      <div class="content-card open">
-        <div class="content-card-header">
-          <span class="card-icon">🏁</span>
-          <h3>Wrap-Up, Q&amp;A, and Next Steps</h3>
-          <span class="chevron">▶</span>
-        </div>
-        <div class="content-card-body">
-          <p><strong>Duration:</strong> 15 minutes</p>
-
-          <div class="warn-box">
-            <div class="warn-label">SHINE Framework Reminder</div>
-            The AI is the co-pilot, not the pilot. Always maintain human oversight.
-          </div>
-
-          <div class="tip-box">
-            <div class="tip-label">Call to Action</div>
-            Create your first "Bot Stack" workflow before the end of the week.
-          </div>
-
-          <p>Open the floor for specific use-case questions from attendees.</p>
-        </div>
-      </div>
-    </div>
-
-  </main>
-</div>
-
-
-<!-- ═══════════════════════════════════════════════ -->
-<!-- PAGE 2: OFFICE AUTOMATION GUIDE (TxCA)         -->
-<!-- ═══════════════════════════════════════════════ -->
-<div class="page" id="page-oag">
-
-  <div class="page-header oag-header">
-    <div class="tag tag-oag">TxCA.org Reference</div>
-    <h1>Office Task Automation<br>with AI</h1>
-    <p class="subtitle">A practical reference mapping common Texas Counseling Association administrative tasks to single-prompt AI solutions and RAG setups with custom instructions.</p>
   </div>
 
-  <div class="legend" id="oag-top">
-    <span class="legend-label">Key:</span>
-    <div class="legend-item"><span class="badge sp">Single Prompt</span> One-shot prompt, no external data needed</div>
-    <div class="legend-item"><span class="badge rag">RAG</span> Requires retrieval from documents or knowledge base</div>
-    <div class="legend-item"><span class="badge both">Both</span> Can work either way; RAG improves quality</div>
+  <!-- ════════════════════════════════
+       RESOURCES
+  ════════════════════════════════ -->
+  <div id="resources-hdr">
+    <div class="section-hdr">
+      <div class="section-tag">Resources</div>
+      <h2>Session Resources</h2>
+      <p>Two standalone tools available as separate pages — bookmark and share them.</p>
+    </div>
+  </div>
+  <div class="divider"></div>
+
+  <div id="resources">
+    <div class="res-banner">
+      <div class="res-banner-icon">📦</div>
+      <div class="res-banner-text">
+        <h3>Two Resources. Both Free. Both Immediately Useful.</h3>
+        <p>The Office Automation Guide maps TxCA administrative tasks to AI solutions and RAG setups. The AI Prompt Architect is an interactive tool — type your task, select a framework, get an engineered prompt ready to paste into BoodleBox.</p>
+      </div>
+    </div>
+    <div class="res-grid">
+      <a class="res-card rc-oag" href="office-automation.html" target="_blank">
+        <div class="res-card-header">
+          <div class="res-icon">⚡</div>
+          <h3 class="res-title">Office Automation Guide</h3>
+        </div>
+        <p class="res-desc">A practical reference mapping common TxCA administrative tasks — member communications, conferences, advocacy, CE administration, and more — to single-prompt AI solutions and RAG setups with custom system prompts.</p>
+        <div class="res-chips">
+          <span class="res-chip">Member Communication</span>
+          <span class="res-chip">Conferences &amp; Events</span>
+          <span class="res-chip">Advocacy</span>
+          <span class="res-chip">RAG System Prompts</span>
+          <span class="res-chip">TxCA.org</span>
+        </div>
+        <div class="res-card-footer">
+          <span class="res-type">📄 Separate Page · TxCA Reference</span>
+          <span class="res-cta">Open guide →</span>
+        </div>
+      </a>
+      <a class="res-card rc-prompt" href="prompt-architect.html" target="_blank">
+        <div class="res-card-header">
+          <div class="res-icon">🛠️</div>
+          <h3 class="res-title">AI Prompt Architect</h3>
+        </div>
+        <p class="res-desc">An interactive prompt engineering tool. Select a framework — Triple-Check, Few-Shot, Chain-of-Thought, RAG, Bot Stacking — enter your task, and get a fully engineered prompt ready to paste into BoodleBox. Includes glossary and model recommendations.</p>
+        <div class="res-chips">
+          <span class="res-chip">Triple-Check</span>
+          <span class="res-chip">Few-Shot</span>
+          <span class="res-chip">Chain-of-Thought</span>
+          <span class="res-chip">Bot Stacking</span>
+          <span class="res-chip">RAG Prompting</span>
+        </div>
+        <div class="res-card-footer">
+          <span class="res-type">🛠️ Separate Page · Interactive Tool</span>
+          <span class="res-cta">Open tool →</span>
+        </div>
+      </a>
+    </div>
   </div>
 
-  <main>
-
-    <!-- ═══════════ MEMBER COMMUNICATION ═══════════ -->
-    <div class="section-head"><h2>Member Communication</h2><div class="section-line"></div></div>
-    <table class="task-table">
-      <thead><tr><th>Task</th><th>Approach</th><th>AI Automation Method</th><th>Suggested Tools / Notes</th></tr></thead>
-      <tbody>
-        <tr>
-          <td>Drafting membership renewal reminders</td>
-          <td><span class="badge both">Both</span></td>
-          <td>Single prompt for a one-off email. RAG to pull member tier, expiration date, and personalized benefits summary.
-            <span class="prompt-example">"Draft a warm membership renewal email for a Licensed Professional Counselor whose membership expires in 14 days. Mention 3 key benefits and include a direct renewal link."</span>
-            <a class="rag-link" href="javascript:void(0)" data-scroll="rag-member-comms">→ RAG: Member Communication Templates</a>
-          </td>
-          <td class="tools-list">Mailchimp, Constant Contact<br>AMS (iMIS, MemberClicks)</td>
-        </tr>
-        <tr>
-          <td>Welcome emails to new members</td>
-          <td><span class="badge sp">Single Prompt</span></td>
-          <td>Provide member name, credential, chapter; model drafts a personalized welcome with onboarding steps.
-            <span class="prompt-example">"Write a welcome email to a new TCA member who is an LPC in the Central Texas chapter. Include: login instructions, chapter contact, and how to access CEU resources. Warm, professional tone."</span>
-          </td>
-          <td class="tools-list">AMS auto-responders<br>BoodleBox bot</td>
-        </tr>
-        <tr>
-          <td>Chapter newsletter content</td>
-          <td><span class="badge both">Both</span></td>
-          <td>Single prompt for general announcements. RAG to pull upcoming events, legislative updates, and chapter-specific news.
-            <a class="rag-link" href="javascript:void(0)" data-scroll="rag-newsletter">→ RAG: Newsletter &amp; Content Calendar</a>
-          </td>
-          <td class="tools-list">Mailchimp, Canva<br>BoodleBox + Knowledge Bank</td>
-        </tr>
-        <tr>
-          <td>Responding to member inquiries</td>
-          <td><span class="badge rag">RAG</span></td>
-          <td>Ground responses in membership policies, benefits docs, and FAQs so answers are accurate and consistent.
-            <a class="rag-link" href="javascript:void(0)" data-scroll="rag-member-faq">→ RAG: Member FAQ &amp; Policy Knowledge Base</a>
-          </td>
-          <td class="tools-list">BoodleBox Knowledge-to-Context mode<br>Custom chatbot on membership docs</td>
-        </tr>
-        <tr>
-          <td>Proofreading and tone-checking outgoing communications</td>
-          <td><span class="badge sp">Single Prompt</span></td>
-          <td>Paste draft; ask model to flag tone issues, grammar, and alignment with TCA's professional voice.
-            <span class="prompt-example">"Review this email to TCA members for clarity, grammar, and professional tone. Flag anything that could come across as impersonal or bureaucratic."</span>
-          </td>
-          <td class="tools-list">Claude, Grammarly Business</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- ═══════════ CONFERENCES & EVENTS ═══════════ -->
-    <div class="section-head"><h2>Conferences &amp; Events</h2><div class="section-line"></div></div>
-    <table class="task-table">
-      <thead><tr><th>Task</th><th>Approach</th><th>AI Automation Method</th><th>Suggested Tools / Notes</th></tr></thead>
-      <tbody>
-        <tr>
-          <td>Building conference session schedules</td>
-          <td><span class="badge both">Both</span></td>
-          <td>Single prompt for agenda structure. RAG to pull accepted session proposals, room assignments, and speaker info.
-            <a class="rag-link" href="javascript:void(0)" data-scroll="rag-conference">→ RAG: Conference Planning Playbook</a>
-            <span class="prompt-example">"Create a 3-day conference schedule for 40 breakout sessions across 8 rooms. Group by track: Ethics, School Counseling, Clinical Practice, Supervision. Include keynote slots."</span>
-          </td>
-          <td class="tools-list">Sched, Whova, Cvent<br>Google Sheets + AI</td>
-        </tr>
-        <tr>
-          <td>Drafting speaker confirmation and logistics emails</td>
-          <td><span class="badge sp">Single Prompt</span></td>
-          <td>Provide speaker name, session title, date/time, room, AV needs; model drafts a complete logistics email.
-            <span class="prompt-example">"Write a speaker confirmation email for Dr. Garcia presenting 'Ethical AI Use in School Counseling' on Feb 2 at 10am in Room 204. Include: AV checklist, parking info, and slide upload deadline."</span>
-          </td>
-          <td class="tools-list">AMS event module, Gmail</td>
-        </tr>
-        <tr>
-          <td>Generating CEU/CPE session descriptions</td>
-          <td><span class="badge both">Both</span></td>
-          <td>Single prompt from speaker's abstract. RAG to ensure alignment with NBCC or TBHEC CE requirements and formatting standards.
-            <span class="prompt-example">"Rewrite this speaker abstract into a formal CEU session description. Include: learning objectives (3), instructional level, target audience, and CE credit hours. Max 150 words."</span>
-          </td>
-          <td class="tools-list">BoodleBox bot with CE guidelines in Knowledge Bank</td>
-        </tr>
-        <tr>
-          <td>Post-conference attendee follow-up</td>
-          <td><span class="badge sp">Single Prompt</span></td>
-          <td>Draft thank-you emails, survey links, and CE certificate delivery messaging.
-            <span class="prompt-example">"Draft a post-conference email for TCA Annual Conference attendees. Include: thank you, survey link [URL], CE certificate access instructions, and 'save the date' for next year. Upbeat, grateful tone."</span>
-          </td>
-          <td class="tools-list">Mailchimp, SurveyMonkey<br>AMS automation</td>
-        </tr>
-        <tr>
-          <td>Call for proposals and session review</td>
-          <td><span class="badge both">Both</span></td>
-          <td>Single prompt to draft the call. RAG to screen proposals against past session topics, speaker history, and track requirements.
-            <a class="rag-link" href="javascript:void(0)" data-scroll="rag-conference">→ RAG: Conference Planning Playbook</a>
-          </td>
-          <td class="tools-list">Google Forms, Submittable<br>BoodleBox review workflow</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- ═══════════ ADVOCACY & GOVERNMENT RELATIONS ═══════════ -->
-    <div class="section-head"><h2>Advocacy &amp; Government Relations</h2><div class="section-line"></div></div>
-    <table class="task-table">
-      <thead><tr><th>Task</th><th>Approach</th><th>AI Automation Method</th><th>Suggested Tools / Notes</th></tr></thead>
-      <tbody>
-        <tr>
-          <td>Drafting legislative action alerts</td>
-          <td><span class="badge rag">RAG</span></td>
-          <td>Ground alerts in TCA's position statements, bill tracking data, and approved advocacy messaging.
-            <a class="rag-link" href="javascript:void(0)" data-scroll="rag-advocacy">→ RAG: Advocacy &amp; Legislative Toolkit</a>
-          </td>
-          <td class="tools-list">BoodleBox with legislative docs<br>Action Network, VoterVoice</td>
-        </tr>
-        <tr>
-          <td>Summarizing proposed legislation</td>
-          <td><span class="badge sp">Single Prompt</span></td>
-          <td>Paste bill text; ask model to extract key provisions, impact on counseling profession, and recommended position.
-            <span class="prompt-example">"Summarize this Texas House Bill for a professional counselor audience. Output: (1) 3-sentence summary, (2) impact on LPCs and school counselors, (3) potential concerns, (4) recommended talking points."</span>
-          </td>
-          <td class="tools-list">Claude (long context), NotebookLM</td>
-        </tr>
-        <tr>
-          <td>Writing position statements</td>
-          <td><span class="badge rag">RAG</span></td>
-          <td>Ground drafts in existing TCA positions, ACA policy documents, and relevant research citations.
-            <a class="rag-link" href="javascript:void(0)" data-scroll="rag-advocacy">→ RAG: Advocacy &amp; Legislative Toolkit</a>
-          </td>
-          <td class="tools-list">BoodleBox Knowledge-to-Context mode</td>
-        </tr>
-        <tr>
-          <td>Preparing testimony and talking points for legislators</td>
-          <td><span class="badge both">Both</span></td>
-          <td>Single prompt for general structure. RAG to pull member data, impact statistics, and approved messaging.
-            <span class="prompt-example">"Draft 5 talking points for a TCA board member testifying before the Texas Senate Health &amp; Human Services Committee on counselor licensure reform. Include data on mental health access gaps in rural Texas."</span>
-          </td>
-          <td class="tools-list">BoodleBox with member survey data</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- ═══════════ MEMBERSHIP MANAGEMENT ═══════════ -->
-    <div class="section-head"><h2>Membership &amp; Chapter Operations</h2><div class="section-line"></div></div>
-    <table class="task-table">
-      <thead><tr><th>Task</th><th>Approach</th><th>AI Automation Method</th><th>Suggested Tools / Notes</th></tr></thead>
-      <tbody>
-        <tr>
-          <td>Generating membership reports and trend analysis</td>
-          <td><span class="badge sp">Single Prompt</span></td>
-          <td>Paste membership data export; ask for narrative analysis and trends.
-            <span class="prompt-example">"Analyze this TCA membership data CSV. Output: (1) year-over-year growth by credential type, (2) top 5 chapters by new members, (3) retention rate by tier, (4) 3 strategic recommendations."</span>
-          </td>
-          <td class="tools-list">Excel Copilot, ChatGPT Code Interpreter<br>AMS reports</td>
-        </tr>
-        <tr>
-          <td>Drafting chapter leader communications</td>
-          <td><span class="badge both">Both</span></td>
-          <td>Single prompt for general updates. RAG to pull chapter-specific data, upcoming deadlines, and resource links.
-            <a class="rag-link" href="javascript:void(0)" data-scroll="rag-chapter">→ RAG: Chapter Operations Guide</a>
-          </td>
-          <td class="tools-list">BoodleBox + chapter resource docs</td>
-        </tr>
-        <tr>
-          <td>Creating division and interest group updates</td>
-          <td><span class="badge sp">Single Prompt</span></td>
-          <td>Provide bullet points; model drafts a polished update for TSCA, TACES, or other divisions.
-            <span class="prompt-example">"Turn these notes into a quarterly update email for the Texas School Counselor Association division. Include upcoming events, membership spotlight, and one advocacy item. 200 words."</span>
-          </td>
-          <td class="tools-list">Mailchimp, Constant Contact</td>
-        </tr>
-        <tr>
-          <td>Onboarding new board and committee members</td>
-          <td><span class="badge rag">RAG</span></td>
-          <td>AI assembles role-specific orientation packets from bylaws, strategic plan, committee charges, and past meeting minutes.
-            <a class="rag-link" href="javascript:void(0)" data-scroll="rag-chapter">→ RAG: Chapter Operations Guide</a>
-          </td>
-          <td class="tools-list">Google Drive, SharePoint<br>BoodleBox Knowledge Bank</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- ═══════════ PROFESSIONAL DEVELOPMENT & CE ═══════════ -->
-    <div class="section-head"><h2>Professional Development &amp; CE Administration</h2><div class="section-line"></div></div>
-    <table class="task-table">
-      <thead><tr><th>Task</th><th>Approach</th><th>AI Automation Method</th><th>Suggested Tools / Notes</th></tr></thead>
-      <tbody>
-        <tr>
-          <td>Drafting CE program applications</td>
-          <td><span class="badge rag">RAG</span></td>
-          <td>Ground applications in NBCC and TBHEC CE provider requirements, learning objective templates, and past approved programs.
-            <a class="rag-link" href="javascript:void(0)" data-scroll="rag-ce">→ RAG: CE Program Standards &amp; Templates</a>
-          </td>
-          <td class="tools-list">BoodleBox with CE requirement docs</td>
-        </tr>
-        <tr>
-          <td>Writing learning objectives for workshops</td>
-          <td><span class="badge sp">Single Prompt</span></td>
-          <td>Provide workshop topic and audience; model generates measurable, Bloom's-aligned learning objectives.
-            <span class="prompt-example">"Write 3 measurable learning objectives for a 2-hour workshop on 'Trauma-Informed School Counseling' for practicing school counselors. Use Bloom's taxonomy action verbs. NBCC format."</span>
-          </td>
-          <td class="tools-list">Claude, BoodleBox</td>
-        </tr>
-        <tr>
-          <td>Generating CE certificate text and descriptions</td>
-          <td><span class="badge both">Both</span></td>
-          <td>Single prompt for standard formatting. RAG to pull approved provider numbers, instructor credentials, and program details.
-            <span class="prompt-example">"Generate CE certificate text for: Program title, date, presenter name and credentials, number of CE hours, TCA provider number, and NBCC approval statement."</span>
-          </td>
-          <td class="tools-list">Canva, AMS CE module</td>
-        </tr>
-        <tr>
-          <td>Creating webinar promotional copy</td>
-          <td><span class="badge both">Both</span></td>
-          <td>Single prompt for general copy. RAG to match TCA's brand voice and pull from the content calendar.
-            <a class="rag-link" href="javascript:void(0)" data-scroll="rag-newsletter">→ RAG: Newsletter &amp; Content Calendar</a>
-            <span class="prompt-example">"Write 3 promotional blurbs for a TCA webinar on 'Ethics in Telehealth Counseling.' Versions for: email (100 words), social media (280 chars), and website listing (60 words). Include CE hours: 1.5."</span>
-          </td>
-          <td class="tools-list">Mailchimp, Buffer, Canva<br>BoodleBox</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- ═══════════ MARKETING & SOCIAL MEDIA ═══════════ -->
-    <div class="section-head"><h2>Marketing &amp; Social Media</h2><div class="section-line"></div></div>
-    <table class="task-table">
-      <thead><tr><th>Task</th><th>Approach</th><th>AI Automation Method</th><th>Suggested Tools / Notes</th></tr></thead>
-      <tbody>
-        <tr>
-          <td>Social media content for awareness campaigns</td>
-          <td><span class="badge both">Both</span></td>
-          <td>Single prompt for generic posts. RAG to enforce brand voice, content calendar themes, and approved messaging.
-            <a class="rag-link" href="javascript:void(0)" data-scroll="rag-brand">→ RAG: TCA Brand Voice &amp; Social Content</a>
-            <span class="prompt-example">"Write 3 Instagram post options for National School Counseling Week. Tone: celebratory, appreciative, professional. Include relevant hashtags. Under 150 words each."</span>
-          </td>
-          <td class="tools-list">Buffer, Hootsuite, Canva<br>BoodleBox brand voice bot</td>
-        </tr>
-        <tr>
-          <td>Sponsorship and partnership outreach</td>
-          <td><span class="badge both">Both</span></td>
-          <td>Single prompt for cold outreach. RAG to pull sponsorship tiers, past partner history, and approved benefits descriptions.
-            <span class="prompt-example">"Draft a sponsorship inquiry email to a mental health software company for the TCA Annual Conference. Mention attendee demographics (3,000+ counselors), exhibit hall options, and a link to the prospectus."</span>
-          </td>
-          <td class="tools-list">Gmail, CRM (HubSpot, Salesforce)</td>
-        </tr>
-        <tr>
-          <td>Writing blog posts and member spotlights</td>
-          <td><span class="badge sp">Single Prompt</span></td>
-          <td>Provide interview notes or bio; model drafts a polished spotlight article.
-            <span class="prompt-example">"Write a 300-word TCA member spotlight based on these interview notes. Include: career path, why they joined TCA, advice for new counselors. Conversational, inspiring tone."</span>
-          </td>
-          <td class="tools-list">WordPress, BoodleBox</td>
-        </tr>
-        <tr>
-          <td>Email subject line and A/B test generation</td>
-          <td><span class="badge sp">Single Prompt</span></td>
-          <td>Describe the email purpose; model generates multiple subject line options with reasoning.
-            <span class="prompt-example">"Generate 5 email subject lines for TCA's early-bird conference registration announcement. A/B test pairs. Keep under 50 characters. Urgency without being clickbaity."</span>
-          </td>
-          <td class="tools-list">Mailchimp A/B, Claude</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- ═══════════ FINANCIAL & ADMINISTRATIVE ═══════════ -->
-    <div class="section-head"><h2>Financial &amp; Administrative</h2><div class="section-line"></div></div>
-    <table class="task-table">
-      <thead><tr><th>Task</th><th>Approach</th><th>AI Automation Method</th><th>Suggested Tools / Notes</th></tr></thead>
-      <tbody>
-        <tr>
-          <td>Summarizing financial reports for the board</td>
-          <td><span class="badge sp">Single Prompt</span></td>
-          <td>Paste budget data; ask for a board-ready narrative summary.
-            <span class="prompt-example">"Summarize this TCA quarterly financial report for a non-financial board audience. Highlight: revenue vs. budget, top 3 expense variances, membership dues trend, and conference registration revenue. 200 words."</span>
-          </td>
-          <td class="tools-list">Excel Copilot, QuickBooks<br>ChatGPT Code Interpreter</td>
-        </tr>
-        <tr>
-          <td>Drafting grant applications and reports</td>
-          <td><span class="badge rag">RAG</span></td>
-          <td>Ground applications in TCA's mission statement, program data, outcomes metrics, and past successful grants.
-            <a class="rag-link" href="javascript:void(0)" data-scroll="rag-grants">→ RAG: Grant Writing &amp; Reporting</a>
-          </td>
-          <td class="tools-list">BoodleBox with grant templates<br>Google Docs</td>
-        </tr>
-        <tr>
-          <td>Preparing board meeting agendas and minutes</td>
-          <td><span class="badge both">Both</span></td>
-          <td>Single prompt for structure. RAG to pull action items from previous minutes, standing agenda items, and committee reports.
-            <span class="prompt-example">"Create a board meeting agenda for TCA's March meeting. Include: call to order, approval of minutes, treasurer's report, committee updates (Advocacy, Membership, Conference, Ethics), old business, new business, adjournment. Add time allocations for a 2-hour meeting."</span>
-          </td>
-          <td class="tools-list">Google Docs, Notion<br>BoodleBox</td>
-        </tr>
-        <tr>
-          <td>Processing and categorizing sponsorship invoices</td>
-          <td><span class="badge both">Both</span></td>
-          <td>Single prompt for one-off invoices. RAG to pull sponsor tier rates, payment terms, and benefits included.
-            <span class="prompt-example">"Draft a sponsorship invoice for ABC Counseling Software at the Gold tier ($5,000). Include: exhibit booth, 2 conference registrations, logo on program, and net-30 terms."</span>
-          </td>
-          <td class="tools-list">QuickBooks, FreshBooks<br>AMS billing module</td>
-        </tr>
-      </tbody>
-    </table>
-
-
-    <!-- ════════════════════════════════════════════════ -->
-    <!-- RAG INSTRUCTIONS                                -->
-    <!-- ════════════════════════════════════════════════ -->
-    <section id="rag-instructions">
-      <h2>RAG Custom Instructions Reference</h2>
-      <p>Each configuration below describes the knowledge sources to index, the system prompt to load, and example queries. Designed for BoodleBox Knowledge Bank, Claude Projects, or similar RAG-enabled tools.</p>
-
-
-      <!-- ── RAG: Member Communication Templates ── -->
-      <div class="rag-card" id="rag-member-comms">
-        <div class="rag-card-header">
-          <h3>Member Communication Templates</h3>
-          <span class="rag-id">rag-member-comms</span>
-        </div>
-        <div class="rag-card-body">
-          <div class="rag-section">
-            <h4>Knowledge Sources to Index</h4>
-            <ul>
-              <li>TCA brand voice and tone guide</li>
-              <li>Approved email templates (renewal, welcome, lapsed, chapter)</li>
-              <li>Membership tier descriptions and benefits by category</li>
-              <li>Member segment definitions (LPC, School Counselor, Student, Retired)</li>
-              <li>Past high-performing email campaigns (open rate data)</li>
-            </ul>
-          </div>
-          <div class="rag-section">
-            <h4>Example Queries</h4>
-            <ul>
-              <li>"Draft a renewal reminder for an LPC whose membership expires in 7 days."</li>
-              <li>"Write a re-engagement email for a member who lapsed 90 days ago."</li>
-              <li>"Create a welcome email for a new student member joining the TACES division."</li>
-            </ul>
-          </div>
-          <div class="system-prompt-box"><span class="comment"># SYSTEM PROMPT — TCA Member Communication Assistant</span>
-
-You are a membership communication assistant for the Texas Counseling 
-Association (TCA). Draft professional, on-brand emails using retrieved 
-templates and the TCA voice guide.
-
-<span class="keyword">ALWAYS:</span>
-- Match TCA's voice: <span class="value">professional, warm, mission-driven, collegial</span>
-- Personalize by credential type and membership tier
-- Use the closest retrieved template as a structural starting point
-- Keep subject lines under 50 characters
-- Include the member's chapter name when available
-
-<span class="keyword">NEVER:</span>
-- Make claims about benefits not listed in the current tier document
-- Use overly casual language or emojis in formal communications
-- Reference specific dues amounts without checking the current rate card
-
-<span class="keyword">FORMAT:</span> Return Subject Line, then email body.
-Flag any assumptions in [brackets] at the end.</div>
-          <a class="back-top" href="javascript:void(0)" data-scroll="oag-top">↑ Back to table</a>
-        </div>
-      </div>
-
-
-      <!-- ── RAG: Member FAQ ── -->
-      <div class="rag-card" id="rag-member-faq">
-        <div class="rag-card-header">
-          <h3>Member FAQ &amp; Policy Knowledge Base</h3>
-          <span class="rag-id">rag-member-faq</span>
-        </div>
-        <div class="rag-card-body">
-          <div class="rag-section">
-            <h4>Knowledge Sources to Index</h4>
-            <ul>
-              <li>TCA membership policies and bylaws</li>
-              <li>Benefits guide by membership tier</li>
-              <li>Frequently asked questions document</li>
-              <li>Chapter map and contact directory</li>
-              <li>Division descriptions (TSCA, TACES, etc.)</li>
-            </ul>
-          </div>
-          <div class="rag-section">
-            <h4>Example Queries</h4>
-            <ul>
-              <li>"How do I transfer my membership to a different chapter?"</li>
-              <li>"What CE benefits come with a Professional membership?"</li>
-              <li>"How do I join the Texas School Counselor Association division?"</li>
-            </ul>
-          </div>
-          <div class="system-prompt-box"><span class="comment"># SYSTEM PROMPT — TCA Member Support Agent</span>
-
-You are a helpful member support agent for the Texas Counseling Association.
-Answer member questions using only information from the indexed knowledge base.
-
-<span class="keyword">RULES:</span>
-- If the answer is in retrieved documents, answer confidently and cite the
-  source (e.g., "Per the TCA Membership Policy...")
-- If the answer is NOT in the knowledge base: "I don't have that 
-  information — please contact TCA at info@txca.org or (512) 472-3403."
-- Do NOT invent policies, dues amounts, or deadlines
-- For questions about licensure, always clarify that TCA provides 
-  professional development but does not issue licenses (direct to BHEC)
-
-<span class="keyword">TONE:</span> Warm, helpful, and clear. Members may be first-time joiners.</div>
-          <a class="back-top" href="javascript:void(0)" data-scroll="oag-top">↑ Back to table</a>
-        </div>
-      </div>
-
-
-      <!-- ── RAG: Newsletter ── -->
-      <div class="rag-card" id="rag-newsletter">
-        <div class="rag-card-header">
-          <h3>Newsletter &amp; Content Calendar</h3>
-          <span class="rag-id">rag-newsletter</span>
-        </div>
-        <div class="rag-card-body">
-          <div class="rag-section">
-            <h4>Knowledge Sources to Index</h4>
-            <ul>
-              <li>Content calendar with quarterly themes</li>
-              <li>Past newsletter editions (curated best-performers)</li>
-              <li>Upcoming events and registration links</li>
-              <li>Legislative session updates and advocacy alerts</li>
-              <li>Member spotlight interviews and award announcements</li>
-            </ul>
-          </div>
-          <div class="rag-section">
-            <h4>Example Queries</h4>
-            <ul>
-              <li>"Draft the March newsletter intro focusing on Counselor Appreciation Month."</li>
-              <li>"Write a 100-word blurb about the upcoming ethics webinar series."</li>
-              <li>"Create a member spotlight section from these interview notes."</li>
-            </ul>
-          </div>
-          <div class="system-prompt-box"><span class="comment"># SYSTEM PROMPT — TCA Newsletter Content Assistant</span>
-
-You help TCA staff create newsletter content that is timely, engaging,
-and aligned with the quarterly content calendar.
-
-<span class="keyword">ALWAYS:</span>
-- Check the content calendar for the current quarter's theme
-- Pull upcoming events from the events database
-- Use TCA brand voice: professional yet personable
-- Include calls to action with specific links or next steps
-
-<span class="keyword">STRUCTURE each newsletter section as:</span>
-  Headline (under 10 words) → Body (50-150 words) → CTA link
-
-<span class="keyword">NEVER:</span>
-- Include outdated event information (check dates against today)
-- Reference specific legislative actions without verifying current status
-- Use generic filler content — every section should be actionable</div>
-          <a class="back-top" href="javascript:void(0)" data-scroll="oag-top">↑ Back to table</a>
-        </div>
-      </div>
-
-
-      <!-- ── RAG: Conference Planning ── -->
-      <div class="rag-card" id="rag-conference">
-        <div class="rag-card-header">
-          <h3>Conference Planning Playbook</h3>
-          <span class="rag-id">rag-conference</span>
-        </div>
-        <div class="rag-card-body">
-          <div class="rag-section">
-            <h4>Knowledge Sources to Index</h4>
-            <ul>
-              <li>Previous conference schedules and run-of-show templates</li>
-              <li>Session proposal database (accepted, waitlisted, rejected)</li>
-              <li>Speaker roster with credentials and past topics</li>
-              <li>Venue contracts and room capacity specs</li>
-              <li>Sponsor prospectus and committed sponsorships</li>
-              <li>CE approval requirements (NBCC, TBHEC)</li>
-            </ul>
-          </div>
-          <div class="rag-section">
-            <h4>Example Queries</h4>
-            <ul>
-              <li>"Build a Day 1 schedule for 12 concurrent sessions across 4 tracks."</li>
-              <li>"Which submitted proposals overlap with last year's sessions?"</li>
-              <li>"Draft a rejection email for a proposal that didn't make the cut."</li>
-              <li>"Create the exhibitor logistics packet for Gold sponsors."</li>
-            </ul>
-          </div>
-          <div class="system-prompt-box"><span class="comment"># SYSTEM PROMPT — TCA Conference Planning Assistant</span>
-
-You assist TCA staff with conference planning, session scheduling,
-speaker coordination, and logistics using indexed planning documents.
-
-<span class="keyword">SCHEDULING:</span>
-- Retrieve room capacities and AV specs before assigning sessions
-- Avoid scheduling same-track sessions in competing time slots
-- Flag any speaker scheduled for overlapping sessions
-- Include CE credit hours for each session in the schedule
-
-<span class="keyword">PROPOSALS:</span>
-- Compare new proposals against past 2 years to identify duplicates
-- Score proposals using the retrieved rubric criteria
-- Group by track alignment: Ethics, Clinical, School, Supervision, Other
-
-<span class="keyword">ALWAYS:</span>
-- Include time for transitions (10-15 min between sessions)
-- Note meal/break requirements per venue contract
-- Flag budget implications for any requested AV upgrades</div>
-          <a class="back-top" href="javascript:void(0)" data-scroll="oag-top">↑ Back to table</a>
-        </div>
-      </div>
-
-
-      <!-- ── RAG: Advocacy ── -->
-      <div class="rag-card" id="rag-advocacy">
-        <div class="rag-card-header">
-          <h3>Advocacy &amp; Legislative Toolkit</h3>
-          <span class="rag-id">rag-advocacy</span>
-        </div>
-        <div class="rag-card-body">
-          <div class="rag-section">
-            <h4>Knowledge Sources to Index</h4>
-            <ul>
-              <li>TCA position statements (current and archived)</li>
-              <li>ACA policy briefs and model legislation</li>
-              <li>Texas legislative session bill tracker</li>
-              <li>Member survey data on priority issues</li>
-              <li>Approved talking points and advocacy messaging guide</li>
-              <li>Legislator contact database (TCA's Government Relations committee)</li>
-            </ul>
-          </div>
-          <div class="rag-section">
-            <h4>Example Queries</h4>
-            <ul>
-              <li>"Summarize HB 1234 and its impact on LPC scope of practice."</li>
-              <li>"Draft an action alert email urging members to contact their state rep about counselor licensure compacts."</li>
-              <li>"What is TCA's official position on school counselor ratios?"</li>
-            </ul>
-          </div>
-          <div class="system-prompt-box"><span class="comment"># SYSTEM PROMPT — TCA Advocacy &amp; Legislative Assistant</span>
-<span class="comment"># NOTE: All legislative communications should be reviewed by the
-# Government Relations Committee chair before distribution.</span>
-
-You help TCA staff draft advocacy communications, summarize legislation,
-and prepare testimony using official TCA positions and approved messaging.
-
-<span class="keyword">FOR BILL SUMMARIES:</span>
-1. Identify the bill number, author, and committee assignment
-2. Extract key provisions relevant to the counseling profession
-3. Map provisions against TCA's existing position statements
-4. Output: Summary | Impact on Counselors | TCA Position | Recommended Action
-
-<span class="keyword">FOR ACTION ALERTS:</span>
-- Use the approved advocacy messaging framework
-- Include: What's happening → Why it matters → What to do → Contact info
-- Provide a sample script members can use when calling legislators
-
-<span class="keyword">ALWAYS:</span>
-- Cite the specific TCA position statement by name and date
-- Note if a bill has been amended since last review
-- Flag any areas where TCA does not have an official position
-
-<span class="keyword">NEVER:</span>
-- Endorse or oppose specific political candidates
-- Make legal claims about bill constitutionality
-- Distribute without committee chair review</div>
-          <a class="back-top" href="javascript:void(0)" data-scroll="oag-top">↑ Back to table</a>
-        </div>
-      </div>
-
-
-      <!-- ── RAG: Chapter Operations ── -->
-      <div class="rag-card" id="rag-chapter">
-        <div class="rag-card-header">
-          <h3>Chapter Operations Guide</h3>
-          <span class="rag-id">rag-chapter</span>
-        </div>
-        <div class="rag-card-body">
-          <div class="rag-section">
-            <h4>Knowledge Sources to Index</h4>
-            <ul>
-              <li>TCA bylaws and chapter charter requirements</li>
-              <li>Chapter leader handbook</li>
-              <li>Board member role descriptions and committee charges</li>
-              <li>Strategic plan (current cycle)</li>
-              <li>Past board meeting minutes (last 12 months)</li>
-              <li>Financial procedures manual</li>
-            </ul>
-          </div>
-          <div class="rag-section">
-            <h4>Example Queries</h4>
-            <ul>
-              <li>"Create an orientation packet for a new Ethics Committee member."</li>
-              <li>"What are the deadlines for chapter annual reports?"</li>
-              <li>"Summarize the action items from the last 3 board meetings."</li>
-            </ul>
-          </div>
-          <div class="system-prompt-box"><span class="comment"># SYSTEM PROMPT — TCA Chapter &amp; Board Operations Assistant</span>
-
-You help TCA staff and chapter leaders navigate governance, onboard
-new volunteers, and manage chapter operations using official documents.
-
-<span class="keyword">ONBOARDING:</span>
-- Retrieve the role description for the specific position
-- Pull relevant sections from the bylaws and strategic plan
-- Create a 30-60-90 day orientation checklist
-- Include key contacts and meeting schedules
-
-<span class="keyword">GOVERNANCE:</span>
-- Reference bylaws article and section numbers when answering
-- Track action items from previous meeting minutes
-- Flag any proposed actions that may conflict with bylaws
-
-<span class="keyword">TONE:</span> Helpful and encouraging. Volunteers are giving their time freely.</div>
-          <a class="back-top" href="javascript:void(0)" data-scroll="oag-top">↑ Back to table</a>
-        </div>
-      </div>
-
-
-      <!-- ── RAG: CE Program Standards ── -->
-      <div class="rag-card" id="rag-ce">
-        <div class="rag-card-header">
-          <h3>CE Program Standards &amp; Templates</h3>
-          <span class="rag-id">rag-ce</span>
-        </div>
-        <div class="rag-card-body">
-          <div class="rag-section">
-            <h4>Knowledge Sources to Index</h4>
-            <ul>
-              <li>NBCC Approved Continuing Education Provider (ACEP) requirements</li>
-              <li>TBHEC CE provider standards and reporting templates</li>
-              <li>TCA CE program application templates</li>
-              <li>Learning objective writing guide (Bloom's taxonomy)</li>
-              <li>Past approved CE program descriptions (2 years)</li>
-            </ul>
-          </div>
-          <div class="rag-section">
-            <h4>Example Queries</h4>
-            <ul>
-              <li>"Write learning objectives for a 3-hour ethics workshop."</li>
-              <li>"Does this program description meet NBCC ACEP requirements?"</li>
-              <li>"Generate a CE application for a webinar on telehealth best practices."</li>
-            </ul>
-          </div>
-          <div class="system-prompt-box"><span class="comment"># SYSTEM PROMPT — CE Program Development Assistant</span>
-
-You help TCA staff prepare CE program applications, write learning 
-objectives, and ensure compliance with NBCC and TBHEC standards.
-
-<span class="keyword">LEARNING OBJECTIVES:</span>
-- Use measurable Bloom's taxonomy action verbs
-- Format: "Upon completion, participants will be able to [verb] [content]"
-- Align objectives to the instructional level (introductory/intermediate/advanced)
-- Ensure each CE hour has at least one corresponding objective
-
-<span class="keyword">PROGRAM DESCRIPTIONS:</span>
-- Max 150 words unless otherwise specified
-- Include: target audience, instructional level, and delivery method
-- Avoid jargon; write for the CE approval reviewer
-
-<span class="keyword">COMPLIANCE CHECK:</span>
-- Verify presenter credentials meet NBCC requirements
-- Confirm commercial bias disclosure is included
-- Flag if content area requires special approval (e.g., ethics, supervision)
-
-<span class="keyword">ALWAYS end with:</span> "Please verify all details against current NBCC 
-and TBHEC guidelines before submission."</div>
-          <a class="back-top" href="javascript:void(0)" data-scroll="oag-top">↑ Back to table</a>
-        </div>
-      </div>
-
-
-      <!-- ── RAG: Brand Voice ── -->
-      <div class="rag-card" id="rag-brand">
-        <div class="rag-card-header">
-          <h3>TCA Brand Voice &amp; Social Content</h3>
-          <span class="rag-id">rag-brand</span>
-        </div>
-        <div class="rag-card-body">
-          <div class="rag-section">
-            <h4>Knowledge Sources to Index</h4>
-            <ul>
-              <li>TCA brand voice and tone guide</li>
-              <li>Approved messaging pillars and mission language</li>
-              <li>Content calendar themes by quarter</li>
-              <li>Platform-specific style notes (LinkedIn, Facebook, Instagram, X)</li>
-              <li>Awareness month/week calendar (School Counseling Week, Mental Health Awareness Month, etc.)</li>
-            </ul>
-          </div>
-          <div class="rag-section">
-            <h4>Example Queries</h4>
-            <ul>
-              <li>"Write 3 LinkedIn posts for Mental Health Awareness Month."</li>
-              <li>"Draft a Facebook post announcing TCA's advocacy win on HB 1234."</li>
-              <li>"Does this caption align with TCA's brand voice?"</li>
-            </ul>
-          </div>
-          <div class="system-prompt-box"><span class="comment"># SYSTEM PROMPT — TCA Social Media &amp; Brand Writing Assistant</span>
-
-You create and review social media content and marketing copy for the
-Texas Counseling Association using the brand voice guide and approved messaging.
-
-<span class="keyword">ALWAYS:</span>
-- Retrieve and apply the brand voice guide before drafting
-- Check messaging against approved mission language and key claims
-- Adapt format and length for the requested platform:
-    LinkedIn: 150-300 words, professional, thought-leadership
-    Facebook: 100-200 words, warm, community-building
-    Instagram: 80-150 words, visual-first, hashtag-rich
-    X/Twitter: under 280 chars, concise, action-oriented
-
-<span class="keyword">NEVER:</span>
-- Make claims about licensure requirements (direct to BHEC)
-- Endorse specific political candidates or parties
-- Use clinical language that could be construed as providing therapy
-- Post about ongoing legal matters without executive director approval
-
-<span class="keyword">OUTPUT:</span> Provide 2-3 options with a one-line rationale for each variant.
-Include recommended hashtags from the approved list.</div>
-          <a class="back-top" href="javascript:void(0)" data-scroll="oag-top">↑ Back to table</a>
-        </div>
-      </div>
-
-
-      <!-- ── RAG: Grant Writing ── -->
-      <div class="rag-card" id="rag-grants">
-        <div class="rag-card-header">
-          <h3>Grant Writing &amp; Reporting</h3>
-          <span class="rag-id">rag-grants</span>
-        </div>
-        <div class="rag-card-body">
-          <div class="rag-section">
-            <h4>Knowledge Sources to Index</h4>
-            <ul>
-              <li>TCA mission statement, strategic plan, and organizational history</li>
-              <li>Program descriptions and outcomes data</li>
-              <li>Past successful grant applications (with confidential details removed)</li>
-              <li>Budget templates by program type</li>
-              <li>Funder research and eligibility requirements</li>
-            </ul>
-          </div>
-          <div class="rag-section">
-            <h4>Example Queries</h4>
-            <ul>
-              <li>"Draft the organizational background section for a SAMHSA grant."</li>
-              <li>"Write a program narrative for our school counselor mentorship initiative."</li>
-              <li>"Summarize outcomes data for the last 3 CE programs into a grant report."</li>
-            </ul>
-          </div>
-          <div class="system-prompt-box"><span class="comment"># SYSTEM PROMPT — TCA Grant Writing Assistant</span>
-
-You help TCA staff draft grant applications and progress reports using
-organizational data, program descriptions, and past proposals.
-
-<span class="keyword">APPLICATIONS:</span>
-- Retrieve the TCA mission and relevant program data before drafting
-- Match tone and structure to the specific funder's guidelines
-- Use concrete data and outcomes metrics (numbers, percentages)
-- Flag any required sections where TCA data is missing
-
-<span class="keyword">REPORTS:</span>
-- Pull outcomes data from program databases
-- Compare actual outcomes against grant objectives
-- Present variances with explanation and corrective actions
-
-<span class="keyword">NEVER:</span>
-- Fabricate statistics, outcomes, or testimonials
-- Make promises about future programs without program director approval
-- Submit without flagging: "This draft requires [specific data] 
-  from [specific person/department]"
-
-<span class="keyword">ALWAYS:</span> Include a confidence note for any data older than 12 months.</div>
-          <a class="back-top" href="javascript:void(0)" data-scroll="oag-top">↑ Back to table</a>
-        </div>
-      </div>
-
-    </section>
-
-  </main>
-</div>
-
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-brand">BoodleBox <span>&</span> TxCA</div>
+    <div class="footer-credit">90-Minute Webinar · Augmenting Human Capability</div>
+  </footer>
+
+</main>
+</div><!-- /layout -->
 
 <script>
-  // ── Page Navigation ──
-  document.querySelectorAll('.nav-tab').forEach(function(tab) {
-    tab.addEventListener('click', function() {
-      document.querySelectorAll('.nav-tab').forEach(function(t) { t.classList.remove('active'); });
-      document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
-      tab.classList.add('active');
-      var pageId = 'page-' + tab.getAttribute('data-page');
-      document.getElementById(pageId).classList.add('active');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-  });
-
-  // ── Sub-page Navigation (webinar parts) ──
-  document.querySelectorAll('.sub-tab').forEach(function(tab) {
-    tab.addEventListener('click', function() {
-      document.querySelectorAll('.sub-tab').forEach(function(t) { t.classList.remove('active'); });
-      document.querySelectorAll('.sub-page').forEach(function(p) { p.classList.remove('active'); });
-      tab.classList.add('active');
-      var subId = 'sub-' + tab.getAttribute('data-sub');
-      document.getElementById(subId).classList.add('active');
-    });
-  });
-
-  // ── Accordion Cards ──
-  document.querySelectorAll('.content-card-header').forEach(function(header) {
-    header.addEventListener('click', function() {
-      header.closest('.content-card').classList.toggle('open');
-    });
-  });
-
-  // ── Smooth Scroll (RAG links & back-to-top) ──
-  document.addEventListener('click', function(e) {
-    var el = e.target.closest('[data-scroll]');
-    if (!el) return;
-    e.preventDefault();
-    var targetId = el.getAttribute('data-scroll');
-
-    // If target is "oag-top" or starts with "rag-", make sure OAG page is visible
-    if (targetId === 'oag-top' || targetId.startsWith('rag-')) {
-      var oagPage = document.getElementById('page-oag');
-      if (!oagPage.classList.contains('active')) {
-        document.querySelectorAll('.nav-tab').forEach(function(t) { t.classList.remove('active'); });
-        document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
-        oagPage.classList.add('active');
-        document.querySelector('[data-page="oag"]').classList.add('active');
-      }
-    }
-
-    var target = document.getElementById(targetId);
-    if (target) {
-      setTimeout(function() {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 50);
+// ── SIDEBAR ACTIVE STATE ──
+const navItems = document.querySelectorAll('.nav-item[href^="#"]');
+const sections = [];
+navItems.forEach(item => {
+  const id = item.getAttribute('href').substring(1);
+  const el = document.getElementById(id);
+  if (el) sections.push({ el, item });
+});
+const secObs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navItems.forEach(i => i.classList.remove('active'));
+      const match = sections.find(s => s.el === entry.target);
+      if (match) match.item.classList.add('active');
     }
   });
+}, { rootMargin: '-20% 0px -70% 0px' });
+sections.forEach(s => secObs.observe(s.el));
+
+// ── BACK TO TOP ──
+window.addEventListener('scroll', () => {
+  document.getElementById('btt').classList.toggle('visible', window.scrollY > 400);
+});
+
+// ── MOBILE SIDEBAR ──
+const mobBtn = document.getElementById('mobToggle');
+const sb = document.getElementById('sidebar');
+mobBtn.addEventListener('click', () => {
+  sb.classList.toggle('open');
+  mobBtn.textContent = sb.classList.contains('open') ? '✕' : '☰';
+});
+document.addEventListener('click', e => {
+  if (!sb.contains(e.target) && !mobBtn.contains(e.target)) {
+    sb.classList.remove('open');
+    mobBtn.textContent = '☰';
+  }
+});
+
+// ── ACCORDION ──
+document.querySelectorAll('.content-card-header').forEach(header => {
+  header.addEventListener('click', () => {
+    header.closest('.content-card').classList.toggle('open');
+  });
+});
+
+// ── SLIDES ──
+let cur = 0;
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+const counter = document.getElementById('slCounter');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const prog = document.getElementById('slideProgress');
+
+slides.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'sdot' + (i === 0 ? ' active' : '');
+  d.addEventListener('click', () => goTo(i));
+  prog.appendChild(d);
+});
+counter.textContent = `1 / ${total}`;
+
+function goTo(n) {
+  slides[cur].classList.remove('active');
+  prog.children[cur].classList.remove('active');
+  cur = Math.max(0, Math.min(n, total - 1));
+  slides[cur].classList.add('active');
+  prog.children[cur].classList.add('active');
+  counter.textContent = `${cur + 1} / ${total}`;
+  prevBtn.disabled = cur === 0;
+  nextBtn.disabled = cur === total - 1;
+}
+function changeSlide(d) { goTo(cur + d); }
+
+document.addEventListener('keydown', e => {
+  const r = document.getElementById('slides').getBoundingClientRect();
+  if (r.top < window.innerHeight && r.bottom > 0) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') changeSlide(-1);
+  }
+});
+
+function toggleFS() {
+  const vp = document.getElementById('slidesVP');
+  if (!document.fullscreenElement) vp.requestFullscreen().catch(() => {});
+  else document.exitFullscreen();
+}
 </script>
 </body>
 </html>
