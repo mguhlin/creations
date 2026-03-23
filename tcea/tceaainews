@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-Powered Newsletter Architecture for Educators | TCEA Lunch &amp; Learn</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0A3476;
+    --navy-dark: #071f4a;
+    --navy-mid: #12428f;
+    --gold: #FCB040;
+    --gold-light: #fdd17a;
+    --gold-pale: #FEF0D0;
+    --pale-navy: #D0D8F0;
+    --white: #ffffff;
+    --off-white: #f7f8fc;
+    --text: #1a1a2e;
+    --text-muted: #5a6680;
+    --border: #e2e7f5;
+    --teal: #0e6b8a;
+    --sidebar-w: 240px;
+    --topbar-h: 52px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    background: var(--white);
+    line-height: 1.6;
+  }
+
+  /* ═══════════════════════════════
+     MOBILE TOP BAR
+  ═══════════════════════════════ */
+  .topbar {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: var(--topbar-h);
+    background: var(--navy-dark);
+    border-bottom: 3px solid var(--gold);
+    z-index: 200;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.25rem;
+  }
+  .topbar-brand {
+    font-family: 'DM Serif Display', serif;
+    color: var(--gold); font-size: 0.92rem;
+  }
+  .topbar-brand span { color: var(--white); }
+
+  .hamburger {
+    background: none; border: none; cursor: pointer;
+    display: flex; flex-direction: column; gap: 5px; padding: 6px;
+  }
+  .hamburger span {
+    display: block; width: 22px; height: 2px;
+    background: var(--gold); border-radius: 2px; transition: all 0.25s;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* ═══════════════════════════════
+     LEFT SIDEBAR
+  ═══════════════════════════════ */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: var(--navy-dark);
+    border-right: 3px solid var(--gold);
+    display: flex; flex-direction: column;
+    z-index: 150;
+    overflow-y: auto;
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar-header {
+    padding: 1.4rem 1.2rem 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    flex-shrink: 0;
+  }
+  .sidebar-logo {
+    font-family: 'DM Serif Display', serif;
+    color: var(--gold); font-size: 1rem; line-height: 1.3; margin-bottom: 0.3rem;
+  }
+  .sidebar-logo span { color: var(--white); display: block; font-size: 0.78rem; }
+  .sidebar-date {
+    display: inline-block;
+    background: var(--gold); color: var(--navy-dark);
+    font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 0.2rem 0.6rem;
+    border-radius: 100px; margin-top: 0.5rem;
+  }
+
+  .sidebar-nav { flex: 1; padding: 0.75rem 0; overflow-y: auto; }
+
+  .nav-group-label {
+    font-size: 0.58rem; font-weight: 700; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--text-muted);
+    padding: 0.85rem 1.2rem 0.25rem;
+  }
+
+  .sidebar-nav a {
+    display: flex; align-items: center; gap: 0.6rem;
+    color: var(--pale-navy); text-decoration: none;
+    font-size: 0.82rem; font-weight: 500;
+    padding: 0.52rem 1.2rem;
+    border-left: 3px solid transparent;
+    transition: background 0.18s, color 0.18s, border-color 0.18s;
+    line-height: 1.3;
+  }
+  .sidebar-nav a:hover,
+  .sidebar-nav a.active {
+    background: rgba(252,176,64,0.1);
+    color: var(--gold); border-left-color: var(--gold);
+  }
+  .nav-icon { font-size: 0.9rem; flex-shrink: 0; width: 18px; text-align: center; }
+
+  .sidebar-footer {
+    padding: 0.9rem 1.2rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    font-size: 0.7rem; color: var(--text-muted); line-height: 1.65;
+    flex-shrink: 0;
+  }
+  .sidebar-footer strong { color: var(--pale-navy); display: block; margin-bottom: 0.15rem; }
+  .sidebar-footer a { color: var(--gold-light); text-decoration: none; }
+  .sidebar-footer a:hover { text-decoration: underline; }
+
+  /* Overlay */
+  .sidebar-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.55); z-index: 140;
+  }
+  .sidebar-overlay.visible { display: block; }
+
+  /* ═══════════════════════════════
+     MAIN CONTENT AREA
+  ═══════════════════════════════ */
+  .main { margin-left: var(--sidebar-w); min-height: 100vh; }
+
+  /* ── HERO ── */
+  #hero {
+    background: radial-gradient(ellipse at 20% 60%, rgba(252,176,64,0.12) 0%, transparent 60%),
+                linear-gradient(150deg, var(--navy-dark) 0%, var(--navy) 60%, var(--navy-mid) 100%);
+    color: var(--white);
+    padding: 4.5rem 3rem 3.5rem;
+    position: relative; overflow: hidden;
+  }
+  #hero::before {
+    content: ''; position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 60px),
+      repeating-linear-gradient(0deg,  rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 60px);
+  }
+  .hero-badge {
+    display: inline-block; background: var(--gold); color: var(--navy-dark);
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; padding: 0.28rem 0.85rem;
+    border-radius: 100px; margin-bottom: 1.2rem; position: relative;
+  }
+  #hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.85rem, 3.8vw, 3rem); line-height: 1.15;
+    max-width: 680px; margin-bottom: 1rem; position: relative;
+  }
+  #hero h1 em { color: var(--gold); font-style: italic; }
+  .hero-sub {
+    font-size: 0.98rem; color: var(--pale-navy);
+    max-width: 540px; margin-bottom: 1.75rem; position: relative; line-height: 1.7;
+  }
+  .hero-meta {
+    display: flex; flex-wrap: wrap; gap: 0.75rem 1.75rem;
+    font-size: 0.82rem; color: var(--gold-light); position: relative;
+  }
+  .hero-meta span { display: flex; align-items: center; gap: 0.4rem; }
+  .hero-stat-row {
+    display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2.25rem; position: relative;
+  }
+  .hero-stat {
+    background: rgba(255,255,255,0.07); border: 1px solid rgba(252,176,64,0.25);
+    border-radius: 10px; padding: 0.95rem 1.4rem; text-align: center; min-width: 120px;
+  }
+  .hero-stat .num {
+    font-family: 'DM Serif Display', serif; font-size: 1.9rem;
+    color: var(--gold); display: block; line-height: 1.1;
+  }
+  .hero-stat .label {
+    font-size: 0.7rem; color: var(--pale-navy);
+    text-transform: uppercase; letter-spacing: 0.07em; margin-top: 0.2rem;
+    display: block; line-height: 1.4;
+  }
+
+  /* ── CONTENT SECTIONS ── */
+  .cs { padding: 3.25rem 3rem; border-bottom: 1px solid var(--border); }
+  .cs.alt  { background: var(--off-white); }
+  .cs.dark { background: var(--navy-dark); color: var(--white); border-bottom-color: rgba(255,255,255,0.08); }
+
+  .sec-eyebrow {
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 0.35rem;
+  }
+  .cs.dark .sec-eyebrow { color: var(--gold-light); }
+
+  h2.sec-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.45rem, 3vw, 2rem); color: var(--navy); margin-bottom: 0.3rem;
+  }
+  .cs.dark h2.sec-title { color: var(--gold); }
+
+  .divider { width: 42px; height: 4px; background: var(--gold); border-radius: 2px; margin: 0.55rem 0 1.2rem; }
+
+  .sec-lead {
+    font-size: 0.97rem; color: var(--text-muted); max-width: 680px; margin-bottom: 1.75rem; line-height: 1.7;
+  }
+  .cs.dark .sec-lead { color: var(--pale-navy); }
+
+  /* ── CARD GRID ── */
+  .card-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.2rem; margin-top: 1.25rem;
+  }
+  .card {
+    background: var(--white); border: 1.5px solid var(--border); border-radius: 12px;
+    padding: 1.5rem; position: relative; transition: box-shadow 0.25s, transform 0.22s;
+  }
+  .card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 4px; background: var(--gold); border-radius: 12px 12px 0 0;
+  }
+  .card:hover { box-shadow: 0 6px 22px rgba(10,52,118,0.1); transform: translateY(-2px); }
+  .card-num {
+    font-family: 'DM Serif Display', serif; font-size: 2.4rem;
+    color: var(--pale-navy); line-height: 1; margin-bottom: 0.35rem;
+  }
+  .card h3 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--navy); margin-bottom: 0.35rem; }
+  .card h4 { font-family: 'DM Serif Display', serif; font-size: 1rem; color: var(--navy); margin-bottom: 0.3rem; }
+  .card p  { font-size: 0.86rem; color: var(--text-muted); line-height: 1.65; margin-bottom: 0.8rem; }
+  .tool-icon {
+    width: 36px; height: 36px; background: var(--navy); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 0.7rem; font-size: 0.95rem;
+  }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .tag {
+    font-size: 0.66rem; font-weight: 600; background: var(--gold-pale); color: var(--navy);
+    border: 1px solid var(--gold-light); border-radius: 100px; padding: 0.16rem 0.55rem;
+  }
+
+  /* dark cards */
+  .dark-card {
+    background: rgba(255,255,255,0.07); border: 1px solid rgba(252,176,64,0.25);
+    border-radius: 12px; padding: 1.5rem; text-align: center; transition: background 0.2s;
+  }
+  .dark-card:hover { background: rgba(255,255,255,0.12); }
+  .dark-card .dc-num {
+    font-family: 'DM Serif Display', serif; font-size: 2.4rem;
+    color: var(--gold); display: block; margin-bottom: 0.35rem;
+  }
+  .dark-card h3 { font-family: 'DM Serif Display', serif; color: var(--white); font-size: 1rem; margin-bottom: 0.35rem; }
+  .dark-card p  { font-size: 0.84rem; color: var(--pale-navy); line-height: 1.6; }
+
+  /* ── WORKFLOW ── */
+  .workflow-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 0; border: 1.5px solid var(--border); border-radius: 12px;
+    overflow: hidden; margin-top: 1.5rem;
+  }
+  .wf-step {
+    padding: 1.5rem 1.35rem; border-right: 1.5px solid var(--border);
+    background: var(--white); transition: background 0.2s;
+  }
+  .wf-step:last-child { border-right: none; }
+  .wf-step:hover { background: var(--gold-pale); }
+  .wf-time {
+    display: inline-block; background: var(--navy); color: var(--gold);
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.18rem 0.52rem; border-radius: 4px; margin-bottom: 0.6rem;
+  }
+  .wf-step h3 { font-family: 'DM Serif Display', serif; font-size: 1.05rem; color: var(--navy); margin-bottom: 0.35rem; }
+  .wf-step p  { font-size: 0.84rem; color: var(--text-muted); line-height: 1.6; }
+
+  /* ── TABLE ── */
+  .table-wrap { overflow-x: auto; border-radius: 12px; border: 1.5px solid var(--border); margin-top: 1.5rem; }
+  .prompt-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; min-width: 520px; }
+  .prompt-table th {
+    background: var(--navy); color: var(--gold);
+    font-family: 'DM Serif Display', serif; font-size: 0.92rem; font-weight: 400;
+    padding: 0.78rem 1rem; text-align: left; letter-spacing: 0.03em;
+  }
+  .prompt-table td {
+    padding: 0.78rem 1rem; border-bottom: 1px solid var(--border);
+    vertical-align: top; line-height: 1.55;
+  }
+  .prompt-table tr:last-child td { border-bottom: none; }
+  .prompt-table tr:nth-child(even) td { background: var(--off-white); }
+  .prompt-table td:first-child { font-weight: 600; color: var(--navy); white-space: nowrap; }
+
+  /* ── PROMPT CARDS ── */
+  .prompt-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; margin-top: 1.6rem; }
+  .prompt-card {
+    background: var(--navy); border-radius: 12px; padding: 1.5rem; position: relative; overflow: hidden;
+  }
+  .prompt-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gold); }
+  .prompt-card .pl { font-size: 0.63rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.55rem; display: block; }
+  .prompt-card h3 { font-family: 'DM Serif Display', serif; font-size: 1rem; color: var(--white); margin-bottom: 0.8rem; }
+  .prompt-text {
+    background: rgba(255,255,255,0.06); border-left: 3px solid var(--gold);
+    border-radius: 0 6px 6px 0; padding: 0.75rem 0.85rem;
+    font-size: 0.82rem; color: var(--pale-navy); font-style: italic; line-height: 1.65;
+  }
+  .prompt-text strong { color: var(--gold-light); font-style: normal; }
+
+  /* ── CHEAT SHEET ── */
+  .cheat-box {
+    background: var(--gold-pale); border: 2px solid var(--gold);
+    border-radius: 12px; padding: 1.6rem 1.75rem; margin-top: 1.75rem;
+  }
+  .cheat-box h3 {
+    font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: var(--navy);
+    margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;
+  }
+  .cheat-rows { display: flex; flex-direction: column; gap: 0.7rem; }
+  .cheat-row {
+    background: var(--white); border: 1px solid var(--border); border-radius: 8px;
+    padding: 0.8rem 1rem; display: grid; grid-template-columns: 125px 1fr;
+    gap: 0.9rem; align-items: start; font-size: 0.86rem;
+  }
+  .step-name { font-weight: 700; color: var(--navy); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.07em; padding-top: 0.1rem; }
+  .step-prompt { color: var(--text); line-height: 1.55; font-style: italic; }
+  .step-prompt strong { font-style: normal; color: var(--teal); }
+
+  /* dark cheat rows */
+  .cheat-row.dr {
+    background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.1);
+  }
+  .cheat-row.dr .step-name  { color: var(--gold-light); }
+  .cheat-row.dr .step-prompt { color: var(--pale-navy); }
+
+  /* inline dark cheat wrap */
+  .dark-cheat { background: var(--navy); border-radius: 12px; padding: 1.5rem; margin-top: 1.6rem; }
+  .dark-cheat h3 { font-family: 'DM Serif Display', serif; color: var(--gold); font-size: 1.05rem; margin-bottom: 0.9rem; }
+
+  /* ── PANEL ── */
+  .panel { background: var(--white); border: 1.5px solid var(--border); border-radius: 10px; padding: 1.4rem; margin-top: 1.4rem; }
+  .panel h3 { font-family: 'DM Serif Display', serif; font-size: 1rem; color: var(--navy); margin-bottom: 0.7rem; }
+
+  /* ── CHECKLIST ── */
+  .checklist { list-style: none; margin-top: 0.9rem; display: flex; flex-direction: column; gap: 0.55rem; }
+  .checklist li { display: flex; align-items: flex-start; gap: 0.65rem; font-size: 0.91rem; line-height: 1.55; }
+  .checklist li::before { content: '✦'; color: var(--gold); font-size: 0.7rem; margin-top: 0.25rem; flex-shrink: 0; }
+  .cs.dark .checklist li { color: var(--pale-navy); }
+
+  /* ── CTA ── */
+  .cta-block {
+    margin-top: 2.25rem; text-align: center; padding: 2rem;
+    background: rgba(252,176,64,0.1); border: 1px solid rgba(252,176,64,0.3); border-radius: 12px;
+  }
+  .cta-block h3 { font-family: 'DM Serif Display', serif; color: var(--gold); font-size: 1.35rem; margin-bottom: 0.6rem; }
+  .cta-block p  { color: var(--pale-navy); font-size: 0.9rem; max-width: 420px; margin: 0 auto; line-height: 1.7; }
+
+  /* ── FACILITATOR + FOOTER ── */
+  .fac-bar {
+    background: var(--navy); color: var(--pale-navy);
+    text-align: center; padding: 1.85rem 2rem; font-size: 0.86rem; line-height: 1.8;
+  }
+  .fac-bar strong { color: var(--gold); }
+  .fac-bar a { color: var(--gold-light); text-decoration: none; }
+  .fac-bar a:hover { text-decoration: underline; }
+  footer {
+    background: var(--navy-dark); color: var(--text-muted);
+    text-align: center; padding: 1rem 2rem; font-size: 0.73rem;
+    border-top: 3px solid var(--gold);
+  }
+
+  /* ═══════════════════════════════
+     RESPONSIVE BREAKPOINTS
+  ═══════════════════════════════ */
+
+  @media (max-width: 980px) {
+    :root { --sidebar-w: 210px; }
+    .cs { padding: 2.75rem 2rem; }
+    #hero { padding: 3.25rem 2rem 3rem; }
+  }
+
+  @media (max-width: 680px) {
+    /* show topbar, hide/slide sidebar */
+    .topbar { display: flex; }
+    .sidebar { transform: translateX(calc(-1 * var(--sidebar-w))); top: 0; }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-left: 0; padding-top: var(--topbar-h); }
+
+    /* section padding */
+    #hero  { padding: 2.25rem 1.25rem 2rem; }
+    .cs    { padding: 2rem 1.25rem; }
+    .cheat-box  { padding: 1.2rem; }
+    .dark-cheat { padding: 1.2rem; }
+
+    /* cheat rows go single-column */
+    .cheat-row { grid-template-columns: 1fr; gap: 0.3rem; }
+
+    /* workflow stack vertically */
+    .workflow-grid { grid-template-columns: 1fr; }
+    .wf-step { border-right: none; border-bottom: 1.5px solid var(--border); }
+    .wf-step:last-child { border-bottom: none; }
+
+    /* stats */
+    .hero-stat-row { gap: 0.75rem; }
+    .hero-stat { flex: 1 1 calc(50% - 0.5rem); min-width: 0; }
+  }
+
+  @media (max-width: 400px) {
+    .hero-stat { flex: 1 1 100%; }
+    .card-grid   { grid-template-columns: 1fr; }
+    .prompt-cards { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── MOBILE TOP BAR ─── -->
+<div class="topbar" id="topbar">
+  <div class="topbar-brand">TCEA <span>Lunch &amp; Learn</span></div>
+  <button class="hamburger" id="hamburger" aria-label="Toggle navigation">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+
+<!-- ─── OVERLAY ─── -->
+<div class="sidebar-overlay" id="overlay"></div>
+
+<!-- ─── LEFT SIDEBAR ─── -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">
+      TCEA
+      <span>Lunch &amp; Learn</span>
+    </div>
+    <span class="sidebar-date">March 25, 2026</span>
+  </div>
+
+  <nav class="sidebar-nav" id="sidebar-nav">
+    <div class="nav-group-label">Overview</div>
+    <a href="#hero"         class="nav-link"><span class="nav-icon">🏠</span>Welcome</a>
+    <a href="#why"          class="nav-link"><span class="nav-icon">❓</span>The Why</a>
+    <a href="#architecture" class="nav-link"><span class="nav-icon">🏗️</span>Architecture</a>
+
+    <div class="nav-group-label">Three Pillars</div>
+    <a href="#ingestion"    class="nav-link"><span class="nav-icon">📥</span>Pillar 1: Ingestion</a>
+    <a href="#synthesis"    class="nav-link"><span class="nav-icon">⚙️</span>Pillar 2: Synthesis</a>
+    <a href="#iteration"    class="nav-link"><span class="nav-icon">🔁</span>Pillar 3: Iteration</a>
+
+    <div class="nav-group-label">Techniques</div>
+    <a href="#prompting"    class="nav-link"><span class="nav-icon">💬</span>Advanced Prompting</a>
+    <a href="#workflow"     class="nav-link"><span class="nav-icon">⏱️</span>20-Min Workflow</a>
+
+    <div class="nav-group-label">Resources</div>
+    <a href="#cheatsheet"   class="nav-link"><span class="nav-icon">📋</span>Prompt Cheat Sheet</a>
+    <a href="#next"         class="nav-link"><span class="nav-icon">🚀</span>Next Steps</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <strong>Miguel Guhlin</strong>
+    Director of PD, TCEA.org<br>
+    <a href="mailto:mguhlin@tcea.org">mguhlin@tcea.org</a><br>
+    <a href="https://mguhlin.org" target="_blank">mguhlin.org</a>
+  </div>
+</aside>
+
+<!-- ═══════════════════════════════
+     MAIN
+═══════════════════════════════ -->
+<main class="main">
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-badge">Lunch &amp; Learn · March 25, 2026</div>
+    <h1>AI-Powered Newsletter<br><em>Architecture for Educators</em></h1>
+    <p class="hero-sub">From 4 hours of manual work to 20 minutes of creative curation — become a <strong>Learning Loop Architect</strong> using AI-powered workflows.</p>
+    <div class="hero-meta">
+      <span>📍 TCEA Conference</span>
+      <span>👤 Miguel Guhlin · mguhlin@tcea.org</span>
+      <span>🌐 mguhlin.org</span>
+    </div>
+    <div class="hero-stat-row">
+      <div class="hero-stat">
+        <span class="num">3×</span>
+        <span class="label">More Content<br>Than 5 Years Ago</span>
+      </div>
+      <div class="hero-stat">
+        <span class="num">4 hrs</span>
+        <span class="label">Typical Newsletter<br>Creation Time</span>
+      </div>
+      <div class="hero-stat">
+        <span class="num">→ 20 min</span>
+        <span class="label">With the AI<br>Architect System</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section class="cs alt" id="why">
+    <span class="sec-eyebrow">The Challenge</span>
+    <h2 class="sec-title">The Curation Crisis</h2>
+    <div class="divider"></div>
+    <p class="sec-lead">Five years ago, we had enough to read. Today, educators consume three times more digital content — and the problem isn't a lack of resources, it's the <strong>noise</strong>. Without a system to filter that noise, we can't transform it into learning.</p>
+    <ul class="checklist">
+      <li>Information overload leads to decision fatigue, not better teaching.</li>
+      <li>Most time is lost <em>hunting</em> for content, not synthesizing it.</li>
+      <li>A newsletter without a system becomes a 4-hour weekly burden.</li>
+      <li>Today's goal: build an architecture that <strong>masters</strong> information — not one that adds to your to-do list.</li>
+    </ul>
+  </section>
+
+  <!-- ARCHITECTURE -->
+  <section class="cs" id="architecture">
+    <span class="sec-eyebrow">The System</span>
+    <h2 class="sec-title">The Architecture Overview</h2>
+    <div class="divider"></div>
+    <p class="sec-lead">Three pillars work together to move you from overwhelmed to architect. Each builds on the last, creating a repeatable 20-minute workflow that compounds over time.</p>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-num">01</div>
+        <h3>Smart Ingestion</h3>
+        <p>Gather content seeds passively — let RSS feeds and curated sources come to you. Your only job is to save the best bits during morning coffee.</p>
+        <div class="tag-row">
+          <span class="tag">Feedly</span><span class="tag">Readwise</span>
+          <span class="tag">Raindrop.io</span><span class="tag">Second Brain</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-num">02</div>
+        <h3>Synthesis (Architect)</h3>
+        <p>Feed saved content to the Newsletter Architect AI. It extracts the "So What?" — turning raw links into structured, audience-aligned drafts.</p>
+        <div class="tag-row">
+          <span class="tag">Role–Context–Task</span>
+          <span class="tag">URL Input</span><span class="tag">Tone &amp; Structure</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-num">03</div>
+        <h3>Iteration (Learning Loop)</h3>
+        <p>Refine the draft so it's actionable for your specific audience. A newsletter should be a <em>learning experience</em>, not just a list of links.</p>
+        <div class="tag-row">
+          <span class="tag">Pedagogical Alignment</span>
+          <span class="tag">Actionable</span><span class="tag">Iterative</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INGESTION -->
+  <section class="cs alt" id="ingestion">
+    <span class="sec-eyebrow">Pillar 1</span>
+    <h2 class="sec-title">Smart Ingestion — Your Second Brain</h2>
+    <div class="divider"></div>
+    <p class="sec-lead">Stop hunting for content. That's where the 4 hours go. Set up passive inflows so content arrives automatically. During your morning coffee, simply save the top 5–10 items.</p>
+    <div class="card-grid">
+      <div class="card">
+        <div class="tool-icon">📰</div>
+        <h4>Feedly / Readwise</h4>
+        <p>Aggregate RSS feeds from education blogs, journals, and news sites. Smart filtering surfaces what matters most.</p>
+      </div>
+      <div class="card">
+        <div class="tool-icon">🔖</div>
+        <h4>Raindrop.io</h4>
+        <p>Free bookmark manager. Organize links by newsletter issue, share collections, generate RSS feeds. No cost required.</p>
+      </div>
+      <div class="card">
+        <div class="tool-icon">🧠</div>
+        <h4>Your Second Brain</h4>
+        <p>Any combination of tools that holds your curated links before you feed them to AI. Key: low-friction capture, organized retrieval.</p>
+      </div>
+      <div class="card">
+        <div class="tool-icon">📩</div>
+        <h4>Inbox Zero Strategy</h4>
+        <p>Treat your RSS inbox like email. Review once, save what's useful, discard the rest. Never browse — only process with intention.</p>
+      </div>
+    </div>
+
+    <div class="cheat-box">
+      <h3>⚡ Raindrop.io Quick-Start</h3>
+      <div class="cheat-rows">
+        <div class="cheat-row">
+          <span class="step-name">Step 1</span>
+          <span class="step-prompt">Create a free account at <strong>raindrop.io</strong> and install the browser extension.</span>
+        </div>
+        <div class="cheat-row">
+          <span class="step-name">Step 2</span>
+          <span class="step-prompt">Create a collection called <strong>Newsletter Content</strong> with sub-folders for each issue (Issue #1, Issue #2…).</span>
+        </div>
+        <div class="cheat-row">
+          <span class="step-name">Step 3</span>
+          <span class="step-prompt">Save links with one click each morning. Review and save the top 5 items. No reading required yet.</span>
+        </div>
+        <div class="cheat-row">
+          <span class="step-name">Step 4</span>
+          <span class="step-prompt">Copy the shareable web address of your collection. Paste these URLs directly into the AI in Pillar 2.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SYNTHESIS -->
+  <section class="cs" id="synthesis">
+    <span class="sec-eyebrow">Pillar 2</span>
+    <h2 class="sec-title">Synthesis — The Newsletter Architect</h2>
+    <div class="divider"></div>
+    <p class="sec-lead">This is where AI does the heavy lifting. Feed your curated URLs or pasted text into the Newsletter Architect and instruct it to extract the "So What?" — then generate a structural draft.</p>
+    <ul class="checklist">
+      <li><strong>Input options:</strong> paste raw URLs, full article text, or notes from your Second Brain.</li>
+      <li><strong>Define tone:</strong> warm and collegial, formal and research-forward, or casual and conversational.</li>
+      <li><strong>Select structure:</strong> choose from the sample structures below or define your own.</li>
+      <li><strong>Custom AI persona (Gem/GPT):</strong> a trained Newsletter Architect produces far better results than a generic prompt.</li>
+    </ul>
+    <div class="card-grid" style="margin-top:1.4rem;">
+      <div class="card">
+        <div class="tool-icon">🏗️</div>
+        <h4>Newsletter Architect Gem</h4>
+        <p>Custom Google Gemini Gem trained with your newsletter's tone, structure, and audience. Processes URLs and outputs a ready-to-edit draft.</p>
+      </div>
+      <div class="card">
+        <div class="tool-icon">🔄</div>
+        <h4>Learning Loop Gem</h4>
+        <p>Custom ChatGPT or Gemini persona focused on pedagogical alignment. Pushes drafts from reporting to teaching.</p>
+      </div>
+      <div class="card">
+        <div class="tool-icon">🤖</div>
+        <h4>Generic AI Tools</h4>
+        <p>Claude, ChatGPT, Gemini — any free tool works as a starting point. Custom Gems compress iteration time significantly.</p>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Sample Newsletter Structures</h3>
+      <div class="cheat-rows">
+        <div class="cheat-row">
+          <span class="step-name">Structure A</span>
+          <span class="step-prompt"><strong>The Hook</strong> → Feature Articles ×3 (headline + gist + "Why It Matters" + "Try This At Home") → AI Toolkit → 3-2-1 Summary</span>
+        </div>
+        <div class="cheat-row">
+          <span class="step-name">Structure B</span>
+          <span class="step-prompt"><strong>K-12 Community Pulse:</strong> Leadership Note → Campus Spotlights ×2 → Learning Lab Updates → Dates &amp; Deadlines → Home-School Bridge</span>
+        </div>
+        <div class="cheat-row">
+          <span class="step-name">Structure C</span>
+          <span class="step-prompt"><strong>Instructional Playbook:</strong> Weekly Theme → Quick Win Strategy → Peer Spotlight → Tech Tip → Evidence Corner → PD Calendar</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ITERATION -->
+  <section class="cs alt" id="iteration">
+    <span class="sec-eyebrow">Pillar 3</span>
+    <h2 class="sec-title">Iteration — The Learning Loop</h2>
+    <div class="divider"></div>
+    <p class="sec-lead">A newsletter shouldn't just be a list of links — it should be a <em>learning experience</em>. Use the Learning Loop to push every draft from reporting to teaching.</p>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-num" style="font-size:1.9rem;">🎯</div>
+        <h3>Actionable for Teachers</h3>
+        <p>Every section should answer: <em>"What can I do with this on Monday?"</em> If it can't be acted on, refine it until it can.</p>
+      </div>
+      <div class="card">
+        <div class="card-num" style="font-size:1.9rem;">📚</div>
+        <h3>Pedagogically Aligned</h3>
+        <p>Frame content through your district's instructional lens — UDL, PBL, HLP, or whatever your current focus is. The AI can hold that context.</p>
+      </div>
+      <div class="card">
+        <div class="card-num" style="font-size:1.9rem;">🔁</div>
+        <h3>Iterative Feedback</h3>
+        <p>Don't aim for perfection on draft one. Iterate 2–3 times. Each pass costs seconds — not hours — when using the Learning Loop.</p>
+      </div>
+    </div>
+
+    <div class="dark-cheat">
+      <h3>Iteration Prompts to Try</h3>
+      <div class="cheat-rows">
+        <div class="cheat-row dr">
+          <span class="step-name">Audience Lens</span>
+          <span class="step-prompt">"Rewrite this section for a 5th-grade teacher with no prior AI experience. Keep it under 100 words."</span>
+        </div>
+        <div class="cheat-row dr">
+          <span class="step-name">Action Check</span>
+          <span class="step-prompt">"Add a specific, classroom-ready action step to each article summary. One sentence. Start with a verb."</span>
+        </div>
+        <div class="cheat-row dr">
+          <span class="step-name">Tighten</span>
+          <span class="step-prompt">"Cut this down to 60% of its current length without losing the key insight or actionable takeaway."</span>
+        </div>
+        <div class="cheat-row dr">
+          <span class="step-name">Alignment</span>
+          <span class="step-prompt">"Reframe this through the lens of Universal Design for Learning (UDL). What principle does it support?"</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROMPTING -->
+  <section class="cs dark" id="prompting">
+    <span class="sec-eyebrow">Advanced Technique</span>
+    <h2 class="sec-title">The Role–Context–Task Formula</h2>
+    <div class="divider"></div>
+    <p class="sec-lead">Professional results need professional prompts. Don't just say "write a newsletter." Use the Role–Context–Task formula. This one shift changes everything.</p>
+
+    <div class="table-wrap">
+      <table class="prompt-table">
+        <thead>
+          <tr>
+            <th>Role</th>
+            <th>Context</th>
+            <th>Task</th>
+            <th>Example Prompt</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Classroom Teacher</td>
+            <td>Classroom-level communication and engagement</td>
+            <td>Summarize weekly updates</td>
+            <td><em>"Act as a 4th-grade teacher writing to parents. Summarize these three articles in warm, accessible language. Connect each to what we're learning this week."</em></td>
+          </tr>
+          <tr>
+            <td>Instructional Coach</td>
+            <td>Supporting teacher growth and instructional quality</td>
+            <td>Curate professional learning resources</td>
+            <td><em>"Act as a Lead Instructional Coach. Use our district's focus on UDL. Summarize these links and add a coaching question for each."</em></td>
+          </tr>
+          <tr>
+            <td>Campus Administrator</td>
+            <td>School vision, policies, and operations</td>
+            <td>Communicate campus priorities</td>
+            <td><em>"Act as a principal writing to teachers. Draft a brief, forward-looking section on campus AI readiness using these two articles as support."</em></td>
+          </tr>
+          <tr>
+            <td>Counselor</td>
+            <td>Student well-being and social-emotional support</td>
+            <td>Share student support strategies</td>
+            <td><em>"Act as a school counselor writing a parent tip section. Summarize these resources in family-friendly, non-alarmist language."</em></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prompt-cards">
+      <div class="prompt-card">
+        <span class="pl">Header Generation</span>
+        <h3>Visual Design Prompt</h3>
+        <div class="prompt-text">"Generate a newsletter header image for <strong>[newsletter name]</strong>. Theme: <strong>[topic]</strong>. Style: clean, professional, no distorted lettering. Colors: navy blue and gold. Text only: the newsletter name and issue number."</div>
+      </div>
+      <div class="prompt-card">
+        <span class="pl">Full Draft Prompt</span>
+        <h3>Newsletter Architect Starter</h3>
+        <div class="prompt-text">"Act as a Lead Instructional Coach creating a weekly newsletter for K-12 teachers. Input: <strong>[paste URLs]</strong>. Output: 3 feature articles (headline + gist + Why It Matters), one AI Toolkit tip, and a 3-2-1 Summary. Tone: collegial and energizing."</div>
+      </div>
+      <div class="prompt-card">
+        <span class="pl">Subject Lines</span>
+        <h3>Email Subject Generator</h3>
+        <div class="prompt-text">"Write 5 subject lines for a teacher newsletter about <strong>[topic]</strong>. Under 50 characters each. Mix: one number, one question, one urgency, one curiosity, one direct. No exclamation marks."</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORKFLOW -->
+  <section class="cs" id="workflow">
+    <span class="sec-eyebrow">The Master Workflow</span>
+    <h2 class="sec-title">20 Minutes, Start to Finish</h2>
+    <div class="divider"></div>
+    <p class="sec-lead">Four discrete phases, each with a focused output. Run through this once — you'll never go back to the 4-hour grind.</p>
+    <div class="workflow-grid">
+      <div class="wf-step">
+        <span class="wf-time">0 – 5 min</span>
+        <h3>Curate</h3>
+        <p>Open your Second Brain. Select your top 5 high-impact links from what you've passively saved this week.</p>
+      </div>
+      <div class="wf-step">
+        <span class="wf-time">5 – 10 min</span>
+        <h3>Synthesize</h3>
+        <p>Paste selected links into the Newsletter Architect. Run your Role–Context–Task prompt. Review the structural draft — don't edit yet.</p>
+      </div>
+      <div class="wf-step">
+        <span class="wf-time">10 – 15 min</span>
+        <h3>Iterate</h3>
+        <p>Refine using the Learning Loop. Add actionable takeaways. Check pedagogical alignment. Adjust tone. 1–2 passes maximum.</p>
+      </div>
+      <div class="wf-step">
+        <span class="wf-time">15 – 20 min</span>
+        <h3>Format</h3>
+        <p>Drop refined text into your newsletter template. Generate a clean header image using AI. Review, then send or schedule.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHEAT SHEET -->
+  <section class="cs alt" id="cheatsheet">
+    <span class="sec-eyebrow">Reference Guide</span>
+    <h2 class="sec-title">Prompt Cheat Sheet</h2>
+    <div class="divider"></div>
+    <p class="sec-lead">Keep this open during your first few newsletter sessions. Replace anything in brackets with your specifics. Copy and paste directly.</p>
+
+    <div class="cheat-box">
+      <h3>📋 Complete Workflow Prompts</h3>
+      <div class="cheat-rows">
+        <div class="cheat-row">
+          <span class="step-name">1. Set the Role</span>
+          <span class="step-prompt">"Act as a <strong>[Lead Instructional Coach / Campus Administrator / Classroom Teacher]</strong> creating a weekly newsletter for <strong>[audience]</strong>. Our current instructional focus is <strong>[topic/framework]</strong>."</span>
+        </div>
+        <div class="cheat-row">
+          <span class="step-name">2. Feed Content</span>
+          <span class="step-prompt">"Here are this week's resources: <strong>[paste 3–5 URLs or text]</strong>. For each, identify: (a) core insight, (b) why it matters to my audience, and (c) one classroom-ready action step."</span>
+        </div>
+        <div class="cheat-row">
+          <span class="step-name">3. Build Draft</span>
+          <span class="step-prompt">"Using that analysis, draft a newsletter: Hook → 3 Feature Articles (headline + gist + 'Why It Matters') → AI Toolkit tip → 3-2-1 Summary. Tone: <strong>[warm/energizing/formal]</strong>."</span>
+        </div>
+        <div class="cheat-row">
+          <span class="step-name">4. Iterate</span>
+          <span class="step-prompt">"Review the draft. Make it more actionable for a teacher skeptical of AI. Add a low-tech alternative for each AI suggestion. Cut to 80% of current length."</span>
+        </div>
+        <div class="cheat-row">
+          <span class="step-name">5. Subject Lines</span>
+          <span class="step-prompt">"Generate 5 email subject lines for this newsletter. Under 50 characters each. Mix: one question, one number, one curiosity hook, one direct, one urgency. No exclamation marks."</span>
+        </div>
+        <div class="cheat-row">
+          <span class="step-name">6. Header Image</span>
+          <span class="step-prompt">"Create a newsletter header. Name: <strong>[name]</strong>. Issue: <strong>[#]</strong>. Theme: <strong>[topic]</strong>. Style: professional, clean, no distorted text. Colors: navy and gold. Legible title text only."</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>Automated Visual Design Rules</h3>
+      <ul class="checklist">
+        <li>Keep header image text to the newsletter name and issue number only.</li>
+        <li>Use clean, standard fonts — no distorted or decorative lettering.</li>
+        <li>Stick to 2–3 brand colors maximum. More is noise.</li>
+        <li>If an image takes longer than 5 minutes to generate — you're overthinking it. Move on.</li>
+        <li>Regenerate with minor prompt tweaks rather than manually editing AI images.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- NEXT STEPS -->
+  <section class="cs dark" id="next">
+    <span class="sec-eyebrow">Your Challenge</span>
+    <h2 class="sec-title">Start Your Loop — Today</h2>
+    <div class="divider"></div>
+    <p class="sec-lead">Don't build a masterpiece. Pick one topic, run it through the architecture, and send it to three colleagues this week. Once you close that first loop, you won't go back.</p>
+    <div class="card-grid">
+      <div class="dark-card">
+        <span class="dc-num">1</span>
+        <h3>Choose One Topic</h3>
+        <p>Pick something your audience asked about recently, or a trending resource you've already saved. One topic only.</p>
+      </div>
+      <div class="dark-card">
+        <span class="dc-num">2</span>
+        <h3>Set Up Raindrop.io</h3>
+        <p>Free account, browser extension installed, one collection created. Takes 5 minutes. Start saving links immediately.</p>
+      </div>
+      <div class="dark-card">
+        <span class="dc-num">3</span>
+        <h3>Run the Workflow</h3>
+        <p>Use today's cheat sheet. Set the role, feed 3–5 links, draft, iterate once, format. Time yourself.</p>
+      </div>
+      <div class="dark-card">
+        <span class="dc-num">4</span>
+        <h3>Send to 3 Colleagues</h3>
+        <p>Not perfected — published. Real reader feedback improves your next issue more than another hour of editing.</p>
+      </div>
+    </div>
+    <div class="cta-block">
+      <h3>What will you start with?</h3>
+      <p>The system is built. The prompts are ready. The only variable left is you pressing send on issue #1. Close the loop.</p>
+    </div>
+  </section>
+
+  <!-- FACILITATOR -->
+  <div class="fac-bar">
+    <strong>Miguel Guhlin</strong> · Director of Professional Development, TCEA.org<br>
+    Educator · Writer · Technology Integration Specialist · District to Classroom<br>
+    <a href="mailto:mguhlin@tcea.org">mguhlin@tcea.org</a> ·
+    <a href="https://mguhlin.org" target="_blank">mguhlin.org</a>
+  </div>
+
+  <footer>
+    TCEA Lunch &amp; Learn · LL32526: AI-Powered Newsletter Architecture for Educators · March 25, 2026 · Facilitator: Miguel Guhlin
+  </footer>
+
+</main>
+
+<script>
+  // ── Mobile sidebar toggle ──
+  const hamburger = document.getElementById('hamburger');
+  const sidebar   = document.getElementById('sidebar');
+  const overlay   = document.getElementById('overlay');
+
+  function openSidebar()  { sidebar.classList.add('open');    overlay.classList.add('visible');    hamburger.classList.add('open'); }
+  function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('visible'); hamburger.classList.remove('open'); }
+
+  hamburger.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
+  overlay.addEventListener('click', closeSidebar);
+
+  document.querySelectorAll('.nav-link').forEach(link =>
+    link.addEventListener('click', () => { if (window.innerWidth <= 680) closeSidebar(); })
+  );
+
+  // ── Active link highlight on scroll ──
+  const sections = document.querySelectorAll('[id]');
+  const navLinks  = document.querySelectorAll('.nav-link');
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const a = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { threshold: 0.3, rootMargin: '-10% 0px -60% 0px' });
+
+  sections.forEach(s => io.observe(s));
+</script>
+</body>
+</html>
