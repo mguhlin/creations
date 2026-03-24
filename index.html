@@ -130,6 +130,9 @@ body::before {
   padding: 16px 20px;
   border-top: 1px solid var(--border-dark);
   margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 .sidebar-footer a {
   font-family: 'DM Mono', monospace;
@@ -274,6 +277,24 @@ body::before {
   line-height: 1.75;
   font-weight: 300;
   animation: fadeDown 0.7s 0.25s ease both;
+}
+.hero-link {
+  margin-bottom: 40px;
+  animation: fadeDown 0.7s 0.28s ease both;
+}
+.hero-link a {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.82rem;
+  color: var(--forest-light);
+  text-decoration: none;
+  padding: 8px 20px;
+  border: 1px solid rgba(116,198,157,0.3);
+  border-radius: 100px;
+  transition: background 0.2s, color 0.2s;
+}
+.hero-link a:hover {
+  background: rgba(116,198,157,0.15);
+  color: var(--forest-pale);
 }
 .hero-tally {
   display: flex;
@@ -631,6 +652,7 @@ footer {
   <div class="sidebar-section-label">Projects</div>
   <nav class="sidebar-nav" id="sidebar-nav"></nav>
   <div class="sidebar-footer">
+    <a href="https://go.mgpd.org/aic" target="_blank" rel="noopener">go.mgpd.org/aic</a>
     <a href="#top">↑ Back to top</a>
   </div>
 </aside>
@@ -645,6 +667,7 @@ footer {
       <h1 class="hero-title">Creative<br><em>Works</em></h1>
       <p class="hero-byline" id="hero-byline"></p>
       <p class="hero-desc" id="hero-desc"></p>
+      <p class="hero-link"><a href="https://go.mgpd.org/aic" target="_blank" rel="noopener">go.mgpd.org/aic</a></p>
       <div class="hero-tally" id="hero-tally"></div>
       <div class="hero-scroll">
         <span>Explore Projects</span>
