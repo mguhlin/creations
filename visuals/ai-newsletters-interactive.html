@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-Powered Newsletters — K-12 Educator Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --forest:        #2D6A4F;
+  --forest-deep:   #1B4332;
+  --forest-mid:    #40916C;
+  --forest-light:  #74C69D;
+  --forest-pale:   #B7E4C7;
+  --forest-faint:  #D8F3DC;
+  --charcoal:      #232526;
+  --charcoal-mid:  #2F3133;
+  --charcoal-soft: #414447;
+  --charcoal-dim:  #5A5F64;
+  --charcoal-mute: #8A9099;
+  --cream:         #F2EFE9;
+  --white:         #FFFFFF;
+  --gold:          #D4AC0D;
+  --gold-light:    #F1C40F;
+  --border-dark:   rgba(116,198,157,0.15);
+  --border-mid:    rgba(116,198,157,0.08);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--charcoal);
+  color: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+/* NAV */
+.topnav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  height: 56px;
+  background: rgba(27,67,50,0.96);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border-dark);
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+  gap: 8px;
+}
+.nav-brand {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--forest-pale);
+  text-decoration: none;
+  margin-right: 12px;
+  white-space: nowrap;
+}
+.nav-brand span { color: var(--forest-light); }
+.nav-links {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex: 1;
+}
+.nav-links::-webkit-scrollbar { display: none; }
+.nav-link {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: rgba(212,228,199,0.65);
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  white-space: nowrap;
+  transition: background 0.2s, color 0.2s;
+}
+.nav-link:hover { background: rgba(116,198,157,0.15); color: var(--forest-pale); }
+
+/* HERO */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 24px 60px;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 40%, rgba(45,106,79,0.28) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 40% at 15% 75%, rgba(27,67,50,0.45) 0%, transparent 55%),
+    radial-gradient(ellipse 30% 35% at 85% 20%, rgba(64,145,108,0.15) 0%, transparent 50%);
+  overflow: hidden;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(116,198,157,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(116,198,157,0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+  pointer-events: none;
+}
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+}
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(45,106,79,0.2);
+  border: 1px solid rgba(116,198,157,0.3);
+  border-radius: 100px;
+  padding: 6px 18px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--forest-light);
+  margin-bottom: 28px;
+}
+.eyebrow::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--forest-light);
+  animation: pulse 2.5s ease infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.4; transform: scale(0.7); }
+}
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  color: var(--cream);
+  margin-bottom: 24px;
+}
+.hero-title em {
+  font-style: italic;
+  color: var(--forest-light);
+}
+.hero-byline {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--charcoal-mute);
+  margin-bottom: 20px;
+}
+.hero-desc {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  font-weight: 300;
+  color: rgba(212,228,199,0.7);
+  max-width: 620px;
+  margin: 0 auto 40px;
+}
+.hero-tally {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-bottom: 48px;
+}
+.tally-item { text-align: center; }
+.tally-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: var(--forest-light);
+  line-height: 1;
+  display: block;
+}
+.tally-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--charcoal-mute);
+  margin-top: 4px;
+}
+.tally-divider {
+  width: 1px;
+  background: rgba(116,198,157,0.15);
+  align-self: stretch;
+}
+.hero-scroll {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(116,198,157,0.5);
+}
+.scroll-ring {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(116,198,157,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  animation: bounceDown 2.2s ease infinite;
+}
+@keyframes bounceDown {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(7px); }
+}
+
+/* ANIMATIONS */
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero-eyebrow { animation: fadeDown 0.7s 0.00s ease both; }
+.hero-title   { animation: fadeDown 0.7s 0.10s ease both; }
+.hero-byline  { animation: fadeDown 0.7s 0.18s ease both; }
+.hero-desc    { animation: fadeDown 0.7s 0.25s ease both; }
+.hero-tally   { animation: fadeDown 0.7s 0.32s ease both; }
+.hero-scroll  { animation: fadeDown 0.7s 0.38s ease both; }
+
+/* SECTION DIVIDER */
+.sec-divider {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 60px 32px 0;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.sec-divider-line {
+  flex: 1;
+  height: 1px;
+  background: rgba(116,198,157,0.12);
+}
+.sec-divider-lbl {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(116,198,157,0.4);
+}
+
+/* MAIN CONTENT */
+main { position: relative; z-index: 1; }
+
+.slides-container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 32px 24px 80px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* SLIDE CARD */
+.slide {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(116,198,157,0.1);
+  background: var(--charcoal-mid);
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: 200px;
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  scroll-margin-top: 72px;
+}
+.slide.visible { opacity: 1; transform: translateY(0); }
+.slide:hover { border-color: rgba(116,198,157,0.22); }
+
+.slide-panel {
+  background: linear-gradient(160deg, #1B4332 0%, #2D6A4F 100%);
+  padding: 36px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 1px solid rgba(116,198,157,0.12);
+}
+.slide-panel-dark {
+  background: linear-gradient(160deg, #0f2318 0%, #1B4332 100%);
+}
+.slide-panel-gold {
+  background: linear-gradient(160deg, #3a2800 0%, #5a4200 100%);
+  border-right-color: rgba(212,172,13,0.2);
+}
+.slide-number {
+  font-family: 'Playfair Display', serif;
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: rgba(116,198,157,0.2);
+  line-height: 1;
+}
+.slide-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--forest-light);
+  border: 1px solid rgba(116,198,157,0.3);
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 3px;
+  margin-bottom: 12px;
+}
+.slide-panel-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--cream);
+  line-height: 1.15;
+}
+
+.slide-body {
+  padding: 32px 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+}
+.slide-body p {
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: rgba(212,228,199,0.75);
+}
+
+/* STEP LIST */
+.step-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.step-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 0.875rem;
+  color: rgba(212,228,199,0.8);
+  line-height: 1.6;
+}
+.step-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 500;
+  background: rgba(45,106,79,0.4);
+  border: 1px solid rgba(116,198,157,0.3);
+  color: var(--forest-light);
+  border-radius: 50%;
+  width: 22px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* PROMPT BUILDER */
+.prompt-builder {
+  background: rgba(27,67,50,0.15);
+  border: 1px solid rgba(116,198,157,0.15);
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 8px;
+}
+.prompt-builder label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--forest-light);
+  display: block;
+  margin-bottom: 6px;
+}
+.prompt-builder select,
+.prompt-builder input {
+  width: 100%;
+  background: rgba(35,37,38,0.8);
+  border: 1px solid rgba(116,198,157,0.2);
+  border-radius: 6px;
+  color: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  padding: 8px 12px;
+  margin-bottom: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+}
+.prompt-builder select:focus,
+.prompt-builder input:focus { border-color: var(--forest-light); }
+.prompt-builder select option { background: var(--charcoal-mid); }
+.gen-btn {
+  background: var(--forest);
+  border: none;
+  border-radius: 7px;
+  color: var(--cream);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+.gen-btn:hover { background: var(--forest-mid); }
+.gen-btn:active { transform: scale(0.97); }
+.prompt-output {
+  margin-top: 14px;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(116,198,157,0.12);
+  border-radius: 6px;
+  padding: 14px 16px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--forest-pale);
+  line-height: 1.7;
+  display: none;
+  white-space: pre-wrap;
+}
+.copy-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid rgba(116,198,157,0.25);
+  color: var(--forest-light);
+  border-radius: 4px;
+  padding: 4px 10px;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.2s;
+  display: none;
+}
+.copy-btn:hover { background: rgba(116,198,157,0.1); }
+
+/* CHECKLIST */
+.checklist { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.check-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.875rem;
+  color: rgba(212,228,199,0.75);
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  transition: background 0.2s, border-color 0.2s;
+  user-select: none;
+}
+.check-item:hover { background: rgba(45,106,79,0.15); border-color: rgba(116,198,157,0.12); }
+.check-item.done { color: var(--forest-light); }
+.check-item.done .check-box { background: var(--forest); border-color: var(--forest-light); }
+.check-item.done .check-box::after { content: '✓'; }
+.check-box {
+  width: 18px; height: 18px;
+  border: 1px solid rgba(116,198,157,0.3);
+  border-radius: 4px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem;
+  color: var(--cream);
+  transition: background 0.2s, border-color 0.2s;
+}
+
+/* TOOL CARDS GRID */
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+  margin-top: 8px;
+}
+.tool-card {
+  background: rgba(27,67,50,0.2);
+  border: 1px solid rgba(116,198,157,0.12);
+  border-radius: 10px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+}
+.tool-card:hover { background: rgba(45,106,79,0.28); border-color: rgba(116,198,157,0.3); transform: translateY(-2px); }
+.tool-card.active { background: rgba(45,106,79,0.4); border-color: var(--forest-light); }
+.tool-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--cream);
+  margin-bottom: 4px;
+}
+.tool-role {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--forest-light);
+}
+.tool-detail {
+  margin-top: 14px;
+  background: rgba(0,0,0,0.2);
+  border: 1px solid rgba(116,198,157,0.1);
+  border-radius: 7px;
+  padding: 14px 16px;
+  font-size: 0.82rem;
+  color: rgba(212,228,199,0.75);
+  line-height: 1.65;
+  display: none;
+}
+.tool-detail.visible { display: block; }
+
+/* EXAMPLE NEWSLETTER PREVIEW */
+.newsletter-preview {
+  background: #fafaf8;
+  border-radius: 10px;
+  padding: 24px;
+  color: #1a1a1a;
+  font-family: Georgia, serif;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  border: 1px solid rgba(116,198,157,0.15);
+}
+.nl-header {
+  text-align: center;
+  border-bottom: 2px solid #2D6A4F;
+  padding-bottom: 14px;
+  margin-bottom: 18px;
+}
+.nl-title {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #1B4332;
+  margin-bottom: 4px;
+}
+.nl-sub {
+  font-size: 0.72rem;
+  color: #5A5F64;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: monospace;
+}
+.nl-section { margin-bottom: 16px; }
+.nl-section-title {
+  font-size: 0.68rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #2D6A4F;
+  margin-bottom: 6px;
+  font-family: monospace;
+}
+.nl-body { color: #333; font-size: 0.82rem; }
+.nl-highlight {
+  background: #D8F3DC;
+  border-left: 3px solid #2D6A4F;
+  padding: 8px 12px;
+  border-radius: 0 5px 5px 0;
+  color: #1B4332;
+  font-size: 0.8rem;
+  margin-top: 8px;
+}
+
+/* QUIZ */
+.quiz-q {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--cream);
+  margin-bottom: 14px;
+  line-height: 1.4;
+}
+.quiz-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+.quiz-option {
+  background: rgba(35,37,38,0.6);
+  border: 1px solid rgba(116,198,157,0.15);
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 0.875rem;
+  color: rgba(212,228,199,0.8);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  text-align: left;
+}
+.quiz-option:hover:not(.locked) { background: rgba(45,106,79,0.2); border-color: rgba(116,198,157,0.3); }
+.quiz-option.correct { background: rgba(45,106,79,0.4); border-color: var(--forest-light); color: var(--forest-pale); }
+.quiz-option.wrong { background: rgba(140,30,30,0.3); border-color: rgba(200,80,80,0.4); color: rgba(255,180,180,0.8); }
+.quiz-feedback {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--forest-light);
+  display: none;
+  padding: 8px 12px;
+  background: rgba(45,106,79,0.15);
+  border-radius: 6px;
+  border: 1px solid rgba(116,198,157,0.15);
+}
+.quiz-next {
+  background: transparent;
+  border: 1px solid rgba(116,198,157,0.3);
+  color: var(--forest-light);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
+  display: none;
+  transition: background 0.2s;
+}
+.quiz-next:hover { background: rgba(116,198,157,0.1); }
+.quiz-score {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--forest-light);
+  text-align: center;
+  display: none;
+}
+
+/* PROGRESS BAR */
+.progress-bar-wrap {
+  background: rgba(116,198,157,0.08);
+  border-radius: 20px;
+  height: 6px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  background: linear-gradient(90deg, var(--forest), var(--forest-light));
+  height: 100%;
+  border-radius: 20px;
+  transition: width 0.5s ease;
+  width: 0%;
+}
+
+/* FOOTER */
+footer {
+  background: var(--forest-deep);
+  border-top: 1px solid rgba(116,198,157,0.12);
+  padding: 36px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+.footer-brand {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--forest-pale);
+}
+.footer-brand span { color: var(--forest-light); }
+.footer-copy {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  color: rgba(116,198,157,0.3);
+}
+
+/* BACK TO TOP */
+#back-to-top {
+  position: fixed;
+  bottom: 28px; right: 28px;
+  z-index: 300;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--forest);
+  border: 1px solid rgba(116,198,157,0.3);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--forest-pale);
+  font-size: 1.1rem;
+  cursor: pointer;
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.3s, transform 0.3s, background 0.2s;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+#back-to-top.visible { opacity: 1; transform: translateY(0); }
+#back-to-top:hover { background: var(--forest-mid); }
+
+/* RESPONSIVE */
+@media (max-width: 860px) {
+  .slide { grid-template-columns: 1fr; }
+  .slide-panel { border-right: none; border-bottom: 1px solid rgba(116,198,157,0.12); padding: 24px 20px; flex-direction: row; align-items: center; gap: 16px; }
+  .slide-number { font-size: 2.5rem; }
+  .slide-body { padding: 20px; }
+  .topnav { padding: 0 16px; }
+  footer { padding: 24px 20px; flex-direction: column; align-items: flex-start; gap: 12px; }
+}
+@media (max-width: 520px) {
+  .hero-title { font-size: 2.5rem; }
+  .hero-tally { gap: 24px; }
+  .tally-num { font-size: 2rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="#top" class="nav-brand">AI <span>Newsletters</span></a>
+  <div class="nav-links">
+    <a href="#why" class="nav-link">Why AI?</a>
+    <a href="#workflow" class="nav-link">Workflow</a>
+    <a href="#prompts" class="nav-link">Prompt Builder</a>
+    <a href="#tools" class="nav-link">Tools</a>
+    <a href="#example" class="nav-link">Example</a>
+    <a href="#checklist" class="nav-link">Checklist</a>
+    <a href="#quiz" class="nav-link">Quiz</a>
+  </div>
+</nav>
+
+<section class="hero" id="top">
+  <div class="hero-inner">
+    <div class="eyebrow hero-eyebrow">K–12 Educator Resource · AI Productivity</div>
+    <h1 class="hero-title hero-title">AI-Powered<br><em>Newsletters</em></h1>
+    <p class="hero-byline hero-byline">For Classroom Teachers · Campus Communicators · Instructional Leaders</p>
+    <p class="hero-desc hero-desc">Turn your weekly updates from a chore into a conversation. Use AI to draft, personalize, and polish newsletters — in minutes, not hours.</p>
+    <div class="hero-tally hero-tally">
+      <div class="tally-item">
+        <span class="tally-num">5×</span>
+        <div class="tally-label">Faster Drafting</div>
+      </div>
+      <div class="tally-divider"></div>
+      <div class="tally-item">
+        <span class="tally-num">7</span>
+        <div class="tally-label">Workflow Steps</div>
+      </div>
+      <div class="tally-divider"></div>
+      <div class="tally-item">
+        <span class="tally-num">∞</span>
+        <div class="tally-label">Prompt Variants</div>
+      </div>
+    </div>
+    <div class="hero-scroll hero-scroll">
+      <div class="scroll-ring">↓</div>
+      Explore
+    </div>
+  </div>
+</section>
+
+<main>
+
+<!-- WHY AI -->
+<div class="sec-divider" id="why">
+  <div class="sec-divider-line"></div>
+  <span class="sec-divider-lbl">Why AI?</span>
+  <div class="sec-divider-line"></div>
+</div>
+<div class="slides-container">
+  <div class="slide" id="slide-why">
+    <div class="slide-panel">
+      <div class="slide-number">01</div>
+      <div>
+        <div class="slide-tag">The Case</div>
+        <div class="slide-panel-title">Why Use AI for Newsletters?</div>
+      </div>
+    </div>
+    <div class="slide-body">
+      <p>Teacher and administrator time is finite. Newsletters often get rushed, skipped, or stay stuck in the same tired template. AI changes that equation.</p>
+      <ul class="step-list">
+        <li><span class="step-num">→</span> Drafts in seconds, not hours — freeing you for higher-value work</li>
+        <li><span class="step-num">→</span> Consistent tone and structure every edition</li>
+        <li><span class="step-num">→</span> Adapts language for different audiences (parents, staff, students)</li>
+        <li><span class="step-num">→</span> Suggests sections you might forget (upcoming events, resources, shoutouts)</li>
+        <li><span class="step-num">→</span> You stay in control — AI is the first draft, not the final word</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- WORKFLOW -->
+<div class="sec-divider" id="workflow">
+  <div class="sec-divider-line"></div>
+  <span class="sec-divider-lbl">Workflow</span>
+  <div class="sec-divider-line"></div>
+</div>
+<div class="slides-container">
+
+  <div class="slide">
+    <div class="slide-panel slide-panel-dark">
+      <div class="slide-number">02</div>
+      <div>
+        <div class="slide-tag">Step 1</div>
+        <div class="slide-panel-title">Gather Your Raw Ingredients</div>
+      </div>
+    </div>
+    <div class="slide-body">
+      <p>Before opening any AI tool, collect your bullet points. AI can't invent facts for you — it needs your inputs to produce accurate content.</p>
+      <ul class="step-list">
+        <li><span class="step-num">1</span> List upcoming events with dates</li>
+        <li><span class="step-num">2</span> Note student or staff accomplishments to celebrate</li>
+        <li><span class="step-num">3</span> Jot any action items or reminders for families</li>
+        <li><span class="step-num">4</span> Identify the audience: parents, teachers, or students?</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-panel">
+      <div class="slide-number">03</div>
+      <div>
+        <div class="slide-tag">Step 2</div>
+        <div class="slide-panel-title">Write a Strong AI Prompt</div>
+      </div>
+    </div>
+    <div class="slide-body">
+      <p>Your prompt is a brief to an expert writer. The more specific you are, the better the draft. A strong newsletter prompt includes role, audience, tone, sections, and your raw bullet points.</p>
+      <div style="background:rgba(0,0,0,0.25);border-radius:8px;padding:14px;font-family:'DM Mono',monospace;font-size:0.76rem;color:var(--forest-pale);line-height:1.7;margin-top:8px;">
+        "You are a school newsletter writer. Draft a warm, friendly newsletter for elementary parents. Include: a welcome message, 3 upcoming events [list them], 1 staff spotlight, and a family tip. Keep it under 300 words. Tone: encouraging and clear."
+      </div>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-panel slide-panel-dark">
+      <div class="slide-number">04</div>
+      <div>
+        <div class="slide-tag">Step 3</div>
+        <div class="slide-panel-title">Review, Edit, Personalize</div>
+      </div>
+    </div>
+    <div class="slide-body">
+      <p>The AI draft is a starting point — not a finished product. Your job is to check facts, add specific names, adjust the voice to match yours, and remove anything that feels generic or off.</p>
+      <ul class="step-list">
+        <li><span class="step-num">✓</span> Verify all dates, names, and links</li>
+        <li><span class="step-num">✓</span> Add 1–2 personal touches the AI couldn't know</li>
+        <li><span class="step-num">✓</span> Read it aloud — does it sound like you?</li>
+        <li><span class="step-num">✓</span> Remove any vague filler phrases</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-panel">
+      <div class="slide-number">05</div>
+      <div>
+        <div class="slide-tag">Step 4</div>
+        <div class="slide-panel-title">Format and Distribute</div>
+      </div>
+    </div>
+    <div class="slide-body">
+      <p>Once your content is solid, drop it into your delivery platform. Keep formatting simple — clear headings, short paragraphs, one action item per section.</p>
+      <ul class="step-list">
+        <li><span class="step-num">→</span> Google Docs → Paste into email or PDF</li>
+        <li><span class="step-num">→</span> Smore, Canva, or Mailchimp for visual newsletters</li>
+        <li><span class="step-num">→</span> ClassDojo or Remind for quick parent push</li>
+        <li><span class="step-num">→</span> School website post for archive and accessibility</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- PROMPT BUILDER -->
+<div class="sec-divider" id="prompts">
+  <div class="sec-divider-line"></div>
+  <span class="sec-divider-lbl">Prompt Builder</span>
+  <div class="sec-divider-line"></div>
+</div>
+<div class="slides-container">
+  <div class="slide">
+    <div class="slide-panel">
+      <div class="slide-number">06</div>
+      <div>
+        <div class="slide-tag">Interactive</div>
+        <div class="slide-panel-title">Build Your Newsletter Prompt</div>
+      </div>
+    </div>
+    <div class="slide-body">
+      <p>Fill in the fields below and generate a ready-to-use AI prompt. Copy it directly into Claude, ChatGPT, or any AI tool.</p>
+      <div class="prompt-builder">
+        <label>Audience</label>
+        <select id="pb-audience">
+          <option value="elementary school parents">Elementary school parents</option>
+          <option value="middle school families">Middle school families</option>
+          <option value="high school students">High school students</option>
+          <option value="school staff and teachers">School staff and teachers</option>
+          <option value="the broader school community">The broader school community</option>
+        </select>
+        <label>Tone</label>
+        <select id="pb-tone">
+          <option value="warm and encouraging">Warm and encouraging</option>
+          <option value="professional and concise">Professional and concise</option>
+          <option value="upbeat and celebratory">Upbeat and celebratory</option>
+          <option value="calm and informative">Calm and informative</option>
+        </select>
+        <label>Newsletter Type</label>
+        <select id="pb-type">
+          <option value="weekly classroom update">Weekly classroom update</option>
+          <option value="monthly campus newsletter">Monthly campus newsletter</option>
+          <option value="back-to-school welcome letter">Back-to-school welcome letter</option>
+          <option value="end-of-semester recap">End-of-semester recap</option>
+          <option value="event announcement">Event announcement</option>
+        </select>
+        <label>Key Topics (your bullet points)</label>
+        <input type="text" id="pb-topics" placeholder="e.g. field trip May 10, reading goals, staff spotlight" />
+        <button class="gen-btn" onclick="generatePrompt()">Generate Prompt →</button>
+        <div class="prompt-output" id="pb-output"></div>
+        <button class="copy-btn" id="pb-copy" onclick="copyPrompt()">Copy Prompt</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOOLS -->
+<div class="sec-divider" id="tools">
+  <div class="sec-divider-line"></div>
+  <span class="sec-divider-lbl">AI Tools</span>
+  <div class="sec-divider-line"></div>
+</div>
+<div class="slides-container">
+  <div class="slide">
+    <div class="slide-panel slide-panel-dark">
+      <div class="slide-number">07</div>
+      <div>
+        <div class="slide-tag">Resources</div>
+        <div class="slide-panel-title">Which Tool Should You Use?</div>
+      </div>
+    </div>
+    <div class="slide-body">
+      <p>Several AI tools work well for newsletter drafting. Click any to learn more about when it fits best.</p>
+      <div class="tool-grid" id="tool-grid">
+        <div class="tool-card" onclick="showTool('claude')">
+          <div class="tool-name">Claude</div>
+          <div class="tool-role">Long-form · Nuanced</div>
+        </div>
+        <div class="tool-card" onclick="showTool('chatgpt')">
+          <div class="tool-name">ChatGPT</div>
+          <div class="tool-role">Versatile · Widely Used</div>
+        </div>
+        <div class="tool-card" onclick="showTool('gemini')">
+          <div class="tool-name">Gemini</div>
+          <div class="tool-role">Google Workspace</div>
+        </div>
+        <div class="tool-card" onclick="showTool('canva')">
+          <div class="tool-name">Canva AI</div>
+          <div class="tool-role">Design + Text</div>
+        </div>
+        <div class="tool-card" onclick="showTool('copilot')">
+          <div class="tool-name">Copilot</div>
+          <div class="tool-role">Microsoft 365</div>
+        </div>
+      </div>
+      <div class="tool-detail" id="tool-claude"><strong style="color:var(--forest-light)">Claude (Anthropic)</strong> — Excellent for longer, more carefully written newsletters. Handles nuance, tone adjustments, and multi-section structure very well. Free tier available at claude.ai. Best when you provide detailed prompts with clear context.</div>
+      <div class="tool-detail" id="tool-chatgpt"><strong style="color:var(--forest-light)">ChatGPT (OpenAI)</strong> — The most widely used option. Strong general-purpose drafting. Free tier at chatgpt.com. Works well for straightforward newsletters. Use GPT-4o for best results. Can browse the web if needed for current events.</div>
+      <div class="tool-detail" id="tool-gemini"><strong style="color:var(--forest-light)">Gemini (Google)</strong> — Integrates directly with Google Docs, Gmail, and Drive through Workspace. Ideal if your school uses Google Workspace for Education. Can pull context from your Drive files automatically.</div>
+      <div class="tool-detail" id="tool-canva"><strong style="color:var(--forest-light)">Canva Magic Write</strong> — Best when you want design and text in one workflow. Draft newsletter copy inside Canva directly, then apply templates for visual polish. Great for parent-facing newsletters that need to look polished.</div>
+      <div class="tool-detail" id="tool-copilot"><strong style="color:var(--forest-light)">Microsoft Copilot</strong> — Built into Word, Outlook, and Teams. If your district uses Microsoft 365, Copilot can draft newsletters inside Word and send via Outlook with one workflow. Check if your district has Copilot licensing.</div>
+    </div>
+  </div>
+</div>
+
+<!-- EXAMPLE -->
+<div class="sec-divider" id="example">
+  <div class="sec-divider-line"></div>
+  <span class="sec-divider-lbl">Example Output</span>
+  <div class="sec-divider-line"></div>
+</div>
+<div class="slides-container">
+  <div class="slide">
+    <div class="slide-panel">
+      <div class="slide-number">08</div>
+      <div>
+        <div class="slide-tag">See It In Action</div>
+        <div class="slide-panel-title">Sample AI-Generated Newsletter</div>
+      </div>
+    </div>
+    <div class="slide-body">
+      <p style="margin-bottom:12px;">Here's what a real AI draft looks like with a good prompt. Notice how it follows a clear structure — your job is to fill in real names and verify the details.</p>
+      <div class="newsletter-preview">
+        <div class="nl-header">
+          <div class="nl-title">🌱 Room 14 Weekly Update</div>
+          <div class="nl-sub">Week of April 7 · Ms. Rivera · 3rd Grade</div>
+        </div>
+        <div class="nl-section">
+          <div class="nl-section-title">👋 Hello, Families!</div>
+          <div class="nl-body">What a wonderful week in Room 14! Students have been diving into our Earth science unit with real curiosity and enthusiasm. We're proud of how hard everyone is working.</div>
+        </div>
+        <div class="nl-section">
+          <div class="nl-section-title">📅 Upcoming Events</div>
+          <div class="nl-body">
+            <strong>Apr 10</strong> — Spring Picture Day (wear your best smile!)<br>
+            <strong>Apr 15</strong> — Science Fair Project due<br>
+            <strong>Apr 22</strong> — Earth Day celebration on the playground
+          </div>
+        </div>
+        <div class="nl-section">
+          <div class="nl-section-title">⭐ Student Spotlight</div>
+          <div class="nl-body">This week we celebrate <strong>[Student Name]</strong> for their incredible effort on our persuasive writing unit. Their growth this semester has been inspiring to the whole class!</div>
+          <div class="nl-highlight">💡 <em>Tip from AI draft: Replace [Student Name] with the actual student's name before sending.</em></div>
+        </div>
+        <div class="nl-section">
+          <div class="nl-section-title">🏠 At-Home Connection</div>
+          <div class="nl-body">Ask your child: "What did you learn about the water cycle this week?" Research shows that family conversations about school content deepen retention.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKLIST -->
+<div class="sec-divider" id="checklist">
+  <div class="sec-divider-line"></div>
+  <span class="sec-divider-lbl">Pre-Send Checklist</span>
+  <div class="sec-divider-line"></div>
+</div>
+<div class="slides-container">
+  <div class="slide">
+    <div class="slide-panel slide-panel-dark">
+      <div class="slide-number">09</div>
+      <div>
+        <div class="slide-tag">Quality Control</div>
+        <div class="slide-panel-title">Before You Hit Send</div>
+      </div>
+    </div>
+    <div class="slide-body">
+      <p>AI drafts fast — but you're responsible for accuracy. Run through this checklist before distributing.</p>
+      <div style="margin-top:8px;">
+        <div class="progress-bar-wrap"><div class="progress-bar-fill" id="checklist-bar"></div></div>
+        <ul class="checklist" id="checklist-items">
+          <li class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box"></div> All dates and times verified against your actual calendar
+          </li>
+          <li class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box"></div> Student and staff names are spelled correctly
+          </li>
+          <li class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box"></div> No AI-generated placeholder text remains (e.g., [Student Name])
+          </li>
+          <li class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box"></div> Tone matches your school's communication standards
+          </li>
+          <li class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box"></div> Links tested and working
+          </li>
+          <li class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box"></div> No confidential student information included
+          </li>
+          <li class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box"></div> Read aloud once — does it sound natural, not robotic?
+          </li>
+          <li class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box"></div> Subject line is specific and compelling
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="sec-divider" id="quiz">
+  <div class="sec-divider-line"></div>
+  <span class="sec-divider-lbl">Knowledge Check</span>
+  <div class="sec-divider-line"></div>
+</div>
+<div class="slides-container">
+  <div class="slide">
+    <div class="slide-panel slide-panel-gold">
+      <div class="slide-number" style="color:rgba(212,172,13,0.25)">10</div>
+      <div>
+        <div class="slide-tag" style="color:var(--gold-light);border-color:rgba(212,172,13,0.4)">Quiz</div>
+        <div class="slide-panel-title">Test Your Knowledge</div>
+      </div>
+    </div>
+    <div class="slide-body">
+      <div id="quiz-container">
+        <div id="q-display">
+          <div class="quiz-q" id="quiz-question"></div>
+          <div class="quiz-options" id="quiz-options"></div>
+          <div class="quiz-feedback" id="quiz-feedback"></div>
+          <button class="quiz-next" id="quiz-next" onclick="nextQuestion()">Next Question →</button>
+        </div>
+        <div class="quiz-score" id="quiz-score"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="footer-brand">AI <span>Newsletter</span> Guide</div>
+  <div class="footer-copy">K–12 Educator Resource · Use Freely</div>
+</footer>
+
+<a href="#top" id="back-to-top">↑</a>
+
+<script>
+// SCROLL OBSERVER
+const btt = document.getElementById('back-to-top');
+window.addEventListener('scroll', () => btt.classList.toggle('visible', scrollY > 500), { passive: true });
+
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+}, { threshold: 0.08 });
+document.querySelectorAll('.slide').forEach(s => io.observe(s));
+
+// PROMPT BUILDER
+function generatePrompt() {
+  const audience = document.getElementById('pb-audience').value;
+  const tone = document.getElementById('pb-tone').value;
+  const type = document.getElementById('pb-type').value;
+  const topics = document.getElementById('pb-topics').value.trim() || 'your key bullet points here';
+
+  const prompt = `You are a professional school communicator writing for educators.
+
+Draft a ${type} for ${audience}. 
+
+Tone: ${tone}. 
+
+Include these sections:
+- A short, warm opening (2–3 sentences)
+- Key updates or announcements based on these points: ${topics}
+- One family engagement tip or reflection question
+- A brief closing with a positive note
+
+Keep total length under 350 words. Use clear headings for each section. Avoid jargon and generic filler phrases.`;
+
+  const out = document.getElementById('pb-output');
+  const copyBtn = document.getElementById('pb-copy');
+  out.textContent = prompt;
+  out.style.display = 'block';
+  copyBtn.style.display = 'inline-block';
+}
+
+function copyPrompt() {
+  const text = document.getElementById('pb-output').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('pb-copy');
+    btn.textContent = 'Copied ✓';
+    setTimeout(() => { btn.textContent = 'Copy Prompt'; }, 2000);
+  });
+}
+
+// TOOL CARDS
+let activeToolId = null;
+function showTool(id) {
+  const cards = document.querySelectorAll('.tool-card');
+  const details = document.querySelectorAll('.tool-detail');
+  details.forEach(d => { d.classList.remove('visible'); });
+  cards.forEach(c => c.classList.remove('active'));
+
+  if (activeToolId === id) {
+    activeToolId = null;
+    return;
+  }
+
+  const detail = document.getElementById('tool-' + id);
+  if (detail) { detail.classList.add('visible'); }
+
+  const grid = document.getElementById('tool-grid');
+  const clickedCard = [...grid.children].find(c => c.getAttribute('onclick') === `showTool('${id}')`);
+  if (clickedCard) clickedCard.classList.add('active');
+  activeToolId = id;
+}
+
+// CHECKLIST
+function toggleCheck(el) {
+  el.classList.toggle('done');
+  updateProgress();
+}
+function updateProgress() {
+  const items = document.querySelectorAll('.check-item');
+  const done = document.querySelectorAll('.check-item.done').length;
+  const pct = Math.round((done / items.length) * 100);
+  document.getElementById('checklist-bar').style.width = pct + '%';
+}
+
+// QUIZ
+const questions = [
+  {
+    q: "What is the most important thing to do BEFORE writing your AI newsletter prompt?",
+    options: ["Open the AI tool immediately", "Gather your bullet points: events, names, key facts", "Choose a fancy template", "Ask a colleague to write it"],
+    correct: 1,
+    feedback: "Correct! AI can't invent facts. Feed it your real content first, then let it draft."
+  },
+  {
+    q: "An AI returns a newsletter draft with the text '[Student Name]'. What should you do?",
+    options: ["Leave it — parents will understand", "Send it immediately, it looks official", "Replace it with the actual student's name before sending", "Delete that whole section"],
+    correct: 2,
+    feedback: "Right! Always replace placeholder text before distributing. Accuracy is your responsibility."
+  },
+  {
+    q: "Which of these makes a newsletter prompt stronger?",
+    options: ["'Write me a newsletter.'", "'Write a warm weekly update for 3rd grade parents with these 3 events and a staff spotlight.'", "'Be creative.'", "'Make it long and detailed.'"],
+    correct: 1,
+    feedback: "Exactly! Specific prompts with audience, tone, structure, and content produce far better drafts."
+  },
+  {
+    q: "Who is responsible for the accuracy of content in an AI-drafted newsletter?",
+    options: ["The AI tool", "The tool's company", "The educator who sends it", "No one — AI is always accurate"],
+    correct: 2,
+    feedback: "You are. AI can make up facts (hallucinate). Always verify dates, names, and details before sending."
+  },
+  {
+    q: "What is the best way to think about an AI-generated newsletter draft?",
+    options: ["A finished product, ready to send", "A first draft that you review, edit, and personalize", "Something to ignore and start over from", "A replacement for your own voice"],
+    correct: 1,
+    feedback: "Perfect. AI handles the blank-page problem. You handle accuracy, personalization, and final judgment."
+  }
+];
+
+let currentQ = 0;
+let score = 0;
+let answered = false;
+
+function loadQuestion() {
+  const q = questions[currentQ];
+  document.getElementById('quiz-question').textContent = `Question ${currentQ + 1} of ${questions.length}: ${q.q}`;
+  const opts = document.getElementById('quiz-options');
+  opts.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-option';
+    btn.textContent = opt;
+    btn.onclick = () => selectAnswer(i);
+    opts.appendChild(btn);
+  });
+  document.getElementById('quiz-feedback').style.display = 'none';
+  document.getElementById('quiz-next').style.display = 'none';
+  answered = false;
+}
+
+function selectAnswer(i) {
+  if (answered) return;
+  answered = true;
+  const q = questions[currentQ];
+  const opts = document.querySelectorAll('.quiz-option');
+  opts.forEach((btn, idx) => {
+    btn.classList.add('locked');
+    if (idx === q.correct) btn.classList.add('correct');
+    else if (idx === i && i !== q.correct) btn.classList.add('wrong');
+  });
+  if (i === q.correct) score++;
+  const fb = document.getElementById('quiz-feedback');
+  fb.textContent = q.feedback;
+  fb.style.display = 'block';
+  const nextBtn = document.getElementById('quiz-next');
+  nextBtn.textContent = currentQ < questions.length - 1 ? 'Next Question →' : 'See My Score →';
+  nextBtn.style.display = 'inline-block';
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ < questions.length) {
+    loadQuestion();
+  } else {
+    document.getElementById('q-display').style.display = 'none';
+    const scoreEl = document.getElementById('quiz-score');
+    scoreEl.style.display = 'block';
+    const pct = Math.round((score / questions.length) * 100);
+    let msg = pct === 100 ? '🏆 Perfect Score!' : pct >= 80 ? '✅ Strong Understanding' : pct >= 60 ? '📝 Good — Review a few sections' : '🔄 Revisit the guide above';
+    scoreEl.innerHTML = `<div style="font-size:1.1rem;color:var(--charcoal-mute);font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">Your Score</div>${score} / ${questions.length}<div style="font-size:0.85rem;color:var(--charcoal-mute);font-family:'DM Sans',sans-serif;margin-top:8px;font-weight:300;">${msg}</div><button class='gen-btn' style='margin-top:16px;' onclick='restartQuiz()'>Retake Quiz</button>`;
+  }
+}
+
+function restartQuiz() {
+  currentQ = 0; score = 0;
+  document.getElementById('q-display').style.display = 'block';
+  document.getElementById('quiz-score').style.display = 'none';
+  loadQuestion();
+}
+
+// INIT
+loadQuestion();
+</script>
+</body>
+</html>
