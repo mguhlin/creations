@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Prompt Library — MGuhlin.org</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --forest:#2D6A4F;--forest-deep:#1B4332;--forest-mid:#40916C;--forest-light:#74C69D;
+  --forest-pale:#B7E4C7;--forest-faint:#D8F3DC;--charcoal:#232526;--charcoal-mid:#2F3133;
+  --charcoal-soft:#414447;--charcoal-dim:#5A5F64;--charcoal-mute:#8A9099;
+  --cream:#F2EFE9;--gold:#D4AC0D;--gold-light:#F1C40F;
+  --border-dark:rgba(116,198,157,0.15);--border-mid:rgba(116,198,157,0.08);
+  --sidebar-w:260px;--topnav-h:56px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--charcoal);color:var(--cream);font-family:'DM Sans',sans-serif;font-weight:300;line-height:1.7;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.6}
+
+/* TOP NAV */
+.topnav{position:fixed;top:0;left:0;right:0;z-index:300;height:var(--topnav-h);background:rgba(27,67,50,0.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--border-dark);display:flex;align-items:center;padding:0 20px;gap:12px}
+.nav-hamburger{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:36px;height:36px;background:none;border:1px solid var(--border-dark);border-radius:6px;cursor:pointer;flex-shrink:0}
+.nav-hamburger span{display:block;width:18px;height:2px;background:var(--forest-light);border-radius:2px;transition:transform .25s,opacity .25s}
+.nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-hamburger.open span:nth-child(2){opacity:0}
+.nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.nav-brand{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--forest-pale);text-decoration:none;white-space:nowrap}
+.nav-brand span{color:var(--forest-light)}
+.nav-spacer{flex:1}
+.nav-count{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--charcoal-mute);white-space:nowrap;flex-shrink:0}
+.nav-count strong{color:var(--forest-light)}
+.nav-search{position:relative;display:flex;align-items:center}
+.nav-search-icon{position:absolute;left:10px;color:var(--charcoal-mute);font-size:.75rem;pointer-events:none}
+.search-input{background:rgba(116,198,157,.08);border:1px solid var(--border-dark);border-radius:20px;padding:6px 14px 6px 30px;color:var(--cream);font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.06em;outline:none;width:190px;transition:width .3s,border-color .2s}
+.search-input::placeholder{color:var(--charcoal-mute)}
+.search-input:focus{width:240px;border-color:rgba(116,198,157,.4)}
+
+/* LAYOUT */
+.layout{display:flex;padding-top:var(--topnav-h);min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{position:fixed;top:var(--topnav-h);left:0;bottom:0;width:var(--sidebar-w);background:var(--charcoal-mid);border-right:1px solid var(--border-dark);overflow-y:auto;overflow-x:hidden;z-index:200;display:flex;flex-direction:column;scrollbar-width:thin;scrollbar-color:rgba(116,198,157,.15) transparent;transition:transform .3s ease}
+.sidebar::-webkit-scrollbar{width:4px}
+.sidebar::-webkit-scrollbar-thumb{background:rgba(116,198,157,.15);border-radius:2px}
+.sidebar-header{padding:18px 16px 14px;border-bottom:1px solid var(--border-mid)}
+.sidebar-title{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(116,198,157,.4);margin-bottom:12px}
+.sidebar-types{display:flex;flex-wrap:wrap;gap:5px}
+.type-pill{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:100px;cursor:pointer;border:1px solid var(--border-dark);background:transparent;color:rgba(116,198,157,.5);transition:all .18s;white-space:nowrap}
+.type-pill:hover{color:var(--forest-pale);border-color:rgba(116,198,157,.35)}
+.type-pill.active{background:var(--forest);border-color:var(--forest-mid);color:var(--cream)}
+.sidebar-nav{flex:1;padding:8px 0 20px}
+.sidebar-section-label{font-family:'DM Mono',monospace;font-size:.52rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(116,198,157,.28);padding:12px 16px 4px}
+.sidebar-link{display:flex;align-items:center;gap:9px;padding:8px 16px;text-decoration:none;color:rgba(212,228,199,.6);font-size:.79rem;font-weight:400;border-left:2px solid transparent;transition:all .18s;cursor:pointer}
+.sidebar-link:hover{color:var(--forest-pale);background:rgba(116,198,157,.06);border-left-color:rgba(116,198,157,.3)}
+.sidebar-link.active{color:var(--forest-pale);background:rgba(45,106,79,.15);border-left-color:var(--forest-light);font-weight:500}
+.sidebar-link-icon{font-size:.82rem;flex-shrink:0;width:16px;text-align:center;opacity:.75}
+.sidebar-link-count{margin-left:auto;font-family:'DM Mono',monospace;font-size:.56rem;background:rgba(116,198,157,.1);color:var(--forest-light);padding:1px 7px;border-radius:100px;letter-spacing:.04em}
+.sidebar-footer{padding:12px 16px;border-top:1px solid var(--border-mid)}
+.sidebar-footer-text{font-family:'DM Mono',monospace;font-size:.56rem;letter-spacing:.07em;color:rgba(116,198,157,.22);line-height:1.7}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:190;backdrop-filter:blur(2px)}
+
+/* MAIN */
+.main-content{flex:1;margin-left:var(--sidebar-w);min-width:0;position:relative;z-index:1}
+
+/* HERO */
+.hero{min-height:50vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:70px 40px 52px;position:relative;overflow:hidden;background:radial-gradient(ellipse 70% 55% at 50% 40%,rgba(45,106,79,.28) 0%,transparent 65%),radial-gradient(ellipse 40% 40% at 15% 75%,rgba(27,67,50,.45) 0%,transparent 55%),radial-gradient(ellipse 30% 35% at 85% 20%,rgba(64,145,108,.15) 0%,transparent 50%)}
+.hero::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(116,198,157,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(116,198,157,.04) 1px,transparent 1px);background-size:56px 56px;pointer-events:none}
+.hero-inner{position:relative;z-index:1;max-width:620px}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(45,106,79,.2);border:1px solid rgba(116,198,157,.3);border-radius:100px;padding:6px 18px;font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--forest-light);margin-bottom:18px;animation:fadeDown .7s .0s ease both}
+.hero-eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--forest-light);animation:pulse 2.5s ease infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.8rem);font-weight:900;line-height:.95;letter-spacing:-.025em;color:var(--cream);margin-bottom:14px;animation:fadeDown .7s .1s ease both}
+.hero-title em{font-style:italic;color:var(--forest-light)}
+.hero-desc{font-size:.9rem;color:rgba(212,228,199,.7);max-width:500px;margin:0 auto 26px;animation:fadeDown .7s .22s ease both}
+.hero-tally{display:flex;justify-content:center;align-items:center;gap:20px;flex-wrap:wrap;animation:fadeDown .7s .3s ease both}
+.tally-item{text-align:center}
+.tally-num{font-family:'Playfair Display',serif;font-size:2.1rem;font-weight:700;color:var(--forest-light);line-height:1;display:block}
+.tally-label{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--charcoal-mute);margin-top:4px}
+.tally-divider{width:1px;height:34px;background:rgba(116,198,157,.15)}
+
+/* SECTION DIVIDER */
+.sec-divider{display:flex;align-items:center;gap:14px;padding:50px 28px 4px;scroll-margin-top:calc(var(--topnav-h) + 12px)}
+.sec-divider-line{flex:1;height:1px;background:rgba(116,198,157,.12)}
+.sec-divider-lbl{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(116,198,157,.4);white-space:nowrap}
+.sec-divider-icon{font-size:.88rem;opacity:.5;flex-shrink:0}
+
+/* GRID */
+.prompts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px;padding:14px 28px 56px}
+
+/* CARD */
+.pcard{position:relative;background:var(--charcoal-mid);border:1px solid rgba(116,198,157,.1);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;opacity:0;transform:translateY(24px);transition:opacity .55s ease,transform .55s ease,border-color .2s,box-shadow .2s}
+.pcard.visible{opacity:1;transform:translateY(0)}
+.pcard:hover{border-color:rgba(116,198,157,.25);box-shadow:0 8px 32px rgba(0,0,0,.25)}
+.pcard-header{background:linear-gradient(160deg,#1B4332 0%,#2D6A4F 100%);padding:13px 15px 11px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.pcard-meta{flex:1;min-width:0}
+.pcard-cat{font-family:'DM Mono',monospace;font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--forest-light);opacity:.8;margin-bottom:4px}
+.pcard-title{font-family:'Playfair Display',serif;font-size:.97rem;font-weight:700;color:var(--forest-pale);line-height:1.2}
+.pcard-type{font-family:'DM Mono',monospace;font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:100px;flex-shrink:0;margin-top:2px}
+.type-short{background:rgba(116,198,157,.15);color:var(--forest-light);border:1px solid rgba(116,198,157,.2)}
+.type-long{background:rgba(212,172,13,.12);color:var(--gold-light);border:1px solid rgba(212,172,13,.2)}
+.type-mega{background:rgba(255,100,50,.1);color:#FF8C5A;border:1px solid rgba(255,100,50,.2)}
+.pcard-body{padding:12px 15px;flex:1;display:flex;flex-direction:column}
+.pcard-desc{font-size:.78rem;color:rgba(212,228,199,.65);margin-bottom:10px;line-height:1.55}
+.pcard-prompt{background:rgba(27,67,50,.3);border:1px solid rgba(116,198,157,.1);border-radius:8px;padding:10px 12px;font-family:'DM Mono',monospace;font-size:.68rem;line-height:1.65;color:rgba(242,239,233,.82);max-height:108px;overflow:hidden;position:relative;transition:max-height .4s ease;white-space:pre-wrap;word-break:break-word}
+.pcard-prompt.expanded{max-height:2400px}
+.pcard-prompt::after{content:'';position:absolute;bottom:0;left:0;right:0;height:36px;background:linear-gradient(transparent,rgba(47,49,51,.96));pointer-events:none;transition:opacity .3s}
+.pcard-prompt.expanded::after{opacity:0}
+.pcard-actions{display:flex;gap:8px;margin-top:9px;align-items:center}
+.btn-expand,.btn-copy{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border-radius:6px;border:1px solid var(--border-dark);cursor:pointer;transition:all .18s;white-space:nowrap}
+.btn-expand{background:transparent;color:rgba(116,198,157,.7)}
+.btn-expand:hover{background:rgba(116,198,157,.08);color:var(--forest-pale)}
+.btn-copy{background:rgba(45,106,79,.3);color:var(--forest-light);border-color:rgba(116,198,157,.2);margin-left:auto}
+.btn-copy:hover{background:var(--forest);color:var(--cream)}
+.btn-copy.copied{background:rgba(116,198,157,.2);color:var(--forest-faint)}
+.no-results{padding:80px 20px;text-align:center;color:var(--charcoal-mute);font-family:'DM Mono',monospace;font-size:.78rem;letter-spacing:.1em;display:none}
+
+/* BACK TO TOP */
+#back-to-top{position:fixed;bottom:24px;right:24px;z-index:400;width:42px;height:42px;border-radius:50%;background:var(--forest);border:1px solid rgba(116,198,157,.3);display:flex;align-items:center;justify-content:center;color:var(--forest-pale);font-size:1rem;text-decoration:none;opacity:0;transform:translateY(12px);transition:opacity .3s,transform .3s,background .2s;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+#back-to-top.visible{opacity:1;transform:translateY(0)}
+#back-to-top:hover{background:var(--forest-mid)}
+
+/* FOOTER */
+footer{background:var(--forest-deep);border-top:1px solid rgba(116,198,157,.12);padding:26px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.footer-brand{font-family:'Playfair Display',serif;font-size:.9rem;color:var(--forest-pale)}
+.footer-brand span{color:var(--forest-light)}
+.footer-copy{font-family:'DM Mono',monospace;font-size:.56rem;color:rgba(116,198,157,.28);letter-spacing:.06em}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  :root{--sidebar-w:220px}
+  .prompts-grid{grid-template-columns:repeat(auto-fill,minmax(300px,1fr));padding:14px 20px 52px}
+}
+@media(max-width:768px){
+  .nav-hamburger{display:flex}
+  .nav-count{display:none}
+  .sidebar{transform:translateX(-100%);width:min(var(--sidebar-w),85vw);z-index:250;box-shadow:4px 0 24px rgba(0,0,0,.4)}
+  .sidebar.open{transform:translateX(0)}
+  .sidebar-overlay.open{display:block}
+  .main-content{margin-left:0}
+  .hero{padding:54px 20px 38px;min-height:auto}
+  .prompts-grid{grid-template-columns:1fr;padding:12px 16px 44px;gap:13px}
+  .sec-divider{padding:38px 16px 4px}
+  .search-input{width:120px}
+  .search-input:focus{width:150px}
+  footer{padding:18px 16px;flex-direction:column;align-items:flex-start;gap:10px}
+}
+@media(max-width:400px){
+  .hero-title{font-size:1.9rem}
+  .tally-divider{display:none}
+  .hero-tally{gap:12px}
+  .topnav{padding:0 12px}
+}
+
+/* ═══════════════════════════════════════════
+   PROMPT ARCHITECT TOOL
+═══════════════════════════════════════════ */
+.tool-wrapper{padding:16px 28px 52px}
+.tool-panel{background:var(--charcoal-mid);border:1px solid var(--border-dark);border-radius:14px;overflow:hidden}
+.tool-panel-header{background:linear-gradient(160deg,#1B4332 0%,#2D6A4F 100%);padding:22px 24px 18px;display:flex;align-items:center;gap:14px}
+.tool-panel-icon{font-size:1.6rem}
+.tool-panel-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--forest-pale)}
+.tool-panel-sub{font-size:.78rem;color:rgba(183,228,199,.65);margin-top:2px}
+.tool-body{padding:24px}
+.tool-field{margin-bottom:20px}
+.tool-label{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(116,198,157,.6);display:block;margin-bottom:8px}
+.tool-textarea,.tool-select{width:100%;background:rgba(27,67,50,.3);border:1px solid var(--border-dark);border-radius:8px;padding:13px 15px;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:.88rem;line-height:1.6;resize:vertical;outline:none;transition:border-color .2s;box-sizing:border-box}
+.tool-textarea:focus,.tool-select:focus{border-color:rgba(116,198,157,.45)}
+.tool-textarea::placeholder{color:var(--charcoal-mute)}
+.tool-select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2374C69D' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.tool-select option{background:#2F3133;color:var(--cream)}
+.btn-generate{width:100%;padding:14px 20px;background:var(--forest);border:1px solid rgba(116,198,157,.3);border-radius:8px;color:var(--cream);font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;font-weight:500;transition:background .2s,box-shadow .2s}
+.btn-generate:hover{background:var(--forest-mid);box-shadow:0 4px 16px rgba(45,106,79,.4)}
+.tool-output{margin-top:22px;display:none;animation:fadeDown .4s ease}
+.output-box{background:rgba(27,67,50,.3);border:1px solid rgba(116,198,157,.15);border-radius:8px;padding:16px;position:relative}
+.output-copy-btn{position:absolute;top:10px;right:10px;font-family:'DM Mono',monospace;font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:6px;border:1px solid var(--border-dark);background:var(--charcoal-soft);color:var(--forest-light);cursor:pointer;transition:all .18s}
+.output-copy-btn:hover{background:var(--forest);color:var(--cream)}
+.output-pre{font-family:'DM Mono',monospace;font-size:.7rem;line-height:1.7;color:rgba(242,239,233,.85);white-space:pre-wrap;word-break:break-word;margin:0;padding-right:60px}
+.rec-box{background:rgba(212,172,13,.07);border:1px solid rgba(212,172,13,.2);border-radius:8px;padding:14px 16px;margin-top:14px}
+.rec-label{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.rec-text{font-size:.8rem;color:rgba(212,228,199,.75);line-height:1.55}
+.rec-text strong{color:var(--gold-light)}
+
+/* ═══════════════════════════════════════════
+   GLOSSARY
+═══════════════════════════════════════════ */
+.glossary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;padding:16px 28px 52px}
+.gcard{background:var(--charcoal-mid);border:1px solid var(--border-dark);border-radius:10px;padding:16px 18px;opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease,border-color .2s}
+.gcard.visible{opacity:1;transform:translateY(0)}
+.gcard:hover{border-color:rgba(116,198,157,.25)}
+.gterm{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.1em;color:var(--forest-light);display:block;margin-bottom:6px}
+.gdef{font-size:.78rem;color:rgba(212,228,199,.65);line-height:1.55}
+
+/* ═══════════════════════════════════════════
+   AI WORKFLOW MODELS
+═══════════════════════════════════════════ */
+.workflow-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:18px;padding:16px 28px 60px}
+.wcard{background:var(--charcoal-mid);border:1px solid var(--border-dark);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;opacity:0;transform:translateY(24px);transition:opacity .55s ease,transform .55s ease,border-color .2s}
+.wcard.visible{opacity:1;transform:translateY(0)}
+.wcard:hover{border-color:rgba(116,198,157,.25)}
+.wcard-header{padding:18px 18px 14px;border-bottom:1px solid var(--border-mid)}
+.wcard-header.pbl{background:linear-gradient(160deg,#1a3a6e 0%,#1e4d8c 100%)}
+.wcard-header.uc{background:linear-gradient(160deg,#0d3d30 0%,#136247 100%)}
+.wcard-eyebrow{font-family:'DM Mono',monospace;font-size:.56rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:4px}
+.wcard-header.pbl .wcard-eyebrow{color:rgba(100,160,255,.7)}
+.wcard-header.uc .wcard-eyebrow{color:rgba(116,198,157,.7)}
+.wcard-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--forest-pale)}
+.wcard-focus{font-size:.75rem;color:rgba(212,228,199,.6);margin-top:4px;line-height:1.5}
+.wcard-body{padding:16px 18px;flex:1}
+.wcard-section{margin-bottom:16px}
+.wcard-section-lbl{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(116,198,157,.5);margin-bottom:10px}
+.wcard-item{padding:9px 12px;background:rgba(27,67,50,.25);border:1px solid var(--border-mid);border-radius:6px;margin-bottom:7px}
+.wcard-item-title{font-size:.78rem;font-weight:500;color:var(--cream)}
+.wcard-item-value{font-size:.72rem;color:rgba(116,198,157,.75);margin-top:3px;font-style:italic}
+.pillar-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.ptag{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:100px;font-weight:500}
+.ptag-data{background:rgba(100,160,255,.12);color:#7eb3ff;border:1px solid rgba(100,160,255,.2)}
+.ptag-rep{background:rgba(212,172,13,.12);color:var(--gold-light);border:1px solid rgba(212,172,13,.2)}
+.ptag-pred{background:rgba(255,100,50,.1);color:#FF8C5A;border:1px solid rgba(255,100,50,.2)}
+.ptag-gen{background:rgba(116,198,157,.12);color:var(--forest-light);border:1px solid rgba(116,198,157,.2)}
+
+@media(max-width:768px){
+  .tool-wrapper,.glossary-grid,.workflow-grid{padding-left:16px;padding-right:16px}
+  .workflow-grid{grid-template-columns:1fr}
+  .glossary-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:480px){
+  .glossary-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <button class="nav-hamburger" id="hamburger" aria-label="Toggle navigation">
+    <span></span><span></span><span></span>
+  </button>
+  <a href="#top" class="nav-brand">MG<span>uhlin</span> Prompts</a>
+  <div class="nav-spacer"></div>
+  <div class="nav-count">Showing <strong id="visible-count">0</strong> of <strong id="total-count">0</strong></div>
+  <div class="nav-search">
+    <span class="nav-search-icon">🔍</span>
+    <input type="text" class="search-input" id="searchInput" placeholder="Search prompts…" aria-label="Search prompts">
+  </div>
+</nav>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">Filter by Type</div>
+    <div class="sidebar-types">
+      <button class="type-pill active" data-filter="all">All</button>
+      <button class="type-pill" data-filter="short">Short</button>
+      <button class="type-pill" data-filter="long">Long</button>
+      <button class="type-pill" data-filter="mega">Mega/System</button>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Categories</div>
+    <a href="#top" class="sidebar-link active" data-cat="all-cat" onclick="handleCatClick(event,'all-cat')"><span class="sidebar-link-icon">🗂</span>All Categories<span class="sidebar-link-count" id="cnt-all">0</span></a>
+    <a href="#prompt-engineering" class="sidebar-link" data-cat="prompt-engineering" onclick="handleCatClick(event,'prompt-engineering')"><span class="sidebar-link-icon">⚙️</span>Prompt Engineering<span class="sidebar-link-count" id="cnt-prompt-engineering">0</span></a>
+    <a href="#writing-style" class="sidebar-link" data-cat="writing-style" onclick="handleCatClick(event,'writing-style')"><span class="sidebar-link-icon">✍️</span>Writing &amp; Style<span class="sidebar-link-count" id="cnt-writing-style">0</span></a>
+    <a href="#critical-thinking" class="sidebar-link" data-cat="critical-thinking" onclick="handleCatClick(event,'critical-thinking')"><span class="sidebar-link-icon">🔬</span>Critical Thinking<span class="sidebar-link-count" id="cnt-critical-thinking">0</span></a>
+    <a href="#education" class="sidebar-link" data-cat="education" onclick="handleCatClick(event,'education')"><span class="sidebar-link-icon">🎓</span>Education<span class="sidebar-link-count" id="cnt-education">0</span></a>
+    <a href="#content-marketing" class="sidebar-link" data-cat="content-marketing" onclick="handleCatClick(event,'content-marketing')"><span class="sidebar-link-icon">📣</span>Content &amp; Marketing<span class="sidebar-link-count" id="cnt-content-marketing">0</span></a>
+    <a href="#productivity" class="sidebar-link" data-cat="productivity" onclick="handleCatClick(event,'productivity')"><span class="sidebar-link-icon">⚡</span>Productivity<span class="sidebar-link-count" id="cnt-productivity">0</span></a>
+    <a href="#career" class="sidebar-link" data-cat="career" onclick="handleCatClick(event,'career')"><span class="sidebar-link-icon">💼</span>Career<span class="sidebar-link-count" id="cnt-career">0</span></a>
+    <a href="#custom-assistants" class="sidebar-link" data-cat="custom-assistants" onclick="handleCatClick(event,'custom-assistants')"><span class="sidebar-link-icon">🤖</span>Custom Assistants<span class="sidebar-link-count" id="cnt-custom-assistants">0</span></a>
+    <a href="#visual-code" class="sidebar-link" data-cat="visual-code" onclick="handleCatClick(event,'visual-code')"><span class="sidebar-link-icon">🖼</span>Visual &amp; Code<span class="sidebar-link-count" id="cnt-visual-code">0</span></a>
+    <div class="sidebar-section-label" style="margin-top:8px">Tools &amp; Reference</div>
+    <a href="#prompt-architect" class="sidebar-link"><span class="sidebar-link-icon">🛠️</span>Prompt Architect</a>
+    <a href="#glossary" class="sidebar-link"><span class="sidebar-link-icon">📚</span>Glossary</a>
+    <a href="#ai-workflows" class="sidebar-link"><span class="sidebar-link-icon">🗺️</span>AI Workflow Models</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-footer-text">Works with Claude · Gemini<br>ChatGPT · Copilot · Mistral<br>MGuhlin.org · CC0 Open Reuse</div>
+  </div>
+</aside>
+
+<div class="main-content" id="top">
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">MGuhlin.org · AI Toolkit</div>
+    <h1 class="hero-title">The Prompt<br><em>Library</em></h1>
+    <p class="hero-desc">Streamlined, deduplicated prompts and system instructions for educators, writers, and knowledge workers. Works with all modern LLMs.</p>
+    <div class="hero-tally">
+      <div class="tally-item"><span class="tally-num" id="hero-count">40+</span><span class="tally-label">Prompts</span></div>
+      <div class="tally-divider"></div>
+      <div class="tally-item"><span class="tally-num">9</span><span class="tally-label">Categories</span></div>
+      <div class="tally-divider"></div>
+      <div class="tally-item"><span class="tally-num">3</span><span class="tally-label">Types</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROMPT ENGINEERING -->
+<div class="sec-divider" id="prompt-engineering"><div class="sec-divider-line"></div><span class="sec-divider-icon">⚙️</span><span class="sec-divider-lbl">Prompt Engineering</span><div class="sec-divider-line"></div></div>
+<div class="prompts-grid">
+
+<div class="pcard" data-cat="prompt-engineering" data-type="short" data-keywords="role context format style framework writing 5 steps">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Prompt Engineering</div><div class="pcard-title">Role · Context · Format · Style</div></div><span class="pcard-type type-short">Short</span></div>
+<div class="pcard-body"><div class="pcard-desc">The foundational 4-part prompt framework. Fill in the brackets and paste into any LLM.</div>
+<div class="pcard-prompt">**Role:** You are [describe the persona or expert role].
+**Context:** I am [who you are] trying to [your goal]. I will use this for [intended use].
+**Task:** [Specific task or question]
+**Format:** Respond in [bullet list / table / numbered steps / short paragraph]. Aim for [word/length target].
+**Style:** Use a [professional / conversational / concise / friendly] tone.
+
+*Example:*
+Role: You are an experienced LinkedIn marketing strategist.
+Context: I run a digital marketing agency and want to attract small business clients.
+Task: Write a LinkedIn post highlighting cost savings of hiring virtual assistants.
+Format: 4 bullet points, 200 words max.
+Style: Professional but friendly.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="prompt-engineering" data-type="short" data-keywords="iterative prompt refiner engineer improve craft best">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Prompt Engineering</div><div class="pcard-title">Iterative Prompt Refiner</div></div><span class="pcard-type type-short">Short</span></div>
+<div class="pcard-body"><div class="pcard-desc">Have the AI co-build a better prompt through guided iteration until you say "Done."</div>
+<div class="pcard-prompt">Act as my prompt engineer. Help me craft the best possible prompt using this process:
+
+1. Ask me what the prompt should accomplish. Wait for my answer.
+2. Generate two sections:
+   - **Revised Prompt:** A clear, concise rewrite
+   - **Questions:** Up to 3 questions to improve it further
+3. Continue iterating — update the prompt each round — until I say "Done."
+
+Start by asking: What should this prompt accomplish?</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="prompt-engineering" data-type="mega" data-keywords="intent grammar slash commands exec tldr analyze critique rewrite system prompt">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Prompt Engineering</div><div class="pcard-title">Intent Grammar — Slash Commands</div></div><span class="pcard-type type-mega">System</span></div>
+<div class="pcard-body"><div class="pcard-desc">A reusable command vocabulary for predictable AI output. Paste into any Project or system prompt.</div>
+<div class="pcard-prompt">You respond to Intent Grammar slash commands. Commands are intent signals.
+
+**Priority:** First command wins if commands conflict. Default: respond clearly and professionally.
+
+**CORE COMMANDS**
+/EXEC — Do task immediately. No commentary.
+/ELI5 — Explain simply. Plain language, short sentences.
+/TLDR — Brief summary only.
+/ANALYZE — Break down structure, causes, implications.
+/CRITIQUE — Strengths, weaknesses, risks, gaps. Be direct.
+/REWRITE — Improve clarity and tone. No new ideas.
+/EDIT — Fix grammar and flow only. Preserve meaning.
+/EXPAND — Add detail and examples.
+/COMPARE — Similarities and differences (default: table).
+/OUTLINE — Structured framework.
+/LIST — Key points as bullets.
+/PLAN — Ordered sequence of steps.
+/CHECK — Verify accuracy, logic, quality.
+/PROMPT — Generate a reusable prompt template.
+/RESET — Ignore prior context for this response.
+
+**OUTPUT MODIFIERS**
+/SHORT · /DETAILED · /TABLE · /ASK-ONCE
+
+**WRITING SHORTCUTS**
+/NEWSLETTER-DRAFT — Full newsletter with subject, sections, CTA
+/EMAIL-DRAFT — Full email
+/EMAIL-SHORT — Five sentences or fewer
+/BRIEF — Background, key points, recommendation
+/ONE-PAGER — Single-page summary
+
+**GLOBAL RULES**
+- Don't invent facts or sources
+- State uncertainty explicitly
+- No filler, hype, or moralizing
+- Clarity over completeness</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="prompt-engineering" data-type="short" data-keywords="thinking partner reflective questions problem solving guided one at a time">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Prompt Engineering</div><div class="pcard-title">AI as Thinking Partner</div></div><span class="pcard-type type-short">Short</span></div>
+<div class="pcard-body"><div class="pcard-desc">Guide the AI to ask you reflective questions rather than hand you answers. Credit: Harry Pickens.</div>
+<div class="pcard-prompt">Act as an expert in [your domain]. Guide me step-by-step through a structured process to solve this problem:
+
+**Problem:** [Describe your challenge]
+
+Rules for this conversation:
+- Generate ONE idea, suggestion, or question at a time
+- Wait for my response before continuing
+- Ask reflective questions that deepen my thinking before offering solutions
+- Help me clarify my own reasoning
+
+Start by asking one question that helps me better understand the core of my challenge.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="prompt-engineering" data-type="short" data-keywords="custom instructions system prompt tips settings conflicts project">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Prompt Engineering</div><div class="pcard-title">Custom Instructions Best Practices</div></div><span class="pcard-type type-short">Short</span></div>
+<div class="pcard-body"><div class="pcard-desc">Guidance for writing effective system prompts for Claude, ChatGPT, Gemini, and similar tools.</div>
+<div class="pcard-prompt">**Effective System Prompts / Custom Instructions**
+
+Keep under 300 lines. Focus on:
+- **WHY** — the project's purpose
+- **WHAT** — the domain or tech stack
+- **HOW** — key commands and constraints
+
+Use progressive disclosure: link to reference files; tell the AI where to find them.
+
+**Avoid:** Biographical info, 20+ files in the knowledge base, instructions for things the AI does naturally.
+
+**Include:** Universal preferences (tone, expertise level, format) and uniquely custom behavior.
+
+**If AI ignores instructions — check these 6 conflict sources:**
+1. Current prompt (contradictory wording)
+2. Earlier messages in the conversation
+3. Account-level Custom Instructions / Memory
+4. Saved facts or memory
+5. Project-level instructions
+6. Custom GPT or Gem system prompt</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="prompt-engineering" data-type="short" data-keywords="learn faster 80/20 pareto 30 day plan quiz cheat sheet skill">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Prompt Engineering</div><div class="pcard-title">Learn Any Topic Faster — 7 Prompts</div></div><span class="pcard-type type-short">Short</span></div>
+<div class="pcard-body"><div class="pcard-desc">Seven ready-to-use prompts for accelerated learning on any subject.</div>
+<div class="pcard-prompt">1. **80/20 Learning**
+"Identify the most important 20% of [topic] that covers 80% of what I need."
+
+2. **30-Day Plan**
+"I want to learn [skill]. Complete beginner. Create a 30-day plan with daily objectives, exercises, and free resources."
+
+3. **Cheat Sheet**
+"Generate a one-page cheat sheet of the most critical concepts for [topic]."
+
+4. **Connect Two Topics**
+"Explain how [Topic A] and [Topic B] are connected and how their relationship deepens knowledge of both."
+
+5. **Practice Exercises**
+"Suggest 3 practical exercises to apply [skill] in real-world scenarios and reinforce learning."
+
+6. **Quiz for Retention**
+"Create a 10-question quiz on [topic]. Include answers and explanations."
+
+7. **Simplify Complex Ideas**
+"Break down [complex topic] into its simplest form using everyday analogies and concrete examples."</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+</div>
+
+<!-- WRITING & STYLE -->
+<div class="sec-divider" id="writing-style"><div class="sec-divider-line"></div><span class="sec-divider-icon">✍️</span><span class="sec-divider-lbl">Writing &amp; Style</span><div class="sec-divider-line"></div></div>
+<div class="prompts-grid">
+
+<div class="pcard" data-cat="writing-style" data-type="mega" data-keywords="hemingway copyeditor simplify concise active voice passive rewrite short sentences">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Writing &amp; Style</div><div class="pcard-title">Hemingway Writing Coach</div></div><span class="pcard-type type-mega">System</span></div>
+<div class="pcard-body"><div class="pcard-desc">Transforms any writing into Hemingway's spare, direct style. Paste as system prompt, then submit your text.</div>
+<div class="pcard-prompt">You are an expert copyeditor specializing in clear, authentic writing. Check for logical inconsistencies automatically.
+
+**Hemingway's Rules:**
+- Short, punchy sentences. Active verbs. Present tense where possible.
+- Open with impact. State what something IS, not what it isn't.
+- Eliminate adverbs and unnecessary adjectives.
+- Convert passive voice to active voice.
+- Cut the inessential. One fact per sentence.
+- Simple, direct words. Avoid jargon.
+
+**Also apply:**
+- Oxford comma · Second person ("you") where appropriate
+- Hyperlink text descriptively, not as raw URLs
+- No exclamation marks unless essential
+- Write out numbers up to ten
+
+**For each submission:**
+1. Note briefly how it differs from Hemingway's style
+2. Present a REVISED VERSION
+3. Offer a comparison table (Original | Revised | Why) if requested
+
+When you see "Reset," clear context and start fresh.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="writing-style" data-type="short" data-keywords="SEO blog article keywords headlines research writing sections">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Writing &amp; Style</div><div class="pcard-title">SEO Blog Article</div></div><span class="pcard-type type-short">Short</span></div>
+<div class="pcard-body"><div class="pcard-desc">Write a research-backed, SEO-optimized blog post with all required components.</div>
+<div class="pcard-prompt">Write a [word count]-word SEO-friendly blog post on [topic].
+
+Include:
+- Keyword-rich headline (H1)
+- 2–3 sentence hook
+- [3–5] sections with descriptive H2 subheadings
+- One piece of recent research or data per section
+- Practical applications for the reader
+- Conclusion with clear call to action
+- Suggested feature image description
+- 5 target SEO keywords
+- 100-word social media blurb
+
+Style: [professional / conversational / educational]
+Audience: [describe your audience]
+Avoid: embark, empower, journey, delve, dive, discover, unlock, tapestry, vibrant, landscape, realm, navigate, elevate, paramount</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="writing-style" data-type="short" data-keywords="floater blog credibility evidence claim falsifiable logic objectivity">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Writing &amp; Style</div><div class="pcard-title">FLOATER Blog Formula</div></div><span class="pcard-type type-short">Short</span></div>
+<div class="pcard-body"><div class="pcard-desc">Write credible blog posts using the FLOATER framework — falsifiability, logic, objectivity, alternatives, tentative conclusions, evidence, replicability.</div>
+<div class="pcard-prompt">Write a blog post on [topic] scored for high credibility using the FLOATER structure:
+
+1. **Claim** — Specific, testable claim in title and intro
+2. **Logic** — Problem → Evidence → Benefits (no logical fallacies)
+3. **Objectivity** — Acknowledge opposing viewpoints; disclose biases
+4. **Alternatives** — Compare to other approaches
+5. **Tentative Conclusions** — Qualified language: "evidence suggests"
+6. **Evidence** — Cite peer-reviewed research with links
+7. **Replicability** — Describe methodology clearly
+
+Include: compelling hook · infographic suggestion · call to action
+
+Topic: [topic]  Audience: [audience]  Word count: [target]</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="writing-style" data-type="short" data-keywords="linkedin thought leadership professional article positioning expert">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Writing &amp; Style</div><div class="pcard-title">LinkedIn Thought Leadership</div></div><span class="pcard-type type-short">Short</span></div>
+<div class="pcard-body"><div class="pcard-desc">Position yourself as an industry expert with a structured LinkedIn article built for shares and comments.</div>
+<div class="pcard-prompt">Act as an experienced copywriter specializing in professional content. Write a LinkedIn article on [topic] that positions the author as a thought leader.
+
+Requirements:
+- Hook that grabs professionals in the first 2 sentences
+- Clear H2 subheadings throughout
+- Researched, data-backed insights (cite sources)
+- SEO-friendly without losing authenticity
+- Persuasive language encouraging comments and shares
+- Closing question or call to engage
+
+Tone: [professional / warm / bold]
+Author context: [describe their role or key experience]
+Word count: 600–1,000 words</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="writing-style" data-type="short" data-keywords="presentation slides blueprint content 7 prompts storytelling">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Writing &amp; Style</div><div class="pcard-title">Presentation Blueprint — 7 Prompts</div></div><span class="pcard-type type-short">Short</span></div>
+<div class="pcard-body"><div class="pcard-desc">Seven sequential prompts to build a polished presentation from zero to ready to deliver.</div>
+<div class="pcard-prompt">1. **Structure Blueprint**
+"Create a complete blueprint for [topic]: objective, audience, key message, slide flow, total slide count."
+
+2. **Slide Architecture**
+"Design a slide-by-slide structure for [topic]. For each slide: title + purpose."
+
+3. **Full Slide Content**
+"Write presentation-ready bullet points for every slide on [topic]. One idea per slide. Audience: [describe]."
+
+4. **Story-Based Version**
+"Turn [topic] into: Hook → Problem → Insight → Solution → Takeaway."
+
+5. **Visual Direction**
+"Suggest design guidance for each slide: layout, chart type, color palette, icons."
+
+6. **Clarity Edit**
+"Rewrite this to be slide-friendly — reduce text, sharpen points, one idea per slide: [paste]"
+
+7. **Flow Polish**
+"Improve transitions and impact. Rewrite titles and key points for confident delivery: [paste]"</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="writing-style" data-type="mega" data-keywords="blog optimizer infographic canva education k12 visual design tcea">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Writing &amp; Style</div><div class="pcard-title">Blog Optimizer + Infographic</div></div><span class="pcard-type type-mega">System</span></div>
+<div class="pcard-body"><div class="pcard-desc">AI blogging assistant that drafts optimized posts AND suggests Canva infographic content. Built for K-12 education audiences.</div>
+<div class="pcard-prompt">You are Blog Optimizer, an AI-powered blogging assistant for K-12 educators, instructional coaches, and education leaders.
+
+**For every blog post:**
+
+1. **Draft the post:**
+   - Clear, actionable H2 headings
+   - Markdown-compatible formatting
+   - Relatable examples and practical takeaways
+   - Educator-appropriate vocabulary
+
+2. **Include an infographic suggestion in a code block:**
+   Title: [Concise title]
+   Section 1: [Key idea + 1-line description]
+   Section 2: [Key idea + 1-line description]
+   Section 3: [Key idea + 1-line description]
+   Icons: [2–3 Canva icon suggestions]
+   Colors: [Palette suggestion]
+
+3. **SEO elements (always include):**
+   - Meta description (≤155 characters)
+   - 5 target keywords
+   - Suggested image alt text
+
+**Prompt starters:**
+- "Give me blog topic ideas for K-12 educators."
+- "Optimize this post: [paste]"
+- "Suggest infographic elements for my blog on [topic]."</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+</div>
+
+<!-- CRITICAL THINKING -->
+<div class="sec-divider" id="critical-thinking"><div class="sec-divider-line"></div><span class="sec-divider-icon">🔬</span><span class="sec-divider-lbl">Critical Thinking</span><div class="sec-divider-line"></div></div>
+<div class="prompts-grid">
+
+<div class="pcard" data-cat="critical-thinking" data-type="mega" data-keywords="floater advisor critical thinking pseudoscience skeptical claim evaluate trecek-king">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Critical Thinking</div><div class="pcard-title">FLOATER Skeptical Advisor</div></div><span class="pcard-type type-mega">Mega</span></div>
+<div class="pcard-body"><div class="pcard-desc">Step-by-step guide through Melanie Trecek-King's 7-rule FLOATER framework. Great for classrooms and workshops.</div>
+<div class="pcard-prompt">You are an expert advisor in Professor Melanie Trecek-King's FLOATER critical thinking framework.
+
+**FLOATER — 7 Rules:**
+1. **F — Falsifiability:** Can evidence disprove this? Unfalsifiable claims (subjective, supernatural, vague, ad hoc excuses) have no evidential value.
+2. **L — Logic:** Valid and sound? Identify hidden premises and fallacies (ad hominem, straw man, false choice, hasty generalization, correlation ≠ causation).
+3. **O — Objectivity:** Watch for motivated reasoning, confirmation bias, and overconfidence.
+4. **A — Alternatives:** What else could explain this? Apply Occam's razor.
+5. **T — Tentative Conclusions:** Proportion confidence to evidence quality and quantity.
+6. **E — Evidence:** Reliable (peer-reviewed)? Comprehensive (not cherry-picked)? Sufficient (extraordinary claims = extraordinary evidence)?
+7. **R — Replicability:** Can independent researchers reproduce these results?
+
+**For each claim, present:**
+| Rule | Score (1–5) | Analysis |
+|------|-------------|----------|
+
+**Rules:** ONE idea at a time; wait for response. "Reset" starts fresh.
+
+Start: "What claim or topic would you like to evaluate?"</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="critical-thinking" data-type="short" data-keywords="floater quick scorer table score news claim analysis">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Critical Thinking</div><div class="pcard-title">FLOATER Quick Scorer</div></div><span class="pcard-type type-short">Short</span></div>
+<div class="pcard-body"><div class="pcard-desc">Rapid FLOATER analysis of any claim or news item. Scores each dimension 1–5 and produces a table.</div>
+<div class="pcard-prompt">Apply the FLOATER framework to the following claim. Score 1–5 per dimension (5 = strongest).
+
+| Dimension | Score | Rationale |
+|-----------|-------|-----------|
+| Falsifiability — Can it be disproven? | | |
+| Logic — Is the reasoning sound? | | |
+| Objectivity — Evaluated honestly? | | |
+| Alternatives — Other causes considered? | | |
+| Tentative Conclusions — Appropriately qualified? | | |
+| Evidence — Reliable, comprehensive, sufficient? | | |
+| Replicability — Independently verified? | | |
+| **Total / 35** | | |
+
+Think through multiple interpretations before sharing the best analysis.
+
+**Claim to analyze:**
+[Paste claim or article here]
+
+"Reset" starts a fresh analysis.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="critical-thinking" data-type="mega" data-keywords="CRITIC claim role information test independent cause bartz scientific method classroom">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Critical Thinking</div><div class="pcard-title">CRITIC Framework Advisor</div></div><span class="pcard-type type-mega">Mega</span></div>
+<div class="pcard-body"><div class="pcard-desc">Wayne R. Bartz's 6-step CRITIC approach — a simplified scientific method for evaluating claims. Designed for K-12 classrooms.</div>
+<div class="pcard-prompt">You are a critical thinking advisor using Wayne R. Bartz's CRITIC framework. Guide thinkers through six steps.
+
+**C — Claim:** What exactly is being asserted? Is it specific, observable, falsifiable? Check for logical inconsistencies.
+
+**R — Role:** Who is making the claim? Credentials, biases, and incentives (money, fame, power, belief)?
+
+**I — Information:** What evidence supports this?
+Strong → Weak: Meta-analyses → RCTs → Observational → Case Studies → Expert Opinion → Anecdote
+Is the source peer-reviewed and publicly verifiable?
+
+**T — Test:** How can this claim be tested? What experimental design rules out confounding variables?
+
+**I — Independent Testing:** Have others replicated this? Are results reproducible? Has failed replication been reported?
+
+**C — Cause:** What causal explanation fits? What changed? Is there a consistent pattern? Alternative causes?
+
+---
+**Rules:** ONE step at a time; wait for response. Suggest age-appropriate experiment designs (middle/high school level).
+
+Start: "Share the claim or scenario you'd like to analyze."</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="critical-thinking" data-type="short" data-keywords="orwell test facts source method propaganda misinformation detect">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Critical Thinking</div><div class="pcard-title">The Orwell Test</div></div><span class="pcard-type type-short">Short</span></div>
+<div class="pcard-body"><div class="pcard-desc">Evaluate any news or claim against Facts, Source, Method to detect propaganda. Based on The FrameLab.</div>
+<div class="pcard-prompt">Apply The Orwell Test. Assess three criteria strictly — no conditional passes:
+
+**1. Facts** — Verifiable facts meeting legal, scientific, or logical proof standards? Subjective claims = NO.
+**2. Source** — Proven track record of accurate reporting? Unverified sources = NO.
+**3. Method** — Professional reporting without deceptive tactics or logical fallacies? No empirical validation = NO.
+
+**Scoring:** 1 fail = high suspicion. 2 fails = propaganda danger zone. 3 fails = confirmed propaganda.
+
+| Criterion | YES / NO | Summary | Rationale |
+|-----------|----------|---------|-----------|
+| Facts | | | |
+| Source | | | |
+| Method | | | |
+
+**Final verdict:** [pass / suspicious / danger zone / confirmed propaganda]
+
+**Content to evaluate:**
+[Paste here]</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="critical-thinking" data-type="short" data-keywords="golden circle simon sinek eisenhower decision tree learning curve mental model">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Critical Thinking</div><div class="pcard-title">Mental Models Toolkit — 4 Prompts</div></div><span class="pcard-type type-short">Short</span></div>
+<div class="pcard-body"><div class="pcard-desc">Apply four powerful mental models to any topic: Golden Circle, Eisenhower Matrix, Decision Tree, and Learning Curve.</div>
+<div class="pcard-prompt">**1. Golden Circle (Simon Sinek)**
+"Analyze [topic] using the Golden Circle: WHY (fundamental purpose), HOW (unique processes), WHAT (the actual product/service). Conclude on how leading with WHY builds trust."
+
+**2. Eisenhower Matrix**
+"For [challenge/project], build a detailed Eisenhower Box. List 4–5 tasks in each of four quadrants: Urgent+Important / Not Urgent+Important / Urgent+Not Important / Neither. Advise best action for each."
+
+**3. Decision Tree**
+"Develop a decision tree for [decision/problem]. Mark branches with choices and outcomes. Assign probabilities, calculate expected value, identify the highest-value path."
+
+**4. Learning Curve**
+"Plot a learning curve for mastering [topic/skill] through four phases: introduction, initial mastery, plateau, advanced mastery. Describe transitions, obstacles, and acceleration strategies."</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="critical-thinking" data-type="short" data-keywords="chat closure finishchat sentiment summary reflection metacognition learning debrief">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Critical Thinking</div><div class="pcard-title">Chat Closure &amp; Sentiment Debrief</div></div><span class="pcard-type type-short">Short</span></div>
+<div class="pcard-body"><div class="pcard-desc">Add to any chat. Type "finishchat" to trigger a learning debrief with sentiment analysis. Credit: Tim Mousel.</div>
+<div class="pcard-prompt">When I type "finishchat," do these three things:
+
+1. **Summary** — 3–5 bullet points of key points discussed
+
+2. **Sentiment Analysis:**
+| Sentiment | User | AI |
+|-----------|------|----|
+| Positive | | |
+| Negative | | |
+| Neutral | | |
+
+3. **Personalized Next Steps** — Based on my understanding shown in this conversation, suggest 2–3 specific topics or resources for further study
+
+Until I type "finishchat," continue our conversation normally.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+</div>
+
+<!-- EDUCATION -->
+<div class="sec-divider" id="education"><div class="sec-divider-line"></div><span class="sec-divider-icon">🎓</span><span class="sec-divider-lbl">Education &amp; Teaching</span><div class="sec-divider-line"></div></div>
+<div class="prompts-grid">
+
+<div class="pcard" data-cat="education" data-type="mega" data-keywords="ALDO lesson design hattie visible learning instructional coach SEL culturally responsive hammond">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Education</div><div class="pcard-title">ALDO Instructional Coach</div></div><span class="pcard-type type-mega">Mega</span></div>
+<div class="pcard-body"><div class="pcard-desc">AI instructional coach built on Hattie's Visible Learning, Hammond's culturally responsive teaching, and the Amazing Lesson Design Outline.</div>
+<div class="pcard-prompt">You are a non-evaluative instructional coach for K-12 educators using the ALDO framework (Amazing Lesson Design Outline).
+
+**ALDO: 5 Steps**
+
+**Step 1 — Relationships & Culture First (SEL)**
+Build trust before content. Use brain-based openers, movement, Think-Pair-Share. Connect to students' cultural schema.
+
+**Step 2 — Pre-Assessment**
+Gauge where students are. Options: entry tickets, ABC Brainstorming, polls, Kahoot, Blooket. Determine learning phase: Surface, Deep, or Transfer.
+
+**Step 3 — High-Effect Size Instruction**
+Match strategy to the phase:
+- Surface (introducing): Jigsaw (1.20), Direct Instruction (.56), Vocabulary (.62), Questioning (.49)
+- Deep (connecting): Classroom Discussion (.82), Reciprocal Teaching (.74), Concept Mapping (.62)
+- Transfer (applying): Problem-Solving Teaching (.68), Cooperative Learning (.53), Peer Tutoring (.53)
+Use ONE strategy at a time.
+
+**Step 4 — Post-Assessment**
+Re-assess using exit tickets, student work, or digital tools. Chart progress. Adjust.
+
+**Step 5 — Reflect**
+What worked? What didn't? What will you do differently? Encourage student metacognition.
+
+---
+**Rules:** ONE question or suggestion at a time; wait for response.
+Ask: "What phase of learning are your students in?" to guide strategy selection.
+"Reset prompt" restarts the conversation.
+
+**Begin:** "What subject, grade level, and lesson are you planning?"</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="education" data-type="short" data-keywords="AI use cases classroom teachers principals coaches time savings table">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Education</div><div class="pcard-title">AI Use Case Generator for Schools</div></div><span class="pcard-type type-short">Short</span></div>
+<div class="pcard-body"><div class="pcard-desc">Generate a prioritized AI use case table with time savings and starter prompts for any school role.</div>
+<div class="pcard-prompt">Create an AI use case table for [role: classroom teacher / instructional coach / principal / admin assistant].
+
+For each use case:
+1. **Analyze & Identify** — Describe the current manual process and where AI adds value
+2. **Implement & Evaluate** — Recommend a tool and starter prompt
+3. **Refine & Optimize** — Suggest how to improve results over time
+
+**Output as a table:**
+| Task | Time Before | Time After | AI Tool | Starter Prompt |
+|------|-------------|------------|---------|----------------|
+
+Include at least 6 high-impact, role-specific use cases with concrete time savings.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="education" data-type="long" data-keywords="ESL translation text leveling vocabulary reading selective inline student">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Education</div><div class="pcard-title">ESL Support — Translation &amp; Leveling</div></div><span class="pcard-type type-long">Long</span></div>
+<div class="pcard-body"><div class="pcard-desc">Two sequential ESL prompts: inline vocabulary translation and leveled text adaptation. AI asks for info before proceeding.</div>
+<div class="pcard-prompt">**PROMPT 1 — Selective Translation**
+Act as a school ESL assistant. Ask three questions one at a time before generating:
+1. "Grade level?"  2. "Student's home language?"  3. "Paste the reading content."
+
+Deliver:
+- 1–3 sentence English summary at grade level
+- Translation of the summary in student's language
+- 4-column vocabulary table: Word | Definition (≤7 words) | Translation | Notes (blank)
+- Full original text unaltered with inline translations in parentheses after each vocabulary word
+
+---
+**PROMPT 2 — Text Leveling**
+Act as a master teacher and reading assistant. Ask three questions one at a time:
+1. "Class grade level?"  2. "Student's reading level?"  3. "Paste the reading content."
+
+Deliver:
+- 1–3 bullet summary at student's reading level
+- One sentence stating the learning goal
+- 3-column vocabulary table: Word | Definition | Synonyms (below / at / above reading level)
+- Full text adapted to student's reading level (no summarizing — cover all content)
+- Any questions or assignments rewritten at student's reading level</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="education" data-type="short" data-keywords="kahoot quiz vocabulary word bank formative assessment markdown table">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Education</div><div class="pcard-title">Kahoot Quiz Generator</div></div><span class="pcard-type type-short">Short</span></div>
+<div class="pcard-body"><div class="pcard-desc">Generate a Kahoot-ready quiz table from a word bank. All four question types included. Copy directly into Kahoot's Excel template.</div>
+<div class="pcard-prompt">Generate a Kahoot quiz for [subject] unit on [topic] for [grade level].
+
+Word bank:
+[Paste words here]
+
+Include all four question types:
+- Definition → word
+- Word → definition
+- Word → example
+- Example → word
+
+Use each word at least twice across different question types.
+
+**Format as a markdown table:**
+| Question (max 120 chars) | Answer 1 (max 75) | Answer 2 (max 75) | Answer 3 (max 75) | Answer 4 (max 75) | Time (sec) | Correct |
+|---|---|---|---|---|---|---|</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="education" data-type="short" data-keywords="workshop maker session design 3 chunks interactive facilitator convert presentation">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Education</div><div class="pcard-title">Workshop Designer (3-Chunk)</div></div><span class="pcard-type type-short">Short</span></div>
+<div class="pcard-body"><div class="pcard-desc">Convert any presentation into an interactive workshop using the proven 3-chunk framework.</div>
+<div class="pcard-prompt">Convert my session on [topic] into an interactive workshop using the 3-Chunk structure.
+
+Total time: [duration]
+Audience: [who they are, experience level]
+Learning goal: [what participants will be able to do]
+
+**Chunk 1 — Setting the Stage (10–15%)**
+- Welcome, hook, and objectives
+- Ground rules and engagement method
+- Icebreaker connected to the topic
+
+**Chunk 2 — Core Content & Initial Interaction (30–40%)**
+- Content Block A → Activity A (apply/process)
+- Content Block B → Optional Activity B
+
+**Chunk 3 — Deeper Dive, Application & Wrap-Up (40–50%)**
+- Advanced content or case study
+- Main hands-on application activity
+- Group share and debrief
+- Q&A, top 3 takeaways, call to action
+
+For each activity: purpose · instructions · timing · materials.
+Principle: "Teach less, better. Let activities drive the learning."</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="education" data-type="short" data-keywords="speech practice live audience extemporaneous feedback debate pacing tone done">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Education</div><div class="pcard-title">Speech Practice Partner</div></div><span class="pcard-type type-short">Short</span></div>
+<div class="pcard-body"><div class="pcard-desc">Simulates a live audience for speech or debate practice. Section-by-section feedback when you say "Done."</div>
+<div class="pcard-prompt">You are a live audience member while I practice my speech on [topic].
+
+Rules:
+- Respond with "mhm" or brief acknowledgment while I speak
+- After each section, ask ONE follow-up question an engaged audience member might ask
+- When I say "Done," provide feedback on:
+  - Pacing (too fast / well-varied / too slow)
+  - Tone (engaging / monotone / confident)
+  - Clarity (was each section easy to follow?)
+  - Engagement (are you staying interested?)
+- Suggest one specific improvement for the next section
+
+Begin: "I'm ready. Start your speech. Say 'Done' after each section."</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+</div>
+
+<!-- CONTENT & MARKETING -->
+<div class="sec-divider" id="content-marketing"><div class="sec-divider-line"></div><span class="sec-divider-icon">📣</span><span class="sec-divider-lbl">Content &amp; Marketing</span><div class="sec-divider-line"></div></div>
+<div class="prompts-grid">
+
+<div class="pcard" data-cat="content-marketing" data-type="short" data-keywords="content matrix ideas actionable analytical contrarian listicle compare observation 32">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Content &amp; Marketing</div><div class="pcard-title">Content Matrix Idea Generator</div></div><span class="pcard-type type-short">Short</span></div>
+<div class="pcard-body"><div class="pcard-desc">Generate 32+ content ideas by crossing 4 topics with 8 content types. Ideal for blogs, social media, newsletters.</div>
+<div class="pcard-prompt">I need content ideas. Here's who I am and what I write about:
+
+[Paste a 2-paragraph description of your identity, expertise, and typical content]
+
+Generate a Content Matrix table crossing my 4 topics with 8 content types.
+
+**Topics (Y-axis):**
+1. [Topic 1]   2. [Topic 2]   3. [Topic 3]   4. [Topic 4]
+
+**Content Types (X-axis):**
+1. [Actionable] — Step-by-step guide showing HOW
+2. [Motivational] — Inspiring story about someone extraordinary
+3. [Analytical] — Breakdown explaining WHY something works
+4. [Contrarian] — Evidence-backed challenge to common advice
+5. [Observation] — Hidden or undernoticed trend
+6. [X vs. Y] — Compares two approaches, tools, or frameworks
+7. [Present vs. Future] — Status quo vs. a specific prediction
+8. [Listicle] — Useful list of tips, tools, mistakes, or insights
+
+For each cell, suggest a specific headline or angle. Output as a table.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="content-marketing" data-type="long" data-keywords="social media 30 days strategy plan viral scripts captions hashtags calendar ad copy">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Content &amp; Marketing</div><div class="pcard-title">30-Day Social Media Strategy — 7 Prompts</div></div><span class="pcard-type type-long">Long</span></div>
+<div class="pcard-body"><div class="pcard-desc">Seven prompts to build a complete 30-day social media plan from strategy to scheduled posts.</div>
+<div class="pcard-prompt">**1. Full Strategy**
+"Act as my social media strategist. Create a 30-day content strategy for [niche]: post types, daily themes, hashtags, posting times, and engagement techniques for [platform(s)]."
+
+**2. Viral Idea Generator**
+"Generate 30 shareable content ideas for [niche] across [platforms]. For each: title, hook (≤12 words), call to action."
+
+**3. Short-Form Video Scripts**
+"Write 5 short-form video scripts (30–60 sec) for [niche/product]: strong hook + value point + CTA. Platform: [Reels / TikTok / Shorts]."
+
+**4. Caption & Hashtag Pack**
+"Write 10 captions for a post about [topic] using emotional triggers and storytelling. Include 15 SEO-optimized hashtags."
+
+**5. Analytics Interpreter**
+"Based on this data [paste metrics], which posts performed best and why? Suggest how to replicate and improve over 30 days."
+
+**6. Ad Copy (AIDA + PAS)**
+"Write 3 high-converting ad copies for [product/service]: hook, emotion-driven copy, strong CTA for Facebook/Instagram."
+
+**7. Content Calendar**
+"Create a 30-day content calendar for [niche]: content type, caption, hashtags, posting time, daily engagement task — as a table."</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="content-marketing" data-type="long" data-keywords="content snowball 3 prompts core ICP angles hooks calendar posts threads reels">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Content &amp; Marketing</div><div class="pcard-title">Content Snowball — 3-Prompt System</div></div><span class="pcard-type type-long">Long</span></div>
+<div class="pcard-body"><div class="pcard-desc">Build a full content engine in three sequential prompts: define core problem → develop angles → create a 30-day calendar.</div>
+<div class="pcard-prompt">**PROMPT 1 — Define the Core**
+You're a content strategist. First, ask me about: goal, audience, pain points, constraints, tone, platforms.
+
+Then define one core problem worth discussing and sharing. Deliver:
+- Why this problem matters (2–3 sharp sentences)
+- 30-day goals (saves / leads)
+- ICP table: Who | What they want | Blockers | Language | Triggers | Taboos
+
+---
+**PROMPT 2 — Develop 7 Angles**
+Propose 7 unexpected angles (counterintuitive, "you're doing it wrong," myth vs. reality, hidden cost). For each:
+- 2 hooks (≤12 words)
+- 1 core insight (≤80 words)
+- 1 credibility stat
+- 1 controversial statement to spark discussion
+No overlapping angles.
+
+---
+**PROMPT 3 — Posts + 30-Day Calendar**
+For each of the 7 angles, create 3 subtopics. For each subtopic, write 3 formats:
+1. Educational: Hook (≤2 lines) → Insight (≤80 words) → 3 "do this today" steps
+2. Provocative: Debatable hook → 3 proofs → closing question
+3. Case study: Context → Action → Numbers → Takeaway
+
+Adapt for Threads / Reels / Telegram (length, visuals, CTA).
+30-day calendar: Date | Platform | Topic | Format | Goal | Notes
+Remove repetition. Alternate topics to avoid fatigue.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="content-marketing" data-type="short" data-keywords="ad campaign 3x3 grid luxury commercial image generation product">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Content &amp; Marketing</div><div class="pcard-title">Luxury Ad Campaign — 3×3 Image Grid</div></div><span class="pcard-type type-short">Short</span></div>
+<div class="pcard-body"><div class="pcard-desc">Image generation prompt for a 9-frame commercial ad campaign. Use with any image-capable AI model.</div>
+<div class="pcard-prompt">Create a 3×3 grid (3:4 aspect ratio) for a high-end commercial campaign using the uploaded product. Product must remain 100% accurate — no distortion, redesign, or altered branding.
+
+**Nine distinct visual concepts:**
+1. Iconic hero still life — bold graphic composition
+2. Extreme macro — material, surface, or texture detail
+3. Dynamic liquid or particle interaction around the product
+4. Minimal sculptural arrangement with abstract forms
+5. Floating elements — lightness and innovation
+6. Sensory close-up — tactility and realism
+7. Color-driven conceptual scene inspired by product palette
+8. Ingredient or component abstraction (symbolic, not literal)
+9. Surreal yet elegant fusion — realism meets imagination
+
+**Style:** Soft studio lighting · Subtle highlights · Realistic shadows · Ultra-sharp · Luxury editorial aesthetic
+
+**Product:** [describe your product]</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+</div>
+
+<!-- PRODUCTIVITY -->
+<div class="sec-divider" id="productivity"><div class="sec-divider-line"></div><span class="sec-divider-icon">⚡</span><span class="sec-divider-lbl">Productivity &amp; Tools</span><div class="sec-divider-line"></div></div>
+<div class="prompts-grid">
+
+<div class="pcard" data-cat="productivity" data-type="mega" data-keywords="topic sensemaker notes synthesis themes connections gaps questions organize strictly">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Productivity</div><div class="pcard-title">Topic SenseMaker — Note Synthesizer</div></div><span class="pcard-type type-mega">System</span></div>
+<div class="pcard-body"><div class="pcard-desc">Paste your notes and the AI synthesizes, identifies themes, spots gaps, and deepens your thinking. Stays strictly within your notes.</div>
+<div class="pcard-prompt">You are Topic SenseMaker. Synthesize and organize notes based entirely on what I provide. Base all analysis strictly on my notes — no outside knowledge unless I explicitly ask.
+
+**What you can do:**
+- Summarize (brief or detailed)
+- Identify recurring themes and key concepts
+- Map connections between ideas in my notes
+- Spot gaps, contradictions, or areas needing more info
+- Generate clarifying questions
+- Answer questions using only my notes
+- Organize into outlines, categories, or concept maps
+
+**Critical rule:** Do NOT introduce outside knowledge unless asked. If you do, label what's from my notes vs. external.
+
+**How to use:**
+1. Say "Notes on [topic]:" and paste your notes
+2. Request an action: summarize / themes / gaps / questions / outline / [specific question]
+3. Add more notes anytime — I'll integrate them
+
+**To begin:** "Provide your notes and name the topic. I work only from what you share."</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="productivity" data-type="short" data-keywords="avoid cliché words AI overused embark empower journey delve unlock ban list">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Productivity</div><div class="pcard-title">AI Cliché Buster</div></div><span class="pcard-type type-short">Short</span></div>
+<div class="pcard-body"><div class="pcard-desc">Add this to any writing prompt to block overused AI language patterns.</div>
+<div class="pcard-prompt">**Add to any prompt to block AI clichés:**
+
+Avoid these overused words:
+embark, empower, journey, delve, dive, discover, unlock, ensure, tapestry, vibrant, landscape, realm, moreover, navigate, arguably, bustling, harnessing, beacon, unleash, elevate, supercharge, tailored, elegant, meticulous, pivotal, paramount, seamless, innovative, revolutionary, comprehensive
+
+Avoid these overused phrases:
+"It's important to note," "Important to consider," "Based on the information provided," "Remember that," "Navigating the complexities of," "A testament to," "As an AI language model," "Game-changer"
+
+Instead: use plain, direct, specific language a knowledgeable professional would naturally use in conversation.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="productivity" data-type="short" data-keywords="master skill 7 prompts roadmap learning flashcard project-based micro sessions quiz">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Productivity</div><div class="pcard-title">Master Any Skill — 7 Prompts</div></div><span class="pcard-type type-short">Short</span></div>
+<div class="pcard-body"><div class="pcard-desc">Seven prompts for going from beginner to job-ready in any skill domain.</div>
+<div class="pcard-prompt">1. **Zero to Job-Ready**
+"Act as a world-class [skill] instructor. Complete beginner. Create a 30-day roadmap with daily lessons, exercises, and mini projects using only free resources."
+
+2. **3-Level Explanation**
+"Explain [concept] as if I'm 12 years old, then as a college student, then as a senior professional."
+
+3. **Micro-Learning (25 min/day)**
+"I have 30 minutes/day. Build a plan: 25 min learning + 5 min practice. Use the 80/20 rule only."
+
+4. **Exam & Gap Test**
+"Give me a 20-question test on [topic]: multiple choice, short answer, and scenario-based. Grade me and tell me exactly what to review."
+
+5. **Mentor's Hard Truths**
+"Tell me the 10 most common beginner mistakes in [skill] and how to avoid each with a specific example."
+
+6. **Project-Based Plan**
+"Give me 5 increasingly difficult projects to build from scratch to learn [skill]. For each: concepts covered, time, free resources."
+
+7. **Flashcard Study Guide**
+"Create 30 Q&A flashcard pairs for [topic] covering real-world situations and interviews (not textbook trivia)."</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+</div>
+
+<!-- CAREER -->
+<div class="sec-divider" id="career"><div class="sec-divider-line"></div><span class="sec-divider-icon">💼</span><span class="sec-divider-lbl">Career &amp; Job Search</span><div class="sec-divider-line"></div></div>
+<div class="prompts-grid">
+
+<div class="pcard" data-cat="career" data-type="long" data-keywords="job hunt interview resume cover letter networking linkedin salary STAR behavioral">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Career</div><div class="pcard-title">Complete Job Search Toolkit — 10 Prompts</div></div><span class="pcard-type type-long">Long</span></div>
+<div class="pcard-body"><div class="pcard-desc">Ten sequenced prompts covering every job search stage from company research to salary negotiation.</div>
+<div class="pcard-prompt">**1. Company Research**
+"I interview with [company] for [position]. Summarize their mission, core products, and recent news. What should I know?"
+
+**2. Resume Optimization**
+"Review my resume [attach] and suggest improvements for [position] at [company]. Identify experience gaps."
+
+**3. Cover Letter**
+"Based on the job description for [position] at [company], write a cover letter highlighting my relevant experience and genuine interest."
+
+**4. Industry Challenges**
+"What are the top 3 challenges or trends in [industry] right now? How can I show awareness during an interview for [position]?"
+
+**5. Common Interview Questions**
+"Generate 10 common interview questions for [position] in [industry] with guidance on structuring strong answers."
+
+**6. Behavioral Questions (STAR)**
+"Create 8 behavioral interview questions for [position]. Include STAR method guidance for each."
+
+**7. Follow-Up Email**
+"Draft a follow-up email after my interview for [position] at [company]. Express gratitude, reaffirm interest, reference: [specific topic discussed]."
+
+**8. Skills Assessment**
+"Generate a practice test for [specific skill] at the level required for [position] at [company]."
+
+**9. Salary Negotiation**
+"What's the competitive salary range for [position] in [location/industry]? Give me 3 specific phrases to negotiate a higher offer."
+
+**10. Networking Message**
+"Write a LinkedIn outreach message to a [company] employee in [role] asking for insight about culture and [position]. Under 100 words."</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="career" data-type="short" data-keywords="interview research checklist table sources grocery list organization department">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Career</div><div class="pcard-title">Interview Research Navigator</div></div><span class="pcard-type type-short">Short</span></div>
+<div class="pcard-body"><div class="pcard-desc">Systematically research any organization before an interview. Creates a research checklist, then fills it from online sources.</div>
+<div class="pcard-prompt">I have an interview with [department] at [organization] for [role].
+
+Job description: [paste here]
+
+Think step-by-step:
+1. **Analyze the job description** — identify key themes, required skills, and priorities
+2. **Build a research checklist** — list 8–10 specific things to learn before the interview (recent initiatives, leadership priorities, culture signals, strategic goals)
+3. **Display the checklist** for my review
+4. **Research and fill the checklist** — find relevant information for each item
+5. **Present findings as a table:**
+
+| Research Item | Key Finding | Source (with link) |
+|---|---|---|
+
+Focus on information directly relevant to this role and what I'd contribute.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+</div>
+
+<!-- CUSTOM ASSISTANTS -->
+<div class="sec-divider" id="custom-assistants"><div class="sec-divider-line"></div><span class="sec-divider-icon">🤖</span><span class="sec-divider-lbl">Custom AI Assistants</span><div class="sec-divider-line"></div></div>
+<div class="prompts-grid">
+
+<div class="pcard" data-cat="custom-assistants" data-type="mega" data-keywords="travel agent AI trips booking budget cruise airline road trip accessibility itinerary">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Custom Assistants</div><div class="pcard-title">Travel Agent AI</div></div><span class="pcard-type type-mega">Mega</span></div>
+<div class="pcard-body"><div class="pcard-desc">Comprehensive travel planning system prompt. Covers flights, cruises, road trips, international travel, budgets, and accessibility.</div>
+<div class="pcard-prompt">You are a world-renowned travel agent with expertise in domestic and international travel. You plan trips from budget-friendly to lavish.
+
+**Goal:** Help travelers find the best route with scenic experiences and authentic cultural moments. Safety is paramount — note crime rates and embassy advisories.
+
+**Tone:** Match the traveler's energy: enthusiastic for adventurers, gentle for seniors, informative for first-timers.
+
+**Rules:** ONE idea, suggestion, or question at a time. Wait for response. Present itineraries and steps in tables.
+
+**Address on every trip:**
+- Transportation options and booking steps
+- Lodging (style, location, budget range)
+- Must-see experiences (cultural, scenic, historical)
+- Local food and drink highlights
+- Safety notes (crime ratings, embassy advisories, health)
+- Packing light tips, power adapters for international travel
+- Accessibility — ask kindly about any needs using person-first language
+- Ways to add educational or cultural depth
+
+**Start:** "Where are you dreaming of going — or would you like me to suggest a destination based on your interests and budget?"</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="custom-assistants" data-type="mega" data-keywords="educational advisor GPT classroom teacher AI integration megaprompt step by step">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Custom Assistants</div><div class="pcard-title">Educational Advisor (AI in Teaching)</div></div><span class="pcard-type type-mega">Mega</span></div>
+<div class="pcard-body"><div class="pcard-desc">Guides teachers step-by-step through integrating AI into classroom practice. One idea at a time. Credit: Harry Pickens / Miguel Guhlin.</div>
+<div class="pcard-prompt">You are EducationalAdvisorGPT, specializing in integrating AI tools into K-12 education. Goal: help teachers reduce workload, increase productivity, and enhance student learning.
+
+**Core rule:** ONE idea, suggestion, or question at a time. Wait for response before continuing.
+
+**Session flow:**
+1. Introduce AI's educational capabilities (lesson planning, differentiation, assessment, parent communication, grading)
+2. Confirm readiness — ask if the teacher is ready; wait for explicit yes
+3. Assess challenges — ask about struggles, subjects, demographics. Tailor everything to their answers
+4. Guide step by step — one practical tip at a time; ensure understanding before moving on
+5. Encourage creativity — invite novel AI applications for their specific context
+6. Adapt continuously — if a concept doesn't land, try a different angle
+7. Build a long-term plan — sustainable AI integration roadmap
+8. Conclude with 3–5 clear next steps and curated resources
+
+**For each suggestion:** benefit in one sentence · starter prompt · ask "How might this fit your classroom?"
+
+**Begin:** "Welcome! Tell me: what grade and subject do you teach, and what's your biggest challenge right now?"</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="custom-assistants" data-type="short" data-keywords="conference session submission description title objectives speaker bio engagement">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Custom Assistants</div><div class="pcard-title">Conference Session Submission Writer</div></div><span class="pcard-type type-short">Short</span></div>
+<div class="pcard-body"><div class="pcard-desc">Generate all required content for a conference session submission from a topic description.</div>
+<div class="pcard-prompt">Generate complete content for a conference session submission.
+
+**Session topic:** [describe in 2–3 sentences]
+**Target audience:** [beginners / intermediate / advanced]
+**Format:** [50-min presentation / 90-min workshop / panel]
+**Conference strand:** [e.g., Artificial Intelligence, Leadership, Curriculum]
+
+**Generate:**
+
+1. **Session Title** — catchy, clear, ≤10 words
+
+2. **Brief Description** (≤50 words) — what attendees experience; no buzzwords
+
+3. **Detailed Description** (≤100 words) — 3 learning outcomes using action verbs
+
+4. **3 Learning Objectives** — specific, measurable, using Bloom's verbs
+
+5. **Speaker Bio** (75 words, third person) — emphasize expertise relevant to this session. Adapt from: [paste credentials]
+
+6. **Engagement Strategy** — 1–2 sentences on how you'll make this interactive</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="custom-assistants" data-type="short" data-keywords="elearning video content evergreen refresh transcript AI voiceover repurpose">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Custom Assistants</div><div class="pcard-title">Evergreen Content Refresher</div></div><span class="pcard-type type-short">Short</span></div>
+<div class="pcard-body"><div class="pcard-desc">Extend the life of existing training videos and eLearning content using a 5-step AI workflow.</div>
+<div class="pcard-prompt">Help me refresh and extend the life of existing training content using this 5-step workflow.
+
+**My content:** [describe existing videos or courses]
+**Goal:** [what refreshed content should accomplish]
+**Audience:** [who will use it]
+
+**Step 1 — Extract & Analyze**
+I'll paste VTT transcripts (timing markers removed). Analyze for recurring themes, key takeaways, and connecting threads. Cite which source each insight comes from.
+
+**Step 2 — Unified Narrative**
+Identify overlapping themes and build a cohesive script outline.
+
+**Step 3 — Voiceover Script**
+Write a clean 800–1,200 word script for AI text-to-speech. Short sentences, natural rhythm, no passive voice.
+
+**Step 4 — Visual Refresh Notes**
+Suggest 5–8 specific graphic or animation updates that modernize the content.
+
+**Step 5 — Repurposing Plan**
+Suggest reuse formats: LMS module / marketing clip / LinkedIn snippet / email newsletter / PDF quick guide
+
+**Transcripts:** [paste here]</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+</div>
+
+<!-- VISUAL & CODE -->
+<div class="sec-divider" id="visual-code"><div class="sec-divider-line"></div><span class="sec-divider-icon">🖼</span><span class="sec-divider-lbl">Visual &amp; Code</span><div class="sec-divider-line"></div></div>
+<div class="prompts-grid">
+
+<div class="pcard" data-cat="visual-code" data-type="mega" data-keywords="mxgraph drawio xml diagram flowchart architecture conceptual map import">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Visual &amp; Code</div><div class="pcard-title">Draw.io Diagram Generator (MXGraph XML)</div></div><span class="pcard-type type-mega">System</span></div>
+<div class="pcard-body"><div class="pcard-desc">Converts any text description into valid, importable Draw.io XML. Paste output directly into draw.io as a ready-to-edit diagram.</div>
+<div class="pcard-prompt">Convert the text below into MXGraph XML that imports directly into Draw.io without errors. Output ONLY the complete XML — no explanation.
+
+**Required structure:**
+Root: &lt;mxGraphModel grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100"&gt;&lt;root&gt;
+Always include: &lt;mxCell id="0"/&gt; and &lt;mxCell id="1" parent="0"/&gt; first
+All visual elements: parent="1" with unique IDs
+Vertices: include mxGeometry x, y, width="120" height="60"
+Edges: require source, target, and relative mxGeometry
+
+**Styling:**
+Nodes: style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;"
+Edges: style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;endFill=1;"
+
+**Process:**
+1. Identify key concepts → each becomes a vertex
+2. Identify relationships/flows → each becomes an edge
+3. Position nodes without overlaps (top-down or left-to-right)
+4. For complex text: map only top-level concepts for clarity
+
+**Text to convert:**
+[Paste your text here]</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="visual-code" data-type="short" data-keywords="image text quality clean professional typography legibility prompt add-on block">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Visual &amp; Code</div><div class="pcard-title">Image Text Quality Rules</div></div><span class="pcard-type type-short">Short</span></div>
+<div class="pcard-body"><div class="pcard-desc">Add-on block for any image generation prompt. Ensures readable, professional text in AI-generated images.</div>
+<div class="pcard-prompt">**Add to any image generation prompt:**
+
+Text requirements:
+- All text must be clean, professional, and completely free of typos
+- Short, plain labels only — scannable at a glance
+- No stylized, distorted, hand-lettered, or decorative fonts
+- Bold sans-serif fonts only — prioritize legibility
+- High contrast between text and background
+- Include ONLY explicitly requested text — no watermarks or extra decorative words
+- Adequate padding around all text elements
+
+Before finalizing: verify every word is readable and correctly spelled.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="visual-code" data-type="short" data-keywords="professional headshot photo portrait photography prompt linkedin bio">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Visual &amp; Code</div><div class="pcard-title">Professional Headshot Prompt</div></div><span class="pcard-type type-short">Short</span></div>
+<div class="pcard-body"><div class="pcard-desc">Image generation prompt for polished professional headshots for LinkedIn, bios, or websites.</div>
+<div class="pcard-prompt">Professional headshot photography. [Gender, approximate age, brief description]. Business casual attire.
+
+Lighting: Soft studio setup — key light at 45 degrees, subtle fill light, gentle background separation. Visible catch lights in eyes.
+
+Background: [Solid neutral gray / blurred office environment / seamless white]
+
+Style: High-resolution DSLR portrait photography. Sharp focus on face and eyes. Natural, confident expression. Slight smile. Face centered and fully visible.
+
+Technical: 85mm lens equivalent, f/2.8 for background blur.
+
+Do not include: props, text overlays, distracting backgrounds, heavy filters.
+
+Use for: LinkedIn profile / company website / speaker bio</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+</div>
+
+<div class="no-results" id="no-results">No prompts match your search. Try different keywords.</div>
+
+<!-- ═══════════ PROMPT ARCHITECT ═══════════ -->
+<div class="sec-divider" id="prompt-architect"><div class="sec-divider-line"></div><span class="sec-divider-icon">🛠️</span><span class="sec-divider-lbl">Prompt Architect Tool</span><div class="sec-divider-line"></div></div>
+<div class="tool-wrapper">
+  <div class="tool-panel">
+    <div class="tool-panel-header">
+      <div class="tool-panel-icon">🛠️</div>
+      <div>
+        <div class="tool-panel-title">Prompt Architect</div>
+        <div class="tool-panel-sub">Transform a basic idea into an optimized, framework-structured prompt</div>
+      </div>
+    </div>
+    <div class="tool-body">
+      <div class="tool-field">
+        <label class="tool-label" for="archInput">1 · Enter your basic request</label>
+        <textarea class="tool-textarea" id="archInput" rows="4" placeholder="Example: Write a lesson plan about the water cycle for 5th graders."></textarea>
+      </div>
+      <div class="tool-field">
+        <label class="tool-label" for="archType">2 · Select a prompt framework</label>
+        <select class="tool-select" id="archType">
+          <option value="triple-check">Triple-Check — Analyze / Criticize / Multi-Perspective</option>
+          <option value="few-shot">Few-Shot — Learning by Example</option>
+          <option value="cot">Chain-of-Thought — Step-by-Step Reasoning</option>
+          <option value="tot">Tree-of-Thought — Simulate Multiple Expert Paths</option>
+          <option value="chaining">Prompt Chaining — Multi-Step Workflow</option>
+          <option value="rag">RAG Organization — Ground in Uploaded Documents</option>
+        </select>
+      </div>
+      <button class="btn-generate" onclick="runArchitect()">✨ Generate Optimized Prompt</button>
+      <div class="tool-output" id="archOutput">
+        <div class="output-box">
+          <button class="output-copy-btn" onclick="copyArch()">Copy</button>
+          <pre class="output-pre" id="archText"></pre>
+        </div>
+        <div class="rec-box">
+          <div class="rec-label">Recommended Model &amp; Tool</div>
+          <div class="rec-text" id="archRec"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ GLOSSARY ═══════════ -->
+<div class="sec-divider" id="glossary"><div class="sec-divider-line"></div><span class="sec-divider-icon">📚</span><span class="sec-divider-lbl">Glossary of Concepts</span><div class="sec-divider-line"></div></div>
+<div class="glossary-grid">
+  <div class="gcard"><span class="gterm">Triple-Check Prompting</span><span class="gdef">A rigorous framework that forces the AI to analyze variables, criticize its own draft, and adopt multiple expert perspectives before finalizing an answer.</span></div>
+  <div class="gcard"><span class="gterm">Few-Shot Prompting</span><span class="gdef">Providing the AI with a few examples of the desired input/output to establish a specific pattern or style it should follow.</span></div>
+  <div class="gcard"><span class="gterm">Chain-of-Thought (CoT)</span><span class="gdef">Instructing the AI to "think step-by-step" and show its reasoning process, which significantly reduces errors in logic and math tasks.</span></div>
+  <div class="gcard"><span class="gterm">Tree-of-Thought (ToT)</span><span class="gdef">Asking the AI to simulate multiple experts exploring different solution paths and vote on the best one — ideal for complex decisions.</span></div>
+  <div class="gcard"><span class="gterm">Prompt Chaining</span><span class="gdef">Breaking a complex task into a sequence of smaller prompts, where the output of one prompt becomes the input for the next.</span></div>
+  <div class="gcard"><span class="gterm">RAG (Retrieval-Augmented Generation)</span><span class="gdef">Grounding the AI's response in specific, uploaded documents rather than its general training data, reducing hallucinations.</span></div>
+  <div class="gcard"><span class="gterm">Bot Stacking</span><span class="gdef">A BoodleBox feature where you use different AI models (e.g., Perplexity for research, Claude for writing) in the same chat context.</span></div>
+  <div class="gcard"><span class="gterm">Nano Banana</span><span class="gdef">Google's Gemini Flash image generator. Fast, watermark-free, and ideal for creating educational visuals and diagrams.</span></div>
+  <div class="gcard"><span class="gterm">Star Docs</span><span class="gdef">Documents you "star" in BoodleBox to automatically attach them to every new chat — ideal for Style Guides, Policies, and Reference Files.</span></div>
+</div>
+
+<!-- ═══════════ AI WORKFLOW MODELS ═══════════ -->
+<div class="sec-divider" id="ai-workflows"><div class="sec-divider-line"></div><span class="sec-divider-icon">🗺️</span><span class="sec-divider-lbl">AI Workflow Models</span><div class="sec-divider-line"></div></div>
+<div class="workflow-grid">
+
+  <div class="wcard">
+    <div class="wcard-header pbl">
+      <div class="wcard-eyebrow">Model 01</div>
+      <div class="wcard-title">Problem-Based Learning (PBL)</div>
+      <div class="wcard-focus"><strong style="color:rgba(183,228,199,.8)">Focus:</strong> Identify known pain points and challenges that can be solved more intelligently with AI. Starts with "Why" and emphasizes measurable ROI.</div>
+    </div>
+    <div class="wcard-body">
+      <div class="wcard-section">
+        <div class="wcard-section-lbl">🏫 K-16 Education Examples</div>
+        <div class="wcard-item">
+          <div class="wcard-item-title">IEP paperwork takes 15+ hours/week</div>
+          <div class="wcard-item-value">→ Reduce drafting time 50%, saving $200k in turnover costs</div>
+        </div>
+        <div class="wcard-item">
+          <div class="wcard-item-title">Writing feedback takes 2 weeks to return</div>
+          <div class="wcard-item-value">→ Instant AI-assisted feedback loops improve proficiency 15%</div>
+        </div>
+      </div>
+      <div class="wcard-section">
+        <div class="wcard-section-lbl">🏢 Organization Examples</div>
+        <div class="wcard-item">
+          <div class="wcard-item-title">Low donor retention from generic "blast" emails</div>
+          <div class="wcard-item-value">→ Personalized AI impact reports increase retention 20%</div>
+        </div>
+        <div class="wcard-item">
+          <div class="wcard-item-title">Directors spend 40% of time on manual report formatting</div>
+          <div class="wcard-item-value">→ Automating "raw data to presentation" recovers 15 hrs/week</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wcard">
+    <div class="wcard-header uc">
+      <div class="wcard-eyebrow">Model 02</div>
+      <div class="wcard-title">Use Case Model</div>
+      <div class="wcard-focus"><strong style="color:rgba(183,228,199,.8)">Focus:</strong> Identify "quick-win" pilot projects with high success probability by unbundling jobs into tasks with four identifying characteristics.</div>
+    </div>
+    <div class="wcard-body">
+      <div class="wcard-section">
+        <div class="wcard-section-lbl">The Four Pillars</div>
+        <div class="pillar-tags">
+          <span class="ptag ptag-data">Data-Driven</span>
+          <span class="ptag ptag-rep">Repetitive</span>
+          <span class="ptag ptag-pred">Predictive</span>
+          <span class="ptag ptag-gen">Generative</span>
+        </div>
+      </div>
+      <div class="wcard-section">
+        <div class="wcard-section-lbl">🏫 K-16 Education Examples</div>
+        <div class="wcard-item">
+          <div class="wcard-item-title"><span class="ptag ptag-gen" style="font-size:.52rem;padding:2px 7px">Generative</span> Watermark-free visual aids</div>
+          <div class="wcard-item-value">→ Create diagrams and images via Nano Banana</div>
+        </div>
+        <div class="wcard-item">
+          <div class="wcard-item-title"><span class="ptag ptag-rep" style="font-size:.52rem;padding:2px 7px">Repetitive</span> Syllabus / Handbook FAQs</div>
+          <div class="wcard-item-value">→ Custom Bots answer student questions 24/7</div>
+        </div>
+        <div class="wcard-item">
+          <div class="wcard-item-title"><span class="ptag ptag-data" style="font-size:.52rem;padding:2px 7px">Data-Driven</span> Analyze CSV test scores</div>
+          <div class="wcard-item-value">→ Identify learning gaps via Code Interpreter</div>
+        </div>
+      </div>
+      <div class="wcard-section">
+        <div class="wcard-section-lbl">🏢 Organization Examples</div>
+        <div class="wcard-item">
+          <div class="wcard-item-title"><span class="ptag ptag-rep" style="font-size:.52rem;padding:2px 7px">Repetitive</span> Automate meeting minutes</div>
+          <div class="wcard-item-value">→ Star Docs + style guide templates</div>
+        </div>
+        <div class="wcard-item">
+          <div class="wcard-item-title"><span class="ptag ptag-gen" style="font-size:.52rem;padding:2px 7px">Generative</span> Repurpose one grant report</div>
+          <div class="wcard-item-value">→ A month of social content via Bot Stacking</div>
+        </div>
+        <div class="wcard-item">
+          <div class="wcard-item-title"><span class="ptag ptag-data" style="font-size:.52rem;padding:2px 7px">Data-Driven</span> Vendor comparison matrices</div>
+          <div class="wcard-item-value">→ Analyze multiple PDF proposals simultaneously</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-brand">MG<span>uhlin</span>.org</div>
+  <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+    <a href="https://mguhlin.org/about-miguel/" target="_blank" style="font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--forest-light);text-decoration:none;opacity:.7;transition:opacity .2s">About Miguel</a>
+    <a href="https://mguhlin.org/?s=tsae" target="_blank" style="font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--forest-light);text-decoration:none;opacity:.7;transition:opacity .2s">Session Resources</a>
+    <div class="footer-copy">AI Prompt Library · Claude · Gemini · ChatGPT · Copilot · CC0</div>
+  </div>
+</footer>
+
+</div><!-- /main-content -->
+
+<a href="#top" id="back-to-top" aria-label="Back to top">↑</a>
+
+<script>
+/* Back to top */
+const btt=document.getElementById('back-to-top');
+window.addEventListener('scroll',()=>btt.classList.toggle('visible',scrollY>500),{passive:true});
+
+/* Scroll-in */
+const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}});},{threshold:0.05});
+document.querySelectorAll('.pcard,.gcard,.wcard').forEach(c=>io.observe(c));
+
+/* Prompt Architect */
+function runArchitect(){
+  const input=document.getElementById('archInput').value.trim();
+  const type=document.getElementById('archType').value;
+  if(!input){alert('Please enter a prompt idea first!');return;}
+  const prompts={
+    'triple-check':{
+      text:`Task: ${input}\n\nPlease follow this Triple-Check process to ensure the highest quality output:\n\n1. ANALYZE FIRST:\nBefore giving an answer, break down the key variables that matter for this question. Compare multiple possible solutions before choosing the best one.\n\n2. SELF-CRITICIZE:\nNow analyze your response. What weaknesses, assumptions, or missing perspectives could be improved? Refine the answer accordingly.\n\n3. FORCE PERSPECTIVES:\nAnswer this from 3 different viewpoints:\n  a) An industry expert\n  b) A data-driven researcher\n  c) A contrarian innovator\n\nThen combine the best insights into a single, refined final answer.`,
+      rec:'<strong>Best Model:</strong> Gemini 1.5 Pro or Claude Sonnet<br><strong>Why:</strong> These models have large context windows and excellent instruction-following for multi-step self-correction.'
+    },
+    'few-shot':{
+      text:`I need you to perform the following task: ${input}\n\nTo match the specific format and style I need, please follow these examples exactly:\n\nExample 1 Input: [Insert similar task here]\nExample 1 Output: [Insert the perfect example response here]\n\nExample 2 Input: [Insert similar task here]\nExample 2 Output: [Insert the perfect example response here]\n\nNow, process my actual request following this exact pattern.`,
+      rec:'<strong>Best Model:</strong> ChatGPT-4o or Claude Sonnet<br><strong>Why:</strong> Highly steerable models that excel at mimicking patterns established by provided examples.'
+    },
+    'cot':{
+      text:`Task: ${input}\n\nInstructions: Do not give me the final answer immediately. Instead, think through this step-by-step:\n\n1. Break down the problem into its core components.\n2. Analyze each component logically.\n3. Show your reasoning for each step.\n4. Only then provide the final conclusion based on this reasoning.\n\nLabel each step clearly as you go.`,
+      rec:'<strong>Best Model:</strong> OpenAI o3 or Claude Sonnet<br><strong>Why:</strong> Reasoning models excel at logic, math, and complex tasks where showing the work matters.'
+    },
+    'tot':{
+      text:`Task: ${input}\n\nInstructions: Imagine three different experts are collaborating on this problem:\n\n- Expert A is a creative visionary focused on novel possibilities.\n- Expert B is a pragmatic realist focused on what is feasible today.\n- Expert C is a detail-oriented critic focused on risks and blind spots.\n\nHave them debate the best approach, critique each other's ideas, and then reach a consensus on the single best solution. Show the dialogue.`,
+      rec:'<strong>Best Model:</strong> Claude Opus<br><strong>Why:</strong> Known for nuance and the ability to maintain distinct reasoning personas within a single response.'
+    },
+    'chaining':{
+      text:`We will complete this task in a sequence of steps. Wait for my explicit "Continue" before moving to the next step.\n\nGoal: ${input}\n\nStep 1 — Research & Analyze\nResearch or analyze the key inputs, context, and constraints. Summarize your findings.\n→ Pause here and wait for my review.\n\nStep 2 — Draft an Outline\nBased on Step 1, draft a structured outline of the deliverable.\n→ Pause here and wait for my review.\n\nStep 3 — Expand to Final Deliverable\nExpand the outline into a complete, polished output.\n→ Pause here and wait for my review.\n\nStep 4 — Visual / Summary\nCreate a concise visual summary, diagram description, or key-points list.`,
+      rec:'<strong>Best Tool:</strong> BoodleBox Bot Stacking<br><strong>Why:</strong> Use @perplexity for Step 1 (Research), @claude-sonnet for Steps 2–3 (Writing), and @nano-banana for Step 4 (Image Gen) — all in one shared chat context.'
+    },
+    'rag':{
+      text:`Using ONLY the documents I have uploaded or attached, please answer the following:\n\n${input}\n\nStrict rules:\n- Do not use any outside knowledge or training data.\n- Cite the specific document name and section for every claim you make.\n- Quote directly when possible, and indicate the quote location.\n- If the answer is not present in the provided documents, state clearly: "I cannot find this information in the provided text."\n- Do not speculate or infer beyond what the documents explicitly state.`,
+      rec:'<strong>Best Tool:</strong> BoodleBox Knowledge Bank or Google NotebookLM<br><strong>Why:</strong> These tools are specifically architected to ground answers in your uploaded files, minimizing hallucinations.'
+    }
+  };
+  const p=prompts[type];
+  document.getElementById('archText').textContent=p.text;
+  document.getElementById('archRec').innerHTML=p.rec;
+  const out=document.getElementById('archOutput');
+  out.style.display='block';
+  out.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function copyArch(){
+  const text=document.getElementById('archText').textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=document.querySelector('.output-copy-btn');
+    btn.textContent='Copied ✓';setTimeout(()=>btn.textContent='Copy',2000);
+  });
+}
+
+/* Hamburger */
+const hamburger=document.getElementById('hamburger');
+const sidebar=document.getElementById('sidebar');
+const overlay=document.getElementById('sidebarOverlay');
+function openSidebar(){sidebar.classList.add('open');overlay.classList.add('open');hamburger.classList.add('open');document.body.style.overflow='hidden';}
+function closeSidebar(){sidebar.classList.remove('open');overlay.classList.remove('open');hamburger.classList.remove('open');document.body.style.overflow='';}
+hamburger.addEventListener('click',()=>sidebar.classList.contains('open')?closeSidebar():openSidebar());
+overlay.addEventListener('click',closeSidebar);
+document.querySelectorAll('.sidebar-link').forEach(l=>l.addEventListener('click',()=>{if(window.innerWidth<=768)closeSidebar();}));
+
+/* Expand/collapse */
+function toggleExpand(btn){
+  const p=btn.closest('.pcard-body').querySelector('.pcard-prompt');
+  const ex=p.classList.toggle('expanded');
+  btn.textContent=ex?'Collapse ▴':'Expand ▾';
+}
+
+/* Copy */
+function copyPrompt(btn){
+  const text=btn.closest('.pcard-body').querySelector('.pcard-prompt').textContent.trim();
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='Copied ✓';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied');},2000);
+  });
+}
+
+/* Filter state */
+const cards=Array.from(document.querySelectorAll('.pcard'));
+const typePills=document.querySelectorAll('.type-pill');
+const catLinks=document.querySelectorAll('.sidebar-link[data-cat]');
+const searchInput=document.getElementById('searchInput');
+const noResults=document.getElementById('no-results');
+let activeType='all',activeCat='all-cat',searchTerm='';
+
+/* counts */
+const catCounts={};
+cards.forEach(c=>{const cat=c.dataset.cat;catCounts[cat]=(catCounts[cat]||0)+1;});
+const total=cards.length;
+document.getElementById('total-count').textContent=total;
+document.getElementById('hero-count').textContent=total;
+document.getElementById('cnt-all').textContent=total;
+Object.entries(catCounts).forEach(([cat,n])=>{const el=document.getElementById('cnt-'+cat);if(el)el.textContent=n;});
+
+function applyFilters(){
+  let visible=0;
+  cards.forEach(card=>{
+    const cat=card.dataset.cat||'',type=card.dataset.type||'';
+    const kw=(card.dataset.keywords||'')+' '+(card.querySelector('.pcard-title')?.textContent||'')+' '+(card.querySelector('.pcard-desc')?.textContent||'');
+    const pt=card.querySelector('.pcard-prompt')?.textContent||'';
+    let show=true;
+    if(activeType!=='all'&&type!==activeType)show=false;
+    if(activeCat!=='all-cat'&&cat!==activeCat)show=false;
+    if(searchTerm){const hay=(kw+' '+pt).toLowerCase();show=show&&hay.includes(searchTerm);}
+    card.style.display=show?'':'none';
+    if(show)visible++;
+  });
+  document.querySelectorAll('.prompts-grid').forEach(grid=>{
+    const hasVis=Array.from(grid.querySelectorAll('.pcard')).some(c=>c.style.display!=='none');
+    grid.style.display=hasVis?'':'none';
+    const div=grid.previousElementSibling;
+    if(div?.classList.contains('sec-divider'))div.style.display=hasVis?'':'none';
+  });
+  document.getElementById('visible-count').textContent=visible;
+  noResults.style.display=visible===0?'block':'none';
+}
+
+/* type pills */
+typePills.forEach(pill=>pill.addEventListener('click',()=>{
+  typePills.forEach(p=>p.classList.remove('active'));pill.classList.add('active');
+  activeType=pill.dataset.filter;applyFilters();
+}));
+
+/* cat links */
+function handleCatClick(e,cat){
+  catLinks.forEach(l=>l.classList.remove('active'));e.currentTarget.classList.add('active');
+  activeCat=cat;applyFilters();
+}
+
+/* search */
+searchInput.addEventListener('input',()=>{
+  searchTerm=searchInput.value.toLowerCase().trim();
+  if(searchTerm){
+    typePills.forEach(p=>p.classList.remove('active'));document.querySelector('[data-filter="all"]').classList.add('active');
+    catLinks.forEach(l=>l.classList.remove('active'));document.querySelector('[data-cat="all-cat"]').classList.add('active');
+    activeType='all';activeCat='all-cat';
+  }
+  applyFilters();
+});
+
+/* scroll spy */
+const sections=Array.from(document.querySelectorAll('.sec-divider[id]'));
+window.addEventListener('scroll',()=>{
+  const sy=window.scrollY+100;let current='all-cat';
+  sections.forEach(sec=>{if(sec.offsetTop<=sy)current=sec.id;});
+  catLinks.forEach(l=>l.classList.toggle('active',l.dataset.cat===current||(current==='all-cat'&&l.dataset.cat==='all-cat')));
+},{passive:true});
+
+applyFilters();
+</script>
+</body>
+</html>
