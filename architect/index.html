@@ -1550,7 +1550,7 @@ function applyFilters(){
     if(activeCat!=='all-cat'&&cat!==activeCat)show=false;
     if(searchTerm){const hay=(kw+' '+pt).toLowerCase();show=show&&hay.includes(searchTerm);}
     card.style.display=show?'':'none';
-    if(show)visible++;
+    if(show){card.classList.add('visible');visible++;}
   });
   document.querySelectorAll('.prompts-grid').forEach(grid=>{
     const hasVis=Array.from(grid.querySelectorAll('.pcard')).some(c=>c.style.display!=='none');
