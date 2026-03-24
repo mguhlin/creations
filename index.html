@@ -24,6 +24,7 @@
   --gold-light:    #F1C40F;
   --border-dark:   rgba(116,198,157,0.15);
   --border-mid:    rgba(116,198,157,0.08);
+  --sidebar-w:     240px;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -48,67 +49,148 @@ body::before {
   opacity: 0.6;
 }
 
-/* ─── STICKY NAV ─── */
-.topnav {
+/* ─── LEFT SIDEBAR ─── */
+.sidebar {
   position: fixed;
-  top: 0; left: 0; right: 0;
+  top: 0; left: 0; bottom: 0;
+  width: var(--sidebar-w);
   z-index: 200;
-  height: 56px;
-  background: rgba(27,67,50,0.96);
+  background: rgba(27,67,50,0.97);
   backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--border-dark);
+  border-right: 1px solid var(--border-dark);
   display: flex;
-  align-items: center;
-  padding: 0 32px;
-  gap: 8px;
+  flex-direction: column;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(116,198,157,0.2) transparent;
+  transition: transform 0.3s ease;
 }
-.topnav-brand {
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(116,198,157,0.2); border-radius: 4px; }
+
+.sidebar-brand {
+  display: block;
+  padding: 24px 20px 20px;
   font-family: 'Playfair Display', serif;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--forest-pale);
   text-decoration: none;
-  white-space: nowrap;
-  margin-right: 16px;
+  border-bottom: 1px solid var(--border-dark);
 }
-.topnav-brand span { color: var(--forest-light); }
-.topnav-scroll {
+.sidebar-brand span { color: var(--forest-light); }
+
+.sidebar-section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(116,198,157,0.4);
+  padding: 20px 20px 6px;
+}
+.sidebar-nav {
   display: flex;
-  gap: 2px;
-  overflow-x: auto;
-  scrollbar-width: none;
+  flex-direction: column;
+  padding: 4px 10px;
+  gap: 1px;
   flex: 1;
 }
-.topnav-scroll::-webkit-scrollbar { display: none; }
-.topnav-scroll a {
+.sidebar-nav a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   color: rgba(212,228,199,0.65);
   text-decoration: none;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 500;
-  letter-spacing: 0.05em;
-  padding: 5px 10px;
-  border-radius: 5px;
-  white-space: nowrap;
+  padding: 8px 10px;
+  border-radius: 6px;
   transition: background 0.15s, color 0.15s;
+  line-height: 1.3;
 }
-.topnav-scroll a:hover {
+.sidebar-nav a:hover {
   background: rgba(116,198,157,0.15);
   color: var(--forest-pale);
 }
-.topnav-back {
-  margin-left: auto;
-  font-size: 0.7rem;
+.sidebar-nav a .pnum {
   font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
   color: var(--forest-light);
   opacity: 0.7;
-  text-decoration: none;
-  padding: 4px 10px;
-  border: 1px solid var(--border-dark);
-  border-radius: 4px;
-  transition: opacity 0.2s;
-  white-space: nowrap;
+  flex-shrink: 0;
+  width: 20px;
 }
-.topnav-back:hover { opacity: 1; }
+.sidebar-nav .nav-section-break {
+  height: 1px;
+  background: rgba(116,198,157,0.08);
+  margin: 8px 10px;
+}
+
+.sidebar-footer {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-dark);
+  margin-top: auto;
+}
+.sidebar-footer a {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--forest-light);
+  opacity: 0.6;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: opacity 0.2s;
+}
+.sidebar-footer a:hover { opacity: 1; }
+
+/* ─── HAMBURGER TOGGLE (mobile only) ─── */
+.menu-toggle {
+  display: none;
+  position: fixed;
+  top: 14px; left: 14px;
+  z-index: 300;
+  width: 42px; height: 42px;
+  border-radius: 8px;
+  background: rgba(27,67,50,0.96);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--border-dark);
+  cursor: pointer;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.menu-toggle span {
+  display: block;
+  width: 20px; height: 2px;
+  background: var(--forest-light);
+  border-radius: 2px;
+  transition: transform 0.25s, opacity 0.25s;
+}
+.menu-toggle.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.menu-toggle.active span:nth-child(2) { opacity: 0; }
+.menu-toggle.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* Overlay behind sidebar on mobile */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 190;
+  background: rgba(0,0,0,0.5);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.sidebar-overlay.visible { opacity: 1; }
+
+/* ─── MAIN WRAPPER (offset for sidebar) ─── */
+.page-wrap {
+  margin-left: var(--sidebar-w);
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+}
 
 /* ─── HERO ─── */
 .hero {
@@ -120,7 +202,7 @@ body::before {
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 100px 32px 80px;
+  padding: 80px 32px;
   background:
     radial-gradient(ellipse 70% 55% at 50% 40%, rgba(45,106,79,0.28) 0%, transparent 65%),
     radial-gradient(ellipse 40% 40% at 15% 75%, rgba(27,67,50,0.45) 0%, transparent 55%),
@@ -248,56 +330,6 @@ body::before {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ─── INDEX STRIP ─── */
-.index-strip {
-  position: relative;
-  z-index: 1;
-  background: var(--forest-deep);
-  border-top: 1px solid var(--border-dark);
-  border-bottom: 1px solid var(--border-dark);
-  padding: 14px 32px;
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-}
-.index-label {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.62rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--forest-light);
-  margin-right: 8px;
-  opacity: 0.7;
-}
-.index-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 12px;
-  border: 1px solid rgba(116,198,157,0.2);
-  border-radius: 100px;
-  font-size: 0.72rem;
-  color: rgba(212,228,199,0.7);
-  text-decoration: none;
-  transition: all 0.15s;
-}
-.index-pill:hover {
-  background: rgba(116,198,157,0.12);
-  color: var(--forest-pale);
-  border-color: rgba(116,198,157,0.35);
-}
-.index-pill .pnum {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.6rem;
-  color: var(--forest-light);
-  opacity: 0.8;
-}
-
-/* ─── MAIN ─── */
-main { position: relative; z-index: 1; }
-
 /* ─── SECTION DIVIDER ─── */
 .sec-divider {
   display: flex;
@@ -337,7 +369,7 @@ main { position: relative; z-index: 1; }
   opacity: 0;
   transform: translateY(28px);
   transition: opacity 0.6s ease, transform 0.6s ease;
-  scroll-margin-top: 72px;
+  scroll-margin-top: 24px;
 }
 .slide.visible { opacity: 1; transform: translateY(0); }
 .slide:hover {
@@ -534,15 +566,39 @@ footer {
 .loading-lbl { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(116,198,157,0.4); }
 
 /* ─── RESPONSIVE ─── */
+
+/* Tablet: narrower sidebar */
+@media (max-width: 1080px) {
+  :root { --sidebar-w: 210px; }
+}
+
+/* Mobile: sidebar off-canvas */
 @media (max-width: 860px) {
+  :root { --sidebar-w: 260px; }
+
+  .menu-toggle { display: flex; }
+  .sidebar-overlay { display: block; }
+
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .page-wrap {
+    margin-left: 0;
+  }
+
+  .hero { padding: 70px 20px 60px; }
+
   .slide { grid-template-columns: 1fr; min-height: auto; }
   .slide-content { border-left: none; border-top: 1px solid rgba(116,198,157,0.08); padding: 28px 24px; }
   .slide-panel { padding: 28px 24px 24px; min-height: 180px; }
-  .topnav { padding: 0 16px; }
-  .hero { padding: 90px 20px 60px; }
-  .index-strip { padding: 12px 16px; }
+
   footer { padding: 24px 20px; flex-direction: column; align-items: flex-start; gap: 12px; }
 }
+
 @media (max-width: 520px) {
   .hero-tally { gap: 20px; }
   .slides-container { padding: 20px 16px 60px; }
@@ -561,38 +617,49 @@ footer {
   <div class="loading-lbl">Loading projects</div>
 </div>
 
-<!-- Nav — populated by JS -->
-<nav class="topnav" id="topnav">
-  <a href="#top" class="topnav-brand">MG<span>uhlin</span></a>
-  <div class="topnav-scroll" id="nav-links"></div>
-  <a href="#top" class="topnav-back">↑ Top</a>
-</nav>
+<!-- Mobile hamburger -->
+<button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation">
+  <span></span><span></span><span></span>
+</button>
 
-<!-- Hero — populated by JS -->
-<section class="hero" id="top">
-  <div class="hero-inner">
-    <div class="hero-eyebrow">MGuhlin.org · Digital Creations</div>
-    <h1 class="hero-title">Creative<br><em>Works</em></h1>
-    <p class="hero-byline" id="hero-byline"></p>
-    <p class="hero-desc" id="hero-desc"></p>
-    <div class="hero-tally" id="hero-tally"></div>
-    <div class="hero-scroll">
-      <span>Explore Projects</span>
-      <div class="scroll-ring">↓</div>
-    </div>
+<!-- Mobile overlay -->
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<!-- Left sidebar — populated by JS -->
+<aside class="sidebar" id="sidebar">
+  <a href="#top" class="sidebar-brand">MG<span>uhlin</span>.org</a>
+  <div class="sidebar-section-label">Projects</div>
+  <nav class="sidebar-nav" id="sidebar-nav"></nav>
+  <div class="sidebar-footer">
+    <a href="#top">↑ Back to top</a>
   </div>
-</section>
+</aside>
 
-<!-- Index strip — populated by JS -->
-<div class="index-strip" id="index-strip">
-  <span class="index-label">Jump to</span>
-</div>
+<!-- Page content wrapper -->
+<div class="page-wrap">
 
-<!-- Main slides — populated by JS -->
-<main id="main-content"></main>
+  <!-- Hero -->
+  <section class="hero" id="top">
+    <div class="hero-inner">
+      <div class="hero-eyebrow">MGuhlin.org · Digital Creations</div>
+      <h1 class="hero-title">Creative<br><em>Works</em></h1>
+      <p class="hero-byline" id="hero-byline"></p>
+      <p class="hero-desc" id="hero-desc"></p>
+      <div class="hero-tally" id="hero-tally"></div>
+      <div class="hero-scroll">
+        <span>Explore Projects</span>
+        <div class="scroll-ring">↓</div>
+      </div>
+    </div>
+  </section>
 
-<!-- Footer — populated by JS -->
-<footer id="site-footer"></footer>
+  <!-- Main slides -->
+  <main id="main-content"></main>
+
+  <!-- Footer -->
+  <footer id="site-footer"></footer>
+
+</div><!-- /.page-wrap -->
 
 <!-- Back to top -->
 <a href="#top" id="back-to-top" title="Back to top">↑</a>
@@ -615,8 +682,7 @@ async function loadAndRender() {
   }
 
   buildHero(data.meta);
-  buildNav(data.projects);
-  buildIndexStrip(data.projects);
+  buildSidebar(data.projects);
   buildSlides(data.projects);
   buildFooter(data.meta);
 
@@ -658,21 +724,19 @@ function buildHero(meta) {
   });
 }
 
-/* ── TOP NAV ── */
-function buildNav(projects) {
-  const el = document.getElementById('nav-links');
+/* ── LEFT SIDEBAR NAV ── */
+function buildSidebar(projects) {
+  const el = document.getElementById('sidebar-nav');
+  let currentSection = null;
   projects.forEach(p => {
+    if (p.section !== currentSection) {
+      if (currentSection !== null) {
+        el.insertAdjacentHTML('beforeend', '<div class="nav-section-break"></div>');
+      }
+      currentSection = p.section;
+    }
     el.insertAdjacentHTML('beforeend',
       `<a href="#${p.id}"><span class="pnum">${p.num}</span> ${stripTags(p.title)}</a>`);
-  });
-}
-
-/* ── INDEX STRIP ── */
-function buildIndexStrip(projects) {
-  const el = document.getElementById('index-strip');
-  projects.forEach(p => {
-    el.insertAdjacentHTML('beforeend',
-      `<a href="#${p.id}" class="index-pill"><span class="pnum">${p.num}</span> ${p.title}</a>`);
   });
 }
 
@@ -682,8 +746,7 @@ function buildSlides(projects) {
   let currentSection = null;
   let container = null;
 
-  projects.forEach((p, idx) => {
-    // New section divider
+  projects.forEach((p) => {
     if (p.section !== currentSection) {
       currentSection = p.section;
       main.insertAdjacentHTML('beforeend', `
@@ -697,10 +760,7 @@ function buildSlides(projects) {
       main.appendChild(container);
     }
 
-    // Feature chips
     const chips = p.features.map(f => `<span class="feat-chip">${f}</span>`).join('');
-
-    // Action buttons
     const btns = p.links.map(l => {
       if (l.primary) {
         return `<a href="${l.href}" class="btn-primary"
@@ -749,6 +809,34 @@ function buildFooter(meta) {
 
 /* ── UTIL ── */
 function stripTags(str) { return str.replace(/<[^>]*>/g, ''); }
+
+/* ── MOBILE SIDEBAR TOGGLE ── */
+const toggle = document.getElementById('menu-toggle');
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('sidebar-overlay');
+
+function openSidebar() {
+  sidebar.classList.add('open');
+  toggle.classList.add('active');
+  overlay.classList.add('visible');
+  document.body.style.overflow = 'hidden';
+}
+function closeSidebar() {
+  sidebar.classList.remove('open');
+  toggle.classList.remove('active');
+  overlay.classList.remove('visible');
+  document.body.style.overflow = '';
+}
+
+toggle.addEventListener('click', () => {
+  sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+});
+overlay.addEventListener('click', closeSidebar);
+
+// Close sidebar when a nav link is clicked (mobile)
+document.getElementById('sidebar-nav').addEventListener('click', (e) => {
+  if (e.target.closest('a')) closeSidebar();
+});
 
 /* ── KICK OFF ── */
 loadAndRender();
