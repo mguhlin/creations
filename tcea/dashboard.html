@@ -7,425 +7,143 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-  --navy: #0A3476;
-  --navy-dark: #071f4a;
-  --navy-mid: #12428f;
-  --gold: #FCB040;
-  --gold-light: #fdd17a;
-  --gold-pale: #FEF0D0;
-  --pale-navy: #D0D8F0;
-  --white: #ffffff;
-  --off-white: #f7f8fc;
-  --text: #1a1a2e;
-  --text-muted: #5a6680;
-  --border: #e2e7f5;
-  --teal: #0e6b8a;
-  --sidebar-w: 240px;
+  --navy: #0A3476; --navy-dark: #071f4a; --navy-mid: #12428f;
+  --gold: #FCB040; --gold-light: #fdd17a; --gold-pale: #FEF0D0;
+  --pale-navy: #D0D8F0; --white: #ffffff; --off-white: #f7f8fc;
+  --text: #1a1a2e; --text-muted: #5a6680; --border: #e2e7f5;
+  --teal: #0e6b8a; --sidebar-w: 240px;
+  --waco-accent: #2ecc71; --waco-accent-dark: #27ae60;
 }
-
 html { scroll-behavior: smooth; }
+body { font-family: "DM Sans", sans-serif; background: var(--navy-dark); color: var(--white); min-height: 100vh; display: flex; -webkit-font-smoothing: antialiased; }
 
-body {
-  font-family: "DM Sans", sans-serif;
-  background: var(--navy-dark);
-  color: var(--white);
-  min-height: 100vh;
-  display: flex;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* ── SIDEBAR ─────────────────────────────────── */
-.sidebar {
-  width: var(--sidebar-w);
-  min-height: 100vh;
-  background: #050e22;
-  border-right: 1px solid rgba(252,176,64,0.15);
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  top: 0; left: 0; bottom: 0;
-  z-index: 100;
-  overflow-y: auto;
-}
-
-.sidebar-logo {
-  padding: 28px 24px 20px;
-  border-bottom: 1px solid rgba(252,176,64,0.12);
-}
-.sidebar-logo .org {
-  font-family: "DM Serif Display", serif;
-  font-size: 1.3rem;
-  color: var(--gold);
-  line-height: 1.1;
-}
-.sidebar-logo .subtitle {
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.4);
-  margin-top: 4px;
-}
-
-.sidebar-section-label {
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.3);
-  padding: 20px 24px 8px;
-}
-
-.sidebar-nav a {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 24px;
-  font-size: 0.82rem;
-  font-weight: 500;
-  color: rgba(255,255,255,0.6);
-  text-decoration: none;
-  transition: all 0.15s;
-  border-left: 3px solid transparent;
-}
-.sidebar-nav a:hover,
-.sidebar-nav a.active {
-  color: var(--gold);
-  background: rgba(252,176,64,0.07);
-  border-left-color: var(--gold);
-}
+/* SIDEBAR */
+.sidebar { width: var(--sidebar-w); min-height: 100vh; background: #050e22; border-right: 1px solid rgba(252,176,64,0.15); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 100; overflow-y: auto; }
+.sidebar-logo { padding: 28px 24px 20px; border-bottom: 1px solid rgba(252,176,64,0.12); }
+.sidebar-logo .org { font-family: "DM Serif Display", serif; font-size: 1.3rem; color: var(--gold); line-height: 1.1; }
+.sidebar-logo .subtitle { font-size: 0.7rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-top: 4px; }
+.sidebar-section-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255,255,255,0.3); padding: 20px 24px 8px; }
+.sidebar-nav a { display: flex; align-items: center; gap: 10px; padding: 10px 24px; font-size: 0.82rem; font-weight: 500; color: rgba(255,255,255,0.6); text-decoration: none; transition: all 0.15s; border-left: 3px solid transparent; }
+.sidebar-nav a:hover, .sidebar-nav a.active { color: var(--gold); background: rgba(252,176,64,0.07); border-left-color: var(--gold); }
+.sidebar-nav a.waco:hover, .sidebar-nav a.waco.active { color: var(--waco-accent); background: rgba(46,204,113,0.07); border-left-color: var(--waco-accent); }
 .sidebar-nav a .icon { font-size: 1rem; width: 20px; text-align: center; }
-
-.sidebar-updated {
-  margin-top: auto;
-  padding: 16px 24px;
-  border-top: 1px solid rgba(255,255,255,0.07);
-  font-size: 0.72rem;
-  color: rgba(255,255,255,0.3);
-  line-height: 1.6;
-}
+.sidebar-divider { margin: 8px 24px; border: none; border-top: 1px solid rgba(255,255,255,0.07); }
+.sidebar-updated { margin-top: auto; padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.07); font-size: 0.72rem; color: rgba(255,255,255,0.3); line-height: 1.6; }
 .sidebar-updated strong { color: rgba(255,255,255,0.55); display: block; margin-bottom: 2px; }
 
-/* ── MAIN CONTENT ─────────────────────────────── */
-.main {
-  margin-left: var(--sidebar-w);
-  flex: 1;
-  min-height: 100vh;
-  background: var(--navy-dark);
-}
-
-/* Loading / Error state */
-.state-overlay {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 60vh;
-  flex-direction: column;
-  gap: 16px;
-  color: rgba(255,255,255,0.4);
-  font-size: 0.9rem;
-}
-.state-overlay .spinner {
-  width: 36px; height: 36px;
-  border: 3px solid rgba(252,176,64,0.2);
-  border-top-color: var(--gold);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
+/* MAIN */
+.main { margin-left: var(--sidebar-w); flex: 1; min-height: 100vh; background: var(--navy-dark); }
+.state-overlay { display: flex; align-items: center; justify-content: center; min-height: 60vh; flex-direction: column; gap: 16px; color: rgba(255,255,255,0.4); font-size: 0.9rem; }
+.state-overlay .spinner { width: 36px; height: 36px; border: 3px solid rgba(252,176,64,0.2); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ── PAGE HEADER ─────────────────────────────── */
-.page-header {
-  background: linear-gradient(135deg, #050e22 0%, var(--navy-dark) 50%, #0a1a3a 100%);
-  border-bottom: 1px solid rgba(252,176,64,0.18);
-  padding: 32px 40px 28px;
-  position: relative;
-  overflow: hidden;
-}
-.page-header::after {
-  content: '';
-  position: absolute;
-  top: -60px; right: -60px;
-  width: 320px; height: 320px;
-  background: radial-gradient(circle, rgba(252,176,64,0.1) 0%, transparent 70%);
-  pointer-events: none;
-}
-.page-header-eyebrow {
-  display: inline-block;
-  background: var(--gold);
-  color: var(--navy-dark);
-  font-size: 0.65rem;
-  font-weight: 800;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  padding: 4px 14px;
-  border-radius: 100px;
-  margin-bottom: 12px;
-}
-.page-header h1 {
-  font-family: "DM Serif Display", serif;
-  font-size: 2rem;
-  color: var(--white);
-  line-height: 1.2;
-}
-.page-header h1 em {
-  font-style: italic;
-  color: var(--gold);
-}
-.page-header-meta {
-  font-size: 0.8rem;
-  color: rgba(255,255,255,0.45);
-  margin-top: 6px;
-}
+/* PAGE HEADER */
+.page-header { background: linear-gradient(135deg, #050e22 0%, var(--navy-dark) 50%, #0a1a3a 100%); border-bottom: 1px solid rgba(252,176,64,0.18); padding: 32px 40px 28px; position: relative; overflow: hidden; }
+.page-header::after { content: ''; position: absolute; top: -60px; right: -60px; width: 320px; height: 320px; background: radial-gradient(circle, rgba(252,176,64,0.1) 0%, transparent 70%); pointer-events: none; }
+.page-header-eyebrow { display: inline-block; background: var(--gold); color: var(--navy-dark); font-size: 0.65rem; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; padding: 4px 14px; border-radius: 100px; margin-bottom: 12px; }
+.page-header h1 { font-family: "DM Serif Display", serif; font-size: 2rem; color: var(--white); line-height: 1.2; }
+.page-header h1 em { font-style: italic; color: var(--gold); }
+.page-header-meta { font-size: 0.8rem; color: rgba(255,255,255,0.45); margin-top: 6px; }
 
-/* ── SECTION SCROLL ANCHORS ───────────────────── */
 section { scroll-margin-top: 20px; }
 
-/* ── HERO STATS ──────────────────────────────── */
-#overview {
-  padding: 36px 40px;
-  background: linear-gradient(180deg, #060f24 0%, var(--navy-dark) 100%);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-.section-label {
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.section-label::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: rgba(252,176,64,0.2);
-}
+/* SECTION LABEL */
+.section-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.section-label::after { content: ''; flex: 1; height: 1px; background: rgba(252,176,64,0.2); }
+.section-label.waco { color: var(--waco-accent); }
+.section-label.waco::after { background: rgba(46,204,113,0.2); }
 
-.hero-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-}
+/* OVERVIEW SECTION */
+#overview { padding: 36px 40px; background: linear-gradient(180deg, #060f24 0%, var(--navy-dark) 100%); border-bottom: 1px solid rgba(255,255,255,0.06); }
 
-.stat-card {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 14px;
-  padding: 28px 28px 24px;
-  position: relative;
-  overflow: hidden;
-  transition: border-color 0.2s;
-}
+/* HERO STAT CARDS */
+.hero-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+.stat-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 28px 28px 24px; position: relative; overflow: hidden; transition: border-color 0.2s; }
 .stat-card:hover { border-color: rgba(252,176,64,0.3); }
-.stat-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: var(--gold);
-  border-radius: 14px 14px 0 0;
-}
+.stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gold); border-radius: 14px 14px 0 0; }
 .stat-card.accent::before { background: var(--teal); }
 .stat-card.accent2::before { background: #7c3aed; }
-
-.stat-label {
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.45);
-  margin-bottom: 12px;
-}
-.stat-value {
-  font-family: "DM Serif Display", serif;
-  font-size: 3.4rem;
-  color: var(--gold);
-  line-height: 1;
-  letter-spacing: -1px;
-}
+.stat-card.green::before { background: var(--waco-accent); }
+.stat-card.green:hover { border-color: rgba(46,204,113,0.3); }
+.stat-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 12px; }
+.stat-value { font-family: "DM Serif Display", serif; font-size: 3.4rem; color: var(--gold); line-height: 1; letter-spacing: -1px; }
 .stat-value.revenue { color: var(--gold-light); }
 .stat-value.courses { color: var(--pale-navy); }
 .stat-value.avg { color: #86efac; }
-
-.stat-sub {
-  font-size: 0.78rem;
-  color: rgba(255,255,255,0.35);
-  margin-top: 8px;
-}
-
-/* ── GOAL PROGRESS ───────────────────────────── */
-.goal-bar-wrap {
-  margin-top: 16px;
-}
-.goal-bar-meta {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.72rem;
-  color: rgba(255,255,255,0.35);
-  margin-bottom: 6px;
-}
+.stat-value.waco-green { color: var(--waco-accent); }
+.stat-value.waco-rev { color: #a7f3d0; }
+.stat-sub { font-size: 0.78rem; color: rgba(255,255,255,0.35); margin-top: 8px; }
+.goal-bar-wrap { margin-top: 16px; }
+.goal-bar-meta { display: flex; justify-content: space-between; font-size: 0.72rem; color: rgba(255,255,255,0.35); margin-bottom: 6px; }
 .goal-bar-meta span { color: rgba(255,255,255,0.6); font-weight: 600; }
-.goal-bar-track {
-  height: 6px;
-  background: rgba(255,255,255,0.08);
-  border-radius: 100px;
-  overflow: hidden;
-}
-.goal-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--gold), var(--gold-light));
-  border-radius: 100px;
-  transition: width 1s cubic-bezier(0.4,0,0.2,1);
-  width: 0%;
-}
+.goal-bar-track { height: 6px; background: rgba(255,255,255,0.08); border-radius: 100px; overflow: hidden; }
+.goal-bar-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); border-radius: 100px; transition: width 1s cubic-bezier(0.4,0,0.2,1); width: 0%; }
 .goal-bar-fill.teal { background: linear-gradient(90deg, var(--teal), #1aa3c7); }
 
-/* ── COURSE TABLE ────────────────────────────── */
-#courses {
-  padding: 36px 40px;
-}
+/* COURSES SECTION */
+#courses { padding: 36px 40px; border-bottom: 1px solid rgba(255,255,255,0.06); }
 
-.table-wrap {
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 14px;
-  overflow: hidden;
-}
+/* WACO SECTION */
+#waco { padding: 36px 40px; }
+.waco-header-card { background: linear-gradient(135deg, rgba(46,204,113,0.08) 0%, rgba(5,14,34,0.6) 100%); border: 1px solid rgba(46,204,113,0.18); border-radius: 14px; padding: 24px 28px; margin-bottom: 28px; display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+.waco-header-card .district-name { font-family: "DM Serif Display", serif; font-size: 1.6rem; color: var(--white); line-height: 1.1; }
+.waco-header-card .district-name em { color: var(--waco-accent); font-style: italic; }
+.waco-header-card .district-sub { font-size: 0.8rem; color: rgba(255,255,255,0.4); margin-top: 4px; }
+.waco-mini-stats { display: flex; gap: 32px; flex-wrap: wrap; }
+.waco-mini-stat { text-align: right; }
+.waco-mini-stat .val { font-family: "DM Serif Display", serif; font-size: 2rem; color: var(--waco-accent); line-height: 1; }
+.waco-mini-stat .lbl { font-size: 0.68rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-top: 4px; }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.88rem;
-}
-
-thead tr {
-  background: rgba(252,176,64,0.08);
-  border-bottom: 1px solid rgba(252,176,64,0.15);
-}
-thead th {
-  padding: 14px 20px;
-  text-align: left;
-  font-size: 0.67rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--gold);
-  white-space: nowrap;
-}
+/* TABLE */
+.table-wrap { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; overflow: hidden; }
+.table-wrap.waco-table { border-color: rgba(46,204,113,0.1); }
+table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+thead tr { background: rgba(252,176,64,0.08); border-bottom: 1px solid rgba(252,176,64,0.15); }
+thead tr.waco-thead { background: rgba(46,204,113,0.08); border-bottom-color: rgba(46,204,113,0.15); }
+thead th { padding: 14px 20px; text-align: left; font-size: 0.67rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); white-space: nowrap; }
+thead tr.waco-thead th { color: var(--waco-accent); }
 thead th.right { text-align: right; }
-
-tbody tr {
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-  transition: background 0.15s;
-}
+tbody tr { border-bottom: 1px solid rgba(255,255,255,0.05); transition: background 0.15s; }
 tbody tr:last-child { border-bottom: none; }
 tbody tr:hover { background: rgba(255,255,255,0.03); }
-
-tbody td {
-  padding: 16px 20px;
-  color: rgba(255,255,255,0.85);
-  vertical-align: middle;
-}
+tbody tr.zero-row { opacity: 0.35; }
+tbody tr.zero-row:hover { opacity: 0.55; background: rgba(255,255,255,0.02); }
+tbody td { padding: 16px 20px; color: rgba(255,255,255,0.85); vertical-align: middle; }
 tbody td.right { text-align: right; }
-
-.course-name {
-  font-weight: 600;
-  color: var(--white);
-}
-
-.reg-count {
-  font-family: "DM Serif Display", serif;
-  font-size: 1.3rem;
-  color: var(--gold);
-}
-
-.revenue-cell {
-  font-weight: 600;
-  color: var(--gold-light);
-}
-
-/* Inline bar */
+.course-name { font-weight: 600; color: var(--white); }
+.reg-count { font-family: "DM Serif Display", serif; font-size: 1.3rem; color: var(--gold); }
+.reg-count.waco-green { color: var(--waco-accent); }
+.revenue-cell { font-weight: 600; color: var(--gold-light); }
+.revenue-cell.waco-green { color: #a7f3d0; }
 .mini-bar-wrap { display: flex; align-items: center; gap: 10px; }
-.mini-bar-track {
-  flex: 1;
-  height: 5px;
-  background: rgba(255,255,255,0.07);
-  border-radius: 100px;
-  overflow: hidden;
-  min-width: 80px;
-}
-.mini-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--gold), var(--gold-light));
-  border-radius: 100px;
-}
-.mini-pct {
-  font-size: 0.72rem;
-  color: rgba(255,255,255,0.35);
-  min-width: 36px;
-  text-align: right;
-}
-
-/* Rank badge */
-.rank {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px; height: 24px;
-  border-radius: 6px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  background: rgba(255,255,255,0.07);
-  color: rgba(255,255,255,0.45);
-}
+.mini-bar-track { flex: 1; height: 5px; background: rgba(255,255,255,0.07); border-radius: 100px; overflow: hidden; min-width: 80px; }
+.mini-bar-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); border-radius: 100px; }
+.mini-bar-fill.green { background: linear-gradient(90deg, var(--waco-accent-dark), var(--waco-accent)); }
+.mini-pct { font-size: 0.72rem; color: rgba(255,255,255,0.35); min-width: 36px; text-align: right; }
+.rank { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 6px; font-size: 0.72rem; font-weight: 700; background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.45); }
 .rank.gold { background: rgba(252,176,64,0.2); color: var(--gold); }
 .rank.silver { background: rgba(208,216,240,0.2); color: var(--pale-navy); }
 .rank.bronze { background: rgba(205,127,50,0.2); color: #cd7f32; }
 
-/* ── FOOTER ──────────────────────────────────── */
-.page-footer {
-  padding: 24px 40px;
-  border-top: 1px solid rgba(255,255,255,0.06);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.75rem;
-  color: rgba(255,255,255,0.25);
-  flex-wrap: wrap;
-  gap: 8px;
-}
+/* TOGGLE ZERO ROWS */
+.toggle-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 10px; }
+.toggle-label { font-size: 0.78rem; color: rgba(255,255,255,0.4); }
+.toggle-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.6); font-size: 0.75rem; font-weight: 600; padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: all 0.15s; font-family: "DM Sans", sans-serif; }
+.toggle-btn:hover { background: rgba(46,204,113,0.1); border-color: rgba(46,204,113,0.3); color: var(--waco-accent); }
+.toggle-btn.active { background: rgba(46,204,113,0.12); border-color: rgba(46,204,113,0.35); color: var(--waco-accent); }
+
+/* FOOTER */
+.page-footer { padding: 24px 40px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: rgba(255,255,255,0.25); flex-wrap: wrap; gap: 8px; }
 .page-footer strong { color: rgba(255,255,255,0.45); }
+.error-box { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 20px 24px; font-size: 0.85rem; color: #fca5a5; margin: 40px; }
+.error-box code { display: block; margin-top: 8px; font-family: "Courier New", monospace; font-size: 0.78rem; color: rgba(255,255,255,0.5); }
 
-/* ── ERROR STATE ─────────────────────────────── */
-.error-box {
-  background: rgba(239,68,68,0.1);
-  border: 1px solid rgba(239,68,68,0.3);
-  border-radius: 10px;
-  padding: 20px 24px;
-  font-size: 0.85rem;
-  color: #fca5a5;
-  margin: 40px;
-}
-.error-box code {
-  display: block;
-  margin-top: 8px;
-  font-family: "Courier New", monospace;
-  font-size: 0.78rem;
-  color: rgba(255,255,255,0.5);
-}
-
-/* ── RESPONSIVE ──────────────────────────────── */
 @media (max-width: 768px) {
   :root { --sidebar-w: 0px; }
   .sidebar { display: none; }
   .main { margin-left: 0; }
-  #overview, #courses { padding: 24px 20px; }
+  #overview, #courses, #waco { padding: 24px 20px; }
   .page-header { padding: 24px 20px; }
   .stat-value { font-size: 2.4rem; }
 }
@@ -433,30 +151,23 @@ tbody td.right { text-align: right; }
 </head>
 <body>
 
-<!-- ── SIDEBAR ──────────────────────────────── -->
 <aside class="sidebar">
   <div class="sidebar-logo">
     <div class="org">TCEA</div>
     <div class="subtitle">Registration Dashboard</div>
   </div>
-
   <div class="sidebar-section-label">Navigate</div>
   <nav class="sidebar-nav">
-    <a href="#overview" class="active">
-      <span class="icon">📊</span> Overview
-    </a>
-    <a href="#courses">
-      <span class="icon">📋</span> Course Breakdown
-    </a>
+    <a href="#overview" class="active"><span class="icon">📊</span> Overview</a>
+    <a href="#courses"><span class="icon">📋</span> Course Breakdown</a>
+    <hr class="sidebar-divider">
+    <a href="#waco" class="waco"><span class="icon">🏫</span> Waco ISD</a>
   </nav>
-
   <div class="sidebar-updated" id="sidebar-meta">
-    <strong>Last Updated</strong>
-    Loading…
+    <strong>Last Updated</strong>Loading…
   </div>
 </aside>
 
-<!-- ── MAIN ─────────────────────────────────── -->
 <main class="main" id="main-content">
 
   <div class="state-overlay" id="loading-state">
@@ -466,70 +177,50 @@ tbody td.right { text-align: right; }
 
   <div id="dashboard-content" style="display:none">
 
-    <!-- Page Header -->
     <div class="page-header">
       <div class="page-header-eyebrow">Live Scoreboard</div>
       <h1>Course Registration <em>Tracker</em></h1>
-      <div class="page-header-meta" id="header-meta">Data loaded from data.md</div>
+      <div class="page-header-meta" id="header-meta"></div>
     </div>
 
-    <!-- Overview Section -->
+    <!-- OVERVIEW -->
     <section id="overview">
       <div class="section-label">📊 &nbsp;Overall Totals</div>
-
       <div class="hero-stats">
-
-        <!-- Total Registrations -->
         <div class="stat-card">
           <div class="stat-label">Total Registrations</div>
           <div class="stat-value" id="stat-total-regs">0</div>
           <div class="stat-sub" id="stat-regs-sub">across all courses</div>
           <div class="goal-bar-wrap" id="regs-goal-wrap" style="display:none">
-            <div class="goal-bar-meta">
-              Goal <span id="regs-goal-label"></span>
-            </div>
-            <div class="goal-bar-track">
-              <div class="goal-bar-fill" id="regs-goal-bar"></div>
-            </div>
+            <div class="goal-bar-meta">Goal <span id="regs-goal-label"></span></div>
+            <div class="goal-bar-track"><div class="goal-bar-fill" id="regs-goal-bar"></div></div>
           </div>
         </div>
-
-        <!-- Total Revenue -->
         <div class="stat-card accent">
           <div class="stat-label">Total Revenue</div>
           <div class="stat-value revenue" id="stat-total-rev">$0</div>
-          <div class="stat-sub" id="stat-rev-sub">combined across all courses</div>
+          <div class="stat-sub">combined across all courses</div>
           <div class="goal-bar-wrap" id="rev-goal-wrap" style="display:none">
-            <div class="goal-bar-meta">
-              Goal <span id="rev-goal-label"></span>
-            </div>
-            <div class="goal-bar-track">
-              <div class="goal-bar-fill teal" id="rev-goal-bar"></div>
-            </div>
+            <div class="goal-bar-meta">Goal <span id="rev-goal-label"></span></div>
+            <div class="goal-bar-track"><div class="goal-bar-fill teal" id="rev-goal-bar"></div></div>
           </div>
         </div>
-
-        <!-- Courses Active -->
         <div class="stat-card accent2">
           <div class="stat-label">Active Courses</div>
           <div class="stat-value courses" id="stat-courses">0</div>
           <div class="stat-sub">courses with registrations</div>
         </div>
-
-        <!-- Avg per Course -->
         <div class="stat-card">
           <div class="stat-label">Avg Revenue / Course</div>
           <div class="stat-value avg" id="stat-avg-rev">$0</div>
           <div class="stat-sub">mean across all courses</div>
         </div>
-
       </div>
     </section>
 
-    <!-- Course Breakdown -->
+    <!-- COURSES -->
     <section id="courses">
       <div class="section-label">📋 &nbsp;Course Breakdown</div>
-
       <div class="table-wrap">
         <table>
           <thead>
@@ -542,8 +233,54 @@ tbody td.right { text-align: right; }
               <th style="min-width:180px">Share of Total</th>
             </tr>
           </thead>
-          <tbody id="course-table-body">
-          </tbody>
+          <tbody id="course-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- WACO ISD -->
+    <section id="waco">
+      <div class="section-label waco">🏫 &nbsp;Waco ISD Registrations</div>
+
+      <div class="waco-header-card">
+        <div>
+          <div class="district-name">Waco <em>ISD</em></div>
+          <div class="district-sub">District-level course registrations &amp; extended cost</div>
+        </div>
+        <div class="waco-mini-stats">
+          <div class="waco-mini-stat">
+            <div class="val" id="waco-stat-participants">0</div>
+            <div class="lbl">Participants</div>
+          </div>
+          <div class="waco-mini-stat">
+            <div class="val" id="waco-stat-revenue" style="color:#a7f3d0">$0</div>
+            <div class="lbl">Ext. Cost</div>
+          </div>
+          <div class="waco-mini-stat">
+            <div class="val" id="waco-stat-active" style="color:var(--pale-navy)">0</div>
+            <div class="lbl">Active Courses</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="toggle-bar">
+        <div class="toggle-label" id="waco-zero-label">Showing active courses only</div>
+        <button class="toggle-btn" id="waco-toggle-btn" onclick="toggleZeroRows()">Show All Courses</button>
+      </div>
+
+      <div class="table-wrap waco-table">
+        <table>
+          <thead>
+            <tr class="waco-thead">
+              <th style="width:40px">#</th>
+              <th>Course</th>
+              <th class="right">Price</th>
+              <th class="right">Participants</th>
+              <th class="right">Ext. Cost</th>
+              <th style="min-width:180px">Share of Participants</th>
+            </tr>
+          </thead>
+          <tbody id="waco-table-body"></tbody>
         </table>
       </div>
     </section>
@@ -553,226 +290,202 @@ tbody td.right { text-align: right; }
       <div id="footer-updated"></div>
     </footer>
 
-  </div><!-- /dashboard-content -->
-
+  </div>
 </main>
 
 <script>
-// ── PARSE MARKDOWN ──────────────────────────────────────────────────────────
+// ── PARSE ────────────────────────────────────────────────────────────────────
 function parseMarkdown(md) {
-  const result = {
-    updated: null,
-    goalRegs: null,
-    goalRevenue: null,
-    courses: []
-  };
-
+  const result = { updated: null, goalRegs: null, goalRevenue: null, courses: [], waco: [] };
   const lines = md.split('\n');
+  let currentSection = null;
+  let inTable = false;
+  let tableHeaderSkipped = false;
 
   for (const line of lines) {
-    const updated = line.match(/\*\*Updated:\*\*\s*(.+)/);
-    if (updated) result.updated = updated[1].trim();
+    const upd = line.match(/\*\*Updated:\*\*\s*(.+)/);
+    if (upd) { result.updated = upd[1].trim(); continue; }
+    const gR = line.match(/\*\*Goal Registrations:\*\*\s*([\d,]+)/);
+    if (gR) { result.goalRegs = parseInt(gR[1].replace(/,/g,'')); continue; }
+    const gRev = line.match(/\*\*Goal Revenue:\*\*\s*([\d,]+)/);
+    if (gRev) { result.goalRevenue = parseInt(gRev[1].replace(/,/g,'')); continue; }
 
-    const goalR = line.match(/\*\*Goal Registrations:\*\*\s*([\d,]+)/);
-    if (goalR) result.goalRegs = parseInt(goalR[1].replace(/,/g, ''));
+    // Section headers
+    if (line.startsWith('## Courses')) { currentSection = 'courses'; inTable = false; tableHeaderSkipped = false; continue; }
+    if (line.startsWith('## Waco ISD')) { currentSection = 'waco'; inTable = false; tableHeaderSkipped = false; continue; }
 
-    const goalRev = line.match(/\*\*Goal Revenue:\*\*\s*([\d,]+)/);
-    if (goalRev) result.goalRevenue = parseInt(goalRev[1].replace(/,/g, ''));
-  }
+    // Table rows
+    if (line.startsWith('|')) {
+      if (!inTable) { inTable = true; tableHeaderSkipped = false; continue; } // header row
+      if (!tableHeaderSkipped) { tableHeaderSkipped = true; continue; }       // separator row
+      const cells = line.split('|').map(c => c.trim()).filter(c => c !== '');
+      if (!cells.length) continue;
 
-  // Parse markdown table rows (skip header and separator)
-  const tableRows = lines.filter(l => l.startsWith('|') && !l.includes('---'));
-  // First table row is header
-  let isHeader = true;
-  for (const row of tableRows) {
-    if (isHeader) { isHeader = false; continue; }
-    const cells = row.split('|').map(c => c.trim()).filter(c => c !== '');
-    if (cells.length >= 3) {
-      const regs  = parseInt(cells[1].replace(/,/g, '')) || 0;
-      const rev   = parseInt(cells[2].replace(/[$,]/g, '')) || 0;
-      result.courses.push({
-        name: cells[0],
-        registrations: regs,
-        revenue: rev
-      });
+      if (currentSection === 'courses' && cells.length >= 3) {
+        result.courses.push({
+          name: cells[0],
+          registrations: parseInt(cells[1].replace(/,/g,'')) || 0,
+          revenue: parseInt(cells[2].replace(/[$,]/g,'')) || 0
+        });
+      } else if (currentSection === 'waco' && cells.length >= 4) {
+        result.waco.push({
+          name: cells[0],
+          price: parseFloat(cells[1].replace(/[$,]/g,'')) || 0,
+          participants: parseInt(cells[2].replace(/,/g,'')) || 0,
+          extCost: parseFloat(cells[3].replace(/[$,]/g,'')) || 0
+        });
+      }
+    } else if (!line.startsWith('|') && inTable) {
+      inTable = false;
     }
   }
 
-  // Sort descending by registrations
-  result.courses.sort((a, b) => b.registrations - a.registrations);
+  result.courses.sort((a,b) => b.registrations - a.registrations);
+  result.waco.sort((a,b) => b.participants - a.participants);
   return result;
 }
 
-// ── FORMAT HELPERS ──────────────────────────────────────────────────────────
-function fmtNum(n) {
-  return n.toLocaleString('en-US');
-}
-function fmtDollar(n) {
-  if (n >= 1000) return '$' + (n / 1000).toFixed(1) + 'k';
-  return '$' + n.toLocaleString('en-US');
-}
-function fmtDollarFull(n) {
-  return '$' + n.toLocaleString('en-US');
-}
-function rankClass(i) {
-  if (i === 0) return 'gold';
-  if (i === 1) return 'silver';
-  if (i === 2) return 'bronze';
-  return '';
+// ── HELPERS ──────────────────────────────────────────────────────────────────
+const fmt = n => n.toLocaleString('en-US');
+const fmtD = n => '$' + n.toLocaleString('en-US', {minimumFractionDigits:0, maximumFractionDigits:0});
+const fmtD2 = n => '$' + n.toFixed(2);
+function rankCls(i) { return i===0?'gold':i===1?'silver':i===2?'bronze':''; }
+
+function animCount(el, end, dur, fmtFn) {
+  const t0 = performance.now();
+  (function step(now) {
+    const p = Math.min((now-t0)/dur,1);
+    const e = 1-Math.pow(1-p,3);
+    el.textContent = fmtFn(Math.round(end*e));
+    if (p<1) requestAnimationFrame(step);
+  })(t0);
 }
 
-// ── ANIMATE NUMBERS ─────────────────────────────────────────────────────────
-function animateValue(el, end, duration, prefix='', suffix='', isFloat=false) {
-  const start = 0;
-  const startTime = performance.now();
-  function update(now) {
-    const elapsed = now - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    const current = Math.round(start + (end - start) * eased);
-    el.textContent = prefix + (isFloat ? current.toLocaleString('en-US') : fmtNum(current)) + suffix;
-    if (progress < 1) requestAnimationFrame(update);
-  }
-  requestAnimationFrame(update);
+// ── TOGGLE ZERO ROWS ─────────────────────────────────────────────────────────
+let showZero = false;
+function toggleZeroRows() {
+  showZero = !showZero;
+  document.querySelectorAll('.zero-row').forEach(r => {
+    r.style.display = showZero ? '' : 'none';
+  });
+  const btn = document.getElementById('waco-toggle-btn');
+  const lbl = document.getElementById('waco-zero-label');
+  btn.textContent = showZero ? 'Hide Zero-Participant Courses' : 'Show All Courses';
+  btn.classList.toggle('active', showZero);
+  lbl.textContent = showZero ? 'Showing all courses (including zero-participant)' : 'Showing active courses only';
 }
 
-// ── RENDER DASHBOARD ────────────────────────────────────────────────────────
+// ── RENDER ───────────────────────────────────────────────────────────────────
 function renderDashboard(data) {
-  const totalRegs = data.courses.reduce((s, c) => s + c.registrations, 0);
-  const totalRev  = data.courses.reduce((s, c) => s + c.revenue, 0);
-  const numCourses = data.courses.length;
-  const avgRev = numCourses > 0 ? Math.round(totalRev / numCourses) : 0;
-
-  // Sidebar + header meta
-  const metaText = data.updated ? `Last updated: ${data.updated}` : 'Last updated: unknown';
-  document.getElementById('sidebar-meta').innerHTML =
-    `<strong>Last Updated</strong>${data.updated || '—'}`;
+  // Meta
+  const metaText = data.updated ? `Last updated: ${data.updated}` : '';
+  document.getElementById('sidebar-meta').innerHTML = `<strong>Last Updated</strong>${data.updated||'—'}`;
   document.getElementById('header-meta').textContent = metaText;
   document.getElementById('footer-updated').textContent = metaText;
 
-  // Animate hero stats
-  animateValue(document.getElementById('stat-total-regs'), totalRegs, 1200);
-  document.getElementById('stat-regs-sub').textContent =
-    `across ${numCourses} course${numCourses !== 1 ? 's' : ''}`;
+  // ── OVERVIEW ──
+  const totalRegs = data.courses.reduce((s,c)=>s+c.registrations,0);
+  const totalRev  = data.courses.reduce((s,c)=>s+c.revenue,0);
+  const numActive = data.courses.filter(c=>c.registrations>0).length;
+  const avgRev = numActive>0 ? Math.round(totalRev/numActive) : 0;
 
-  // Revenue — animate via raw number, display as formatted
-  const revEl = document.getElementById('stat-total-rev');
-  const revEnd = totalRev;
-  const startTime = performance.now();
-  (function animRev(now) {
-    const p = Math.min((now - startTime) / 1200, 1);
-    const e = 1 - Math.pow(1 - p, 3);
-    revEl.textContent = fmtDollarFull(Math.round(revEnd * e));
-    if (p < 1) requestAnimationFrame(animRev);
-  })(startTime);
+  animCount(document.getElementById('stat-total-regs'), totalRegs, 1200, fmt);
+  document.getElementById('stat-regs-sub').textContent = `across ${data.courses.length} course${data.courses.length!==1?'s':''}`;
+  animCount(document.getElementById('stat-total-rev'), totalRev, 1200, fmtD);
+  animCount(document.getElementById('stat-courses'), numActive, 800, n=>n.toString());
+  animCount(document.getElementById('stat-avg-rev'), avgRev, 1000, fmtD);
 
-  animateValue(document.getElementById('stat-courses'), numCourses, 800);
-
-  const avgEl = document.getElementById('stat-avg-rev');
-  const avgStart = performance.now();
-  (function animAvg(now) {
-    const p = Math.min((now - avgStart) / 1000, 1);
-    const e = 1 - Math.pow(1 - p, 3);
-    avgEl.textContent = fmtDollarFull(Math.round(avgRev * e));
-    if (p < 1) requestAnimationFrame(animAvg);
-  })(avgStart);
-
-  // Goal bars
   if (data.goalRegs) {
-    const pct = Math.min((totalRegs / data.goalRegs) * 100, 100);
-    document.getElementById('regs-goal-wrap').style.display = 'block';
-    document.getElementById('regs-goal-label').textContent =
-      fmtNum(data.goalRegs) + ' (' + Math.round(pct) + '%)';
-    setTimeout(() => {
-      document.getElementById('regs-goal-bar').style.width = pct + '%';
-    }, 300);
+    const pct = Math.min((totalRegs/data.goalRegs)*100,100);
+    document.getElementById('regs-goal-wrap').style.display='block';
+    document.getElementById('regs-goal-label').textContent = fmt(data.goalRegs)+' ('+Math.round(pct)+'%)';
+    setTimeout(()=>{ document.getElementById('regs-goal-bar').style.width=pct+'%'; },300);
   }
   if (data.goalRevenue) {
-    const pct = Math.min((totalRev / data.goalRevenue) * 100, 100);
-    document.getElementById('rev-goal-wrap').style.display = 'block';
-    document.getElementById('rev-goal-label').textContent =
-      fmtDollarFull(data.goalRevenue) + ' (' + Math.round(pct) + '%)';
-    setTimeout(() => {
-      document.getElementById('rev-goal-bar').style.width = pct + '%';
-    }, 300);
+    const pct = Math.min((totalRev/data.goalRevenue)*100,100);
+    document.getElementById('rev-goal-wrap').style.display='block';
+    document.getElementById('rev-goal-label').textContent = fmtD(data.goalRevenue)+' ('+Math.round(pct)+'%)';
+    setTimeout(()=>{ document.getElementById('rev-goal-bar').style.width=pct+'%'; },300);
   }
 
-  // Course table
+  // ── COURSES TABLE ──
   const tbody = document.getElementById('course-table-body');
-  tbody.innerHTML = '';
-
-  data.courses.forEach((course, i) => {
-    const sharePct = totalRegs > 0 ? (course.registrations / totalRegs) * 100 : 0;
-    const avgPerReg = course.registrations > 0
-      ? fmtDollarFull(Math.round(course.revenue / course.registrations))
-      : '—';
-    const rc = rankClass(i);
-
+  data.courses.forEach((c,i) => {
+    const share = totalRegs>0?(c.registrations/totalRegs*100):0;
+    const avgPR = c.registrations>0?fmtD(Math.round(c.revenue/c.registrations)):'—';
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td><span class="rank ${rc}">${i + 1}</span></td>
-      <td class="course-name">${course.name}</td>
-      <td class="right"><span class="reg-count">${fmtNum(course.registrations)}</span></td>
-      <td class="right revenue-cell">${fmtDollarFull(course.revenue)}</td>
-      <td class="right" style="color:rgba(255,255,255,0.55);font-size:0.82rem">${avgPerReg}</td>
-      <td>
-        <div class="mini-bar-wrap">
-          <div class="mini-bar-track">
-            <div class="mini-bar-fill" style="width:${sharePct.toFixed(1)}%"></div>
-          </div>
-          <span class="mini-pct">${sharePct.toFixed(1)}%</span>
-        </div>
-      </td>
-    `;
+      <td><span class="rank ${rankCls(i)}">${i+1}</span></td>
+      <td class="course-name">${c.name}</td>
+      <td class="right"><span class="reg-count">${fmt(c.registrations)}</span></td>
+      <td class="right revenue-cell">${fmtD(c.revenue)}</td>
+      <td class="right" style="color:rgba(255,255,255,0.55);font-size:0.82rem">${avgPR}</td>
+      <td><div class="mini-bar-wrap"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${share.toFixed(1)}%"></div></div><span class="mini-pct">${share.toFixed(1)}%</span></div></td>`;
     tbody.appendChild(tr);
   });
 
-  // Show dashboard
-  document.getElementById('loading-state').style.display = 'none';
-  document.getElementById('dashboard-content').style.display = 'block';
-}
+  // ── WACO ISD ──
+  const wacoActive = data.waco.filter(c=>c.participants>0);
+  const wacoTotal = data.waco.reduce((s,c)=>s+c.participants,0);
+  const wacoRev   = data.waco.reduce((s,c)=>s+c.extCost,0);
 
-// ── FETCH DATA ───────────────────────────────────────────────────────────────
-fetch('data.md?_=' + Date.now())
-  .then(res => {
-    if (!res.ok) throw new Error(`HTTP ${res.status} — could not load data.md`);
-    return res.text();
-  })
-  .then(text => {
-    const data = parseMarkdown(text);
-    if (data.courses.length === 0) {
-      throw new Error('No course data found. Check the table format in data.md.');
+  animCount(document.getElementById('waco-stat-participants'), wacoTotal, 1400, fmt);
+  animCount(document.getElementById('waco-stat-revenue'), Math.round(wacoRev), 1400, fmtD);
+  animCount(document.getElementById('waco-stat-active'), wacoActive.length, 800, n=>n.toString());
+
+  const wtbody = document.getElementById('waco-table-body');
+  let activeRank = 0;
+  data.waco.forEach((c) => {
+    const isZero = c.participants === 0;
+    const share = wacoTotal>0?(c.participants/wacoTotal*100):0;
+    const tr = document.createElement('tr');
+    if (isZero) {
+      tr.className = 'zero-row';
+      tr.style.display = 'none';
     }
-    renderDashboard(data);
-  })
-  .catch(err => {
-    document.getElementById('loading-state').style.display = 'none';
-    const errBox = document.createElement('div');
-    errBox.className = 'error-box';
-    errBox.innerHTML = `
-      <strong>⚠️ Could not load data.md</strong><br>
-      ${err.message}
-      <code>Make sure data.md is in the same folder as dashboard.html and the page is served over HTTP (not file://).</code>
-    `;
-    document.getElementById('main-content').appendChild(errBox);
+    const rank = isZero ? '' : `<span class="rank ${rankCls(activeRank)}">${activeRank+1}</span>`;
+    if (!isZero) activeRank++;
+    tr.innerHTML = `
+      <td>${rank}</td>
+      <td class="course-name">${c.name}</td>
+      <td class="right" style="color:rgba(255,255,255,0.45);font-size:0.82rem">${fmtD2(c.price)}</td>
+      <td class="right"><span class="reg-count waco-green">${fmt(c.participants)}</span></td>
+      <td class="right revenue-cell waco-green">${fmtD2(c.extCost)}</td>
+      <td><div class="mini-bar-wrap"><div class="mini-bar-track"><div class="mini-bar-fill green" style="width:${share.toFixed(1)}%"></div></div><span class="mini-pct">${share.toFixed(1)}%</span></div></td>`;
+    wtbody.appendChild(tr);
   });
 
-// ── SIDEBAR ACTIVE STATE ON SCROLL ──────────────────────────────────────────
-const sections = ['overview', 'courses'];
-const navLinks = document.querySelectorAll('.sidebar-nav a');
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      navLinks.forEach(a => {
-        a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id);
+  document.getElementById('loading-state').style.display='none';
+  document.getElementById('dashboard-content').style.display='block';
+}
+
+// ── FETCH ────────────────────────────────────────────────────────────────────
+fetch('data.md?_='+Date.now())
+  .then(r=>{ if(!r.ok) throw new Error(`HTTP ${r.status}`); return r.text(); })
+  .then(text=>{
+    const data = parseMarkdown(text);
+    if (!data.courses.length && !data.waco.length) throw new Error('No data found. Check data.md table format.');
+    renderDashboard(data);
+  })
+  .catch(err=>{
+    document.getElementById('loading-state').style.display='none';
+    const box = document.createElement('div');
+    box.className='error-box';
+    box.innerHTML=`<strong>⚠️ Could not load data.md</strong><br>${err.message}<code>Ensure data.md is in the same folder and served over HTTP.</code>`;
+    document.getElementById('main-content').appendChild(box);
+  });
+
+// ── SIDEBAR ACTIVE ON SCROLL ─────────────────────────────────────────────────
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting) {
+      document.querySelectorAll('.sidebar-nav a').forEach(a=>{
+        a.classList.toggle('active', a.getAttribute('href')==='#'+e.target.id);
       });
     }
   });
-}, { threshold: 0.4 });
-sections.forEach(id => {
-  const el = document.getElementById(id);
-  if (el) observer.observe(el);
-});
+},{threshold:0.3});
+['overview','courses','waco'].forEach(id=>{ const el=document.getElementById(id); if(el) obs.observe(el); });
 </script>
 </body>
 </html>
