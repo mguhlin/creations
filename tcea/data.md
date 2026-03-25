@@ -1,30 +1,40 @@
 # TCEA Registration Dashboard
 
-**Updated:** March 25, 2026
-**Goal Registrations:** 500
-**Goal Revenue:** 99000
+**Updated:** June 15, 2025 **Goal Registrations:** 2900 **Goal Revenue:** 99000
 
 ## Courses
 
-| Course | Registrations | Revenue | Capacity |
-|--------|--------------|---------|----------|
-| Introduction to Claude AI | 45 | 2250 | 100 |
-| Advanced Prompt Engineering | 32 | 1600 | 75 |
-| Digital Citizenship for Educators | 78 | 3900 | 120 |
-| Google Workspace for Teachers | 61 | 3050 | 100 |
-| Instructional Design Fundamentals | 29 | 1450 | 60 |
-| Data Privacy and Student Safety | 54 | 2700 | 80 |
-| STEM Integration Strategies | 41 | 2050 | 75 |
-| Blended Learning Bootcamp | 18 | 900 | 50 |
+| Course | Registrations | Revenue |
+| :---- | ----- | ----- |
+| Chromebook Educator | 313 | $10,692.00 |
+| AI Tools for Educators | 140 | $4,692.00 |
+| Artificial Intelligence Educator | 130 | $5,204.00 |
+| Canva Specialist | 87 | $2,638.00 |
+| Microsoft 365 | 78 | $3,176.00 |
+| Canva Educator | 76 | $3,028.00 |
+| Remote Learning Educator | 66 | $2,820.00 |
+| Schoology Educator | 60 | $2,114.00 |
+| Canvas Educator | 56 | $2,214.00 |
+| ChatGPT for Educators | 43 | $1,772.00 |
+| The Three Dimensions of the Science TEKS | 40 | $1,706.00 |
+| Understanding and Teaching Gifted Learners | 38 | $1,652.00 |
+| Google Educator Level 1 | 37 | $1,365.00 |
+| Instructional Coach Certification | 34 | $11,766.00 |
+| STEAM Educator | 33 | $1,322.00 |
+| Technology/IT Director Certification | 30 | $12,572.01 |
+| Cultivating Calm | 29 | $1,276.00 |
+| Campus Technology Specialist Certification | 24 | $8,366.00 |
+| Google Classroom | 22 | $878.00 |
+| Social and Emotional Learning | 22 | $898.00 |
 
 ## Waco ISD
 
 | Course | Price | Participants | Ext Cost |
-|--------|-------|-------------|----------|
+| :---- | :---- | :---- | :---- |
 | Adobe Photoshop | 34.00 | 3 | 102.00 |
 | Artificial Intelligence Educator | 34.00 | 2 | 68.00 |
 | AI Tools for Educators | 34.00 | 6 | 204.00 |
-| AI Tools for Educators - Discounted | 29.00 | 1 | 29.00 |
+| AI Tools for Educators \- Discounted | 29.00 | 1 | 29.00 |
 | Advanced Streaming through OBS Studio | 34.00 | 2 | 68.00 |
 | Assessment-Based Feedback | 34.00 | 0 | 0.00 |
 | Bitmoji Educator | 34.00 | 0 | 0.00 |
