@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>District KPI Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green: #2d7a3e;
+      --green-dark: #1e5229;
+      --green-mid: #3a9450;
+      --green-light: #5cb574;
+      --green-pale: #e8f5ea;
+      --yellow: #f4c430;
+      --yellow-light: #f9d96b;
+      --yellow-pale: #fef9e7;
+      --yellow-dark: #d4a520;
+      --white: #ffffff;
+      --off-white: #f7f8fc;
+      --text: #1a1a2e;
+      --text-muted: #5a6680;
+      --border: #e2e7f5;
+      --sidebar-w: 240px;
+      --sidebar-bg: #0d1b0d;
+      --main-bg: #1e5229;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--main-bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--sidebar-bg);
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 2rem 0;
+      z-index: 100;
+    }
+
+    .sidebar-header {
+      padding: 0 1.5rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 1.5rem;
+    }
+
+    .sidebar-header h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.5rem;
+      color: var(--yellow);
+      margin-bottom: 0.25rem;
+    }
+
+    .sidebar-header p {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .nav-links {
+      list-style: none;
+    }
+
+    .nav-links a {
+      display: block;
+      padding: 0.75rem 1.5rem;
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      transition: all 0.2s;
+      border-left: 3px solid transparent;
+    }
+
+    .nav-links a:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--yellow-light);
+    }
+
+    .nav-links a.active {
+      background: rgba(244, 196, 48, 0.1);
+      color: var(--yellow);
+      border-left-color: var(--yellow);
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      padding: 3rem;
+      background: var(--main-bg);
+    }
+
+    .dashboard-header {
+      background: rgba(255,255,255,0.95);
+      padding: 2rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .dashboard-header h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2.5rem;
+      color: var(--green-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .meta-info {
+      display: flex;
+      gap: 2rem;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .meta-info span {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Sections */
+    .section {
+      margin-bottom: 3rem;
+      scroll-margin-top: 2rem;
+    }
+
+    .section-header {
+      background: rgba(255,255,255,0.95);
+      padding: 1.5rem 2rem;
+      border-radius: 12px 12px 0 0;
+      border-left: 5px solid var(--yellow);
+    }
+
+    .section-header h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.8rem;
+      color: var(--green-dark);
+    }
+
+    /* Stat Cards */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: rgba(13, 27, 13, 0.7);
+      padding: 1.5rem;
+      border-radius: 8px;
+      border-top: 3px solid var(--yellow);
+      backdrop-filter: blur(10px);
+    }
+
+    .stat-card.accent-green {
+      border-top-color: var(--green-light);
+    }
+
+    .stat-card.accent-yellow {
+      border-top-color: var(--yellow);
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-value {
+      font-family: 'DM Serif Display', serif;
+      font-size: 3.4rem;
+      color: var(--yellow-light);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-card.accent-green .stat-value {
+      color: var(--green-light);
+    }
+
+    .stat-target {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* Tables */
+    .table-container {
+      background: rgba(255,255,255,0.95);
+      border-radius: 0 0 12px 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .table-controls {
+      padding: 1rem 2rem;
+      background: rgba(244, 196, 48, 0.05);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .toggle-zeros {
+      background: var(--yellow);
+      color: var(--green-dark);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+
+    .toggle-zeros:hover {
+      background: var(--yellow-dark);
+      transform: translateY(-1px);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      background: var(--green);
+      color: var(--white);
+    }
+
+    thead th {
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.2s;
+    }
+
+    tbody tr:hover {
+      background: rgba(244, 196, 48, 0.08);
+    }
+
+    tbody tr.zero-row {
+      display: none;
+      opacity: 0.35;
+    }
+
+    tbody tr.zero-row.show {
+      display: table-row;
+    }
+
+    tbody td {
+      padding: 1rem;
+      color: var(--text);
+    }
+
+    tbody td:first-child {
+      font-weight: 600;
+      color: var(--green-dark);
+    }
+
+    .progress-cell {
+      position: relative;
+    }
+
+    .progress-bar {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      background: linear-gradient(90deg, rgba(244, 196, 48, 0.15), rgba(244, 196, 48, 0.05));
+      z-index: 0;
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .progress-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Error State */
+    .error-message {
+      background: rgba(225, 29, 72, 0.1);
+      border: 2px solid #e11d48;
+      border-radius: 8px;
+      padding: 2rem;
+      margin: 2rem 0;
+      color: #e11d48;
+      text-align: center;
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+        padding: 1.5rem;
+      }
+
+      .stat-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .meta-info {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      table {
+        font-size: 0.85rem;
+      }
+
+      thead th, tbody td {
+        padding: 0.75rem 0.5rem;
+      }
+    }
+
+    /* Loading Animation */
+    @keyframes countUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .stat-value {
+      animation: countUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>District KPIs</h1>
+        <p id="sidebar-meta">Loading...</p>
+      </div>
+      <nav>
+        <ul class="nav-links" id="nav-links">
+          <!-- Generated dynamically -->
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="dashboard-header">
+        <h2 id="district-name">District Dashboard</h2>
+        <div class="meta-info">
+          <span>📅 <strong>Updated:</strong> <span id="updated-date">—</span></span>
+          <span>🎓 <strong>School Year:</strong> <span id="school-year">—</span></span>
+        </div>
+      </div>
+
+      <div id="dashboard-content">
+        <!-- Sections generated dynamically -->
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Fetch and parse data.md
+    async function loadDashboard() {
+      try {
+        const response = await fetch('data.md?_=' + Date.now());
+        if (!response.ok) throw new Error('Could not load data.md');
+        
+        const text = await response.text();
+        parseMarkdown(text);
+      } catch (error) {
+        document.getElementById('dashboard-content').innerHTML = `
+          <div class="error-message">
+            <h3>⚠️ Unable to Load Dashboard Data</h3>
+            <p>Please ensure <strong>data.md</strong> is in the same directory as this HTML file and that you're viewing this page over HTTP (not file://).</p>
+            <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.7;">Error: ${error.message}</p>
+          </div>
+        `;
+      }
+    }
+
+    function parseMarkdown(text) {
+      const lines = text.split('\n');
+      let metadata = {};
+      let sections = [];
+      let currentSection = null;
+      let tableLines = [];
+      let inTable = false;
+
+      for (let line of lines) {
+        // Parse metadata
+        if (line.startsWith('**Updated:**')) {
+          metadata.updated = line.replace('**Updated:**', '').trim();
+        } else if (line.startsWith('**District:**')) {
+          metadata.district = line.replace('**District:**', '').trim();
+        } else if (line.startsWith('**School Year:**')) {
+          metadata.schoolYear = line.replace('**School Year:**', '').trim();
+        }
+        // Parse sections
+        else if (line.startsWith('## ')) {
+          if (currentSection && tableLines.length > 0) {
+            currentSection.table = parseTable(tableLines);
+            tableLines = [];
+            inTable = false;
+          }
+          if (currentSection) sections.push(currentSection);
+          
+          currentSection = {
+            title: line.replace('## ', '').trim(),
+            stats: [],
+            goals: {},
+            table: null
+          };
+        }
+        // Parse goals
+        else if (line.startsWith('**Goal ') && currentSection) {
+          const match = line.match(/\*\*Goal (.+?):\*\*\s*(.+)/);
+          if (match) {
+            currentSection.goals[match[1].trim()] = match[2].trim();
+          }
+        }
+        // Parse table
+        else if (line.startsWith('|') && currentSection) {
+          inTable = true;
+          tableLines.push(line);
+        } else if (inTable && line.trim() === '') {
+          if (tableLines.length > 0) {
+            currentSection.table = parseTable(tableLines);
+            tableLines = [];
+            inTable = false;
+          }
+        }
+      }
+
+      // Push last section
+      if (currentSection) {
+        if (tableLines.length > 0) {
+          currentSection.table = parseTable(tableLines);
+        }
+        sections.push(currentSection);
+      }
+
+      renderDashboard(metadata, sections);
+    }
+
+    function parseTable(lines) {
+      if (lines.length < 3) return null;
+      
+      const headers = lines[0].split('|').map(h => h.trim()).filter(h => h);
+      const rows = [];
+      
+      for (let i = 2; i < lines.length; i++) {
+        const cells = lines[i].split('|').map(c => c.trim()).filter(c => c);
+        if (cells.length > 0) {
+          rows.push(cells);
+        }
+      }
+      
+      return { headers, rows };
+    }
+
+    function renderDashboard(metadata, sections) {
+      // Set metadata
+      document.getElementById('district-name').textContent = metadata.district || 'District Dashboard';
+      document.getElementById('updated-date').textContent = metadata.updated || '—';
+      document.getElementById('school-year').textContent = metadata.schoolYear || '—';
+      document.getElementById('sidebar-meta').textContent = metadata.schoolYear || '';
+
+      // Generate navigation
+      const navLinks = document.getElementById('nav-links');
+      navLinks.innerHTML = sections.map((section, i) => {
+        const id = 'section-' + i;
+        return `<li><a href="#${id}">${section.title}</a></li>`;
+      }).join('');
+
+      // Generate sections
+      const content = document.getElementById('dashboard-content');
+      const accentColors = ['yellow', 'green', 'yellow', 'green'];
+      
+      content.innerHTML = sections.map((section, i) => {
+        const id = 'section-' + i;
+        const accent = accentColors[i % accentColors.length];
+        
+        let html = `
+          <section class="section" id="${id}">
+            <div class="section-header">
+              <h3>${section.title}</h3>
+            </div>
+        `;
+
+        // Render table
+        if (section.table) {
+          html += `<div class="table-container">`;
+          html += `<div class="table-controls">
+            <button class="toggle-zeros" onclick="toggleZeros('${id}')">Show/Hide Zero Values</button>
+          </div>`;
+          html += renderTable(section.table, id);
+          html += `</div>`;
+        }
+
+        html += `</section>`;
+        return html;
+      }).join('');
+
+      // Animate numbers
+      animateNumbers();
+
+      // Setup scroll spy
+      setupScrollSpy();
+    }
+
+    function renderTable(table, sectionId) {
+      let html = '<table><thead><tr>';
+      table.headers.forEach(h => {
+        html += `<th>${h}</th>`;
+      });
+      html += '</tr></thead><tbody>';
+
+      // Calculate max for progress bars (use last numeric column)
+      const lastColIndex = table.headers.length - 1;
+      const numericValues = table.rows.map(row => {
+        const val = row[lastColIndex];
+        return parseFloat(val.replace(/[^0-9.-]/g, '')) || 0;
+      });
+      const maxValue = Math.max(...numericValues);
+
+      table.rows.forEach((row, i) => {
+        const isZero = row.every(cell => {
+          const num = parseFloat(cell.replace(/[^0-9.-]/g, ''));
+          return num === 0 || isNaN(num);
+        });
+
+        html += `<tr class="${isZero ? 'zero-row' : ''}" data-section="${sectionId}">`;
+        row.forEach((cell, j) => {
+          if (j === lastColIndex) {
+            const val = parseFloat(cell.replace(/[^0-9.-]/g, '')) || 0;
+            const percent = maxValue > 0 ? (val / maxValue * 100) : 0;
+            html += `<td class="progress-cell">
+              <div class="progress-bar" style="width: ${percent}%"></div>
+              <div class="progress-content">${cell}</div>
+            </td>`;
+          } else {
+            html += `<td>${cell}</td>`;
+          }
+        });
+        html += '</tr>';
+      });
+
+      html += '</tbody></table>';
+      return html;
+    }
+
+    function toggleZeros(sectionId) {
+      const rows = document.querySelectorAll(`tr.zero-row[data-section="${sectionId}"]`);
+      rows.forEach(row => row.classList.toggle('show'));
+    }
+
+    function animateNumbers() {
+      const statValues = document.querySelectorAll('.stat-value');
+      statValues.forEach(el => {
+        const target = el.textContent;
+        const num = parseFloat(target.replace(/[^0-9.-]/g, ''));
+        
+        if (!isNaN(num)) {
+          let current = 0;
+          const increment = num / 30;
+          const timer = setInterval(() => {
+            current += increment;
+            if (current >= num) {
+              el.textContent = target;
+              clearInterval(timer);
+            } else {
+              el.textContent = Math.floor(current) + target.replace(/[0-9]/g, '').replace('-', '').replace('.', '');
+            }
+          }, 30);
+        }
+      });
+    }
+
+    function setupScrollSpy() {
+      const sections = document.querySelectorAll('.section');
+      const navLinks = document.querySelectorAll('.nav-links a');
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const id = entry.target.id;
+            navLinks.forEach(link => {
+              link.classList.remove('active');
+              if (link.getAttribute('href') === '#' + id) {
+                link.classList.add('active');
+              }
+            });
+          }
+        });
+      }, { threshold: 0.3 });
+
+      sections.forEach(section => observer.observe(section));
+    }
+
+    // Load dashboard on page load
+    loadDashboard();
+  </script>
+</body>
+</html>
