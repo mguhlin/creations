@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technology Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #0A3476;
+            --navy-dark: #071f4a;
+            --navy-mid: #12428f;
+            --gold: #FCB040;
+            --gold-light: #fdd17a;
+            --gold-pale: #FEF0D0;
+            --pale-navy: #D0D8F0;
+            --white: #ffffff;
+            --off-white: #f7f8fc;
+            --text: #1a1a2e;
+            --text-muted: #5a6680;
+            --border: #e2e7f5;
+            --teal: #0e6b8a;
+            --sidebar-w: 240px;
+            --purple: #7c3aed;
+            --green: #2ecc71;
+            --rose: #e11d48;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--navy-dark);
+            color: var(--white);
+            line-height: 1.6;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-w);
+            background: #050e22;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-header .meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .sidebar nav {
+            padding: 1rem 0;
+        }
+
+        .sidebar nav a {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            color: var(--pale-navy);
+            text-decoration: none;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+            font-size: 0.95rem;
+        }
+
+        .sidebar nav a:hover {
+            background: rgba(252, 176, 64, 0.1);
+            color: var(--gold);
+            border-left-color: var(--gold);
+        }
+
+        .sidebar nav a.active {
+            background: rgba(252, 176, 64, 0.15);
+            color: var(--gold);
+            border-left-color: var(--gold);
+            font-weight: 500;
+        }
+
+        /* Main Content */
+        .main {
+            margin-left: var(--sidebar-w);
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2.5rem;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header .updated {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 3rem;
+            scroll-margin-top: 2rem;
+        }
+
+        .section-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.8rem;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Stat Cards */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-top: 3px solid var(--gold);
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-card.accent-teal {
+            border-top-color: var(--teal);
+        }
+
+        .stat-card.accent-purple {
+            border-top-color: var(--purple);
+        }
+
+        .stat-card.accent-green {
+            border-top-color: var(--green);
+        }
+
+        .stat-card.accent-rose {
+            border-top-color: var(--rose);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-family: 'DM Serif Display', serif;
+            font-size: 3.4rem;
+            color: var(--white);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-progress {
+            margin-top: 1rem;
+        }
+
+        .progress-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gold);
+            border-radius: 3px;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Tables */
+        .table-container {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .table-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .toggle-zeros {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--white);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .toggle-zeros:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--gold);
+            color: var(--navy-dark);
+        }
+
+        thead.accent-teal {
+            background: var(--teal);
+            color: var(--white);
+        }
+
+        thead.accent-purple {
+            background: var(--purple);
+            color: var(--white);
+        }
+
+        thead.accent-green {
+            background: var(--green);
+            color: var(--white);
+        }
+
+        thead.accent-rose {
+            background: var(--rose);
+            color: var(--white);
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        tbody tr {
+            background: rgba(255, 255, 255, 0.02);
+            transition: background 0.2s;
+        }
+
+        tbody tr:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        tbody tr.zero-row {
+            display: none;
+            opacity: 0.35;
+        }
+
+        tbody tr.zero-row.show {
+            display: table-row;
+        }
+
+        .cell-with-bar {
+            position: relative;
+        }
+
+        .mini-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: var(--gold);
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Error State */
+        .error-message {
+            background: rgba(225, 29, 72, 0.1);
+            border: 1px solid var(--rose);
+            color: var(--white);
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .error-message h3 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--rose);
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .stat-grid {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                font-size: 0.85rem;
+            }
+
+            th, td {
+                padding: 0.75rem 0.5rem;
+            }
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>Technology Dashboard</h1>
+                <div class="meta">
+                    <div id="district-name">Loading...</div>
+                    <div id="school-year">Loading...</div>
+                </div>
+            </div>
+            <nav id="sidebar-nav">
+                <!-- Navigation links will be generated dynamically -->
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main">
+            <div class="page-header">
+                <h2 id="page-title">Technology Dashboard</h2>
+                <div class="updated" id="last-updated">Loading...</div>
+            </div>
+
+            <div id="dashboard-content">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading dashboard data...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Parse markdown data
+        async function loadDashboard() {
+            try {
+                const response = await fetch('data.md?_=' + Date.now());
+                if (!response.ok) throw new Error('Could not load data.md');
+                
+                const markdown = await response.text();
+                const data = parseMarkdown(markdown);
+                renderDashboard(data);
+            } catch (error) {
+                document.getElementById('dashboard-content').innerHTML = `
+                    <div class="error-message">
+                        <h3>⚠️ Unable to Load Dashboard</h3>
+                        <p>Could not find or read data.md file.</p>
+                        <p style="margin-top: 1rem; font-size: 0.9rem;">Make sure data.md is in the same directory as this HTML file and you're viewing this page over HTTP (not file://).</p>
+                    </div>
+                `;
+            }
+        }
+
+        function parseMarkdown(md) {
+            const lines = md.split('\n');
+            const data = {
+                metadata: {},
+                sections: []
+            };
+            
+            let currentSection = null;
+            let currentTable = null;
+            let inTable = false;
+
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+
+                // Parse metadata
+                if (line.startsWith('**Updated:**')) {
+                    data.metadata.updated = line.replace('**Updated:**', '').trim();
+                }
+                if (line.startsWith('**District:**')) {
+                    data.metadata.district = line.replace('**District:**', '').trim();
+                }
+                if (line.startsWith('**School Year:**')) {
+                    data.metadata.schoolYear = line.replace('**School Year:**', '').trim();
+                }
+
+                // Parse sections
+                if (line.startsWith('## ')) {
+                    if (currentSection) {
+                        data.sections.push(currentSection);
+                    }
+                    currentSection = {
+                        title: line.replace('## ', ''),
+                        stats: {},
+                        goals: {},
+                        tables: []
+                    };
+                    inTable = false;
+                    currentTable = null;
+                }
+
+                // Parse stats
+                if (currentSection && line.startsWith('**') && line.includes(':**') && !line.startsWith('**Goal')) {
+                    const match = line.match(/\*\*(.+?):\*\*\s*(.+)/);
+                    if (match) {
+                        currentSection.stats[match[1]] = match[2];
+                    }
+                }
+
+                // Parse goals
+                if (currentSection && line.startsWith('**Goal')) {
+                    const match = line.match(/\*\*Goal\s+(.+?):\*\*\s*(.+)/);
+                    if (match) {
+                        currentSection.goals[match[1]] = match[2];
+                    }
+                }
+
+                // Parse tables
+                if (line.startsWith('|') && currentSection) {
+                    if (!inTable) {
+                        currentTable = { headers: [], rows: [] };
+                        currentSection.tables.push(currentTable);
+                        inTable = true;
+                    }
+
+                    const cells = line.split('|').map(c => c.trim()).filter(c => c);
+                    
+                    if (currentTable.headers.length === 0) {
+                        currentTable.headers = cells;
+                    } else if (!line.includes('---')) {
+                        currentTable.rows.push(cells);
+                    }
+                } else if (inTable && !line.startsWith('|')) {
+                    inTable = false;
+                }
+            }
+
+            if (currentSection) {
+                data.sections.push(currentSection);
+            }
+
+            return data;
+        }
+
+        function renderDashboard(data) {
+            // Update metadata
+            document.getElementById('district-name').textContent = data.metadata.district || 'District';
+            document.getElementById('school-year').textContent = data.metadata.schoolYear || '';
+            document.getElementById('last-updated').textContent = `Last updated: ${data.metadata.updated || 'Unknown'}`;
+
+            // Generate navigation
+            const nav = document.getElementById('sidebar-nav');
+            nav.innerHTML = data.sections.map(section => {
+                const id = section.title.toLowerCase().replace(/\s+/g, '-');
+                return `<a href="#${id}">${section.title}</a>`;
+            }).join('');
+
+            // Generate sections
+            const content = document.getElementById('dashboard-content');
+            const accentColors = ['gold', 'teal', 'purple', 'green', 'rose'];
+            
+            content.innerHTML = data.sections.map((section, idx) => {
+                const id = section.title.toLowerCase().replace(/\s+/g, '-');
+                const accent = accentColors[idx % accentColors.length];
+                
+                let html = `<section class="section" id="${id}">`;
+                html += `<h3 class="section-title">${section.title}</h3>`;
+
+                // Render stats
+                if (Object.keys(section.stats).length > 0) {
+                    html += '<div class="stat-grid">';
+                    let statIdx = 0;
+                    for (const [label, value] of Object.entries(section.stats)) {
+                        const statAccent = accentColors[(idx + statIdx) % accentColors.length];
+                        const goal = section.goals[label];
+                        
+                        html += `<div class="stat-card accent-${statAccent}">`;
+                        html += `<div class="stat-label">${label}</div>`;
+                        html += `<div class="stat-value" data-target="${parseFloat(value.replace(/[^0-9.]/g, ''))}">${value}</div>`;
+                        
+                        if (goal) {
+                            const current = parseFloat(value.replace(/[^0-9.]/g, ''));
+                            const target = parseFloat(goal.replace(/[^0-9.]/g, ''));
+                            const percent = Math.min((current / target) * 100, 100);
+                            html += `<div class="stat-progress">`;
+                            html += `<div class="progress-label">Goal: ${goal} (${percent.toFixed(1)}%)</div>`;
+                            html += `<div class="progress-bar"><div class="progress-fill" style="width: ${percent}%"></div></div>`;
+                            html += `</div>`;
+                        }
+                        
+                        html += '</div>';
+                        statIdx++;
+                    }
+                    html += '</div>';
+                }
+
+                // Render tables
+                section.tables.forEach((table, tableIdx) => {
+                    const tableAccent = accentColors[(idx + tableIdx) % accentColors.length];
+                    const tableId = `table-${id}-${tableIdx}`;
+                    
+                    html += `<div class="table-container">`;
+                    html += `<div class="table-header">`;
+                    html += `<div class="table-title">${table.headers[0]} Breakdown</div>`;
+                    html += `<button class="toggle-zeros" onclick="toggleZeros('${tableId}')">Show/Hide Zero Values</button>`;
+                    html += `</div>`;
+                    html += `<table id="${tableId}">`;
+                    html += `<thead class="accent-${tableAccent}"><tr>`;
+                    table.headers.forEach(h => html += `<th>${h}</th>`);
+                    html += '</tr></thead><tbody>';
+
+                    // Sort rows by first numeric column (descending)
+                    const sortedRows = [...table.rows].sort((a, b) => {
+                        const aVal = parseFloat(a[1]?.replace(/[^0-9.]/g, '') || 0);
+                        const bVal = parseFloat(b[1]?.replace(/[^0-9.]/g, '') || 0);
+                        return bVal - aVal;
+                    });
+
+                    // Find max value for progress bars
+                    const numericCol = sortedRows.map(r => parseFloat(r[1]?.replace(/[^0-9.]/g, '') || 0));
+                    const maxVal = Math.max(...numericCol);
+
+                    sortedRows.forEach(row => {
+                        const isZero = row.every(cell => {
+                            const num = parseFloat(cell.replace(/[^0-9.]/g, ''));
+                            return num === 0 || isNaN(num);
+                        });
+                        
+                        html += `<tr${isZero ? ' class="zero-row"' : ''}>`;
+                        row.forEach((cell, cellIdx) => {
+                            if (cellIdx === row.length - 1) {
+                                const val = parseFloat(cell.replace(/[^0-9.]/g, '') || 0);
+                                const percent = maxVal > 0 ? (val / maxVal) * 100 : 0;
+                                html += `<td class="cell-with-bar">${cell}<div class="mini-bar" style="width: ${percent}%"></div></td>`;
+                            } else {
+                                html += `<td>${cell}</td>`;
+                            }
+                        });
+                        html += '</tr>';
+                    });
+
+                    html += '</tbody></table></div>';
+                });
+
+                html += '</section>';
+                return html;
+            }).join('');
+
+            // Animate stat values
+            animateStats();
+
+            // Setup scroll spy
+            setupScrollSpy();
+        }
+
+        function animateStats() {
+            const stats = document.querySelectorAll('.stat-value');
+            stats.forEach(stat => {
+                const target = parseFloat(stat.dataset.target);
+                if (isNaN(target)) return;
+
+                let current = 0;
+                const increment = target / 60;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    
+                    // Format based on original text
+                    const originalText = stat.textContent;
+                    if (originalText.includes('%')) {
+                        stat.textContent = current.toFixed(1) + '%';
+                    } else if (originalText.includes('$')) {
+                        stat.textContent = '$' + formatNumber(Math.round(current));
+                    } else {
+                        stat.textContent = formatNumber(Math.round(current));
+                    }
+                }, 16);
+            });
+        }
+
+        function formatNumber(num) {
+            if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'k';
+            }
+            return num.toLocaleString();
+        }
+
+        function toggleZeros(tableId) {
+            const table = document.getElementById(tableId);
+            const zeroRows = table.querySelectorAll('.zero-row');
+            zeroRows.forEach(row => row.classList.toggle('show'));
+        }
+
+        function setupScrollSpy() {
+            const sections = document.querySelectorAll('.section');
+            const navLinks = document.querySelectorAll('.sidebar nav a');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.id;
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${id}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, { threshold: 0.3 });
+
+            sections.forEach(section => observer.observe(section));
+        }
+
+        // Load dashboard on page load
+        loadDashboard();
+    </script>
+</body>
+</html>
