@@ -1,6 +1,6 @@
 # TCEA Registration Dashboard
 
-**Updated:** June 15, 2025 **Goal Registrations:** 2900 **Goal Revenue:** 99000
+**Updated:** March 25, 2026 **Goal Registrations:** 2900 **Goal Revenue:** 99000
 
 ## Courses
 
