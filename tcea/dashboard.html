@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TCEA Registration Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy: #0A3476;
+  --navy-dark: #071f4a;
+  --navy-mid: #12428f;
+  --gold: #FCB040;
+  --gold-light: #fdd17a;
+  --gold-pale: #FEF0D0;
+  --pale-navy: #D0D8F0;
+  --white: #ffffff;
+  --off-white: #f7f8fc;
+  --text: #1a1a2e;
+  --text-muted: #5a6680;
+  --border: #e2e7f5;
+  --teal: #0e6b8a;
+  --sidebar-w: 240px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: "DM Sans", sans-serif;
+  background: var(--navy-dark);
+  color: var(--white);
+  min-height: 100vh;
+  display: flex;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── SIDEBAR ─────────────────────────────────── */
+.sidebar {
+  width: var(--sidebar-w);
+  min-height: 100vh;
+  background: #050e22;
+  border-right: 1px solid rgba(252,176,64,0.15);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 100;
+  overflow-y: auto;
+}
+
+.sidebar-logo {
+  padding: 28px 24px 20px;
+  border-bottom: 1px solid rgba(252,176,64,0.12);
+}
+.sidebar-logo .org {
+  font-family: "DM Serif Display", serif;
+  font-size: 1.3rem;
+  color: var(--gold);
+  line-height: 1.1;
+}
+.sidebar-logo .subtitle {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-top: 4px;
+}
+
+.sidebar-section-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  padding: 20px 24px 8px;
+}
+
+.sidebar-nav a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 24px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  transition: all 0.15s;
+  border-left: 3px solid transparent;
+}
+.sidebar-nav a:hover,
+.sidebar-nav a.active {
+  color: var(--gold);
+  background: rgba(252,176,64,0.07);
+  border-left-color: var(--gold);
+}
+.sidebar-nav a .icon { font-size: 1rem; width: 20px; text-align: center; }
+
+.sidebar-updated {
+  margin-top: auto;
+  padding: 16px 24px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.3);
+  line-height: 1.6;
+}
+.sidebar-updated strong { color: rgba(255,255,255,0.55); display: block; margin-bottom: 2px; }
+
+/* ── MAIN CONTENT ─────────────────────────────── */
+.main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  min-height: 100vh;
+  background: var(--navy-dark);
+}
+
+/* Loading / Error state */
+.state-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  flex-direction: column;
+  gap: 16px;
+  color: rgba(255,255,255,0.4);
+  font-size: 0.9rem;
+}
+.state-overlay .spinner {
+  width: 36px; height: 36px;
+  border: 3px solid rgba(252,176,64,0.2);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── PAGE HEADER ─────────────────────────────── */
+.page-header {
+  background: linear-gradient(135deg, #050e22 0%, var(--navy-dark) 50%, #0a1a3a 100%);
+  border-bottom: 1px solid rgba(252,176,64,0.18);
+  padding: 32px 40px 28px;
+  position: relative;
+  overflow: hidden;
+}
+.page-header::after {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 320px; height: 320px;
+  background: radial-gradient(circle, rgba(252,176,64,0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+.page-header-eyebrow {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--navy-dark);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  border-radius: 100px;
+  margin-bottom: 12px;
+}
+.page-header h1 {
+  font-family: "DM Serif Display", serif;
+  font-size: 2rem;
+  color: var(--white);
+  line-height: 1.2;
+}
+.page-header h1 em {
+  font-style: italic;
+  color: var(--gold);
+}
+.page-header-meta {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.45);
+  margin-top: 6px;
+}
+
+/* ── SECTION SCROLL ANCHORS ───────────────────── */
+section { scroll-margin-top: 20px; }
+
+/* ── HERO STATS ──────────────────────────────── */
+#overview {
+  padding: 36px 40px;
+  background: linear-gradient(180deg, #060f24 0%, var(--navy-dark) 100%);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.section-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(252,176,64,0.2);
+}
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 28px 28px 24px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.stat-card:hover { border-color: rgba(252,176,64,0.3); }
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--gold);
+  border-radius: 14px 14px 0 0;
+}
+.stat-card.accent::before { background: var(--teal); }
+.stat-card.accent2::before { background: #7c3aed; }
+
+.stat-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 12px;
+}
+.stat-value {
+  font-family: "DM Serif Display", serif;
+  font-size: 3.4rem;
+  color: var(--gold);
+  line-height: 1;
+  letter-spacing: -1px;
+}
+.stat-value.revenue { color: var(--gold-light); }
+.stat-value.courses { color: var(--pale-navy); }
+.stat-value.avg { color: #86efac; }
+
+.stat-sub {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.35);
+  margin-top: 8px;
+}
+
+/* ── GOAL PROGRESS ───────────────────────────── */
+.goal-bar-wrap {
+  margin-top: 16px;
+}
+.goal-bar-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 6px;
+}
+.goal-bar-meta span { color: rgba(255,255,255,0.6); font-weight: 600; }
+.goal-bar-track {
+  height: 6px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 100px;
+  overflow: hidden;
+}
+.goal-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  border-radius: 100px;
+  transition: width 1s cubic-bezier(0.4,0,0.2,1);
+  width: 0%;
+}
+.goal-bar-fill.teal { background: linear-gradient(90deg, var(--teal), #1aa3c7); }
+
+/* ── COURSE TABLE ────────────────────────────── */
+#courses {
+  padding: 36px 40px;
+}
+
+.table-wrap {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+thead tr {
+  background: rgba(252,176,64,0.08);
+  border-bottom: 1px solid rgba(252,176,64,0.15);
+}
+thead th {
+  padding: 14px 20px;
+  text-align: left;
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  white-space: nowrap;
+}
+thead th.right { text-align: right; }
+
+tbody tr {
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  transition: background 0.15s;
+}
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: rgba(255,255,255,0.03); }
+
+tbody td {
+  padding: 16px 20px;
+  color: rgba(255,255,255,0.85);
+  vertical-align: middle;
+}
+tbody td.right { text-align: right; }
+
+.course-name {
+  font-weight: 600;
+  color: var(--white);
+}
+
+.reg-count {
+  font-family: "DM Serif Display", serif;
+  font-size: 1.3rem;
+  color: var(--gold);
+}
+
+.revenue-cell {
+  font-weight: 600;
+  color: var(--gold-light);
+}
+
+/* Inline bar */
+.mini-bar-wrap { display: flex; align-items: center; gap: 10px; }
+.mini-bar-track {
+  flex: 1;
+  height: 5px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 100px;
+  overflow: hidden;
+  min-width: 80px;
+}
+.mini-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  border-radius: 100px;
+}
+.mini-pct {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.35);
+  min-width: 36px;
+  text-align: right;
+}
+
+/* Rank badge */
+.rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px; height: 24px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.45);
+}
+.rank.gold { background: rgba(252,176,64,0.2); color: var(--gold); }
+.rank.silver { background: rgba(208,216,240,0.2); color: var(--pale-navy); }
+.rank.bronze { background: rgba(205,127,50,0.2); color: #cd7f32; }
+
+/* ── FOOTER ──────────────────────────────────── */
+.page-footer {
+  padding: 24px 40px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.25);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.page-footer strong { color: rgba(255,255,255,0.45); }
+
+/* ── ERROR STATE ─────────────────────────────── */
+.error-box {
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.3);
+  border-radius: 10px;
+  padding: 20px 24px;
+  font-size: 0.85rem;
+  color: #fca5a5;
+  margin: 40px;
+}
+.error-box code {
+  display: block;
+  margin-top: 8px;
+  font-family: "Courier New", monospace;
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.5);
+}
+
+/* ── RESPONSIVE ──────────────────────────────── */
+@media (max-width: 768px) {
+  :root { --sidebar-w: 0px; }
+  .sidebar { display: none; }
+  .main { margin-left: 0; }
+  #overview, #courses { padding: 24px 20px; }
+  .page-header { padding: 24px 20px; }
+  .stat-value { font-size: 2.4rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ──────────────────────────────── -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="org">TCEA</div>
+    <div class="subtitle">Registration Dashboard</div>
+  </div>
+
+  <div class="sidebar-section-label">Navigate</div>
+  <nav class="sidebar-nav">
+    <a href="#overview" class="active">
+      <span class="icon">📊</span> Overview
+    </a>
+    <a href="#courses">
+      <span class="icon">📋</span> Course Breakdown
+    </a>
+  </nav>
+
+  <div class="sidebar-updated" id="sidebar-meta">
+    <strong>Last Updated</strong>
+    Loading…
+  </div>
+</aside>
+
+<!-- ── MAIN ─────────────────────────────────── -->
+<main class="main" id="main-content">
+
+  <div class="state-overlay" id="loading-state">
+    <div class="spinner"></div>
+    <div>Loading dashboard data…</div>
+  </div>
+
+  <div id="dashboard-content" style="display:none">
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="page-header-eyebrow">Live Scoreboard</div>
+      <h1>Course Registration <em>Tracker</em></h1>
+      <div class="page-header-meta" id="header-meta">Data loaded from data.md</div>
+    </div>
+
+    <!-- Overview Section -->
+    <section id="overview">
+      <div class="section-label">📊 &nbsp;Overall Totals</div>
+
+      <div class="hero-stats">
+
+        <!-- Total Registrations -->
+        <div class="stat-card">
+          <div class="stat-label">Total Registrations</div>
+          <div class="stat-value" id="stat-total-regs">0</div>
+          <div class="stat-sub" id="stat-regs-sub">across all courses</div>
+          <div class="goal-bar-wrap" id="regs-goal-wrap" style="display:none">
+            <div class="goal-bar-meta">
+              Goal <span id="regs-goal-label"></span>
+            </div>
+            <div class="goal-bar-track">
+              <div class="goal-bar-fill" id="regs-goal-bar"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Total Revenue -->
+        <div class="stat-card accent">
+          <div class="stat-label">Total Revenue</div>
+          <div class="stat-value revenue" id="stat-total-rev">$0</div>
+          <div class="stat-sub" id="stat-rev-sub">combined across all courses</div>
+          <div class="goal-bar-wrap" id="rev-goal-wrap" style="display:none">
+            <div class="goal-bar-meta">
+              Goal <span id="rev-goal-label"></span>
+            </div>
+            <div class="goal-bar-track">
+              <div class="goal-bar-fill teal" id="rev-goal-bar"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Courses Active -->
+        <div class="stat-card accent2">
+          <div class="stat-label">Active Courses</div>
+          <div class="stat-value courses" id="stat-courses">0</div>
+          <div class="stat-sub">courses with registrations</div>
+        </div>
+
+        <!-- Avg per Course -->
+        <div class="stat-card">
+          <div class="stat-label">Avg Revenue / Course</div>
+          <div class="stat-value avg" id="stat-avg-rev">$0</div>
+          <div class="stat-sub">mean across all courses</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Course Breakdown -->
+    <section id="courses">
+      <div class="section-label">📋 &nbsp;Course Breakdown</div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:40px">#</th>
+              <th>Course</th>
+              <th class="right">Registrations</th>
+              <th class="right">Revenue</th>
+              <th class="right">Avg / Reg</th>
+              <th style="min-width:180px">Share of Total</th>
+            </tr>
+          </thead>
+          <tbody id="course-table-body">
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="page-footer">
+      <div>TCEA Registration Dashboard &nbsp;·&nbsp; Data source: <strong>data.md</strong></div>
+      <div id="footer-updated"></div>
+    </footer>
+
+  </div><!-- /dashboard-content -->
+
+</main>
+
+<script>
+// ── PARSE MARKDOWN ──────────────────────────────────────────────────────────
+function parseMarkdown(md) {
+  const result = {
+    updated: null,
+    goalRegs: null,
+    goalRevenue: null,
+    courses: []
+  };
+
+  const lines = md.split('\n');
+
+  for (const line of lines) {
+    const updated = line.match(/\*\*Updated:\*\*\s*(.+)/);
+    if (updated) result.updated = updated[1].trim();
+
+    const goalR = line.match(/\*\*Goal Registrations:\*\*\s*([\d,]+)/);
+    if (goalR) result.goalRegs = parseInt(goalR[1].replace(/,/g, ''));
+
+    const goalRev = line.match(/\*\*Goal Revenue:\*\*\s*([\d,]+)/);
+    if (goalRev) result.goalRevenue = parseInt(goalRev[1].replace(/,/g, ''));
+  }
+
+  // Parse markdown table rows (skip header and separator)
+  const tableRows = lines.filter(l => l.startsWith('|') && !l.includes('---'));
+  // First table row is header
+  let isHeader = true;
+  for (const row of tableRows) {
+    if (isHeader) { isHeader = false; continue; }
+    const cells = row.split('|').map(c => c.trim()).filter(c => c !== '');
+    if (cells.length >= 3) {
+      const regs  = parseInt(cells[1].replace(/,/g, '')) || 0;
+      const rev   = parseInt(cells[2].replace(/[$,]/g, '')) || 0;
+      result.courses.push({
+        name: cells[0],
+        registrations: regs,
+        revenue: rev
+      });
+    }
+  }
+
+  // Sort descending by registrations
+  result.courses.sort((a, b) => b.registrations - a.registrations);
+  return result;
+}
+
+// ── FORMAT HELPERS ──────────────────────────────────────────────────────────
+function fmtNum(n) {
+  return n.toLocaleString('en-US');
+}
+function fmtDollar(n) {
+  if (n >= 1000) return '$' + (n / 1000).toFixed(1) + 'k';
+  return '$' + n.toLocaleString('en-US');
+}
+function fmtDollarFull(n) {
+  return '$' + n.toLocaleString('en-US');
+}
+function rankClass(i) {
+  if (i === 0) return 'gold';
+  if (i === 1) return 'silver';
+  if (i === 2) return 'bronze';
+  return '';
+}
+
+// ── ANIMATE NUMBERS ─────────────────────────────────────────────────────────
+function animateValue(el, end, duration, prefix='', suffix='', isFloat=false) {
+  const start = 0;
+  const startTime = performance.now();
+  function update(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = Math.round(start + (end - start) * eased);
+    el.textContent = prefix + (isFloat ? current.toLocaleString('en-US') : fmtNum(current)) + suffix;
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+// ── RENDER DASHBOARD ────────────────────────────────────────────────────────
+function renderDashboard(data) {
+  const totalRegs = data.courses.reduce((s, c) => s + c.registrations, 0);
+  const totalRev  = data.courses.reduce((s, c) => s + c.revenue, 0);
+  const numCourses = data.courses.length;
+  const avgRev = numCourses > 0 ? Math.round(totalRev / numCourses) : 0;
+
+  // Sidebar + header meta
+  const metaText = data.updated ? `Last updated: ${data.updated}` : 'Last updated: unknown';
+  document.getElementById('sidebar-meta').innerHTML =
+    `<strong>Last Updated</strong>${data.updated || '—'}`;
+  document.getElementById('header-meta').textContent = metaText;
+  document.getElementById('footer-updated').textContent = metaText;
+
+  // Animate hero stats
+  animateValue(document.getElementById('stat-total-regs'), totalRegs, 1200);
+  document.getElementById('stat-regs-sub').textContent =
+    `across ${numCourses} course${numCourses !== 1 ? 's' : ''}`;
+
+  // Revenue — animate via raw number, display as formatted
+  const revEl = document.getElementById('stat-total-rev');
+  const revEnd = totalRev;
+  const startTime = performance.now();
+  (function animRev(now) {
+    const p = Math.min((now - startTime) / 1200, 1);
+    const e = 1 - Math.pow(1 - p, 3);
+    revEl.textContent = fmtDollarFull(Math.round(revEnd * e));
+    if (p < 1) requestAnimationFrame(animRev);
+  })(startTime);
+
+  animateValue(document.getElementById('stat-courses'), numCourses, 800);
+
+  const avgEl = document.getElementById('stat-avg-rev');
+  const avgStart = performance.now();
+  (function animAvg(now) {
+    const p = Math.min((now - avgStart) / 1000, 1);
+    const e = 1 - Math.pow(1 - p, 3);
+    avgEl.textContent = fmtDollarFull(Math.round(avgRev * e));
+    if (p < 1) requestAnimationFrame(animAvg);
+  })(avgStart);
+
+  // Goal bars
+  if (data.goalRegs) {
+    const pct = Math.min((totalRegs / data.goalRegs) * 100, 100);
+    document.getElementById('regs-goal-wrap').style.display = 'block';
+    document.getElementById('regs-goal-label').textContent =
+      fmtNum(data.goalRegs) + ' (' + Math.round(pct) + '%)';
+    setTimeout(() => {
+      document.getElementById('regs-goal-bar').style.width = pct + '%';
+    }, 300);
+  }
+  if (data.goalRevenue) {
+    const pct = Math.min((totalRev / data.goalRevenue) * 100, 100);
+    document.getElementById('rev-goal-wrap').style.display = 'block';
+    document.getElementById('rev-goal-label').textContent =
+      fmtDollarFull(data.goalRevenue) + ' (' + Math.round(pct) + '%)';
+    setTimeout(() => {
+      document.getElementById('rev-goal-bar').style.width = pct + '%';
+    }, 300);
+  }
+
+  // Course table
+  const tbody = document.getElementById('course-table-body');
+  tbody.innerHTML = '';
+
+  data.courses.forEach((course, i) => {
+    const sharePct = totalRegs > 0 ? (course.registrations / totalRegs) * 100 : 0;
+    const avgPerReg = course.registrations > 0
+      ? fmtDollarFull(Math.round(course.revenue / course.registrations))
+      : '—';
+    const rc = rankClass(i);
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><span class="rank ${rc}">${i + 1}</span></td>
+      <td class="course-name">${course.name}</td>
+      <td class="right"><span class="reg-count">${fmtNum(course.registrations)}</span></td>
+      <td class="right revenue-cell">${fmtDollarFull(course.revenue)}</td>
+      <td class="right" style="color:rgba(255,255,255,0.55);font-size:0.82rem">${avgPerReg}</td>
+      <td>
+        <div class="mini-bar-wrap">
+          <div class="mini-bar-track">
+            <div class="mini-bar-fill" style="width:${sharePct.toFixed(1)}%"></div>
+          </div>
+          <span class="mini-pct">${sharePct.toFixed(1)}%</span>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  // Show dashboard
+  document.getElementById('loading-state').style.display = 'none';
+  document.getElementById('dashboard-content').style.display = 'block';
+}
+
+// ── FETCH DATA ───────────────────────────────────────────────────────────────
+fetch('data.md?_=' + Date.now())
+  .then(res => {
+    if (!res.ok) throw new Error(`HTTP ${res.status} — could not load data.md`);
+    return res.text();
+  })
+  .then(text => {
+    const data = parseMarkdown(text);
+    if (data.courses.length === 0) {
+      throw new Error('No course data found. Check the table format in data.md.');
+    }
+    renderDashboard(data);
+  })
+  .catch(err => {
+    document.getElementById('loading-state').style.display = 'none';
+    const errBox = document.createElement('div');
+    errBox.className = 'error-box';
+    errBox.innerHTML = `
+      <strong>⚠️ Could not load data.md</strong><br>
+      ${err.message}
+      <code>Make sure data.md is in the same folder as dashboard.html and the page is served over HTTP (not file://).</code>
+    `;
+    document.getElementById('main-content').appendChild(errBox);
+  });
+
+// ── SIDEBAR ACTIVE STATE ON SCROLL ──────────────────────────────────────────
+const sections = ['overview', 'courses'];
+const navLinks = document.querySelectorAll('.sidebar-nav a');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id);
+      });
+    }
+  });
+}, { threshold: 0.4 });
+sections.forEach(id => {
+  const el = document.getElementById(id);
+  if (el) observer.observe(el);
+});
+</script>
+</body>
+</html>
