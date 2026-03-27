@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Client Workspace — MGuhlin.org</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --forest:        #2D6A4F;
+  --forest-deep:   #1B4332;
+  --forest-mid:    #40916C;
+  --forest-light:  #74C69D;
+  --forest-pale:   #B7E4C7;
+  --forest-faint:  #D8F3DC;
+  --charcoal:      #232526;
+  --charcoal-mid:  #2F3133;
+  --charcoal-soft: #414447;
+  --charcoal-dim:  #5A5F64;
+  --charcoal-mute: #8A9099;
+  --cream:         #F2EFE9;
+  --white:         #FFFFFF;
+  --gold:          #D4AC0D;
+  --gold-light:    #F1C40F;
+  --border-dark:   rgba(116,198,157,0.15);
+  --border-mid:    rgba(116,198,157,0.08);
+  --red:           #E74C3C;
+  --red-soft:      rgba(231,76,60,0.15);
+  --amber:         #F39C12;
+  --amber-soft:    rgba(243,156,18,0.15);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--charcoal);
+  color:var(--cream);
+  font-family:'DM Sans',sans-serif;
+  font-weight:300;
+  font-size:0.9rem;
+  line-height:1.75;
+  min-height:100vh;
+}
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;opacity:0.6;
+}
+
+/* ── Layout Shell ── */
+.app-shell{position:relative;z-index:1;display:flex;min-height:100vh;}
+.sidebar{
+  width:280px;min-width:280px;
+  background:var(--forest-deep);
+  border-right:1px solid var(--border-dark);
+  display:flex;flex-direction:column;
+  position:fixed;top:0;left:0;bottom:0;z-index:100;
+  transition:transform 0.3s ease;
+}
+.sidebar.collapsed{transform:translateX(-280px);}
+.main-area{
+  flex:1;margin-left:280px;
+  display:flex;flex-direction:column;min-height:100vh;
+  transition:margin-left 0.3s ease;
+}
+.main-area.expanded{margin-left:0;}
+
+/* ── Sidebar ── */
+.sidebar-header{
+  padding:20px 20px 16px;
+  border-bottom:1px solid var(--border-dark);
+}
+.sidebar-brand{
+  font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;
+  color:var(--forest-pale);margin-bottom:2px;
+}
+.sidebar-brand span{color:var(--forest-light);}
+.sidebar-sub{
+  font-family:'DM Mono',monospace;font-size:0.6rem;
+  letter-spacing:0.16em;text-transform:uppercase;
+  color:rgba(116,198,157,0.45);
+}
+.sidebar-actions{padding:12px 16px;display:flex;gap:8px;}
+.sidebar-actions button{
+  flex:1;padding:8px 12px;border-radius:8px;border:none;
+  font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;
+  cursor:pointer;transition:all 0.2s;
+}
+.btn-add-client{
+  background:var(--forest);color:var(--white);
+}
+.btn-add-client:hover{filter:brightness(1.15);}
+.btn-reminders{
+  background:rgba(243,156,18,0.15);color:var(--amber);
+  border:1px solid rgba(243,156,18,0.3) !important;
+}
+.btn-reminders:hover{background:rgba(243,156,18,0.25);}
+.reminder-count{
+  background:var(--amber);color:var(--charcoal);
+  font-size:0.65rem;font-weight:600;
+  padding:1px 6px;border-radius:100px;margin-left:4px;
+}
+.client-list{
+  flex:1;overflow-y:auto;padding:8px 12px;
+  scrollbar-width:thin;scrollbar-color:var(--charcoal-soft) transparent;
+}
+.client-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;border-radius:10px;
+  cursor:pointer;transition:all 0.15s;
+  margin-bottom:4px;
+}
+.client-item:hover{background:rgba(116,198,157,0.08);}
+.client-item.active{
+  background:rgba(116,198,157,0.14);
+  border:1px solid rgba(116,198,157,0.25);
+}
+.client-avatar{
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;font-weight:700;font-size:0.85rem;
+  color:var(--white);flex-shrink:0;
+}
+.client-info{flex:1;min-width:0;}
+.client-name{
+  font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:500;
+  color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.client-meta{
+  font-family:'DM Mono',monospace;font-size:0.58rem;
+  letter-spacing:0.08em;color:var(--charcoal-mute);
+}
+.client-flag-dot{
+  width:8px;height:8px;border-radius:50%;background:var(--amber);flex-shrink:0;
+}
+.sidebar-search{padding:8px 16px 12px;}
+.sidebar-search input{
+  width:100%;padding:9px 14px 9px 36px;border-radius:8px;
+  background:rgba(116,198,157,0.06);border:1px solid var(--border-dark);
+  color:var(--cream);font-family:'DM Sans',sans-serif;font-size:0.8rem;
+  outline:none;transition:border-color 0.2s;
+}
+.sidebar-search input:focus{border-color:rgba(116,198,157,0.4);}
+.sidebar-search input::placeholder{color:var(--charcoal-mute);}
+.sidebar-search-wrap{position:relative;}
+.sidebar-search-wrap .search-icon{
+  position:absolute;left:12px;top:50%;transform:translateY(-50%);
+  color:var(--charcoal-mute);font-size:0.85rem;pointer-events:none;
+}
+
+/* ── Top Bar ── */
+.topbar{
+  height:56px;background:rgba(35,37,38,0.95);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border-dark);
+  display:flex;align-items:center;padding:0 24px;gap:12px;
+  position:sticky;top:0;z-index:50;
+}
+.topbar-toggle{
+  display:none;background:none;border:none;color:var(--forest-light);
+  font-size:1.2rem;cursor:pointer;padding:4px 8px;
+}
+.topbar-title{
+  font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;
+  color:var(--cream);flex:1;
+}
+.topbar-search{position:relative;width:280px;}
+.topbar-search input{
+  width:100%;padding:8px 14px 8px 34px;border-radius:8px;
+  background:rgba(116,198,157,0.06);border:1px solid var(--border-dark);
+  color:var(--cream);font-family:'DM Sans',sans-serif;font-size:0.8rem;
+  outline:none;transition:border-color 0.2s;
+}
+.topbar-search input:focus{border-color:rgba(116,198,157,0.4);}
+.topbar-search input::placeholder{color:var(--charcoal-mute);}
+.topbar-search .search-icon{
+  position:absolute;left:10px;top:50%;transform:translateY(-50%);
+  color:var(--charcoal-mute);font-size:0.85rem;pointer-events:none;
+}
+
+/* ── Main Content ── */
+.main-content{flex:1;padding:24px;max-width:900px;width:100%;}
+
+/* Welcome state */
+.welcome-state{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:60vh;text-align:center;padding:40px 20px;
+}
+.welcome-state h2{
+  font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;
+  color:var(--forest-pale);margin-bottom:8px;
+}
+.welcome-state p{color:var(--charcoal-mute);max-width:400px;}
+
+/* ── Quick Entry ── */
+.quick-entry{
+  background:var(--charcoal-mid);border:1px solid var(--border-dark);
+  border-radius:16px;padding:20px 24px;margin-bottom:24px;
+}
+.quick-entry-header{
+  display:flex;align-items:center;gap:10px;margin-bottom:14px;
+}
+.quick-entry-header h3{
+  font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;
+  color:var(--cream);flex:1;
+}
+.entry-type-tabs{display:flex;gap:4px;}
+.entry-type-tab{
+  padding:5px 12px;border-radius:100px;border:1px solid var(--border-dark);
+  background:transparent;color:var(--charcoal-mute);
+  font-family:'DM Mono',monospace;font-size:0.65rem;
+  letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;
+  transition:all 0.15s;
+}
+.entry-type-tab.active{
+  background:rgba(116,198,157,0.14);color:var(--forest-light);
+  border-color:rgba(116,198,157,0.3);
+}
+.entry-type-tab:hover:not(.active){background:rgba(116,198,157,0.06);}
+.quick-entry textarea{
+  width:100%;min-height:80px;padding:14px;border-radius:10px;
+  background:rgba(116,198,157,0.04);border:1px solid var(--border-dark);
+  color:var(--cream);font-family:'DM Sans',sans-serif;font-size:0.85rem;
+  line-height:1.6;resize:vertical;outline:none;transition:border-color 0.2s;
+}
+.quick-entry textarea:focus{border-color:rgba(116,198,157,0.35);}
+.quick-entry textarea::placeholder{color:var(--charcoal-dim);}
+.quick-entry-footer{display:flex;align-items:center;gap:10px;margin-top:12px;}
+.quick-entry-footer .btn-primary{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:9px 20px;border-radius:8px;border:none;
+  font-size:0.82rem;font-weight:600;cursor:pointer;
+  background:var(--forest-mid);color:#fff;
+  transition:filter 0.2s,transform 0.15s;letter-spacing:0.02em;
+}
+.quick-entry-footer .btn-primary:hover{filter:brightness(1.15);transform:translateY(-1px);}
+.remind-toggle{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 14px;border-radius:8px;border:1px solid var(--border-dark);
+  background:transparent;color:var(--charcoal-mute);
+  font-family:'DM Mono',monospace;font-size:0.68rem;
+  letter-spacing:0.08em;cursor:pointer;transition:all 0.2s;
+}
+.remind-toggle.flagged{
+  background:var(--amber-soft);color:var(--amber);
+  border-color:rgba(243,156,18,0.4);
+}
+.remind-toggle:hover{border-color:rgba(243,156,18,0.5);}
+
+/* ── Timeline ── */
+.timeline{position:relative;padding-left:28px;}
+.timeline::before{
+  content:'';position:absolute;left:8px;top:0;bottom:0;
+  width:2px;background:rgba(116,198,157,0.12);border-radius:2px;
+}
+.timeline-entry{
+  position:relative;margin-bottom:20px;
+  background:var(--charcoal-mid);border:1px solid var(--border-dark);
+  border-radius:14px;padding:18px 22px;
+  transition:border-color 0.2s,box-shadow 0.2s;
+}
+.timeline-entry:hover{
+  border-color:rgba(116,198,157,0.22);
+  box-shadow:0 6px 30px rgba(0,0,0,0.25);
+}
+.timeline-entry::before{
+  content:'';position:absolute;left:-24px;top:24px;
+  width:12px;height:12px;border-radius:50%;
+  border:2px solid var(--forest-mid);background:var(--charcoal);
+}
+.timeline-entry.type-meeting::before{background:var(--forest-mid);}
+.timeline-entry.type-decision::before{background:var(--gold);}
+.timeline-entry.type-next-step::before{background:var(--forest-light);}
+.timeline-entry-header{
+  display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;
+}
+.entry-type-badge{
+  font-family:'DM Mono',monospace;font-size:0.58rem;
+  letter-spacing:0.14em;text-transform:uppercase;
+  padding:3px 10px;border-radius:4px;
+}
+.badge-meeting{background:rgba(45,106,79,0.2);color:var(--forest-light);}
+.badge-decision{background:rgba(212,172,13,0.15);color:var(--gold-light);}
+.badge-next-step{background:rgba(116,198,157,0.12);color:var(--forest-pale);}
+.entry-date{
+  font-family:'DM Mono',monospace;font-size:0.62rem;
+  color:var(--charcoal-mute);letter-spacing:0.06em;
+}
+.entry-flag{
+  margin-left:auto;width:22px;height:22px;border-radius:6px;
+  border:1px solid var(--border-dark);background:transparent;
+  color:var(--charcoal-dim);font-size:0.75rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.2s;
+}
+.entry-flag.flagged{
+  background:var(--amber-soft);color:var(--amber);
+  border-color:rgba(243,156,18,0.4);
+}
+.entry-flag:hover{border-color:rgba(243,156,18,0.5);}
+.entry-text{
+  color:rgba(212,228,199,0.7);font-size:0.85rem;line-height:1.7;
+  white-space:pre-wrap;word-break:break-word;
+}
+.entry-actions{
+  display:flex;gap:6px;margin-top:10px;
+}
+.entry-action-btn{
+  padding:4px 10px;border-radius:6px;border:1px solid var(--border-dark);
+  background:transparent;color:var(--charcoal-mute);
+  font-family:'DM Mono',monospace;font-size:0.58rem;
+  letter-spacing:0.08em;cursor:pointer;transition:all 0.15s;
+}
+.entry-action-btn:hover{
+  background:rgba(116,198,157,0.08);color:var(--forest-pale);
+}
+.entry-action-btn.delete:hover{
+  background:var(--red-soft);color:var(--red);border-color:rgba(231,76,60,0.3);
+}
+
+/* ── Search Results Overlay ── */
+.search-overlay{
+  position:fixed;inset:0;z-index:400;
+  background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);
+  display:none;align-items:flex-start;justify-content:center;
+  padding:80px 20px 40px;overflow-y:auto;
+}
+.search-overlay.visible{display:flex;}
+.search-panel{
+  background:var(--charcoal-mid);border:1px solid var(--border-dark);
+  border-radius:16px;width:100%;max-width:680px;
+  max-height:80vh;overflow-y:auto;
+}
+.search-panel-header{
+  padding:20px 24px;border-bottom:1px solid var(--border-dark);
+  display:flex;align-items:center;gap:12px;
+}
+.search-panel-header input{
+  flex:1;padding:10px 16px;border-radius:10px;
+  background:rgba(116,198,157,0.06);border:1px solid var(--border-dark);
+  color:var(--cream);font-family:'DM Sans',sans-serif;font-size:0.9rem;
+  outline:none;
+}
+.search-panel-header input:focus{border-color:rgba(116,198,157,0.4);}
+.search-panel-close{
+  background:none;border:none;color:var(--charcoal-mute);
+  font-size:1.3rem;cursor:pointer;padding:4px;
+}
+.search-panel-close:hover{color:var(--cream);}
+.search-results{padding:12px;}
+.search-result-item{
+  padding:14px 18px;border-radius:10px;cursor:pointer;
+  transition:background 0.15s;margin-bottom:4px;
+}
+.search-result-item:hover{background:rgba(116,198,157,0.06);}
+.search-result-client{
+  font-family:'DM Mono',monospace;font-size:0.6rem;
+  letter-spacing:0.12em;text-transform:uppercase;color:var(--forest-light);
+  margin-bottom:3px;
+}
+.search-result-text{
+  font-size:0.82rem;color:rgba(212,228,199,0.7);
+  overflow:hidden;text-overflow:ellipsis;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+}
+.search-result-text mark{
+  background:rgba(243,156,18,0.25);color:var(--cream);
+  padding:0 2px;border-radius:2px;
+}
+.search-result-date{
+  font-family:'DM Mono',monospace;font-size:0.56rem;
+  color:var(--charcoal-mute);margin-top:4px;
+}
+.search-empty{
+  padding:40px 20px;text-align:center;color:var(--charcoal-dim);
+  font-size:0.85rem;
+}
+
+/* ── Reminders Panel ── */
+.reminders-view .timeline-entry{border-left:3px solid var(--amber);}
+.reminders-header{
+  display:flex;align-items:center;gap:12px;margin-bottom:20px;
+}
+.reminders-header h2{
+  font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;
+  color:var(--cream);flex:1;
+}
+.reminders-back{
+  padding:6px 14px;border-radius:8px;
+  border:1px solid var(--border-dark);background:transparent;
+  color:var(--charcoal-mute);font-family:'DM Mono',monospace;
+  font-size:0.68rem;letter-spacing:0.08em;cursor:pointer;
+  transition:all 0.15s;
+}
+.reminders-back:hover{background:rgba(116,198,157,0.08);color:var(--forest-pale);}
+.reminder-client-label{
+  font-family:'DM Mono',monospace;font-size:0.6rem;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--forest-light);margin-bottom:6px;margin-top:16px;
+}
+
+/* ── Modal ── */
+.modal-overlay{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);
+  display:none;align-items:center;justify-content:center;padding:20px;
+}
+.modal-overlay.visible{display:flex;}
+.modal{
+  background:var(--charcoal-mid);border:1px solid var(--border-dark);
+  border-radius:16px;padding:28px 32px;width:100%;max-width:420px;
+}
+.modal h3{
+  font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;
+  color:var(--cream);margin-bottom:16px;
+}
+.modal label{
+  display:block;margin-bottom:4px;
+  font-family:'DM Mono',monospace;font-size:0.62rem;
+  letter-spacing:0.14em;text-transform:uppercase;color:var(--charcoal-mute);
+}
+.modal input[type="text"]{
+  width:100%;padding:10px 14px;border-radius:8px;
+  background:rgba(116,198,157,0.06);border:1px solid var(--border-dark);
+  color:var(--cream);font-family:'DM Sans',sans-serif;font-size:0.85rem;
+  outline:none;margin-bottom:14px;
+}
+.modal input[type="text"]:focus{border-color:rgba(116,198,157,0.4);}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:8px;}
+.modal-actions button{
+  padding:9px 20px;border-radius:8px;border:none;
+  font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:500;
+  cursor:pointer;transition:all 0.2s;
+}
+.modal-cancel{background:var(--charcoal-soft);color:var(--cream);}
+.modal-cancel:hover{background:var(--charcoal-dim);}
+.modal-confirm{background:var(--forest);color:var(--white);}
+.modal-confirm:hover{filter:brightness(1.15);}
+
+/* ── Delete Client ── */
+.client-delete{
+  margin-left:auto;width:20px;height:20px;border-radius:4px;
+  border:none;background:transparent;color:transparent;
+  font-size:0.7rem;cursor:pointer;transition:all 0.15s;
+  display:flex;align-items:center;justify-content:center;
+}
+.client-item:hover .client-delete{color:var(--charcoal-dim);}
+.client-delete:hover{color:var(--red) !important;background:var(--red-soft);}
+
+/* ── Empty State ── */
+.empty-timeline{
+  text-align:center;padding:60px 20px;color:var(--charcoal-dim);
+}
+.empty-timeline .empty-icon{font-size:2.5rem;margin-bottom:12px;display:block;}
+.empty-timeline p{font-size:0.85rem;max-width:320px;margin:0 auto;}
+
+/* ── Footer ── */
+.app-footer{
+  background:var(--forest-deep);border-top:1px solid rgba(116,198,157,0.12);
+  padding:20px 24px;display:flex;align-items:center;
+  justify-content:space-between;gap:12px;flex-wrap:wrap;
+  margin-top:auto;
+}
+.app-footer .footer-brand{
+  font-family:'Playfair Display',serif;font-size:0.9rem;
+  color:var(--forest-pale);
+}
+.app-footer .footer-brand span{color:var(--forest-light);}
+.app-footer .footer-copy{
+  font-family:'DM Mono',monospace;font-size:0.58rem;
+  color:rgba(116,198,157,0.3);letter-spacing:0.06em;
+}
+.export-btn{
+  padding:6px 14px;border-radius:6px;
+  border:1px solid var(--border-dark);background:transparent;
+  color:var(--charcoal-mute);font-family:'DM Mono',monospace;
+  font-size:0.62rem;letter-spacing:0.08em;cursor:pointer;
+  transition:all 0.15s;text-transform:uppercase;
+}
+.export-btn:hover{background:rgba(116,198,157,0.08);color:var(--forest-pale);}
+
+/* ── Responsive ── */
+@media(max-width:860px){
+  .sidebar{transform:translateX(-280px);}
+  .sidebar.open{transform:translateX(0);}
+  .main-area{margin-left:0;}
+  .topbar-toggle{display:block;}
+  .topbar-search{width:180px;}
+}
+@media(max-width:520px){
+  .topbar-search{display:none;}
+  .quick-entry{padding:16px;}
+  .entry-type-tabs{flex-wrap:wrap;}
+  .main-content{padding:16px;}
+}
+
+/* ── Sync Bar ── */
+.sync-bar{
+  background:var(--charcoal-mid);border:1px solid var(--border-dark);
+  border-radius:12px;padding:14px 20px;margin:0 24px 0;
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+}
+.sync-btn{
+  padding:7px 16px;border-radius:6px;border:none;
+  font-family:'DM Sans',sans-serif;font-size:0.76rem;font-weight:500;
+  cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px;
+}
+.sync-push{background:var(--forest);color:var(--white);}
+.sync-push:hover{filter:brightness(1.15);}
+.sync-pull{background:rgba(41,128,185,0.15);color:#5DADE2;border:1px solid rgba(41,128,185,0.3) !important;}
+.sync-pull:hover{background:rgba(41,128,185,0.25);}
+.sync-status{
+  font-family:'DM Mono',monospace;font-size:0.6rem;
+  color:var(--charcoal-mute);letter-spacing:0.06em;
+  margin-left:auto;
+}
+.sync-status.success{color:var(--forest-light);}
+.sync-status.error{color:var(--red);}
+.sync-status.working{color:var(--amber);}
+
+/* Keyboard shortcut hint */
+.kbd{
+  display:inline-block;padding:1px 6px;border-radius:4px;
+  background:var(--charcoal-soft);border:1px solid var(--border-dark);
+  font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--charcoal-mute);
+  vertical-align:middle;
+}
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-brand">Client<span>Workspace</span></div>
+      <div class="sidebar-sub">MGuhlin.org</div>
+    </div>
+    <div class="sidebar-search">
+      <div class="sidebar-search-wrap">
+        <span class="search-icon">⌕</span>
+        <input type="text" id="clientFilter" placeholder="Filter clients..." autocomplete="off">
+      </div>
+    </div>
+    <div class="sidebar-actions">
+      <button class="btn-add-client" onclick="showAddClient()">+ Client</button>
+      <button class="btn-reminders" onclick="showReminders()">⚑ <span id="reminderBtnCount"></span></button>
+    </div>
+    <div class="client-list" id="clientList"></div>
+  </aside>
+
+  <!-- ── Main ── -->
+  <div class="main-area" id="mainArea">
+    <div class="topbar">
+      <button class="topbar-toggle" onclick="toggleSidebar()">☰</button>
+      <div class="topbar-title" id="topbarTitle">Client Workspace</div>
+      <div class="topbar-search">
+        <span class="search-icon">⌕</span>
+        <input type="text" id="globalSearch" placeholder="Search all notes... (Ctrl+K)" autocomplete="off" readonly onclick="openSearch()" onkeydown="if(event.key==='Enter')openSearch()">
+      </div>
+    </div>
+
+    <div class="main-content" id="mainContent">
+      <div class="welcome-state" id="welcomeState">
+        <h2>Select or add a client</h2>
+        <p>Your meeting notes, decisions, and next steps will appear here as a running timeline.</p>
+        <div style="margin-top:20px;color:var(--charcoal-dim);font-size:0.78rem;">
+          <span class="kbd">Ctrl</span> + <span class="kbd">K</span> Global Search &nbsp;·&nbsp;
+          <span class="kbd">Ctrl</span> + <span class="kbd">N</span> New Client
+        </div>
+      </div>
+
+      <div id="clientView" style="display:none;">
+        <!-- Quick Entry -->
+        <div class="quick-entry">
+          <div class="quick-entry-header">
+            <h3>Quick Note</h3>
+            <div class="entry-type-tabs">
+              <button class="entry-type-tab active" data-type="meeting" onclick="setEntryType(this)">Meeting</button>
+              <button class="entry-type-tab" data-type="decision" onclick="setEntryType(this)">Decision</button>
+              <button class="entry-type-tab" data-type="next-step" onclick="setEntryType(this)">Next Step</button>
+            </div>
+          </div>
+          <textarea id="noteInput" placeholder="Type your note here..."></textarea>
+          <div class="quick-entry-footer">
+            <button class="btn-primary" onclick="addNote()">Save Note</button>
+            <button class="remind-toggle" id="remindToggle" onclick="toggleRemind()">⚑ Remind</button>
+            <span style="flex:1"></span>
+            <span style="font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--charcoal-dim);" id="entryCount"></span>
+          </div>
+        </div>
+
+        <!-- Timeline -->
+        <div id="timeline" class="timeline"></div>
+        <div id="emptyTimeline" class="empty-timeline" style="display:none;">
+          <span class="empty-icon">📋</span>
+          <p>No entries yet. Add your first meeting note, decision, or next step above.</p>
+        </div>
+      </div>
+
+      <div id="remindersView" style="display:none;"></div>
+    </div>
+
+    <div class="sync-bar" id="syncBar">
+      <button class="sync-btn sync-push" onclick="pushToSheet()">↑ Push to Sheet</button>
+      <button class="sync-btn sync-pull" onclick="pullFromSheet()">↓ Pull from Sheet</button>
+      <span class="sync-status" id="syncStatus"></span>
+    </div>
+
+    <div class="app-footer">
+      <div class="footer-brand">MG<span>uhlin</span>.org</div>
+      <button class="export-btn" onclick="exportData()">↓ Export JSON</button>
+      <button class="export-btn" onclick="importData()">↑ Import JSON</button>
+      <div class="footer-copy">Local storage + optional Google Sheets sync</div>
+    </div>
+  </div>
+</div>
+
+<!-- Search Overlay -->
+<div class="search-overlay" id="searchOverlay" onclick="if(event.target===this)closeSearch()">
+  <div class="search-panel">
+    <div class="search-panel-header">
+      <input type="text" id="searchInput" placeholder="Search all clients and notes..." autocomplete="off" oninput="runSearch()">
+      <button class="search-panel-close" onclick="closeSearch()">✕</button>
+    </div>
+    <div class="search-results" id="searchResults">
+      <div class="search-empty">Start typing to search across all clients and notes.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Client Modal -->
+<div class="modal-overlay" id="addClientModal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <h3>Add Client</h3>
+    <label>Client Name</label>
+    <input type="text" id="clientNameInput" placeholder="e.g. Acme School District" onkeydown="if(event.key==='Enter')confirmAddClient()">
+    <label>Organization (optional)</label>
+    <input type="text" id="clientOrgInput" placeholder="e.g. Region 20 ESC" onkeydown="if(event.key==='Enter')confirmAddClient()">
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+      <button class="modal-confirm" onclick="confirmAddClient()">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Delete Modal -->
+<div class="modal-overlay" id="deleteModal" onclick="if(event.target===this)closeDeleteModal()">
+  <div class="modal">
+    <h3>Delete Client</h3>
+    <p style="color:var(--charcoal-mute);font-size:0.85rem;margin-bottom:16px;" id="deleteMessage"></p>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeDeleteModal()">Cancel</button>
+      <button class="modal-confirm" style="background:var(--red);" onclick="confirmDeleteClient()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="importFile" accept=".json" style="display:none" onchange="handleImport(event)">
+
+<script>
+/* ─── State ─── */
+const STORAGE_KEY = 'mguhlin_client_workspace';
+let state = loadState();
+let activeClientId = null;
+let currentEntryType = 'meeting';
+let remindOnSave = false;
+let pendingDeleteId = null;
+let currentView = 'client'; // 'client' | 'reminders'
+
+const COLORS = [
+  '#2D6A4F','#1B4332','#40916C','#D4AC0D','#2980B9',
+  '#8E44AD','#C0392B','#16A085','#D35400','#27AE60'
+];
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) { console.error('Load error:', e); }
+  return { clients: [], entries: [] };
+}
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch(e) { console.error('Save error:', e); }
+}
+function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+
+/* ─── Clients ─── */
+function renderClientList(filter = '') {
+  const list = document.getElementById('clientList');
+  const fl = filter.toLowerCase();
+  const filtered = state.clients.filter(c =>
+    c.name.toLowerCase().includes(fl) || (c.org||'').toLowerCase().includes(fl)
+  );
+  if (filtered.length === 0) {
+    list.innerHTML = `<div style="padding:20px;text-align:center;color:var(--charcoal-dim);font-size:0.82rem;">
+      ${state.clients.length === 0 ? 'No clients yet' : 'No matches'}
+    </div>`;
+    return;
+  }
+  list.innerHTML = filtered.map(c => {
+    const initials = c.name.split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    const color = COLORS[Math.abs(hashStr(c.id)) % COLORS.length];
+    const entryCount = state.entries.filter(e=>e.clientId===c.id).length;
+    const hasFlag = state.entries.some(e=>e.clientId===c.id && e.flagged);
+    const isActive = c.id === activeClientId;
+    return `<div class="client-item${isActive?' active':''}" onclick="selectClient('${c.id}')">
+      <div class="client-avatar" style="background:${color}">${initials}</div>
+      <div class="client-info">
+        <div class="client-name">${esc(c.name)}</div>
+        <div class="client-meta">${c.org?esc(c.org)+' · ':''}${entryCount} note${entryCount!==1?'s':''}</div>
+      </div>
+      ${hasFlag?'<div class="client-flag-dot" title="Has reminders"></div>':''}
+      <button class="client-delete" onclick="event.stopPropagation();askDeleteClient('${c.id}')" title="Delete client">✕</button>
+    </div>`;
+  }).join('');
+}
+
+function hashStr(s) {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = ((h << 5) - h) + s.charCodeAt(i);
+  return h;
+}
+
+function selectClient(id) {
+  activeClientId = id;
+  currentView = 'client';
+  renderClientList(document.getElementById('clientFilter').value);
+  renderClientView();
+  // On mobile, close sidebar
+  if (window.innerWidth <= 860) document.getElementById('sidebar').classList.remove('open');
+}
+
+function showAddClient() {
+  document.getElementById('addClientModal').classList.add('visible');
+  setTimeout(() => document.getElementById('clientNameInput').focus(), 100);
+}
+function closeModal() {
+  document.getElementById('addClientModal').classList.remove('visible');
+  document.getElementById('clientNameInput').value = '';
+  document.getElementById('clientOrgInput').value = '';
+}
+function confirmAddClient() {
+  const name = document.getElementById('clientNameInput').value.trim();
+  const org = document.getElementById('clientOrgInput').value.trim();
+  if (!name) return;
+  const client = { id: genId(), name, org, created: new Date().toISOString() };
+  state.clients.push(client);
+  saveState();
+  closeModal();
+  selectClient(client.id);
+  renderClientList();
+  updateReminderCount();
+}
+
+function askDeleteClient(id) {
+  pendingDeleteId = id;
+  const c = state.clients.find(cl=>cl.id===id);
+  const count = state.entries.filter(e=>e.clientId===id).length;
+  document.getElementById('deleteMessage').textContent =
+    `This will permanently remove "${c.name}" and all ${count} associated note${count!==1?'s':''}. Are you sure?`;
+  document.getElementById('deleteModal').classList.add('visible');
+}
+function closeDeleteModal() {
+  document.getElementById('deleteModal').classList.remove('visible');
+  pendingDeleteId = null;
+}
+function confirmDeleteClient() {
+  if (!pendingDeleteId) return;
+  state.clients = state.clients.filter(c=>c.id!==pendingDeleteId);
+  state.entries = state.entries.filter(e=>e.clientId!==pendingDeleteId);
+  if (activeClientId === pendingDeleteId) activeClientId = null;
+  saveState();
+  closeDeleteModal();
+  renderClientList();
+  renderClientView();
+  updateReminderCount();
+}
+
+/* ─── Client View ─── */
+function renderClientView() {
+  const welcome = document.getElementById('welcomeState');
+  const view = document.getElementById('clientView');
+  const remView = document.getElementById('remindersView');
+  remView.style.display = 'none';
+
+  if (!activeClientId || currentView === 'reminders') {
+    welcome.style.display = currentView === 'reminders' ? 'none' : 'flex';
+    view.style.display = 'none';
+    return;
+  }
+
+  const client = state.clients.find(c=>c.id===activeClientId);
+  if (!client) { welcome.style.display = 'flex'; view.style.display = 'none'; return; }
+
+  welcome.style.display = 'none';
+  view.style.display = 'block';
+  document.getElementById('topbarTitle').textContent = client.name;
+
+  const entries = state.entries
+    .filter(e=>e.clientId===activeClientId)
+    .sort((a,b)=>new Date(b.date)-new Date(a.date));
+
+  document.getElementById('entryCount').textContent = `${entries.length} entr${entries.length!==1?'ies':'y'}`;
+
+  if (entries.length === 0) {
+    document.getElementById('timeline').innerHTML = '';
+    document.getElementById('emptyTimeline').style.display = 'block';
+    return;
+  }
+
+  document.getElementById('emptyTimeline').style.display = 'none';
+  document.getElementById('timeline').innerHTML = entries.map(e => {
+    const typeLabels = { meeting: 'Meeting', decision: 'Decision', 'next-step': 'Next Step' };
+    const badgeClass = { meeting: 'badge-meeting', decision: 'badge-decision', 'next-step': 'badge-next-step' };
+    const d = new Date(e.date);
+    const dateStr = d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric' })
+      + ' · ' + d.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit' });
+    return `<div class="timeline-entry type-${e.type}">
+      <div class="timeline-entry-header">
+        <span class="entry-type-badge ${badgeClass[e.type]||'badge-meeting'}">${typeLabels[e.type]||e.type}</span>
+        <span class="entry-date">${dateStr}</span>
+        <button class="entry-flag ${e.flagged?'flagged':''}" onclick="toggleEntryFlag('${e.id}')" title="${e.flagged?'Remove reminder':'Set reminder'}">⚑</button>
+      </div>
+      <div class="entry-text">${esc(e.text)}</div>
+      <div class="entry-actions">
+        <button class="entry-action-btn" onclick="editEntry('${e.id}')">Edit</button>
+        <button class="entry-action-btn delete" onclick="deleteEntry('${e.id}')">Delete</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ─── Notes ─── */
+function setEntryType(btn) {
+  document.querySelectorAll('.entry-type-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  currentEntryType = btn.dataset.type;
+}
+function toggleRemind() {
+  remindOnSave = !remindOnSave;
+  document.getElementById('remindToggle').classList.toggle('flagged', remindOnSave);
+}
+function addNote() {
+  const text = document.getElementById('noteInput').value.trim();
+  if (!text || !activeClientId) return;
+  state.entries.push({
+    id: genId(),
+    clientId: activeClientId,
+    type: currentEntryType,
+    text,
+    date: new Date().toISOString(),
+    flagged: remindOnSave
+  });
+  saveState();
+  document.getElementById('noteInput').value = '';
+  remindOnSave = false;
+  document.getElementById('remindToggle').classList.remove('flagged');
+  renderClientView();
+  renderClientList(document.getElementById('clientFilter').value);
+  updateReminderCount();
+}
+function toggleEntryFlag(id) {
+  const entry = state.entries.find(e=>e.id===id);
+  if (entry) { entry.flagged = !entry.flagged; saveState(); }
+  renderClientView();
+  renderClientList(document.getElementById('clientFilter').value);
+  updateReminderCount();
+}
+function deleteEntry(id) {
+  if (!confirm('Delete this note?')) return;
+  state.entries = state.entries.filter(e=>e.id!==id);
+  saveState();
+  renderClientView();
+  renderClientList(document.getElementById('clientFilter').value);
+  updateReminderCount();
+}
+function editEntry(id) {
+  const entry = state.entries.find(e=>e.id===id);
+  if (!entry) return;
+  const newText = prompt('Edit note:', entry.text);
+  if (newText !== null && newText.trim()) {
+    entry.text = newText.trim();
+    entry.editedAt = new Date().toISOString();
+    saveState();
+    renderClientView();
+  }
+}
+
+/* ─── Reminders ─── */
+function showReminders() {
+  currentView = 'reminders';
+  document.getElementById('welcomeState').style.display = 'none';
+  document.getElementById('clientView').style.display = 'none';
+  const view = document.getElementById('remindersView');
+  view.style.display = 'block';
+  document.getElementById('topbarTitle').textContent = 'Flagged Reminders';
+
+  const flagged = state.entries.filter(e=>e.flagged).sort((a,b)=>new Date(b.date)-new Date(a.date));
+
+  if (flagged.length === 0) {
+    view.innerHTML = `<div class="reminders-header">
+      <h2>⚑ Reminders</h2>
+      <button class="reminders-back" onclick="backFromReminders()">← Back</button>
+    </div>
+    <div class="empty-timeline"><span class="empty-icon">✓</span><p>No flagged items. Use the ⚑ button on any note to flag it for follow-up.</p></div>`;
+    return;
+  }
+
+  // Group by client
+  const grouped = {};
+  flagged.forEach(e => {
+    const c = state.clients.find(cl=>cl.id===e.clientId);
+    const label = c ? c.name : 'Unknown';
+    if (!grouped[label]) grouped[label] = [];
+    grouped[label].push(e);
+  });
+
+  let html = `<div class="reminders-header">
+    <h2>⚑ Reminders (${flagged.length})</h2>
+    <button class="reminders-back" onclick="backFromReminders()">← Back</button>
+  </div><div class="reminders-view">`;
+
+  for (const [clientName, entries] of Object.entries(grouped)) {
+    html += `<div class="reminder-client-label">${esc(clientName)}</div>`;
+    html += `<div class="timeline" style="margin-bottom:16px;">`;
+    entries.forEach(e => {
+      const typeLabels = { meeting:'Meeting', decision:'Decision', 'next-step':'Next Step' };
+      const badgeClass = { meeting:'badge-meeting', decision:'badge-decision', 'next-step':'badge-next-step' };
+      const d = new Date(e.date);
+      const dateStr = d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+      html += `<div class="timeline-entry type-${e.type}">
+        <div class="timeline-entry-header">
+          <span class="entry-type-badge ${badgeClass[e.type]||'badge-meeting'}">${typeLabels[e.type]||e.type}</span>
+          <span class="entry-date">${dateStr}</span>
+          <button class="entry-flag flagged" onclick="clearReminder('${e.id}')" title="Clear reminder">⚑</button>
+        </div>
+        <div class="entry-text">${esc(e.text)}</div>
+        <div class="entry-actions">
+          <button class="entry-action-btn" onclick="jumpToClient('${e.clientId}')">Go to Client</button>
+        </div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+  html += `</div>`;
+  view.innerHTML = html;
+}
+function backFromReminders() {
+  currentView = 'client';
+  document.getElementById('remindersView').style.display = 'none';
+  if (activeClientId) renderClientView();
+  else { document.getElementById('welcomeState').style.display='flex'; document.getElementById('topbarTitle').textContent='Client Workspace'; }
+}
+function clearReminder(id) {
+  const entry = state.entries.find(e=>e.id===id);
+  if (entry) { entry.flagged = false; saveState(); }
+  showReminders();
+  renderClientList(document.getElementById('clientFilter').value);
+  updateReminderCount();
+}
+function jumpToClient(clientId) {
+  selectClient(clientId);
+}
+function updateReminderCount() {
+  const count = state.entries.filter(e=>e.flagged).length;
+  const el = document.getElementById('reminderBtnCount');
+  el.innerHTML = count > 0 ? `<span class="reminder-count">${count}</span>` : '';
+}
+
+/* ─── Global Search ─── */
+function openSearch() {
+  document.getElementById('searchOverlay').classList.add('visible');
+  const inp = document.getElementById('searchInput');
+  inp.value = '';
+  setTimeout(()=>inp.focus(), 100);
+  document.getElementById('searchResults').innerHTML = '<div class="search-empty">Start typing to search across all clients and notes.</div>';
+}
+function closeSearch() {
+  document.getElementById('searchOverlay').classList.remove('visible');
+}
+function runSearch() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const results = document.getElementById('searchResults');
+  if (q.length < 2) {
+    results.innerHTML = '<div class="search-empty">Type at least two characters to search.</div>';
+    return;
+  }
+  const matches = state.entries.filter(e => e.text.toLowerCase().includes(q))
+    .sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0, 30);
+
+  if (matches.length === 0) {
+    results.innerHTML = '<div class="search-empty">No results found.</div>';
+    return;
+  }
+
+  results.innerHTML = matches.map(e => {
+    const c = state.clients.find(cl=>cl.id===e.clientId);
+    const d = new Date(e.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    const highlighted = highlightMatch(esc(e.text), q);
+    return `<div class="search-result-item" onclick="closeSearch();selectClient('${e.clientId}')">
+      <div class="search-result-client">${c?esc(c.name):'Unknown'} · ${e.type}</div>
+      <div class="search-result-text">${highlighted}</div>
+      <div class="search-result-date">${d}</div>
+    </div>`;
+  }).join('');
+}
+function highlightMatch(text, q) {
+  const idx = text.toLowerCase().indexOf(q);
+  if (idx === -1) return text;
+  const start = Math.max(0, idx - 40);
+  const end = Math.min(text.length, idx + q.length + 80);
+  let snippet = (start > 0 ? '...' : '') + text.slice(start, end) + (end < text.length ? '...' : '');
+  return snippet.replace(new RegExp(`(${escRegex(q)})`, 'gi'), '<mark>$1</mark>');
+}
+function escRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+/* ─── Sidebar Toggle ─── */
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  sb.classList.toggle('open');
+}
+
+/* ─── Export / Import ─── */
+function exportData() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `client-workspace-${new Date().toISOString().slice(0,10)}.json`;
+  a.click(); URL.revokeObjectURL(url);
+}
+function importData() {
+  document.getElementById('importFile').click();
+}
+function handleImport(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const imported = JSON.parse(e.target.result);
+      if (imported.clients && imported.entries) {
+        if (confirm(`Import ${imported.clients.length} client(s) and ${imported.entries.length} note(s)? This will replace all current data.`)) {
+          state = imported;
+          saveState();
+          activeClientId = null;
+          renderClientList();
+          renderClientView();
+          updateReminderCount();
+        }
+      } else {
+        alert('Invalid file format. Expected JSON with "clients" and "entries" arrays.');
+      }
+    } catch(err) { alert('Could not parse file: ' + err.message); }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+/* ─── Utils ─── */
+function esc(s) {
+  const d = document.createElement('div'); d.textContent = s; return d.innerHTML;
+}
+
+/* ─── Keyboard Shortcuts ─── */
+document.addEventListener('keydown', function(e) {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
+  if ((e.ctrlKey || e.metaKey) && e.key === 'n') { e.preventDefault(); showAddClient(); }
+  if (e.key === 'Escape') {
+    closeSearch();
+    closeModal();
+    closeDeleteModal();
+  }
+});
+
+/* ─── Google Sheet Sync ─── */
+const SYNC_URL = 'https://script.google.com/macros/s/AKfycbwNvMOFqGAHqSwO-sqssG-qtNleWyhOLyzCQ0LaYfCcudNcLcOwq4tcLcEmi4N1vtU/exec';
+
+function setSyncStatus(msg, type) {
+  const el = document.getElementById('syncStatus');
+  el.textContent = msg;
+  el.className = 'sync-status' + (type ? ' ' + type : '');
+  if (type === 'success' || type === 'error') {
+    setTimeout(() => { el.textContent = ''; el.className = 'sync-status'; }, 5000);
+  }
+}
+
+function pushToSheet() {
+  setSyncStatus('Pushing...', 'working');
+  fetch(SYNC_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify(state),
+    mode: 'no-cors'
+  })
+  .then(() => {
+    setSyncStatus('Push sent — check your Sheet', 'success');
+  })
+  .catch(err => {
+    setSyncStatus('Push failed: ' + err.message, 'error');
+  });
+}
+
+function pullFromSheet() {
+  setSyncStatus('Pulling...', 'working');
+  const fetchUrl = SYNC_URL + '?ts=' + Date.now();
+
+  fetch(fetchUrl, { redirect: 'follow' })
+  .then(r => {
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  })
+  .then(data => {
+    if (data.clients && data.entries) {
+      const cc = data.clients.length;
+      const ec = data.entries.length;
+      if (confirm('Pull ' + cc + ' client(s) and ' + ec + ' note(s) from Sheet? This replaces all local data.')) {
+        state = data;
+        saveState();
+        activeClientId = null;
+        renderClientList();
+        renderClientView();
+        updateReminderCount();
+        setSyncStatus('Pulled ' + cc + ' clients, ' + ec + ' notes', 'success');
+      } else {
+        setSyncStatus('Pull cancelled', '');
+      }
+    } else if (data.error) {
+      setSyncStatus('Sheet error: ' + data.error, 'error');
+    } else {
+      setSyncStatus('Unexpected response format', 'error');
+    }
+  })
+  .catch(err => {
+    setSyncStatus('Pull failed: ' + err.message, 'error');
+  });
+}
+
+/* ─── Client Filter ─── */
+document.getElementById('clientFilter').addEventListener('input', function() {
+  renderClientList(this.value);
+});
+
+/* ─── Init ─── */
+renderClientList();
+updateReminderCount();
+</script>
+</body>
+</html>
