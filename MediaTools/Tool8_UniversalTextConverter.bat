@@ -12,8 +12,6 @@ echo.
 
 REM === PATHS AND ENGINE CHECKS ===
 set "PDFTOTEXT=%~dp0pdftotext.exe"
-:: Update the path below to where you install wkhtmltopdf
-set "PDF_ENGINE=wkhtmltopdf"
 
 where pandoc >nul 2>&1
 if %errorlevel% neq 0 (set "HAS_PANDOC=0") else (set "HAS_PANDOC=1")
@@ -31,7 +29,7 @@ REM === SELECT OUTPUT FORMAT ===
 echo Select your desired output format:
 echo [1] .md (Markdown)     [5] .odt (OpenOffice)
 echo [2] .docx (MS Word)    [6] .html (Web Page)
-echo [3] .pdf (Non-LaTeX)   [7] .txt (Plain Text)
+echo [3] .pdf (Via Edge)    [7] .txt (Plain Text)
 echo [4] .rtf (Rich Text)   [8] .csv (Table data)
 echo.
 choice /c 12345678 /m "Enter choice:"
@@ -50,7 +48,7 @@ set "OUT_FILE=%cd%\merged_document.%EXT%"
 if exist "combined_temp.md" del "combined_temp.md" >nul 2>&1
 
 echo.
-echo [STATUS] Processing files...
+echo [STATUS] Processing files into temporary Markdown...
 echo ------------------------------------------------------
 
 :process
@@ -60,10 +58,12 @@ set "F_EXT=%~x1"
 
 echo [WORKING] Processing: "%~nx1"
 
+REM --- Logic for PDFs (Extraction) ---
 if /I "%F_EXT%"==".pdf" (
     if %HAS_PDFTEXT%==1 (
         "%PDFTOTEXT%" "%FILE%" "temp_chunk.txt"
         echo # Source: %~nx1 >> "combined_temp.md"
+        echo --- >> "combined_temp.md"
         type "temp_chunk.txt" >> "combined_temp.md"
         echo. >> "combined_temp.md"
         del "temp_chunk.txt"
@@ -71,10 +71,12 @@ if /I "%F_EXT%"==".pdf" (
     )
 )
 
+REM --- Logic for all other files via Pandoc ---
 if %HAS_PANDOC%==1 (
     pandoc "%FILE%" -t markdown -o "temp_chunk.md" --wrap=none >nul 2>&1
     if exist "temp_chunk.md" (
         echo # Source: %~nx1 >> "combined_temp.md"
+        echo --- >> "combined_temp.md"
         type "temp_chunk.md" >> "combined_temp.md"
         echo. >> "combined_temp.md"
         del "temp_chunk.md"
@@ -84,6 +86,7 @@ if %HAS_PANDOC%==1 (
 ) else (
     :FALLBACK
     echo # Source: %~nx1 >> "combined_temp.md"
+    echo --- >> "combined_temp.md"
     type "%FILE%" >> "combined_temp.md" 2>nul
     echo. >> "combined_temp.md"
 )
@@ -94,25 +97,38 @@ goto :process
 
 :FINALIZE
 if not exist "combined_temp.md" (
-    echo [ERROR] No content found.
+    echo [ERROR] No content was processed.
     pause
     exit /b
 )
 
+echo.
 echo [FINALIZING] Building %OUT_FILE%...
 
 if %HAS_PANDOC%==1 (
-    if "%EXT%"=="pdf" (
-        :: This specific command bypasses pdflatex
-        pandoc "combined_temp.md" -t html5 -o "%OUT_FILE%" --metadata title="Merged Document"
-        echo [INFO] PDF generated using Pandoc's internal HTML5 engine.
+    if /I "%EXT%"=="pdf" (
+        echo [INFO] Using Microsoft Edge as PDF Engine...
+        :: Using msedge as the engine (requires Pandoc 2.11+)
+        pandoc "combined_temp.md" -o "%OUT_FILE%" --pdf-engine=msedge --metadata title="Merged Document" 2>nul
+        
+        if not exist "%OUT_FILE%" (
+            echo [WARNING] PDF creation failed. Falling back to Word format...
+            set "OUT_FILE=%cd%\merged_document.docx"
+            pandoc "combined_temp.md" -o "!OUT_FILE!"
+            echo [NOTICE] Created .docx instead. Open and Save as PDF manually.
+        )
     ) else (
         pandoc "combined_temp.md" -o "%OUT_FILE%"
     )
 ) else (
     move /y "combined_temp.md" "merged_document.md"
+    echo [NOTE] Pandoc not found. Result saved as .md file.
 )
 
 if exist "combined_temp.md" del "combined_temp.md"
-echo [SUCCESS] Task Complete.
+echo.
+echo ------------------------------------------------------
+echo [SUCCESS] Operation Finished.
+echo Output: %OUT_FILE%
+echo ------------------------------------------------------
 pause
