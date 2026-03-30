@@ -27,10 +27,10 @@ if "%~1"=="" (
 
 REM === SELECT OUTPUT FORMAT ===
 echo Select your desired output format:
-echo [1] .md (Markdown)     [5] .odt (OpenOffice)
-echo [2] .docx (MS Word)    [6] .html (Web Page)
-echo [3] .pdf (Via Edge)    [7] .txt (Plain Text)
-echo [4] .rtf (Rich Text)   [8] .csv (Table data)
+echo [1] .md (Markdown)      [5] .odt (OpenOffice)
+echo [2] .docx (MS Word)     [6] .html (Web Page)
+echo [3] .pdf (Browser-Print) [7] .txt (Plain Text)
+echo [4] .rtf (Rich Text)    [8] .csv (Table data)
 echo.
 choice /c 12345678 /m "Enter choice:"
 set "sel=%errorlevel%"
@@ -58,7 +58,6 @@ set "F_EXT=%~x1"
 
 echo [WORKING] Processing: "%~nx1"
 
-REM --- Logic for PDFs (Extraction) ---
 if /I "%F_EXT%"==".pdf" (
     if %HAS_PDFTEXT%==1 (
         "%PDFTOTEXT%" "%FILE%" "temp_chunk.txt"
@@ -71,7 +70,6 @@ if /I "%F_EXT%"==".pdf" (
     )
 )
 
-REM --- Logic for all other files via Pandoc ---
 if %HAS_PANDOC%==1 (
     pandoc "%FILE%" -t markdown -o "temp_chunk.md" --wrap=none >nul 2>&1
     if exist "temp_chunk.md" (
@@ -107,15 +105,25 @@ echo [FINALIZING] Building %OUT_FILE%...
 
 if %HAS_PANDOC%==1 (
     if /I "%EXT%"=="pdf" (
-        echo [INFO] Using Microsoft Edge as PDF Engine...
-        :: Using msedge as the engine (requires Pandoc 2.11+)
-        pandoc "combined_temp.md" -o "%OUT_FILE%" --pdf-engine=msedge --metadata title="Merged Document" 2>nul
+        set "TEMP_HTML=%cd%\temp_print.html"
+        pandoc "combined_temp.md" -s -o "!TEMP_HTML!" --metadata title="Merged Document"
         
+        set "EDGE_EXE="
+        if exist "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" set "EDGE_EXE=C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
+        if exist "C:\Program Files\Microsoft\Edge\Application\msedge.exe" set "EDGE_EXE=C:\Program Files\Microsoft\Edge\Application\msedge.exe"
+
+        if defined EDGE_EXE (
+            :: Added 2>nul to hide the browser error messages you saw
+            "!EDGE_EXE!" --headless --disable-gpu --print-to-pdf="%OUT_FILE%" "file:///!TEMP_HTML!" 2>nul
+            timeout /t 2 >nul
+        )
+        
+        if exist "!TEMP_HTML!" del "!TEMP_HTML!"
+
         if not exist "%OUT_FILE%" (
-            echo [WARNING] PDF creation failed. Falling back to Word format...
+            echo [ERROR] Edge print failed. Falling back to .docx...
             set "OUT_FILE=%cd%\merged_document.docx"
             pandoc "combined_temp.md" -o "!OUT_FILE!"
-            echo [NOTICE] Created .docx instead. Open and Save as PDF manually.
         )
     ) else (
         pandoc "combined_temp.md" -o "%OUT_FILE%"
