@@ -1,12 +1,8 @@
-To link directly to the files within your `README.md`, you can use standard Markdown relative links. Since these files are in the same repository, the syntax is `[Display Name](filename.bat)`.
-
-Here is the updated README with functional relative links for your tools:
-
------
-
 # Media and Document Processing Tools
 
 This repository contains a collection of batch script utilities designed for Windows to streamline media conversion, image optimization, and document merging. These tools primarily utilize **FFmpeg**, **ImageMagick**, and **Pandoc** to perform high-quality transformations via a simple drag-and-drop interface.
+
+-----
 
 ## Core Utilities
 
@@ -18,13 +14,14 @@ This repository contains a collection of batch script utilities designed for Win
 
 ### Audio Enhancement
 
-  * [cite_start]**[Tool3\_AudioFix.bat](https://www.google.com/search?q=Tool3_AudioFix.bat)**: An automated script that applies noise reduction and boosts frequencies below 100Hz by 6dB for "depth"[cite: 16, 17]. [cite_start]It also uses a compressor and limiter to increase "loudness" while preventing digital clipping[cite: 18, 19].
+  * [cite_start]**[Tool3\_AudioFix.bat](https://www.google.com/search?q=Tool3_AudioFix.bat)**: An automated script that applies noise reduction and boosts frequencies below 100Hz by 6dB for "depth"[cite: 16, 17].
+  * [cite_start]**Loudness Processing**: It uses a compressor and limiter to increase "loudness" and "solidity" while preventing digital clipping[cite: 18, 19].
 
 ### Image Optimization and Shrinking
 
   * [cite_start]**[Tool4\_ImageShrinker\_CompressToPNG.bat](https://www.google.com/search?q=Tool4_ImageShrinker_CompressToPNG.bat)**: Reduces images to a maximum dimension of **1600px**[cite: 24]. [cite_start]It converts files to PNG, strips metadata, and applies strong compression[cite: 27].
-  * [cite_start]**[Tool5\_ImgShrinker\_ConvertMediaToImages.bat](https://www.google.com/search?q=Tool5_ImgShrinker_ConvertMediaToImages.bat)**: Converts images and videos into **WEBP, JPG, PNG, or GIF**[cite: 32]. [cite_start]For videos, it extracts a thumbnail frame at the one-second mark and scales it[cite: 36].
-  * [cite_start]**[Tool6\_ImgShrinker\_ShrinkPNG.bat](https://www.google.com/search?q=Tool6_ImgShrinker_ShrinkPNG.bat)**: Focuses on aggressive file-size reduction by scaling dimensions (e.g., 60%, 50%, or 40%)[cite: 42, 47, 49, 51]. [cite_start]It utilizes ImageMagick to resize and compress PNG files[cite: 53].
+  * [cite_start]**[Tool5\_ImgShrinker\_ConvertMediaToImages.bat](https://www.google.com/search?q=Tool5_ImgShrinker_ConvertMediaToImages.bat)**: Converts images and videos into **WEBP, JPG, PNG, or GIF**[cite: 32]. [cite_start]For videos, it extracts a thumbnail frame at the one-second mark and scales it according to user settings[cite: 36].
+  * [cite_start]**[Tool6\_ImgShrinker\_ShrinkPNG.bat](https://www.google.com/search?q=Tool6_ImgShrinker_ShrinkPNG.bat)**: Focuses on aggressive file-size reduction by scaling dimensions (e.g., 60%, 50%, or 40% of original pixels)[cite: 47, 49, 51]. [cite_start]It utilizes ImageMagick to resize and compress PNG files[cite: 53].
 
 ### Document Management
 
@@ -47,7 +44,7 @@ To use these tools, ensure the following applications are installed and added to
 ## How to Use
 
 1.  **Select** the files or folders you wish to process.
-2.  [cite_start]**Drag and drop** them directly onto the relevant `.bat` file link or local file[cite: 9, 25, 30, 56].
+2.  [cite_start]**Drag and drop** them directly onto the relevant `.bat` file[cite: 9, 25, 30, 56].
 3.  [cite_start]**Follow the on-screen prompts** to select quality levels or output formats[cite: 2, 32, 59, 66].
 4.  [cite_start]The processed files will be saved in the **same folder** as your original files[cite: 11, 57].
 
