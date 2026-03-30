@@ -61,7 +61,8 @@ echo [WORKING] Processing: "%~nx1"
 REM --- Extraction Logic ---
 if /I "%F_EXT%"==".pdf" (
     if %HAS_PDFTEXT%==1 (
-        if /I "%EXT%"=="csv" ( "%PDFTOTEXT%" -layout "%FILE%" "temp_chunk.txt" ) else ( "%PDFTOTEXT%" "%FILE%" "temp_chunk.txt" )
+        :: Use -layout to help preserve table alignment for the interim text
+        "%PDFTOTEXT%" -layout "%FILE%" "temp_chunk.txt"
         echo # Source: %~nx1 >> "combined_temp.md"
         type "temp_chunk.txt" >> "combined_temp.md"
         echo. >> "combined_temp.md"
@@ -71,8 +72,8 @@ if /I "%F_EXT%"==".pdf" (
 )
 
 if %HAS_PANDOC%==1 (
-    :: Using --standalone for better formatting preservation
-    pandoc "%FILE%" -t markdown -o "temp_chunk.md" --wrap=none >nul 2>&1
+    :: Use pipe_tables extension to try and force table recognition
+    pandoc "%FILE%" -f docx+pipe_tables -t markdown+pipe_tables -o "temp_chunk.md" --wrap=none >nul 2>&1
     if exist "temp_chunk.md" (
         echo # Source: %~nx1 >> "combined_temp.md"
         type "temp_chunk.md" >> "combined_temp.md"
@@ -103,14 +104,11 @@ echo.
 echo [FINALIZING] Building %OUT_FILE%...
 
 if /I "%EXT%"=="rtf" (
-    :: Use -s (standalone) to ensure the RTF header is created correctly
-    pandoc "combined_temp.md" -s -o "%OUT_FILE%"
-    echo [INFO] RTF created. If formatting looks odd, open in MS Word or WordPad.
-) else if /I "%EXT%"=="csv" (
-    move /y "combined_temp.md" "%OUT_FILE%" >nul
+    :: Use standalone mode and enable pipe_tables for the final output
+    pandoc "combined_temp.md" -f markdown+pipe_tables -s -o "%OUT_FILE%"
 ) else if /I "%EXT%"=="pdf" (
     set "TEMP_HTML=%cd%\temp_print.html"
-    pandoc "combined_temp.md" -s -o "!TEMP_HTML!" --metadata title="Merged Document"
+    pandoc "combined_temp.md" -f markdown+pipe_tables -s -o "!TEMP_HTML!" --metadata title="Merged Document"
     set "EDGE_EXE="
     if exist "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" set "EDGE_EXE=C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
     if exist "C:\Program Files\Microsoft\Edge\Application\msedge.exe" set "EDGE_EXE=C:\Program Files\Microsoft\Edge\Application\msedge.exe"
@@ -119,8 +117,10 @@ if /I "%EXT%"=="rtf" (
         timeout /t 2 >nul
     )
     if exist "!TEMP_HTML!" del "!TEMP_HTML!"
+) else if /I "%EXT%"=="csv" (
+    move /y "combined_temp.md" "%OUT_FILE%" >nul
 ) else (
-    pandoc "combined_temp.md" -o "%OUT_FILE%"
+    pandoc "combined_temp.md" -f markdown+pipe_tables -o "%OUT_FILE%"
 )
 
 if exist "combined_temp.md" del "combined_temp.md"
