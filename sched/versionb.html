@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>April 2026 Dealership Schedule</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #0f172a; padding: 20px 16px 40px; }
+.container { max-width: 1160px; margin: 0 auto; }
+
+header { text-align: center; margin-bottom: 18px; }
+header h1 { color: #fff; font-size: 2rem; letter-spacing: 5px; font-weight: 900; }
+header p { color: #94a3b8; font-size: 0.78rem; margin-top: 4px; letter-spacing: 0.5px; }
+
+.legend { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+.lcard { border-radius: 8px; padding: 11px 13px; }
+.lcard-a { background: #1e3a8a22; border-left: 4px solid #60a5fa; border-top: 1px solid #3b82f640; border-right: 1px solid #3b82f640; border-bottom: 1px solid #3b82f640; }
+.lcard-b { background: #78350f22; border-left: 4px solid #fbbf24; border-top: 1px solid #f59e0b40; border-right: 1px solid #f59e0b40; border-bottom: 1px solid #f59e0b40; }
+.lcard-c { background: #14532d22; border-left: 4px solid #34d399; border-top: 1px solid #22c55e40; border-right: 1px solid #22c55e40; border-bottom: 1px solid #22c55e40; }
+.lcard-title { font-size: 0.72rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 5px; }
+.lcard-a .lcard-title { color: #93c5fd; }
+.lcard-b .lcard-title { color: #fde68a; }
+.lcard-c .lcard-title { color: #6ee7b7; }
+.lcard-names { font-size: 0.72rem; color: #cbd5e1; line-height: 1.6; }
+.lcard-off { font-size: 0.65rem; margin-top: 5px; font-style: italic; }
+.lcard-a .lcard-off { color: #93c5fd99; }
+.lcard-b .lcard-off { color: #fde68a99; }
+.lcard-c .lcard-off { color: #6ee7b799; }
+
+.cal-wrap { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 8px 40px rgba(0,0,0,0.5); }
+.cal-header { display: grid; grid-template-columns: repeat(7, 1fr); }
+.ch { background: #0f172a; color: white; text-align: center; padding: 10px 4px; font-size: 0.78rem; font-weight: 700; letter-spacing: 1.5px; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+.cell { border-right: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; padding: 7px 5px 8px; min-height: 135px; background: white; }
+.cell:nth-child(7n) { border-right: none; }
+.cell.out { background: #f8fafc; }
+.cell.sun { background: #fafafa; }
+.dn { font-weight: bold; font-size: 0.88rem; color: #334155; display: block; margin-bottom: 5px; }
+.cell.out .dn { color: #cbd5e0; }
+
+.bx { display: block; font-size: 0.58rem; padding: 2px 4px; border-radius: 3px; margin-bottom: 2px; line-height: 1.55; border-left: 3px solid transparent; font-weight: 500; }
+.ba { background: #eff6ff; color: #1e3a8a; border-left-color: #3b82f6; }
+.bb { background: #fffbeb; color: #78350f; border-left-color: #f59e0b; }
+.bc { background: #f0fdf4; color: #14532d; border-left-color: #22c55e; }
+.bo { background: #fef2f2; color: #991b1b; border-left-color: #ef4444; font-style: italic; }
+.note { display: block; font-size: 0.53rem; color: #64748b; margin-top: 3px; font-style: italic; }
+.alloff { color: #cbd5e0; font-size: 0.65rem; font-style: italic; margin-top: 14px; text-align: center; display: block; }
+
+.foot-note { background: #1e293b; border-radius: 8px; padding: 12px 16px; margin-top: 12px; font-size: 0.76rem; color: #94a3b8; line-height: 1.7; display: flex; gap: 24px; flex-wrap: wrap; }
+.foot-note strong { color: #e2e8f0; }
+.print-btn { display: block; margin: 14px auto 0; background: #3b82f6; color: white; border: none; padding: 10px 30px; border-radius: 6px; cursor: pointer; font-size: 0.88rem; font-weight: bold; }
+.print-btn:hover { background: #2563eb; }
+
+@media print {
+  body { background: white; padding: 10px; }
+  header h1, header p { color: #111; }
+  .lcard-a { background: #dbeafe; } .lcard-b { background: #fef3c7; } .lcard-c { background: #d1fae5; }
+  .lcard-a .lcard-title { color: #1e3a8a; } .lcard-b .lcard-title { color: #78350f; } .lcard-c .lcard-title { color: #14532d; }
+  .lcard-names { color: #334155; } .lcard-a .lcard-off, .lcard-b .lcard-off, .lcard-c .lcard-off { color: #64748b; }
+  .ch { background: #1e293b; }
+  .foot-note { background: #f1f5f9; color: #334155; border: 1px solid #e2e8f0; }
+  .foot-note strong { color: #0f172a; }
+  .print-btn { display: none; }
+}
+@media (max-width: 640px) {
+  .legend { grid-template-columns: 1fr; }
+  .bx { font-size: 0.53rem; }
+  .cell { min-height: 100px; padding: 5px 3px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>APRIL 2026</h1>
+    <p>Dealership Team Schedule &nbsp;&middot;&nbsp; Used Cars: Teams A &amp; B &nbsp;&middot;&nbsp; New Cars: Team C</p>
+  </header>
+
+  <div class="legend">
+    <div class="lcard lcard-a">
+      <div class="lcard-title">Team A &mdash; Used Cars</div>
+      <div class="lcard-names">Toa &middot; Juan &middot; Brian &middot; Zack</div>
+      <div class="lcard-off">Fixed off day: Wednesday</div>
+    </div>
+    <div class="lcard lcard-b">
+      <div class="lcard-title">Team B &mdash; Used Cars</div>
+      <div class="lcard-names">Aevyn &middot; Kenny &middot; Kyle &middot; Ried</div>
+      <div class="lcard-off">Fixed off day: Thursday</div>
+    </div>
+    <div class="lcard lcard-c">
+      <div class="lcard-title">Team C &mdash; New Cars</div>
+      <div class="lcard-names">Robert &middot; Mark &middot; Levi &middot; Connor &middot; Fred &middot; Kayrina</div>
+      <div class="lcard-off">Fixed off day: Tuesday</div>
+    </div>
+  </div>
+
+  <div class="cal-wrap">
+    <div class="cal-header">
+      <div class="ch">SUN</div><div class="ch">MON</div><div class="ch">TUE</div>
+      <div class="ch">WED</div><div class="ch">THU</div><div class="ch">FRI</div><div class="ch">SAT</div>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+  </div>
+
+  <div class="foot-note">
+    <div><strong>Recovery Day Tasks</strong> (team on their off day):<br>Videos &middot; Social Media &middot; Surveys &middot; Training &middot; Tasks</div>
+    <div><strong>Lead Logic:</strong><br>C: no new leads Mon (works Sat leads). A: no new leads Tue (works Mon leads). B: no new leads Wed (works Tue leads).</div>
+    <div><strong>Monday:</strong><br>Staggered early departures &mdash; manager discretion.</div>
+  </div>
+
+  <button class="print-btn" onclick="window.print()">Print Schedule</button>
+</div>
+
+<script>
+const S = {
+  0: null,
+  1: [
+    { cls: 'bx ba', t: 'A · 8:30 AM · Leads ✓' },
+    { cls: 'bx bb', t: 'B · 8:30 AM · Leads ✓' },
+    { cls: 'bx bc', t: 'C · 8:30 AM · No new leads (works Sat leads)' },
+    { cls: 'note',  t: '★ Staggered early departures — Monday only' }
+  ],
+  2: [
+    { cls: 'bx ba', t: 'A · 9 AM · Works Mon leads (no new leads)' },
+    { cls: 'bx bb', t: 'B · 11 AM · Leads ✓' },
+    { cls: 'bx bo', t: 'C · OFF — Recovery Day' }
+  ],
+  3: [
+    { cls: 'bx bo', t: 'A · OFF — Recovery Day' },
+    { cls: 'bx bb', t: 'B · 9 AM · Works Tue leads (no new leads)' },
+    { cls: 'bx bc', t: 'C · 11 AM · Leads ✓' }
+  ],
+  4: [
+    { cls: 'bx ba', t: 'A · 11 AM · Leads ✓' },
+    { cls: 'bx bo', t: 'B · OFF — Recovery Day' },
+    { cls: 'bx bc', t: 'C · 9 AM · Leads ✓' }
+  ],
+  5: [
+    { cls: 'bx ba', t: 'A · 8:30 AM · Leads ✓' },
+    { cls: 'bx bb', t: 'B · 8:30 AM · Leads ✓' },
+    { cls: 'bx bc', t: 'C · 8:30 AM · Leads ✓' }
+  ],
+  6: [
+    { cls: 'bx ba', t: 'A · 8:30 AM · Leads ✓' },
+    { cls: 'bx bb', t: 'B · 8:30 AM · Leads ✓' },
+    { cls: 'bx bc', t: 'C · 8:30 AM · Leads ✓' }
+  ]
+};
+
+(function build() {
+  const grid = document.getElementById('calGrid');
+  const start = new Date(2026, 2, 29); // March 29 — first Sunday of the grid
+
+  for (let i = 0; i < 35; i++) {
+    const d = new Date(start);
+    d.setDate(start.getDate() + i);
+    const dow = d.getDay();
+    const isApril = d.getMonth() === 3;
+
+    const cell = document.createElement('div');
+    cell.className = 'cell' + (!isApril ? ' out' : '') + (dow === 0 ? ' sun' : '');
+
+    const num = document.createElement('span');
+    num.className = 'dn';
+    num.textContent = d.getDate();
+    cell.appendChild(num);
+
+    if (isApril) {
+      const sched = S[dow];
+      if (!sched) {
+        const off = document.createElement('span');
+        off.className = 'alloff';
+        off.textContent = 'Day Off';
+        cell.appendChild(off);
+      } else {
+        sched.forEach(e => {
+          const el = document.createElement('span');
+          el.className = e.cls;
+          el.textContent = e.t;
+          cell.appendChild(el);
+        });
+      }
+    }
+
+    grid.appendChild(cell);
+  }
+})();
+</script>
+</body>
+</html>
