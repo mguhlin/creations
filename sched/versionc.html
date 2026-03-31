@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dealership Schedule - April 2026</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.5; color: #333; max-width: 1200px; margin: 0 auto; padding: 20px; background-color: #f4f7f6; }
+        h1 { text-align: center; color: #2c3e50; }
+        .legend { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; }
+        .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; }
+        .box { width: 15px; height: 15px; border-radius: 3px; }
+        .calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .day-header { font-weight: bold; text-align: center; padding: 10px; background: #eee; border-radius: 4px; }
+        .day { border: 1px solid #ddd; border-radius: 4px; padding: 10px; min-height: 120px; position: relative; }
+        .day-num { font-weight: bold; margin-bottom: 5px; display: block; }
+        .team-a { border-left: 5px solid #3498db; } /* Blue */
+        .team-b { border-left: 5px solid #e67e22; } /* Orange */
+        .team-c { border-left: 5px solid #9b59b6; } /* Purple */
+        .shift-info { font-size: 0.75rem; margin-top: 5px; }
+        .no-leads { color: #e74c3c; font-weight: bold; text-decoration: underline; }
+        .closed { background-color: #f9f9f9; color: #ccc; text-align: center; display: flex; align-items: center; justify-content: center; }
+    </style>
+</head>
+<body>
+
+    <h1>Dealership Schedule: April 2026</h1>
+
+    <div class="legend">
+        <div class="legend-item"><div class="box" style="background:#3498db"></div> Team A: Toa, Juan, Brian</div>
+        <div class="legend-item"><div class="box" style="background:#e67e22"></div> Team B: Zack, Aevyn, Kenny</div>
+        <div class="legend-item"><div class="box" style="background:#9b59b6"></div> Team C: Kyle, Ried</div>
+    </div>
+
+    <div class="calendar">
+        <div class="day-header">Sun</div><div class="day-header">Mon</div><div class="day-header">Tue</div><div class="day-header">Wed</div><div class="day-header">Thu</div><div class="day-header">Fri</div><div class="day-header">Sat</div>
+
+        <div class="day closed"></div> <div class="day closed"></div> <div class="day closed"></div> <div class="day team-b team-c">
+            <span class="day-num">1 (Wed)</span>
+            <div class="shift-info"><b>Off: Team A</b><br>T-B: 9AM | T-C: 11AM</div>
+        </div>
+        <div class="day team-a team-b">
+            <span class="day-num">2 (Thu)</span>
+            <div class="shift-info"><b>Off: Team C</b><br>T-A: 9AM | T-B: 11AM</div>
+            <div class="shift-info no-leads">T-C: No Leads (Wed)</div>
+        </div>
+        <div class="day">
+            <span class="day-num">3 (Fri)</span>
+            <div class="shift-info"><b>Everyone In (8:30)</b></div>
+        </div>
+        <div class="day">
+            <span class="day-num">4 (Sat)</span>
+            <div class="shift-info"><b>Everyone In (8:30)</b></div>
+        </div>
+
+        <div class="day closed"><span class="day-num">5</span>CLOSED</div>
+        <div class="day">
+            <span class="day-num">6 (Mon)</span>
+            <div class="shift-info">All In (8:30)<br>Staggered Early Outs</div>
+            <div class="shift-info no-leads">T-A: No Leads</div>
+        </div>
+        <div class="day team-b team-c">
+            <span class="day-num">7 (Tue)</span>
+            <div class="shift-info"><b>Off: Team A</b><br>T-B: 9AM | T-C: 11AM</div>
+        </div>
+        <div class="day team-a team-c">
+            <span class="day-num">8 (Wed)</span>
+            <div class="shift-info"><b>Off: Team B</b><br>T-A: 9AM | T-C: 11AM</div>
+            <div class="shift-info no-leads">T-B: No Leads (Tue)</div>
+        </div>
+        <div class="day team-a team-b">
+            <span class="day-num">9 (Thu)</span>
+            <div class="shift-info"><b>Off: Team C</b><br>T-A: 9AM | T-B: 11AM</div>
+            <div class="shift-info no-leads">T-C: No Leads (Wed)</div>
+        </div>
+        <div class="day"><span class="day-num">10 (Fri)</span>All In (8:30)</div>
+        <div class="day"><span class="day-num">11 (Sat)</span>All In (8:30)</div>
+
+        </div>
+
+    <p style="text-align: center; font-size: 0.8rem; margin-top: 20px;">
+        * Reminder: Bold names stay in Used Car building. Ensure 3+ Used Car staff present daily.
+    </p>
+
+</body>
+</html>
