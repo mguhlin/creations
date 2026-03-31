@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Literacy Roadmap for Nonprofit Organizations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e1117;
+    --surface: #161b24;
+    --surface2: #1e2535;
+    --border: rgba(255,255,255,0.08);
+    --gold: #e8b84b;
+    --gold-dim: rgba(232,184,75,0.15);
+    --gold-glow: rgba(232,184,75,0.06);
+    --teal: #4ecdc4;
+    --teal-dim: rgba(78,205,196,0.12);
+    --rose: #ff6b6b;
+    --text: #e8eaf0;
+    --text-muted: #7a8297;
+    --text-dim: #4a5068;
+    --track-a: #4ecdc4;
+    --track-b: #e8b84b;
+    --phase-colors: #6c63ff, #4ecdc4, #e8b84b, #ff6b6b, #a8e063;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Ambient background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -20%;
+    left: -10%;
+    width: 60%;
+    height: 60%;
+    background: radial-gradient(ellipse, rgba(78,205,196,0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -10%;
+    right: -10%;
+    width: 50%;
+    height: 50%;
+    background: radial-gradient(ellipse, rgba(232,184,75,0.05) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 32px 100px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 72px;
+    animation: fadeUp 0.7s ease both;
+  }
+
+  .header-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 18px;
+    opacity: 0.9;
+  }
+
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+
+  .header h1 span {
+    color: var(--gold);
+  }
+
+  .header-sub {
+    font-size: 15px;
+    color: var(--text-muted);
+    max-width: 560px;
+    margin: 0 auto 28px;
+    line-height: 1.6;
+  }
+
+  /* Track legend */
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    flex-wrap: wrap;
+    margin-bottom: 0;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .legend-dot.a { background: var(--track-a); }
+  .legend-dot.b { background: var(--track-b); }
+
+  /* Progress bar */
+  .progress-bar {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin: 48px 0 56px;
+    animation: fadeUp 0.7s 0.15s ease both;
+  }
+
+  .prog-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .prog-step:hover { opacity: 0.8; }
+
+  .prog-dot {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    border: 2px solid transparent;
+    transition: all 0.25s ease;
+    position: relative;
+  }
+
+  .prog-dot.active {
+    transform: scale(1.15);
+  }
+
+  .prog-dot.complete::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+    opacity: 0.3;
+    animation: pulse 2s infinite;
+  }
+
+  .prog-label {
+    font-size: 10px;
+    color: var(--text-dim);
+    text-align: center;
+    max-width: 70px;
+    line-height: 1.3;
+    transition: color 0.2s;
+  }
+
+  .prog-step.active .prog-label { color: var(--text-muted); }
+
+  .prog-connector {
+    width: 32px;
+    height: 2px;
+    background: var(--border);
+    margin-top: 17px;
+    flex-shrink: 0;
+  }
+
+  /* Phases */
+  .phases {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .phase-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    animation: fadeUp 0.6s ease both;
+    cursor: pointer;
+  }
+
+  .phase-card:hover {
+    border-color: rgba(255,255,255,0.14);
+  }
+
+  .phase-card.expanded {
+    border-color: rgba(255,255,255,0.16);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+  }
+
+  /* Phase header */
+  .phase-header {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 20px;
+    padding: 22px 28px;
+    user-select: none;
+  }
+
+  .phase-badge {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  .phase-title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .phase-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .phase-timeline {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+  }
+
+  .phase-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--border);
+    flex-shrink: 0;
+    transition: transform 0.3s, background 0.2s;
+  }
+
+  .phase-card.expanded .phase-toggle {
+    transform: rotate(180deg);
+  }
+
+  .phase-toggle svg {
+    opacity: 0.5;
+  }
+
+  /* Phase body */
+  .phase-body {
+    display: none;
+    padding: 0 28px 28px;
+  }
+
+  .phase-card.expanded .phase-body {
+    display: block;
+    animation: slideDown 0.3s ease;
+  }
+
+  .track-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 4px;
+  }
+
+  @media (max-width: 700px) {
+    .track-grid { grid-template-columns: 1fr; }
+    .phase-header { padding: 18px 20px; gap: 14px; }
+    .phase-body { padding: 0 20px 20px; }
+  }
+
+  .track-panel {
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .track-panel.a {
+    background: linear-gradient(135deg, rgba(78,205,196,0.07) 0%, rgba(78,205,196,0.02) 100%);
+    border: 1px solid rgba(78,205,196,0.18);
+  }
+
+  .track-panel.b {
+    background: linear-gradient(135deg, rgba(232,184,75,0.08) 0%, rgba(232,184,75,0.02) 100%);
+    border: 1px solid rgba(232,184,75,0.2);
+  }
+
+  .track-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .track-label.a { color: var(--track-a); }
+  .track-label.b { color: var(--track-b); }
+
+  .track-label::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+  }
+
+  .track-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .track-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--text);
+    opacity: 0.88;
+  }
+
+  .track-item::before {
+    content: '→';
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-size: 12px;
+    opacity: 0.4;
+  }
+
+  .track-item em {
+    font-style: italic;
+    opacity: 0.75;
+  }
+
+  /* Divider between header and body */
+  .phase-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0 28px 20px;
+  }
+
+  /* Phase colors */
+  .p0 .phase-badge { background: rgba(108,99,255,0.15); color: #9b94ff; }
+  .p0 .phase-name { color: #c5c2ff; }
+  .p0.expanded { border-color: rgba(108,99,255,0.25) !important; }
+
+  .p1 .phase-badge { background: rgba(78,205,196,0.12); color: var(--track-a); }
+  .p1 .phase-name { color: #8de8e3; }
+  .p1.expanded { border-color: rgba(78,205,196,0.25) !important; }
+
+  .p2 .phase-badge { background: rgba(232,184,75,0.12); color: var(--gold); }
+  .p2 .phase-name { color: #f0cc7a; }
+  .p2.expanded { border-color: rgba(232,184,75,0.25) !important; }
+
+  .p3 .phase-badge { background: rgba(255,107,107,0.1); color: #ff9494; }
+  .p3 .phase-name { color: #ffb3b3; }
+  .p3.expanded { border-color: rgba(255,107,107,0.22) !important; }
+
+  .p4 .phase-badge { background: rgba(168,224,99,0.1); color: #b8f064; }
+  .p4 .phase-name { color: #c8f07a; }
+  .p4.expanded { border-color: rgba(168,224,99,0.22) !important; }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.08); }
+  }
+
+  /* Staggered animation delays */
+  .phase-card:nth-child(1) { animation-delay: 0.1s; }
+  .phase-card:nth-child(2) { animation-delay: 0.18s; }
+  .phase-card:nth-child(3) { animation-delay: 0.26s; }
+  .phase-card:nth-child(4) { animation-delay: 0.34s; }
+  .phase-card:nth-child(5) { animation-delay: 0.42s; }
+
+  /* Summary strip at top */
+  .summary-strip {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 56px;
+    animation: fadeUp 0.7s 0.05s ease both;
+  }
+
+  .strip-chip {
+    font-family: 'DM Mono', monospace;
+    font-size: 10.5px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .strip-chip:hover {
+    border-color: rgba(255,255,255,0.18);
+    color: var(--text);
+  }
+
+  .strip-chip.active {
+    background: var(--surface2);
+    color: var(--text);
+    border-color: rgba(255,255,255,0.2);
+  }
+
+  /* Expand all btn */
+  .controls {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+  }
+
+  .btn-expand-all {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    padding: 7px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-expand-all:hover {
+    border-color: rgba(255,255,255,0.2);
+    color: var(--text);
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 64px;
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    opacity: 0.6;
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <header class="header">
+    <div class="header-eyebrow">Strategic Framework · 2025–2026</div>
+    <h1>AI Literacy Roadmap<br><span>for Nonprofit Organizations</span></h1>
+    <p class="header-sub">A phased framework for building durable AI competency — from leadership alignment through strategic integration.</p>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot a"></div> Track A: Personal Competency</div>
+      <div class="legend-item"><div class="legend-dot b"></div> Track B: Organizational Capacity</div>
+    </div>
+  </header>
+
+  <!-- Progress nav -->
+  <div class="progress-bar" id="progressBar"></div>
+
+  <div class="controls">
+    <button class="btn-expand-all" id="expandAllBtn" onclick="toggleAll()">Expand all phases</button>
+  </div>
+
+  <div class="phases" id="phasesContainer"></div>
+
+  <div class="footer">Click any phase to expand · AI Literacy Roadmap for Nonprofit Organizations</div>
+</div>
+
+<script>
+const phases = [
+  {
+    id: 'p0',
+    num: '00',
+    name: 'Leadership Alignment',
+    timeline: 'Before anything else',
+    trackA: [
+      'Executive director and senior team complete 3–5 hours of hands-on use of a reasoning-capable AI tool applied to real work.',
+      'Board is briefed on the operational reality — not on tools.'
+    ],
+    trackB: [
+      'Designate a single senior AI champion with authority to remove obstacles.',
+      'Reach explicit organizational agreement: <em>AI adoption is an organizational priority, not an IT project.</em>'
+    ]
+  },
+  {
+    id: 'p1',
+    num: '01',
+    name: 'Foundation',
+    timeline: 'Months 1–3',
+    trackA: [
+      'Every staff member learns what AI is and isn\'t, how to prompt effectively, 3–5 role-specific use cases, how to catch AI errors, and basic org policy.',
+      'Every session ends with a real work task completed — not a practice exercise.',
+      'Differentiate by adopter type from the start: give power users room to go further, move the middle group past surface use, and let a pain point solution do the convincing for resistant staff.'
+    ],
+    trackB: [
+      'Write an AI use policy (not a technology policy).',
+      'Publish a short approved tool list with guidance on which tool fits which task.',
+      'Create a frictionless staff sharing mechanism.',
+      'Conduct an informal baseline assessment of current AI use — not punitive, just informational.'
+    ]
+  },
+  {
+    id: 'p2',
+    num: '02',
+    name: 'Application',
+    timeline: 'Months 3–6',
+    trackA: [
+      'Staff build repeatable, department-specific AI workflows.',
+      'Develop prompt libraries for common tasks by function.',
+      'Practice using AI as a thought partner — not just a drafting tool.',
+      'Build evaluation skills: quality, accuracy, bias, brand alignment.',
+      'Invest in paid/Pro tiers; the gap between free and paid reasoning models is significant and this is not the place to cut costs.'
+    ],
+    trackB: [
+      'Build a structured peer learning model — monthly working sessions by function, sharing real outputs.',
+      'Maintain an internal living prompt library.',
+      'Integrate AI into existing workflows rather than running it as a parallel track.',
+      'Update job descriptions to reflect specific, observable AI competency expectations.',
+      'Define a named escalation path for staff who encounter problems.'
+    ]
+  },
+  {
+    id: 'p3',
+    num: '03',
+    name: 'Organizational Capacity',
+    timeline: 'Months 6–12',
+    trackA: [
+      'Staff develop advanced use of reasoning models, ability to evaluate and select tools independently, and basic understanding of agents and automation.',
+      'Identify 3–5 internal power users across functions — invest in them specifically.',
+      'By this phase, a portion of training delivery should be peer-led.'
+    ],
+    trackB: [
+      'Stand up a formal AI governance working group with a mandate to evaluate tools, update policies, and actively support adoption.',
+      'Clarify data governance: what organizational data can go into AI tools and under what conditions.',
+      'Build a standard vendor/tool evaluation framework.',
+      'Conduct the first structured AI use audit — not cost-cutting, but mission-effectiveness.',
+      'Establish a staff feedback mechanism with a commitment from leadership to act on it.'
+    ]
+  },
+  {
+    id: 'p4',
+    num: '04',
+    name: 'Strategic Integration',
+    timeline: 'Year 2 and ongoing',
+    trackA: [
+      'Continuous learning is built into the work rhythm — short-form updates, tool reviews, peer sharing.',
+      'Staff own their learning paths.',
+      'AI competency is a real factor in hiring, onboarding, and performance reviews.',
+      'The organization can onboard new staff into AI literacy without starting from scratch.'
+    ],
+    trackB: [
+      'AI is embedded in annual planning — used actively in strategic analysis, scenario planning, and resource decisions.',
+      'The organization can articulate its AI posture — including ethical boundaries — to funders, partners, board, and community.',
+      'Governance policies are reviewed at minimum twice per year.',
+      'Senior leadership is personally and visibly competent.',
+      'The organization contributes what it has learned back to the field.'
+    ]
+  }
+];
+
+const phaseLabels = ['Alignment', 'Foundation', 'Application', 'Capacity', 'Integration'];
+
+// Build progress bar
+const pb = document.getElementById('progressBar');
+phases.forEach((phase, i) => {
+  const colors = ['#9b94ff','#4ecdc4','#e8b84b','#ff9494','#b8f064'];
+  const step = document.createElement('div');
+  step.className = 'prog-step';
+  step.setAttribute('data-phase', i);
+  step.innerHTML = `
+    <div class="prog-dot" style="background: ${colors[i]}22; color: ${colors[i]}; border-color: ${colors[i]}44;">
+      ${String(i).padStart(2,'0')}
+    </div>
+    <div class="prog-label">${phaseLabels[i]}</div>
+  `;
+  step.onclick = () => scrollToPhase(i);
+  pb.appendChild(step);
+  if (i < phases.length - 1) {
+    const conn = document.createElement('div');
+    conn.className = 'prog-connector';
+    pb.appendChild(conn);
+  }
+});
+
+// Build phase cards
+const container = document.getElementById('phasesContainer');
+
+phases.forEach((phase, i) => {
+  const card = document.createElement('div');
+  card.className = `phase-card ${phase.id}`;
+  card.id = `phase-${i}`;
+  card.setAttribute('data-index', i);
+
+  const colors = ['#9b94ff','#4ecdc4','#e8b84b','#ff9494','#b8f064'];
+
+  const trackAItems = phase.trackA.map(t => `<div class="track-item">${t}</div>`).join('');
+  const trackBItems = phase.trackB.map(t => `<div class="track-item">${t}</div>`).join('');
+
+  card.innerHTML = `
+    <div class="phase-header" onclick="togglePhase(${i})">
+      <div class="phase-badge">${phase.num}</div>
+      <div class="phase-title-group">
+        <div class="phase-name">${phase.name}</div>
+        <div class="phase-timeline">${phase.timeline}</div>
+      </div>
+      <div class="phase-toggle">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 5L7 10L12 5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+    <div class="phase-divider" style="display:none"></div>
+    <div class="phase-body">
+      <div class="track-grid">
+        <div class="track-panel a">
+          <div class="track-label a">Track A · Personal Competency</div>
+          <div class="track-items">${trackAItems}</div>
+        </div>
+        <div class="track-panel b">
+          <div class="track-label b">Track B · Organizational Capacity</div>
+          <div class="track-items">${trackBItems}</div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  container.appendChild(card);
+});
+
+function togglePhase(index) {
+  const card = document.querySelector(`#phase-${index}`);
+  const divider = card.querySelector('.phase-divider');
+  const wasExpanded = card.classList.contains('expanded');
+  card.classList.toggle('expanded');
+  divider.style.display = wasExpanded ? 'none' : 'block';
+
+  // Update progress bar dot
+  updateProgDots();
+  updateExpandBtn();
+}
+
+function scrollToPhase(index) {
+  const card = document.querySelector(`#phase-${index}`);
+  if (!card.classList.contains('expanded')) {
+    togglePhase(index);
+  }
+  setTimeout(() => {
+    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 50);
+}
+
+let allExpanded = false;
+function toggleAll() {
+  const cards = document.querySelectorAll('.phase-card');
+  const btn = document.getElementById('expandAllBtn');
+  allExpanded = !allExpanded;
+  cards.forEach((card, i) => {
+    const divider = card.querySelector('.phase-divider');
+    if (allExpanded) {
+      card.classList.add('expanded');
+      divider.style.display = 'block';
+    } else {
+      card.classList.remove('expanded');
+      divider.style.display = 'none';
+    }
+  });
+  btn.textContent = allExpanded ? 'Collapse all phases' : 'Expand all phases';
+  updateProgDots();
+}
+
+function updateExpandBtn() {
+  const cards = document.querySelectorAll('.phase-card');
+  const expanded = document.querySelectorAll('.phase-card.expanded');
+  const btn = document.getElementById('expandAllBtn');
+  allExpanded = expanded.length === cards.length;
+  btn.textContent = allExpanded ? 'Collapse all phases' : 'Expand all phases';
+}
+
+function updateProgDots() {
+  const dots = document.querySelectorAll('.prog-dot');
+  const colors = ['#9b94ff','#4ecdc4','#e8b84b','#ff9494','#b8f064'];
+  dots.forEach((dot, i) => {
+    const card = document.querySelector(`#phase-${i}`);
+    if (card && card.classList.contains('expanded')) {
+      dot.style.background = colors[i] + '33';
+      dot.style.borderColor = colors[i];
+      dot.style.boxShadow = `0 0 12px ${colors[i]}44`;
+    } else {
+      dot.style.background = colors[i] + '22';
+      dot.style.borderColor = colors[i] + '44';
+      dot.style.boxShadow = 'none';
+    }
+  });
+}
+
+// Open first phase by default
+togglePhase(0);
+</script>
+</body>
+</html>
