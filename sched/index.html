@@ -1,0 +1,632 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>April 2026 — Dealership Schedule</title>
+<style>
+:root {
+  --a: #1d4ed8; --a-bg: #dbeafe; --a-border: #2563eb;
+  --b: #92400e; --b-bg: #fef3c7; --b-border: #d97706;
+  --c: #065f46; --c-bg: #d1fae5; --c-border: #059669;
+  --off-bg: #f1f5f9; --off-color: #94a3b8; --off-border: #cbd5e1;
+  --dark: #0f172a; --mid: #334155;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', system-ui, Arial, sans-serif; background: #e2e8f0; color: var(--dark); }
+
+header {
+  background: var(--dark); color: white;
+  padding: 16px 28px; display: flex; align-items: center; justify-content: space-between;
+}
+header h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.02em; }
+header p { font-size: 0.74rem; opacity: 0.55; margin-top: 3px; }
+.header-right { text-align: right; font-size: 0.7rem; opacity: 0.55; line-height: 1.6; }
+
+.legend {
+  background: white; padding: 8px 28px;
+  display: flex; gap: 18px; flex-wrap: wrap; align-items: center;
+  border-bottom: 1px solid #e2e8f0;
+}
+.leg-group { display: flex; gap: 12px; align-items: center; }
+.leg-label { font-size: 0.68rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; }
+.leg { display: flex; align-items: center; gap: 5px; font-size: 0.7rem; font-weight: 600; }
+.dot { width: 10px; height: 10px; border-radius: 2px; }
+.dot-a { background: var(--a-border); }
+.dot-b { background: var(--b-border); }
+.dot-c { background: var(--c-border); }
+.dot-off { background: var(--off-border); }
+
+.cal-wrap { padding: 14px 28px; }
+table.cal {
+  width: 100%; border-collapse: collapse;
+  background: white; border-radius: 10px; overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+table.cal th {
+  background: var(--dark); color: white;
+  text-align: center; padding: 9px 4px;
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em;
+}
+table.cal td {
+  border: 1px solid #e2e8f0; vertical-align: top;
+  padding: 5px; width: 14.28%; height: 138px;
+}
+td.sunday { background: #fafafa; }
+td.out-month { background: #f8fafc; }
+
+.dn { font-size: 0.8rem; font-weight: 800; color: var(--dark); margin-bottom: 4px; }
+td.out-month .dn { color: #cbd5e1; }
+
+/* Team blocks */
+.blk {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 3px;
+  padding: 3px 5px; border-radius: 4px; margin-bottom: 3px;
+  font-size: 0.67rem; font-weight: 700; line-height: 1.3;
+}
+.blk-a { background: var(--a-bg); border-left: 3px solid var(--a-border); color: var(--a); }
+.blk-b { background: var(--b-bg); border-left: 3px solid var(--b-border); color: var(--b); }
+.blk-c { background: var(--c-bg); border-left: 3px solid var(--c-border); color: var(--c); }
+.blk-off { background: var(--off-bg); border-left: 3px solid var(--off-border); color: var(--off-color); }
+
+.bname { flex: 1; min-width: 48px; }
+.btime { font-size: 0.6rem; font-weight: 400; white-space: nowrap; opacity: 0.8; }
+
+/* Tags */
+.tg {
+  display: inline-block; font-size: 0.56rem; font-weight: 800;
+  border-radius: 2px; padding: 1px 3px; white-space: nowrap; line-height: 1.3;
+}
+.tg-uc { background: #ede9fe; color: #5b21b6; }
+.tg-nc { background: #e0f2fe; color: #0369a1; }
+.tg-leads { background: #dcfce7; color: #15803d; }
+.tg-noleads { background: #fee2e2; color: #b91c1c; }
+.tg-rec { background: #f1f5f9; color: #94a3b8; }
+
+.note-all {
+  font-size: 0.62rem; background: #f0fdf4; color: #15803d;
+  border-left: 2px solid #16a34a; padding: 2px 5px; border-radius: 3px;
+  margin-bottom: 3px; font-weight: 600;
+}
+.note-early {
+  font-size: 0.6rem; background: #fff7ed; color: #c2410c;
+  border-left: 2px solid #ea580c; padding: 2px 5px; border-radius: 3px;
+  margin-bottom: 3px; font-weight: 600;
+}
+.rec-tasks {
+  font-size: 0.58rem; color: #94a3b8; padding: 0 0 2px 8px;
+  font-style: italic; line-height: 1.5;
+}
+
+/* Bottom info */
+.bottom {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  padding: 0 28px 28px;
+}
+.card {
+  background: white; border-radius: 8px; padding: 14px 16px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+}
+.card h3 {
+  font-size: 0.8rem; font-weight: 800; color: var(--dark);
+  margin-bottom: 10px; padding-bottom: 7px;
+  border-bottom: 1px solid #e2e8f0; text-transform: uppercase; letter-spacing: 0.04em;
+}
+.roster-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.team-col h4 { font-size: 0.7rem; font-weight: 800; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.04em; }
+.h4-a { color: var(--a-border); } .h4-b { color: var(--b-border); } .h4-c { color: var(--c-border); }
+.rname { font-size: 0.72rem; display: flex; align-items: center; gap: 4px; margin-bottom: 4px; }
+.rule { font-size: 0.72rem; padding: 4px 8px; border-left: 2px solid #e2e8f0; margin-bottom: 5px; color: var(--mid); }
+.rule strong { color: var(--dark); }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>April 2026 — Team Schedule</h1>
+    <p>Dealership Operations · Used Car &amp; New Car Buildings</p>
+  </div>
+  <div class="header-right">
+    Mon / Fri / Sat — All teams by 8:30 AM<br>
+    Used Cars: A Team + B Team &nbsp;|&nbsp; New Cars: C Team
+  </div>
+</header>
+
+<div class="legend">
+  <span class="leg-label">Teams:</span>
+  <div class="leg-group">
+    <span class="leg"><span class="dot dot-a"></span>A Team (UC)</span>
+    <span class="leg"><span class="dot dot-b"></span>B Team (UC)</span>
+    <span class="leg"><span class="dot dot-c"></span>C Team (NC)</span>
+    <span class="leg"><span class="dot dot-off"></span>Recovery Day</span>
+  </div>
+  <span class="leg-label" style="margin-left:8px;">Tags:</span>
+  <div class="leg-group">
+    <span class="tg tg-uc">UC</span><span style="font-size:0.68rem;"> Used Cars building</span>
+    <span class="tg tg-nc">NC</span><span style="font-size:0.68rem;"> New Cars building</span>
+    <span class="tg tg-leads">Leads ✓</span>
+    <span class="tg tg-noleads">No Leads</span>
+  </div>
+</div>
+
+<div class="cal-wrap">
+<table class="cal">
+<thead>
+  <tr>
+    <th>SUN</th><th>MON</th><th>TUE</th><th>WED</th><th>THU</th><th>FRI</th><th>SAT</th>
+  </tr>
+</thead>
+<tbody>
+
+<!-- Week 1: Mar 29 – Apr 4 -->
+<tr>
+  <td class="sunday out-month"><div class="dn">29</div></td>
+  <td class="out-month"><div class="dn">30</div></td>
+  <td class="out-month"><div class="dn">31</div></td>
+
+  <!-- Wed Apr 1 — A Recovery, B 9am no leads, C 11am leads -->
+  <td>
+    <div class="dn">1</div>
+    <div class="blk blk-off">
+      <span class="bname">A Team</span>
+      <span class="tg tg-uc">UC</span>
+      <span class="tg tg-rec">RECOVERY</span>
+    </div>
+    <div class="rec-tasks">Videos · Social Media · Surveys · Training · Tasks</div>
+    <div class="blk blk-b">
+      <span class="bname">B Team</span>
+      <span class="tg tg-uc">UC</span>
+      <span class="btime">9:00 AM</span>
+      <span class="tg tg-noleads">No Leads</span>
+    </div>
+    <div class="blk blk-c">
+      <span class="bname">C Team</span>
+      <span class="tg tg-nc">NC</span>
+      <span class="btime">11:00 AM</span>
+      <span class="tg tg-leads">Leads ✓</span>
+    </div>
+  </td>
+
+  <!-- Thu Apr 2 — B Recovery, A 9am leads, C 11am leads -->
+  <td>
+    <div class="dn">2</div>
+    <div class="blk blk-a">
+      <span class="bname">A Team</span>
+      <span class="tg tg-uc">UC</span>
+      <span class="btime">9:00 AM</span>
+      <span class="tg tg-leads">Leads ✓</span>
+    </div>
+    <div class="blk blk-off">
+      <span class="bname">B Team</span>
+      <span class="tg tg-uc">UC</span>
+      <span class="tg tg-rec">RECOVERY</span>
+    </div>
+    <div class="rec-tasks">Videos · Social Media · Surveys · Training · Tasks</div>
+    <div class="blk blk-c">
+      <span class="bname">C Team</span>
+      <span class="tg tg-nc">NC</span>
+      <span class="btime">11:00 AM</span>
+      <span class="tg tg-leads">Leads ✓</span>
+    </div>
+  </td>
+
+  <!-- Fri Apr 3 -->
+  <td>
+    <div class="dn">3</div>
+    <div class="note-all">All Teams · 8:30 AM</div>
+    <div class="blk blk-a"><span class="bname">A Team</span><span class="tg tg-uc">UC</span><span class="tg tg-leads">Leads ✓</span></div>
+    <div class="blk blk-b"><span class="bname">B Team</span><span class="tg tg-uc">UC</span><span class="tg tg-leads">Leads ✓</span></div>
+    <div class="blk blk-c"><span class="bname">C Team</span><span class="tg tg-nc">NC</span><span class="tg tg-noleads">No Leads</span></div>
+  </td>
+
+  <!-- Sat Apr 4 -->
+  <td>
+    <div class="dn">4</div>
+    <div class="note-all">All Teams · 8:30 AM</div>
+    <div class="blk blk-a"><span class="bname">A Team</span><span class="tg tg-uc">UC</span><span class="tg tg-leads">Leads ✓</span></div>
+    <div class="blk blk-b"><span class="bname">B Team</span><span class="tg tg-uc">UC</span><span class="tg tg-leads">Leads ✓</span></div>
+    <div class="blk blk-c"><span class="bname">C Team</span><span class="tg tg-nc">NC</span><span class="tg tg-noleads">No Leads</span></div>
+  </td>
+</tr>
+
+<!-- Week 2: Apr 5–11 -->
+<tr>
+  <td class="sunday"><div class="dn">5</div></td>
+
+  <!-- Mon Apr 6 — A early out -->
+  <td>
+    <div class="dn">6</div>
+    <div class="note-all">All Teams · 8:30 AM</div>
+    <div class="note-early">A Team early out ↑</div>
+    <div class="blk blk-a"><span class="bname">A Team</span><span class="tg tg-uc">UC</span><span class="tg tg-leads">Leads ✓</span></div>
+    <div class="blk blk-b"><span class="bname">B Team</span><span class="tg tg-uc">UC</span><span class="tg tg-leads">Leads ✓</span></div>
+    <div class="blk blk-c"><span class="bname">C Team</span><span class="tg tg-nc">NC</span><span class="tg tg-noleads">No Leads</span></div>
+  </td>
+
+  <!-- Tue Apr 7 — C Recovery, A 9am no leads, B 11am leads -->
+  <td>
+    <div class="dn">7</div>
+    <div class="blk blk-a">
+      <span class="bname">A Team</span>
+      <span class="tg tg-uc">UC</span>
+      <span class="btime">9:00 AM</span>
+      <span class="tg tg-noleads">No Leads</span>
+    </div>
+    <div class="blk blk-b">
+      <span class="bname">B Team</span>
+      <span class="tg tg-uc">UC</span>
+      <span class="btime">11:00 AM</span>
+      <span class="tg tg-leads">Leads ✓</span>
+    </div>
+    <div class="blk blk-off">
+      <span class="bname">C Team</span>
+      <span class="tg tg-nc">NC</span>
+      <span class="tg tg-rec">RECOVERY</span>
+    </div>
+    <div class="rec-tasks">Videos · Social Media · Surveys · Training · Tasks</div>
+  </td>
+
+  <!-- Wed Apr 8 — A Recovery, B 9am no leads, C 11am leads -->
+  <td>
+    <div class="dn">8</div>
+    <div class="blk blk-off">
+      <span class="bname">A Team</span>
+      <span class="tg tg-uc">UC</span>
+      <span class="tg tg-rec">RECOVERY</span>
+    </div>
+    <div class="rec-tasks">Videos · Social Media · Surveys · Training · Tasks</div>
+    <div class="blk blk-b">
+      <span class="bname">B Team</span>
+      <span class="tg tg-uc">UC</span>
+      <span class="btime">9:00 AM</span>
+      <span class="tg tg-noleads">No Leads</span>
+    </div>
+    <div class="blk blk-c">
+      <span class="bname">C Team</span>
+      <span class="tg tg-nc">NC</span>
+      <span class="btime">11:00 AM</span>
+      <span class="tg tg-leads">Leads ✓</span>
+    </div>
+  </td>
+
+  <!-- Thu Apr 9 — B Recovery, A 9am leads, C 11am leads -->
+  <td>
+    <div class="dn">9</div>
+    <div class="blk blk-a">
+      <span class="bname">A Team</span>
+      <span class="tg tg-uc">UC</span>
+      <span class="btime">9:00 AM</span>
+      <span class="tg tg-leads">Leads ✓</span>
+    </div>
+    <div class="blk blk-off">
+      <span class="bname">B Team</span>
+      <span class="tg tg-uc">UC</span>
+      <span class="tg tg-rec">RECOVERY</span>
+    </div>
+    <div class="rec-tasks">Videos · Social Media · Surveys · Training · Tasks</div>
+    <div class="blk blk-c">
+      <span class="bname">C Team</span>
+      <span class="tg tg-nc">NC</span>
+      <span class="btime">11:00 AM</span>
+      <span class="tg tg-leads">Leads ✓</span>
+    </div>
+  </td>
+
+  <!-- Fri Apr 10 -->
+  <td>
+    <div class="dn">10</div>
+    <div class="note-all">All Teams · 8:30 AM</div>
+    <div class="blk blk-a"><span class="bname">A Team</span><span class="tg tg-uc">UC</span><span class="tg tg-leads">Leads ✓</span></div>
+    <div class="blk blk-b"><span class="bname">B Team</span><span class="tg tg-uc">UC</span><span class="tg tg-leads">Leads ✓</span></div>
+    <div class="blk blk-c"><span class="bname">C Team</span><span class="tg tg-nc">NC</span><span class="tg tg-noleads">No Leads</span></div>
+  </td>
+
+  <!-- Sat Apr 11 -->
+  <td>
+    <div class="dn">11</div>
+    <div class="note-all">All Teams · 8:30 AM</div>
+    <div class="blk blk-a"><span class="bname">A Team</span><span class="tg tg-uc">UC</span><span class="tg tg-leads">Leads ✓</span></div>
+    <div class="blk blk-b"><span class="bname">B Team</span><span class="tg tg-uc">UC</span><span class="tg tg-leads">Leads ✓</span></div>
+    <div class="blk blk-c"><span class="bname">C Team</span><span class="tg tg-nc">NC</span><span class="tg tg-noleads">No Leads</span></div>
+  </td>
+</tr>
+
+<!-- Week 3: Apr 12–18 -->
+<tr>
+  <td class="sunday"><div class="dn">12</div></td>
+
+  <!-- Mon Apr 13 — B early out -->
+  <td>
+    <div class="dn">13</div>
+    <div class="note-all">All Teams · 8:30 AM</div>
+    <div class="note-early">B Team early out ↑</div>
+    <div class="blk blk-a"><span class="bname">A Team</span><span class="tg tg-uc">UC</span><span class="tg tg-leads">Leads ✓</span></div>
+    <div class="blk blk-b"><span class="bname">B Team</span><span class="tg tg-uc">UC</span><span class="tg tg-leads">Leads ✓</span></div>
+    <div class="blk blk-c"><span class="bname">C Team</span><span class="tg tg-nc">NC</span><span class="tg tg-noleads">No Leads</span></div>
+  </td>
+
+  <!-- Tue Apr 14 -->
+  <td>
+    <div class="dn">14</div>
+    <div class="blk blk-a">
+      <span class="bname">A Team</span><span class="tg tg-uc">UC</span>
+      <span class="btime">9:00 AM</span><span class="tg tg-noleads">No Leads</span>
+    </div>
+    <div class="blk blk-b">
+      <span class="bname">B Team</span><span class="tg tg-uc">UC</span>
+      <span class="btime">11:00 AM</span><span class="tg tg-leads">Leads ✓</span>
+    </div>
+    <div class="blk blk-off">
+      <span class="bname">C Team</span><span class="tg tg-nc">NC</span>
+      <span class="tg tg-rec">RECOVERY</span>
+    </div>
+    <div class="rec-tasks">Videos · Social Media · Surveys · Training · Tasks</div>
+  </td>
+
+  <!-- Wed Apr 15 -->
+  <td>
+    <div class="dn">15</div>
+    <div class="blk blk-off">
+      <span class="bname">A Team</span><span class="tg tg-uc">UC</span>
+      <span class="tg tg-rec">RECOVERY</span>
+    </div>
+    <div class="rec-tasks">Videos · Social Media · Surveys · Training · Tasks</div>
+    <div class="blk blk-b">
+      <span class="bname">B Team</span><span class="tg tg-uc">UC</span>
+      <span class="btime">9:00 AM</span><span class="tg tg-noleads">No Leads</span>
+    </div>
+    <div class="blk blk-c">
+      <span class="bname">C Team</span><span class="tg tg-nc">NC</span>
+      <span class="btime">11:00 AM</span><span class="tg tg-leads">Leads ✓</span>
+    </div>
+  </td>
+
+  <!-- Thu Apr 16 -->
+  <td>
+    <div class="dn">16</div>
+    <div class="blk blk-a">
+      <span class="bname">A Team</span><span class="tg tg-uc">UC</span>
+      <span class="btime">9:00 AM</span><span class="tg tg-leads">Leads ✓</span>
+    </div>
+    <div class="blk blk-off">
+      <span class="bname">B Team</span><span class="tg tg-uc">UC</span>
+      <span class="tg tg-rec">RECOVERY</span>
+    </div>
+    <div class="rec-tasks">Videos · Social Media · Surveys · Training · Tasks</div>
+    <div class="blk blk-c">
+      <span class="bname">C Team</span><span class="tg tg-nc">NC</span>
+      <span class="btime">11:00 AM</span><span class="tg tg-leads">Leads ✓</span>
+    </div>
+  </td>
+
+  <!-- Fri Apr 17 -->
+  <td>
+    <div class="dn">17</div>
+    <div class="note-all">All Teams · 8:30 AM</div>
+    <div class="blk blk-a"><span class="bname">A Team</span><span class="tg tg-uc">UC</span><span class="tg tg-leads">Leads ✓</span></div>
+    <div class="blk blk-b"><span class="bname">B Team</span><span class="tg tg-uc">UC</span><span class="tg tg-leads">Leads ✓</span></div>
+    <div class="blk blk-c"><span class="bname">C Team</span><span class="tg tg-nc">NC</span><span class="tg tg-noleads">No Leads</span></div>
+  </td>
+
+  <!-- Sat Apr 18 -->
+  <td>
+    <div class="dn">18</div>
+    <div class="note-all">All Teams · 8:30 AM</div>
+    <div class="blk blk-a"><span class="bname">A Team</span><span class="tg tg-uc">UC</span><span class="tg tg-leads">Leads ✓</span></div>
+    <div class="blk blk-b"><span class="bname">B Team</span><span class="tg tg-uc">UC</span><span class="tg tg-leads">Leads ✓</span></div>
+    <div class="blk blk-c"><span class="bname">C Team</span><span class="tg tg-nc">NC</span><span class="tg tg-noleads">No Leads</span></div>
+  </td>
+</tr>
+
+<!-- Week 4: Apr 19–25 -->
+<tr>
+  <td class="sunday"><div class="dn">19</div></td>
+
+  <!-- Mon Apr 20 — C early out -->
+  <td>
+    <div class="dn">20</div>
+    <div class="note-all">All Teams · 8:30 AM</div>
+    <div class="note-early">C Team early out ↑</div>
+    <div class="blk blk-a"><span class="bname">A Team</span><span class="tg tg-uc">UC</span><span class="tg tg-leads">Leads ✓</span></div>
+    <div class="blk blk-b"><span class="bname">B Team</span><span class="tg tg-uc">UC</span><span class="tg tg-leads">Leads ✓</span></div>
+    <div class="blk blk-c"><span class="bname">C Team</span><span class="tg tg-nc">NC</span><span class="tg tg-noleads">No Leads</span></div>
+  </td>
+
+  <!-- Tue Apr 21 -->
+  <td>
+    <div class="dn">21</div>
+    <div class="blk blk-a">
+      <span class="bname">A Team</span><span class="tg tg-uc">UC</span>
+      <span class="btime">9:00 AM</span><span class="tg tg-noleads">No Leads</span>
+    </div>
+    <div class="blk blk-b">
+      <span class="bname">B Team</span><span class="tg tg-uc">UC</span>
+      <span class="btime">11:00 AM</span><span class="tg tg-leads">Leads ✓</span>
+    </div>
+    <div class="blk blk-off">
+      <span class="bname">C Team</span><span class="tg tg-nc">NC</span>
+      <span class="tg tg-rec">RECOVERY</span>
+    </div>
+    <div class="rec-tasks">Videos · Social Media · Surveys · Training · Tasks</div>
+  </td>
+
+  <!-- Wed Apr 22 -->
+  <td>
+    <div class="dn">22</div>
+    <div class="blk blk-off">
+      <span class="bname">A Team</span><span class="tg tg-uc">UC</span>
+      <span class="tg tg-rec">RECOVERY</span>
+    </div>
+    <div class="rec-tasks">Videos · Social Media · Surveys · Training · Tasks</div>
+    <div class="blk blk-b">
+      <span class="bname">B Team</span><span class="tg tg-uc">UC</span>
+      <span class="btime">9:00 AM</span><span class="tg tg-noleads">No Leads</span>
+    </div>
+    <div class="blk blk-c">
+      <span class="bname">C Team</span><span class="tg tg-nc">NC</span>
+      <span class="btime">11:00 AM</span><span class="tg tg-leads">Leads ✓</span>
+    </div>
+  </td>
+
+  <!-- Thu Apr 23 -->
+  <td>
+    <div class="dn">23</div>
+    <div class="blk blk-a">
+      <span class="bname">A Team</span><span class="tg tg-uc">UC</span>
+      <span class="btime">9:00 AM</span><span class="tg tg-leads">Leads ✓</span>
+    </div>
+    <div class="blk blk-off">
+      <span class="bname">B Team</span><span class="tg tg-uc">UC</span>
+      <span class="tg tg-rec">RECOVERY</span>
+    </div>
+    <div class="rec-tasks">Videos · Social Media · Surveys · Training · Tasks</div>
+    <div class="blk blk-c">
+      <span class="bname">C Team</span><span class="tg tg-nc">NC</span>
+      <span class="btime">11:00 AM</span><span class="tg tg-leads">Leads ✓</span>
+    </div>
+  </td>
+
+  <!-- Fri Apr 24 -->
+  <td>
+    <div class="dn">24</div>
+    <div class="note-all">All Teams · 8:30 AM</div>
+    <div class="blk blk-a"><span class="bname">A Team</span><span class="tg tg-uc">UC</span><span class="tg tg-leads">Leads ✓</span></div>
+    <div class="blk blk-b"><span class="bname">B Team</span><span class="tg tg-uc">UC</span><span class="tg tg-leads">Leads ✓</span></div>
+    <div class="blk blk-c"><span class="bname">C Team</span><span class="tg tg-nc">NC</span><span class="tg tg-noleads">No Leads</span></div>
+  </td>
+
+  <!-- Sat Apr 25 -->
+  <td>
+    <div class="dn">25</div>
+    <div class="note-all">All Teams · 8:30 AM</div>
+    <div class="blk blk-a"><span class="bname">A Team</span><span class="tg tg-uc">UC</span><span class="tg tg-leads">Leads ✓</span></div>
+    <div class="blk blk-b"><span class="bname">B Team</span><span class="tg tg-uc">UC</span><span class="tg tg-leads">Leads ✓</span></div>
+    <div class="blk blk-c"><span class="bname">C Team</span><span class="tg tg-nc">NC</span><span class="tg tg-noleads">No Leads</span></div>
+  </td>
+</tr>
+
+<!-- Week 5: Apr 26 – May 2 -->
+<tr>
+  <td class="sunday"><div class="dn">26</div></td>
+
+  <!-- Mon Apr 27 — A early out (rotation repeats) -->
+  <td>
+    <div class="dn">27</div>
+    <div class="note-all">All Teams · 8:30 AM</div>
+    <div class="note-early">A Team early out ↑</div>
+    <div class="blk blk-a"><span class="bname">A Team</span><span class="tg tg-uc">UC</span><span class="tg tg-leads">Leads ✓</span></div>
+    <div class="blk blk-b"><span class="bname">B Team</span><span class="tg tg-uc">UC</span><span class="tg tg-leads">Leads ✓</span></div>
+    <div class="blk blk-c"><span class="bname">C Team</span><span class="tg tg-nc">NC</span><span class="tg tg-noleads">No Leads</span></div>
+  </td>
+
+  <!-- Tue Apr 28 -->
+  <td>
+    <div class="dn">28</div>
+    <div class="blk blk-a">
+      <span class="bname">A Team</span><span class="tg tg-uc">UC</span>
+      <span class="btime">9:00 AM</span><span class="tg tg-noleads">No Leads</span>
+    </div>
+    <div class="blk blk-b">
+      <span class="bname">B Team</span><span class="tg tg-uc">UC</span>
+      <span class="btime">11:00 AM</span><span class="tg tg-leads">Leads ✓</span>
+    </div>
+    <div class="blk blk-off">
+      <span class="bname">C Team</span><span class="tg tg-nc">NC</span>
+      <span class="tg tg-rec">RECOVERY</span>
+    </div>
+    <div class="rec-tasks">Videos · Social Media · Surveys · Training · Tasks</div>
+  </td>
+
+  <!-- Wed Apr 29 -->
+  <td>
+    <div class="dn">29</div>
+    <div class="blk blk-off">
+      <span class="bname">A Team</span><span class="tg tg-uc">UC</span>
+      <span class="tg tg-rec">RECOVERY</span>
+    </div>
+    <div class="rec-tasks">Videos · Social Media · Surveys · Training · Tasks</div>
+    <div class="blk blk-b">
+      <span class="bname">B Team</span><span class="tg tg-uc">UC</span>
+      <span class="btime">9:00 AM</span><span class="tg tg-noleads">No Leads</span>
+    </div>
+    <div class="blk blk-c">
+      <span class="bname">C Team</span><span class="tg tg-nc">NC</span>
+      <span class="btime">11:00 AM</span><span class="tg tg-leads">Leads ✓</span>
+    </div>
+  </td>
+
+  <!-- Thu Apr 30 -->
+  <td>
+    <div class="dn">30</div>
+    <div class="blk blk-a">
+      <span class="bname">A Team</span><span class="tg tg-uc">UC</span>
+      <span class="btime">9:00 AM</span><span class="tg tg-leads">Leads ✓</span>
+    </div>
+    <div class="blk blk-off">
+      <span class="bname">B Team</span><span class="tg tg-uc">UC</span>
+      <span class="tg tg-rec">RECOVERY</span>
+    </div>
+    <div class="rec-tasks">Videos · Social Media · Surveys · Training · Tasks</div>
+    <div class="blk blk-c">
+      <span class="bname">C Team</span><span class="tg tg-nc">NC</span>
+      <span class="btime">11:00 AM</span><span class="tg tg-leads">Leads ✓</span>
+    </div>
+  </td>
+
+  <td class="out-month"><div class="dn">1</div></td>
+  <td class="out-month"><div class="dn">2</div></td>
+</tr>
+
+</tbody>
+</table>
+</div>
+
+<div class="bottom">
+  <div class="card">
+    <h3>Team Roster</h3>
+    <div class="roster-grid">
+      <div class="team-col">
+        <h4 class="h4-a">A Team — Used Cars</h4>
+        <div class="rname">Toa <span class="tg tg-uc">UC</span></div>
+        <div class="rname">Juan <span class="tg tg-uc">UC</span></div>
+        <div class="rname">Brian <span class="tg tg-uc">UC</span></div>
+        <div class="rname">Zack <span class="tg tg-uc">UC</span></div>
+      </div>
+      <div class="team-col">
+        <h4 class="h4-b">B Team — Used Cars</h4>
+        <div class="rname">Aevyn <span class="tg tg-uc">UC</span></div>
+        <div class="rname">Kenny <span class="tg tg-uc">UC</span></div>
+        <div class="rname">Kyle <span class="tg tg-uc">UC</span></div>
+        <div class="rname">Ried <span class="tg tg-uc">UC</span></div>
+      </div>
+      <div class="team-col">
+        <h4 class="h4-c">C Team — New Cars</h4>
+        <div class="rname">Robert Deleo <span class="tg tg-nc">NC</span></div>
+        <div class="rname">Mark Martinez <span class="tg tg-nc">NC</span></div>
+        <div class="rname">Levi Sepulvado <span class="tg tg-nc">NC</span></div>
+        <div class="rname">Connor Johnson <span class="tg tg-nc">NC</span></div>
+        <div class="rname">Fred Anguiano <span class="tg tg-nc">NC</span></div>
+        <div class="rname">Kayrina Lambert <span class="tg tg-nc">NC</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Schedule Rules</h3>
+    <div class="rule"><strong>Mon / Fri / Sat:</strong> All teams in by 8:30 AM</div>
+    <div class="rule"><strong>Monday early out rotation:</strong> A → B → C (repeating weekly)</div>
+    <div class="rule"><strong>Tuesday:</strong> C = Recovery &nbsp;|&nbsp; A in at 9 AM &nbsp;|&nbsp; B in at 11 AM</div>
+    <div class="rule"><strong>Wednesday:</strong> A = Recovery &nbsp;|&nbsp; B in at 9 AM &nbsp;|&nbsp; C in at 11 AM</div>
+    <div class="rule"><strong>Thursday:</strong> B = Recovery &nbsp;|&nbsp; A in at 9 AM &nbsp;|&nbsp; C in at 11 AM</div>
+    <div class="rule"><strong>Leads on Mon / Fri / Sat:</strong> A ✓ &nbsp; B ✓ &nbsp; C ✗ (off Tuesday)</div>
+    <div class="rule"><strong>Leads on Tuesday:</strong> A ✗ (pre-Wed off) &nbsp; B ✓</div>
+    <div class="rule"><strong>Leads on Wednesday:</strong> B ✗ (pre-Thu off) &nbsp; C ✓</div>
+    <div class="rule"><strong>Leads on Thursday:</strong> A ✓ &nbsp; C ✓</div>
+    <div class="rule"><strong>Recovery day tasks:</strong> Videos · Social Media · Surveys · Training · Tasks</div>
+  </div>
+</div>
+
+</body>
+</html>
