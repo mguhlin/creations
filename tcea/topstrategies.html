@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beyond the 20% Policy — TCEA Strategy Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0A3476;--navy-dark:#071f4a;--navy-mid:#12428f;
+  --gold:#FCB040;--gold-light:#fdd17a;--gold-pale:#FEF0D0;
+  --pale-navy:#D0D8F0;--white:#ffffff;--off-white:#f7f8fc;
+  --text:#1a1a2e;--text-muted:#5a6680;--border:#e2e7f5;--teal:#0e6b8a;
+  --phase-surface:#E1F5EE;--phase-surface-text:#085041;
+  --phase-deep:#EEEDFE;--phase-deep-text:#26215C;
+  --phase-transfer:#FAECE7;--phase-transfer-text:#4A1B0C;
+}
+body{font-family:'DM Sans',sans-serif;color:var(--text);background:#fff;line-height:1.6}
+a{color:var(--navy);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ── Header ── */
+.site-header{background:var(--navy-dark);padding:0}
+.header-inner{max-width:960px;margin:0 auto;padding:24px 24px 0}
+.header-eyebrow{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.header-title{font-family:'DM Serif Display',serif;font-size:clamp(26px,4vw,40px);color:#fff;line-height:1.2;margin-bottom:10px}
+.header-title em{font-style:italic;color:var(--gold)}
+.header-sub{font-size:15px;color:rgba(255,255,255,.75);max-width:620px;margin-bottom:20px}
+.header-tabs{display:flex;gap:0;border-bottom:none;margin-top:4px}
+.htab{padding:10px 20px;font-size:13px;font-weight:500;color:rgba(255,255,255,.6);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;transition:all .15s;font-family:'DM Sans',sans-serif}
+.htab:hover{color:#fff}
+.htab.active{color:#fff;border-bottom-color:var(--gold)}
+
+/* ── Layout ── */
+.page-body{max-width:960px;margin:0 auto;padding:32px 24px 64px}
+
+/* ── Population filter ── */
+.pop-filter{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:32px}
+.pop-label{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-right:4px}
+.pop-btn{padding:7px 16px;border-radius:100px;border:1.5px solid var(--border);background:#fff;font-size:13px;font-weight:500;color:var(--text-muted);cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
+.pop-btn:hover{border-color:var(--navy);color:var(--navy)}
+.pop-btn.active{background:var(--navy);border-color:var(--navy);color:#fff}
+.pop-btn[data-pop="esl"].active{background:#0e6b8a;border-color:#0e6b8a}
+.pop-btn[data-pop="gt"].active{background:#534AB7;border-color:#534AB7}
+.pop-btn[data-pop="sped"].active{background:#993C1D;border-color:#993C1D}
+
+/* ── Strategy cards ── */
+.strategy-card{border:1.5px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px;background:#fff}
+.strategy-header{display:flex;align-items:center;gap:16px;padding:18px 20px;cursor:pointer;user-select:none;transition:background .15s}
+.strategy-header:hover{background:var(--off-white)}
+.strategy-header.open{background:var(--off-white)}
+.strategy-num{width:36px;height:36px;border-radius:50%;background:var(--navy);color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.strategy-meta{flex:1;min-width:0}
+.strategy-name{font-size:17px;font-weight:600;color:var(--navy);line-height:1.2}
+.strategy-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:5px}
+.badge{font-size:11px;font-weight:600;padding:3px 9px;border-radius:4px;letter-spacing:.02em}
+.badge-phase-surface{background:var(--phase-surface);color:var(--phase-surface-text)}
+.badge-phase-deep{background:var(--phase-deep);color:var(--phase-deep-text)}
+.badge-phase-transfer{background:var(--phase-transfer);color:var(--phase-transfer-text)}
+.badge-effect{background:var(--gold-pale);color:#7a4f00;border:1px solid var(--gold-light)}
+.strategy-chevron{font-size:18px;color:var(--text-muted);transition:transform .2s;flex-shrink:0}
+.strategy-header.open .strategy-chevron{transform:rotate(180deg)}
+.strategy-body{display:none;border-top:1.5px solid var(--border)}
+.strategy-body.open{display:block}
+.strategy-intro{padding:16px 20px;font-size:14px;color:var(--text-muted);background:var(--off-white);border-bottom:1px solid var(--border);line-height:1.6}
+
+/* ── Example grid ── */
+.example-area{padding:20px}
+.example-area-title{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--navy);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.example-area-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.example-block{margin-bottom:12px}
+.example-label{font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.example-text{font-size:14px;color:var(--text);line-height:1.65;padding:10px 14px;border-left:3px solid var(--border);background:#fafafa;border-radius:0 6px 6px 0}
+.pop-general .example-text{border-left-color:var(--navy)}
+.pop-esl .example-text{border-left-color:#0e6b8a}
+.pop-gt .example-text{border-left-color:#7F77DD}
+.pop-sped .example-text{border-left-color:#D85A30}
+.elps-tag{display:inline-block;font-size:10px;font-weight:700;background:#E1F5EE;color:#085041;padding:1px 6px;border-radius:3px;margin-left:4px;vertical-align:middle}
+
+/* ── Content area tabs (inside card) ── */
+.content-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);padding:0 20px}
+.ctab{padding:8px 16px;font-size:13px;font-weight:500;color:var(--text-muted);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;font-family:'DM Sans',sans-serif}
+.ctab:hover{color:var(--navy)}
+.ctab.active{color:var(--navy);border-bottom-color:var(--gold);font-weight:600}
+
+/* ── Summary table ── */
+.summary-section{margin-bottom:48px}
+.summary-section h2{font-family:'DM Serif Display',serif;font-size:24px;color:var(--navy);margin-bottom:16px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{background:var(--navy);color:#fff;padding:10px 14px;text-align:left;font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:nth-child(even) td{background:var(--off-white)}
+.effect-pill{display:inline-block;background:var(--gold-pale);color:#7a4f00;padding:2px 8px;border-radius:4px;font-weight:600;font-size:12px}
+
+/* ── Random Generator ── */
+.generator-card{background:var(--navy-dark);border-radius:16px;padding:32px;margin-bottom:48px;position:relative;overflow:hidden}
+.generator-card::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(252,176,64,.15),transparent 70%)}
+.generator-title{font-family:'DM Serif Display',serif;font-size:22px;color:#fff;margin-bottom:6px}
+.generator-sub{font-size:14px;color:rgba(255,255,255,.65);margin-bottom:24px}
+.generator-controls{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px}
+.gen-select{padding:9px 14px;border-radius:8px;border:1.5px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;font-size:14px;font-family:'DM Sans',sans-serif;cursor:pointer;flex:1;min-width:160px}
+.gen-select option{background:var(--navy-dark);color:#fff}
+.gen-btn{padding:10px 24px;background:var(--gold);color:var(--navy-dark);border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .15s;white-space:nowrap}
+.gen-btn:hover{background:var(--gold-light)}
+.gen-random-btn{padding:10px 18px;background:rgba(255,255,255,.1);color:#fff;border:1.5px solid rgba(255,255,255,.2);border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .15s}
+.gen-random-btn:hover{background:rgba(255,255,255,.18)}
+.gen-output{display:none;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:20px;margin-top:4px}
+.gen-output.visible{display:block}
+.gen-output-header{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.gen-strategy-name{font-size:18px;font-weight:600;color:#fff;margin-bottom:2px}
+.gen-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.gen-tag{font-size:11px;font-weight:600;padding:3px 8px;border-radius:4px}
+.gen-tag-content{background:rgba(255,255,255,.15);color:rgba(255,255,255,.9)}
+.gen-tag-pop{background:rgba(252,176,64,.2);color:var(--gold)}
+.gen-output-text{font-size:14px;color:rgba(255,255,255,.85);line-height:1.7}
+.gen-elps{font-size:12px;color:rgba(255,255,255,.5);margin-top:10px;font-style:italic}
+
+/* ── Intro ── */
+.intro-block{background:var(--gold-pale);border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:16px 20px;margin-bottom:32px;font-size:14px;color:var(--text);line-height:1.65}
+.intro-block strong{color:var(--navy);font-weight:600}
+
+/* ── Footer ── */
+.site-footer{background:var(--off-white);border-top:1px solid var(--border);padding:24px;text-align:center;font-size:13px;color:var(--text-muted)}
+
+/* ── Responsive ── */
+@media(max-width:600px){
+  .page-body{padding:20px 16px 48px}
+  .header-inner{padding:20px 16px 0}
+  .htab{padding:8px 12px;font-size:12px}
+  .content-tabs{overflow-x:auto}
+  .ctab{white-space:nowrap}
+  .gen-output-text{font-size:13px}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-eyebrow">TCEA Technotes — Strategy Reference</div>
+    <h1 class="header-title">Beyond the 20% Policy:<br><em>Six strategies that make it unnecessary</em></h1>
+    <p class="header-sub">Assign work Gen AI cannot do for them. Each strategy below includes examples for core content areas and three learner populations.</p>
+    <div class="header-tabs">
+      <button class="htab active" onclick="showSection('strategies')">Strategies</button>
+      <button class="htab" onclick="showSection('generator')">Scenario Generator</button>
+      <button class="htab" onclick="showSection('summary')">Summary Table</button>
+    </div>
+  </div>
+</header>
+
+<main class="page-body">
+
+<!-- STRATEGIES SECTION -->
+<div id="section-strategies">
+
+  <div class="intro-block">
+    <strong>How to use this guide:</strong> Select a content area tab inside each strategy card. Then filter by learner population using the buttons below. Each example is ready to adapt for your classroom — no detection tool required.
+  </div>
+
+  <div class="pop-filter">
+    <span class="pop-label">Show examples for:</span>
+    <button class="pop-btn active" data-pop="all" onclick="setPop('all')">All populations</button>
+    <button class="pop-btn" data-pop="esl" onclick="setPop('esl')">Bilingual / ESL (ELPS)</button>
+    <button class="pop-btn" data-pop="gt" onclick="setPop('gt')">Gifted &amp; Talented</button>
+    <button class="pop-btn" data-pop="sped" onclick="setPop('sped')">Special Education</button>
+  </div>
+
+  <div id="strategy-cards"></div>
+
+</div>
+
+<!-- GENERATOR SECTION -->
+<div id="section-generator" style="display:none">
+
+  <div class="generator-card">
+    <div class="generator-title">Classroom Scenario Generator</div>
+    <div class="generator-sub">Select a content area, learner population, and strategy — or let the tool choose at random.</div>
+    <div class="generator-controls">
+      <select class="gen-select" id="gen-content">
+        <option value="">Any content area</option>
+        <option value="ela">ELA / Reading</option>
+        <option value="math">Mathematics</option>
+        <option value="science">Science</option>
+        <option value="ss">Social Studies</option>
+      </select>
+      <select class="gen-select" id="gen-pop">
+        <option value="">Any population</option>
+        <option value="general">General Education</option>
+        <option value="esl">Bilingual / ESL</option>
+        <option value="gt">Gifted &amp; Talented</option>
+        <option value="sped">Special Education</option>
+      </select>
+      <select class="gen-select" id="gen-strat">
+        <option value="">Any strategy</option>
+        <option value="0">Writing Workshop &amp; Outlining</option>
+        <option value="1">In-Class Short Writes</option>
+        <option value="2">Reciprocal Teaching</option>
+        <option value="3">Jigsaw</option>
+        <option value="4">Argumentation &amp; Discussion</option>
+        <option value="5">Problem-Solving Teaching</option>
+      </select>
+      <button class="gen-random-btn" onclick="randomize()">&#9861; Randomize all</button>
+      <button class="gen-btn" onclick="generate()">Generate scenario</button>
+    </div>
+    <div class="gen-output" id="gen-output">
+      <div class="gen-output-header">Your classroom scenario</div>
+      <div class="gen-strategy-name" id="gen-sname"></div>
+      <div class="gen-tags" id="gen-tag-row"></div>
+      <div class="gen-output-text" id="gen-text"></div>
+      <div class="gen-elps" id="gen-elps"></div>
+    </div>
+  </div>
+
+  <div class="intro-block">
+    <strong>About the Scenario Generator:</strong> Every scenario is drawn from the research-backed examples in the Strategies tab. Use the dropdowns to target a specific context, or randomize to surface a strategy you might not have considered. All examples are aligned to Hattie's Visible Learning database and Texas ELPS standards where applicable.
+  </div>
+
+</div>
+
+<!-- SUMMARY SECTION -->
+<div id="section-summary" style="display:none">
+  <div class="summary-section">
+    <h2>Strategy Summary</h2>
+    <div style="overflow-x:auto">
+    <table>
+      <thead>
+        <tr>
+          <th>Strategy</th>
+          <th>Learning Phase</th>
+          <th>Effect Size</th>
+          <th>Primary Evidence Collected</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Writing Workshop &amp; Outlining</strong></td>
+          <td><span class="badge badge-phase-surface" style="font-size:12px">Surface → Deep</span></td>
+          <td><span class="effect-pill">d = 0.84</span></td>
+          <td>Graphic organizers, annotated drafts, revision artifacts</td>
+        </tr>
+        <tr>
+          <td><strong>In-Class Short Writes</strong></td>
+          <td><span class="badge badge-phase-surface" style="font-size:12px">Surface</span></td>
+          <td><span class="effect-pill">d = 0.46–0.55</span></td>
+          <td>Timed written samples, exit tickets, retrieval checks</td>
+        </tr>
+        <tr>
+          <td><strong>Reciprocal Teaching</strong></td>
+          <td><span class="badge badge-phase-deep" style="font-size:12px">Deep</span></td>
+          <td><span class="effect-pill">d = 0.74</span></td>
+          <td>Live discussion observation, role performance, peer interaction</td>
+        </tr>
+        <tr>
+          <td><strong>Jigsaw</strong></td>
+          <td><span class="badge badge-phase-deep" style="font-size:12px">Deep</span></td>
+          <td><span class="effect-pill">d = 0.92</span></td>
+          <td>Teaching performance, peer explanation quality, reassembly discussion</td>
+        </tr>
+        <tr>
+          <td><strong>Argumentation &amp; Discussion</strong></td>
+          <td><span class="badge badge-phase-transfer" style="font-size:12px">Deep → Transfer</span></td>
+          <td><span class="effect-pill">d = 0.82</span></td>
+          <td>Live debate response, evidence use, reasoning under challenge</td>
+        </tr>
+        <tr>
+          <td><strong>Problem-Solving Teaching</strong></td>
+          <td><span class="badge badge-phase-transfer" style="font-size:12px">Transfer</span></td>
+          <td><span class="effect-pill">d = 0.61</span></td>
+          <td>Novel task response, framework application, written process</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="summary-section">
+    <h2>Learner Population Alignment</h2>
+    <div style="overflow-x:auto">
+    <table>
+      <thead>
+        <tr>
+          <th>Population</th>
+          <th>Key Adaptations</th>
+          <th>Texas Standard Alignment</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Bilingual / ESL</strong></td>
+          <td>Sentence frames, bilingual glossaries, visual supports, home language scaffolding, cognate awareness</td>
+          <td>ELPS 3C–3H (speaking); 4G–4K (reading); 5B–5G (writing)</td>
+        </tr>
+        <tr>
+          <td><strong>Gifted &amp; Talented</strong></td>
+          <td>Increased abstraction, metacognitive demands, reduced scaffolding, argumentation of opposing views, novel problem generation</td>
+          <td>Texas G/T Standards: Cognitive development, communication, leadership, creative thinking</td>
+        </tr>
+        <tr>
+          <td><strong>Special Education</strong></td>
+          <td>Visual organizers, reduced length requirements, scaffolded templates, alternative response modes (verbal, diagram), peer scribing</td>
+          <td>IDEA accommodations; TEKS access via Universal Design for Learning (UDL)</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer class="site-footer">
+  Based on <a href="https://blog.tcea.org" target="_blank">TCEA Technotes</a> research. Effect sizes from Hattie's Visible Learning MetaX database. ELPS alignment: Texas Education Agency. &copy; 2026 TCEA.
+</footer>
+
+<script>
+const contentAreas = [
+  { id:'ela', label:'ELA / Reading' },
+  { id:'math', label:'Mathematics' },
+  { id:'science', label:'Science' },
+  { id:'ss', label:'Social Studies' }
+];
+
+const populations = [
+  { id:'general', label:'General Education' },
+  { id:'esl', label:'Bilingual / ESL' },
+  { id:'gt', label:'Gifted & Talented' },
+  { id:'sped', label:'Special Education' }
+];
+
+const popLabels = {general:'General Education',esl:'Bilingual / ESL (ELPS)',gt:'Gifted & Talented',sped:'Special Education'};
+const contentLabels = {ela:'ELA / Reading',math:'Mathematics',science:'Science',ss:'Social Studies'};
+
+const strategies = [
+  {
+    num:1,
+    name:'Writing Workshop & Outlining',
+    phase:['Surface → Deep'],
+    phaseClass:['badge-phase-surface'],
+    effect:'d = 0.84',
+    metax:'https://www.visiblelearningmetax.com/influences/view/outlining_&_organizing',
+    intro:'A finished essay submitted Sunday night is a product. Gen AI is very good at producing products. What it cannot produce is a documented, in-class process that matches a specific student\'s thinking on a specific day. Assign concept maps and structured outlines first — if the final draft shares no DNA with the Tuesday outline, you have actual evidence to ground a conversation.',
+    examples:{
+      ela:{
+        general:'Students complete a three-column graphic organizer (claim, evidence, so-what) by hand in class before drafting a literary analysis paragraph. The outline stays on file. If the final draft shares no DNA with it, you have a grounded conversation.',
+        esl:'Provide a partially completed organizer with sentence frames: "The author uses ___ to show ___." Allow students to outline in their home language first, then transfer key ideas to English. <span class="elps-tag">ELPS 5B</span>',
+        gt:'Require a hierarchical outline identifying three competing interpretations of the text, with a written defense of which is most textually supported. Remove sentence frames entirely.',
+        sped:'Use a visual web or color-coded sticky notes instead of a written outline. Accept voice-recorded concept connections as documentation of understanding.'
+      },
+      math:{
+        general:'Before solving a multi-step word problem, students write a "plan map" identifying what they know, what they need to find, and which strategy to use. Graded on process, not answer.',
+        esl:'Pair the planning template with math vocabulary cards and highlighted cognates. Allow diagrams or labeled drawings in place of written explanations. <span class="elps-tag">ELPS 5G</span>',
+        gt:'Students outline a proof or create an annotated solution path explaining why each step is valid — not just what it is. Peer-reviewed before solving begins.',
+        sped:'Provide a pre-structured planning template with visual cues and icons for each step. Allow students to dictate their plan to a partner or aide.'
+      },
+      science:{
+        general:'Students outline a lab procedure before conducting it: hypothesis, materials, sequence of steps, predicted outcome. The outline is compared to actual results as a post-lab reflection.',
+        esl:'Use a bilingual lab template with labeled diagrams. Allow students to label illustrations rather than write full sentences. <span class="elps-tag">ELPS 4G, 5G</span>',
+        gt:'Students write an experimental design proposal including variables, controls, and predicted sources of error. The proposal is peer-reviewed before the lab begins.',
+        sped:'Provide a visual sequence template with picture supports. Students arrange procedural picture cards in order before writing the outline.'
+      },
+      ss:{
+        general:'Students use a cause-and-effect map to outline the factors leading to a historical event before writing an explanatory paragraph. Multiple data points over time replace a single submitted essay.',
+        esl:'Provide a cause-and-effect frame with sentence starters in English and Spanish. Allow students to use images from primary sources as nodes on the map. <span class="elps-tag">ELPS 5F</span>',
+        gt:'Students outline a historiographical essay comparing two historians\' interpretations of the same event, identifying evidence used and bias in each source.',
+        sped:'Use a two-column graphic organizer (cause / effect) with visual anchors. Reduce writing requirement to key phrases or short sentences only.'
+      }
+    }
+  },
+  {
+    num:2,
+    name:'In-Class Short Writes',
+    phase:['Surface'],
+    phaseClass:['badge-phase-surface'],
+    effect:'d = 0.46–0.55',
+    metax:'https://www.visiblelearningmetax.com/influences/view/spaced_versus_massed_practice',
+    intro:'A five-paragraph essay assigned for homework is an open invitation. A one-paragraph response written in 15 minutes at the start of class is not. Timed, in-class writing gives you a direct sample of what a student can produce without outside assistance — and builds the stamina longer pieces require.',
+    examples:{
+      ela:{
+        general:'Students write a one-paragraph response to a cold text in the first 10 minutes of class — no prep, no notes. Rotate prompts weekly. Collected and compared over the semester, these samples show growth more honestly than any submitted draft.',
+        esl:'Provide a sentence frame prompt: "In this text, the author argues ___ because ___." <span class="elps-tag">ELPS 4G, 5B</span> reading for main idea and writing with grade-appropriate language.',
+        gt:'Increase the cognitive demand — students analyze the author\'s rhetorical choices rather than summarize content. No sentence frames; full analytical response expected.',
+        sped:'Reduce the length requirement to three sentences or a labeled diagram. Allow extended time and provide a word bank drawn from the text.'
+      },
+      math:{
+        general:'At the start of class, students solve two spaced-practice problems from two weeks prior — without notes. Graded on process and reasoning, not the final answer.',
+        esl:'Pair the problem with a vocabulary anchor chart visible in the room. Allow labels or diagrams as part of the written solution. <span class="elps-tag">ELPS 3H</span>',
+        gt:'Use a "what\'s wrong here?" prompt — students identify and correct an erroneous solution, explaining each error in writing. No worked example provided.',
+        sped:'Pre-teach the problem context the day before. Provide a step-by-step scaffold with blanks to fill in rather than a blank page.'
+      },
+      science:{
+        general:'End-of-class "exit ticket" — three sentences explaining today\'s concept as if writing for a younger student. Submitted before leaving; reviewed before tomorrow\'s opener.',
+        esl:'Offer a bilingual glossary during the write. Accept labeled diagrams as part of the response. <span class="elps-tag">ELPS 5B</span>: narrate with grade-appropriate writing.',
+        gt:'"Explain what we don\'t know yet" — students write what questions the day\'s content raises that science hasn\'t answered. Encourages meta-disciplinary thinking.',
+        sped:'Provide a sentence starter and limit to two sentences. Allow a partner to scribe if needed. Focus on one core concept per ticket.'
+      },
+      ss:{
+        general:'Students write a three-sentence "quick take" — their position on a historical decision, with one piece of evidence — on a notecard submitted before leaving class.',
+        esl:'Provide a position sentence frame and two pre-selected evidence options to choose from. <span class="elps-tag">ELPS 5F</span>: write using content-area vocabulary.',
+        gt:'Students write a "devil\'s advocate" response — arguing for a position they personally disagree with, supported by historical evidence. No position frame provided.',
+        sped:'Use a three-box graphic organizer: position box, evidence box, conclusion box — each with its own sentence starter. Reduce to two complete sentences.'
+      }
+    }
+  },
+  {
+    num:3,
+    name:'Reciprocal Teaching',
+    phase:['Deep'],
+    phaseClass:['badge-phase-deep'],
+    effect:'d = 0.74',
+    metax:'https://www.visiblelearningmetax.com/influences/view/reciprocal_teaching',
+    intro:'Reading it and explaining it are not the same skill. Reciprocal Teaching is a structured discussion strategy where students rotate through four roles — summarizing, questioning, clarifying, and predicting. It requires students to engage with a text in real time, in front of their group, and respond to what peers actually say. Gen AI can write a summary. It cannot sit at a table and answer a classmate\'s follow-up question on the fly.',
+    examples:{
+      ela:{
+        general:'Assign each group member a role as they read a shared text aloud. Roles rotate each paragraph. Observe what happens when the questioner asks something the summarizer didn\'t prepare for.',
+        esl:'Provide role cards with the role name, definition, and a sentence frame for each. <span class="elps-tag">ELPS 3E</span>: share in discussions using academic vocabulary. Allow home-language discussion first, then English.',
+        gt:'Add a "connector" role — the student must link the current passage to another text, unit, or real-world event, providing textual evidence for every connection made.',
+        sped:'Reduce to two roles (summarizer and questioner) to lower cognitive load. Use visual role cards with icons. Pre-read the text with audio support before group time.'
+      },
+      math:{
+        general:'Groups work through a problem set using RT roles: summarizer recaps progress, questioner poses "what if" variations, clarifier explains steps aloud, predictor estimates what the next result will be.',
+        esl:'Pair role cards with math vocabulary cards. Allow calculation work in the home language; discussion in English. <span class="elps-tag">ELPS 3H</span>: narrate mathematical processes aloud.',
+        gt:'Each role includes a metacognitive layer — the questioner must generate a problem that would stump another group. Both the question and the solution are submitted.',
+        sped:'Pre-assign roles based on student strength. Provide a worked example on each role card. Allow use of manipulatives during discussion to support explanation.'
+      },
+      science:{
+        general:'Students use RT roles to read and discuss a science article or lab report. The predictor role focuses on what the data might mean for the next experiment or real-world application.',
+        esl:'Use a bilingual science article where available. The clarifier role suits English learners — restating in simpler terms builds language while demonstrating understanding. <span class="elps-tag">ELPS 4K</span>',
+        gt:'Add a "skeptic" role — the student identifies one methodological weakness in the article\'s claim and explains it to the group, citing evidence.',
+        sped:'Provide an audio version of the text. Use picture-supported role cards. Assign the clarifier role to students with strong verbal skills; assign summarizer to students who benefit from structure.'
+      },
+      ss:{
+        general:'Groups read a primary source document using RT roles. The predictor role asks: given this document, what do you think happened next? Students defend predictions with context clues.',
+        esl:'Use a document with visual context — photograph, map, or political cartoon — alongside text. Provide a glossary. <span class="elps-tag">ELPS 4K</span>: demonstrate comprehension of social studies texts.',
+        gt:'Add a "corroborator" role — student must identify at least one other source that supports or contradicts this document\'s perspective, explaining the relationship between both.',
+        sped:'Use a simplified or excerpted version of the primary source with key phrases highlighted. Allow verbal summaries in place of written ones.'
+      }
+    }
+  },
+  {
+    num:4,
+    name:'Jigsaw',
+    phase:['Deep'],
+    phaseClass:['badge-phase-deep'],
+    effect:'d = 0.92',
+    metax:'https://www.visiblelearningmetax.com/influences/view/jigsaw_method',
+    intro:'Jigsaw divides content across students, then reassembles them to teach each other. The research report becomes a teaching performance. Students who used Gen AI to "read" their section will struggle in front of peers who actually want to understand the material. No policy required, no detection tool consulted. When students know they must explain content to others, they process it more deeply during preparation.',
+    examples:{
+      ela:{
+        general:'Assign each group a different critical lens (feminist, historical, reader-response) to apply to the same novel chapter. Groups reassemble to build a full interpretation from all perspectives.',
+        esl:'Assign the visual and contextual content section to emerging English learners — they analyze images, maps, or biographical materials. <span class="elps-tag">ELPS 4I</span>: demonstrate reading comprehension by taking notes, discussing, and presenting.',
+        gt:'Require each expert to generate two discussion questions that the reassembled group must answer without the expert giving away the answer directly.',
+        sped:'Reduce the expert section to a single key idea with a three-sentence summary template. Provide a "teaching card" with sentence frames for the reassembly phase.'
+      },
+      math:{
+        general:'Groups become "experts" on one solution strategy for the same problem type (e.g., substitution, elimination, graphing for systems of equations). They teach the approach to all other groups.',
+        esl:'Pair the visual strategy (graphing) with bilingual vocabulary. Allow students to teach using worked examples rather than verbal explanation alone. <span class="elps-tag">ELPS 3H</span>',
+        gt:'Each expert must explain when their strategy is most efficient and when it fails — requiring comparative analysis beyond basic procedural mastery.',
+        sped:'Assign the most concrete, procedural strategy to students who benefit from repetition. Provide a worked example as part of the expert packet.'
+      },
+      science:{
+        general:'Each group becomes an expert on one ecosystem, biome, or body system. Reassembled groups compare all sections to identify patterns, relationships, and differences.',
+        esl:'Assign image-rich, diagram-based sections. Provide bilingual glossaries. Allow teaching to occur with labeled visuals if verbal explanation is difficult. <span class="elps-tag">ELPS 4G</span>',
+        gt:'Experts must design a comparison question that requires reasoning across all groups\' content — posed to the reassembled group during the teaching phase.',
+        sped:'Reduce each expert section to three key facts with visual support. Provide a "teaching script" frame with prompts and sentence starters for the reassembly phase.'
+      },
+      ss:{
+        general:'Groups each study a different stakeholder\'s perspective on a historical event or policy issue. Reassembled groups negotiate a shared understanding of what happened and why.',
+        esl:'Assign primary source documents with images and simplified text. <span class="elps-tag">ELPS 4J</span>: read and understand social studies content. Allow peer translation support during expert group time.',
+        gt:'Each expert presents the strongest argument for and the strongest counterargument against their stakeholder\'s position — requiring deep understanding of the whole, not just their part.',
+        sped:'Use three-to-five bullet-point expert packets instead of full articles. Provide a "teaching card" with prompts for the reassembly discussion.'
+      }
+    }
+  },
+  {
+    num:5,
+    name:'Argumentation & Discussion',
+    phase:['Deep → Transfer'],
+    phaseClass:['badge-phase-transfer'],
+    effect:'d = 0.82',
+    metax:'https://www.visiblelearningmetax.com/influences/view/classroom_discussion',
+    intro:'Students must construct and defend a position in response to what someone else just said. That is a live, improvised task. A student who read and engaged with the material can respond to a peer\'s counterargument on the fly. A student who submitted a Gen AI summary usually cannot. You\'ll know the difference within the first two minutes.',
+    examples:{
+      ela:{
+        general:'Structured academic controversy: two students argue one position on an author\'s intent, two argue the opposing view, then all four move toward consensus with textual evidence.',
+        esl:'Provide argument sentence frames for each phase: "I claim ___ because ___"; "I agree with ___ and would add ___." <span class="elps-tag">ELPS 3D</span>: speak using content-area vocabulary.',
+        gt:'Remove sentence frames. Require students to anticipate and preemptively address counterarguments in their opening statement before peers can raise them.',
+        sped:'Use a four-corners debate (agree, disagree, strongly agree, strongly disagree) — movement reduces verbal demand. Provide a position card with two supporting points.'
+      },
+      math:{
+        general:'Students debate which solution method is most efficient, using worked examples as evidence. Class votes, then discusses what "most efficient" means across different contexts.',
+        esl:'Display worked examples on the board so language demands are reduced. Provide a comparison sentence frame: "Method A is more efficient because ___." <span class="elps-tag">ELPS 3H</span>',
+        gt:'Introduce edge cases — one method breaks down for a specific input. Students must find the flaw and defend a revised claim with mathematical justification.',
+        sped:'Use a two-position structure (this way vs. that way) with visual worked examples visible throughout. Allow students to point to evidence rather than verbalize it.'
+      },
+      science:{
+        general:'Socratic seminar on a controversial science issue — students argue from evidence in articles they\'ve read and must respond to what peers actually say, not prepared remarks.',
+        esl:'Pre-teach discussion vocabulary: "evidence shows," "I disagree because," "building on what ___ said." <span class="elps-tag">ELPS 3E</span>: participate in discussions using academic language.',
+        gt:'Require students to cite specific data or experimental evidence for every claim — no unsupported assertions accepted. Peers may challenge any claim lacking evidence.',
+        sped:'Use a structured discussion format with a speaking token — reduces anxiety and makes turn-taking explicit. Allow a written "pass card" with one prepared statement as backup.'
+      },
+      ss:{
+        general:'Philosophical chairs debate — students position themselves physically based on their stance on a historical decision, then must move if a peer\'s argument convinces them.',
+        esl:'Provide a position statement in simplified language. Allow students to agree with a peer\'s statement rather than generate their own first. <span class="elps-tag">ELPS 3C</span>: speak using grade-level content-area vocabulary.',
+        gt:'Students argue their assigned position, then switch and argue the opposite — requiring deep understanding of both sides. No preparation time for the switch.',
+        sped:'Use a binary choice chart (I agree / I disagree) with one sentence of evidence. Allow collaborative preparation with a partner before the whole-class discussion begins.'
+      }
+    }
+  },
+  {
+    num:6,
+    name:'Problem-Solving Teaching',
+    phase:['Transfer'],
+    phaseClass:['badge-phase-transfer'],
+    effect:'d = 0.61',
+    metax:'https://www.visiblelearningmetax.com/influences/view/problem_solving_teaching',
+    intro:'Problem-Solving Teaching places students in a scenario where they must apply a concept or framework to a new, unfamiliar situation. Prior exposure to the content is necessary but not sufficient — students have to think. A student who internalized the framework can use it here. A student who submitted a Gen AI version of someone else\'s understanding cannot.',
+    examples:{
+      ela:{
+        general:'Give students an unseen passage and ask them to apply the analytical framework from the previous unit — cold analysis in class, written in 20 minutes. The framework is the tool; the new text is the test.',
+        esl:'Provide a glossary of technical literary terms in the task directions. Allow annotation in the home language. <span class="elps-tag">ELPS 4I</span>: demonstrate comprehension by analyzing and responding to unseen text.',
+        gt:'Use a deliberately ambiguous or paradoxical text — students must argue for the most defensible interpretation with limited textual support. No framework checklist provided.',
+        sped:'Pre-teach the analytical framework the day before. Provide the framework as a visual checklist. Allow extended time and reduce the written response to two focused paragraphs.'
+      },
+      math:{
+        general:'Present a non-routine problem the class has never seen — students identify which strategies apply and why, then solve. The written process is graded at least as heavily as the final answer.',
+        esl:'Use a problem with a visual or diagram to reduce language demand. Provide a strategy menu (list of approaches learned) as a reference. <span class="elps-tag">ELPS 3H</span>',
+        gt:'Remove the strategy menu. Require students to derive an approach from first principles and justify it in writing before solving. The justification is the primary assessment.',
+        sped:'Use a familiar problem type with one new variable — transfer one step at a time. Provide a partially completed solution to reduce cognitive load without eliminating challenge.'
+      },
+      science:{
+        general:'Give students a data set from an experiment they haven\'t run — ask them to draw conclusions and identify what they\'d test next. Prior unit knowledge is required; new thinking is assessed.',
+        esl:'Pair the data set with labeled visuals and a conclusion sentence frame: "The data shows ___, which suggests ___." <span class="elps-tag">ELPS 5G</span>: narrate scientific processes in writing.',
+        gt:'Give students conflicting data sets from two "researchers" — they must evaluate the methodology and determine which data set is more reliable, with written justification.',
+        sped:'Provide a simplified two-column data table. Use a conclusion frame with a word bank drawn from the unit. Focus on one variable at a time.'
+      },
+      ss:{
+        general:'Present a current-events scenario that parallels a historical event from the unit. Students apply historical thinking to analyze it — without being told the parallel exists.',
+        esl:'Provide a bilingual summary of the current event. Ask students to identify three similarities using a Venn diagram. <span class="elps-tag">ELPS 4K</span>: demonstrate comprehension of social studies texts.',
+        gt:'Students must not only identify the historical parallel but argue whether the historical outcome is predictive — and explicitly defend the limits of that analogy.',
+        sped:'Show both events as visual timelines side by side. Use a structured comparison organizer with sentence starters for each similarity and difference identified.'
+      }
+    }
+  }
+];
+
+let currentPop = 'all';
+let openCards = {};
+
+function renderCards() {
+  const container = document.getElementById('strategy-cards');
+  container.innerHTML = '';
+  strategies.forEach((s, idx) => {
+    const card = document.createElement('div');
+    card.className = 'strategy-card';
+    card.id = 'scard-' + idx;
+    const isOpen = !!openCards[idx];
+    const badges = s.phase.map((p,i) => `<span class="badge ${s.phaseClass[i]}">${p}</span>`).join('');
+    card.innerHTML = `
+      <div class="strategy-header${isOpen?' open':''}" onclick="toggleCard(${idx})">
+        <div class="strategy-num">${s.num}</div>
+        <div class="strategy-meta">
+          <div class="strategy-name">${s.name}</div>
+          <div class="strategy-badges">
+            ${badges}
+            <span class="badge badge-effect">${s.effect}</span>
+          </div>
+        </div>
+        <span class="strategy-chevron">&#8964;</span>
+      </div>
+      <div class="strategy-body${isOpen?' open':''}" id="sbody-${idx}">
+        <div class="strategy-intro">${s.intro} <a href="${s.metax}" target="_blank" style="color:var(--teal);font-size:13px">MetaX →</a></div>
+        <div class="content-tabs" id="ctabs-${idx}">
+          ${contentAreas.map((c,ci) => `<button class="ctab${ci===0?' active':''}" onclick="setContent(${idx},'${c.id}',this)">${c.label}</button>`).join('')}
+        </div>
+        <div class="example-area" id="examples-${idx}">
+          ${renderExamples(s, contentAreas[0].id)}
+        </div>
+      </div>`;
+    container.appendChild(card);
+  });
+}
+
+function renderExamples(s, contentId) {
+  const ex = s.examples[contentId];
+  const pops = currentPop === 'all' ? populations : populations.filter(p => p.id === currentPop || p.id === 'general');
+  return `<div class="example-area-title">${contentLabels[contentId]}</div>` +
+    pops.map(p => {
+      const showClass = `pop-${p.id}`;
+      return `<div class="example-block ${showClass}">
+        <div class="example-label">${p.label}</div>
+        <div class="example-text">${ex[p.id]}</div>
+      </div>`;
+    }).join('');
+}
+
+function toggleCard(idx) {
+  openCards[idx] = !openCards[idx];
+  const header = document.querySelector(`#scard-${idx} .strategy-header`);
+  const body = document.getElementById('sbody-' + idx);
+  header.classList.toggle('open', openCards[idx]);
+  body.classList.toggle('open', openCards[idx]);
+}
+
+function setContent(idx, contentId, btn) {
+  const tabs = document.querySelectorAll(`#ctabs-${idx} .ctab`);
+  tabs.forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  const s = strategies[idx];
+  document.getElementById('examples-' + idx).innerHTML = renderExamples(s, contentId);
+}
+
+function setPop(pop) {
+  currentPop = pop;
+  document.querySelectorAll('.pop-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.pop-btn[data-pop="${pop}"]`).classList.add('active');
+  strategies.forEach((s, idx) => {
+    if (!openCards[idx]) return;
+    const activeTab = document.querySelector(`#ctabs-${idx} .ctab.active`);
+    const contentId = activeTab ? contentAreas.find(c => activeTab.textContent.includes(c.label.split('/')[0].trim()))?.id || 'ela' : 'ela';
+    document.getElementById('examples-' + idx).innerHTML = renderExamples(s, contentId);
+  });
+}
+
+function showSection(sec) {
+  ['strategies','generator','summary'].forEach(s => {
+    document.getElementById('section-' + s).style.display = s === sec ? '' : 'none';
+  });
+  document.querySelectorAll('.htab').forEach((t,i) => {
+    t.classList.toggle('active', ['strategies','generator','summary'][i] === sec);
+  });
+}
+
+function randomize() {
+  const contents = ['ela','math','science','ss'];
+  const pops = ['general','esl','gt','sped'];
+  const stratIdxs = [0,1,2,3,4,5];
+  document.getElementById('gen-content').value = contents[Math.floor(Math.random()*contents.length)];
+  document.getElementById('gen-pop').value = pops[Math.floor(Math.random()*pops.length)];
+  document.getElementById('gen-strat').value = String(stratIdxs[Math.floor(Math.random()*stratIdxs.length)]);
+  generate();
+}
+
+function generate() {
+  const contentSel = document.getElementById('gen-content').value;
+  const popSel = document.getElementById('gen-pop').value;
+  const stratSel = document.getElementById('gen-strat').value;
+
+  const contents = ['ela','math','science','ss'];
+  const pops = ['general','esl','gt','sped'];
+  const contentId = contentSel || contents[Math.floor(Math.random()*contents.length)];
+  const popId = popSel || pops[Math.floor(Math.random()*pops.length)];
+  const stratIdx = stratSel !== '' ? parseInt(stratSel) : Math.floor(Math.random()*strategies.length);
+  const s = strategies[stratIdx];
+  const text = s.examples[contentId][popId];
+
+  document.getElementById('gen-sname').textContent = s.name;
+  document.getElementById('gen-tag-row').innerHTML = `
+    <span class="gen-tag gen-tag-content">${contentLabels[contentId]}</span>
+    <span class="gen-tag gen-tag-pop">${popLabels[popId]}</span>
+    ${s.phase.map((p,i) => `<span class="gen-tag" style="background:rgba(255,255,255,.12);color:rgba(255,255,255,.8)">${p}</span>`).join('')}
+    <span class="gen-tag" style="background:rgba(252,176,64,.2);color:var(--gold)">${s.effect}</span>`;
+  document.getElementById('gen-text').innerHTML = text;
+  const elpsNote = popId === 'esl' ? 'Texas ELPS alignment noted above. See TEA ELPS framework for full standard descriptions.' : '';
+  document.getElementById('gen-elps').textContent = elpsNote;
+  const out = document.getElementById('gen-output');
+  out.classList.add('visible');
+  out.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+renderCards();
+</script>
+</body>
+</html>
