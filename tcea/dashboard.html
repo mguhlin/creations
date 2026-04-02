@@ -13,11 +13,10 @@
   --pale-navy: #D0D8F0; --white: #ffffff; --off-white: #f7f8fc;
   --text: #1a1a2e; --text-muted: #5a6680; --border: #e2e7f5;
   --teal: #0e6b8a; --sidebar-w: 240px;
-  --waco-accent: #2ecc71; --waco-accent-dark: #27ae60;
+  --ardent-accent: #2ecc71; --ardent-accent-dark: #27ae60;
 }
 html { scroll-behavior: smooth; }
 body { font-family: "DM Sans", sans-serif; background: var(--navy-dark); color: var(--white); min-height: 100vh; display: flex; -webkit-font-smoothing: antialiased; }
-
 /* SIDEBAR */
 .sidebar { width: var(--sidebar-w); min-height: 100vh; background: #050e22; border-right: 1px solid rgba(252,176,64,0.15); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 100; overflow-y: auto; }
 .sidebar-logo { padding: 28px 24px 20px; border-bottom: 1px solid rgba(252,176,64,0.12); }
@@ -26,18 +25,16 @@ body { font-family: "DM Sans", sans-serif; background: var(--navy-dark); color: 
 .sidebar-section-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255,255,255,0.3); padding: 20px 24px 8px; }
 .sidebar-nav a { display: flex; align-items: center; gap: 10px; padding: 10px 24px; font-size: 0.82rem; font-weight: 500; color: rgba(255,255,255,0.6); text-decoration: none; transition: all 0.15s; border-left: 3px solid transparent; }
 .sidebar-nav a:hover, .sidebar-nav a.active { color: var(--gold); background: rgba(252,176,64,0.07); border-left-color: var(--gold); }
-.sidebar-nav a.waco:hover, .sidebar-nav a.waco.active { color: var(--waco-accent); background: rgba(46,204,113,0.07); border-left-color: var(--waco-accent); }
+.sidebar-nav a.ardent:hover, .sidebar-nav a.ardent.active { color: var(--ardent-accent); background: rgba(46,204,113,0.07); border-left-color: var(--ardent-accent); }
 .sidebar-nav a .icon { font-size: 1rem; width: 20px; text-align: center; }
 .sidebar-divider { margin: 8px 24px; border: none; border-top: 1px solid rgba(255,255,255,0.07); }
 .sidebar-updated { margin-top: auto; padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.07); font-size: 0.72rem; color: rgba(255,255,255,0.3); line-height: 1.6; }
 .sidebar-updated strong { color: rgba(255,255,255,0.55); display: block; margin-bottom: 2px; }
-
 /* MAIN */
 .main { margin-left: var(--sidebar-w); flex: 1; min-height: 100vh; background: var(--navy-dark); }
 .state-overlay { display: flex; align-items: center; justify-content: center; min-height: 60vh; flex-direction: column; gap: 16px; color: rgba(255,255,255,0.4); font-size: 0.9rem; }
 .state-overlay .spinner { width: 36px; height: 36px; border: 3px solid rgba(252,176,64,0.2); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
-
 /* PAGE HEADER */
 .page-header { background: linear-gradient(135deg, #050e22 0%, var(--navy-dark) 50%, #0a1a3a 100%); border-bottom: 1px solid rgba(252,176,64,0.18); padding: 32px 40px 28px; position: relative; overflow: hidden; }
 .page-header::after { content: ''; position: absolute; top: -60px; right: -60px; width: 320px; height: 320px; background: radial-gradient(circle, rgba(252,176,64,0.1) 0%, transparent 70%); pointer-events: none; }
@@ -45,18 +42,14 @@ body { font-family: "DM Sans", sans-serif; background: var(--navy-dark); color: 
 .page-header h1 { font-family: "DM Serif Display", serif; font-size: 2rem; color: var(--white); line-height: 1.2; }
 .page-header h1 em { font-style: italic; color: var(--gold); }
 .page-header-meta { font-size: 0.8rem; color: rgba(255,255,255,0.45); margin-top: 6px; }
-
 section { scroll-margin-top: 20px; }
-
 /* SECTION LABEL */
 .section-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
 .section-label::after { content: ''; flex: 1; height: 1px; background: rgba(252,176,64,0.2); }
-.section-label.waco { color: var(--waco-accent); }
-.section-label.waco::after { background: rgba(46,204,113,0.2); }
-
+.section-label.ardent { color: var(--ardent-accent); }
+.section-label.ardent::after { background: rgba(46,204,113,0.2); }
 /* OVERVIEW SECTION */
 #overview { padding: 36px 40px; background: linear-gradient(180deg, #060f24 0%, var(--navy-dark) 100%); border-bottom: 1px solid rgba(255,255,255,0.06); }
-
 /* HERO STAT CARDS */
 .hero-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
 .stat-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 28px 28px 24px; position: relative; overflow: hidden; transition: border-color 0.2s; }
@@ -64,15 +57,15 @@ section { scroll-margin-top: 20px; }
 .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gold); border-radius: 14px 14px 0 0; }
 .stat-card.accent::before { background: var(--teal); }
 .stat-card.accent2::before { background: #7c3aed; }
-.stat-card.green::before { background: var(--waco-accent); }
+.stat-card.green::before { background: var(--ardent-accent); }
 .stat-card.green:hover { border-color: rgba(46,204,113,0.3); }
 .stat-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 12px; }
 .stat-value { font-family: "DM Serif Display", serif; font-size: 3.4rem; color: var(--gold); line-height: 1; letter-spacing: -1px; }
 .stat-value.revenue { color: var(--gold-light); }
 .stat-value.courses { color: var(--pale-navy); }
 .stat-value.avg { color: #86efac; }
-.stat-value.waco-green { color: var(--waco-accent); }
-.stat-value.waco-rev { color: #a7f3d0; }
+.stat-value.ardent-green { color: var(--ardent-accent); }
+.stat-value.ardent-rev { color: #a7f3d0; }
 .stat-sub { font-size: 0.78rem; color: rgba(255,255,255,0.35); margin-top: 8px; }
 .goal-bar-wrap { margin-top: 16px; }
 .goal-bar-meta { display: flex; justify-content: space-between; font-size: 0.72rem; color: rgba(255,255,255,0.35); margin-bottom: 6px; }
@@ -80,29 +73,26 @@ section { scroll-margin-top: 20px; }
 .goal-bar-track { height: 6px; background: rgba(255,255,255,0.08); border-radius: 100px; overflow: hidden; }
 .goal-bar-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); border-radius: 100px; transition: width 1s cubic-bezier(0.4,0,0.2,1); width: 0%; }
 .goal-bar-fill.teal { background: linear-gradient(90deg, var(--teal), #1aa3c7); }
-
 /* COURSES SECTION */
 #courses { padding: 36px 40px; border-bottom: 1px solid rgba(255,255,255,0.06); }
-
-/* WACO SECTION */
-#waco { padding: 36px 40px; }
-.waco-header-card { background: linear-gradient(135deg, rgba(46,204,113,0.08) 0%, rgba(5,14,34,0.6) 100%); border: 1px solid rgba(46,204,113,0.18); border-radius: 14px; padding: 24px 28px; margin-bottom: 28px; display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
-.waco-header-card .district-name { font-family: "DM Serif Display", serif; font-size: 1.6rem; color: var(--white); line-height: 1.1; }
-.waco-header-card .district-name em { color: var(--waco-accent); font-style: italic; }
-.waco-header-card .district-sub { font-size: 0.8rem; color: rgba(255,255,255,0.4); margin-top: 4px; }
-.waco-mini-stats { display: flex; gap: 32px; flex-wrap: wrap; }
-.waco-mini-stat { text-align: right; }
-.waco-mini-stat .val { font-family: "DM Serif Display", serif; font-size: 2rem; color: var(--waco-accent); line-height: 1; }
-.waco-mini-stat .lbl { font-size: 0.68rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-top: 4px; }
-
+/* ARDENT SECTION */
+#ardent { padding: 36px 40px; }
+.ardent-header-card { background: linear-gradient(135deg, rgba(46,204,113,0.08) 0%, rgba(5,14,34,0.6) 100%); border: 1px solid rgba(46,204,113,0.18); border-radius: 14px; padding: 24px 28px; margin-bottom: 28px; display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+.ardent-header-card .district-name { font-family: "DM Serif Display", serif; font-size: 1.6rem; color: var(--white); line-height: 1.1; }
+.ardent-header-card .district-name em { color: var(--ardent-accent); font-style: italic; }
+.ardent-header-card .district-sub { font-size: 0.8rem; color: rgba(255,255,255,0.4); margin-top: 4px; }
+.ardent-mini-stats { display: flex; gap: 32px; flex-wrap: wrap; }
+.ardent-mini-stat { text-align: right; }
+.ardent-mini-stat .val { font-family: "DM Serif Display", serif; font-size: 2rem; color: var(--ardent-accent); line-height: 1; }
+.ardent-mini-stat .lbl { font-size: 0.68rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-top: 4px; }
 /* TABLE */
 .table-wrap { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; overflow: hidden; }
-.table-wrap.waco-table { border-color: rgba(46,204,113,0.1); }
+.table-wrap.ardent-table { border-color: rgba(46,204,113,0.1); }
 table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
 thead tr { background: rgba(252,176,64,0.08); border-bottom: 1px solid rgba(252,176,64,0.15); }
-thead tr.waco-thead { background: rgba(46,204,113,0.08); border-bottom-color: rgba(46,204,113,0.15); }
+thead tr.ardent-thead { background: rgba(46,204,113,0.08); border-bottom-color: rgba(46,204,113,0.15); }
 thead th { padding: 14px 20px; text-align: left; font-size: 0.67rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); white-space: nowrap; }
-thead tr.waco-thead th { color: var(--waco-accent); }
+thead tr.ardent-thead th { color: var(--ardent-accent); }
 thead th.right { text-align: right; }
 tbody tr { border-bottom: 1px solid rgba(255,255,255,0.05); transition: background 0.15s; }
 tbody tr:last-child { border-bottom: none; }
@@ -113,44 +103,40 @@ tbody td { padding: 16px 20px; color: rgba(255,255,255,0.85); vertical-align: mi
 tbody td.right { text-align: right; }
 .course-name { font-weight: 600; color: var(--white); }
 .reg-count { font-family: "DM Serif Display", serif; font-size: 1.3rem; color: var(--gold); }
-.reg-count.waco-green { color: var(--waco-accent); }
+.reg-count.ardent-green { color: var(--ardent-accent); }
 .revenue-cell { font-weight: 600; color: var(--gold-light); }
-.revenue-cell.waco-green { color: #a7f3d0; }
+.revenue-cell.ardent-green { color: #a7f3d0; }
 .mini-bar-wrap { display: flex; align-items: center; gap: 10px; }
 .mini-bar-track { flex: 1; height: 5px; background: rgba(255,255,255,0.07); border-radius: 100px; overflow: hidden; min-width: 80px; }
 .mini-bar-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); border-radius: 100px; }
-.mini-bar-fill.green { background: linear-gradient(90deg, var(--waco-accent-dark), var(--waco-accent)); }
+.mini-bar-fill.green { background: linear-gradient(90deg, var(--ardent-accent-dark), var(--ardent-accent)); }
 .mini-pct { font-size: 0.72rem; color: rgba(255,255,255,0.35); min-width: 36px; text-align: right; }
 .rank { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 6px; font-size: 0.72rem; font-weight: 700; background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.45); }
 .rank.gold { background: rgba(252,176,64,0.2); color: var(--gold); }
 .rank.silver { background: rgba(208,216,240,0.2); color: var(--pale-navy); }
 .rank.bronze { background: rgba(205,127,50,0.2); color: #cd7f32; }
-
 /* TOGGLE ZERO ROWS */
 .toggle-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 10px; }
 .toggle-label { font-size: 0.78rem; color: rgba(255,255,255,0.4); }
 .toggle-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.6); font-size: 0.75rem; font-weight: 600; padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: all 0.15s; font-family: "DM Sans", sans-serif; }
-.toggle-btn:hover { background: rgba(46,204,113,0.1); border-color: rgba(46,204,113,0.3); color: var(--waco-accent); }
-.toggle-btn.active { background: rgba(46,204,113,0.12); border-color: rgba(46,204,113,0.35); color: var(--waco-accent); }
-
+.toggle-btn:hover { background: rgba(46,204,113,0.1); border-color: rgba(46,204,113,0.3); color: var(--ardent-accent); }
+.toggle-btn.active { background: rgba(46,204,113,0.12); border-color: rgba(46,204,113,0.35); color: var(--ardent-accent); }
 /* FOOTER */
 .page-footer { padding: 24px 40px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: rgba(255,255,255,0.25); flex-wrap: wrap; gap: 8px; }
 .page-footer strong { color: rgba(255,255,255,0.45); }
 .error-box { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 20px 24px; font-size: 0.85rem; color: #fca5a5; margin: 40px; }
 .error-box code { display: block; margin-top: 8px; font-family: "Courier New", monospace; font-size: 0.78rem; color: rgba(255,255,255,0.5); }
-
 @media (max-width: 768px) {
   :root { --sidebar-w: 0px; }
   .sidebar { display: none; }
   .main { margin-left: 0; }
-  #overview, #courses, #waco { padding: 24px 20px; }
+  #overview, #courses, #ardent { padding: 24px 20px; }
   .page-header { padding: 24px 20px; }
   .stat-value { font-size: 2.4rem; }
 }
 </style>
 </head>
 <body>
-
 <aside class="sidebar">
   <div class="sidebar-logo">
     <div class="org">TCEA</div>
@@ -161,28 +147,23 @@ tbody td.right { text-align: right; }
     <a href="#overview" class="active"><span class="icon">📊</span> Overview</a>
     <a href="#courses"><span class="icon">📋</span> Course Breakdown</a>
     <hr class="sidebar-divider">
-    <a href="#waco" class="waco"><span class="icon">🏫</span> Ardent ISD</a>
+    <a href="#ardent" class="ardent"><span class="icon">🏫</span> Ardent ISD</a>
   </nav>
   <div class="sidebar-updated" id="sidebar-meta">
     <strong>Last Updated</strong>Loading…
   </div>
 </aside>
-
 <main class="main" id="main-content">
-
   <div class="state-overlay" id="loading-state">
     <div class="spinner"></div>
     <div>Loading dashboard data…</div>
   </div>
-
   <div id="dashboard-content" style="display:none">
-
     <div class="page-header">
       <div class="page-header-eyebrow">Live Scoreboard</div>
       <h1>Course Registration <em>Tracker</em></h1>
       <div class="page-header-meta" id="header-meta"></div>
     </div>
-
     <!-- OVERVIEW -->
     <section id="overview">
       <div class="section-label">📊 &nbsp;Overall Totals</div>
@@ -217,7 +198,6 @@ tbody td.right { text-align: right; }
         </div>
       </div>
     </section>
-
     <!-- COURSES -->
     <section id="courses">
       <div class="section-label">📋 &nbsp;Course Breakdown</div>
@@ -237,41 +217,37 @@ tbody td.right { text-align: right; }
         </table>
       </div>
     </section>
-
     <!-- Ardent ISD -->
-    <section id="waco">
-      <div class="section-label waco">🏫 &nbsp;Ardent ISD Registrations</div>
-
-      <div class="waco-header-card">
+    <section id="ardent">
+      <div class="section-label ardent">🏫 &nbsp;Ardent ISD Registrations</div>
+      <div class="ardent-header-card">
         <div>
-          <div class="district-name">Waco <em>ISD</em></div>
+          <div class="district-name">Ardent <em>ISD</em></div>
           <div class="district-sub">District-level course registrations &amp; extended cost</div>
         </div>
-        <div class="waco-mini-stats">
-          <div class="waco-mini-stat">
-            <div class="val" id="waco-stat-participants">0</div>
+        <div class="ardent-mini-stats">
+          <div class="ardent-mini-stat">
+            <div class="val" id="ardent-stat-participants">0</div>
             <div class="lbl">Participants</div>
           </div>
-          <div class="waco-mini-stat">
-            <div class="val" id="waco-stat-revenue" style="color:#a7f3d0">$0</div>
+          <div class="ardent-mini-stat">
+            <div class="val" id="ardent-stat-revenue" style="color:#a7f3d0">$0</div>
             <div class="lbl">Ext. Cost</div>
           </div>
-          <div class="waco-mini-stat">
-            <div class="val" id="waco-stat-active" style="color:var(--pale-navy)">0</div>
+          <div class="ardent-mini-stat">
+            <div class="val" id="ardent-stat-active" style="color:var(--pale-navy)">0</div>
             <div class="lbl">Active Courses</div>
           </div>
         </div>
       </div>
-
       <div class="toggle-bar">
-        <div class="toggle-label" id="waco-zero-label">Showing active courses only</div>
-        <button class="toggle-btn" id="waco-toggle-btn" onclick="toggleZeroRows()">Show All Courses</button>
+        <div class="toggle-label" id="ardent-zero-label">Showing active courses only</div>
+        <button class="toggle-btn" id="ardent-toggle-btn" onclick="toggleZeroRows()">Show All Courses</button>
       </div>
-
-      <div class="table-wrap waco-table">
+      <div class="table-wrap ardent-table">
         <table>
           <thead>
-            <tr class="waco-thead">
+            <tr class="ardent-thead">
               <th style="width:40px">#</th>
               <th>Course</th>
               <th class="right">Price</th>
@@ -280,28 +256,24 @@ tbody td.right { text-align: right; }
               <th style="min-width:180px">Share of Participants</th>
             </tr>
           </thead>
-          <tbody id="waco-table-body"></tbody>
+          <tbody id="ardent-table-body"></tbody>
         </table>
       </div>
     </section>
-
     <footer class="page-footer">
       <div>TCEA Registration Dashboard &nbsp;·&nbsp; Data source: <strong>data.md</strong></div>
       <div id="footer-updated"></div>
     </footer>
-
   </div>
 </main>
-
 <script>
 // ── PARSE ────────────────────────────────────────────────────────────────────
 function parseMarkdown(md) {
-  const result = { updated: null, goalRegs: null, goalRevenue: null, courses: [], waco: [] };
+  const result = { updated: null, goalRegs: null, goalRevenue: null, courses: [], ardent: [] };
   const lines = md.split('\n');
   let currentSection = null;
   let inTable = false;
   let tableHeaderSkipped = false;
-
   for (const line of lines) {
     const upd = line.match(/\*\*Updated:\*\*\s*(.+)/);
     if (upd) { result.updated = upd[1].trim(); continue; }
@@ -309,26 +281,23 @@ function parseMarkdown(md) {
     if (gR) { result.goalRegs = parseInt(gR[1].replace(/,/g,'')); continue; }
     const gRev = line.match(/\*\*Goal Revenue:\*\*\s*([\d,]+)/);
     if (gRev) { result.goalRevenue = parseInt(gRev[1].replace(/,/g,'')); continue; }
-
     // Section headers
     if (line.startsWith('## Courses')) { currentSection = 'courses'; inTable = false; tableHeaderSkipped = false; continue; }
-    if (line.startsWith('## Ardent ISD')) { currentSection = 'waco'; inTable = false; tableHeaderSkipped = false; continue; }
-
+    if (line.startsWith('## Ardent ISD')) { currentSection = 'ardent'; inTable = false; tableHeaderSkipped = false; continue; }
     // Table rows
     if (line.startsWith('|')) {
       if (!inTable) { inTable = true; tableHeaderSkipped = false; continue; } // header row
       if (!tableHeaderSkipped) { tableHeaderSkipped = true; continue; }       // separator row
       const cells = line.split('|').map(c => c.trim()).filter(c => c !== '');
       if (!cells.length) continue;
-
       if (currentSection === 'courses' && cells.length >= 3) {
         result.courses.push({
           name: cells[0],
           registrations: parseInt(cells[1].replace(/,/g,'')) || 0,
           revenue: parseInt(cells[2].replace(/[$,]/g,'')) || 0
         });
-      } else if (currentSection === 'waco' && cells.length >= 4) {
-        result.waco.push({
+      } else if (currentSection === 'ardent' && cells.length >= 4) {
+        result.ardent.push({
           name: cells[0],
           price: parseFloat(cells[1].replace(/[$,]/g,'')) || 0,
           participants: parseInt(cells[2].replace(/,/g,'')) || 0,
@@ -339,18 +308,15 @@ function parseMarkdown(md) {
       inTable = false;
     }
   }
-
   result.courses.sort((a,b) => b.registrations - a.registrations);
-  result.waco.sort((a,b) => b.participants - a.participants);
+  result.ardent.sort((a,b) => b.participants - a.participants);
   return result;
 }
-
 // ── HELPERS ──────────────────────────────────────────────────────────────────
 const fmt = n => n.toLocaleString('en-US');
 const fmtD = n => '$' + n.toLocaleString('en-US', {minimumFractionDigits:0, maximumFractionDigits:0});
 const fmtD2 = n => '$' + n.toFixed(2);
 function rankCls(i) { return i===0?'gold':i===1?'silver':i===2?'bronze':''; }
-
 function animCount(el, end, dur, fmtFn) {
   const t0 = performance.now();
   (function step(now) {
@@ -360,7 +326,6 @@ function animCount(el, end, dur, fmtFn) {
     if (p<1) requestAnimationFrame(step);
   })(t0);
 }
-
 // ── TOGGLE ZERO ROWS ─────────────────────────────────────────────────────────
 let showZero = false;
 function toggleZeroRows() {
@@ -368,13 +333,12 @@ function toggleZeroRows() {
   document.querySelectorAll('.zero-row').forEach(r => {
     r.style.display = showZero ? '' : 'none';
   });
-  const btn = document.getElementById('waco-toggle-btn');
-  const lbl = document.getElementById('waco-zero-label');
+  const btn = document.getElementById('ardent-toggle-btn');
+  const lbl = document.getElementById('ardent-zero-label');
   btn.textContent = showZero ? 'Hide Zero-Participant Courses' : 'Show All Courses';
   btn.classList.toggle('active', showZero);
   lbl.textContent = showZero ? 'Showing all courses (including zero-participant)' : 'Showing active courses only';
 }
-
 // ── RENDER ───────────────────────────────────────────────────────────────────
 function renderDashboard(data) {
   // Meta
@@ -382,19 +346,16 @@ function renderDashboard(data) {
   document.getElementById('sidebar-meta').innerHTML = `<strong>Last Updated</strong>${data.updated||'—'}`;
   document.getElementById('header-meta').textContent = metaText;
   document.getElementById('footer-updated').textContent = metaText;
-
   // ── OVERVIEW ──
   const totalRegs = data.courses.reduce((s,c)=>s+c.registrations,0);
   const totalRev  = data.courses.reduce((s,c)=>s+c.revenue,0);
   const numActive = data.courses.filter(c=>c.registrations>0).length;
   const avgRev = numActive>0 ? Math.round(totalRev/numActive) : 0;
-
   animCount(document.getElementById('stat-total-regs'), totalRegs, 1200, fmt);
   document.getElementById('stat-regs-sub').textContent = `across ${data.courses.length} course${data.courses.length!==1?'s':''}`;
   animCount(document.getElementById('stat-total-rev'), totalRev, 1200, fmtD);
   animCount(document.getElementById('stat-courses'), numActive, 800, n=>n.toString());
   animCount(document.getElementById('stat-avg-rev'), avgRev, 1000, fmtD);
-
   if (data.goalRegs) {
     const pct = Math.min((totalRegs/data.goalRegs)*100,100);
     document.getElementById('regs-goal-wrap').style.display='block';
@@ -407,7 +368,6 @@ function renderDashboard(data) {
     document.getElementById('rev-goal-label').textContent = fmtD(data.goalRevenue)+' ('+Math.round(pct)+'%)';
     setTimeout(()=>{ document.getElementById('rev-goal-bar').style.width=pct+'%'; },300);
   }
-
   // ── COURSES TABLE ──
   const tbody = document.getElementById('course-table-body');
   data.courses.forEach((c,i) => {
@@ -423,21 +383,18 @@ function renderDashboard(data) {
       <td><div class="mini-bar-wrap"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${share.toFixed(1)}%"></div></div><span class="mini-pct">${share.toFixed(1)}%</span></div></td>`;
     tbody.appendChild(tr);
   });
-
   // ── Ardent ISD ──
-  const wacoActive = data.waco.filter(c=>c.participants>0);
-  const wacoTotal = data.waco.reduce((s,c)=>s+c.participants,0);
-  const wacoRev   = data.waco.reduce((s,c)=>s+c.extCost,0);
-
-  animCount(document.getElementById('waco-stat-participants'), wacoTotal, 1400, fmt);
-  animCount(document.getElementById('waco-stat-revenue'), Math.round(wacoRev), 1400, fmtD);
-  animCount(document.getElementById('waco-stat-active'), wacoActive.length, 800, n=>n.toString());
-
-  const wtbody = document.getElementById('waco-table-body');
+  const ardentActive = data.ardent.filter(c=>c.participants>0);
+  const ardentTotal = data.ardent.reduce((s,c)=>s+c.participants,0);
+  const ardentRev   = data.ardent.reduce((s,c)=>s+c.extCost,0);
+  animCount(document.getElementById('ardent-stat-participants'), ardentTotal, 1400, fmt);
+  animCount(document.getElementById('ardent-stat-revenue'), Math.round(ardentRev), 1400, fmtD);
+  animCount(document.getElementById('ardent-stat-active'), ardentActive.length, 800, n=>n.toString());
+  const wtbody = document.getElementById('ardent-table-body');
   let activeRank = 0;
-  data.waco.forEach((c) => {
+  data.ardent.forEach((c) => {
     const isZero = c.participants === 0;
-    const share = wacoTotal>0?(c.participants/wacoTotal*100):0;
+    const share = ardentTotal>0?(c.participants/ardentTotal*100):0;
     const tr = document.createElement('tr');
     if (isZero) {
       tr.className = 'zero-row';
@@ -449,22 +406,20 @@ function renderDashboard(data) {
       <td>${rank}</td>
       <td class="course-name">${c.name}</td>
       <td class="right" style="color:rgba(255,255,255,0.45);font-size:0.82rem">${fmtD2(c.price)}</td>
-      <td class="right"><span class="reg-count waco-green">${fmt(c.participants)}</span></td>
-      <td class="right revenue-cell waco-green">${fmtD2(c.extCost)}</td>
+      <td class="right"><span class="reg-count ardent-green">${fmt(c.participants)}</span></td>
+      <td class="right revenue-cell ardent-green">${fmtD2(c.extCost)}</td>
       <td><div class="mini-bar-wrap"><div class="mini-bar-track"><div class="mini-bar-fill green" style="width:${share.toFixed(1)}%"></div></div><span class="mini-pct">${share.toFixed(1)}%</span></div></td>`;
     wtbody.appendChild(tr);
   });
-
   document.getElementById('loading-state').style.display='none';
   document.getElementById('dashboard-content').style.display='block';
 }
-
 // ── FETCH ────────────────────────────────────────────────────────────────────
 fetch('data.md?_='+Date.now())
   .then(r=>{ if(!r.ok) throw new Error(`HTTP ${r.status}`); return r.text(); })
   .then(text=>{
     const data = parseMarkdown(text);
-    if (!data.courses.length && !data.waco.length) throw new Error('No data found. Check data.md table format.');
+    if (!data.courses.length && !data.ardent.length) throw new Error('No data found. Check data.md table format.');
     renderDashboard(data);
   })
   .catch(err=>{
@@ -474,7 +429,6 @@ fetch('data.md?_='+Date.now())
     box.innerHTML=`<strong>⚠️ Could not load data.md</strong><br>${err.message}<code>Ensure data.md is in the same folder and served over HTTP.</code>`;
     document.getElementById('main-content').appendChild(box);
   });
-
 // ── SIDEBAR ACTIVE ON SCROLL ─────────────────────────────────────────────────
 const obs = new IntersectionObserver(entries=>{
   entries.forEach(e=>{
@@ -485,7 +439,7 @@ const obs = new IntersectionObserver(entries=>{
     }
   });
 },{threshold:0.3});
-['overview','courses','waco'].forEach(id=>{ const el=document.getElementById(id); if(el) obs.observe(el); });
+['overview','courses','ardent'].forEach(id=>{ const el=document.getElementById(id); if(el) obs.observe(el); });
 </script>
 </body>
 </html>
