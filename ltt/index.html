@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Navigating Leadership Transition: An Empedoclean Toolkit for Nonprofits</title>
+<style>
+  :root {
+    --primary: #2c3e6b;
+    --secondary: #e8913a;
+    --accent: #4a90c4;
+    --light: #f4f1ec;
+    --dark: #1a1a2e;
+    --success: #27ae60;
+    --warning: #f39c12;
+    --danger: #c0392b;
+    --mid: #7f8c8d;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--light);
+    color: var(--dark);
+    line-height: 1.7;
+  }
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--primary);
+    padding: 0.6rem 1rem;
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+  nav a {
+    color: #fff; text-decoration: none; font-size: 0.85rem;
+    padding: 0.4rem 1rem; border-radius: 20px;
+    transition: background 0.3s;
+  }
+  nav a:hover, nav a:focus { background: var(--secondary); }
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    color: #fff; text-align: center;
+    padding: 4rem 1.5rem 3rem;
+  }
+  .hero h1 { font-size: 2.4rem; margin-bottom: 0.5rem; }
+  .hero p { font-size: 1.15rem; max-width: 700px; margin: 0 auto; opacity: 0.92; }
+  .hero .subtitle { font-style: italic; margin-top: 0.3rem; opacity: 0.8; font-size: 1rem; }
+  /* SECTIONS */
+  section { max-width: 960px; margin: 0 auto; padding: 3rem 1.5rem; }
+  section h2 {
+    font-size: 1.8rem; color: var(--primary);
+    border-bottom: 3px solid var(--secondary);
+    padding-bottom: 0.4rem; margin-bottom: 1.5rem;
+  }
+  section h3 { font-size: 1.25rem; color: var(--accent); margin: 1.5rem 0 0.6rem; }
+  section p, section li { font-size: 1rem; }
+  section ul, section ol { margin-left: 1.5rem; margin-bottom: 1rem; }
+  section li { margin-bottom: 0.4rem; }
+  blockquote {
+    border-left: 4px solid var(--secondary);
+    background: #fff; padding: 1rem 1.2rem;
+    margin: 1.2rem 0; border-radius: 4px;
+    font-style: italic; color: #555;
+  }
+  .phase-card {
+    background: #fff; border-radius: 10px;
+    padding: 1.8rem; margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    border-left: 5px solid var(--accent);
+  }
+  .phase-card.strife { border-left-color: var(--danger); }
+  .phase-card.pause { border-left-color: var(--warning); }
+  .phase-card.love { border-left-color: var(--success); }
+  .phase-card h3 { margin-top: 0; }
+  /* INFOGRAPHIC */
+  .infographic-wrapper {
+    text-align: center; padding: 2rem 0;
+  }
+  .infographic-container {
+    background: linear-gradient(180deg, #ffffff 0%, #eef2f7 100%);
+    border-radius: 16px; max-width: 860px; margin: 0 auto;
+    padding: 2.5rem 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+  .infographic-container h3 { text-align: center; color: var(--primary); font-size: 1.5rem; margin-bottom: 1.5rem; }
+  .info-phases { display: flex; flex-direction: column; gap: 1.2rem; }
+  .info-phase {
+    display: flex; align-items: flex-start; gap: 1.2rem;
+    background: #fff; border-radius: 12px; padding: 1.4rem;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+    position: relative;
+  }
+  .info-phase::after {
+    content: '▼'; position: absolute; bottom: -1.1rem; left: 50%;
+    transform: translateX(-50%); color: var(--accent); font-size: 1.2rem;
+  }
+  .info-phase:last-child::after { display: none; }
+  .info-icon {
+    width: 60px; height: 60px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem; flex-shrink: 0;
+  }
+  .icon-rupture { background: #fde8e8; }
+  .icon-pause { background: #fef5e0; }
+  .icon-rebuild { background: #e0f5e9; }
+  .icon-action { background: #e0ecf5; }
+  .info-text h4 { font-size: 1.05rem; margin-bottom: 0.3rem; }
+  .info-text ul { margin-left: 1.2rem; font-size: 0.9rem; }
+  .info-text ul li { margin-bottom: 0.2rem; }
+  /* ASSESSMENT */
+  .assessment-intro {
+    background: #fff; border-radius: 10px; padding: 1.5rem;
+    margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .dimension {
+    background: #fff; border-radius: 10px; padding: 1.8rem;
+    margin-bottom: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .dimension h3 {
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .dim-badge {
+    display: inline-block; background: var(--primary); color: #fff;
+    width: 28px; height: 28px; border-radius: 50%; text-align: center;
+    line-height: 28px; font-size: 0.85rem; flex-shrink: 0;
+  }
+  .question {
+    padding: 0.8rem 0; border-bottom: 1px solid #eee;
+  }
+  .question:last-child { border-bottom: none; }
+  .question p { font-weight: 500; margin-bottom: 0.5rem; }
+  .likert {
+    display: flex; gap: 0.3rem; flex-wrap: wrap;
+  }
+  .likert label {
+    cursor: pointer; padding: 0.35rem 0.8rem;
+    border: 2px solid #ddd; border-radius: 20px;
+    font-size: 0.85rem; transition: all 0.2s;
+    user-select: none;
+  }
+  .likert input { display: none; }
+  .likert input:checked + span {
+    background: var(--accent); color: #fff;
+    border-color: var(--accent);
+  }
+  .likert label:hover { border-color: var(--accent); }
+  .likert label span {
+    display: inline-block; padding: 0.35rem 0.8rem;
+    border-radius: 20px; transition: all 0.2s;
+  }
+  /* Override: make the whole label the click target */
+  .likert label { padding: 0; border: none; }
+  .likert label span {
+    border: 2px solid #ddd; display: inline-block;
+  }
+  .likert label span:hover { border-color: var(--accent); }
+  .likert input:checked + span {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+  }
+  /* RESULTS */
+  #results-area {
+    display: none; background: #fff; border-radius: 10px;
+    padding: 2rem; margin-top: 2rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  }
+  .score-bar-container {
+    margin-bottom: 1.2rem;
+  }
+  .score-label {
+    display: flex; justify-content: space-between;
+    font-weight: 600; margin-bottom: 0.3rem; font-size: 0.95rem;
+  }
+  .score-bar {
+    height: 22px; background: #e9ecef; border-radius: 12px; overflow: hidden;
+  }
+  .score-fill {
+    height: 100%; border-radius: 12px; transition: width 0.8s ease;
+    display: flex; align-items: center; justify-content: flex-end;
+    padding-right: 8px; font-size: 0.75rem; color: #fff; font-weight: 700;
+  }
+  .overall-score {
+    text-align: center; padding: 1.5rem;
+    border-radius: 12px; margin-bottom: 1.5rem;
+  }
+  .overall-score .big-number { font-size: 3.5rem; font-weight: 800; }
+  .overall-score .out-of { font-size: 1rem; opacity: 0.7; }
+  .overall-score .verdict { font-size: 1.2rem; font-weight: 600; margin-top: 0.3rem; }
+  .interpretation { margin-top: 1.5rem; }
+  .interpretation h4 { color: var(--primary); margin-bottom: 0.5rem; }
+  .interpretation ul { margin-left: 1.5rem; }
+  .btn {
+    display: inline-block; background: var(--secondary); color: #fff;
+    padding: 0.8rem 2rem; border: none; border-radius: 30px;
+    font-size: 1.05rem; cursor: pointer; font-weight: 600;
+    transition: background 0.3s, transform 0.2s;
+    margin-top: 1rem;
+  }
+  .btn:hover { background: #d07a2a; transform: translateY(-1px); }
+  .btn-reset {
+    background: var(--mid); margin-left: 0.5rem;
+  }
+  .btn-reset:hover { background: #636e72; }
+  .btn-print { background: var(--primary); margin-left: 0.5rem; }
+  .btn-print:hover { background: #1e2d4d; }
+  .button-row { text-align: center; margin-top: 1.5rem; }
+  /* FOOTER */
+  footer {
+    background: var(--dark); color: #aaa; text-align: center;
+    padding: 2rem 1rem; font-size: 0.85rem; margin-top: 3rem;
+  }
+  footer a { color: var(--secondary); }
+  /* RESPONSIVE */
+  @media (max-width: 640px) {
+    .hero h1 { font-size: 1.6rem; }
+    section { padding: 2rem 1rem; }
+    .info-phase { flex-direction: column; align-items: center; text-align: center; }
+    .info-text ul { text-align: left; }
+    nav a { font-size: 0.75rem; padding: 0.3rem 0.6rem; }
+  }
+  @media print {
+    nav { display: none; }
+    .hero { padding: 1.5rem; }
+    section { padding: 1rem; }
+    .btn, .button-row { display: none; }
+    #results-area { display: block !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <a href="#treatise">📜 Treatise</a>
+  <a href="#infographic">🖼️ Infographic</a>
+  <a href="#assessment">📋 Self-Assessment</a>
+  <a href="#results-anchor">📊 Results</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Navigating Leadership Transition</h1>
+  <p>An Empedoclean Toolkit for Nonprofit Organizations</p>
+  <p class="subtitle">"When everything falls apart, it's not always the end—sometimes it's rearrangement."</p>
+</div>
+
+<!-- ============================================ -->
+<!-- SECTION 1: TREATISE -->
+<!-- ============================================ -->
+<section id="treatise">
+  <h2>📜 The Treatise</h2>
+
+  <h3>Introduction: The Collapse of the Known Order</h3>
+  <p>When a leader leaves—whether through promotion, retirement, or departure—the immediate experience for those remaining is often one of rupture. The familiar structure of authority, communication, and expectation suddenly dissolves. Uncertainty floods in: <em>Will the new leader value our mission the same way? Will organizational culture change? What happens to programs we've invested in?</em></p>
+  <blockquote>Empedocles offers a counter-intuitive lens: <strong>collapse is not always an ending; sometimes it is a rearrangement.</strong> His cosmology saw the universe in perpetual cycle—forces of Love (attraction, unity) and Strife (separation, conflict) constantly recombining the elemental "roots." What appears as destruction is merely the visible point at which an exhausted structure stops functioning, making way for a new configuration.</blockquote>
+
+  <div class="phase-card strife">
+    <h3>Phase 1: Interpreting the Rupture—What Was Already Not Holding Up?</h3>
+    <p>Empedocles reminds us that crises "don't appear out of nowhere: they are the point at which an exhausted structure stops functioning." Before rushing to blame external circumstances, ask:</p>
+    <ul>
+      <li><strong>Over-reliance on a single person:</strong> Was too much decision-making, knowledge, or relationship-capital concentrated in the departing leader?</li>
+      <li><strong>Unclear or informal processes:</strong> Were workflows and approvals dependent on the leader's personal habits rather than documented systems?</li>
+      <li><strong>Hidden fractures in team dynamics:</strong> Did the leader's presence suppress conflicts or imbalances that now surface?</li>
+      <li><strong>Misalignment with broader direction:</strong> Was the leader shielding the team from shifts in strategy that now become unavoidable?</li>
+    </ul>
+    <p><strong>Shift the question from "What did we lose?" to "What was already no longer holding up?"</strong></p>
+  </div>
+
+  <div class="phase-card pause">
+    <h3>Phase 2: The Deliberate Pause—Observing What Actually Fell Apart</h3>
+    <p>One of the most common mistakes after a leadership change is to try to rebuild immediately—to return to what was, to fill the void, to restore the familiar shape. Empedocles' idea of reordering requires a <strong>deliberate pause</strong>.</p>
+    <ol>
+      <li><strong>Map the voids:</strong> Which routines, decisions, and communications have stalled or become ambiguous?</li>
+      <li><strong>Distinguish between what <em>mattered</em> and what was merely <em>familiar</em>:</strong> Not everything that breaks deserves to be repaired.</li>
+      <li><strong>Listen to the team's anxieties—and its hopes:</strong> What do colleagues worry about losing? What do they secretly hope might change?</li>
+    </ol>
+    <p>This pause is not passive waiting; it is <strong>active sense-making</strong>.</p>
+  </div>
+
+  <div class="phase-card love">
+    <h3>Phase 3: Conscious Reorganization—Choosing What to Carry Forward</h3>
+    <p>"Reorganizing isn't about denying what happened or covering it with forced optimism—it's about deciding which elements to carry forward and under what logic."</p>
+    <ul>
+      <li><strong>Clarify contributions:</strong> Document key projects, skills, and relationships across the organization.</li>
+      <li><strong>Identify what to preserve:</strong> Which aspects of the previous culture are worth advocating for?</li>
+      <li><strong>Acknowledge what to release:</strong> What outdated procedures or unhealthy dynamics should not return?</li>
+      <li><strong>Engage constructively:</strong> Offer to help onboard the new leader with context about programs, strengths, and challenges.</li>
+      <li><strong>Co-create new norms:</strong> Use the interim period to propose clearer workflows and more equitable decision-making.</li>
+    </ul>
+  </div>
+
+  <h3>Practical Steps During the Uncertain Transition</h3>
+  <ol>
+    <li><strong>Manage your narrative:</strong> Instead of "everything is falling apart," tell yourself, "The structure is rearranging."</li>
+    <li><strong>Increase visibility—thoughtfully:</strong> Volunteer for interim leadership tasks and contribute to transition planning.</li>
+    <li><strong>Seek information, but tolerate ambiguity:</strong> Ask questions about the hiring process; accept that many answers will be "we don't know yet."</li>
+    <li><strong>Strengthen your network:</strong> Connect with peers, mentors, and partner organizations.</li>
+    <li><strong>Practice self-care:</strong> Transition fatigue is real. Maintain routines and talk about your feelings with trusted colleagues.</li>
+  </ol>
+
+  <h3>Conclusion</h3>
+  <p>Empedocles' philosophy does not romanticize loss. Some leadership transitions are genuinely damaging. Yet, by viewing the departure through the lens of <strong>rearrangement rather than pure loss</strong>, you reclaim a measure of control. You become an interpreter of the break, not just its casualty.</p>
+  <blockquote><strong>When everything falls apart, it's not always the end. Sometimes, it's the necessary rearrangement before a stronger foundation can emerge.</strong></blockquote>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 2: INFOGRAPHIC -->
+<!-- ============================================ -->
+<section id="infographic">
+  <h2>🖼️ Visual Infographic</h2>
+
+  <div class="infographic-container">
+    <h3>The Empedoclean Cycle of Leadership Transition</h3>
+    <div class="info-phases">
+
+      <div class="info-phase">
+        <div class="info-icon icon-rupture">💥</div>
+        <div class="info-text">
+          <h4>Phase 1 — Interpret the Rupture</h4>
+          <ul>
+            <li>Identify over-reliance on the departing leader</li>
+            <li>Surface hidden fractures in processes &amp; culture</li>
+            <li>Ask: "What was already no longer holding up?"</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="info-phase">
+        <div class="info-icon icon-pause">🔍</div>
+        <div class="info-text">
+          <h4>Phase 2 — The Deliberate Pause</h4>
+          <ul>
+            <li>Map voids in routines, decisions, relationships</li>
+            <li>Separate what <em>mattered</em> from what was merely <em>familiar</em></li>
+            <li>Listen to anxieties <strong>and</strong> hopes</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="info-phase">
+        <div class="info-icon icon-rebuild">🧱</div>
+        <div class="info-text">
+          <h4>Phase 3 — Conscious Reorganization</h4>
+          <ul>
+            <li>Document institutional knowledge &amp; contributions</li>
+            <li>Preserve what's valuable; release what's outdated</li>
+            <li>Co-create new norms and onboard the new leader</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="info-phase">
+        <div class="info-icon icon-action">🚀</div>
+        <div class="info-text">
+          <h4>Practical Actions</h4>
+          <ul>
+            <li>Reframe: "rearrangement," not "collapse"</li>
+            <li>Increase visibility; volunteer for interim roles</li>
+            <li>Strengthen networks; practice self-care</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 3: SELF-ASSESSMENT -->
+<!-- ============================================ -->
+<section id="assessment">
+  <h2>📋 Organizational Self-Assessment</h2>
+
+  <div class="assessment-intro">
+    <p><strong>Instructions:</strong> This assessment is designed for nonprofit leadership teams, boards, and staff navigating a leadership transition. For each statement, rate your organization on a scale of <strong>1 (Strongly Disagree)</strong> to <strong>5 (Strongly Agree)</strong>. Complete all 30 items, then click <em>Calculate Results</em> to see your scores across six dimensions.</p>
+    <p><em>Tip: Complete this as a team for richer discussion. Compare individual responses to surface different perspectives.</em></p>
+  </div>
+
+  <form id="assessmentForm">
+
+    <!-- DIMENSION A -->
+    <div class="dimension">
+      <h3><span class="dim-badge">A</span> Structural Resilience</h3>
+      <p style="font-size:0.9rem;color:#666;margin-bottom:0.8rem;">How well does the organization function independently of any single leader?</p>
+
+      <div class="question" data-dim="A">
+        <p>1. Key organizational processes are documented and accessible to multiple staff members.</p>
+        <div class="likert">
+          <label><input type="radio" name="q1" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q1" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q1" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q1" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q1" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+
+      <div class="question" data-dim="A">
+        <p>2. Decision-making authority is distributed across multiple roles, not concentrated in one person.</p>
+        <div class="likert">
+          <label><input type="radio" name="q2" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q2" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q2" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q2" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q2" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+
+      <div class="question" data-dim="A">
+        <p>3. Critical external relationships (funders, partners, community) are maintained by more than one person.</p>
+        <div class="likert">
+          <label><input type="radio" name="q3" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q3" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q3" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q3" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q3" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+
+      <div class="question" data-dim="A">
+        <p>4. We have a succession plan or leadership continuity plan in place.</p>
+        <div class="likert">
+          <label><input type="radio" name="q4" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q4" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q4" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q4" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q4" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+
+      <div class="question" data-dim="A">
+        <p>5. Institutional knowledge (program history, donor relationships, operational procedures) is stored in shared systems, not just in individuals' heads.</p>
+        <div class="likert">
+          <label><input type="radio" name="q5" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q5" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q5" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q5" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q5" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIMENSION B -->
+    <div class="dimension">
+      <h3><span class="dim-badge">B</span> Honest Diagnosis</h3>
+      <p style="font-size:0.9rem;color:#666;margin-bottom:0.8rem;">Can the organization honestly assess what the departure has exposed?</p>
+
+      <div class="question" data-dim="B">
+        <p>6. We can openly discuss what was working and what was not under the previous leader.</p>
+        <div class="likert">
+          <label><input type="radio" name="q6" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q6" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q6" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q6" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q6" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+
+      <div class="question" data-dim="B">
+        <p>7. We have identified specific vulnerabilities that the leadership change has revealed.</p>
+        <div class="likert">
+          <label><input type="radio" name="q7" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q7" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q7" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q7" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q7" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+
+      <div class="question" data-dim="B">
+        <p>8. Staff feel safe raising concerns about the transition without fear of reprisal.</p>
+        <div class="likert">
+          <label><input type="radio" name="q8" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q8" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q8" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q8" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q8" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+
+      <div class="question" data-dim="B">
+        <p>9. We distinguish between problems caused by the departure and problems that existed before it.</p>
+        <div class="likert">
+          <label><input type="radio" name="q9" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q9" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q9" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q9" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q9" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+
+      <div class="question" data-dim="B">
+        <p>10. Board members and senior staff have had candid conversations about the organization's current state.</p>
+        <div class="likert">
+          <label><input type="radio" name="q10" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q10" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q10" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q10" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q10" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIMENSION C -->
+    <div class="dimension">
+      <h3><span class="dim-badge">C</span> Deliberate Pause &amp; Sense-Making</h3>
+      <p style="font-size:0.9rem;color:#666;margin-bottom:0.8rem;">Is the organization resisting the urge to rush and instead observing thoughtfully?</p>
+
+      <div class="question" data-dim="C">
+        <p>11. We have resisted the pressure to immediately hire a replacement without first assessing organizational needs.</p>
+        <div class="likert">
+          <label><input type="radio" name="q11" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q11" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q11" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q11" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q11" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+
+      <div class="question" data-dim="C">
+        <p>12. We have mapped which routines, decisions, and communications have stalled since the departure.</p>
+        <div class="likert">
+          <label><input type="radio" name="q12" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q12" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q12" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q12" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q12" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+
+      <div class="question" data-dim="C">
+        <p>13. We are distinguishing between practices that were genuinely valuable and those that were merely habitual.</p>
+        <div class="likert">
+          <label><input type="radio" name="q13" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q13" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q13" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q13" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q13" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+
+      <div class="question" data-dim="C">
+        <p>14. Staff at all levels have been invited to share their observations about the transition.</p>
+        <div class="likert">
+          <label><input type="radio" name="q14" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q14" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q14" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q14" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q14" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+
+      <div class="question" data-dim="C">
+        <p>15. We have a defined interim leadership structure that provides stability without locking in permanent decisions.</p>
+        <div class="likert">
+          <label><input type="radio" name="q15" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q15" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q15" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q15" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q15" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIMENSION D -->
+    <div class="dimension">
+      <h3><span class="dim-badge">D</span> Intentional Reorganization</h3>
+      <p style="font-size:0.9rem;color:#666;margin-bottom:0.8rem;">Is the organization actively choosing what to carry forward and what to release?</p>
+
+      <div class="question" data-dim="D">
+        <p>16. We have identified the core cultural values we want to preserve through this transition.</p>
+        <div class="likert">
+          <label><input type="radio" name="q16" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q16" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q16" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q16" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q16" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+
+      <div class="question" data-dim="D">
+        <p>17. We have acknowledged outdated practices or dynamics that we are ready to leave behind.</p>
+        <div class="likert">
+          <label><input type="radio" name="q17" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q17" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q17" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q17" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q17" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+
+      <div class="question" data-dim="D">
+        <p>18. The search/hiring process for the new leader reflects our current and future needs, not just a desire to replicate the previous leader.</p>
+        <div class="likert">
+          <label><input type="radio" name="q18" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q18" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q18" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q18" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q18" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+
+      <div class="question" data-dim="D">
+        <p>19. We are using this transition as an opportunity to strengthen peer-to-peer collaboration and reduce vertical dependency.</p>
+        <div class="likert">
+          <label><input type="radio" name="q19" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q19" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q19" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q19" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q19" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+
+      <div class="question" data-dim="D">
+        <p>20. A comprehensive onboarding plan is being developed for the incoming leader.</p>
+        <div class="likert">
+          <label><input type="radio" name="q20" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q20" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q20" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q20" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q20" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIMENSION E -->
+    <div class="dimension">
+      <h3><span class="dim-badge">E</span> Communication &amp; Stakeholder Engagement</h3>
+      <p style="font-size:0.9rem;color:#666;margin-bottom:0.8rem;">How well is the organization communicating through the transition?</p>
+
+      <div class="question" data-dim="E">
+        <p>21. Staff receive regular, transparent updates about the transition timeline and process.</p>
+        <div class="likert">
+          <label><input type="radio" name="q21" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q21" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q21" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q21" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q21" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+
+      <div class="question" data-dim="E">
+        <p>22. External stakeholders (funders, partners, community members) have been appropriately informed and reassured.</p>
+        <div class="likert">
+          <label><input type="radio" name="q22" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q22" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q22" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q22" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q22" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+
+      <div class="question" data-dim="E">
+        <p>23. The board is actively engaged in the transition—not absent or micromanaging.</p>
+        <div class="likert">
+          <label><input type="radio" name="q23" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q23" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q23" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q23" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q23" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+
+      <div class="question" data-dim="E">
+        <p>24. There is a clear point of contact for staff questions and concerns during the transition.</p>
+        <div class="likert">
+          <label><input type="radio" name="q24" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q24" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q24" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q24" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q24" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+
+      <div class="question" data-dim="E">
+        <p>25. The narrative around the transition is honest—neither catastrophizing nor falsely optimistic.</p>
+        <div class="likert">
+          <label><input type="radio" name="q25" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q25" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q25" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q25" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q25" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIMENSION F -->
+    <div class="dimension">
+      <h3><span class="dim-badge">F</span> Emotional &amp; Cultural Well-Being</h3>
+      <p style="font-size:0.9rem;color:#666;margin-bottom:0.8rem;">Is the human side of the transition being honored?</p>
+
+      <div class="question" data-dim="F">
+        <p>26. Staff morale is being actively monitored and supported during the transition.</p>
+        <div class="likert">
+          <label><input type="radio" name="q26" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q26" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q26" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q26" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q26" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+
+      <div class="question" data-dim="F">
+        <p>27. People have space to grieve the loss of the previous leader and the familiar way of working.</p>
+        <div class="likert">
+          <label><input type="radio" name="q27" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q27" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q27" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q27" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q27" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+
+      <div class="question" data-dim="F">
+        <p>28. The organization is taking steps to prevent burnout during the transition (e.g., adjusting workloads, providing support).</p>
+        <div class="likert">
+          <label><input type="radio" name="q28" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q28" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q28" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q28" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q28" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+
+      <div class="question" data-dim="F">
+        <p>29. There is a sense of shared purpose and mission continuity despite the leadership change.</p>
+        <div class="likert">
+          <label><input type="radio" name="q29" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q29" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q29" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q29" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q29" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+
+      <div class="question" data-dim="F">
+        <p>30. Staff express cautious optimism—or at least openness—about the possibilities ahead.</p>
+        <div class="likert">
+          <label><input type="radio" name="q30" value="1"><span>1 – Strongly Disagree</span></label>
+          <label><input type="radio" name="q30" value="2"><span>2 – Disagree</span></label>
+          <label><input type="radio" name="q30" value="3"><span>3 – Neutral</span></label>
+          <label><input type="radio" name="q30" value="4"><span>4 – Agree</span></label>
+          <label><input type="radio" name="q30" value="5"><span>5 – Strongly Agree</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="button-row">
+      <button type="button" class="btn" onclick="calculateResults()">📊 Calculate Results</button>
+      <button type="button" class="btn btn-reset" onclick="resetForm()">🔄 Reset</button>
+      <button type="button" class="btn btn-print" onclick="window.print()">🖨️ Print</button>
+    </div>
+  </form>
+
+  <!-- RESULTS -->
+  <div id="results-anchor"></div>
+  <div id="results-area">
+    <h3 style="text-align:center;color:var(--primary);margin-bottom:1.5rem;">📊 Your Assessment Results</h3>
+
+    <div class="overall-score" id="overall-box">
+      <div class="big-number" id="overall-score">—</div>
+      <div class="out-of">out of 150</div>
+      <div class="verdict" id="overall-verdict"></div>
+    </div>
+
+    <div id="dimension-bars"></div>
+
+    <div class="interpretation" id="interpretation"></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>Based on the philosophy of <strong>Empedocles of Acragas</strong> (c. 490–430 BCE)</p>
+  <p>Treatise &amp; Assessment created in <a href="#">BoodleBox</a> · April 2026</p>
+  <p style="margin-top:0.5rem;font-size:0.8rem;">This tool is offered freely for nonprofit organizational development. Share widely.</p>
+</footer>
+
+<script>
+const dims = {
+  A: { name: 'Structural Resilience', qs: [1,2,3,4,5], color: '#2c3e6b' },
+  B: { name: 'Honest Diagnosis', qs: [6,7,8,9,10], color: '#c0392b' },
+  C: { name: 'Deliberate Pause & Sense-Making', qs: [11,12,13,14,15], color: '#f39c12' },
+  D: { name: 'Intentional Reorganization', qs: [16,17,18,19,20], color: '#27ae60' },
+  E: { name: 'Communication & Stakeholder Engagement', qs: [21,22,23,24,25], color: '#4a90c4' },
+  F: { name: 'Emotional & Cultural Well-Being', qs: [26,27,28,29,30], color: '#8e44ad' }
+};
+
+function getVal(n) {
+  const r = document.querySelector(`input[name="q${n}"]:checked`);
+  return r ? parseInt(r.value) : null;
+}
+
+function calculateResults() {
+  let total = 0, answered = 0;
+  const scores = {};
+
+  for (const [key, dim] of Object.entries(dims)) {
+    let sum = 0, count = 0;
+    for (const q of dim.qs) {
+      const v = getVal(q);
+      if (v !== null) { sum += v; count++; answered++; total += v; }
+    }
+    scores[key] = { sum, count, max: dim.qs.length * 5 };
+  }
+
+  if (answered < 30) {
+    alert(`Please answer all 30 questions. You've answered ${answered} so far.`);
+    return;
+  }
+
+  // Show results
+  const area = document.getElementById('results-area');
+  area.style.display = 'block';
+
+  // Overall
+  document.getElementById('overall-score').textContent = total;
+  const pct = total / 150;
+  const box = document.getElementById('overall-box');
+  let verdict = '', bg = '';
+  if (pct >= 0.8) { verdict = '🟢 Strong Transition Readiness'; bg = '#e8f8f0'; }
+  else if (pct >= 0.6) { verdict = '🟡 Moderate Readiness — Key Areas Need Attention'; bg = '#fef9e7'; }
+  else if (pct >= 0.4) { verdict = '🟠 Significant Gaps — Focused Action Required'; bg = '#fdf2e9'; }
+  else { verdict = '🔴 Critical Vulnerability — Immediate Intervention Needed'; bg = '#fdedec'; }
+  document.getElementById('overall-verdict').textContent = verdict;
+  box.style.background = bg;
+
+  // Dimension bars
+  const barsDiv = document.getElementById('dimension-bars');
+  barsDiv.innerHTML = '';
+  for (const [key, dim] of Object.entries(dims)) {
+    const s = scores[key];
+    const p = Math.round((s.sum / s.max) * 100);
+    barsDiv.innerHTML += `
+      <div class="score-bar-container">
+        <div class="score-label">
+          <span>${dim.name}</span>
+          <span>${s.sum}/${s.max} (${p}%)</span>
+        </div>
+        <div class="score-bar">
+          <div class="score-fill" style="width:${p}%;background:${dim.color};">${p}%</div>
+        </div>
+      </div>`;
+  }
+
+  // Interpretation
+  const interp = document.getElementById('interpretation');
+  let html = '<h4>Dimension-by-Dimension Guidance</h4>';
+  for (const [key, dim] of Object.entries(dims)) {
+    const s = scores[key];
+    const p = s.sum / s.max;
+    let advice = '';
+    if (key === 'A') {
+      if (p < 0.6) advice = '<strong>Priority:</strong> Begin documenting key processes immediately. Identify single points of failure and create redundancy. Draft a basic succession framework even if the search is underway.';
+      else if (p < 0.8) advice = '<strong>Developing:</strong> Good foundation, but look for remaining gaps—especially in external relationship management and institutional memory systems.';
+      else advice = '<strong>Strong:</strong> Your structural resilience is solid. Leverage this stability to support other dimensions that may need more attention.';
+    } else if (key === 'B') {
+      if (p < 0.6) advice = '<strong>Priority:</strong> Create safe spaces for honest conversation—anonymous surveys, facilitated team discussions, or a trusted external consultant. Avoid the temptation to "move on" before understanding what happened.';
+      else if (p < 0.8) advice = '<strong>Developing:</strong> You\'re making progress. Ensure the diagnosis extends beyond senior staff to include frontline perspectives and board-level reflection.';
+      else advice = '<strong>Strong:</strong> Your organization\'s honesty is a powerful asset. Use these insights to inform the hiring profile and onboarding plan for the new leader.';
+    } else if (key === 'C') {
+      if (p < 0.6) advice = '<strong>Priority:</strong> Slow down. Appoint interim leadership, set a realistic timeline, and create structured opportunities for observation before making permanent decisions.';
+      else if (p < 0.8) advice = '<strong>Developing:</strong> You\'re pausing, but ensure the pause is active—not just waiting. Assign someone to synthesize observations into actionable insights.';
+      else advice = '<strong>Strong:</strong> Excellent discipline. Your thoughtful approach will pay dividends in the quality of your reorganization.';
+    } else if (key === 'D') {
+      if (p < 0.6) advice = '<strong>Priority:</strong> Convene a transition task force to explicitly decide what to preserve, what to change, and what the new leader needs to know. Don\'t leave reorganization to chance.';
+      else if (p < 0.8) advice = '<strong>Developing:</strong> Good momentum. Focus on the onboarding plan and ensure the hiring criteria reflect future needs, not nostalgia.';
+      else advice = '<strong>Strong:</strong> You\'re approaching this transition with intentionality. The new leader will benefit enormously from your preparation.';
+    } else if (key === 'E') {
+      if (p < 0.6) advice = '<strong>Priority:</strong> Establish a regular communication cadence immediately—weekly updates, even if the update is "no news yet." Silence breeds anxiety and rumor.';
+      else if (p < 0.8) advice = '<strong>Developing:</strong> Communication is happening but may not be reaching all stakeholders equally. Check in with frontline staff, volunteers, and external partners.';
+      else advice = '<strong>Strong:</strong> Your transparent communication is building trust. Maintain this standard as the new leader arrives—the first 90 days are critical.';
+    } else if (key === 'F') {
+      if (p < 0.6) advice = '<strong>Priority:</strong> The human cost of this transition is being underestimated. Acknowledge grief, adjust expectations, and consider bringing in external support (coaching, EAP, facilitation).';
+      else if (p < 0.8) advice = '<strong>Developing:</strong> You\'re attending to well-being, but watch for transition fatigue—especially among those carrying extra responsibilities during the interim.';
+      else advice = '<strong>Strong:</strong> Your organization\'s emotional intelligence is a competitive advantage. This cultural strength will help the new leader integrate successfully.';
+    }
+    html += `<div style="margin:1rem 0;padding:1rem;background:#f9f9f9;border-radius:8px;border-left:4px solid ${dim.color};">
+      <strong style="color:${dim.color};">${key}. ${dim.name} (${Math.round(p*100)}%)</strong><br>${advice}
+    </div>`;
+  }
+
+  // Overall recommendations
+  html += '<h4 style="margin-top:1.5rem;">Overall Recommendations</h4><ul>';
+  const weakest = Object.entries(scores).sort((a,b) => (a[1].sum/a[1].max) - (b[1].sum/b[1].max));
+  html += `<li><strong>Highest priority:</strong> ${dims[weakest[0][0]].name} — this is your most vulnerable dimension.</li>`;
+  html += `<li><strong>Second priority:</strong> ${dims[weakest[1][0]].name} — address this alongside your top priority.</li>`;
+  const strongest = weakest[weakest.length-1];
+  html += `<li><strong>Greatest strength:</strong> ${dims[strongest[0]].name} — leverage this to support weaker areas.</li>`;
+  html += '</ul>';
+
+  html += '<p style="margin-top:1rem;font-style:italic;color:#666;">Remember Empedocles: this is not collapse—it is rearrangement. Your willingness to assess honestly is itself a sign of organizational health.</p>';
+
+  interp.innerHTML = html;
+
+  // Scroll to results
+  setTimeout(() => {
+    area.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 200);
+}
+
+function resetForm() {
+  document.getElementById('assessmentForm').reset();
+  document.getElementById('results-area').style.display = 'none';
+  window.scrollTo({ top: document.getElementById('assessment').offsetTop, behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>
