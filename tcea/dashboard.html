@@ -161,7 +161,7 @@ tbody td.right { text-align: right; }
     <a href="#overview" class="active"><span class="icon">📊</span> Overview</a>
     <a href="#courses"><span class="icon">📋</span> Course Breakdown</a>
     <hr class="sidebar-divider">
-    <a href="#waco" class="waco"><span class="icon">🏫</span> Waco ISD</a>
+    <a href="#waco" class="waco"><span class="icon">🏫</span> Ardent ISD</a>
   </nav>
   <div class="sidebar-updated" id="sidebar-meta">
     <strong>Last Updated</strong>Loading…
@@ -238,9 +238,9 @@ tbody td.right { text-align: right; }
       </div>
     </section>
 
-    <!-- WACO ISD -->
+    <!-- Ardent ISD -->
     <section id="waco">
-      <div class="section-label waco">🏫 &nbsp;Waco ISD Registrations</div>
+      <div class="section-label waco">🏫 &nbsp;Ardent ISD Registrations</div>
 
       <div class="waco-header-card">
         <div>
@@ -312,7 +312,7 @@ function parseMarkdown(md) {
 
     // Section headers
     if (line.startsWith('## Courses')) { currentSection = 'courses'; inTable = false; tableHeaderSkipped = false; continue; }
-    if (line.startsWith('## Waco ISD')) { currentSection = 'waco'; inTable = false; tableHeaderSkipped = false; continue; }
+    if (line.startsWith('## Ardent ISD')) { currentSection = 'waco'; inTable = false; tableHeaderSkipped = false; continue; }
 
     // Table rows
     if (line.startsWith('|')) {
@@ -424,7 +424,7 @@ function renderDashboard(data) {
     tbody.appendChild(tr);
   });
 
-  // ── WACO ISD ──
+  // ── Ardent ISD ──
   const wacoActive = data.waco.filter(c=>c.participants>0);
   const wacoTotal = data.waco.reduce((s,c)=>s+c.participants,0);
   const wacoRev   = data.waco.reduce((s,c)=>s+c.extCost,0);
