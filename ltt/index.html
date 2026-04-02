@@ -223,6 +223,93 @@
     section { padding: 1rem; }
     .btn, .button-row { display: none; }
     #results-area { display: block !important; }
+    .fac-accordion-body { display: block !important; }
+    .fac-accordion-toggle { display: none; }
+  }
+
+  /* FACILITATOR GUIDE */
+  .fac-intro-box {
+    background: linear-gradient(135deg, #edf2fb 0%, #f4f1ec 100%);
+    border-left: 5px solid var(--primary);
+    border-radius: 10px; padding: 1.4rem 1.6rem; margin-bottom: 2rem;
+  }
+  .fac-intro-box p { margin: 0; font-size: 1rem; color: #333; }
+
+  .fac-accordion {
+    border: 1px solid #e0e0e0; border-radius: 10px;
+    margin-bottom: 1rem; overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .fac-accordion-toggle {
+    width: 100%; background: var(--primary); color: #fff;
+    border: none; padding: 1rem 1.4rem; text-align: left;
+    font-size: 1.05rem; font-weight: 600; cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    transition: background 0.25s;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  .fac-accordion-toggle:hover { background: #1e2d4d; }
+  .fac-accordion-toggle .fac-chevron { transition: transform 0.3s; font-size: 0.8rem; }
+  .fac-accordion-toggle.open { background: #1e2d4d; }
+  .fac-accordion-toggle.open .fac-chevron { transform: rotate(180deg); }
+  .fac-accordion-body {
+    display: none; padding: 1.6rem;
+    background: #fff; border-top: 3px solid var(--secondary);
+  }
+  .fac-accordion-body.open { display: block; }
+  .fac-accordion-body h4 { color: var(--primary); font-size: 1.05rem; margin: 1.2rem 0 0.5rem; }
+  .fac-accordion-body h4:first-child { margin-top: 0; }
+  .fac-accordion-body p, .fac-accordion-body li { font-size: 0.97rem; line-height: 1.65; }
+  .fac-accordion-body ul, .fac-accordion-body ol { margin-left: 1.4rem; margin-bottom: 0.8rem; }
+  .fac-accordion-body li { margin-bottom: 0.35rem; }
+
+  .fac-callout {
+    border-left: 4px solid var(--secondary); background: #fffbf5;
+    padding: 0.9rem 1.1rem; margin: 1rem 0; border-radius: 4px;
+    font-style: italic; font-size: 0.95rem; color: #444;
+  }
+  .fac-callout.blue { border-left-color: var(--accent); background: #f0f6ff; }
+  .fac-callout.green { border-left-color: var(--success); background: #f0faf4; }
+
+  .fac-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+  .fac-table th { background: var(--primary); color: #fff; padding: 0.6rem 0.8rem; text-align: left; font-weight: 600; }
+  .fac-table td { padding: 0.55rem 0.8rem; border-bottom: 1px solid #eee; vertical-align: top; }
+  .fac-table tr:nth-child(even) td { background: #f8f9fa; }
+  .fac-table tr:last-child td { border-bottom: none; }
+
+  .fac-dim-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin: 1rem 0; }
+  .fac-dim-card { border-radius: 8px; padding: 1rem; border-left: 4px solid; background: #fafafa; }
+  .fac-dim-card h5 { font-size: 0.9rem; margin: 0 0 0.4rem; display: flex; align-items: center; gap: 0.4rem; }
+  .fac-dim-card .fac-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px; border-radius: 50%;
+    font-size: 0.75rem; font-weight: 700; color: #fff; flex-shrink: 0;
+  }
+  .fac-dim-card ul { margin-left: 1rem; margin-bottom: 0; }
+  .fac-dim-card li { font-size: 0.88rem; margin-bottom: 0.25rem; }
+
+  .fac-prompt-block { background: #f8f9fa; border-radius: 8px; padding: 1rem 1.2rem; margin-bottom: 0.8rem; border-left: 4px solid var(--accent); }
+  .fac-prompt-block h5 { font-size: 0.95rem; margin: 0 0 0.5rem; font-weight: 700; }
+  .fac-prompt-block ul { margin-left: 1rem; margin-bottom: 0; }
+  .fac-prompt-block li { font-size: 0.9rem; font-style: italic; margin-bottom: 0.3rem; }
+
+  .fac-challenge-block { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 1rem 1.2rem; margin-bottom: 0.8rem; }
+  .fac-challenge-block h5 { font-size: 0.95rem; font-weight: 700; color: var(--primary); margin: 0 0 0.5rem; }
+
+  .fac-action-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 1rem 0; }
+  .fac-action-table th { background: var(--primary); color: #fff; padding: 0.55rem 0.7rem; text-align: left; }
+  .fac-action-table td { border: 1px solid #ddd; padding: 0.7rem; vertical-align: top; }
+  .fac-action-table .blank-row td { height: 3rem; }
+
+  .fac-checklist { list-style: none; margin-left: 0; padding: 0; }
+  .fac-checklist li { padding: 0.4rem 0 0.4rem 1.8rem; position: relative; font-size: 0.95rem; border-bottom: 1px solid #f0f0f0; }
+  .fac-checklist li:last-child { border-bottom: none; }
+  .fac-checklist li::before { content: '☐'; position: absolute; left: 0; color: var(--primary); font-size: 1rem; }
+
+  @media (max-width: 640px) {
+    .fac-dim-grid { grid-template-columns: 1fr; }
+    .fac-table { font-size: 0.82rem; }
+    .fac-table th, .fac-table td { padding: 0.4rem 0.5rem; }
   }
 </style>
 </head>
@@ -234,6 +321,7 @@
   <a href="#infographic">🖼️ Infographic</a>
   <a href="#assessment">📋 Self-Assessment</a>
   <a href="#results-anchor">📊 Results</a>
+  <a href="#facilitator">🧭 Facilitator's Guide</a>
 </nav>
 
 <!-- HERO -->
@@ -732,7 +820,7 @@
       </div>
 
       <div class="question" data-dim="F">
-        <p>30. Staff express cautious optimism—or at least openness—about the possibilities ahead.</p>
+        <p>30. The organization is approaching this transition with a growth mindset.</p>
         <div class="likert">
           <label><input type="radio" name="q30" value="1"><span>1 – Strongly Disagree</span></label>
           <label><input type="radio" name="q30" value="2"><span>2 – Disagree</span></label>
@@ -767,6 +855,400 @@
   </div>
 </section>
 
+<!-- ============================================ -->
+<!-- SECTION 4: FACILITATOR'S GUIDE -->
+<!-- ============================================ -->
+<section id="facilitator">
+  <h2>🧭 Facilitator's Guide</h2>
+
+  <div class="fac-intro-box">
+    <p>This guide is for anyone leading a group through the self-assessment. It provides session formats, facilitation prompts, interpretation support, and planning tools to make the process productive and action-oriented. The facilitator's role is to hold the Empedoclean reframe for the group — <em>rearrangement, not collapse</em> — even when the conversation gets uncomfortable.</p>
+  </div>
+
+  <!-- 1. WHO SHOULD FACILITATE -->
+  <div class="fac-accordion">
+    <button class="fac-accordion-toggle" onclick="toggleFac(this)">
+      <span>1 · Who Should Facilitate</span><span class="fac-chevron">▼</span>
+    </button>
+    <div class="fac-accordion-body">
+      <p>This assessment works best when the facilitator is someone the group trusts and who is not directly implicated in the transition decisions. Good options include:</p>
+      <ul>
+        <li>A board member not involved in the search process</li>
+        <li>An external organizational development consultant</li>
+        <li>A trusted peer organization leader</li>
+        <li>An internal staff member in a neutral, cross-functional role</li>
+      </ul>
+      <div class="fac-callout">Avoid having the interim leader or board chair facilitate. They may unintentionally signal preferred answers or inhibit honest scoring.</div>
+      <h4>Facilitator Preparation Checklist</h4>
+      <ul class="fac-checklist">
+        <li>Read the full Treatise section before the session</li>
+        <li>Complete the assessment yourself to anticipate where the group may cluster or diverge</li>
+        <li>Decide on individual vs. simultaneous group scoring (see Scoring Logistics)</li>
+        <li>Prepare devices for digital scoring — or print a paper scoring sheet</li>
+        <li>Set up the room for open discussion — circular or U-shaped seating works better than rows</li>
+        <li>Block time after the results to discuss next steps — do not let the session end at the score reveal</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 2. WHAT THE ASSESSMENT MEASURES -->
+  <div class="fac-accordion">
+    <button class="fac-accordion-toggle" onclick="toggleFac(this)">
+      <span>2 · What the Assessment Measures</span><span class="fac-chevron">▼</span>
+    </button>
+    <div class="fac-accordion-body">
+      <p>The assessment contains 30 items across six dimensions, scored 1–5. Maximum score per dimension: 25. Maximum overall score: 150.</p>
+      <div class="fac-dim-grid">
+        <div class="fac-dim-card" style="border-left-color:#2c3e6b;">
+          <h5><span class="fac-badge" style="background:#2c3e6b;">A</span> Structural Resilience</h5>
+          <p style="font-size:0.85rem;margin:0 0 0.4rem;color:#555;">Items 1–5</p>
+          <ul><li>Can the org function without any single leader?</li></ul>
+        </div>
+        <div class="fac-dim-card" style="border-left-color:#c0392b;">
+          <h5><span class="fac-badge" style="background:#c0392b;">B</span> Honest Diagnosis</h5>
+          <p style="font-size:0.85rem;margin:0 0 0.4rem;color:#555;">Items 6–10</p>
+          <ul><li>Can you candidly assess what the departure exposed?</li></ul>
+        </div>
+        <div class="fac-dim-card" style="border-left-color:#f39c12;">
+          <h5><span class="fac-badge" style="background:#f39c12;">C</span> Deliberate Pause</h5>
+          <p style="font-size:0.85rem;margin:0 0 0.4rem;color:#555;">Items 11–15</p>
+          <ul><li>Are you resisting the rush to rebuild?</li></ul>
+        </div>
+        <div class="fac-dim-card" style="border-left-color:#27ae60;">
+          <h5><span class="fac-badge" style="background:#27ae60;">D</span> Intentional Reorganization</h5>
+          <p style="font-size:0.85rem;margin:0 0 0.4rem;color:#555;">Items 16–20</p>
+          <ul><li>Are you choosing what to carry forward?</li></ul>
+        </div>
+        <div class="fac-dim-card" style="border-left-color:#4a90c4;">
+          <h5><span class="fac-badge" style="background:#4a90c4;">E</span> Communication &amp; Stakeholder Engagement</h5>
+          <p style="font-size:0.85rem;margin:0 0 0.4rem;color:#555;">Items 21–25</p>
+          <ul><li>Is information flowing transparently?</li></ul>
+        </div>
+        <div class="fac-dim-card" style="border-left-color:#8e44ad;">
+          <h5><span class="fac-badge" style="background:#8e44ad;">F</span> Emotional &amp; Cultural Well-Being</h5>
+          <p style="font-size:0.85rem;margin:0 0 0.4rem;color:#555;">Items 26–30</p>
+          <ul><li>Is the human side being honored?</li></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. SESSION FORMATS -->
+  <div class="fac-accordion">
+    <button class="fac-accordion-toggle" onclick="toggleFac(this)">
+      <span>3 · Session Formats</span><span class="fac-chevron">▼</span>
+    </button>
+    <div class="fac-accordion-body">
+      <p>Choose the format that fits your group size, time available, and the sensitivity of the transition.</p>
+
+      <h4>Format A — Full Team Workshop (3 hours)</h4>
+      <p><em>Best for: Organizations that want to surface divergent perspectives across staff levels and create shared ownership of next steps.</em></p>
+      <table class="fac-table">
+        <thead><tr><th style="width:18%;">Time</th><th style="width:35%;">Activity</th><th>Facilitator Action</th></tr></thead>
+        <tbody>
+          <tr><td>0:00–0:15</td><td>Welcome &amp; Context Setting</td><td>Introduce the Empedoclean framework. Explain that disagreement in scores is data, not dysfunction.</td></tr>
+          <tr><td>0:15–0:30</td><td>Read the Treatise (key sections)</td><td>Guide the group through the three phases. Use the infographic to orient visual learners.</td></tr>
+          <tr><td>0:30–0:55</td><td>Individual Scoring</td><td>Each participant scores independently. No discussion yet. Emphasize honesty over consensus.</td></tr>
+          <tr><td>0:55–1:15</td><td>Score Reveal &amp; Dimension Averages</td><td>Collect scores, calculate averages per dimension. Display results on screen or whiteboard.</td></tr>
+          <tr><td>1:15–1:30</td><td>Break</td><td>Allow the group to absorb initial results informally.</td></tr>
+          <tr><td>1:30–2:15</td><td>Dimension Discussion</td><td>Use the discussion prompts below. Focus on the two lowest-scoring dimensions.</td></tr>
+          <tr><td>2:15–2:45</td><td>Action Planning</td><td>Complete the Action Plan worksheet (see the printable worksheet at the bottom of this guide).</td></tr>
+          <tr><td>2:45–3:00</td><td>Close &amp; Commitments</td><td>Each participant states one thing they will do differently in the next two weeks.</td></tr>
+        </tbody>
+      </table>
+
+      <h4>Format B — Board Retreat Session (90 minutes)</h4>
+      <p><em>Best for: Governing boards needing a focused, executive-level view of transition readiness.</em></p>
+      <table class="fac-table">
+        <thead><tr><th style="width:18%;">Time</th><th style="width:35%;">Activity</th><th>Facilitator Action</th></tr></thead>
+        <tbody>
+          <tr><td>0:00–0:10</td><td>Framing</td><td>Brief overview of the Empedoclean framework. Emphasize the "rearrangement, not collapse" mindset.</td></tr>
+          <tr><td>0:10–0:30</td><td>Individual Scoring</td><td>Board members score independently. Collect on paper or a shared spreadsheet.</td></tr>
+          <tr><td>0:30–0:45</td><td>Score Review</td><td>Display aggregated dimension scores. Flag any dimension below 60%.</td></tr>
+          <tr><td>0:45–1:15</td><td>Focused Discussion</td><td>Use prompts for the two lowest dimensions. Ask: "What does this tell us about our governance role?"</td></tr>
+          <tr><td>1:15–1:30</td><td>Board Action Commitments</td><td>Each board member names one concrete commitment. Record in meeting minutes.</td></tr>
+        </tbody>
+      </table>
+
+      <h4>Format C — Leadership Team Check-In (60 minutes)</h4>
+      <p><em>Best for: Senior staff or department heads doing a quick pulse check mid-transition.</em></p>
+      <table class="fac-table">
+        <thead><tr><th style="width:18%;">Time</th><th style="width:35%;">Activity</th><th>Facilitator Action</th></tr></thead>
+        <tbody>
+          <tr><td>0:00–0:05</td><td>Frame the Purpose</td><td>This is a pulse check, not a judgment. Scores will inform a follow-up plan.</td></tr>
+          <tr><td>0:05–0:20</td><td>Individual Scoring</td><td>Score independently. Submit to facilitator.</td></tr>
+          <tr><td>0:20–0:35</td><td>Display Results</td><td>Show dimension scores. Ask: "Which score surprises you most, and why?"</td></tr>
+          <tr><td>0:35–0:55</td><td>Priority Discussion</td><td>Focus exclusively on the lowest-scoring dimension. Name two concrete actions.</td></tr>
+          <tr><td>0:55–1:00</td><td>Schedule Follow-Up</td><td>Set a date for a full Format A workshop or the next check-in.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 4. SCORING LOGISTICS -->
+  <div class="fac-accordion">
+    <button class="fac-accordion-toggle" onclick="toggleFac(this)">
+      <span>4 · Scoring Logistics</span><span class="fac-chevron">▼</span>
+    </button>
+    <div class="fac-accordion-body">
+      <h4>Option 1 — Digital (Recommended)</h4>
+      <p>Each participant opens this toolkit on their own device and completes the assessment individually. At the end, each person's results appear on their screen. The facilitator collects the dimension scores verbally or via a shared document and calculates group averages.</p>
+      <ul>
+        <li><strong>Advantage:</strong> Instant individual results; color-coded guidance is immediately visible</li>
+        <li><strong>Limitation:</strong> Requires reliable internet and devices for all participants</li>
+      </ul>
+      <h4>Option 2 — Paper</h4>
+      <p>Participants score on a printed sheet. The facilitator collects and averages each dimension. Best for groups where device use would create distraction.</p>
+      <ul>
+        <li><strong>Advantage:</strong> No technology required; physical anonymity can increase honesty</li>
+        <li><strong>Limitation:</strong> Requires manual tallying; participants don't see their own color-coded results</li>
+      </ul>
+      <h4>Handling Score Divergence</h4>
+      <p>When one person scores a dimension 4–5 and another scores it 1–2, that gap reveals differing vantage points — not a problem to resolve quickly. Use this prompt:</p>
+      <div class="fac-callout blue">"We have a wide range of scores on this dimension. Before we average them, let's hear from someone on each end. What are you seeing that the other person might not be?"</div>
+      <p>Do not rush to consensus. The divergence often points to where the organization's blind spots live.</p>
+    </div>
+  </div>
+
+  <!-- 5. DISCUSSION PROMPTS -->
+  <div class="fac-accordion">
+    <button class="fac-accordion-toggle" onclick="toggleFac(this)">
+      <span>5 · Discussion Prompts by Dimension</span><span class="fac-chevron">▼</span>
+    </button>
+    <div class="fac-accordion-body">
+      <p>Prioritize the one or two lowest-scoring dimensions. You do not need to address all six in equal depth.</p>
+      <div class="fac-callout">Facilitator principle: Ask the question, then wait. Count to ten silently if needed. The first silence often gives way to the most honest response.</div>
+
+      <div class="fac-prompt-block" style="border-left-color:#2c3e6b;">
+        <h5 style="color:#2c3e6b;">A · Structural Resilience</h5>
+        <ul>
+          <li>Which processes would stall tomorrow if one more person left suddenly?</li>
+          <li>Where does institutional knowledge live — in a system or in someone's head?</li>
+          <li>If we had to onboard a new executive in 30 days, what would we not know how to hand off?</li>
+        </ul>
+      </div>
+      <div class="fac-prompt-block" style="border-left-color:#c0392b;">
+        <h5 style="color:#c0392b;">B · Honest Diagnosis</h5>
+        <ul>
+          <li>What did this departure make visible that was already true before it happened?</li>
+          <li>Is there anything we are avoiding saying out loud? What would happen if we said it?</li>
+          <li>Are staff at every level feeling safe enough to name what is not working?</li>
+        </ul>
+      </div>
+      <div class="fac-prompt-block" style="border-left-color:#f39c12;">
+        <h5 style="color:#f39c12;">C · Deliberate Pause</h5>
+        <ul>
+          <li>What decision are we most tempted to rush, and why? Is that pressure external or internal?</li>
+          <li>What routines have stalled? Which of those did we actually need, and which were just habit?</li>
+          <li>Who is synthesizing everything we are observing, and when will they report back?</li>
+        </ul>
+      </div>
+      <div class="fac-prompt-block" style="border-left-color:#27ae60;">
+        <h5 style="color:#27ae60;">D · Intentional Reorganization</h5>
+        <ul>
+          <li>What are the three things we must carry forward from the previous leader's tenure?</li>
+          <li>What would we change if we had the courage — and does this transition give us that opening?</li>
+          <li>Does our hiring profile reflect where we are going, or where we have been?</li>
+        </ul>
+      </div>
+      <div class="fac-prompt-block" style="border-left-color:#4a90c4;">
+        <h5 style="color:#4a90c4;">E · Communication &amp; Stakeholder Engagement</h5>
+        <ul>
+          <li>Who is not in this room who needs to hear what we learn today?</li>
+          <li>What is the rumor mill currently saying, and how close to true is it?</li>
+          <li>Are we communicating more with funders and board than with frontline staff? If so, why?</li>
+        </ul>
+      </div>
+      <div class="fac-prompt-block" style="border-left-color:#8e44ad;">
+        <h5 style="color:#8e44ad;">F · Emotional &amp; Cultural Well-Being</h5>
+        <ul>
+          <li>Has anyone been given permission to acknowledge that this is hard?</li>
+          <li>Who is carrying extra weight right now and not saying so?</li>
+          <li>What would it look like to honor the departing leader's contributions without being trapped by them?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. INTERPRETING RESULTS -->
+  <div class="fac-accordion">
+    <button class="fac-accordion-toggle" onclick="toggleFac(this)">
+      <span>6 · Interpreting Results</span><span class="fac-chevron">▼</span>
+    </button>
+    <div class="fac-accordion-body">
+      <h4>Overall Score Guide</h4>
+      <table class="fac-table">
+        <thead><tr><th style="width:28%;">Overall Score</th><th style="width:30%;">Rating</th><th>Recommended Response</th></tr></thead>
+        <tbody>
+          <tr>
+            <td style="background:#e8f8f0;font-weight:700;">120–150 &nbsp;(80–100%)</td>
+            <td>🟢 Strong Transition Readiness</td>
+            <td>Maintain current practices. Identify which strengths can support weaker dimensions.</td>
+          </tr>
+          <tr>
+            <td style="background:#fef9e7;font-weight:700;">90–119 &nbsp;(60–79%)</td>
+            <td>🟡 Moderate Readiness</td>
+            <td>Two or more dimensions need deliberate attention. Build a 90-day action plan.</td>
+          </tr>
+          <tr>
+            <td style="background:#fdf2e9;font-weight:700;">60–89 &nbsp;(40–59%)</td>
+            <td>🟠 Significant Gaps</td>
+            <td>Multiple dimensions are underdeveloped. Consider external facilitation or a consultant.</td>
+          </tr>
+          <tr>
+            <td style="background:#fdedec;font-weight:700;">Below 60 &nbsp;(&lt;40%)</td>
+            <td>🔴 Critical Vulnerability</td>
+            <td>Immediate intervention is needed. Escalate to the board. Seek outside support.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>Dimension Score Benchmarks</h4>
+      <table class="fac-table">
+        <thead><tr><th style="width:28%;">Score Range</th><th style="width:30%;">Meaning</th><th>Facilitator Move</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:700;">20–25 &nbsp;(80–100%)</td><td>Strong — leverage this</td><td>Acknowledge the strength and ask how it can support weaker dimensions.</td></tr>
+          <tr><td style="font-weight:700;">15–19 &nbsp;(60–79%)</td><td>Developing — targeted attention needed</td><td>Name the specific items scored lowest and ask what would change them.</td></tr>
+          <tr><td style="font-weight:700;">10–14 &nbsp;(40–59%)</td><td>Significant Gaps — clear action required</td><td>Dedicate the most discussion time here. Ask what is blocking progress.</td></tr>
+          <tr><td style="font-weight:700;">Below 10 &nbsp;(&lt;40%)</td><td>Critical — escalate or seek outside help</td><td>"This dimension needs more than we can address today. Who should we bring in?"</td></tr>
+        </tbody>
+      </table>
+
+      <h4>What to Do With the Strongest Dimension</h4>
+      <p>Groups often focus only on gaps. Equally important: identify the highest-scoring dimension and ask how the organization can use that strength to support areas of weakness. For example, if Communication is strong but Structural Resilience is low, a well-run communication strategy can accelerate documentation and knowledge-transfer work.</p>
+    </div>
+  </div>
+
+  <!-- 7. CLOSING THE SESSION -->
+  <div class="fac-accordion">
+    <button class="fac-accordion-toggle" onclick="toggleFac(this)">
+      <span>7 · Closing the Session</span><span class="fac-chevron">▼</span>
+    </button>
+    <div class="fac-accordion-body">
+      <p>How you close matters as much as how you open. Avoid ending on the score reveal alone — that produces anxiety without direction.</p>
+      <h4>Recommended Closing Sequence</h4>
+      <ol>
+        <li>Name the top two priority dimensions aloud as a group. Write them where everyone can see.</li>
+        <li>For each priority, identify: one action, one owner, one deadline.</li>
+        <li>Surface one strength the group can rely on during the transition.</li>
+        <li>Ask each participant to state one thing they will do differently in the next two weeks.</li>
+        <li>Schedule the follow-up — either a check-in using the same assessment in 60–90 days, or a working session to address the priority dimensions.</li>
+      </ol>
+      <h4>Closing Reflection Prompts (choose one or two)</h4>
+      <div class="fac-callout blue">"What did you learn today that you didn't know this morning?"</div>
+      <div class="fac-callout blue">"Which score surprised you the most?"</div>
+      <div class="fac-callout blue">"What is one thing this transition is making possible that wasn't possible before?"</div>
+      <h4>Reassessment Schedule</h4>
+      <ul>
+        <li><strong>30 days</strong> after the session — brief check-in using Format C</li>
+        <li><strong>60–90 days</strong> — full reassessment using Format A or B</li>
+        <li><strong>First 90 days of new leader tenure</strong> — use results to brief the incoming leader</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 8. COMMON CHALLENGES -->
+  <div class="fac-accordion">
+    <button class="fac-accordion-toggle" onclick="toggleFac(this)">
+      <span>8 · Common Facilitation Challenges</span><span class="fac-chevron">▼</span>
+    </button>
+    <div class="fac-accordion-body">
+      <div class="fac-challenge-block">
+        <h5>The group clusters around 3s (neutral)</h5>
+        <p>Midpoint clustering usually signals fear of conflict, not genuine neutrality. Ask participants to reconsider any item they scored 3 and push to a 2 or 4. Normalize disagreement: "A 3 means you're unsure, not that things are average. What would need to be true for this to be a 4?"</p>
+      </div>
+      <div class="fac-challenge-block">
+        <h5>One person dominates the discussion</h5>
+        <p>Use round-robin structures: go around the room and ask each person to respond to a prompt in one sentence before opening discussion. This prevents the loudest voice from setting the frame.</p>
+      </div>
+      <div class="fac-challenge-block">
+        <h5>The group wants to relitigate the departure</h5>
+        <p>The assessment is forward-looking. If the conversation turns to assigning blame, redirect:</p>
+        <div class="fac-callout">"We can hold a separate conversation about what happened. Right now, our job is to understand where we are and what we need to do next."</div>
+      </div>
+      <div class="fac-challenge-block">
+        <h5>Scores are very low across multiple dimensions</h5>
+        <p>Low scores across the board are not failure — they are clarity. Resist the urge to soften the results.</p>
+        <div class="fac-callout green">"This is exactly why we're doing this. Now we know where the work is. That's better than guessing."</div>
+      </div>
+      <div class="fac-challenge-block">
+        <h5>The group wants to move straight to solutions</h5>
+        <p>Remind the group that the Deliberate Pause dimension exists for a reason. Hold the diagnosis phase for at least 20 minutes before opening the action planning worksheet. A quick pivot to action before understanding is reached tends to produce surface-level fixes.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. ACTION PLANNING WORKSHEET -->
+  <div class="fac-accordion">
+    <button class="fac-accordion-toggle" onclick="toggleFac(this)">
+      <span>9 · Action Planning Worksheet</span><span class="fac-chevron">▼</span>
+    </button>
+    <div class="fac-accordion-body">
+      <p>Complete this as a group following the score review and discussion. Aim for three to five concrete actions, each with a clear owner and a deadline no more than 60 days out.</p>
+      <p>
+        <strong>Organization:</strong> __________________________________ &nbsp;&nbsp;
+        <strong>Session Date:</strong> ______________<br>
+        <strong>Facilitator:</strong> __________________________________
+      </p>
+
+      <h4>Priorities &amp; Strengths</h4>
+      <table class="fac-table" style="margin-bottom:1.5rem;">
+        <thead><tr><th>Role</th><th>Dimension</th><th>Score</th><th>%</th></tr></thead>
+        <tbody>
+          <tr><td>First Priority</td><td style="min-width:200px;">&nbsp;</td><td style="min-width:80px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/ 25</td><td style="min-width:60px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%</td></tr>
+          <tr><td>Second Priority</td><td>&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/ 25</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%</td></tr>
+          <tr><td>Greatest Strength</td><td>&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/ 25</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%</td></tr>
+        </tbody>
+      </table>
+
+      <h4>Action Items</h4>
+      <table class="fac-action-table">
+        <thead>
+          <tr>
+            <th style="width:30%;">Priority Action</th>
+            <th style="width:15%;">Dimension</th>
+            <th style="width:22%;">Person Responsible</th>
+            <th style="width:15%;">Deadline</th>
+            <th>Resources Needed</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="blank-row"><td>&nbsp;</td><td></td><td></td><td></td><td></td></tr>
+          <tr class="blank-row"><td>&nbsp;</td><td></td><td></td><td></td><td></td></tr>
+          <tr class="blank-row"><td>&nbsp;</td><td></td><td></td><td></td><td></td></tr>
+          <tr class="blank-row"><td>&nbsp;</td><td></td><td></td><td></td><td></td></tr>
+          <tr class="blank-row"><td>&nbsp;</td><td></td><td></td><td></td><td></td></tr>
+        </tbody>
+      </table>
+
+      <h4>Individual Commitments (next two weeks)</h4>
+      <p>Each participant names one personal commitment:</p>
+      <ol style="line-height:2.4;color:#aaa;font-style:italic;">
+        <li><span style="color:#333;font-style:normal;">_____________________________________________________________</span></li>
+        <li><span style="color:#333;font-style:normal;">_____________________________________________________________</span></li>
+        <li><span style="color:#333;font-style:normal;">_____________________________________________________________</span></li>
+        <li><span style="color:#333;font-style:normal;">_____________________________________________________________</span></li>
+        <li><span style="color:#333;font-style:normal;">_____________________________________________________________</span></li>
+        <li><span style="color:#333;font-style:normal;">_____________________________________________________________</span></li>
+      </ol>
+
+      <h4>Follow-Up Plan</h4>
+      <p>
+        <strong>Date of next check-in:</strong> __________________________________<br><br>
+        <strong>Format:</strong> &nbsp;
+        <label><input type="radio" name="fup_format"> 60-minute pulse check</label> &nbsp;&nbsp;
+        <label><input type="radio" name="fup_format"> Full reassessment</label> &nbsp;&nbsp;
+        <label><input type="radio" name="fup_format"> Board session</label><br><br>
+        <strong>Person responsible for scheduling:</strong> __________________________________
+      </p>
+      <div style="text-align:right;margin-top:1rem;">
+        <button class="btn btn-print" onclick="window.print()" style="font-size:0.9rem;padding:0.6rem 1.4rem;">🖨️ Print This Worksheet</button>
+      </div>
+    </div>
+  </div>
+
+</section>
+
 <!-- FOOTER -->
 <footer>
   <p>Based on the philosophy of <strong>Empedocles of Acragas</strong> (c. 490–430 BCE)</p>
@@ -775,6 +1257,13 @@
 </footer>
 
 <script>
+function toggleFac(btn) {
+  const body = btn.nextElementSibling;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  btn.classList.toggle('open', !isOpen);
+}
+
 const dims = {
   A: { name: 'Structural Resilience', qs: [1,2,3,4,5], color: '#2c3e6b' },
   B: { name: 'Honest Diagnosis', qs: [6,7,8,9,10], color: '#c0392b' },
@@ -849,27 +1338,33 @@ function calculateResults() {
     const p = s.sum / s.max;
     let advice = '';
     if (key === 'A') {
-      if (p < 0.6) advice = '<strong>Priority:</strong> Begin documenting key processes immediately. Identify single points of failure and create redundancy. Draft a basic succession framework even if the search is underway.';
+      if (p < 0.4) advice = '<strong>Critical:</strong> Structural vulnerability is severe. Escalate to the board immediately. Begin emergency process documentation, identify every single point of failure, and bring in outside support to stabilize operations before the search proceeds.';
+      else if (p < 0.6) advice = '<strong>Significant Gaps:</strong> Begin documenting key processes immediately. Identify single points of failure and create redundancy. Draft a basic succession framework even if the search is underway.';
       else if (p < 0.8) advice = '<strong>Developing:</strong> Good foundation, but look for remaining gaps—especially in external relationship management and institutional memory systems.';
       else advice = '<strong>Strong:</strong> Your structural resilience is solid. Leverage this stability to support other dimensions that may need more attention.';
     } else if (key === 'B') {
-      if (p < 0.6) advice = '<strong>Priority:</strong> Create safe spaces for honest conversation—anonymous surveys, facilitated team discussions, or a trusted external consultant. Avoid the temptation to "move on" before understanding what happened.';
+      if (p < 0.4) advice = '<strong>Critical:</strong> The organization is avoiding honest self-examination at a moment when it is most needed. Bring in an external facilitator or consultant immediately. Without honest diagnosis, every subsequent decision is built on an unstable foundation.';
+      else if (p < 0.6) advice = '<strong>Significant Gaps:</strong> Create safe spaces for honest conversation—anonymous surveys, facilitated team discussions, or a trusted external consultant. Avoid the temptation to "move on" before understanding what happened.';
       else if (p < 0.8) advice = '<strong>Developing:</strong> You\'re making progress. Ensure the diagnosis extends beyond senior staff to include frontline perspectives and board-level reflection.';
       else advice = '<strong>Strong:</strong> Your organization\'s honesty is a powerful asset. Use these insights to inform the hiring profile and onboarding plan for the new leader.';
     } else if (key === 'C') {
-      if (p < 0.6) advice = '<strong>Priority:</strong> Slow down. Appoint interim leadership, set a realistic timeline, and create structured opportunities for observation before making permanent decisions.';
+      if (p < 0.4) advice = '<strong>Critical:</strong> The organization is rushing decisions that will be difficult to reverse. Stop. Appoint interim leadership immediately, set a realistic timeline, and suspend permanent structural decisions until sense-making is complete.';
+      else if (p < 0.6) advice = '<strong>Significant Gaps:</strong> Slow down. Appoint interim leadership, set a realistic timeline, and create structured opportunities for observation before making permanent decisions.';
       else if (p < 0.8) advice = '<strong>Developing:</strong> You\'re pausing, but ensure the pause is active—not just waiting. Assign someone to synthesize observations into actionable insights.';
       else advice = '<strong>Strong:</strong> Excellent discipline. Your thoughtful approach will pay dividends in the quality of your reorganization.';
     } else if (key === 'D') {
-      if (p < 0.6) advice = '<strong>Priority:</strong> Convene a transition task force to explicitly decide what to preserve, what to change, and what the new leader needs to know. Don\'t leave reorganization to chance.';
+      if (p < 0.4) advice = '<strong>Critical:</strong> Reorganization is being left to chance. Convene a transition task force this week. Without intentional decisions about what to preserve and what to release, the incoming leader will inherit confusion rather than clarity.';
+      else if (p < 0.6) advice = '<strong>Significant Gaps:</strong> Convene a transition task force to explicitly decide what to preserve, what to change, and what the new leader needs to know. Don\'t leave reorganization to chance.';
       else if (p < 0.8) advice = '<strong>Developing:</strong> Good momentum. Focus on the onboarding plan and ensure the hiring criteria reflect future needs, not nostalgia.';
       else advice = '<strong>Strong:</strong> You\'re approaching this transition with intentionality. The new leader will benefit enormously from your preparation.';
     } else if (key === 'E') {
-      if (p < 0.6) advice = '<strong>Priority:</strong> Establish a regular communication cadence immediately—weekly updates, even if the update is "no news yet." Silence breeds anxiety and rumor.';
+      if (p < 0.4) advice = '<strong>Critical:</strong> Communication has broken down. Anxiety and rumor are filling the void. Issue an immediate all-staff update—even if the message is only "here is what we know and when you will hear more"—and establish a weekly cadence starting now.';
+      else if (p < 0.6) advice = '<strong>Significant Gaps:</strong> Establish a regular communication cadence immediately—weekly updates, even if the update is "no news yet." Silence breeds anxiety and rumor.';
       else if (p < 0.8) advice = '<strong>Developing:</strong> Communication is happening but may not be reaching all stakeholders equally. Check in with frontline staff, volunteers, and external partners.';
       else advice = '<strong>Strong:</strong> Your transparent communication is building trust. Maintain this standard as the new leader arrives—the first 90 days are critical.';
     } else if (key === 'F') {
-      if (p < 0.6) advice = '<strong>Priority:</strong> The human cost of this transition is being underestimated. Acknowledge grief, adjust expectations, and consider bringing in external support (coaching, EAP, facilitation).';
+      if (p < 0.4) advice = '<strong>Critical:</strong> The human cost of this transition is being severely underestimated and people are at risk of burnout or departure. Acknowledge the difficulty publicly, adjust workloads immediately, and bring in external support—coaching, an employee assistance program, or a professional facilitator.';
+      else if (p < 0.6) advice = '<strong>Significant Gaps:</strong> The human cost of this transition is being underestimated. Acknowledge grief, adjust expectations, and consider bringing in external support (coaching, EAP, facilitation).';
       else if (p < 0.8) advice = '<strong>Developing:</strong> You\'re attending to well-being, but watch for transition fatigue—especially among those carrying extra responsibilities during the interim.';
       else advice = '<strong>Strong:</strong> Your organization\'s emotional intelligence is a competitive advantage. This cultural strength will help the new leader integrate successfully.';
     }
