@@ -5,15 +5,15 @@
     "byline": "Miguel Guhlin",
     "description": "A curated portfolio of AI-powered tools, reference guides, coaching frameworks, and interactive resources built for educators, administrators, and knowledge workers.",
     "tallies": [
-      { "num": "10",  "label": "Projects" },
-      { "num": "35+", "label": "AI Bots"  },
-      { "num": "7",   "label": "Skills"   },
-      { "num": "CC0", "label": "Open License" }
+      { "num": "18",  "label": "Projects"      },
+      { "num": "35+", "label": "AI Bots"       },
+      { "num": "7",   "label": "Skills"        },
+      { "num": "CC0", "label": "Open License"  }
     ],
     "footerLinks": [
-      { "label": "MGuhlin.org",    "href": "https://mguhlin.org"       },
-      { "label": "TCEA TechNotes", "href": "https://blog.tcea.org"     },
-      { "label": "TCEA.org",       "href": "https://tcea.org"          }
+      { "label": "MGuhlin.org",    "href": "https://mguhlin.org"   },
+      { "label": "TCEA TechNotes", "href": "https://blog.tcea.org" },
+      { "label": "TCEA.org",       "href": "https://tcea.org"      }
     ]
   },
 
@@ -178,7 +178,7 @@
     {
       "num": "06",
       "id": "eog",
-      "section": "Onboarding &amp; HR Tools",
+      "section": "Onboarding &amp; Productivity Tools",
       "category": "Claude Project · Generator",
       "title": "Onboarding Guide Generator",
       "subtitle": "One prompt → a complete branded HTML employee onboarding site",
@@ -191,7 +191,7 @@
       "btnColor": "#B7E4C7",
       "btnHoverBg": "#2D6A4F",
       "btnHoverColor": "#fff",
-      "description": "A Claude Project system prompt that turns a company name into a complete, single-file HTML onboarding website. Claude searches the web for brand colors, locations, hours, and org structure before writing a line of HTML. The output includes a sticky header, sidebar table of contents, 8 structured content sections, a first-week checklist, and amber-highlighted placeholders for any data Claude could not verify. Ships with two live examples: Mac Haik Georgetown (automotive) and TCEA.",
+      "description": "A Claude Project system prompt that turns a company name into a complete, single-file HTML onboarding website. Claude searches the web for brand colors, locations, hours, and org structure before writing a line of HTML. The output includes a sticky header, sidebar table of contents, eight structured content sections, a first-week checklist, and amber-highlighted placeholders for any data Claude could not verify. Ships with two live examples: Mac Haik Georgetown (automotive) and TCEA.",
       "features": [
         "Live Web Research",
         "Auto Brand Colors",
@@ -210,6 +210,37 @@
 
     {
       "num": "07",
+      "id": "vcnotes",
+      "section": "Onboarding &amp; Productivity Tools",
+      "category": "Productivity App · Client Work",
+      "title": "Client Workspace",
+      "subtitle": "Meeting notes, decisions, and next steps with session persistence",
+      "stat": "3",
+      "statLabel": "Core Panels",
+      "panelGradient": "linear-gradient(160deg, #142018 0%, #1E3226 100%)",
+      "catStyle": "background:rgba(116,198,157,0.13);color:#74C69D;",
+      "statColor": "#B7E4C7",
+      "btnBg": "#2D6A4F",
+      "btnColor": "#fff",
+      "btnHoverBg": "#40916C",
+      "btnHoverColor": "#fff",
+      "description": "A single-file HTML workspace for client and coaching sessions. Organizes meeting notes, key decisions, and next steps in a fixed sidebar layout with localStorage persistence across sessions. Includes Google Sheets sync via Apps Script for team-accessible record-keeping, client-side password protection, and a collapsible sidebar for focused writing mode. Designed for consultants, coaches, and PD facilitators who work with multiple clients.",
+      "features": [
+        "Meeting Notes Panel",
+        "Decisions Tracker",
+        "Next Steps Panel",
+        "localStorage Persistence",
+        "Google Sheets Sync",
+        "Client-Side Auth",
+        "Collapsible Sidebar"
+      ],
+      "links": [
+        { "label": "Open Workspace →", "href": "vcnotes/index.html", "primary": true }
+      ]
+    },
+
+    {
+      "num": "08",
       "id": "twc",
       "section": "Claude Orientation &amp; AI Literacy",
       "category": "K–12 Educator Series",
@@ -239,7 +270,7 @@
     },
 
     {
-      "num": "08",
+      "num": "09",
       "id": "txca",
       "section": "Claude Orientation &amp; AI Literacy",
       "category": "Webinar + Reference Guide",
@@ -269,7 +300,100 @@
     },
 
     {
-      "num": "09",
+      "num": "10",
+      "id": "nspa",
+      "section": "Conference &amp; Session Resources",
+      "category": "Session Resource Index",
+      "title": "NSPA AI Training Series",
+      "subtitle": "All session web resources in one place — 4 sessions, 13 resources",
+      "stat": "13",
+      "statLabel": "Resources · 4 Sessions",
+      "panelGradient": "linear-gradient(160deg, #1a1e2a 0%, #252C3E 100%)",
+      "catStyle": "background:rgba(100,140,220,0.2);color:#8AB4F8;",
+      "statColor": "#A8C4F8",
+      "btnBg": "#2D3F6A",
+      "btnColor": "#D0DCFA",
+      "btnHoverBg": "#3D5090",
+      "btnHoverColor": "#fff",
+      "description": "A consolidated resource index for the NSPA AI Training Series — four sessions aggregated into a single navigable page. Each session entry links directly to its slide deck, handouts, AI tool demos, and reference pages. Supplementary resources include an AI Fluency Levels reference, example workflow prompts, and the NSPA3 222 Framework. Designed for conference participants who need fast access to materials during or after sessions.",
+      "features": [
+        "4-Session Index",
+        "13 Direct Resource Links",
+        "AI Fluency Levels Reference",
+        "NSPA3 222 Framework",
+        "Workflow Prompting Guide",
+        "Marketing Scenarios"
+      ],
+      "links": [
+        { "label": "Open Resource Index →",      "href": "nspa/index.html",                        "primary": true  },
+        { "label": "AI Fluency Levels",           "href": "nspa/ai_fluency_levels.html",            "primary": false },
+        { "label": "NSPA3 222 Framework",         "href": "nspa/nspa3_222_framework.html",          "primary": false },
+        { "label": "100 Marketing Prompts",       "href": "nspa/nspa4_100_marketing_prompts.html",  "primary": false }
+      ]
+    },
+
+    {
+      "num": "11",
+      "id": "ltt",
+      "section": "Leadership &amp; Nonprofit Strategy",
+      "category": "Leadership Framework · Nonprofit",
+      "title": "Leadership Transition Toolkit",
+      "subtitle": "An Empedoclean framework for navigating nonprofit organizational change",
+      "stat": "4",
+      "statLabel": "Classical Elements · Framework",
+      "panelGradient": "linear-gradient(160deg, #1E1A2E 0%, #2E2840 100%)",
+      "catStyle": "background:rgba(180,140,220,0.2);color:#C4A8F0;",
+      "statColor": "#D0C0F8",
+      "btnBg": "#4A3A70",
+      "btnColor": "#E8DCFA",
+      "btnHoverBg": "#5C4A88",
+      "btnHoverColor": "#fff",
+      "description": "An interactive leadership reference grounded in Empedocles' four classical elements — Earth, Water, Fire, and Air — mapped to nonprofit organizational phases: Stability, Flow, Transformation, and Vision. Helps nonprofit leaders and boards diagnose where they are in a transition cycle and identify high-leverage actions. Includes reflection prompts, case examples, and a self-assessment keyed to each elemental phase.",
+      "features": [
+        "Empedoclean Framework",
+        "4 Transition Phases",
+        "Board &amp; Leader Prompts",
+        "Self-Assessment",
+        "Case Examples",
+        "Nonprofit Context"
+      ],
+      "links": [
+        { "label": "Open Toolkit →", "href": "ltt/index.html", "primary": true }
+      ]
+    },
+
+    {
+      "num": "12",
+      "id": "roadmap",
+      "section": "Leadership &amp; Nonprofit Strategy",
+      "category": "Strategic Framework · AI Literacy",
+      "title": "AI Literacy Roadmap",
+      "subtitle": "A phased framework for building durable AI competency in nonprofits",
+      "stat": "2",
+      "statLabel": "Tracks · 5 Phases",
+      "panelGradient": "linear-gradient(160deg, #1A1E1A 0%, #28302A 100%)",
+      "catStyle": "background:rgba(78,205,196,0.18);color:#6EDDD8;",
+      "statColor": "#A0E8E4",
+      "btnBg": "#2A4A44",
+      "btnColor": "#B0E8E4",
+      "btnHoverBg": "#3A5E58",
+      "btnHoverColor": "#fff",
+      "description": "A phased strategic framework for building durable AI competency in nonprofit organizations, structured across two parallel tracks: Personal Competency (individual staff) and Organizational Readiness (leadership and systems). Five sequential phases move from leadership alignment through tool adoption, team capability building, process redesign, and strategic integration. Each phase includes diagnostic questions, milestones, and common failure modes.",
+      "features": [
+        "Track A: Personal Competency",
+        "Track B: Organizational Readiness",
+        "5 Sequential Phases",
+        "Diagnostic Questions",
+        "Milestone Markers",
+        "Common Failure Modes"
+      ],
+      "links": [
+        { "label": "Open Roadmap →", "href": "roadmap/index.html", "primary": true }
+      ]
+    },
+
+    {
+      "num": "13",
       "id": "visuals",
       "section": "Data Visualization &amp; Evidence-Based Practice",
       "category": "Data Visualization",
@@ -299,7 +423,7 @@
     },
 
     {
-      "num": "10",
+      "num": "14",
       "id": "vlet",
       "section": "Data Visualization &amp; Evidence-Based Practice",
       "category": "Instructional Reference · K–16",
@@ -325,8 +449,137 @@
         "BoodleBox Strategy Partner"
       ],
       "links": [
-        { "label": "Open Reference →", "href": "vlet/index.html",                  "primary": true  },
-        { "label": "Live Site ↗",      "href": "https://mglearn.github.io/vlet/",  "primary": false, "external": true }
+        { "label": "Open Reference →", "href": "vlet/index.html",                 "primary": true  },
+        { "label": "Live Site ↗",      "href": "https://mglearn.github.io/vlet/", "primary": false, "external": true }
+      ]
+    },
+
+    {
+      "num": "15",
+      "id": "funquiz",
+      "section": "Interactive &amp; Classroom Tools",
+      "category": "Classroom Activity · Educator Fun",
+      "title": "Fun Personality Quizzes",
+      "subtitle": "Which character matches your teaching style? Four themed educator quizzes",
+      "stat": "4",
+      "statLabel": "Quiz Themes",
+      "panelGradient": "linear-gradient(160deg, #221A14 0%, #3A2A1C 100%)",
+      "catStyle": "background:rgba(220,160,80,0.2);color:#E8B464;",
+      "statColor": "#F0C880",
+      "btnBg": "#6A4020",
+      "btnColor": "#F8E0C0",
+      "btnHoverBg": "#8A5228",
+      "btnHoverColor": "#fff",
+      "description": "Four five-question personality quizzes that help educators discover which iconic character best matches their teaching style. Each quiz is fully self-contained, mobile-friendly, and requires no login. Themes span Winnie the Pooh, The Smurfs, Snow White and the Seven Dwarfs, and Looney Tunes. Designed as a low-stakes icebreaker for PD sessions, team meetings, or classroom community building.",
+      "features": [
+        "Winnie the Pooh Quiz",
+        "Smurfs Quiz",
+        "Seven Dwarfs Quiz",
+        "Looney Tunes Quiz",
+        "Instant Results",
+        "No Login Required",
+        "PD Icebreaker Ready"
+      ],
+      "links": [
+        { "label": "Winnie the Pooh →", "href": "funquiz/index.html",  "primary": true  },
+        { "label": "The Smurfs",        "href": "funquiz/smurfs.html", "primary": false },
+        { "label": "Seven Dwarfs",      "href": "funquiz/dwarfs.html", "primary": false },
+        { "label": "Looney Tunes",      "href": "funquiz/looney.html", "primary": false }
+      ]
+    },
+
+    {
+      "num": "16",
+      "id": "tcea-hub",
+      "section": "Interactive &amp; Classroom Tools",
+      "category": "TCEA Reference Hub",
+      "title": "TCEA AI Tools Hub",
+      "subtitle": "Custom instructions library, KPI dashboard, and instructional strategy references",
+      "stat": "6+",
+      "statLabel": "Reference Tools",
+      "panelGradient": "linear-gradient(160deg, #0A1E3A 0%, #0F2E56 100%)",
+      "catStyle": "background:rgba(252,176,64,0.2);color:#FCB040;",
+      "statColor": "#FDCC80",
+      "btnBg": "#0A3476",
+      "btnColor": "#FCB040",
+      "btnHoverBg": "#1245A8",
+      "btnHoverColor": "#fff",
+      "description": "A TCEA-branded hub of interrelated reference tools built for district and campus leaders. The index is the TCEA edition of the AI Custom Instructions Library. Supporting tools include a KPI dashboard for school data visualization, a Surface-Deep-Transfer learning reference, a top instructional strategies guide, and an AI news digest. Companion to the mguhlin.github.io/aici personal edition.",
+      "features": [
+        "TCEA AI Instructions Library",
+        "KPI Dashboard",
+        "Surface-Deep-Transfer Reference",
+        "Top Instructional Strategies",
+        "TCEA AI News Digest",
+        "TCEA Branding"
+      ],
+      "links": [
+        { "label": "TCEA Instructions Library →",  "href": "tcea/index.html",                           "primary": true  },
+        { "label": "KPI Dashboard",                "href": "tcea/dashboard.html",                       "primary": false },
+        { "label": "Surface-Deep-Transfer",        "href": "tcea/surface_deep_transfer_learning.html",  "primary": false },
+        { "label": "Top Strategies",               "href": "tcea/topstrategies.html",                   "primary": false }
+      ]
+    },
+
+    {
+      "num": "17",
+      "id": "media-tools-win",
+      "section": "Utilities &amp; Scripts",
+      "category": "Windows Utilities · Batch Scripts",
+      "title": "Media Processing Tools",
+      "subtitle": "Drag-and-drop batch scripts for Windows media conversion and optimization",
+      "stat": "8",
+      "statLabel": "Batch Utilities",
+      "panelGradient": "linear-gradient(160deg, #1A1A1A 0%, #282828 100%)",
+      "catStyle": "background:rgba(180,180,180,0.15);color:#C0C0C0;",
+      "statColor": "#D0D0D0",
+      "btnBg": "#383838",
+      "btnColor": "#D0D0D0",
+      "btnHoverBg": "#484848",
+      "btnHoverColor": "#fff",
+      "description": "Eight Windows batch scripts for drag-and-drop media conversion and document processing using FFmpeg, ImageMagick, and Pandoc. Covers audio-to-MP3 extraction, bulk video conversion, audio noise fix, PNG compression, media-to-image conversion, PNG shrinking, WebM encoding, and universal text format conversion. No GUI required — drop a file on the script and it runs.",
+      "features": [
+        "Audio → MP3 / OGG / AAC",
+        "Bulk Video Conversion",
+        "Audio Noise Fix",
+        "PNG Compression",
+        "Media → Image Sheets",
+        "WebM Encoding",
+        "Universal Text Converter",
+        "FFmpeg · ImageMagick · Pandoc"
+      ],
+      "links": [
+        { "label": "Read Readme →", "href": "MediaTools/readme.md", "primary": true }
+      ]
+    },
+
+    {
+      "num": "18",
+      "id": "media-tools-linux",
+      "section": "Utilities &amp; Scripts",
+      "category": "Linux Utilities · Bash Scripts",
+      "title": "Linux Media Tools",
+      "subtitle": "Bash scripts for audio, video, image, and document processing on Linux",
+      "stat": "6",
+      "statLabel": "Bash Scripts",
+      "panelGradient": "linear-gradient(160deg, #141A14 0%, #202A20 100%)",
+      "catStyle": "background:rgba(180,180,180,0.15);color:#B0C8B0;",
+      "statColor": "#C0D8C0",
+      "btnBg": "#283828",
+      "btnColor": "#C0D8C0",
+      "btnHoverBg": "#384838",
+      "btnHoverColor": "#fff",
+      "description": "Six Bash scripts for Linux that mirror the Windows Media Tools suite — built for Pop!_OS and Ubuntu. Uses FFmpeg for audio extraction and video encoding, ImageMagick for image compression and resizing, and Pandoc for document format conversion. Scripts are designed for terminal use or integration into file manager right-click actions. Recommended over the Windows versions for any Linux-primary workflow.",
+      "features": [
+        "Audio Convert (MP3/OGG/AAC)",
+        "Audio Fix (noise reduction)",
+        "Video Convert (MP4/WebM)",
+        "Image Shrink (PNG)",
+        "Text Converter (Pandoc)",
+        "Pop!_OS / Ubuntu Tested"
+      ],
+      "links": [
+        { "label": "Read Readme →", "href": "LinuxMediaTools/readme.md", "primary": true }
       ]
     }
 
