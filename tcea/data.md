@@ -1,6 +1,6 @@
 # TCEA Registration Dashboard - Fake Data
 
-**Updated:** March 25, 2026 **Goal Registrations:** 2900 **Goal Revenue:** 200000
+**Updated:** April 2, 2026 **Goal Registrations:** 2900 **Goal Revenue:** 200000
 
 ## Courses
 
