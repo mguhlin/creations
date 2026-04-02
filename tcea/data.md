@@ -1,6 +1,6 @@
-# TCEA Registration Dashboard
+# TCEA Registration Dashboard - Fake Data
 
-**Updated:** March 25, 2026 **Goal Registrations:** 2900 **Goal Revenue:** 99000
+**Updated:** March 25, 2026 **Goal Registrations:** 2900 **Goal Revenue:** 200000
 
 ## Courses
 
@@ -27,7 +27,7 @@
 | Google Classroom | 22 | $878.00 |
 | Social and Emotional Learning | 22 | $898.00 |
 
-## Waco ISD
+## Ardent ISD
 
 | Course | Price | Participants | Ext Cost |
 | :---- | :---- | :---- | :---- |
