@@ -24,6 +24,8 @@
   --illustrate-color: #B45309;
   --validate-color: #1E40AF;
   --apply-color: #7C3AED;
+  --success: #059669;
+  --success-pale: #D1FAE5;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -82,6 +84,7 @@ body {
   color: var(--gold-light);
   opacity: 0.85;
 }
+.header-meta a { color: var(--gold-light); }
 
 /* ── NAV ─────────────────────────────────────────────────────────────────── */
 .site-nav {
@@ -140,6 +143,94 @@ body {
   margin-bottom: 1.4rem;
   line-height: 1.55;
 }
+
+/* ── PROGRESS DASHBOARD ──────────────────────────────────────────────────── */
+#dashboard { margin-bottom: 2rem; }
+.dash-bar {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 1.2rem 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem;
+}
+.dash-stat {
+  text-align: center;
+  min-width: 80px;
+}
+.dash-stat-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.8rem;
+  color: var(--navy);
+  line-height: 1;
+}
+.dash-stat-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 0.2rem;
+}
+.dash-progress-wrap {
+  flex: 1;
+  min-width: 200px;
+}
+.dash-progress-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+  display: flex;
+  justify-content: space-between;
+}
+.dash-progress-track {
+  height: 10px;
+  background: var(--off-white);
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.dash-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--navy), var(--gold));
+  border-radius: 100px;
+  transition: width 0.5s ease;
+  width: 0%;
+}
+.dash-badges {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.dash-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--gold-pale);
+  color: var(--navy-dark);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: 100px;
+  opacity: 0.35;
+  transition: opacity 0.3s;
+}
+.dash-badge.earned { opacity: 1; }
+.dash-reset {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: border-color 0.18s;
+}
+.dash-reset:hover { border-color: var(--navy); color: var(--navy); }
 
 /* ── CARE FRAMEWORK GRID ─────────────────────────────────────────────────── */
 #care { margin-bottom: 3rem; }
@@ -406,7 +497,7 @@ body {
   font-style: italic;
 }
 
-/* ── VIVA DISCUSSION PANEL ───────────────────────────────────────────────── */
+/* ── INTERACTIVE VIVA PANEL ──────────────────────────────────────────────── */
 .viva-discussion {
   background: var(--off-white);
   border-radius: 10px;
@@ -419,10 +510,88 @@ body {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-muted);
-  margin-bottom: 0.9rem;
+  margin-bottom: 0.6rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+.viva-mode-toggle {
+  display: flex;
+  gap: 0;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1.5px solid var(--border);
+  width: fit-content;
+}
+.viva-mode-btn {
+  background: var(--white);
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.18s;
+}
+.viva-mode-btn.active {
+  background: var(--navy);
+  color: var(--gold);
+}
+.viva-respond-area {
+  display: none;
+}
+.viva-respond-area.active { display: block; }
+.viva-guide-area {
+  display: none;
+}
+.viva-guide-area.active { display: block; }
+.viva-input-group {
+  background: var(--white);
+  border-radius: 8px;
+  padding: 0.85rem 0.9rem;
+  border-top: 3px solid;
+  margin-bottom: 0.75rem;
+}
+.viva-input-group.v1 { border-top-color: var(--verify-color); }
+.viva-input-group.i  { border-top-color: var(--illustrate-color); }
+.viva-input-group.v2 { border-top-color: var(--validate-color); }
+.viva-input-group.a  { border-top-color: var(--apply-color); }
+.viva-input-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.viva-input-prompt {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-bottom: 0.5rem;
+  line-height: 1.45;
+}
+.viva-textarea {
+  width: 100%;
+  min-height: 70px;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  padding: 0.6rem 0.75rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  color: var(--text);
+  resize: vertical;
+  transition: border-color 0.18s;
+  background: var(--off-white);
+}
+.viva-textarea:focus {
+  outline: none;
+  border-color: var(--navy-mid);
+  background: var(--white);
+}
+.viva-textarea::placeholder {
+  color: var(--text-muted);
+  opacity: 0.6;
 }
 .viva-steps-grid {
   display: grid;
@@ -474,6 +643,91 @@ body {
   list-style: disc;
 }
 
+/* ── SELF-ASSESSMENT QUIZ ──────────────────────────────────────────────── */
+.quiz-section {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 1.2rem;
+  margin-bottom: 1.2rem;
+}
+.quiz-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--navy-mid);
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.quiz-q {
+  font-size: 0.9rem;
+  color: var(--text);
+  margin-bottom: 0.65rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+}
+.quiz-opt {
+  display: block;
+  background: var(--off-white);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.85rem;
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.18s;
+  line-height: 1.45;
+}
+.quiz-opt:hover { border-color: var(--navy-mid); background: var(--white); }
+.quiz-opt.selected { border-color: var(--navy); background: var(--pale-navy); font-weight: 600; }
+.quiz-opt.correct { border-color: var(--success); background: var(--success-pale); }
+.quiz-opt.incorrect { border-color: #DC2626; background: #FEE2E2; }
+.quiz-opt[disabled] { cursor: default; opacity: 0.85; }
+.quiz-feedback {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  padding: 0.7rem 0.9rem;
+  border-radius: 8px;
+  display: none;
+}
+.quiz-feedback.visible { display: block; }
+.quiz-feedback.correct-fb {
+  background: var(--success-pale);
+  color: var(--verify-color);
+  border: 1px solid #A7F3D0;
+}
+.quiz-feedback.incorrect-fb {
+  background: #FEF2F2;
+  color: #991B1B;
+  border: 1px solid #FECACA;
+}
+.quiz-submit {
+  background: var(--navy);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 1.2rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: background 0.18s;
+  margin-top: 0.5rem;
+}
+.quiz-submit:hover { background: var(--navy-mid); }
+.quiz-submit:disabled { opacity: 0.4; cursor: default; }
+
 /* ── GUARDRAIL BOX ───────────────────────────────────────────────────────── */
 .guardrail-box {
   background: var(--navy-dark);
@@ -503,6 +757,146 @@ body {
   line-height: 1.55;
 }
 
+/* ── COMPARE VIEW ────────────────────────────────────────────────────────── */
+#compare { margin-bottom: 3rem; }
+.compare-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+.compare-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 100px;
+  padding: 0.3rem 0.4rem 0.3rem 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--navy);
+}
+.compare-tag-remove {
+  background: var(--border);
+  border: none;
+  border-radius: 50%;
+  width: 1.2rem;
+  height: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-family: 'DM Sans', sans-serif;
+}
+.compare-tag-remove:hover { background: var(--navy); color: var(--white); }
+.compare-add-btn {
+  background: var(--off-white);
+  border: 1.5px dashed var(--border);
+  border-radius: 100px;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.18s;
+}
+.compare-add-btn:hover { border-color: var(--navy); color: var(--navy); }
+.compare-dropdown {
+  position: relative;
+  display: inline-block;
+}
+.compare-dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 0.4rem 0;
+  min-width: 260px;
+  max-height: 240px;
+  overflow-y: auto;
+  box-shadow: 0 6px 20px rgba(10,52,118,0.12);
+  z-index: 50;
+}
+.compare-dropdown-menu.open { display: block; }
+.compare-dropdown-item {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.82rem;
+  color: var(--text);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: background 0.12s;
+}
+.compare-dropdown-item:hover { background: var(--off-white); }
+.compare-dropdown-item.disabled {
+  color: var(--text-muted);
+  opacity: 0.5;
+  cursor: default;
+}
+.compare-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.compare-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.82rem;
+}
+.compare-table th {
+  background: var(--navy);
+  color: var(--white);
+  padding: 0.7rem 0.9rem;
+  text-align: left;
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  position: sticky;
+  top: 0;
+  white-space: nowrap;
+}
+.compare-table th:first-child {
+  border-radius: 8px 0 0 0;
+  min-width: 120px;
+}
+.compare-table th:last-child { border-radius: 0 8px 0 0; }
+.compare-table td {
+  background: var(--white);
+  padding: 0.65rem 0.9rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.5;
+  color: var(--text);
+}
+.compare-table tr:last-child td:first-child { border-radius: 0 0 0 8px; }
+.compare-table tr:last-child td:last-child { border-radius: 0 0 8px 0; }
+.compare-table td:first-child {
+  font-weight: 700;
+  color: var(--navy);
+  background: var(--off-white);
+}
+.compare-empty {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  background: var(--white);
+  border: 1.5px dashed var(--border);
+  border-radius: 10px;
+}
+
 /* ── ALL SCENARIOS LIST ──────────────────────────────────────────────────── */
 #all-scenarios { margin-bottom: 3rem; }
 .scenarios-list {
@@ -519,11 +913,30 @@ body {
   transition: border-color 0.18s, box-shadow 0.18s, transform 0.12s;
   text-decoration: none;
   display: block;
+  position: relative;
 }
 .scenario-card-mini:hover {
   border-color: var(--navy);
   box-shadow: 0 3px 12px rgba(10,52,118,0.1);
   transform: translateY(-2px);
+}
+.scenario-card-mini.completed {
+  border-color: var(--success);
+}
+.completed-check {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  width: 1.4rem;
+  height: 1.4rem;
+  background: var(--success);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  font-size: 0.7rem;
+  font-weight: 700;
 }
 .mini-header {
   display: flex;
@@ -563,17 +976,68 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-.mini-load-btn {
+.mini-actions {
+  display: flex;
+  gap: 0.5rem;
   margin-top: 0.6rem;
+}
+.mini-load-btn, .mini-compare-btn {
   font-size: 0.75rem;
-  color: var(--navy-mid);
   font-weight: 600;
-  text-decoration: underline;
   background: none;
   border: none;
   cursor: pointer;
   padding: 0;
   font-family: 'DM Sans', sans-serif;
+}
+.mini-load-btn {
+  color: var(--navy-mid);
+  text-decoration: underline;
+}
+.mini-compare-btn {
+  color: var(--teal);
+  text-decoration: underline;
+}
+
+/* ── TOOLTIP ─────────────────────────────────────────────────────────────── */
+.term-tip {
+  position: relative;
+  border-bottom: 1.5px dotted var(--teal);
+  color: var(--teal);
+  cursor: help;
+  font-weight: 600;
+}
+.term-tip .tip-content {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--navy-dark);
+  color: var(--off-white);
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 400;
+  line-height: 1.5;
+  width: 280px;
+  max-width: 90vw;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  z-index: 80;
+  pointer-events: none;
+}
+.term-tip .tip-content::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--navy-dark);
+}
+.term-tip:hover .tip-content,
+.term-tip:focus .tip-content {
+  display: block;
 }
 
 /* ── CLOSING ─────────────────────────────────────────────────────────────── */
@@ -630,6 +1094,9 @@ body {
   .main-wrap { padding: 1.2rem 1rem 3rem; }
   .generator-controls { flex-direction: column; align-items: stretch; }
   .random-btn { justify-content: center; }
+  .dash-bar { flex-direction: column; align-items: stretch; gap: 1rem; }
+  .dash-stat { text-align: left; }
+  .compare-table { min-width: 500px; }
 }
 </style>
 </head>
@@ -642,16 +1109,18 @@ body {
     <div class="header-badge">K-12 School Library Edition</div>
     <h1 class="header-title">What Would <span>You</span> Do?</h1>
     <p class="header-desc">AI Ethics and Privacy Scenarios for School Librarians — Practice judgment using the C.A.R.E. Framework and the VIVA discussion method.</p>
-    <p class="header-meta">Facilitator: Miguel Guhlin &nbsp;|&nbsp; mguhlin@tcea.org &nbsp;|&nbsp; mguhlin.org &nbsp;|&nbsp; <a href="https://tcea.org/courses" style="color:var(--gold-light)">tcea.org/courses</a></p>
+    <p class="header-meta">Facilitator: Miguel Guhlin &nbsp;|&nbsp; mguhlin@tcea.org &nbsp;|&nbsp; mguhlin.org &nbsp;|&nbsp; <a href="https://tcea.org/courses">tcea.org/courses</a></p>
   </div>
 </header>
 
 <!-- ── NAV ───────────────────────────────────────────────────────────────── -->
 <nav class="site-nav" aria-label="Page sections">
   <div class="nav-inner">
+    <a href="#dashboard" class="nav-link">Progress</a>
     <a href="#care" class="nav-link">C.A.R.E. Framework</a>
     <a href="#viva" class="nav-link">VIVA Method</a>
     <a href="#generator" class="nav-link">Scenario Generator</a>
+    <a href="#compare" class="nav-link">Compare</a>
     <a href="#all-scenarios" class="nav-link">All Scenarios</a>
     <a href="#closing" class="nav-link">Closing Reflection</a>
   </div>
@@ -659,6 +1128,40 @@ body {
 
 <!-- ── MAIN ──────────────────────────────────────────────────────────────── -->
 <main class="main-wrap">
+
+  <!-- PROGRESS DASHBOARD ─────────────────────────────────────────────────── -->
+  <section id="dashboard" aria-labelledby="dash-heading">
+    <h2 class="section-heading" id="dash-heading">Your Progress</h2>
+    <p class="section-sub">Track the scenarios you have worked through and the skills you are building.</p>
+    <div class="dash-bar">
+      <div class="dash-stat">
+        <div class="dash-stat-num" id="dash-completed">0</div>
+        <div class="dash-stat-label">Completed</div>
+      </div>
+      <div class="dash-stat">
+        <div class="dash-stat-num" id="dash-quiz-score">—</div>
+        <div class="dash-stat-label">Quiz Accuracy</div>
+      </div>
+      <div class="dash-progress-wrap">
+        <div class="dash-progress-label">
+          <span>Scenario Coverage</span>
+          <span id="dash-pct">0%</span>
+        </div>
+        <div class="dash-progress-track">
+          <div class="dash-progress-fill" id="dash-fill"></div>
+        </div>
+      </div>
+      <div class="dash-badges">
+        <div class="dash-badge" id="badge-c" title="Earned by completing all Critical Awareness scenarios">🔍 Critical Awareness</div>
+        <div class="dash-badge" id="badge-a" title="Earned by completing all Applied Purpose scenarios">🎯 Applied Purpose</div>
+        <div class="dash-badge" id="badge-r" title="Earned by completing all Responsible Practice scenarios">🛡️ Responsible Practice</div>
+        <div class="dash-badge" id="badge-e" title="Earned by completing all Evaluative Outcome scenarios">📊 Evaluative Outcome</div>
+      </div>
+      <button class="dash-reset" onclick="resetProgress()">Reset Progress</button>
+    </div>
+  </section>
+
+  <div class="divider"></div>
 
   <!-- C.A.R.E. FRAMEWORK ─────────────────────────────────────────────────── -->
   <section id="care" aria-labelledby="care-heading">
@@ -691,10 +1194,10 @@ body {
         <div class="care-card-title">Responsible Practice</div>
         <div class="care-card-tagline">Use AI safely, transparently, with integrity</div>
         <ul>
-          <li>Never inputs student PII into any AI tool without a DPA</li>
+          <li>Never inputs student <span class="term-tip" tabindex="0">PII<span class="tip-content"><strong>Personally Identifiable Information (PII)</strong> — Any data that can identify a specific individual, such as names, addresses, student ID numbers, or biometric data. Under FERPA and state privacy laws, student PII requires strict handling and consent protocols.</span></span> into any AI tool without a <span class="term-tip" tabindex="0">DPA<span class="tip-content"><strong>Data Processing Agreement (DPA)</strong> — A legally binding contract between a data controller (the school/district) and a data processor (the vendor) that specifies how student data will be handled, stored, protected, and deleted. Required for FERPA compliance when sharing student data with third parties.</span></span></li>
           <li>Labels all AI-generated library content clearly</li>
           <li>Supports school-wide AI policy development</li>
-          <li>Distinguishes enterprise AI from free/consumer AI tools</li>
+          <li>Distinguishes <span class="term-tip" tabindex="0">enterprise AI<span class="tip-content"><strong>Enterprise AI</strong> — AI tools purchased or licensed by the school or district under a formal agreement that includes data privacy protections, a DPA, and administrative controls. Contrast with free consumer AI tools (ChatGPT free tier, Google Gemini, etc.) that may use input data for model training.</span></span> from free/consumer AI tools</li>
           <li>Models the academic integrity standards taught to students</li>
         </ul>
       </div>
@@ -763,7 +1266,7 @@ body {
   <!-- SCENARIO GENERATOR ───────────────────────────────────────────────────── -->
   <section id="generator" aria-labelledby="gen-heading">
     <h2 class="section-heading" id="gen-heading">Scenario Generator</h2>
-    <p class="section-sub">Filter by C.A.R.E. principle or draw a random scenario. Use VIVA to guide your group discussion.</p>
+    <p class="section-sub">Filter by C.A.R.E. principle or draw a random scenario. Use VIVA to guide your group discussion. Try writing your own responses before revealing the discussion guide.</p>
 
     <div class="generator-controls">
       <span class="gen-label">Filter by C.A.R.E.:</span>
@@ -781,6 +1284,26 @@ body {
 
     <div class="active-scenario" id="active-scenario">
       <!-- populated by JS -->
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- COMPARE SCENARIOS ────────────────────────────────────────────────────── -->
+  <section id="compare" aria-labelledby="compare-heading">
+    <h2 class="section-heading" id="compare-heading">Compare Scenarios</h2>
+    <p class="section-sub">Select two or three scenarios to see them side by side. Identify shared patterns, common biases, and reusable guardrails across different situations.</p>
+
+    <div class="compare-controls" id="compare-controls">
+      <div id="compare-tags"></div>
+      <div class="compare-dropdown" id="compare-dropdown">
+        <button class="compare-add-btn" id="compare-add-btn" onclick="toggleCompareDropdown()">+ Add Scenario</button>
+        <div class="compare-dropdown-menu" id="compare-menu"></div>
+      </div>
+    </div>
+
+    <div id="compare-output">
+      <div class="compare-empty">Select two or three scenarios above to see a comparison matrix.</div>
     </div>
   </section>
 
@@ -814,7 +1337,7 @@ body {
       <div class="closing-col">
         <h4>If You Want a Starting Point</h4>
         <ul>
-          <li>Create a no-upload list for student PII and sensitive content</li>
+          <li>Create a no-upload list for student <span class="term-tip" tabindex="0">PII<span class="tip-content"><strong>Personally Identifiable Information (PII)</strong> — Any data that can identify a specific individual, such as names, addresses, student ID numbers, or biometric data.</span></span> and sensitive content</li>
           <li>Require source verification for all AI-generated resource lists</li>
           <li>Add a fairness check to any AI-generated collection recommendations</li>
           <li>Set a quarterly review cycle for your AI guardrails and policies</li>
@@ -840,6 +1363,33 @@ body {
 </footer>
 
 <script>
+// ── GLOSSARY (tooltips injected into scenario text) ────────────────────────
+const glossary = {
+  "PII": "<strong>Personally Identifiable Information (PII)</strong> — Any data that can identify a specific individual: names, addresses, student ID numbers, biometric data. Protected under FERPA and state privacy laws.",
+  "DPA": "<strong>Data Processing Agreement (DPA)</strong> — A binding contract between a data controller (school/district) and a processor (vendor) specifying how student data is handled, stored, protected, and deleted. Required for FERPA compliance.",
+  "FERPA": "<strong>Family Educational Rights and Privacy Act (FERPA)</strong> — A federal law (20 U.S.C. § 1232g) that protects the privacy of student education records. Schools must have written consent before sharing PII from a student's education record with third parties, with limited exceptions.",
+  "hallucination": "<strong>AI Hallucination</strong> — When an AI model generates content that is factually incorrect, fabricated, or unsupported by its training data but presents it with high confidence. Common in book lists, citations, and factual claims.",
+  "algorithmic bias": "<strong>Algorithmic Bias</strong> — Systematic errors in AI output that produce unfair outcomes, often reflecting biases in training data. In library contexts, this can mean AI tools that favor mainstream content over diverse or multilingual resources.",
+  "enterprise AI": "<strong>Enterprise AI</strong> — AI tools purchased or licensed under a formal agreement with data privacy protections, a DPA, and administrative controls. Distinct from free consumer AI tools that may use input data for model training."
+};
+
+function injectTooltips(text) {
+  const terms = [
+    { pattern: /\bPII\b/g, key: "PII" },
+    { pattern: /\bDPA\b/g, key: "DPA" },
+    { pattern: /\bFERPA\b/g, key: "FERPA" },
+    { pattern: /\bhallucin/gi, key: "hallucination" },
+  ];
+  terms.forEach(t => {
+    if (glossary[t.key]) {
+      text = text.replace(t.pattern, match =>
+        `<span class="term-tip" tabindex="0">${match}<span class="tip-content">${glossary[t.key]}</span></span>`
+      );
+    }
+  });
+  return text;
+}
+
 // ── SCENARIO DATA ─────────────────────────────────────────────────────────────
 const scenarios = [
   {
@@ -853,7 +1403,14 @@ const scenarios = [
     vivaI:  ["Which student communities might no longer see themselves in the display?","Could this erode trust with families who expect culturally responsive library services?","What happens if students or parents notice the shift?"],
     vivaV2: ["Critical Awareness — did the librarian question what the AI removed?","Responsible Practice — was a free AI tool appropriate for community-facing content?","What professional value is at stake: equity, representation, or voice?"],
     vivaA:  ["Establish a review step: any AI-edited public-facing text must be compared side-by-side with the original before publishing.","Prohibit use of free consumer AI for community-facing content without an approval step.","Who needs to sign off before culturally responsive text is changed by AI?"],
-    guardrail: "Write down one guardrail your library could adopt this month."
+    guardrail: "Write down one guardrail your library could adopt this month.",
+    quiz: {
+      question: "A librarian uses AI to \"clean up\" a bilingual library display. The AI removes Spanish-language references and replaces community authors with mainstream ones. Which C.A.R.E. principle was most violated?",
+      options: ["Applied Purpose — there was no clear goal","Critical Awareness — the librarian did not question what the AI removed","Evaluative Outcome — there was no review cycle","Responsible Practice — the tool was not approved"],
+      correct: 1,
+      feedback_correct: "Correct. Critical Awareness requires questioning AI output, especially when it removes culturally significant content. The librarian accepted the AI's definition of \"polished\" without examining what was lost.",
+      feedback_incorrect: "Not quite. While other principles may apply, the core failure was Critical Awareness — the librarian did not question what the AI removed or how it redefined \"polished\" in a way that erased community representation."
+    }
   },
   {
     id: 2,
@@ -866,7 +1423,14 @@ const scenarios = [
     vivaI:  ["What happens to student names and reading data after they enter a free AI system?","Could this data be used to train future models without consent — a FERPA violation?","Which students are most vulnerable if this data is misused?"],
     vivaV2: ["Responsible Practice — student PII must never enter a consumer AI tool.","Applied Purpose — is AI the right tool here, or does a simple spreadsheet work just as well?","Which law or policy is at risk: FERPA, district data governance, or state privacy law?"],
     vivaA:  ["Hard rule: no student names, grades, or reading data enter any AI tool without a signed DPA.","Use an enterprise-grade tool or switch to a non-AI method for reading recommendations.","Create a one-page 'What not to paste' guide for library staff and volunteers."],
-    guardrail: "Write down one guardrail your library could adopt this month."
+    guardrail: "Write down one guardrail your library could adopt this month.",
+    quiz: {
+      question: "A librarian pastes student names, grades, and reading preferences into a free AI chatbot. What is the most immediate legal risk?",
+      options: ["The AI might give bad book recommendations","The school could face a FERPA violation for sharing PII without consent","The librarian could lose their teaching certification","The AI company could sue the school"],
+      correct: 1,
+      feedback_correct: "Correct. Sharing student PII with a consumer AI tool that has no DPA is a FERPA violation. The data leaves the district's control and may be used for model training without parental consent.",
+      feedback_incorrect: "The most immediate legal risk is a FERPA violation. Student PII shared with a consumer AI tool without a DPA leaves the district's data governance framework and may be used for model training without parental consent."
+    }
   },
   {
     id: 3,
@@ -879,7 +1443,14 @@ const scenarios = [
     vivaI:  ["What happens if a student or parent challenges a clause no one can defend?","Could unenforceable policy language create legal liability for the school?","Who is accountable if the policy is adopted and then violated?"],
     vivaV2: ["Evaluative Outcome — was the AI output evaluated before being treated as authoritative?","Did anyone reflect on whether the AI actually understood the school's legal context?","What does 'professional judgment' mean in policy-making?"],
     vivaA:  ["Every clause in any AI-generated policy must be explainable in plain language by the person presenting it.","Require a human expert review — district counsel, technology director — before any AI-drafted policy is adopted.","Set a review cycle: any AI-assisted policy must be revisited within 90 days of adoption."],
-    guardrail: "Write down one guardrail your library could adopt this month."
+    guardrail: "Write down one guardrail your library could adopt this month.",
+    quiz: {
+      question: "An AI-generated Acceptable Use Policy is presented at a faculty meeting. No one can explain three key sections. What should happen next?",
+      options: ["Adopt it anyway since it looks professional","Table the policy until every clause can be explained in plain language","Ask the AI to rewrite the confusing sections","Remove the three confusing sections and adopt the rest"],
+      correct: 1,
+      feedback_correct: "Correct. A policy that no one can explain is a policy no one can enforce. Tabling it until every clause is understood ensures accountability and reduces legal risk.",
+      feedback_incorrect: "The right move is to table the policy until every clause can be explained in plain language. Adopting policy language you cannot defend creates legal liability and undermines professional accountability."
+    }
   },
   {
     id: 4,
@@ -892,7 +1463,14 @@ const scenarios = [
     vivaI:  ["Which student communities are being left out of future collection decisions?","How long before this bias compounds and gaps become structural?","Who benefits when the AI recommends only what is already popular?"],
     vivaV2: ["Critical Awareness — the librarian treats AI output as a starting point, not a final list.","The tool is amplifying existing collection bias, not correcting it.","What is the library's equity mandate, and is this tool undermining it?"],
     vivaA:  ["Request a formal bias audit from the vendor before continuing use of the tool.","Supplement AI recommendations with a human equity review using a diverse titles checklist.","Add a policy: no AI-generated collection list is finalized without cross-referencing a diverse publishers and authors database."],
-    guardrail: "Write down one guardrail your library could adopt this month."
+    guardrail: "Write down one guardrail your library could adopt this month.",
+    quiz: {
+      question: "An AI collection tool recommends only popular, mainstream titles and never surfaces diverse authors. This is an example of what?",
+      options: ["A software bug that needs a vendor patch","Algorithmic bias amplifying existing collection gaps","Normal AI behavior that does not need correction","A training data limitation that will fix itself over time"],
+      correct: 1,
+      feedback_correct: "Correct. This is algorithmic bias in action. The AI is trained on circulation data that reflects existing collection imbalances, so it amplifies those gaps rather than correcting them.",
+      feedback_incorrect: "This is algorithmic bias. The AI is trained on historical circulation data that reflects existing collection imbalances, so it reinforces and amplifies those gaps. It will not self-correct without human intervention."
+    }
   },
   {
     id: 5,
@@ -905,7 +1483,14 @@ const scenarios = [
     vivaI:  ["The teacher loses instructional time. Trust in library recommendations erodes.","Students miss access to a vetted, culturally appropriate resource for their unit.","What is the reputational cost to the library if this happens repeatedly?"],
     vivaV2: ["Responsible Practice — AI output must be fact-checked before it becomes a library recommendation.","The librarian's professional authority attaches to the list the moment it is shared.","What does professional integrity require before forwarding AI-generated content?"],
     vivaA:  ["Establish a non-negotiable step: every AI-generated booklist is verified in a catalog before it leaves the library.","Create a simple checklist: title exists, author is credited correctly, publication date is accurate, ISBN resolves.","Never forward AI-generated resource lists without a verification note indicating who checked them."],
-    guardrail: "Write down one guardrail your library could adopt this month."
+    guardrail: "Write down one guardrail your library could adopt this month.",
+    quiz: {
+      question: "A librarian shares an AI-generated booklist without checking it. Three titles do not exist. Who bears responsibility?",
+      options: ["The AI tool, because it generated false information","The librarian, because professional authority attaches to the list the moment it is shared","The teacher, because they should have verified the titles before ordering","The district, because they did not provide verification tools"],
+      correct: 1,
+      feedback_correct: "Correct. The librarian's professional authority attaches to any recommendation they share, regardless of how it was generated. AI hallucinations are a known risk, so verification is a professional obligation.",
+      feedback_incorrect: "The librarian bears responsibility. Professional authority attaches to any recommendation shared under the library's name, regardless of how it was generated. Verification before distribution is a non-negotiable professional standard."
+    }
   },
   {
     id: 6,
@@ -918,7 +1503,14 @@ const scenarios = [
     vivaI:  ["Students learning to accept AI answers without questioning them are developing poor research habits.","Which students are most likely to be harmed by generic, low-quality reference responses?","What is the long-term cost to information literacy if this continues unchecked?"],
     vivaV2: ["Applied Purpose — what specific good is this AI use achieving, and at what cost?","Evaluative Outcome — has anyone formally reviewed whether AI is deepening or shortcutting student learning?","Is volume a valid measure of library impact?"],
     vivaA:  ["Define which reference questions are appropriate for AI-assisted response and which require human engagement.","Establish a quality review: sample 10 AI-generated reference responses per month and evaluate for accuracy and depth.","Report on student research outcomes, not just volume of interactions, in library impact data."],
-    guardrail: "Write down one guardrail your library could adopt this month."
+    guardrail: "Write down one guardrail your library could adopt this month.",
+    quiz: {
+      question: "An AI reference tool doubles the library's response volume, but responses are generic and students stop asking follow-up questions. What metric should replace volume?",
+      options: ["Student satisfaction surveys","Student research outcome quality","Number of AI-generated responses per day","Speed of response time"],
+      correct: 1,
+      feedback_correct: "Correct. Student research outcome quality measures whether the library is fulfilling its educational mission, not just processing requests. Volume without quality is throughput without impact.",
+      feedback_incorrect: "Student research outcome quality is the strongest replacement metric. It measures whether the library is fulfilling its educational mission rather than simply processing requests at speed."
+    }
   },
   {
     id: 7,
@@ -931,7 +1523,14 @@ const scenarios = [
     vivaI:  ["Families whose primary language is not English may no longer see the library as a welcoming space.","Students who depend on bilingual collections are invisibilized in library marketing.","The librarian may not even notice the erosion because the individual edits seem minor."],
     vivaV2: ["Critical Awareness — the librarian must question what the AI defines as 'professional' and 'clear.'","The AI is not neutral: its training reflects linguistic biases embedded in its source data.","What is the library's obligation to multilingual and multicultural communities?"],
     vivaA:  ["Establish a community review step: any AI-edited public-facing text is reviewed by a bilingual staff member or community representative before publishing.","Explicitly instruct AI tools to preserve bilingual language, cultural references, and inclusive terminology.","Set a rule: AI does not define 'professional' for our community — our community does."],
-    guardrail: "Write down one guardrail your library could adopt this month."
+    guardrail: "Write down one guardrail your library could adopt this month.",
+    quiz: {
+      question: "An AI tool consistently removes Spanish-language references from library signage, calling the English-only version \"cleaner.\" What is the root cause?",
+      options: ["The librarian forgot to include Spanish text","The AI's training data reflects monolingual, English-dominant communication norms","The AI tool is broken and needs an update","Spanish is not a supported language in the tool"],
+      correct: 1,
+      feedback_correct: "Correct. AI training data skews toward English-dominant norms, so the model treats monolingual English as the \"standard\" for professional communication. This is a systemic bias, not a bug.",
+      feedback_incorrect: "The root cause is that AI training data reflects monolingual, English-dominant communication norms. The model treats English-only text as \"cleaner\" because its training data equates monolingual English with professional quality."
+    }
   },
   {
     id: 8,
@@ -944,7 +1543,14 @@ const scenarios = [
     vivaI:  ["Student reading data is sensitive: it can reveal learning disabilities, language barriers, and academic struggles.","Without a DPA, student data could be used to train commercial AI models without consent.","What is the legal and reputational exposure for the district if data is mishandled?"],
     vivaV2: ["Responsible Practice — the librarian's role includes advocating for student data protection before a tool is adopted.","Speed is not a valid reason to bypass student privacy safeguards.","What does the vendor's refusal to provide a DPA signal about how they treat student data?"],
     vivaA:  ["Non-negotiable: no AI tool that processes student data is adopted without a signed, district-approved DPA.","Create a five-question vendor vetting checklist and share it with administrators before any demo.","The librarian's role is to ask the data privacy questions — even when leadership wants to move fast."],
-    guardrail: "Write down one guardrail your library could adopt this month."
+    guardrail: "Write down one guardrail your library could adopt this month.",
+    quiz: {
+      question: "A vendor demos an impressive AI reading tool, but has no DPA and cannot explain their data retention practices. What should the librarian do?",
+      options: ["Recommend adoption since leadership supports it","Request the vendor provide a signed DPA and data documentation before any adoption decision","Ask the vendor to verbally promise data protection","Pilot the tool with a small group of students to test it first"],
+      correct: 1,
+      feedback_correct: "Correct. No AI tool that processes student data should be adopted without a signed, district-approved DPA and clear data documentation. Verbal promises and pilot programs do not replace legal protections.",
+      feedback_incorrect: "The correct action is to require a signed DPA and written data documentation before any adoption decision. Verbal promises and small-scale pilots do not provide legal protection for student data."
+    }
   },
   {
     id: 9,
@@ -957,7 +1563,14 @@ const scenarios = [
     vivaI:  ["Students are building research habits around an unmonitored AI that can hallucinate or mislead.","Teachers are trusting a tool they do not understand, and holding students accountable to AI-generated standards.","What happens when the chatbot gives a confident but wrong answer on a high-stakes assignment?"],
     vivaV2: ["Evaluative Outcome — who is monitoring whether this tool is helping or harming student learning?","Responsible Practice — unmonitored AI deployment without clear disclosure violates professional accountability.","The librarian remains accountable for all research guidance that carries the library's implicit endorsement."],
     vivaA:  ["Any AI tool deployed under the library's name requires regular output review and a clear disclaimer visible to users.","Add a visible label: 'This is an AI assistant, not a librarian. Verify all answers before citing.'","Establish a monthly review: sample chatbot responses and assess for accuracy, bias, and pedagogical appropriateness."],
-    guardrail: "Write down one guardrail your library could adopt this month."
+    guardrail: "Write down one guardrail your library could adopt this month.",
+    quiz: {
+      question: "Students are citing an unmonitored library chatbot as an authoritative source. What is the single most important first step?",
+      options: ["Shut down the chatbot immediately","Add a visible disclaimer and establish a regular output review process","Train students on how to cite AI properly","Ask the vendor for an accuracy guarantee"],
+      correct: 1,
+      feedback_correct: "Correct. Adding a disclaimer and review process addresses both the transparency gap and the quality gap without removing a useful tool entirely. Students need to understand the chatbot is not a verified source.",
+      feedback_incorrect: "The best first step is adding a visible disclaimer and establishing a regular output review process. This addresses both the transparency gap (students do not know it is unverified) and the quality gap (no one is checking outputs)."
+    }
   },
   {
     id: 10,
@@ -970,7 +1583,14 @@ const scenarios = [
     vivaI:  ["The parent's trust in the library's professional judgment is at stake.","If families do not know AI is involved, they cannot give informed consent or make informed decisions.","What if the AI recommendation does not account for the student's specific learning needs?"],
     vivaV2: ["Responsible Practice — transparency about AI use is a professional and ethical obligation.","Applied Purpose — using AI for personalized recommendations requires a clear disclosure framework.","What do families have a right to know about how AI shapes their child's educational experience?"],
     vivaA:  ["Create a simple, plain-language AI disclosure statement for all student-facing library materials generated with AI assistance.","Make disclosure visible — not buried in fine print — so families can ask informed questions.","Prepare a brief FAQ for library staff on how to answer parent questions about AI use honestly and clearly."],
-    guardrail: "Write down one guardrail your library could adopt this month."
+    guardrail: "Write down one guardrail your library could adopt this month.",
+    quiz: {
+      question: "A parent asks whether AI was used in their child's reading plan. The librarian has no disclosure policy. What is the most professional immediate response?",
+      options: ["Say no to avoid alarming the parent","Explain honestly that AI was used and commit to creating a disclosure policy","Redirect the parent to the principal","Say it was just a tool, like a calculator"],
+      correct: 1,
+      feedback_correct: "Correct. Honesty is the only professional response. Acknowledging AI use and committing to a disclosure policy builds trust and demonstrates responsible practice.",
+      feedback_incorrect: "The professional response is honest acknowledgment paired with a commitment to create a formal disclosure policy. Deflection or minimization erodes trust and violates the transparency obligation."
+    }
   },
   {
     id: 11,
@@ -983,7 +1603,14 @@ const scenarios = [
     vivaI:  ["A single point of failure for AI expertise creates institutional fragility.","Students and teachers are left without guidance precisely when AI questions are most urgent.","If the expert leaves permanently, does the district's AI literacy capacity leave with them?"],
     vivaV2: ["Evaluative Outcome — has anyone evaluated whether this concentration of expertise is sustainable?","Distributed knowledge is more resilient than centralized expertise — especially in a fast-moving field.","What does responsible stewardship of institutional knowledge look like?"],
     vivaA:  ["Document all AI policies, vendor agreements, and guardrails in a shared, accessible location — not just in email.","Create a peer learning structure: at least two librarians in every building can evaluate and recommend AI tools.","Build a succession plan for AI expertise into professional development planning."],
-    guardrail: "Write down one guardrail your library could adopt this month."
+    guardrail: "Write down one guardrail your library could adopt this month.",
+    quiz: {
+      question: "One librarian holds all AI expertise for the district. They go on leave and everything stalls. What is the most sustainable fix?",
+      options: ["Hire a dedicated AI coordinator","Document all AI policies and build a peer learning structure across buildings","Wait for the expert to return","Outsource AI decisions to a vendor"],
+      correct: 1,
+      feedback_correct: "Correct. Documentation plus distributed expertise eliminates the single point of failure. At least two people in every building should be able to evaluate and recommend AI tools independently.",
+      feedback_incorrect: "The most sustainable fix is documentation plus distributed expertise. Centralized knowledge in one person is an institutional risk; at least two people in every building should be able to make AI decisions independently."
+    }
   },
   {
     id: 12,
@@ -996,13 +1623,75 @@ const scenarios = [
     vivaI:  ["Gradual values drift is invisible precisely because no single decision feels significant.","Students and communities may be receiving a library program that no longer reflects the library's core commitments.","Who holds the library accountable when AI quietly reshapes its professional identity?"],
     vivaV2: ["Evaluative Outcome — regular reflection is not optional; it is how professionals lead responsibly.","The library's mission is a document, but it is also a living commitment that must be actively defended.","What is the difference between adapting and drifting?"],
     vivaA:  ["Schedule a formal mid-year AI impact review: document what AI changed and whether it aligned with the mission.","Create a simple 'mission alignment check' for any AI-assisted program or policy decision.","Make 'Did AI help us live our values or shift away from them?' a standing agenda item at department meetings."],
-    guardrail: "Write down one guardrail your library could adopt this month."
+    guardrail: "Write down one guardrail your library could adopt this month.",
+    quiz: {
+      question: "A library team realizes AI has quietly shifted their collection priorities, engagement methods, and program focus over a full year. What is the core failure?",
+      options: ["They used the wrong AI tools","They failed to conduct regular evaluative reviews of AI's impact on their mission","They should have banned AI entirely","They did not get enough training on AI"],
+      correct: 1,
+      feedback_correct: "Correct. The core failure is the absence of regular evaluative review. Values drift happens when no one pauses to check whether incremental changes still align with the mission. Reflection is not optional.",
+      feedback_incorrect: "The core failure is the absence of regular evaluative review. Without periodic checks on whether AI-influenced decisions align with the library's mission, gradual values drift becomes invisible until it is too late."
+    }
   }
 ];
+
+// ── PROGRESS STATE (sessionStorage) ──────────────────────────────────────────
+let progress = JSON.parse(sessionStorage.getItem('wwyd_progress') || '{}');
+// progress = { completedScenarios: [id,...], quizResults: { id: true/false }, responses: { id: { v1:"", i:"", v2:"", a:"" } } }
+if (!progress.completedScenarios) progress.completedScenarios = [];
+if (!progress.quizResults) progress.quizResults = {};
+if (!progress.responses) progress.responses = {};
+
+function saveProgress() {
+  sessionStorage.setItem('wwyd_progress', JSON.stringify(progress));
+  updateDashboard();
+}
+
+function resetProgress() {
+  if (!confirm('Reset all progress? This clears completed scenarios, quiz results, and your written responses for this session.')) return;
+  progress = { completedScenarios: [], quizResults: {}, responses: {} };
+  saveProgress();
+  updateMiniCards();
+}
+
+function markComplete(id) {
+  if (!progress.completedScenarios.includes(id)) {
+    progress.completedScenarios.push(id);
+    saveProgress();
+    updateMiniCards();
+  }
+}
+
+function updateDashboard() {
+  const total = scenarios.length;
+  const done = progress.completedScenarios.length;
+  const pct = Math.round((done / total) * 100);
+
+  document.getElementById('dash-completed').textContent = done;
+  document.getElementById('dash-pct').textContent = pct + '%';
+  document.getElementById('dash-fill').style.width = pct + '%';
+
+  // Quiz accuracy
+  const qKeys = Object.keys(progress.quizResults);
+  if (qKeys.length > 0) {
+    const correct = qKeys.filter(k => progress.quizResults[k]).length;
+    document.getElementById('dash-quiz-score').textContent = Math.round((correct / qKeys.length) * 100) + '%';
+  } else {
+    document.getElementById('dash-quiz-score').textContent = '—';
+  }
+
+  // Badges: earned when all scenarios for a CARE principle are completed
+  const carePrinciples = { C: [], A: [], R: [], E: [] };
+  scenarios.forEach(s => s.care.forEach(c => { if (!carePrinciples[c].includes(s.id)) carePrinciples[c].push(s.id); }));
+  ['C','A','R','E'].forEach(p => {
+    const all = carePrinciples[p].every(id => progress.completedScenarios.includes(id));
+    document.getElementById('badge-' + p.toLowerCase()).classList.toggle('earned', all);
+  });
+}
 
 // ── STATE ────────────────────────────────────────────────────────────────────
 let currentFilter = "all";
 let lastDrawnId = null;
+let compareSelection = [];
 
 // ── FILTER ────────────────────────────────────────────────────────────────────
 document.querySelectorAll(".filter-btn").forEach(btn => {
@@ -1024,7 +1713,6 @@ function drawRandom() {
   const pool = filteredScenarios();
   if (!pool.length) return;
   let pick = pool[Math.floor(Math.random() * pool.length)];
-  // avoid repeating same scenario if pool allows
   if (pool.length > 1 && pick.id === lastDrawnId) {
     pick = pool.filter(s => s.id !== lastDrawnId)[Math.floor(Math.random() * (pool.length - 1))];
   }
@@ -1034,6 +1722,7 @@ function drawRandom() {
 function loadScenario(scenario) {
   lastDrawnId = scenario.id;
   const el = document.getElementById("active-scenario");
+  const saved = progress.responses[scenario.id] || {};
 
   const careChips = scenario.careLabels.map(l => `<span class="care-chip">${l}</span>`).join("");
 
@@ -1047,47 +1736,81 @@ function loadScenario(scenario) {
     </div>
     <div class="scenario-body">
       <div class="situation-label">The Situation</div>
-      <div class="situation-text">${scenario.situation}</div>
+      <div class="situation-text">${injectTooltips(scenario.situation)}</div>
 
       <div class="big-question">
         <div class="big-q-label">Big Question</div>
         <div class="big-q-text">${scenario.bigQuestion}</div>
       </div>
 
+      <!-- INTERACTIVE VIVA PANEL -->
       <div class="viva-discussion">
         <div class="viva-disc-title">
           <span>Use VIVA to Discuss This Scenario</span>
         </div>
-        <div class="viva-steps-grid">
-          <div class="viva-step v1">
-            <div class="viva-step-head">
-              <div class="viva-dot">V</div>
-              <div class="viva-step-name">Verify — What do we know?</div>
-            </div>
-            <ul>${scenario.vivaV1.map(q => `<li>${q}</li>`).join("")}</ul>
+        <div class="viva-mode-toggle">
+          <button class="viva-mode-btn active" onclick="setVivaMode(this, 'respond', ${scenario.id})">Try It Yourself</button>
+          <button class="viva-mode-btn" onclick="setVivaMode(this, 'guide', ${scenario.id})">Show Discussion Guide</button>
+        </div>
+
+        <!-- RESPOND MODE: user types their own thinking -->
+        <div class="viva-respond-area active" id="viva-respond-${scenario.id}">
+          <div class="viva-input-group v1">
+            <div class="viva-input-head"><div class="viva-dot" style="background:var(--verify-color)">V</div><div class="viva-step-name">Verify — What do we know?</div></div>
+            <div class="viva-input-prompt">What is actually happening? Who is making decisions? What do you know for certain versus assume?</div>
+            <textarea class="viva-textarea" placeholder="Type your analysis here..." data-sid="${scenario.id}" data-step="v1" oninput="saveResponse(this)">${saved.v1 || ''}</textarea>
           </div>
-          <div class="viva-step i">
-            <div class="viva-step-head">
-              <div class="viva-dot">I</div>
-              <div class="viva-step-name">Illustrate — What could go wrong?</div>
-            </div>
-            <ul>${scenario.vivaI.map(q => `<li>${q}</li>`).join("")}</ul>
+          <div class="viva-input-group i">
+            <div class="viva-input-head"><div class="viva-dot" style="background:var(--illustrate-color)">I</div><div class="viva-step-name">Illustrate — What could go wrong?</div></div>
+            <div class="viva-input-prompt">Who might be affected? What are the unintended consequences? Who is most at risk?</div>
+            <textarea class="viva-textarea" placeholder="Type your analysis here..." data-sid="${scenario.id}" data-step="i" oninput="saveResponse(this)">${saved.i || ''}</textarea>
           </div>
-          <div class="viva-step v2">
-            <div class="viva-step-head">
-              <div class="viva-dot">V</div>
-              <div class="viva-step-name">Validate — Which C.A.R.E. principle?</div>
-            </div>
-            <ul>${scenario.vivaV2.map(q => `<li>${q}</li>`).join("")}</ul>
+          <div class="viva-input-group v2">
+            <div class="viva-input-head"><div class="viva-dot" style="background:var(--validate-color)">V</div><div class="viva-step-name">Validate — Which C.A.R.E. principle?</div></div>
+            <div class="viva-input-prompt">Which C.A.R.E. principle is most at risk? What professional value is being tested?</div>
+            <textarea class="viva-textarea" placeholder="Type your analysis here..." data-sid="${scenario.id}" data-step="v2" oninput="saveResponse(this)">${saved.v2 || ''}</textarea>
           </div>
-          <div class="viva-step a">
-            <div class="viva-step-head">
-              <div class="viva-dot">A</div>
-              <div class="viva-step-name">Apply — What will we do?</div>
-            </div>
-            <ul>${scenario.vivaA.map(q => `<li>${q}</li>`).join("")}</ul>
+          <div class="viva-input-group a">
+            <div class="viva-input-head"><div class="viva-dot" style="background:var(--apply-color)">A</div><div class="viva-step-name">Apply — What will we do?</div></div>
+            <div class="viva-input-prompt">What guardrail would reduce risk? What would you change first? Who needs to be involved?</div>
+            <textarea class="viva-textarea" placeholder="Type your analysis here..." data-sid="${scenario.id}" data-step="a" oninput="saveResponse(this)">${saved.a || ''}</textarea>
           </div>
         </div>
+
+        <!-- GUIDE MODE: existing discussion prompts -->
+        <div class="viva-guide-area" id="viva-guide-${scenario.id}">
+          <div class="viva-steps-grid">
+            <div class="viva-step v1">
+              <div class="viva-step-head"><div class="viva-dot">V</div><div class="viva-step-name">Verify — What do we know?</div></div>
+              <ul>${scenario.vivaV1.map(q => `<li>${injectTooltips(q)}</li>`).join("")}</ul>
+            </div>
+            <div class="viva-step i">
+              <div class="viva-step-head"><div class="viva-dot">I</div><div class="viva-step-name">Illustrate — What could go wrong?</div></div>
+              <ul>${scenario.vivaI.map(q => `<li>${injectTooltips(q)}</li>`).join("")}</ul>
+            </div>
+            <div class="viva-step v2">
+              <div class="viva-step-head"><div class="viva-dot">V</div><div class="viva-step-name">Validate — Which C.A.R.E. principle?</div></div>
+              <ul>${scenario.vivaV2.map(q => `<li>${injectTooltips(q)}</li>`).join("")}</ul>
+            </div>
+            <div class="viva-step a">
+              <div class="viva-step-head"><div class="viva-dot">A</div><div class="viva-step-name">Apply — What will we do?</div></div>
+              <ul>${scenario.vivaA.map(q => `<li>${injectTooltips(q)}</li>`).join("")}</ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUIZ -->
+      <div class="quiz-section" id="quiz-${scenario.id}">
+        <div class="quiz-title">📝 Check Your Understanding</div>
+        <div class="quiz-q">${scenario.quiz.question}</div>
+        <div class="quiz-options" id="quiz-opts-${scenario.id}">
+          ${scenario.quiz.options.map((opt, idx) => `
+            <button class="quiz-opt" onclick="selectQuizOpt(${scenario.id}, ${idx}, this)" data-idx="${idx}">${opt}</button>
+          `).join("")}
+        </div>
+        <button class="quiz-submit" id="quiz-submit-${scenario.id}" onclick="submitQuiz(${scenario.id})" disabled>Check Answer</button>
+        <div class="quiz-feedback" id="quiz-fb-${scenario.id}"></div>
       </div>
 
       <div class="guardrail-box">
@@ -1100,30 +1823,209 @@ function loadScenario(scenario) {
     </div>
   `;
 
+  // Restore quiz state if already answered
+  if (progress.quizResults.hasOwnProperty(scenario.id)) {
+    restoreQuizState(scenario);
+  }
+
   el.classList.add("visible");
-  // Smooth scroll to generator
   el.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+// ── VIVA MODE TOGGLE ──────────────────────────────────────────────────────
+function setVivaMode(btn, mode, sid) {
+  const parent = btn.closest('.viva-discussion');
+  parent.querySelectorAll('.viva-mode-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const respond = document.getElementById('viva-respond-' + sid);
+  const guide = document.getElementById('viva-guide-' + sid);
+  if (mode === 'respond') {
+    respond.classList.add('active');
+    guide.classList.remove('active');
+  } else {
+    respond.classList.remove('active');
+    guide.classList.add('active');
+  }
+}
+
+// ── SAVE USER RESPONSES ──────────────────────────────────────────────────────
+function saveResponse(textarea) {
+  const sid = textarea.dataset.sid;
+  const step = textarea.dataset.step;
+  if (!progress.responses[sid]) progress.responses[sid] = {};
+  progress.responses[sid][step] = textarea.value;
+  saveProgress();
+}
+
+// ── QUIZ ─────────────────────────────────────────────────────────────────────
+let quizSelected = {};
+
+function selectQuizOpt(sid, idx, btn) {
+  if (progress.quizResults.hasOwnProperty(sid)) return;
+  const container = document.getElementById('quiz-opts-' + sid);
+  container.querySelectorAll('.quiz-opt').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  quizSelected[sid] = idx;
+  document.getElementById('quiz-submit-' + sid).disabled = false;
+}
+
+function submitQuiz(sid) {
+  const scenario = scenarios.find(s => s.id === sid);
+  const selected = quizSelected[sid];
+  if (selected === undefined) return;
+
+  const isCorrect = selected === scenario.quiz.correct;
+  progress.quizResults[sid] = isCorrect;
+  markComplete(sid);
+
+  const container = document.getElementById('quiz-opts-' + sid);
+  container.querySelectorAll('.quiz-opt').forEach((btn, idx) => {
+    btn.disabled = true;
+    if (idx === scenario.quiz.correct) btn.classList.add('correct');
+    if (idx === selected && !isCorrect) btn.classList.add('incorrect');
+  });
+
+  const fb = document.getElementById('quiz-fb-' + sid);
+  fb.textContent = isCorrect ? scenario.quiz.feedback_correct : scenario.quiz.feedback_incorrect;
+  fb.className = 'quiz-feedback visible ' + (isCorrect ? 'correct-fb' : 'incorrect-fb');
+  document.getElementById('quiz-submit-' + sid).style.display = 'none';
+}
+
+function restoreQuizState(scenario) {
+  const sid = scenario.id;
+  const isCorrect = progress.quizResults[sid];
+  const container = document.getElementById('quiz-opts-' + sid);
+  if (!container) return;
+  const selected = quizSelected[sid];
+
+  container.querySelectorAll('.quiz-opt').forEach((btn, idx) => {
+    btn.disabled = true;
+    if (idx === scenario.quiz.correct) btn.classList.add('correct');
+  });
+
+  const fb = document.getElementById('quiz-fb-' + sid);
+  fb.textContent = isCorrect ? scenario.quiz.feedback_correct : scenario.quiz.feedback_incorrect;
+  fb.className = 'quiz-feedback visible ' + (isCorrect ? 'correct-fb' : 'incorrect-fb');
+  document.getElementById('quiz-submit-' + sid).style.display = 'none';
+}
+
+// ── COMPARE ─────────────────────────────────────────────────────────────────
+function addToCompare(id) {
+  if (compareSelection.includes(id) || compareSelection.length >= 3) return;
+  compareSelection.push(id);
+  renderCompare();
+}
+
+function removeFromCompare(id) {
+  compareSelection = compareSelection.filter(x => x !== id);
+  renderCompare();
+}
+
+function toggleCompareDropdown() {
+  const menu = document.getElementById('compare-menu');
+  const isOpen = menu.classList.contains('open');
+  if (isOpen) { menu.classList.remove('open'); return; }
+
+  menu.innerHTML = scenarios.map(s => {
+    const disabled = compareSelection.includes(s.id) || compareSelection.length >= 3;
+    return `<button class="compare-dropdown-item ${disabled ? 'disabled' : ''}"
+      onclick="${disabled ? '' : `addToCompare(${s.id}); document.getElementById('compare-menu').classList.remove('open');`}">
+      #${s.id} — ${s.title}
+    </button>`;
+  }).join('');
+  menu.classList.add('open');
+}
+
+// Close dropdown on click outside
+document.addEventListener('click', (e) => {
+  const dd = document.getElementById('compare-dropdown');
+  if (!dd.contains(e.target)) {
+    document.getElementById('compare-menu').classList.remove('open');
+  }
+});
+
+function renderCompare() {
+  const tagsEl = document.getElementById('compare-tags');
+  const output = document.getElementById('compare-output');
+
+  tagsEl.innerHTML = compareSelection.map(id => {
+    const s = scenarios.find(x => x.id === id);
+    return `<span class="compare-tag">#${s.id} ${s.title}
+      <button class="compare-tag-remove" onclick="removeFromCompare(${id})">×</button>
+    </span>`;
+  }).join('');
+
+  // Update add button state
+  const addBtn = document.getElementById('compare-add-btn');
+  addBtn.style.display = compareSelection.length >= 3 ? 'none' : '';
+
+  if (compareSelection.length < 2) {
+    output.innerHTML = '<div class="compare-empty">Select two or three scenarios above to see a comparison matrix.</div>';
+    return;
+  }
+
+  const selected = compareSelection.map(id => scenarios.find(s => s.id === id));
+
+  const rows = [
+    { label: 'C.A.R.E. Principles', fn: s => s.careLabels.join(', ') },
+    { label: 'Core Risk', fn: s => s.bigQuestion },
+    { label: 'Primary Bias or Failure', fn: s => {
+      // Extract the first VIVA Validate point as the primary bias
+      return s.vivaV2[0] || '—';
+    }},
+    { label: 'Key Guardrail', fn: s => s.vivaA[0] || '—' },
+    { label: 'Who Is Most Affected', fn: s => s.vivaI[0] || '—' },
+  ];
+
+  output.innerHTML = `
+    <div class="compare-table-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Dimension</th>
+            ${selected.map(s => `<th>#${s.id} — ${s.title}</th>`).join('')}
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map(r => `
+            <tr>
+              <td>${r.label}</td>
+              ${selected.map(s => `<td>${r.fn(s)}</td>`).join('')}
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
 }
 
 // ── MINI CARDS ─────────────────────────────────────────────────────────────────
 function updateMiniCards() {
   const list = document.getElementById("scenarios-list");
   const pool = filteredScenarios();
-  list.innerHTML = pool.map(s => `
-    <div class="scenario-card-mini" onclick="loadScenario(scenarios.find(x=>x.id===${s.id})); document.getElementById('generator').scrollIntoView({behavior:'smooth'})">
+  list.innerHTML = pool.map(s => {
+    const done = progress.completedScenarios.includes(s.id);
+    return `
+    <div class="scenario-card-mini ${done ? 'completed' : ''}" onclick="loadScenario(scenarios.find(x=>x.id===${s.id})); document.getElementById('generator').scrollIntoView({behavior:'smooth'})">
+      ${done ? '<div class="completed-check">✓</div>' : ''}
       <div class="mini-header">
         <div class="mini-num">${s.id}</div>
         <div class="mini-title">${s.title}</div>
       </div>
       <div class="mini-focus">C.A.R.E.: ${s.careLabels.join(", ")}</div>
       <div class="mini-snippet">${s.situation.substring(0, 120)}…</div>
-      <button class="mini-load-btn" tabindex="-1">Load this scenario →</button>
-    </div>
-  `).join("");
+      <div class="mini-actions">
+        <button class="mini-load-btn" tabindex="-1">Load scenario →</button>
+        <button class="mini-compare-btn" tabindex="-1" onclick="event.stopPropagation(); addToCompare(${s.id}); document.getElementById('compare').scrollIntoView({behavior:'smooth'})">+ Compare</button>
+      </div>
+    </div>`;
+  }).join("");
 }
 
 // ── INIT ────────────────────────────────────────────────────────────────────
 updateMiniCards();
+updateDashboard();
+renderCompare();
 </script>
 </body>
 </html>
