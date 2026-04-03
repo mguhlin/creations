@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Governance Case Study Simulator | Gemma 4</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0056b3; /* Deep Blue for branding */
+            --secondary-color: #28a745; /* Green for positive action/success */
+            --warning-color: #ffc107; /* Yellow for warnings/bias */
+            --bg-light: #f8f9fa;
+            --text-dark: #333;
+            --border-color: #e9ecef;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: #f4f7f9;
+            margin: 0;
+            padding-bottom: 50px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        /* --- Dashboard & Navigation --- */
+        .dashboard {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+
+        .dashboard-info {
+            text-align: left;
+        }
+
+        .dashboard-info h2 {
+            color: var(--primary-color);
+            font-weight: 400;
+        }
+
+        .case-selector button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-left: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            font-weight: 700;
+        }
+
+        .case-selector button:hover {
+            background-color: #004085;
+        }
+        
+        /* --- Case Study Layout --- */
+        .case-study-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .case-narrative {
+            flex: 2; /* Takes up 66% space */
+            padding-right: 20px;
+            border-right: 1px dashed var(--border-color);
+        }
+
+        .case-analysis {
+            flex: 1; /* Takes up 33% space */
+            padding-left: 20px;
+        }
+        
+        .case-narrative h3, .case-analysis h3 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 5px;
+        }
+
+        /* --- Interactive Elements (The core improvement) --- */
+        .question-block {
+            margin-bottom: 25px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--bg-light);
+        }
+
+        .question-block label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        textarea {
+            width: 98%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* --- Comparative Learning Section --- */
+        .comparative-section {
+            margin-top: 50px;
+            padding: 30px;
+            background-color: #e6f7ff; /* Light blue background for emphasis */
+            border-radius: 10px;
+            border: 1px solid #cceeff;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .comparison-card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .comparison-card h4 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        /* --- Action Button --- */
+        .submit-button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            float: right;
+        }
+
+        .submit-button:hover {
+            background-color: #218838;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🤖 AI Governance & Ethics Simulator</h1>
+        <p>Mastering the real-world implications of technology through guided case studies.</p>
+    </header>
+
+    <div class="container">
+
+        <!-- 1. LEARNING DASHBOARD & NAVIGATION (Top Component) -->
+        <section class="dashboard">
+            <div class="dashboard-info">
+                <h2>Your Progress</h2>
+                <p><strong>Current Streak:</strong> 🚀 3 Cases Completed | <strong>Mastery Focus:</strong> Bias Identification & Regulatory Compliance.</p>
+                <small>Next Goal: Complete the Healthcare Scenario to unlock advanced AI auditing tools.</small>
+            </div>
+            <div class="case-selector">
+                <strong>Select Case:</strong>
+                <button onclick="loadCase('insurance')">Insurance Bias</button>
+                <button onclick="loadCase('criminal')">Criminal Justice</button>
+                <button onclick="loadCase('healthcare')">Healthcare Systems</button>
+            </div>
+        </section>
+
+        <!-- 2. CORE CASE STUDY VIEW (Simulating the "Insurance Bias" Case) -->
+        <section id="case-study-area">
+            <h2 style="color: var(--text-dark); border-bottom: 1px solid var(--primary-color); padding-bottom: 10px;">Case Study: Automated Loan Underwriting (Insurance Bias)</h2>
+            
+            <div class="case-study-container">
+                
+                <!-- LEFT COLUMN: NARRATIVE -->
+                <div class="case-narrative">
+                    <h3>📖 The Scenario: Automated Loan Approval System</h3>
+                    <p>A major fintech company rolls out a new AI system to assess loan risk for insurance purposes. The system ingests thousands of data points, including credit history, neighborhood data, and self-reported demographic information, promising unprecedented accuracy and speed. Initial reports show a 20% reduction in default rates across the board.</p>
+
+                    <h3 style="margin-top: 30px;">🔍 Critical Details & Ethical Tension</h3>
+                    <p>When auditing the results, an internal team notices a pattern: Applicants from specific zip codes (historically low-income, minority communities) are disproportionately flagged as high risk, regardless of their individual financial standing. The system uses "neighborhood average risk" as a key weighted factor, creating a systemic barrier that mirrors historical economic redlining practices.</p>
+                    
+                    <p><strong>The Challenge:</strong> The company defends the system, claiming that the high weighted risk factor is statistically accurate and necessary for fiduciary duty. The public argues that the system is merely automating and amplifying historical systemic bias, leading to economic exclusion.</p>
+                </div>
+
+                <!-- RIGHT COLUMN: INTERACTIVE ANALYSIS -->
+                <div class="case-analysis">
+                    <h3>🧠 Your Analysis & Recommendations</h3>
+                    
+                    <!-- Question Block 1: Bias Identification -->
+                    <div class="question-block">
+                        <label for="bias_id">1. Identifying the Bias Type:</label>
+                        <p>Based on the scenario, what type of bias is most apparent? (Select all that apply)</p>
+                        <input type="checkbox" id="gender" value="gender"> Gender Bias
+                        <input type="checkbox" id="race" value="race"> Racial Bias
+                        <input type="checkbox" id="socio" value="socio"> Socioeconomic Bias (Proxy Discrimination)
+                        <input type="checkbox" id="age" value="age"> Ageism
+                        <br><br>
+                        <label for="bias_text">Explain *why* this bias exists (Max 150 words):</label>
+                        <textarea id="bias_text" placeholder="Type your critical analysis here..."></textarea>
+                        <small style="color: #6c757d;">(Developer Note: This input should trigger a relevance/accuracy score check against established ethical guidelines.)</small>
+                    </div>
+
+                    <!-- Question Block 2: Policy Recommendation -->
+                    <div class="question-block">
+                        <label for="policy_rec">2. Proposing Ethical Guardrails:</label>
+                        <p>What concrete, non-technical policy change should the company implement to mitigate the bias?</p>
+                        <textarea id="policy_rec" placeholder="Propose a rule change or policy adjustment..."></textarea>
+                        <small style="color: #6c757d;">(Developer Note: This can be graded by keyword detection (e.g., 'Bias Auditing,' 'Explainability,' 'Differential Privacy').)</small>
+                    </div>
+                    
+                    <button class="submit-button" onclick="checkAnswers()">Submit Analysis & Review</button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 3. COMPARATIVE LEARNING MODULE -->
+        <section class="comparative-section">
+            <h2>🚀 Comparative Learning Module: Generalizing Ethics</h2>
+            <p>To deepen your understanding, compare the challenge and solution proposed in the current scenario (Loan Underwriting) with historical/different scenarios (Healthcare and Criminal Justice).</p>
+            
+            <div class="comparison-grid">
+                
+                <div class="comparison-card">
+                    <h4>⚖️ Comparing 'Proxy Discrimination'</h4>
+                    <p><strong>Loan Underwriting (Current):</strong> Used 'Zip Code' as a proxy for socioeconomic status, which is directly linked to historical injustice.</p>
+                    <p><strong>Key Takeaway:</strong> Correlation in data does not equal causation. Proxy variables must be audited for protected class correlation.</p>
+                </div>
+                
+                <div class="comparison-card">
+                    <h4>Data Drift and Model Decay</h4>
+                    <p>Models trained on historical data may fail when societal norms, economic conditions, or demographics change over time (Data Drift).</p>
+                    <p><strong>Action:</strong> Implement continuous monitoring loops (MLOps) to detect when real-world data significantly deviates from training data.</p>
+                </div>
+                
+                <div class="comparison-card">
+                    <h4>Explainability (XAI)</h4>
+                    <p>Black-box models are insufficient for high-stakes decisions (e.g., loans, medical diagnosis). We must know *why* the model rejected an applicant.</p>
+                    <p><strong>Tool:</strong> Utilize LIME or SHAP values to generate local, human-interpretable explanations for specific predictions.</p>
+                </div>
+            </div>
+
+    </div>
+
+    <script>
+        // Dummy function to simulate interaction and provide feedback
+        function submitAnalysis() {
+            const score = Math.floor(Math.random() * 10) + 7;
+            alert(`✅ Analysis Submitted!\n\nYour proficiency score based on this session is: ${score}/10.\n\nRemember: Ethical AI requires critical thinking about data bias, explainability, and accountability.`);
+        }
+    </script>
+</html>
