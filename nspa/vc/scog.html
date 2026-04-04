@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scholarship Counselor Outreach Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:      #1a1a2e;
+    --slate:    #2e3a59;
+    --accent:   #2563c7;
+    --gold:     #d4a017;
+    --surface:  #f4f6fa;
+    --card:     #ffffff;
+    --border:   #dce3ef;
+    --muted:    #6b7a99;
+    --success:  #1a7f5a;
+    --warn:     #b54708;
+    --radius:   10px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--surface);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 32px 16px 60px;
+  }
+
+  .wrapper {
+    max-width: 780px;
+    margin: 0 auto;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  header .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    color: var(--slate);
+    line-height: 1.2;
+  }
+
+  header p {
+    margin-top: 8px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(26,26,46,0.05);
+  }
+
+  .card h2 {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field.full { grid-column: 1 / -1; }
+
+  label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--slate);
+    letter-spacing: 0.04em;
+  }
+
+  input {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    padding: 9px 13px;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    color: var(--ink);
+    background: #fff;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    outline: none;
+  }
+
+  input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(37,99,199,0.12);
+  }
+
+  input::placeholder { color: #b0b8cc; }
+
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+
+  button {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    padding: 10px 22px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-primary:hover { background: #1a4fa8; transform: translateY(-1px); }
+
+  .btn-secondary {
+    background: var(--surface);
+    color: var(--slate);
+    border: 1.5px solid var(--border);
+  }
+  .btn-secondary:hover { background: #e8ecf5; }
+
+  .btn-copy {
+    background: var(--success);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .btn-copy:hover { background: #15694a; transform: translateY(-1px); }
+  .btn-copy.copied { background: #1a7f5a; }
+
+  /* Output area */
+  .output-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .output-header h2 {
+    margin: 0;
+    border: none;
+    padding: 0;
+  }
+
+  .counter-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .char-badge {
+    font-size: 13px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    transition: all 0.2s;
+    min-width: 56px;
+    text-align: center;
+  }
+
+  .char-badge.ok    { background: #ecfdf5; border-color: #6ee7b7; color: var(--success); }
+  .char-badge.warn  { background: #fff7ed; border-color: #fdba74; color: var(--warn); }
+  .char-badge.over  { background: #fef2f2; border-color: #fca5a5; color: #b91c1c; }
+
+  .word-target { font-size: 12px; color: var(--muted); }
+
+  #email-output {
+    font-size: 14.5px;
+    line-height: 1.75;
+    color: var(--ink);
+    white-space: pre-wrap;
+    background: #f9fafc;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    min-height: 180px;
+  }
+
+  .placeholder-text {
+    color: #b0b8cc;
+    font-style: italic;
+  }
+
+  .blurb-block {
+    margin-top: 16px;
+    background: #fffbea;
+    border-left: 4px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: #6b5200;
+    line-height: 1.6;
+  }
+
+  .blurb-block strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #a37a00;
+  }
+
+  .hidden { display: none !important; }
+
+  .note {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    line-height: 1.6;
+  }
+
+  .note strong { color: var(--slate); }
+
+  @media (max-width: 520px) {
+    .fields { grid-template-columns: 1fr; }
+    .field.full { grid-column: auto; }
+    header h1 { font-size: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <header>
+    <div class="eyebrow">Scholarship Tools</div>
+    <h1>Counselor Outreach Email Generator</h1>
+    <p>Fill in the fields below to generate a ready-to-send, under-150-word counselor email.</p>
+  </header>
+
+  <!-- Input card -->
+  <div class="card">
+    <h2>Scholarship Details</h2>
+    <div class="fields">
+      <div class="field full">
+        <label for="schName">Scholarship Name</label>
+        <input id="schName" type="text" placeholder="e.g., Garcia Family Memorial Scholarship" />
+      </div>
+      <div class="field full">
+        <label for="eligibility">Eligibility (1–2 sentences)</label>
+        <input id="eligibility" type="text" placeholder="e.g., Open to Texas juniors and seniors with a 2.5+ GPA pursuing healthcare careers." />
+      </div>
+      <div class="field">
+        <label for="award">Award Amount</label>
+        <input id="award" type="text" placeholder="e.g., $2,500" />
+      </div>
+      <div class="field">
+        <label for="deadline">Deadline</label>
+        <input id="deadline" type="text" placeholder="e.g., March 15, 2026" />
+      </div>
+      <div class="field full">
+        <label for="flyerLink">Flyer / Application Link</label>
+        <input id="flyerLink" type="text" placeholder="e.g., https://example.org/apply" />
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-primary" onclick="generate()">Generate Email</button>
+      <button class="btn-secondary" onclick="clearAll()">Clear</button>
+    </div>
+  </div>
+
+  <!-- Output card -->
+  <div class="card" id="output-card">
+    <div class="output-header">
+      <h2>Generated Email</h2>
+      <div class="counter-wrap">
+        <span class="word-target">Target: under 150 words</span>
+        <span class="char-badge" id="word-badge">-- words</span>
+      </div>
+    </div>
+
+    <div id="email-output">
+      <span class="placeholder-text">Your email will appear here after you click Generate Email.</span>
+    </div>
+
+    <div class="blurb-block hidden" id="forward-blurb">
+      <strong>Forward-to-Students Blurb (copy separately)</strong>
+      <span id="blurb-text"></span>
+    </div>
+
+    <div class="btn-row hidden" id="copy-btn-row">
+      <button class="btn-copy" id="copy-btn" onclick="copyEmail()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy Full Email + Blurb
+      </button>
+    </div>
+
+    <div class="note">
+      <strong>Staff review required before sending.</strong> Verify eligibility details, deadline, and link against source documents. Personalize the greeting if sending to a specific counselor. Do not include student PII in any follow-up prompting.
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let generatedFull = '';
+
+  function countWords(str) {
+    return str.trim().split(/\s+/).filter(Boolean).length;
+  }
+
+  function updateBadge(words) {
+    const badge = document.getElementById('word-badge');
+    badge.textContent = words + ' words';
+    badge.className = 'char-badge';
+    if (words <= 150) badge.classList.add('ok');
+    else if (words <= 170) badge.classList.add('warn');
+    else badge.classList.add('over');
+  }
+
+  function generate() {
+    const name     = document.getElementById('schName').value.trim();
+    const elig     = document.getElementById('eligibility').value.trim();
+    const award    = document.getElementById('award').value.trim();
+    const deadline = document.getElementById('deadline').value.trim();
+    const link     = document.getElementById('flyerLink').value.trim();
+
+    if (!name || !elig || !award || !deadline) {
+      alert('Please fill in Scholarship Name, Eligibility, Award Amount, and Deadline.');
+      return;
+    }
+
+    const linkLine = link
+      ? `Flyer and application: ${link}`
+      : 'Please contact us for the application link.';
+
+    const email =
+`Subject: Share Now: ${name} (${deadline} Deadline)
+
+Dear School Counselor,
+
+${elig} The ${name} awards ${award} to eligible students, with a deadline of ${deadline}.
+
+We ask three things:
+
+1. Forward this email to qualifying students in your school.
+2. Print and post the flyer on your scholarship bulletin board.
+3. Share the application link on any student-facing channels you use.
+
+${linkLine}
+
+Thank you for connecting your students to this opportunity. Please reply with any questions.`;
+
+    const blurb =
+`"Attention students: The ${name} is open to eligible applicants and awards ${award}. Deadline: ${deadline}. Apply here: ${link || '[link]'}. See your counselor for details."`;
+
+    generatedFull = email + '\n\n---\nForward-to-Students Blurb:\n' + blurb;
+
+    document.getElementById('email-output').textContent = email;
+    document.getElementById('blurb-text').textContent = blurb;
+    document.getElementById('forward-blurb').classList.remove('hidden');
+    document.getElementById('copy-btn-row').classList.remove('hidden');
+
+    const words = countWords(email);
+    updateBadge(words);
+  }
+
+  function copyEmail() {
+    const btn = document.getElementById('copy-btn');
+    navigator.clipboard.writeText(generatedFull).then(() => {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Full Email + Blurb`;
+        btn.classList.remove('copied');
+      }, 2200);
+    });
+  }
+
+  function clearAll() {
+    ['schName','eligibility','award','deadline','flyerLink'].forEach(id => {
+      document.getElementById(id).value = '';
+    });
+    document.getElementById('email-output').innerHTML =
+      '<span class="placeholder-text">Your email will appear here after you click Generate Email.</span>';
+    document.getElementById('forward-blurb').classList.add('hidden');
+    document.getElementById('copy-btn-row').classList.add('hidden');
+    const badge = document.getElementById('word-badge');
+    badge.textContent = '-- words';
+    badge.className = 'char-badge';
+    generatedFull = '';
+  }
+</script>
+</body>
+</html>
