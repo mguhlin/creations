@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NSPA GEO FAQ Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal:       #0d7a8c;
+    --teal-dark:  #085666;
+    --teal-mid:   #1094a8;
+    --teal-light: #d9f3f7;
+    --teal-pale:  #edfafc;
+    --teal-muted: #5ba8b5;
+    --white:      #ffffff;
+    --off-white:  #f5fbfc;
+    --text:       #0f2b30;
+    --text-muted: #4a7880;
+    --border:     #b8e0e7;
+    --accent:     #f0a500;
+    --danger:     #c0392b;
+    --success:    #1a7a4a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--off-white);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, var(--teal-dark) 0%, var(--teal) 60%, var(--teal-mid) 100%);
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 2px 12px rgba(13,122,140,0.25);
+  }
+
+  .logo-badge {
+    width: 44px; height: 44px;
+    background: rgba(255,255,255,0.15);
+    border: 2px solid rgba(255,255,255,0.4);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px; font-weight: 400;
+    color: #fff; letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.35rem;
+    color: #fff;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+  }
+
+  header p {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.75);
+    margin-top: 2px;
+    font-weight: 400;
+  }
+
+  .header-tag {
+    margin-left: auto;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.9);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 0;
+    min-height: calc(100vh - 80px);
+  }
+
+  /* ── LEFT PANEL ── */
+  .panel-form {
+    background: var(--white);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .panel-label {
+    padding: 16px 24px 12px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal-muted);
+    border-bottom: 1px solid var(--border);
+    background: var(--teal-pale);
+  }
+
+  .form-inner {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--teal-dark);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  label .req {
+    color: var(--accent);
+    font-size: 0.9em;
+  }
+
+  label .hint {
+    font-weight: 400;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-left: auto;
+  }
+
+  input[type="text"],
+  input[type="url"],
+  textarea {
+    width: 100%;
+    padding: 10px 13px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    color: var(--text);
+    background: var(--off-white);
+    transition: border-color 0.15s, box-shadow 0.15s;
+    outline: none;
+  }
+
+  input[type="text"]:focus,
+  input[type="url"]:focus,
+  textarea:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(13,122,140,0.12);
+    background: var(--white);
+  }
+
+  textarea { resize: vertical; min-height: 90px; line-height: 1.5; }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  /* divider */
+  .divider {
+    border: none;
+    border-top: 1px dashed var(--border);
+    margin: 0 -24px;
+  }
+
+  /* tone selector */
+  .tone-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .tone-btn {
+    padding: 5px 13px;
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    font-size: 0.76rem;
+    font-weight: 500;
+    cursor: pointer;
+    background: var(--off-white);
+    color: var(--text-muted);
+    transition: all 0.15s;
+  }
+
+  .tone-btn.active {
+    border-color: var(--teal);
+    background: var(--teal-light);
+    color: var(--teal-dark);
+    font-weight: 600;
+  }
+
+  /* generate button */
+  .btn-generate {
+    width: 100%;
+    padding: 13px 20px;
+    background: linear-gradient(135deg, var(--teal-dark), var(--teal));
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.925rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    transition: all 0.2s;
+    box-shadow: 0 3px 10px rgba(13,122,140,0.3);
+    letter-spacing: 0.01em;
+    margin-top: 4px;
+  }
+
+  .btn-generate:hover:not(:disabled) {
+    background: linear-gradient(135deg, #063f4a, var(--teal-dark));
+    box-shadow: 0 5px 16px rgba(13,122,140,0.4);
+    transform: translateY(-1px);
+  }
+
+  .btn-generate:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .btn-generate svg { flex-shrink: 0; }
+
+  /* spinner */
+  .spinner {
+    width: 18px; height: 18px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: none;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── RIGHT PANEL ── */
+  .panel-output {
+    display: flex;
+    flex-direction: column;
+    background: var(--off-white);
+    overflow: hidden;
+  }
+
+  .output-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 24px;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .output-toolbar span {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal-muted);
+  }
+
+  .tab-group {
+    display: flex;
+    gap: 4px;
+    background: var(--teal-pale);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 3px;
+  }
+
+  .tab-btn {
+    padding: 5px 14px;
+    border-radius: 6px;
+    border: none;
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .tab-btn.active {
+    background: var(--white);
+    color: var(--teal-dark);
+    font-weight: 600;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  }
+
+  .btn-copy {
+    margin-left: auto;
+    padding: 7px 16px;
+    background: var(--teal-light);
+    border: 1.5px solid var(--teal);
+    border-radius: 8px;
+    color: var(--teal-dark);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 7px;
+    transition: all 0.15s;
+  }
+
+  .btn-copy:hover:not(:disabled) {
+    background: var(--teal);
+    color: #fff;
+    border-color: var(--teal);
+  }
+
+  .btn-copy:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .btn-copy.copied {
+    background: var(--success);
+    border-color: var(--success);
+    color: #fff;
+  }
+
+  .output-pane {
+    flex: 1;
+    overflow-y: auto;
+    padding: 28px 32px;
+    position: relative;
+  }
+
+  /* empty / loading state */
+  .state-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 14px;
+    color: var(--teal-muted);
+    text-align: center;
+    padding: 40px;
+  }
+
+  .state-empty svg { opacity: 0.35; }
+
+  .state-empty h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.15rem;
+    font-weight: 400;
+    color: var(--teal-dark);
+    opacity: 0.6;
+  }
+
+  .state-empty p { font-size: 0.85rem; color: var(--text-muted); max-width: 320px; line-height: 1.6; }
+
+  /* preview rendered */
+  #preview-pane {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px 36px;
+    box-shadow: 0 2px 16px rgba(13,122,140,0.07);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  /* code pane */
+  #code-pane {
+    background: #0f2b30;
+    border: 1px solid #1a4a52;
+    border-radius: 12px;
+    padding: 24px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.78rem;
+    line-height: 1.65;
+    color: #a8d8df;
+    white-space: pre-wrap;
+    word-break: break-all;
+    overflow-x: auto;
+  }
+
+  /* error state */
+  .error-box {
+    background: #fff5f5;
+    border: 1.5px solid #f5c0c0;
+    border-radius: 10px;
+    padding: 16px 20px;
+    color: var(--danger);
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  /* ── GEO PREVIEW STYLES (inside #preview-pane) ── */
+  #preview-pane .position-zero {
+    background: var(--teal-light);
+    border-left: 4px solid var(--teal);
+    border-radius: 0 10px 10px 0;
+    padding: 16px 20px;
+    margin-bottom: 28px;
+  }
+
+  #preview-pane .position-zero h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1rem;
+    color: var(--teal-dark);
+    margin-bottom: 8px;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    border: none;
+    padding: 0;
+  }
+
+  #preview-pane .position-zero p {
+    font-size: 0.88rem;
+    color: var(--teal-dark);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  #preview-pane h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.15rem;
+    color: var(--teal-dark);
+    border-bottom: 2px solid var(--teal-light);
+    padding-bottom: 6px;
+    margin: 28px 0 14px;
+    font-weight: 400;
+  }
+
+  #preview-pane h3 {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--teal);
+    margin: 18px 0 6px;
+  }
+
+  #preview-pane .direct-answer {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.88rem;
+    margin-bottom: 4px;
+    line-height: 1.5;
+  }
+
+  #preview-pane .elaboration {
+    font-size: 0.84rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 14px;
+  }
+
+  #preview-pane a { color: var(--teal); }
+
+  /* loading indicator */
+  .loading-bar {
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--teal-dark), var(--teal-mid), var(--teal-muted));
+    background-size: 200% 100%;
+    animation: shimmer 1.2s ease-in-out infinite;
+    display: none;
+    border-radius: 0 0 2px 2px;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* char counter */
+  .char-count {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-align: right;
+    margin-top: 2px;
+  }
+
+  /* responsive */
+  @media (max-width: 860px) {
+    main { grid-template-columns: 1fr; }
+    .panel-form { border-right: none; border-bottom: 1px solid var(--border); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-badge">N</div>
+  <div>
+    <h1>NSPA GEO FAQ Generator</h1>
+    <p>Paste your scholarship details. Get publish-ready, AI-indexed FAQ HTML.</p>
+  </div>
+  <span class="header-tag">GEO-Optimized</span>
+</header>
+
+<main>
+  <!-- LEFT: FORM -->
+  <aside class="panel-form">
+    <div class="panel-label">Scholarship Details</div>
+    <div class="form-inner">
+
+      <div class="field">
+        <label>Scholarship Name <span class="req">*</span></label>
+        <input type="text" id="f-name" placeholder="e.g. Bright Future Scholarship" maxlength="120">
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Award Amount <span class="req">*</span></label>
+          <input type="text" id="f-amount" placeholder="e.g. $2,500" maxlength="60">
+        </div>
+        <div class="field">
+          <label>Number of Awards</label>
+          <input type="text" id="f-count" placeholder="e.g. 5 awards" maxlength="40">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Application Deadline <span class="req">*</span></label>
+        <input type="text" id="f-deadline" placeholder="e.g. March 15, 2026 at 11:59 PM CT" maxlength="80">
+      </div>
+
+      <div class="field">
+        <label>Eligibility Requirements <span class="req">*</span>
+          <span class="hint">Be specific</span>
+        </label>
+        <textarea id="f-eligibility" placeholder="e.g. Texas high school senior, 3.0+ GPA, enrolling in accredited college Fall 2026, demonstrated financial need..." rows="4"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Application URL <span class="req">*</span></label>
+        <input type="url" id="f-link" placeholder="https://yourorg.org/apply">
+      </div>
+
+      <hr class="divider">
+
+      <div class="field">
+        <label>What to Submit <span class="hint">Optional</span></label>
+        <textarea id="f-requirements" placeholder="e.g. Completed application form, two letters of recommendation, official transcript, 500-word personal statement..." rows="3"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Selection Criteria <span class="hint">Optional</span></label>
+        <textarea id="f-criteria" placeholder="e.g. Academic achievement (40%), financial need (30%), community involvement (20%), essay quality (10%)..." rows="3"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Provider / Organization Name</label>
+        <input type="text" id="f-org" placeholder="e.g. ABC Community Foundation" maxlength="120">
+      </div>
+
+      <div class="field">
+        <label>Contact / Questions Email <span class="hint">Optional</span></label>
+        <input type="text" id="f-email" placeholder="scholarships@yourorg.org" maxlength="100">
+      </div>
+
+      <div class="field">
+        <label>Announcement / Results Date <span class="hint">Optional</span></label>
+        <input type="text" id="f-results" placeholder="e.g. Recipients notified by May 1, 2026" maxlength="80">
+      </div>
+
+      <hr class="divider">
+
+      <div class="field">
+        <label>Tone</label>
+        <div class="tone-group">
+          <button class="tone-btn active" data-tone="warm and supportive">Warm</button>
+          <button class="tone-btn" data-tone="formal and professional">Formal</button>
+          <button class="tone-btn" data-tone="clear and direct">Direct</button>
+        </div>
+      </div>
+
+      <button class="btn-generate" id="btn-generate" onclick="generateFAQ()">
+        <svg id="icon-generate" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3v3M12 18v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M3 12H6M18 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/>
+        </svg>
+        <div class="spinner" id="spinner"></div>
+        <span id="btn-label">Generate FAQ Page</span>
+      </button>
+
+    </div>
+  </aside>
+
+  <!-- RIGHT: OUTPUT -->
+  <section class="panel-output">
+    <div class="output-toolbar">
+      <span>Output</span>
+      <div class="tab-group">
+        <button class="tab-btn active" id="tab-preview" onclick="switchTab('preview')">Preview</button>
+        <button class="tab-btn" id="tab-code" onclick="switchTab('code')">HTML Code</button>
+      </div>
+      <button class="btn-copy" id="btn-copy" disabled onclick="copyHTML()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+        </svg>
+        Copy HTML
+      </button>
+    </div>
+
+    <div class="output-pane" id="output-pane">
+      <div class="loading-bar" id="loading-bar"></div>
+
+      <div class="state-empty" id="state-empty">
+        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" color="#0d7a8c">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+        <h3>Your FAQ Page Will Appear Here</h3>
+        <p>Fill in the scholarship details on the left, then click <strong>Generate FAQ Page</strong>. The output includes a Position Zero summary, categorized Q&amp;A, and clean HTML ready to embed.</p>
+      </div>
+
+      <div id="preview-pane" style="display:none;"></div>
+      <pre id="code-pane" style="display:none;"></pre>
+    </div>
+  </section>
+</main>
+
+<script>
+  let generatedHTML = '';
+  let currentTone = 'warm and supportive';
+  let activeTab = 'preview';
+
+  // Tone selector
+  document.querySelectorAll('.tone-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentTone = btn.dataset.tone;
+    });
+  });
+
+  function switchTab(tab) {
+    activeTab = tab;
+    document.getElementById('tab-preview').classList.toggle('active', tab === 'preview');
+    document.getElementById('tab-code').classList.toggle('active', tab === 'code');
+
+    const hasContent = generatedHTML.length > 0;
+    if (!hasContent) return;
+
+    document.getElementById('preview-pane').style.display = tab === 'preview' ? 'block' : 'none';
+    document.getElementById('code-pane').style.display = tab === 'code' ? 'block' : 'none';
+  }
+
+  function setLoading(on) {
+    const btn = document.getElementById('btn-generate');
+    const spinner = document.getElementById('spinner');
+    const icon = document.getElementById('icon-generate');
+    const label = document.getElementById('btn-label');
+    const bar = document.getElementById('loading-bar');
+
+    btn.disabled = on;
+    spinner.style.display = on ? 'block' : 'none';
+    icon.style.display = on ? 'none' : 'block';
+    label.textContent = on ? 'Generating...' : 'Generate FAQ Page';
+    bar.style.display = on ? 'block' : 'none';
+  }
+
+  function buildPrompt(data) {
+    return `You are a web content specialist helping scholarship providers create GEO-optimized FAQ pages (Generative Engine Optimization — content structured so AI tools like ChatGPT, Perplexity, and Google's AI Overview accurately answer questions about the scholarship).
+
+Here are the scholarship details:
+- Name: ${data.name}
+- Award Amount: ${data.amount}${data.count ? '\n- Number of Awards: ' + data.count : ''}
+- Application Deadline: ${data.deadline}
+- Eligibility: ${data.eligibility}
+- Application URL: ${data.link}${data.requirements ? '\n- What to Submit: ' + data.requirements : ''}${data.criteria ? '\n- Selection Criteria: ' + data.criteria : ''}${data.org ? '\n- Organization: ' + data.org : ''}${data.email ? '\n- Contact Email: ' + data.email : ''}${data.results ? '\n- Results/Notification Date: ' + data.results : ''}
+
+Tone: ${data.tone}
+
+Generate a complete, publish-ready FAQ page as clean HTML. Follow these exact rules:
+
+1. POSITION ZERO BOX: At the very top, output a <div class="position-zero"> containing an <h2> titled "Quick Answer: ${data.name}" and a concise 2–3 sentence summary paragraph that directly answers: what is this scholarship, who qualifies, and how to apply. This is the most important element.
+
+2. SECTION STRUCTURE: Organize FAQs under these <h2> category headings (use only the ones you have enough detail to populate):
+   - Eligibility and Qualifications
+   - Award Details and Timeline
+   - How to Apply
+   - Selection Process
+   - Contact and Support
+
+3. EACH FAQ ITEM: For every question, output:
+   <h3>[The Question]</h3>
+   <p class="direct-answer">[One direct, complete sentence answer — the key fact.]</p>
+   <p class="elaboration">[1–2 sentences of helpful context or detail.]</p>
+
+4. HYPERLINKS: Wrap the application URL in an <a href="${data.link}" target="_blank" rel="noopener">Apply Now</a> link at least once in the How to Apply section.
+
+5. OUTPUT RULES:
+   - Output ONLY the inner HTML fragment (no <html>, <head>, <body>, or <style> tags).
+   - Use only these classes: position-zero, direct-answer, elaboration.
+   - Every question must have a direct one-sentence answer BEFORE any elaboration.
+   - Aim for 10–16 FAQ items total, spread across sections.
+   - Do not add placeholder text. Only include information derivable from the details provided.
+   - Do not add any explanation, preamble, or markdown — output raw HTML only.`;
+  }
+
+  async function generateFAQ() {
+    const data = {
+      name:         document.getElementById('f-name').value.trim(),
+      amount:       document.getElementById('f-amount').value.trim(),
+      count:        document.getElementById('f-count').value.trim(),
+      deadline:     document.getElementById('f-deadline').value.trim(),
+      eligibility:  document.getElementById('f-eligibility').value.trim(),
+      link:         document.getElementById('f-link').value.trim(),
+      requirements: document.getElementById('f-requirements').value.trim(),
+      criteria:     document.getElementById('f-criteria').value.trim(),
+      org:          document.getElementById('f-org').value.trim(),
+      email:        document.getElementById('f-email').value.trim(),
+      results:      document.getElementById('f-results').value.trim(),
+      tone:         currentTone
+    };
+
+    // Validate required fields
+    if (!data.name || !data.amount || !data.deadline || !data.eligibility || !data.link) {
+      showError('Please fill in all required fields: Scholarship Name, Award Amount, Deadline, Eligibility, and Application URL.');
+      return;
+    }
+
+    setLoading(true);
+    document.getElementById('state-empty').style.display = 'none';
+    document.getElementById('preview-pane').style.display = 'none';
+    document.getElementById('code-pane').style.display = 'none';
+    document.getElementById('btn-copy').disabled = true;
+
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          messages: [{ role: 'user', content: buildPrompt(data) }]
+        })
+      });
+
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err?.error?.message || `API error ${response.status}`);
+      }
+
+      const result = await response.json();
+      const raw = result.content?.find(b => b.type === 'text')?.text || '';
+
+      // Strip any accidental markdown fences
+      generatedHTML = raw
+        .replace(/^```html\s*/i, '')
+        .replace(/^```\s*/i, '')
+        .replace(/```\s*$/i, '')
+        .trim();
+
+      renderOutput();
+
+    } catch (err) {
+      showError(`Generation failed: ${err.message}. Check your network connection or try again.`);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function renderOutput() {
+    document.getElementById('state-empty').style.display = 'none';
+    document.getElementById('btn-copy').disabled = false;
+
+    if (activeTab === 'preview') {
+      document.getElementById('preview-pane').innerHTML = generatedHTML;
+      document.getElementById('preview-pane').style.display = 'block';
+      document.getElementById('code-pane').style.display = 'none';
+    } else {
+      document.getElementById('code-pane').textContent = generatedHTML;
+      document.getElementById('code-pane').style.display = 'block';
+      document.getElementById('preview-pane').style.display = 'none';
+    }
+  }
+
+  function showError(msg) {
+    document.getElementById('state-empty').style.display = 'none';
+    const pane = document.getElementById('preview-pane');
+    pane.innerHTML = `<div class="error-box"><strong>Error:</strong> ${msg}</div>`;
+    pane.style.display = 'block';
+    document.getElementById('code-pane').style.display = 'none';
+  }
+
+  async function copyHTML() {
+    if (!generatedHTML) return;
+    const btn = document.getElementById('btn-copy');
+    try {
+      await navigator.clipboard.writeText(generatedHTML);
+      btn.classList.add('copied');
+      btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Copied!`;
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy HTML`;
+      }, 2200);
+    } catch {
+      // Fallback for non-HTTPS
+      const ta = document.createElement('textarea');
+      ta.value = generatedHTML;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      btn.textContent = 'Copied!';
+      setTimeout(() => { btn.textContent = 'Copy HTML'; }, 2000);
+    }
+  }
+</script>
+</body>
+</html>
