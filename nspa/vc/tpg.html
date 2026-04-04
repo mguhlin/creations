@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scholarship Talking Points Generator</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;1,400&display=swap');
+
+  :root {
+    --navy: #1a2744;
+    --gold: #c8952a;
+    --gold-light: #f5e6c8;
+    --slate: #4a5568;
+    --bg: #f7f5f0;
+    --white: #ffffff;
+    --rule: #d1c9b8;
+    --danger: #9b2335;
+    --success: #1e5c3a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--bg);
+    color: var(--navy);
+    min-height: 100vh;
+  }
+
+  /* ── SCREEN LAYOUT ─────────────────────────────── */
+  .screen-wrapper {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  .masthead {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    border-bottom: 3px solid var(--navy);
+    padding-bottom: 1rem;
+  }
+  .masthead h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.85rem;
+    color: var(--navy);
+    line-height: 1.1;
+  }
+  .masthead .badge {
+    background: var(--gold);
+    color: var(--white);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+  }
+
+  /* INPUT FORM */
+  .form-card {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-top: 4px solid var(--gold);
+    border-radius: 4px;
+    padding: 1.75rem 2rem;
+    margin-bottom: 1.5rem;
+  }
+  .form-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    margin-bottom: 1.25rem;
+    color: var(--navy);
+  }
+
+  .fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .field { display: flex; flex-direction: column; gap: 0.35rem; }
+  .field.full { grid-column: 1 / -1; }
+  .field label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--slate);
+  }
+  .field input, .field textarea {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 0.5rem 0.7rem;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.92rem;
+    color: var(--navy);
+    background: #fafafa;
+    transition: border-color 0.2s;
+    resize: vertical;
+  }
+  .field input:focus, .field textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+    background: var(--white);
+  }
+  .field .hint {
+    font-size: 0.72rem;
+    color: var(--slate);
+    font-style: italic;
+  }
+
+  .generate-btn {
+    display: block;
+    width: 100%;
+    margin-top: 1.25rem;
+    padding: 0.75rem;
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .generate-btn:hover { background: var(--gold); }
+  .generate-btn:disabled { background: #aaa; cursor: not-allowed; }
+
+  /* STATUS */
+  .status {
+    font-size: 0.85rem;
+    color: var(--slate);
+    margin-top: 0.75rem;
+    min-height: 1.2em;
+    text-align: center;
+    font-style: italic;
+  }
+
+  /* ── PRINTED ONE-PAGER ─────────────────────────── */
+  .output-section { display: none; }
+  .output-section.visible { display: block; }
+
+  .print-btn {
+    display: inline-block;
+    margin-bottom: 1rem;
+    padding: 0.5rem 1.25rem;
+    background: var(--success);
+    color: var(--white);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+  }
+  .print-btn:hover { background: #164d30; }
+
+  .reset-btn {
+    display: inline-block;
+    margin-bottom: 1rem;
+    margin-left: 0.75rem;
+    padding: 0.5rem 1.25rem;
+    background: transparent;
+    color: var(--slate);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  /* THE DOCUMENT */
+  #talkingPointsDoc {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    padding: 2.25rem 2.5rem;
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+
+  .doc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 3px double var(--navy);
+    padding-bottom: 0.9rem;
+    margin-bottom: 1.25rem;
+  }
+  .doc-title-block h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.45rem;
+    color: var(--navy);
+  }
+  .doc-title-block p {
+    font-size: 0.78rem;
+    color: var(--slate);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-top: 2px;
+  }
+  .doc-stat-pill {
+    background: var(--navy);
+    color: var(--gold-light);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-align: center;
+    min-width: 140px;
+  }
+  .doc-stat-pill .label {
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 3px;
+  }
+  .doc-stat-pill .value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    display: block;
+    line-height: 1.2;
+  }
+
+  .section-block { margin-bottom: 1.35rem; }
+  .section-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.35rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  .elevator-pitch {
+    background: var(--gold-light);
+    border-left: 4px solid var(--gold);
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    font-style: italic;
+    border-radius: 0 3px 3px 0;
+  }
+
+  /* Two-column bottom half */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  .qa-item {
+    margin-bottom: 0.85rem;
+    padding-bottom: 0.85rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .qa-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .qa-q {
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--navy);
+    margin-bottom: 0.25rem;
+  }
+  .qa-a {
+    font-size: 0.87rem;
+    color: var(--slate);
+  }
+
+  .dont-say-box {
+    background: #fff5f5;
+    border: 1px solid #f5c6cb;
+    border-top: 3px solid var(--danger);
+    border-radius: 3px;
+    padding: 0.85rem 1rem;
+    height: fit-content;
+  }
+  .dont-say-box .ds-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--danger);
+    margin-bottom: 0.6rem;
+  }
+  .dont-say-item {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+  }
+  .dont-say-item:last-child { margin-bottom: 0; }
+  .dont-say-item::before {
+    content: '✗';
+    color: var(--danger);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .doc-footer {
+    margin-top: 1.25rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.72rem;
+    color: #999;
+  }
+
+  /* Loading animation */
+  .loading-dots span {
+    animation: blink 1.4s infinite both;
+    font-size: 1.2rem;
+  }
+  .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes blink {
+    0%, 80%, 100% { opacity: 0; }
+    40% { opacity: 1; }
+  }
+
+  /* ── PRINT ─────────────────────────────────────── */
+  @media print {
+    body { background: white; }
+    .screen-wrapper { padding: 0; max-width: 100%; }
+    .masthead, .form-card, .print-btn, .reset-btn, .status { display: none !important; }
+    .output-section { display: block !important; }
+    #talkingPointsDoc {
+      border: none;
+      padding: 0.5rem 0;
+      font-size: 0.88rem;
+    }
+    .doc-header { page-break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="screen-wrapper">
+
+  <div class="masthead">
+    <h1>Scholarship Talking Points Generator</h1>
+    <span class="badge">NSPA Tool</span>
+  </div>
+
+  <div class="form-card">
+    <h2>Enter Your Program Details</h2>
+    <div class="fields">
+      <div class="field">
+        <label>Program Name</label>
+        <input type="text" id="programName" placeholder="e.g., Hernandez Family Scholarship">
+      </div>
+      <div class="field">
+        <label>Number of Awards</label>
+        <input type="text" id="numAwards" placeholder="e.g., 12 awards annually">
+      </div>
+      <div class="field">
+        <label>Total Dollars Awarded</label>
+        <input type="text" id="totalDollars" placeholder="e.g., $180,000 per cycle">
+      </div>
+      <div class="field">
+        <label>Award Amount per Recipient</label>
+        <input type="text" id="awardAmount" placeholder="e.g., $15,000 renewable">
+      </div>
+      <div class="field full">
+        <label>Key Eligibility Criteria</label>
+        <textarea id="eligibility" rows="2" placeholder="e.g., First-generation college students in Texas; 2.8+ GPA; enrolled in STEM fields"></textarea>
+      </div>
+      <div class="field full">
+        <label>One Standout Fact</label>
+        <input type="text" id="standoutFact" placeholder="e.g., 94% of recipients graduate within 4 years, vs. 67% national average">
+        <span class="hint">A single compelling stat or story hook you want repeated in every conversation</span>
+      </div>
+      <div class="field full">
+        <label>Organization / Sponsor Name (optional)</label>
+        <input type="text" id="orgName" placeholder="e.g., Greater San Antonio Community Foundation">
+      </div>
+    </div>
+    <button class="generate-btn" id="generateBtn" onclick="generateTalkingPoints()">Generate Talking Points Sheet</button>
+    <div class="status" id="statusMsg"></div>
+  </div>
+
+  <div class="output-section" id="outputSection">
+    <button class="print-btn" onclick="window.print()">Print / Save as PDF</button>
+    <button class="reset-btn" onclick="resetForm()">Start Over</button>
+
+    <div id="talkingPointsDoc">
+      <!-- Filled by JS -->
+    </div>
+  </div>
+
+</div>
+
+<script>
+async function generateTalkingPoints() {
+  const programName  = document.getElementById('programName').value.trim();
+  const numAwards    = document.getElementById('numAwards').value.trim();
+  const totalDollars = document.getElementById('totalDollars').value.trim();
+  const awardAmount  = document.getElementById('awardAmount').value.trim();
+  const eligibility  = document.getElementById('eligibility').value.trim();
+  const standoutFact = document.getElementById('standoutFact').value.trim();
+  const orgName      = document.getElementById('orgName').value.trim();
+
+  if (!programName || !standoutFact || !eligibility) {
+    setStatus('Please fill in Program Name, Eligibility, and Standout Fact at minimum.');
+    return;
+  }
+
+  const btn = document.getElementById('generateBtn');
+  btn.disabled = true;
+  setStatus('<span class="loading-dots">Generating<span>.</span><span>.</span><span>.</span></span>');
+
+  const prompt = `You are a communications expert for nonprofit scholarship programs. Generate structured talking points for a program representative.
+
+PROGRAM DATA:
+- Program Name: ${programName}
+- Awards: ${numAwards || 'not specified'}
+- Total Dollars: ${totalDollars || 'not specified'}
+- Per-Recipient Award: ${awardAmount || 'not specified'}
+- Eligibility: ${eligibility}
+- Standout Fact: ${standoutFact}
+- Organization: ${orgName || 'not specified'}
+
+OUTPUT: Return ONLY valid JSON with this exact structure (no markdown, no preamble):
+{
+  "elevatorPitch": "Two clear, human sentences (under 50 words total). Start with impact, end with action or invitation.",
+  "statLine": "The single most memorable stat or fact to use in EVERY conversation. 1-2 sentences maximum.",
+  "questions": [
+    {
+      "q": "First tough question a donor, board member, or skeptic would ask",
+      "a": "Concise, honest 2-3 sentence answer. No jargon. Acknowledge nuance if needed."
+    },
+    {
+      "q": "Second tough question (focus on equity, selection fairness, or impact proof)",
+      "a": "Concise, honest 2-3 sentence answer."
+    },
+    {
+      "q": "Third tough question (sustainability, process, or what happens when awards run out)",
+      "a": "Concise, honest 2-3 sentence answer."
+    }
+  ],
+  "dontSay": [
+    "Phrase or claim to avoid - with a 4-6 word reason why",
+    "Second phrase to avoid",
+    "Third phrase to avoid",
+    "Fourth phrase to avoid"
+  ]
+}`;
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+
+    if (!response.ok) throw new Error(`API error ${response.status}`);
+    const data = await response.json();
+
+    let raw = data.content.map(b => b.text || '').join('');
+    // Strip any accidental markdown fences
+    raw = raw.replace(/```json|```/g, '').trim();
+
+    let parsed;
+    try {
+      parsed = JSON.parse(raw);
+    } catch(e) {
+      throw new Error('Could not parse AI response. Try again.');
+    }
+
+    renderDoc(parsed, { programName, numAwards, totalDollars, awardAmount, eligibility, orgName });
+    document.getElementById('outputSection').classList.add('visible');
+    document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth' });
+    setStatus('');
+
+  } catch(err) {
+    setStatus('Error: ' + err.message);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function renderDoc(d, meta) {
+  const today = new Date().toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' });
+  const awardsLine = [meta.numAwards, meta.totalDollars, meta.awardAmount].filter(Boolean).join(' | ');
+
+  const qaHTML = d.questions.map(item => `
+    <div class="qa-item">
+      <div class="qa-q">Q: ${esc(item.q)}</div>
+      <div class="qa-a">${esc(item.a)}</div>
+    </div>`).join('');
+
+  const dsHTML = d.dontSay.map(item => `
+    <div class="dont-say-item">${esc(item)}</div>`).join('');
+
+  document.getElementById('talkingPointsDoc').innerHTML = `
+    <div class="doc-header">
+      <div class="doc-title-block">
+        <h1>${esc(meta.programName)}</h1>
+        <p>${meta.orgName ? esc(meta.orgName) + ' &nbsp;|&nbsp; ' : ''}Talking Points &nbsp;|&nbsp; ${today}</p>
+        ${awardsLine ? `<p style="margin-top:4px;font-size:0.8rem;color:var(--navy)">${esc(awardsLine)}</p>` : ''}
+      </div>
+      <div class="doc-stat-pill">
+        <span class="label">Use this every time</span>
+        <span class="value" style="font-size:0.82rem;font-family:'Source Sans 3',sans-serif;font-weight:600">${esc(d.statLine)}</span>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-label">Elevator Pitch</div>
+      <div class="elevator-pitch">${esc(d.elevatorPitch)}</div>
+    </div>
+
+    <div class="section-label">Eligibility at a Glance</div>
+    <div class="section-block" style="font-size:0.87rem;color:var(--slate);padding:0.5rem 0 0.25rem">
+      ${esc(meta.eligibility)}
+    </div>
+
+    <div class="two-col" style="margin-top:0.5rem">
+      <div>
+        <div class="section-label">Tough Questions + Suggested Answers</div>
+        ${qaHTML}
+      </div>
+      <div>
+        <div class="section-label">Do Not Say</div>
+        <div class="dont-say-box">
+          <div class="ds-label">Avoid these in every conversation</div>
+          ${dsHTML}
+        </div>
+      </div>
+    </div>
+
+    <div class="doc-footer">
+      <span>Internal use only &mdash; not for distribution to applicants</span>
+      <span>Generated with AI &mdash; verify facts before use</span>
+    </div>
+  `;
+}
+
+function esc(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function setStatus(html) {
+  document.getElementById('statusMsg').innerHTML = html;
+}
+
+function resetForm() {
+  document.getElementById('outputSection').classList.remove('visible');
+  document.getElementById('talkingPointsDoc').innerHTML = '';
+  setStatus('');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
