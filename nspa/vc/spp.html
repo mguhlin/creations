@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NSPA Privacy Check — Social Media Post Screener</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── NSPA TOKENS ─────────────────────────────────────── */
+:root {
+  --navy:      #1A2B5E;
+  --navy-dk:   #0F1A40;
+  --navy-md:   #243A7A;
+  --gold:      #F0A500;
+  --gold-lt:   #FEF9E7;
+  --gold-dk:   #b08a00;
+  --teal:      #0D9488;
+  --teal-lt:   #CCFBF1;
+  --white:     #FFFFFF;
+  --lgray:     #F4F6FA;
+  --mgray:     #E2E8F0;
+  --slate:     #475569;
+  --ink:       #1e293b;
+  --red:       #991B1B;
+  --red-bg:    #FEF2F2;
+  --red-border:#FCA5A5;
+  --green:     #166534;
+  --green-bg:  #F0FDF4;
+  --green-border:#86EFAC;
+  --warn-bg:   #FFFBEB;
+  --warn-border:#FCD34D;
+  --radius:    10px;
+  --shadow:    0 2px 16px rgba(26,43,94,.10);
+  --shadow-md: 0 4px 28px rgba(26,43,94,.16);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  background: var(--lgray);
+  color: var(--ink);
+  min-height: 100vh;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* ── HEADER ─────────────────────────────────────────── */
+header {
+  background: var(--navy-dk);
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 2px 12px rgba(0,0,0,.35);
+}
+.header-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 56px;
+}
+.gold-bar {
+  width: 6px;
+  height: 36px;
+  background: var(--gold);
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+header h1 {
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 700;
+  font-size: .9rem;
+  color: #fff;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.header-badge {
+  margin-left: auto;
+  background: var(--teal);
+  color: #fff;
+  font-size: .7rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+/* ── HERO ───────────────────────────────────────────── */
+.hero {
+  background: linear-gradient(135deg, var(--navy-dk) 0%, var(--navy) 60%, var(--navy-md) 100%);
+  padding: 52px 24px 44px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 70% 50%, rgba(240,165,0,.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero-inner { max-width: 700px; margin: 0 auto; position: relative; }
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(240,165,0,.12);
+  border: 1px solid rgba(240,165,0,.35);
+  color: var(--gold);
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-bottom: 18px;
+}
+.hero h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.7rem, 4vw, 2.6rem);
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+.hero h2 em { color: var(--gold); font-style: normal; }
+.hero p {
+  color: rgba(255,255,255,.78);
+  font-size: 1rem;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+/* ── MAIN LAYOUT ────────────────────────────────────── */
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 36px 20px 60px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+/* ── CARDS ──────────────────────────────────────────── */
+.card {
+  background: var(--white);
+  border: 1.5px solid var(--mgray);
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  box-shadow: var(--shadow);
+}
+.card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-title .icon {
+  width: 28px;
+  height: 28px;
+  background: var(--gold-lt);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .95rem;
+  flex-shrink: 0;
+}
+.card-sub {
+  font-size: .88rem;
+  color: var(--slate);
+  margin-bottom: 18px;
+}
+
+/* ── TEXTAREA ───────────────────────────────────────── */
+textarea {
+  width: 100%;
+  min-height: 140px;
+  border: 1.5px solid var(--mgray);
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: .96rem;
+  color: var(--ink);
+  background: var(--lgray);
+  resize: vertical;
+  transition: border-color .2s, box-shadow .2s;
+  line-height: 1.6;
+}
+textarea:focus {
+  outline: none;
+  border-color: var(--navy-md);
+  box-shadow: 0 0 0 3px rgba(26,43,94,.1);
+  background: var(--white);
+}
+textarea::placeholder { color: #94a3b8; }
+
+/* ── CHAR COUNT ─────────────────────────────────────── */
+.char-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  font-size: .8rem;
+  color: var(--slate);
+}
+.char-count { font-weight: 600; }
+
+/* ── PLATFORM PILLS ─────────────────────────────────── */
+.platform-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.platform-pill {
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 1.5px solid var(--mgray);
+  font-size: .8rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--white);
+  color: var(--slate);
+  transition: all .15s;
+  user-select: none;
+}
+.platform-pill.active {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: var(--white);
+}
+.platform-pill:hover:not(.active) {
+  border-color: var(--navy-md);
+  color: var(--navy);
+}
+
+/* ── ANALYZE BUTTON ─────────────────────────────────── */
+.btn-analyze {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--navy);
+  color: var(--white);
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: .96rem;
+  font-weight: 700;
+  padding: 12px 28px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  margin-top: 16px;
+  transition: background .2s, transform .1s, box-shadow .2s;
+  box-shadow: 0 2px 8px rgba(26,43,94,.22);
+}
+.btn-analyze:hover:not(:disabled) {
+  background: var(--navy-md);
+  box-shadow: 0 4px 16px rgba(26,43,94,.3);
+  transform: translateY(-1px);
+}
+.btn-analyze:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+  transform: none;
+}
+.btn-analyze .spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  display: none;
+}
+.btn-analyze.loading .spinner { display: block; }
+.btn-analyze.loading .btn-label { display: none; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── RESULTS SECTION ────────────────────────────────── */
+#results-section { display: none; }
+#results-section.visible { display: block; }
+
+/* ── RISK BANNER ────────────────────────────────────── */
+.risk-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1.5px solid;
+}
+.risk-banner.high   { background: var(--red-bg);  border-color: var(--red-border);  }
+.risk-banner.medium { background: var(--warn-bg);  border-color: var(--warn-border); }
+.risk-banner.low    { background: var(--green-bg); border-color: var(--green-border);}
+.risk-icon { font-size: 1.6rem; flex-shrink: 0; }
+.risk-text strong {
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.risk-banner.high   .risk-text strong { color: var(--red);   }
+.risk-banner.medium .risk-text strong { color: #92400e;      }
+.risk-banner.low    .risk-text strong { color: var(--green); }
+.risk-text p { font-size: .88rem; color: var(--slate); margin: 0; }
+
+/* ── ANNOTATED POST ─────────────────────────────────── */
+.annotated-post {
+  background: var(--lgray);
+  border: 1.5px solid var(--mgray);
+  border-radius: 8px;
+  padding: 18px 20px;
+  font-size: .97rem;
+  line-height: 1.75;
+  margin-bottom: 20px;
+  word-break: break-word;
+}
+.flag-high {
+  background: #FEE2E2;
+  color: var(--red);
+  border-bottom: 2px solid #F87171;
+  border-radius: 3px;
+  padding: 1px 3px;
+  cursor: pointer;
+  font-weight: 600;
+  position: relative;
+}
+.flag-medium {
+  background: #FEF3C7;
+  color: #92400e;
+  border-bottom: 2px solid #FCD34D;
+  border-radius: 3px;
+  padding: 1px 3px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.flag-combo {
+  background: #EDE9FE;
+  color: #4C1D95;
+  border-bottom: 2px dashed #A78BFA;
+  border-radius: 3px;
+  padding: 1px 3px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* ── FLAG LEGEND ────────────────────────────────────── */
+.legend-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .8rem;
+  color: var(--slate);
+}
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+.dot-high   { background: #FEE2E2; border: 1.5px solid #F87171; }
+.dot-medium { background: #FEF3C7; border: 1.5px solid #FCD34D; }
+.dot-combo  { background: #EDE9FE; border: 1.5px dashed #A78BFA; }
+
+/* ── FLAG CARDS ─────────────────────────────────────── */
+.flags-list {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.flag-card {
+  border: 1.5px solid;
+  border-radius: 8px;
+  padding: 14px 18px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px 14px;
+  align-items: start;
+}
+.flag-card.severity-high   { border-color: var(--red-border); background: var(--red-bg); }
+.flag-card.severity-medium { border-color: var(--warn-border); background: var(--warn-bg); }
+.flag-card.severity-combo  { border-color: #DDD6FE; background: #F5F3FF; }
+
+.flag-card-icon {
+  font-size: 1.2rem;
+  margin-top: 2px;
+}
+.flag-phrase {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .82rem;
+  font-weight: 500;
+  background: rgba(0,0,0,.06);
+  padding: 2px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 4px;
+  word-break: break-all;
+}
+.flag-reason {
+  font-size: .88rem;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.flag-suggestion {
+  font-size: .84rem;
+  color: var(--teal);
+  font-weight: 600;
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+}
+.severity-tag {
+  font-size: .72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  display: inline-block;
+  margin-bottom: 6px;
+}
+.tag-high   { background: #FEE2E2; color: var(--red); }
+.tag-medium { background: #FEF3C7; color: #92400e; }
+.tag-combo  { background: #EDE9FE; color: #4C1D95; }
+
+/* ── SAFE VERSION ───────────────────────────────────── */
+.safe-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.safe-post {
+  background: var(--green-bg);
+  border: 1.5px solid var(--green-border);
+  border-radius: 8px;
+  padding: 18px 20px;
+  font-size: .97rem;
+  line-height: 1.75;
+  color: var(--ink);
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+.btn-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--teal);
+  color: var(--white);
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: .84rem;
+  font-weight: 700;
+  padding: 7px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background .15s;
+}
+.btn-copy:hover { background: #0b7a70; }
+.btn-copy.copied { background: var(--green); }
+
+/* ── CHECKLIST ──────────────────────────────────────── */
+.checklist {
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+.checklist li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: .9rem;
+  color: var(--ink);
+  padding: 8px 12px;
+  background: var(--lgray);
+  border-radius: 6px;
+  border: 1px solid var(--mgray);
+}
+.checklist li .check-icon {
+  font-size: 1rem;
+  margin-top: 1px;
+  flex-shrink: 0;
+}
+
+/* ── POLICY STRIP ───────────────────────────────────── */
+.policy-strip {
+  background: var(--navy);
+  color: var(--white);
+  border-radius: var(--radius);
+  padding: 22px 28px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+@media (max-width: 600px) { .policy-strip { grid-template-columns: 1fr; } }
+.policy-col h4 {
+  font-size: .82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid;
+}
+.policy-col.will h4   { color: #86EFAC; border-color: #86EFAC; }
+.policy-col.wont h4   { color: #FCA5A5; border-color: #FCA5A5; }
+.policy-col ul { list-style: none; }
+.policy-col li {
+  font-size: .86rem;
+  padding: 4px 0;
+  color: rgba(255,255,255,.85);
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+}
+.policy-col.will li::before { content: '✓'; color: #86EFAC; font-weight: 700; flex-shrink: 0; }
+.policy-col.wont li::before { content: '✗'; color: #FCA5A5; font-weight: 700; flex-shrink: 0; }
+
+/* ── FOOTER ─────────────────────────────────────────── */
+footer {
+  background: var(--navy-dk);
+  color: rgba(255,255,255,.55);
+  text-align: center;
+  padding: 16px 24px;
+  font-size: .78rem;
+}
+footer a { color: var(--gold); text-decoration: none; }
+
+/* ── EMPTY STATE ────────────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--slate);
+}
+.empty-state .empty-icon { font-size: 2.5rem; margin-bottom: 12px; }
+.empty-state p { font-size: .9rem; max-width: 360px; margin: 0 auto; }
+
+/* ── SKELETON ───────────────────────────────────────── */
+.skeleton {
+  display: none;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+.skeleton.visible { display: block; }
+.skel-line {
+  background: var(--mgray);
+  border-radius: 4px;
+  height: 14px;
+  margin-bottom: 10px;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+
+/* ── SECTION DIVIDER ─────────────────────────────────── */
+.section-label {
+  font-size: .75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--slate);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--mgray);
+}
+
+/* ── TOOLTIP ─────────────────────────────────────────── */
+[data-tooltip] { position: relative; }
+[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--navy-dk);
+  color: #fff;
+  font-size: .75rem;
+  padding: 4px 10px;
+  border-radius: 5px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 100;
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 400;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="gold-bar"></div>
+    <h1>NSPA Privacy Check &mdash; Social Media Screener</h1>
+    <span class="header-badge">AI-Powered</span>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">🔒 Student Privacy Protection</div>
+    <h2>Does your post <em>identify</em> a student?</h2>
+    <p>Paste a draft social media post. This tool flags PII and identifier combinations that could re-identify a scholarship recipient, then gives you a safer version ready to post.</p>
+  </div>
+</div>
+
+<main>
+
+  <!-- INPUT CARD -->
+  <div class="card">
+    <div class="card-title">
+      <div class="icon">✍️</div>
+      Draft Post
+    </div>
+    <p class="card-sub">Paste your draft announcement, winner spotlight, or program update below. Do not include anything you are not comfortable sharing for review.</p>
+
+    <div class="section-label">Platform context</div>
+    <div class="platform-row" id="platforms">
+      <span class="platform-pill active" data-platform="General">General</span>
+      <span class="platform-pill" data-platform="Facebook">Facebook</span>
+      <span class="platform-pill" data-platform="Instagram">Instagram</span>
+      <span class="platform-pill" data-platform="LinkedIn">LinkedIn</span>
+      <span class="platform-pill" data-platform="X / Twitter">X / Twitter</span>
+    </div>
+
+    <div class="section-label">Your draft</div>
+    <textarea id="post-input" placeholder="Example: Congratulations to Emma Rodriguez from Jefferson High School in Austin, TX! Emma will be attending UT Austin to study biomedical engineering on a full $15,000 scholarship. We're so proud of this first-generation college student!"></textarea>
+    <div class="char-row">
+      <span>Tip: include all details you plan to publish, including hashtags and @mentions.</span>
+      <span class="char-count"><span id="char-num">0</span> chars</span>
+    </div>
+
+    <button class="btn-analyze" id="analyze-btn" onclick="analyzePost()">
+      <span class="btn-label">🔍 Check for Privacy Risks</span>
+      <span class="spinner"></span>
+    </button>
+  </div>
+
+  <!-- SKELETON LOADER -->
+  <div class="card skeleton" id="skeleton">
+    <div class="skel-line" style="width:40%;height:18px;margin-bottom:16px"></div>
+    <div class="skel-line" style="width:100%"></div>
+    <div class="skel-line" style="width:85%"></div>
+    <div class="skel-line" style="width:92%"></div>
+    <div class="skel-line" style="width:60%;margin-top:16px;height:18px"></div>
+    <div class="skel-line" style="width:100%"></div>
+    <div class="skel-line" style="width:78%"></div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results-section">
+
+    <!-- RISK BANNER -->
+    <div id="risk-banner" class="risk-banner high">
+      <div class="risk-icon" id="risk-icon">⚠️</div>
+      <div class="risk-text">
+        <strong id="risk-label">High Privacy Risk</strong>
+        <p id="risk-desc">This post contains identifiers that could re-identify a student. Review all flagged items before publishing.</p>
+      </div>
+    </div>
+
+    <!-- ANNOTATED POST CARD -->
+    <div class="card">
+      <div class="card-title">
+        <div class="icon">🔎</div>
+        Annotated Post
+      </div>
+      <p class="card-sub">Flagged phrases are highlighted. Click any highlight to jump to its explanation below.</p>
+
+      <div class="legend-row">
+        <div class="legend-item"><div class="legend-dot dot-high"></div> Direct PII (high)</div>
+        <div class="legend-item"><div class="legend-dot dot-medium"></div> Contextual risk (medium)</div>
+        <div class="legend-item"><div class="legend-dot dot-combo"></div> Identifying combination</div>
+      </div>
+
+      <div class="annotated-post" id="annotated-post"></div>
+    </div>
+
+    <!-- FLAGS DETAIL CARD -->
+    <div class="card" id="flags-card">
+      <div class="card-title">
+        <div class="icon">🚩</div>
+        Flag Details &amp; Suggestions
+      </div>
+      <p class="card-sub">Each flagged item includes the reason and a safer alternative.</p>
+      <div class="flags-list" id="flags-list"></div>
+    </div>
+
+    <!-- SAFE VERSION CARD -->
+    <div class="card">
+      <div class="card-title">
+        <div class="icon">✅</div>
+        Safe Version
+      </div>
+      <p class="card-sub">Identifiers have been generalized. Review and personalize before posting. Staff approval required before publishing.</p>
+
+      <div class="safe-header">
+        <span class="section-label" style="margin-bottom:0">Revised post</span>
+        <button class="btn-copy" id="copy-btn" onclick="copyPost()">
+          <span>📋 Copy to clipboard</span>
+        </button>
+      </div>
+      <div class="safe-post" id="safe-post"></div>
+    </div>
+
+    <!-- REVIEW CHECKLIST -->
+    <div class="card">
+      <div class="card-title">
+        <div class="icon">📋</div>
+        Before You Post: Staff Checklist
+      </div>
+      <ul class="checklist" id="checklist">
+        <li><span class="check-icon">☐</span> Confirm student has given written consent for this specific post.</li>
+        <li><span class="check-icon">☐</span> Verify the safe version is accurate (no hallucinated replacements).</li>
+        <li><span class="check-icon">☐</span> Check that no combination of details can narrow to one student.</li>
+        <li><span class="check-icon">☐</span> Confirm award amount visibility matches your disclosure policy.</li>
+        <li><span class="check-icon">☐</span> Obtain supervisor or communications lead approval before publishing.</li>
+        <li><span class="check-icon">☐</span> Save approved version to your social media content log.</li>
+      </ul>
+    </div>
+
+  </div><!-- /results-section -->
+
+  <!-- WE WILL / WE WILL NOT -->
+  <div class="policy-strip">
+    <div class="policy-col will">
+      <h4>We Will</h4>
+      <ul>
+        <li>Use first name + field of study to celebrate students.</li>
+        <li>Share generalized details (city region, major category).</li>
+        <li>Obtain written consent before using any student content.</li>
+        <li>Run all posts through a privacy check before publishing.</li>
+      </ul>
+    </div>
+    <div class="policy-col wont">
+      <h4>We Will Not</h4>
+      <ul>
+        <li>Combine full name, school, location, and award in one post.</li>
+        <li>Tag or @mention students without explicit consent.</li>
+        <li>Disclose award amounts without student/policy approval.</li>
+        <li>Publish before a staff reviewer approves the final copy.</li>
+      </ul>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  NSPA Privacy Check Tool &nbsp;|&nbsp; Session resources: <a href="https://mguhlin.org/nspa">mguhlin.org/nspa</a> &nbsp;|&nbsp; #NSPAai &nbsp;|&nbsp; Not a substitute for legal counsel or official policy review.
+</footer>
+
+<script>
+// ── STATE ─────────────────────────────────────────────
+let selectedPlatform = 'General';
+let lastAnalysis = null;
+
+// ── PLATFORM PILLS ────────────────────────────────────
+document.querySelectorAll('.platform-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('.platform-pill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+    selectedPlatform = pill.dataset.platform;
+  });
+});
+
+// ── CHAR COUNT ────────────────────────────────────────
+const postInput = document.getElementById('post-input');
+postInput.addEventListener('input', () => {
+  document.getElementById('char-num').textContent = postInput.value.length;
+});
+
+// ── ANALYZE ───────────────────────────────────────────
+async function analyzePost() {
+  const text = postInput.value.trim();
+  if (!text) {
+    postInput.focus();
+    postInput.style.borderColor = '#F87171';
+    setTimeout(() => postInput.style.borderColor = '', 2000);
+    return;
+  }
+
+  const btn = document.getElementById('analyze-btn');
+  const skeleton = document.getElementById('skeleton');
+  const resultsSection = document.getElementById('results-section');
+
+  btn.disabled = true;
+  btn.classList.add('loading');
+  skeleton.classList.add('visible');
+  resultsSection.classList.remove('visible');
+
+  const systemPrompt = `You are a student privacy analyst for nonprofit scholarship organizations. Your job is to identify personally identifiable information (PII) and re-identification risks in social media draft posts about scholarship recipients.
+
+You analyze text for:
+1. DIRECT PII (high severity): Full names, email addresses, phone numbers, home addresses, social media handles, specific student ID numbers, birth dates.
+2. CONTEXTUAL RISK (medium severity): School name alone, city/town alone, graduation year alone, first name alone, general field of study alone, award amounts alone.
+3. IDENTIFYING COMBINATIONS (combo severity — most important): Two or more contextual details that together could uniquely identify a student, even if each item alone seems harmless. Examples:
+   - First name + school + field of study
+   - School + city + award amount
+   - First generation status + school + major
+   - Graduation year + school + specific award name
+   - Last name + any location detail
+   - Full name + any detail (always combo)
+
+For each flag, provide a specific safer suggestion (e.g., "Replace 'Emma Rodriguez' with 'a recent graduate'" or "Replace 'Jefferson High School in Austin, TX' with 'a local high school'").
+
+Also produce a Safe Version of the post with all flags resolved using your suggestions. The safe version should still be warm, celebratory, and usable — not stripped of all meaning.
+
+Assess overall risk level: HIGH (direct PII present or 2+ identifying combinations), MEDIUM (1-2 contextual risks), LOW (minimal risk, mostly safe).
+
+Respond ONLY with a valid JSON object in this exact format, no preamble, no markdown fences:
+{
+  "riskLevel": "HIGH" | "MEDIUM" | "LOW",
+  "riskSummary": "One sentence explaining the overall risk.",
+  "flags": [
+    {
+      "phrase": "exact text from the post to flag",
+      "severity": "high" | "medium" | "combo",
+      "reason": "Why this is a privacy risk in 1-2 sentences.",
+      "suggestion": "Specific safer alternative text or action."
+    }
+  ],
+  "safeVersion": "The full revised post text with all flags addressed."
+}
+
+If no flags are found, return an empty flags array and riskLevel LOW.
+Do not invent flags that are not present. Only flag what is genuinely in the text.`;
+
+  const userMessage = `Platform: ${selectedPlatform}
+
+Draft post to analyze:
+"""
+${text}
+"""
+
+Analyze for student privacy risks and return JSON.`;
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages: [{ role: "user", content: userMessage }]
+      })
+    });
+
+    const data = await response.json();
+    const rawText = data.content.map(i => i.text || "").join("").trim();
+    const clean = rawText.replace(/```json|```/g, "").trim();
+    const analysis = JSON.parse(clean);
+    lastAnalysis = analysis;
+
+    renderResults(text, analysis);
+
+  } catch (err) {
+    console.error(err);
+    skeleton.classList.remove('visible');
+    btn.disabled = false;
+    btn.classList.remove('loading');
+    alert("Analysis failed. Check your connection and try again.");
+  }
+}
+
+// ── RENDER ────────────────────────────────────────────
+function renderResults(originalText, analysis) {
+  const skeleton = document.getElementById('skeleton');
+  const btn = document.getElementById('analyze-btn');
+  const resultsSection = document.getElementById('results-section');
+
+  skeleton.classList.remove('visible');
+  btn.disabled = false;
+  btn.classList.remove('loading');
+
+  // Risk banner
+  const riskBanner = document.getElementById('risk-banner');
+  const riskIcon = document.getElementById('risk-icon');
+  const riskLabel = document.getElementById('risk-label');
+  const riskDesc = document.getElementById('risk-desc');
+
+  riskBanner.className = 'risk-banner';
+  if (analysis.riskLevel === 'HIGH') {
+    riskBanner.classList.add('high');
+    riskIcon.textContent = '⛔';
+    riskLabel.textContent = 'High Privacy Risk';
+  } else if (analysis.riskLevel === 'MEDIUM') {
+    riskBanner.classList.add('medium');
+    riskIcon.textContent = '⚠️';
+    riskLabel.textContent = 'Medium Privacy Risk';
+  } else {
+    riskBanner.classList.add('low');
+    riskIcon.textContent = '✅';
+    riskLabel.textContent = 'Low Privacy Risk';
+  }
+  riskDesc.textContent = analysis.riskSummary || '';
+
+  // Annotated post
+  const annotatedEl = document.getElementById('annotated-post');
+  if (!analysis.flags || analysis.flags.length === 0) {
+    annotatedEl.innerHTML = escapeHtml(originalText) + '<br><br><em style="color:#166534;font-size:.88rem">No significant privacy flags detected.</em>';
+  } else {
+    annotatedEl.innerHTML = buildAnnotated(originalText, analysis.flags);
+  }
+
+  // Flag cards
+  const flagsList = document.getElementById('flags-list');
+  if (!analysis.flags || analysis.flags.length === 0) {
+    flagsList.innerHTML = '<div class="empty-state"><div class="empty-icon">🎉</div><p>No flags found. This post appears to have low re-identification risk.</p></div>';
+  } else {
+    flagsList.innerHTML = analysis.flags.map((f, i) => buildFlagCard(f, i)).join('');
+  }
+
+  // Safe version
+  document.getElementById('safe-post').textContent = analysis.safeVersion || originalText;
+
+  // Show
+  resultsSection.classList.add('visible');
+  resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Reset copy button
+  const copyBtn = document.getElementById('copy-btn');
+  copyBtn.classList.remove('copied');
+  copyBtn.innerHTML = '<span>📋 Copy to clipboard</span>';
+}
+
+// ── BUILD ANNOTATED HTML ──────────────────────────────
+function buildAnnotated(text, flags) {
+  if (!flags || flags.length === 0) return escapeHtml(text);
+
+  // Sort flags by phrase length descending to handle overlaps
+  const sorted = [...flags].sort((a, b) => b.phrase.length - a.phrase.length);
+
+  let result = text;
+  const replacements = [];
+
+  for (const flag of sorted) {
+    const phrase = flag.phrase;
+    const escapedPhrase = phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(escapedPhrase, 'gi');
+    const cssClass = flag.severity === 'high' ? 'flag-high' : flag.severity === 'combo' ? 'flag-combo' : 'flag-medium';
+    const replaced = result.replace(regex, match => {
+      return `\x00OPEN:${cssClass}\x00${match}\x00CLOSE\x00`;
+    });
+    result = replaced;
+  }
+
+  // Convert placeholders to HTML
+  result = escapeHtml(result)
+    .replace(/&amp;\x00OPEN:([^\x00]+)\x00/g, (_, cls) => `<span class="${cls}">`)
+    .replace(/\x00CLOSE\x00/g, '</span>')
+    .replace(/\x00OPEN:([^\x00]+)\x00/g, (_, cls) => `<span class="${cls}">`)
+    .replace(/\x00CLOSE\x00/g, '</span>');
+
+  // Simpler approach: just do the replacements properly
+  return buildAnnotatedClean(text, flags);
+}
+
+function buildAnnotatedClean(text, flags) {
+  if (!flags || flags.length === 0) return escapeHtml(text);
+
+  // Build a list of ranges to highlight
+  const sorted = [...flags].sort((a, b) => b.phrase.length - a.phrase.length);
+  const ranges = [];
+
+  for (const flag of sorted) {
+    if (!flag.phrase) continue;
+    const searchStr = flag.phrase.toLowerCase();
+    let idx = text.toLowerCase().indexOf(searchStr);
+    while (idx !== -1) {
+      const end = idx + flag.phrase.length;
+      const overlaps = ranges.some(r => r.start < end && r.end > idx);
+      if (!overlaps) {
+        ranges.push({ start: idx, end, cls: flag.severity === 'high' ? 'flag-high' : flag.severity === 'combo' ? 'flag-combo' : 'flag-medium' });
+      }
+      idx = text.toLowerCase().indexOf(searchStr, idx + 1);
+    }
+  }
+
+  ranges.sort((a, b) => a.start - b.start);
+
+  let html = '';
+  let cursor = 0;
+  for (const r of ranges) {
+    html += escapeHtml(text.slice(cursor, r.start));
+    html += `<span class="${r.cls}">${escapeHtml(text.slice(r.start, r.end))}</span>`;
+    cursor = r.end;
+  }
+  html += escapeHtml(text.slice(cursor));
+  return html;
+}
+
+// ── BUILD FLAG CARD ───────────────────────────────────
+function buildFlagCard(flag, idx) {
+  const icons = { high: '🔴', medium: '🟡', combo: '🟣' };
+  const tagClass = { high: 'tag-high', medium: 'tag-medium', combo: 'tag-combo' };
+  const tagLabel = { high: 'Direct PII', medium: 'Contextual Risk', combo: 'Identifying Combo' };
+  const sev = flag.severity || 'medium';
+
+  return `
+  <div class="flag-card severity-${sev}" id="flag-${idx}">
+    <div class="flag-card-icon">${icons[sev] || '🟡'}</div>
+    <div>
+      <span class="severity-tag ${tagClass[sev]}">${tagLabel[sev]}</span>
+      <div class="flag-phrase">${escapeHtml(flag.phrase || '')}</div>
+      <div class="flag-reason">${escapeHtml(flag.reason || '')}</div>
+      <div class="flag-suggestion">➜ ${escapeHtml(flag.suggestion || '')}</div>
+    </div>
+  </div>`;
+}
+
+// ── COPY ──────────────────────────────────────────────
+async function copyPost() {
+  const safeText = document.getElementById('safe-post').textContent;
+  try {
+    await navigator.clipboard.writeText(safeText);
+    const btn = document.getElementById('copy-btn');
+    btn.classList.add('copied');
+    btn.innerHTML = '<span>✅ Copied!</span>';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '<span>📋 Copy to clipboard</span>';
+    }, 2500);
+  } catch {
+    alert("Copy failed. Please select and copy the text manually.");
+  }
+}
+
+// ── UTILS ─────────────────────────────────────────────
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+</script>
+</body>
+</html>
