@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Donor Impact Report Builder</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1a2744;
+    --navy-mid: #243460;
+    --gold: #c9973a;
+    --gold-light: #e8b85a;
+    --cream: #faf7f2;
+    --slate: #4a5568;
+    --slate-light: #718096;
+    --white: #ffffff;
+    --border: #e2d9cc;
+    --success: #2d6a4f;
+    --error: #c0392b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: #f0ebe3;
+    color: var(--navy);
+    min-height: 100vh;
+  }
+
+  /* ── BUILDER PANEL ── */
+  #builder {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  .builder-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .builder-header .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .builder-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem;
+    color: var(--navy);
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+
+  .builder-header p {
+    color: var(--slate);
+    font-size: 1rem;
+    font-weight: 300;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(26,39,68,0.06);
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--navy);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card-title .step-badge {
+    background: var(--navy);
+    color: var(--gold);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: 3px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+  }
+
+  /* GRID */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+  }
+
+  .stories-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  /* FORM ELEMENTS */
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--slate);
+  }
+
+  input[type="text"],
+  input[type="number"],
+  textarea {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.95rem;
+    color: var(--navy);
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+
+  input:focus, textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201,151,58,0.15);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 88px;
+    line-height: 1.55;
+  }
+
+  .field-hint {
+    font-size: 0.75rem;
+    color: var(--slate-light);
+    font-style: italic;
+  }
+
+  /* ORG NAME */
+  .org-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 0;
+  }
+
+  /* GIVING TIERS */
+  .tiers-info {
+    background: var(--cream);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    border-left: 3px solid var(--gold);
+  }
+
+  .tiers-info p {
+    font-size: 0.85rem;
+    color: var(--slate);
+    line-height: 1.5;
+  }
+
+  .tiers-info strong { color: var(--navy); }
+
+  .tiers-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+  }
+
+  /* GENERATE BUTTON */
+  .generate-btn {
+    display: block;
+    width: 100%;
+    padding: 16px 32px;
+    background: var(--navy);
+    color: var(--gold-light);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    margin-top: 8px;
+  }
+
+  .generate-btn:hover { background: var(--navy-mid); transform: translateY(-1px); }
+  .generate-btn:active { transform: translateY(0); }
+  .generate-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  /* STATUS */
+  #status-bar {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    margin-top: 16px;
+  }
+  #status-bar.loading { display: flex; background: #eef2ff; color: #3730a3; }
+  #status-bar.error { display: flex; background: #fef2f2; color: var(--error); }
+
+  .spinner {
+    width: 18px; height: 18px;
+    border: 2px solid #c7d2fe;
+    border-top-color: #4338ca;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── REPORT OUTPUT ── */
+  #report-output { display: none; }
+
+  .report-actions {
+    max-width: 820px;
+    margin: 0 auto 16px;
+    padding: 0 24px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .action-btn {
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+
+  .btn-pdf {
+    background: var(--gold);
+    color: var(--navy);
+  }
+  .btn-pdf:hover { background: var(--gold-light); }
+
+  .btn-back {
+    background: transparent;
+    color: var(--slate);
+    border: 1.5px solid var(--border);
+  }
+  .btn-back:hover { border-color: var(--slate); color: var(--navy); }
+
+  /* ── REPORT PAGE ── */
+  #report-page {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .report-paper {
+    background: var(--white);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(26,39,68,0.14);
+  }
+
+  /* HEADER BAND */
+  .report-header {
+    background: var(--navy);
+    padding: 44px 52px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .report-header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    background: rgba(201,151,58,0.08);
+  }
+
+  .report-header::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: 30%;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(201,151,58,0.05);
+  }
+
+  .report-org {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+
+  .report-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.6rem;
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 18px;
+    max-width: 600px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .report-headline em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .report-subhead {
+    color: rgba(255,255,255,0.65);
+    font-size: 0.9rem;
+    font-weight: 300;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* STAT STRIP */
+  .stat-strip {
+    background: var(--gold);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 0;
+  }
+
+  .stat-item {
+    padding: 18px 24px;
+    text-align: center;
+    border-right: 1px solid rgba(26,39,68,0.15);
+  }
+  .stat-item:last-child { border-right: none; }
+
+  .stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1;
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--navy-mid);
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* BODY */
+  .report-body {
+    padding: 44px 52px;
+  }
+
+  /* STORIES */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+
+  .section-rule {
+    height: 2px;
+    background: var(--gold);
+    width: 40px;
+    margin-bottom: 24px;
+  }
+
+  .stories-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  .story-card {
+    background: var(--cream);
+    border-radius: 10px;
+    padding: 22px 20px;
+    border-top: 3px solid var(--gold);
+    position: relative;
+  }
+
+  .story-card::before {
+    content: '\201C';
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    color: var(--gold);
+    opacity: 0.3;
+    position: absolute;
+    top: 4px;
+    left: 14px;
+    line-height: 1;
+  }
+
+  .story-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+
+  .story-text {
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: var(--slate);
+  }
+
+  /* GIVING TIERS */
+  .tiers-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+
+  .tier-card {
+    background: var(--navy);
+    border-radius: 10px;
+    padding: 24px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tier-card::after {
+    content: '';
+    position: absolute;
+    bottom: -20px; right: -20px;
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: rgba(201,151,58,0.1);
+  }
+
+  .tier-amount {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .tier-name {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .tier-desc {
+    font-size: 0.84rem;
+    color: rgba(255,255,255,0.82);
+    line-height: 1.6;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* CTA */
+  .cta-block {
+    background: linear-gradient(135deg, var(--cream) 0%, #efe9df 100%);
+    border-radius: 12px;
+    padding: 32px 36px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 28px;
+  }
+
+  .cta-accent {
+    width: 4px;
+    min-height: 80px;
+    background: var(--gold);
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .cta-content {}
+
+  .cta-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .cta-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    color: var(--navy);
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+
+  .cta-sub {
+    font-size: 0.88rem;
+    color: var(--slate);
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  .report-footer {
+    background: var(--navy);
+    padding: 18px 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-org {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+  }
+
+  .footer-cycle {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.35);
+    font-weight: 300;
+  }
+
+  /* ── PRINT ── */
+  @media print {
+    body { background: white; }
+    #builder, .report-actions { display: none !important; }
+    #report-output { display: block !important; }
+    #report-page { padding: 0; max-width: 100%; }
+    .report-paper { border-radius: 0; box-shadow: none; }
+    .report-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .stat-strip { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .tier-card { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .report-footer { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+
+  /* small screen adjustments */
+  @media (max-width: 620px) {
+    .stats-grid, .tiers-grid, .tiers-grid { grid-template-columns: 1fr 1fr; }
+    .stat-strip { grid-template-columns: 1fr 1fr; }
+    .stories-wrap, .tiers-wrap { grid-template-columns: 1fr; }
+    .report-header, .report-body { padding: 28px 28px; }
+    .org-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════ BUILDER FORM ════════ -->
+<div id="builder">
+  <div class="builder-header">
+    <div class="eyebrow">NSPA Scholarship Tools</div>
+    <h1>Donor Impact Report Builder</h1>
+    <p>Enter your program data below. The report generates in seconds, ready to print or share.</p>
+  </div>
+
+  <!-- STEP 1: Org + Cycle -->
+  <div class="card">
+    <div class="card-title">
+      <span class="step-badge">Step 1</span>
+      Organization &amp; Program Year
+    </div>
+    <div class="org-row">
+      <div class="field">
+        <label for="org-name">Organization Name</label>
+        <input type="text" id="org-name" placeholder="e.g., Heartland Community Foundation" />
+      </div>
+      <div class="field">
+        <label for="program-cycle">Program Cycle</label>
+        <input type="text" id="program-cycle" placeholder="e.g., 2024–2025 Academic Year" />
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: Stats -->
+  <div class="card">
+    <div class="card-title">
+      <span class="step-badge">Step 2</span>
+      Program Statistics
+    </div>
+    <div class="stats-grid">
+      <div class="field">
+        <label for="num-applicants">Total Applicants</label>
+        <input type="number" id="num-applicants" placeholder="e.g., 312" min="1" />
+      </div>
+      <div class="field">
+        <label for="num-awards">Awards Given</label>
+        <input type="number" id="num-awards" placeholder="e.g., 48" min="1" />
+      </div>
+      <div class="field">
+        <label for="total-dollars">Total $ Awarded</label>
+        <input type="text" id="total-dollars" placeholder="e.g., 240000" />
+        <span class="field-hint">Numbers only; no $ or commas</span>
+      </div>
+      <div class="field">
+        <label for="avg-award">Average Award ($)</label>
+        <input type="text" id="avg-award" placeholder="e.g., 5000" />
+        <span class="field-hint">Numbers only</span>
+      </div>
+      <div class="field">
+        <label for="renewal-rate">Renewal Rate (%)</label>
+        <input type="number" id="renewal-rate" placeholder="e.g., 82" min="0" max="100" />
+        <span class="field-hint">Recipients who renewed</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: Giving Tiers -->
+  <div class="card">
+    <div class="card-title">
+      <span class="step-badge">Step 3</span>
+      Giving Tiers (What Each Amount Covers)
+    </div>
+    <div class="tiers-info">
+      <p>Enter three gift levels you want donors to see. The AI will write a short, compelling description of the <strong>real impact</strong> each amount makes for a recipient.</p>
+    </div>
+    <div class="tiers-grid">
+      <div class="field">
+        <label for="tier1-amount">Tier 1 Amount ($)</label>
+        <input type="text" id="tier1-amount" placeholder="e.g., 1000" />
+      </div>
+      <div class="field">
+        <label for="tier2-amount">Tier 2 Amount ($)</label>
+        <input type="text" id="tier2-amount" placeholder="e.g., 2500" />
+      </div>
+      <div class="field">
+        <label for="tier3-amount">Tier 3 Amount ($)</label>
+        <input type="text" id="tier3-amount" placeholder="e.g., 5000" />
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4: Student Stories -->
+  <div class="card">
+    <div class="card-title">
+      <span class="step-badge">Step 4</span>
+      Anonymized Student Stories
+      <span style="font-family:'Source Sans 3';font-size:0.78rem;font-weight:300;color:var(--slate-light);margin-left:auto;text-transform:none;letter-spacing:0;">No names, IDs, or identifying details</span>
+    </div>
+    <div class="stories-grid">
+      <div class="field">
+        <label for="story1">Student Story 1</label>
+        <textarea id="story1" placeholder="e.g., First-generation college student, nursing major, used award to cover clinical rotation costs and avoid dropping to part-time enrollment."></textarea>
+      </div>
+      <div class="field">
+        <label for="story2">Student Story 2</label>
+        <textarea id="story2" placeholder="e.g., Single parent returning to school after 10 years, award covered childcare gap during finals week and allowed on-time graduation."></textarea>
+      </div>
+      <div class="field">
+        <label for="story3">Student Story 3</label>
+        <textarea id="story3" placeholder="e.g., Rural student 80 miles from campus, scholarship covered commute and housing so they could accept an unpaid research internship."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <button class="generate-btn" id="generate-btn" onclick="generateReport()">
+    Generate Impact Report
+  </button>
+
+  <div id="status-bar">
+    <div class="spinner" id="spinner"></div>
+    <span id="status-text">Building your report...</span>
+  </div>
+</div>
+
+<!-- ════════ REPORT OUTPUT ════════ -->
+<div id="report-output">
+  <div class="report-actions">
+    <button class="action-btn btn-back" onclick="backToBuilder()">&#8592; Edit Inputs</button>
+    <button class="action-btn btn-pdf" onclick="downloadPDF()">&#8595; Download PDF</button>
+  </div>
+
+  <div id="report-page">
+    <div class="report-paper">
+
+      <div class="report-header">
+        <div class="report-org" id="rpt-org"></div>
+        <div class="report-headline" id="rpt-headline"></div>
+        <div class="report-subhead" id="rpt-cycle"></div>
+      </div>
+
+      <div class="stat-strip">
+        <div class="stat-item">
+          <span class="stat-number" id="rpt-applicants"></span>
+          <span class="stat-label">Applicants</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" id="rpt-awards"></span>
+          <span class="stat-label">Awards Given</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" id="rpt-total"></span>
+          <span class="stat-label">Total Awarded</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" id="rpt-renewal"></span>
+          <span class="stat-label">Renewal Rate</span>
+        </div>
+      </div>
+
+      <div class="report-body">
+
+        <div class="section-title">Student Voices</div>
+        <div class="section-rule"></div>
+        <div class="stories-wrap" id="rpt-stories"></div>
+
+        <div class="section-title">Your Gift at Work</div>
+        <div class="section-rule"></div>
+        <div class="tiers-wrap" id="rpt-tiers"></div>
+
+        <div class="cta-block">
+          <div class="cta-accent"></div>
+          <div class="cta-content">
+            <div class="cta-label">Make a Difference</div>
+            <div class="cta-text" id="rpt-cta-title"></div>
+            <div class="cta-sub" id="rpt-cta-body"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="report-footer">
+        <span class="footer-org" id="rpt-footer-org"></span>
+        <span class="footer-cycle" id="rpt-footer-cycle"></span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Helpers ──
+function fmt$(n) {
+  const num = parseFloat(String(n).replace(/[^0-9.]/g,''));
+  if (isNaN(num)) return n;
+  return '$' + num.toLocaleString('en-US', {maximumFractionDigits:0});
+}
+
+function setStatus(msg, type) {
+  const bar = document.getElementById('status-bar');
+  const txt = document.getElementById('status-text');
+  const sp  = document.getElementById('spinner');
+  bar.className = type;
+  txt.textContent = msg;
+  sp.style.display = type === 'loading' ? 'block' : 'none';
+}
+
+function backToBuilder() {
+  document.getElementById('report-output').style.display = 'none';
+  document.getElementById('builder').style.display = 'block';
+}
+
+function downloadPDF() {
+  window.print();
+}
+
+// ── GENERATE ──
+async function generateReport() {
+  const org      = document.getElementById('org-name').value.trim() || 'Our Scholarship Program';
+  const cycle    = document.getElementById('program-cycle').value.trim() || 'Current Academic Year';
+  const apps     = document.getElementById('num-applicants').value.trim();
+  const awards   = document.getElementById('num-awards').value.trim();
+  const total    = document.getElementById('total-dollars').value.trim();
+  const avg      = document.getElementById('avg-award').value.trim();
+  const renewal  = document.getElementById('renewal-rate').value.trim();
+  const t1       = document.getElementById('tier1-amount').value.trim();
+  const t2       = document.getElementById('tier2-amount').value.trim();
+  const t3       = document.getElementById('tier3-amount').value.trim();
+  const s1       = document.getElementById('story1').value.trim();
+  const s2       = document.getElementById('story2').value.trim();
+  const s3       = document.getElementById('story3').value.trim();
+
+  if (!apps || !awards || !total) {
+    setStatus('Please fill in at least: Total Applicants, Awards Given, and Total $ Awarded.', 'error');
+    return;
+  }
+
+  const btn = document.getElementById('generate-btn');
+  btn.disabled = true;
+  setStatus('Generating your impact report...', 'loading');
+
+  const prompt = `You are writing copy for a one-page donor impact report for a scholarship program. 
+Write professional, warm, results-focused content. No fabrication beyond reasonable inference from the data.
+
+Program data:
+- Organization: ${org}
+- Cycle: ${cycle}
+- Applicants: ${apps}
+- Awards given: ${awards}
+- Total awarded: $${total}
+- Average award: $${avg || 'not provided'}
+- Renewal rate: ${renewal || 'not provided'}%
+- Tier 1 gift: $${t1 || '1000'}
+- Tier 2 gift: $${t2 || '2500'}
+- Tier 3 gift: $${t3 || '5000'}
+- Student story 1: ${s1 || 'A scholarship recipient used the award to cover educational expenses and remain enrolled full-time.'}
+- Student story 2: ${s2 || 'A first-generation student used the scholarship to afford required course materials and graduate on time.'}
+- Student story 3: ${s3 || 'A working student used the scholarship to reduce hours at their job and focus on academic performance.'}
+
+Return ONLY valid JSON (no markdown, no preamble) in this exact structure:
+{
+  "headline": "A short, powerful headline (under 12 words) for the impact report. May use emphasis with *asterisks* around 1-3 impactful words.",
+  "story1_label": "Short label for student 1 (4-6 words, e.g. 'First-Generation Nursing Student')",
+  "story1_text": "2-3 sentence narrative version of story 1, warm and specific, anonymized, donor-facing.",
+  "story2_label": "Short label for student 2",
+  "story2_text": "2-3 sentence narrative version of story 2.",
+  "story3_label": "Short label for student 3",
+  "story3_text": "2-3 sentence narrative version of story 3.",
+  "tier1_name": "1-2 word name for tier 1 (e.g. 'Supporter')",
+  "tier1_desc": "2-3 sentences describing what a $${t1||'1000'} gift specifically covers for a student.",
+  "tier2_name": "1-2 word name for tier 2 (e.g. 'Champion')",
+  "tier2_desc": "2-3 sentences for $${t2||'2500'} gift impact.",
+  "tier3_name": "1-2 word name for tier 3 (e.g. 'Benefactor')",
+  "tier3_desc": "2-3 sentences for $${t3||'5000'} gift impact.",
+  "cta_title": "A compelling, 1-sentence call to action headline (under 15 words).",
+  "cta_body": "2-3 sentences inviting the donor to give, referencing real impact data from above."
+}`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    if (!resp.ok) throw new Error('API error ' + resp.status);
+
+    const data = await resp.json();
+    const raw = data.content.map(c => c.text || '').join('');
+    const clean = raw.replace(/```json|```/g,'').trim();
+    const d = JSON.parse(clean);
+
+    // ── Populate report ──
+    // Header
+    document.getElementById('rpt-org').textContent = org.toUpperCase();
+    // Handle *emphasis* in headline
+    const hl = d.headline.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+    document.getElementById('rpt-headline').innerHTML = hl;
+    document.getElementById('rpt-cycle').textContent = cycle + ' Donor Impact Summary';
+
+    // Stats
+    document.getElementById('rpt-applicants').textContent = parseInt(apps).toLocaleString();
+    document.getElementById('rpt-awards').textContent = parseInt(awards).toLocaleString();
+    document.getElementById('rpt-total').textContent = fmt$(total);
+    document.getElementById('rpt-renewal').textContent = renewal ? renewal + '%' : 'N/A';
+
+    // Stories
+    const storiesEl = document.getElementById('rpt-stories');
+    storiesEl.innerHTML = '';
+    [[d.story1_label, d.story1_text],[d.story2_label, d.story2_text],[d.story3_label, d.story3_text]].forEach(([lbl,txt]) => {
+      storiesEl.innerHTML += `<div class="story-card"><div class="story-label">${lbl}</div><div class="story-text">${txt}</div></div>`;
+    });
+
+    // Tiers
+    const tiersEl = document.getElementById('rpt-tiers');
+    tiersEl.innerHTML = '';
+    [[t1||'1000', d.tier1_name, d.tier1_desc],[t2||'2500', d.tier2_name, d.tier2_desc],[t3||'5000', d.tier3_name, d.tier3_desc]].forEach(([amt,name,desc]) => {
+      tiersEl.innerHTML += `<div class="tier-card"><span class="tier-amount">${fmt$(amt)}</span><span class="tier-name">${name}</span><div class="tier-desc">${desc}</div></div>`;
+    });
+
+    // CTA
+    document.getElementById('rpt-cta-title').textContent = d.cta_title;
+    document.getElementById('rpt-cta-body').textContent = d.cta_body;
+
+    // Footer
+    document.getElementById('rpt-footer-org').textContent = org.toUpperCase();
+    document.getElementById('rpt-footer-cycle').textContent = cycle;
+
+    // Show report
+    document.getElementById('status-bar').className = '';
+    document.getElementById('builder').style.display = 'none';
+    document.getElementById('report-output').style.display = 'block';
+    window.scrollTo(0,0);
+
+  } catch(err) {
+    setStatus('Generation failed: ' + err.message + '. Check your inputs and try again.', 'error');
+  } finally {
+    btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>
