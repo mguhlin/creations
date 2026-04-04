@@ -1,1 +1,302 @@
+import { useState, useRef } from "react";
 
+const SYSTEM_PROMPT = `You are a scholarship program communications specialist. Generate exactly three deadline reminder emails (30-day, 7-day, 48-hour) based on the inputs provided. Each email must be under 120 words (body text only, not counting subject line). Tone: 30-day = informational and welcoming; 7-day = warm and encouraging; 48-hour = urgent and action-oriented. Do NOT use em-dashes. Be human, not corporate. Return ONLY a valid JSON object with no markdown, no backticks, no explanation. Use this exact structure:
+{
+  "thirty": { "subject": "...", "body": "..." },
+  "seven": { "subject": "...", "body": "..." },
+  "fortyeight": { "subject": "...", "body": "..." }
+}`;
+
+function buildUserPrompt(program, deadline, link) {
+  return `Program name: ${program}
+Application deadline: ${deadline}
+Application link: ${link}
+
+Generate the three email drafts now.`;
+}
+
+function countWords(text) {
+  return text.trim().split(/\s+/).filter(Boolean).length;
+}
+
+const LABELS = [
+  { key: "thirty", days: "30 Days Out", color: "#1a5c8a", badge: "INFORMATIONAL", icon: "📅" },
+  { key: "seven", days: "7 Days Out", color: "#c07a00", badge: "ENCOURAGING", icon: "⏳" },
+  { key: "fortyeight", days: "48 Hours Out", color: "#b3000c", badge: "URGENT", icon: "🚨" },
+];
+
+export default function EmailGenerator() {
+  const [program, setProgram] = useState("");
+  const [deadline, setDeadline] = useState("");
+  const [link, setLink] = useState("");
+  const [emails, setEmails] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [copied, setCopied] = useState({});
+  const abortRef = useRef(null);
+
+  async function generate() {
+    if (!program.trim() || !deadline || !link.trim()) {
+      setError("Please fill in all three fields.");
+      return;
+    }
+    setError("");
+    setEmails(null);
+    setLoading(true);
+
+    try {
+      const res = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 1000,
+          system: SYSTEM_PROMPT,
+          messages: [{ role: "user", content: buildUserPrompt(program, deadline, link) }],
+        }),
+      });
+      const data = await res.json();
+      const raw = data?.content?.find(b => b.type === "text")?.text || "";
+      const parsed = JSON.parse(raw);
+      setEmails(parsed);
+    } catch (e) {
+      setError("Generation failed. Check your inputs and try again.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function copyEmail(key, subject, body) {
+    const text = `Subject: ${subject}\n\n${body}`;
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(c => ({ ...c, [key]: true }));
+      setTimeout(() => setCopied(c => ({ ...c, [key]: false })), 2000);
+    });
+  }
+
+  function formatDeadlineDisplay(dateStr) {
+    if (!dateStr) return "";
+    const d = new Date(dateStr + "T12:00:00");
+    return d.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+  }
+
+  return (
+    <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", minHeight: "100vh", background: "#f5f3ef", padding: "0" }}>
+      {/* Header */}
+      <div style={{ background: "#0d2d4e", color: "#fff", padding: "28px 32px 22px", borderBottom: "4px solid #c9a227" }}>
+        <div style={{ maxWidth: 780, margin: "0 auto" }}>
+          <div style={{ fontSize: 11, letterSpacing: "0.18em", color: "#c9a227", fontFamily: "sans-serif", textTransform: "uppercase", marginBottom: 6 }}>
+            Scholarship Communications Tool
+          </div>
+          <h1 style={{ margin: 0, fontSize: 26, fontWeight: 700, lineHeight: 1.2, letterSpacing: "-0.01em" }}>
+            Deadline Reminder Email Generator
+          </h1>
+          <p style={{ margin: "8px 0 0", fontSize: 14, color: "#b8ccd8", fontFamily: "sans-serif", fontWeight: 400 }}>
+            Enter three inputs. Get three ready-to-send reminder emails.
+          </p>
+        </div>
+      </div>
+
+      <div style={{ maxWidth: 780, margin: "0 auto", padding: "32px 24px" }}>
+        {/* Input card */}
+        <div style={{ background: "#fff", border: "1px solid #ddd", borderRadius: 6, padding: "28px 28px 24px", marginBottom: 28, boxShadow: "0 1px 4px rgba(0,0,0,0.06)" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "18px 24px" }}>
+            <div style={{ gridColumn: "1 / -1" }}>
+              <label style={labelStyle}>Program Name</label>
+              <input
+                style={inputStyle}
+                placeholder="e.g., Bright Future Scholarship"
+                value={program}
+                onChange={e => setProgram(e.target.value)}
+              />
+            </div>
+            <div>
+              <label style={labelStyle}>Application Deadline</label>
+              <input
+                type="date"
+                style={inputStyle}
+                value={deadline}
+                onChange={e => setDeadline(e.target.value)}
+              />
+            </div>
+            <div>
+              <label style={labelStyle}>Application Link (URL)</label>
+              <input
+                style={inputStyle}
+                placeholder="https://apply.example.org"
+                value={link}
+                onChange={e => setLink(e.target.value)}
+              />
+            </div>
+          </div>
+
+          {deadline && (
+            <div style={{ marginTop: 14, fontSize: 12, color: "#555", fontFamily: "sans-serif", background: "#f0f4f8", borderRadius: 4, padding: "6px 12px", display: "inline-block" }}>
+              Deadline: {formatDeadlineDisplay(deadline)}
+            </div>
+          )}
+
+          {error && (
+            <div style={{ marginTop: 14, color: "#9b1c1c", fontSize: 13, fontFamily: "sans-serif", background: "#fff0f0", border: "1px solid #fca5a5", borderRadius: 4, padding: "8px 12px" }}>
+              {error}
+            </div>
+          )}
+
+          <button
+            onClick={generate}
+            disabled={loading}
+            style={{
+              marginTop: 20,
+              background: loading ? "#7a9db5" : "#0d2d4e",
+              color: "#fff",
+              border: "none",
+              borderRadius: 4,
+              padding: "12px 28px",
+              fontSize: 14,
+              fontFamily: "sans-serif",
+              fontWeight: 600,
+              letterSpacing: "0.04em",
+              cursor: loading ? "not-allowed" : "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              transition: "background 0.15s",
+            }}
+          >
+            {loading ? (
+              <>
+                <span style={{ display: "inline-block", width: 14, height: 14, border: "2px solid #fff", borderTopColor: "transparent", borderRadius: "50%", animation: "spin 0.7s linear infinite" }} />
+                Generating emails...
+              </>
+            ) : (
+              "Generate 3-Email Sequence"
+            )}
+          </button>
+        </div>
+
+        {/* Email output */}
+        {emails && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+            {LABELS.map(({ key, days, color, badge, icon }) => {
+              const email = emails[key];
+              if (!email) return null;
+              const wc = countWords(email.body);
+              const over = wc > 120;
+              return (
+                <div
+                  key={key}
+                  style={{
+                    background: "#fff",
+                    border: `1px solid #ddd`,
+                    borderLeft: `5px solid ${color}`,
+                    borderRadius: 6,
+                    overflow: "hidden",
+                    boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
+                  }}
+                >
+                  {/* Email header */}
+                  <div style={{ background: "#fafafa", borderBottom: "1px solid #eee", padding: "12px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <span style={{ fontSize: 18 }}>{icon}</span>
+                      <div>
+                        <div style={{ fontFamily: "sans-serif", fontWeight: 700, fontSize: 14, color: "#111" }}>{days}</div>
+                        <div style={{
+                          display: "inline-block",
+                          fontSize: 10,
+                          fontFamily: "sans-serif",
+                          fontWeight: 700,
+                          letterSpacing: "0.12em",
+                          color,
+                          background: `${color}18`,
+                          border: `1px solid ${color}44`,
+                          borderRadius: 3,
+                          padding: "2px 7px",
+                          marginTop: 2,
+                        }}>{badge}</div>
+                      </div>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <span style={{ fontFamily: "sans-serif", fontSize: 12, color: over ? "#9b1c1c" : "#4a7c59", fontWeight: 600 }}>
+                        {wc} words {over ? "(⚠ over 120)" : "✓"}
+                      </span>
+                      <button
+                        onClick={() => copyEmail(key, email.subject, email.body)}
+                        style={{
+                          background: copied[key] ? "#2d6a4f" : "#0d2d4e",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: 4,
+                          padding: "7px 16px",
+                          fontSize: 12,
+                          fontFamily: "sans-serif",
+                          fontWeight: 600,
+                          cursor: "pointer",
+                          letterSpacing: "0.03em",
+                          transition: "background 0.15s",
+                          minWidth: 80,
+                        }}
+                      >
+                        {copied[key] ? "Copied!" : "Copy"}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Email content */}
+                  <div style={{ padding: "18px 20px" }}>
+                    <div style={{ marginBottom: 12 }}>
+                      <span style={{ fontFamily: "sans-serif", fontSize: 11, fontWeight: 700, color: "#777", letterSpacing: "0.1em", textTransform: "uppercase" }}>Subject</span>
+                      <div style={{ marginTop: 4, fontFamily: "sans-serif", fontSize: 14, color: "#111", fontWeight: 600, background: "#f5f3ef", padding: "8px 12px", borderRadius: 4, border: "1px solid #e5e2db" }}>
+                        {email.subject}
+                      </div>
+                    </div>
+                    <div>
+                      <span style={{ fontFamily: "sans-serif", fontSize: 11, fontWeight: 700, color: "#777", letterSpacing: "0.1em", textTransform: "uppercase" }}>Body</span>
+                      <div style={{ marginTop: 4, fontSize: 14, color: "#222", lineHeight: 1.7, whiteSpace: "pre-wrap", background: "#fcfbf9", padding: "14px 16px", borderRadius: 4, border: "1px solid #e5e2db" }}>
+                        {email.body}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* Footer note */}
+            <div style={{ fontFamily: "sans-serif", fontSize: 12, color: "#666", background: "#f0f4f8", border: "1px solid #d0dce8", borderRadius: 4, padding: "10px 16px", lineHeight: 1.6 }}>
+              <strong>Before sending:</strong> Personalize salutations, confirm the deadline date is accurate, verify the application link resolves, and have a staff member approve each draft.
+            </div>
+          </div>
+        )}
+      </div>
+
+      <style>{`
+        @keyframes spin { to { transform: rotate(360deg); } }
+        input:focus { outline: 2px solid #0d2d4e; outline-offset: 1px; }
+        button:hover:not(:disabled) { filter: brightness(1.12); }
+      `}</style>
+    </div>
+  );
+}
+
+const labelStyle = {
+  display: "block",
+  fontFamily: "sans-serif",
+  fontSize: 12,
+  fontWeight: 700,
+  color: "#444",
+  letterSpacing: "0.06em",
+  textTransform: "uppercase",
+  marginBottom: 6,
+};
+
+const inputStyle = {
+  width: "100%",
+  boxSizing: "border-box",
+  fontFamily: "sans-serif",
+  fontSize: 14,
+  color: "#111",
+  background: "#fafafa",
+  border: "1px solid #ccc",
+  borderRadius: 4,
+  padding: "9px 12px",
+  transition: "border-color 0.15s",
+};
