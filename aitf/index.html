@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Texas AI in Education Task Force — Field Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0A3476;
+  --navy-dark: #071f4a;
+  --navy-mid: #12428f;
+  --gold: #FCB040;
+  --gold-light: #fdd17a;
+  --gold-pale: #FEF0D0;
+  --pale-navy: #D0D8F0;
+  --white: #ffffff;
+  --off-white: #f7f8fc;
+  --text: #1a1a2e;
+  --text-muted: #5a6680;
+  --border: #e2e7f5;
+  --teal: #0e6b8a;
+  --nav-h: 62px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--off-white);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+/* ── NAV ─────────────────────────────────────── */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--navy-dark);
+  border-bottom: 3px solid var(--gold);
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+nav::-webkit-scrollbar { display: none; }
+
+.nav-brand {
+  font-family: 'DM Serif Display', serif;
+  color: var(--gold);
+  font-size: 1rem;
+  white-space: nowrap;
+  margin-right: 2rem;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+}
+
+nav a {
+  color: rgba(255,255,255,0.72);
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.85rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color 0.18s, background 0.18s;
+}
+nav a:hover {
+  color: var(--gold);
+  background: rgba(252,176,64,0.1);
+}
+
+/* ── HERO ────────────────────────────────────── */
+.hero {
+  background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-mid) 60%, #1a4fa0 100%);
+  position: relative;
+  overflow: hidden;
+  padding: 5rem 2rem 4.5rem;
+  text-align: center;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 70% 20%, rgba(252,176,64,0.12) 0%, transparent 60%),
+              radial-gradient(ellipse at 20% 80%, rgba(14,107,138,0.18) 0%, transparent 50%);
+}
+.hero-eyebrow {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: rgba(252,176,64,0.12);
+  border: 1px solid rgba(252,176,64,0.35);
+  padding: 0.3rem 1rem;
+  border-radius: 100px;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+.hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  color: var(--white);
+  line-height: 1.2;
+  max-width: 820px;
+  margin: 0 auto 1.25rem;
+  position: relative;
+}
+.hero h1 em {
+  color: var(--gold);
+  font-style: italic;
+}
+.hero-sub {
+  color: rgba(255,255,255,0.7);
+  max-width: 620px;
+  margin: 0 auto 2.5rem;
+  font-size: 1.05rem;
+  position: relative;
+}
+.hero-meta {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: relative;
+}
+.hero-pill {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.85);
+  padding: 0.4rem 1.1rem;
+  border-radius: 100px;
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+/* ── LAYOUT ──────────────────────────────────── */
+.container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+section {
+  padding: 4rem 0;
+}
+section + section {
+  border-top: 1px solid var(--border);
+}
+
+.section-label {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 0.6rem;
+}
+h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+  color: var(--navy);
+  margin-bottom: 1rem;
+  line-height: 1.25;
+}
+h3 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.25rem;
+  color: var(--navy);
+  margin-bottom: 0.6rem;
+}
+p { margin-bottom: 1rem; color: var(--text); }
+p:last-child { margin-bottom: 0; }
+
+/* ── VISION BLOCK ────────────────────────────── */
+.vision-block {
+  background: var(--navy);
+  border-left: 5px solid var(--gold);
+  border-radius: 0 12px 12px 0;
+  padding: 2rem 2.5rem;
+  margin: 2rem 0;
+}
+.vision-block p {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.25rem;
+  color: var(--white);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ── QUOTE ───────────────────────────────────── */
+blockquote {
+  border-left: 4px solid var(--gold);
+  padding: 1rem 1.5rem;
+  margin: 2rem 0;
+  background: var(--gold-pale);
+  border-radius: 0 8px 8px 0;
+}
+blockquote p {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.1rem;
+  color: var(--navy);
+  font-style: italic;
+  margin-bottom: 0.5rem;
+}
+blockquote cite {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-style: normal;
+  font-weight: 600;
+}
+
+/* ── TWO-COL ─────────────────────────────────── */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+@media(max-width:700px){ .two-col { grid-template-columns: 1fr; } }
+
+/* ── CARDS ───────────────────────────────────── */
+.card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+.card-accent {
+  border-top: 4px solid var(--gold);
+}
+
+/* ── STAT STRIP ──────────────────────────────── */
+.stat-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1.25rem;
+  margin: 2rem 0;
+}
+.stat-box {
+  background: var(--navy-dark);
+  border-radius: 10px;
+  padding: 1.25rem 1rem;
+  text-align: center;
+}
+.stat-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2.2rem;
+  color: var(--gold);
+  display: block;
+  line-height: 1;
+  margin-bottom: 0.4rem;
+}
+.stat-label {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.72);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* ── FRAMEWORK TILES ─────────────────────────── */
+.framework-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+.fw-tile {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem 1.25rem;
+  position: relative;
+  overflow: hidden;
+}
+.fw-tile::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+}
+.fw-tile:nth-child(1)::before { background: var(--navy); }
+.fw-tile:nth-child(2)::before { background: var(--teal); }
+.fw-tile:nth-child(3)::before { background: var(--gold); }
+.fw-tile:nth-child(4)::before { background: #c0392b; }
+.fw-icon { font-size: 1.8rem; margin-bottom: 0.75rem; display: block; }
+.fw-tile h4 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1rem;
+  color: var(--navy);
+  margin-bottom: 0.4rem;
+}
+.fw-tile p { font-size: 0.88rem; color: var(--text-muted); margin: 0; }
+
+/* ── BARRIERS ────────────────────────────────── */
+.barrier-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+.barrier-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+}
+.barrier-tag {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--pale-navy);
+  color: var(--navy);
+  padding: 0.2rem 0.65rem;
+  border-radius: 4px;
+  margin-bottom: 0.75rem;
+}
+.barrier-card ul {
+  padding-left: 1.1rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+.barrier-card ul li { margin-bottom: 0.3rem; }
+
+/* ── SOLUTIONS LIST ──────────────────────────── */
+.sol-group {
+  margin-top: 2rem;
+}
+.sol-group h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--gold-pale);
+  margin-bottom: 1rem;
+}
+.sol-group h3 span {
+  background: var(--gold);
+  color: var(--navy-dark);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+}
+.sol-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.5rem;
+}
+.sol-list li {
+  font-size: 0.9rem;
+  padding: 0.6rem 0.9rem;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  line-height: 1.45;
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+}
+.sol-list li::before {
+  content: '→';
+  color: var(--gold);
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 0.02rem;
+}
+
+/* ── RUBRIC TABLE ────────────────────────────── */
+.rubric-scroll {
+  overflow-x: auto;
+  margin-top: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 16px rgba(7,31,74,0.08);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  min-width: 820px;
+}
+thead th {
+  background: var(--navy);
+  color: var(--white);
+  padding: 0.9rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+}
+thead th:first-child { border-radius: 10px 0 0 0; }
+thead th:last-child { border-radius: 0 10px 0 0; }
+tbody tr:nth-child(even) { background: var(--off-white); }
+tbody tr:nth-child(odd) { background: var(--white); }
+tbody td {
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.5;
+}
+tbody td:first-child { font-weight: 600; color: var(--navy); }
+.level-1 { color: #c0392b; font-weight: 600; }
+.level-2 { color: #e67e22; font-weight: 600; }
+.level-3 { color: #27ae60; font-weight: 600; }
+.level-4 { color: var(--navy); font-weight: 700; }
+
+/* ── SCENARIOS ───────────────────────────────── */
+.scenario-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+.scenario-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 1.75rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.scenario-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(10,52,118,0.12);
+}
+.scenario-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--teal));
+}
+.sc-tag {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--teal);
+  background: rgba(14,107,138,0.08);
+  border: 1px solid rgba(14,107,138,0.2);
+  padding: 0.22rem 0.7rem;
+  border-radius: 100px;
+  margin-bottom: 0.9rem;
+}
+.scenario-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 0.75rem;
+  color: var(--navy);
+}
+.scenario-card p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 0.8rem;
+}
+.sc-outcome {
+  background: var(--gold-pale);
+  border-left: 3px solid var(--gold);
+  padding: 0.6rem 0.9rem;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--navy);
+  margin-top: 0.75rem;
+}
+
+/* ── CONCERNS TABLE ──────────────────────────── */
+.concerns-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+@media(max-width:580px){ .concerns-grid { grid-template-columns: 1fr; } }
+.concern-box {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1.5px solid var(--border);
+}
+.concern-box-head {
+  padding: 0.65rem 1.1rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.concern-box-head.top { background: var(--navy); color: var(--gold); }
+.concern-box-head.bottom { background: var(--pale-navy); color: var(--navy); }
+.concern-box ol {
+  padding: 0.9rem 1.25rem;
+  margin: 0;
+  background: var(--white);
+}
+.concern-box ol li {
+  font-size: 0.9rem;
+  color: var(--text);
+  padding: 0.25rem 0;
+}
+
+/* ── PROGRESS TRACKER ────────────────────────── */
+.progress-track {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: 2rem 0;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+.pt-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  min-width: 140px;
+}
+.pt-dot {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  position: relative;
+  z-index: 1;
+}
+.pt-line {
+  flex: 1;
+  height: 3px;
+  margin-top: -22px;
+  position: relative;
+  z-index: 0;
+}
+.pt-step .pt-date {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-top: 0.6rem;
+}
+.pt-step .pt-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--navy);
+  text-align: center;
+  margin-top: 0.2rem;
+}
+
+/* ── STATE GUIDANCE ──────────────────────────── */
+.state-guidance-list {
+  columns: 2;
+  column-gap: 2rem;
+  margin-top: 1.5rem;
+}
+@media(max-width:600px){ .state-guidance-list { columns: 1; } }
+.state-guidance-list li {
+  font-size: 0.88rem;
+  break-inside: avoid;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 0.6rem;
+  align-items: baseline;
+}
+.state-guidance-list li::before {
+  content: '★';
+  color: var(--gold);
+  flex-shrink: 0;
+  font-size: 0.65rem;
+}
+.state-guidance-list li a {
+  color: var(--navy-mid);
+  text-decoration: none;
+  font-weight: 500;
+}
+.state-guidance-list li a:hover { text-decoration: underline; color: var(--teal); }
+
+/* ── NEXT STEPS ──────────────────────────────── */
+.next-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+.ns-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+}
+.ns-who {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--white);
+  background: var(--navy);
+  padding: 0.22rem 0.7rem;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 0.85rem;
+}
+.ns-card ul { padding-left: 1.1rem; }
+.ns-card ul li { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.3rem; }
+
+/* ── FOOTER ──────────────────────────────────── */
+footer {
+  background: var(--navy-dark);
+  padding: 2.5rem;
+  text-align: center;
+  border-top: 3px solid var(--gold);
+}
+footer p {
+  color: rgba(255,255,255,0.5);
+  font-size: 0.82rem;
+  margin: 0;
+}
+footer strong { color: var(--gold); }
+
+/* ── UTILITY ─────────────────────────────────── */
+.gold-line {
+  width: 48px;
+  height: 4px;
+  background: var(--gold);
+  border-radius: 2px;
+  margin-bottom: 1.5rem;
+}
+.tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.22rem 0.75rem;
+  border-radius: 100px;
+  margin: 0.2rem;
+}
+.tag-navy { background: var(--pale-navy); color: var(--navy); }
+.tag-gold { background: var(--gold-pale); color: #7a4a00; }
+.tag-teal { background: rgba(14,107,138,0.1); color: var(--teal); }
+
+.alert-banner {
+  background: linear-gradient(90deg, var(--navy-dark), var(--navy));
+  border-left: 5px solid var(--gold);
+  border-radius: 0 10px 10px 0;
+  padding: 1.25rem 1.5rem;
+  margin: 2rem 0;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+.alert-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 0.1rem; }
+.alert-banner p {
+  color: rgba(255,255,255,0.88);
+  font-size: 0.95rem;
+  margin: 0;
+}
+.alert-banner strong { color: var(--gold); }
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══════════════════════════════════════════════════════════ -->
+<nav>
+  <span class="nav-brand">TX AI in Ed</span>
+  <a href="#vision">Vision</a>
+  <a href="#landscape">Texas Today</a>
+  <a href="#framework">AI Literacy</a>
+  <a href="#barriers">Barriers</a>
+  <a href="#solutions">Solutions</a>
+  <a href="#rubric">Rubric</a>
+  <a href="#scenarios">Scenarios</a>
+  <a href="#guidance">State Guidance</a>
+  <a href="#nextsteps">Next Steps</a>
+</nav>
+
+<!-- ═══ HERO ══════════════════════════════════════════════════════════ -->
+<div class="hero">
+  <span class="hero-eyebrow">Texas AI in Education Task Force — March 26, 2026</span>
+  <h1>Every Texas Student Prepared to <em>Thrive</em> in an AI-Driven World</h1>
+  <p class="hero-sub">A field guide synthesizing the work, findings, and recommendations of the inaugural Texas AI in Education Task Force kickoff — convened at the Texas Advanced Computing Center, Austin.</p>
+  <div class="hero-meta">
+    <span class="hero-pill">📍 TACC, Austin</span>
+    <span class="hero-pill">🗓 March 26, 2026</span>
+    <span class="hero-pill">🔬 ALIGN Grant · Google.org</span>
+    <span class="hero-pill">📄 White Paper → April 13</span>
+  </div>
+</div>
+
+<!-- ═══ VISION ════════════════════════════════════════════════════════ -->
+<section id="vision">
+  <div class="container">
+    <span class="section-label">Draft Vision Statement</span>
+    <div class="gold-line"></div>
+    <h2>What We Are Building Toward</h2>
+
+    <div class="vision-block">
+      <p>All Texas students are prepared to thrive personally and professionally in an AI-driven world — equipped with the critical thinking, ethical reasoning, and technical understanding needed to use AI effectively, evaluate it skeptically, and shape it responsibly.</p>
+    </div>
+
+    <blockquote>
+      <p>"We really want every Texas student to be prepared to thrive both personally and professionally in an AI-driven world. Right now, Texas is not being strategic about how we reach that vision."</p>
+      <cite>— Carol Fletcher, Director, EPIC / TACC</cite>
+    </blockquote>
+
+    <p>This vision demands action across six interconnected areas, each identified as a gap or priority by task force members:</p>
+
+    <div class="two-col" style="margin-top:1.5rem;">
+      <div class="card card-accent">
+        <h3>What This Vision Requires</h3>
+        <ul style="padding-left:1.1rem; font-size:0.9rem; color:var(--text-muted);">
+          <li style="margin-bottom:.4rem"><strong style="color:var(--navy)">State leadership</strong> — TEA must have an empowered point person and a published AI strategy</li>
+          <li style="margin-bottom:.4rem"><strong style="color:var(--navy)">Updated standards</strong> — TEKS must explicitly name AI literacy K–12 with grade-level specificity</li>
+          <li style="margin-bottom:.4rem"><strong style="color:var(--navy)">Educator preparation</strong> — Pre- and in-service training must include AI literacy for teachers, counselors, and administrators</li>
+          <li style="margin-bottom:.4rem"><strong style="color:var(--navy)">District guidance</strong> — Model policies, procurement criteria, and tool-vetting frameworks</li>
+          <li style="margin-bottom:.4rem"><strong style="color:var(--navy)">Student well-being</strong> — Psychological, social, and emotional impacts addressed proactively</li>
+          <li><strong style="color:var(--navy)">Equity</strong> — AI literacy opportunities reaching every student regardless of zip code, income, or language</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top:4px solid #c0392b;">
+        <h3>What This Vision Rejects</h3>
+        <ul style="padding-left:1.1rem; font-size:0.9rem; color:var(--text-muted);">
+          <li style="margin-bottom:.4rem">Banning or ignoring AI as though it does not exist in students' lives</li>
+          <li style="margin-bottom:.4rem">Allowing AI to replace student thinking rather than augment it</li>
+          <li style="margin-bottom:.4rem">Building policy around specific tools rather than durable frameworks</li>
+          <li>Leaving Texas in a reactive posture while 46 other states have issued formal AI guidance</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ LANDSCAPE ═════════════════════════════════════════════════════ -->
+<section id="landscape" style="background:var(--white);">
+  <div class="container">
+    <span class="section-label">Current State of Texas</span>
+    <div class="gold-line"></div>
+    <h2>Where Texas Stands — and the Gap</h2>
+
+    <blockquote>
+      <p>"Texas has no state vision, no state strategy, no empowered TEA lead, no state guidance, and no educator preparation plan for AI. That is where we are."</p>
+      <cite>— Carol Fletcher, Director, EPIC / TACC</cite>
+    </blockquote>
+
+    <div class="stat-strip">
+      <div class="stat-box">
+        <span class="stat-num">96%</span>
+        <span class="stat-label">of Texas teachers<br>using AI</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">61%</span>
+        <span class="stat-label">of students<br>using AI</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">~3k</span>
+        <span class="stat-label">of 5.2M students<br>considered AI-literate</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">29%</span>
+        <span class="stat-label">of districts with<br>a student AI policy</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">46</span>
+        <span class="stat-label">states have issued<br>formal AI guidance</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">20%</span>
+        <span class="stat-label">of districts with<br>a staff AI policy</span>
+      </div>
+    </div>
+
+    <p>A TASA survey of 322 respondents representing 277 districts revealed that most existing student AI policies (out of 43 analyzed) focus almost entirely on <em>what not to do</em> — cheating, academic integrity, data privacy — with almost no affirmative guidance.</p>
+
+    <p>The top administrator need identified: <strong>examples and guidance for writing AI policies</strong> (40%), followed by professional development and staff training (26%). Only 9% cited AI curriculum or tools as a need.</p>
+
+    <h3 style="margin-top:2rem;">Administrator Priorities: A Telling Pattern</h3>
+
+    <div class="concerns-grid">
+      <div class="concern-box">
+        <div class="concern-box-head top">Top 3 Concerns</div>
+        <ol class="concern-box">
+          <li>Academic Integrity</li>
+          <li>Current AI Policies</li>
+          <li>Student Data Privacy</li>
+        </ol>
+      </div>
+      <div class="concern-box">
+        <div class="concern-box-head bottom">Lowest-Ranked Concerns</div>
+        <ol class="concern-box">
+          <li>Uneven/Unfair Access</li>
+          <li>Psychological Effects on Students</li>
+          <li>Student Creativity</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="alert-banner">
+      <span class="alert-icon">⚠️</span>
+      <p><strong>Red Flag:</strong> Preparing students for the psychological, social, and emotional impacts of AI ranks near the bottom of administrator concerns — not because it doesn't matter, but because leaders are in triage mode over cheating and data privacy. The task force identified this gap as urgent.</p>
+    </div>
+
+    <h3 style="margin-top:2rem;">What Exists in Texas Standards</h3>
+    <div class="two-col">
+      <div class="card">
+        <h4 style="color:var(--navy); font-family:'DM Serif Display',serif; font-size:1rem; margin-bottom:.6rem;">K–12 Standards</h4>
+        <ul style="padding-left:1.1rem; font-size:0.88rem; color:var(--text-muted);">
+          <li style="margin-bottom:.3rem">K–8 Tech Apps: "emerging technologies" mentioned vaguely in creativity/innovation sections only</li>
+          <li style="margin-bottom:.3rem">3 high school CTE courses include "artificial intelligence" in the title (cybersecurity, game programming, advanced cloud computing)</li>
+          <li style="margin-bottom:.3rem">Core CS courses (CS 1, 2, 3): AI is <strong style="color:#c0392b">not mentioned in standards at all</strong></li>
+          <li>CS teacher certification: AI mentioned <strong style="color:#c0392b">once</strong> in competencies</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4 style="color:var(--navy); font-family:'DM Serif Display',serif; font-size:1rem; margin-bottom:.6rem;">The Opportunity</h4>
+        <ul style="padding-left:1.1rem; font-size:0.88rem; color:var(--text-muted);">
+          <li style="margin-bottom:.3rem"><strong style="color:var(--navy)">1.5 million</strong> CTE students enrolled in 2024–25 — inserting AI literacy into CTE employability/preamble standards could reach far more students than current pathways</li>
+          <li style="margin-bottom:.3rem">128 TEKS exist for Tech Apps, but only vaguely address emerging technologies — a revision is feasible and overdue</li>
+          <li>The Public Education Committee of the Texas Legislature has been charged with reviewing AI in classrooms — the window for action is open</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FRAMEWORK ═════════════════════════════════════════════════════ -->
+<section id="framework">
+  <div class="container">
+    <span class="section-label">What Is AI Literacy?</span>
+    <div class="gold-line"></div>
+    <h2>A Framework for Texas</h2>
+
+    <blockquote>
+      <p>"We can't let AI replace thinking. But equally dangerous is acting as though AI doesn't exist. And we can't make it a conversation about who has the shiniest tool."</p>
+      <cite>— Alan Antoine, Director of CS Education Strategy, TACC/EPIC</cite>
+    </blockquote>
+
+    <p>AI literacy is defined as the practical, technical, and ethical understanding of AI. Across leading frameworks — Where We Teach AI, DataCamp, Digital Promise, TeachAI — four elements consistently appear:</p>
+
+    <div class="framework-grid">
+      <div class="fw-tile">
+        <span class="fw-icon">🔍</span>
+        <h4>Teaching About AI</h4>
+        <p>How AI works — its mechanics, limitations, and design. Students who understand the system can evaluate it critically.</p>
+      </div>
+      <div class="fw-tile">
+        <span class="fw-icon">🤝</span>
+        <h4>Teaching With AI</h4>
+        <p>Integrating AI into daily practice as a tool — learning to collaborate with, not defer to, AI systems.</p>
+      </div>
+      <div class="fw-tile">
+        <span class="fw-icon">⚙️</span>
+        <h4>Creating With AI</h4>
+        <p>Applied, generative use — building, designing, and producing with AI as an active co-creator.</p>
+      </div>
+      <div class="fw-tile">
+        <span class="fw-icon">⚖️</span>
+        <h4>Ethics Woven Throughout</h4>
+        <p>The ethical thread runs through all three layers — bias, privacy, accountability, human dignity, and the right to think for oneself.</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:2rem; background:var(--navy-dark); border:none;">
+      <p style="color:rgba(255,255,255,.88); font-size:0.95rem; margin-bottom:.5rem;"><strong style="color:var(--gold)">Why Computer Science has a unique role:</strong></p>
+      <p style="color:rgba(255,255,255,.72); font-size:0.9rem; margin:0;">CS can teach <em>how</em> AI actually works, enabling students to understand both its power and its limits. Understanding the mechanics leads naturally to ethical reasoning. As one task force member put it: <em style="color:var(--gold-light)">"I want my kids to learn AI well enough that they don't trust it for anything."</em></p>
+    </div>
+
+    <p style="margin-top:1.5rem; color:var(--text-muted); font-size:0.9rem;">The future-of-work framing offered by AI researchers at the meeting: AI use exists on a spectrum between <em>delegating the task</em> and <em>delegating the role</em>. Neither extreme is coming — the TBD bell curve requires critical thinking and effective human-machine collaboration skills. The evergreen focus: <strong>critical thinking + ability to collaborate with AI systems.</strong></p>
+  </div>
+</section>
+
+<!-- ═══ BARRIERS ══════════════════════════════════════════════════════ -->
+<section id="barriers" style="background:var(--white);">
+  <div class="container">
+    <span class="section-label">Breakout Sessions</span>
+    <div class="gold-line"></div>
+    <h2>Barriers &amp; Challenges Identified</h2>
+    <p>Task force members organized barriers across seven categories during structured breakout sessions. These were captured live via sticky notes and structured discussion.</p>
+
+    <div class="barrier-grid">
+      <div class="barrier-card">
+        <span class="barrier-tag">Educator Preparation &amp; Leadership</span>
+        <ul>
+          <li>Educators arrive unprepared — no AI literacy in teacher prep programs</li>
+          <li>Training expected to replace genuine understanding</li>
+          <li>Lack of standards in educator preparation programs</li>
+          <li>Leaders lack the knowledge, skills, and mindset to support AI-integrated learning</li>
+          <li>Teachers need to know <em>when not</em> to use AI, not just how</li>
+        </ul>
+      </div>
+      <div class="barrier-card">
+        <span class="barrier-tag">Privacy &amp; Safety</span>
+        <ul>
+          <li>Student data (including IEP/504 documents) fed into unvetted AI systems</li>
+          <li>No clear district-level data boundaries for AI tools</li>
+          <li>FERPA/COPPA compliance obligations unclear for AI use cases</li>
+          <li>Tools that monitor student collaboration without consent</li>
+        </ul>
+      </div>
+      <div class="barrier-card">
+        <span class="barrier-tag">Strategy, Scale &amp; Leadership</span>
+        <ul>
+          <li>No single TEA point person empowered to lead AI education work</li>
+          <li>Multi-faceted challenge with no clear accountable leadership</li>
+          <li>Lack of institutional precedent at the state level</li>
+          <li>No practical mindset that supports cross-sector coordination</li>
+        </ul>
+      </div>
+      <div class="barrier-card">
+        <span class="barrier-tag">Attitudes About AI</span>
+        <ul>
+          <li>Fear, resistance, and "AI guilt" among educators</li>
+          <li>Schools reverting to pen &amp; paper as a response</li>
+          <li>Cultural differences in readiness and trust</li>
+          <li>Lack of knowledge and understanding about what AI actually does</li>
+        </ul>
+      </div>
+      <div class="barrier-card">
+        <span class="barrier-tag">Community Engagement &amp; Values</span>
+        <ul>
+          <li>Parents lack awareness of how AI is used in schools</li>
+          <li>No meaningful parental consultation processes in most districts</li>
+          <li>Generational differences in comfort and trust</li>
+          <li>Need for multilingual, culturally responsive outreach</li>
+        </ul>
+      </div>
+      <div class="barrier-card">
+        <span class="barrier-tag">Student Learning</span>
+        <ul>
+          <li>Role of AI in digital literacy unclear — where does rigor live?</li>
+          <li>Curriculum alignment to AI not addressed in most districts</li>
+          <li>"Is it cheating?" — critical thinking and academic integrity in tension</li>
+          <li>Students and counselors already navigating emotional AI attachment</li>
+        </ul>
+      </div>
+      <div class="barrier-card">
+        <span class="barrier-tag">Equity &amp; Access</span>
+        <ul>
+          <li>AI literacy concentrated in well-resourced districts</li>
+          <li>Rural, low-income, and ELL students largely unserved</li>
+          <li>Insufficient investment in building capacity across the state</li>
+          <li>Implementation risks becoming an unfunded mandate</li>
+        </ul>
+      </div>
+    </div>
+
+    <blockquote style="margin-top:2.5rem;">
+      <p>"We have got to prepare kids to thrive in this AI world — not just for where the jobs are, but because I am very concerned about the psychological, social, and emotional impact of AI on young people. We had a serious lack of imagination about social media. AI is going to make that look like a walk in the park."</p>
+      <cite>— Carol Fletcher, Director, EPIC / TACC</cite>
+    </blockquote>
+  </div>
+</section>
+
+<!-- ═══ SOLUTIONS ═════════════════════════════════════════════════════ -->
+<section id="solutions">
+  <div class="container">
+    <span class="section-label">Task Force Recommendations</span>
+    <div class="gold-line"></div>
+    <h2>Solutions &amp; Recommendations</h2>
+    <p>The following recommendations were generated by task force members at the March 26 kickoff and recorded via structured sticky-note activities. They are organized by category and represent the collective consensus of the group.</p>
+
+    <div class="sol-group">
+      <h3><span>Student Standards</span> TEKS &amp; AI Literacy</h3>
+      <ul class="sol-list">
+        <li>Update TEKS to explicitly incorporate AI literacy at grade-level resolution across K–12</li>
+        <li>Expand Computational Thinking standards to include how AI works</li>
+        <li>Require Technology Applications integrated across all subjects through 7th grade</li>
+        <li>Adopt grade-level-appropriate AI definitions and standards by grade band</li>
+        <li>Revise tech app standards to explicitly name AI (not just "emerging technologies")</li>
+        <li>Create a required course covering social media and emerging technologies</li>
+      </ul>
+    </div>
+
+    <div class="sol-group">
+      <h3><span>Training</span> Educator Preparation &amp; PD</h3>
+      <ul class="sol-list">
+        <li>Mandatory AI literacy training for all teachers, counselors, paras, and administrators</li>
+        <li>AI literacy standards of practice for counselors, teachers, and administrators</li>
+        <li>Pre-service teacher preparation must include AI literacy at all EPPs</li>
+        <li>Add a dedicated professional development day per year focused on AI training</li>
+        <li>Create tiered PD pathway with "AI Ambassador" designation to scale and empower educators</li>
+        <li>Incentive-based PD — rewards for early completion, not just mandates</li>
+        <li>State strategy to build educator capacity for teaching both with and about AI</li>
+        <li>Develop AI literacy frameworks, PD, and field-ready tools from the field — NOT just top-down from TEA</li>
+        <li>Reintegrate logic and intentional pedagogy into teacher instruction</li>
+        <li>Identify content knowledge and skills teachers need to supercharge student learning with AI</li>
+      </ul>
+    </div>
+
+    <div class="sol-group">
+      <h3><span>Policy</span> Procurement &amp; District Guidance</h3>
+      <ul class="sol-list">
+        <li>State guidance with model AI policy examples for both student and staff use</li>
+        <li>Publish district vignettes of how early-adopter districts have planned strategically</li>
+        <li>Create a vetting process and research base for AI tools deployed in classrooms</li>
+        <li>Establish baseline safety practices including student data minimization and wiping protocols</li>
+        <li>Update teacher code of conduct for the AI era</li>
+        <li>Develop technical assistance for school leaders to build local governance frameworks</li>
+        <li>Encourage procurement of tools that coach vs. answer — supporting student learning actively</li>
+        <li>Effective change management strategies for education leaders</li>
+      </ul>
+    </div>
+
+    <div class="sol-group">
+      <h3><span>Leadership</span> Partnerships &amp; State Infrastructure</h3>
+      <ul class="sol-list">
+        <li>TEA must designate an empowered point person to lead AI education work statewide</li>
+        <li>Form a state-wide steering committee of industry experts to advise TEA</li>
+        <li>Cross-sector, cross-district steering committees to break down silos</li>
+        <li>Provide dedicated funding from the state for a Texas strategic plan with priorities, targets, and timelines</li>
+        <li>Gather industry-defined core competencies to inform future-of-work preparation</li>
+        <li>Build educator-industry partnerships</li>
+      </ul>
+    </div>
+
+    <div class="sol-group">
+      <h3><span>Family</span> Parent &amp; Community Engagement</h3>
+      <ul class="sol-list">
+        <li>AI literacy training designed for parents and families</li>
+        <li>Help parents understand when and why AI will be taught in schools</li>
+        <li>Public information and awareness campaigns for all stakeholders</li>
+        <li>Town halls for understanding, training, and informing about AI</li>
+        <li>Use Title III bilingual family meeting strategies as a model for AI parent education</li>
+      </ul>
+    </div>
+
+    <div class="sol-group">
+      <h3><span>Research</span> Evidence Base</h3>
+      <ul class="sol-list">
+        <li>Research initiatives to collect data and build evidence base for AI's impact on education</li>
+        <li>Dedicated funding to understand the psychological effects of AI use on students</li>
+        <li>Rubrics for educators to assess AI tools for usage, data collection, and safety</li>
+      </ul>
+    </div>
+
+    <div class="card" style="margin-top:2rem; border-top:4px solid var(--teal);">
+      <h3>Strategic Approach Principles</h3>
+      <div style="display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.75rem;">
+        <span class="tag tag-teal">Framework-based, not tool-based</span>
+        <span class="tag tag-teal">Incentive-driven, not mandate-only</span>
+        <span class="tag tag-teal">Multi-tiered: state → district → campus → teacher</span>
+        <span class="tag tag-teal">AI infused across all subjects</span>
+        <span class="tag tag-teal">K–12 and higher ed aligned</span>
+        <span class="tag tag-teal">Prepare for what's coming (agentic AI)</span>
+        <span class="tag tag-teal">Think in 3-year revision cycles</span>
+        <span class="tag tag-gold">Always ask: Does AI add value to the learning objective?</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ RUBRIC ═════════════════════════════════════════════════════════ -->
+<section id="rubric" style="background:var(--white);">
+  <div class="container">
+    <span class="section-label">AI Readiness Rubric for Texas</span>
+    <div class="gold-line"></div>
+    <h2>Eight-Domain Readiness Rubric</h2>
+    <p>This rubric translates the task force vision into observable indicators across eight domains. Score each domain 1–4. A score of 3 (Proficient) represents the minimum acceptable standard. A score of 4 (Exemplary) reflects what leading states and districts have achieved.</p>
+    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0;">Prepared for April 13, 2026 review · Feedback deadline: April 20, 2026</p>
+
+    <div class="rubric-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Domain</th>
+            <th>Key Indicator</th>
+            <th><span class="level-1">1 — Beginning</span></th>
+            <th><span class="level-2">2 — Developing</span></th>
+            <th><span class="level-3">3 — Proficient</span></th>
+            <th><span class="level-4">4 — Exemplary</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1. State Vision &amp; Leadership</td>
+            <td>TEA has an articulated AI vision, designated point person, and published strategic plan.</td>
+            <td>No state vision, no TEA AI lead, no plan in development.</td>
+            <td>Vision drafted; TEA lead identified but lacks formal authority or resources.</td>
+            <td>Vision published; TEA point person empowered; strategic plan underway.</td>
+            <td>Vision widely adopted; TEA lead empowered with staff and budget; strategic plan active with measurable milestones.</td>
+          </tr>
+          <tr>
+            <td>2. Student Standards &amp; AI Literacy</td>
+            <td>K–12 TEKS explicitly address AI literacy in an age-appropriate, grade-banded, cross-curricular way.</td>
+            <td>AI mentioned only vaguely (e.g., "emerging technologies"); no grade-level specificity.</td>
+            <td>AI referenced in select CTE or CS courses; not integrated across grade bands or core subjects.</td>
+            <td>TEKS updated to include AI literacy across K–12 with grade-level specificity; revision timeline published.</td>
+            <td>AI literacy embedded across all K–12 TEKS; computational thinking and ethical use addressed at every grade band; revision cycle established.</td>
+          </tr>
+          <tr>
+            <td>3. Educator Preparation &amp; PD</td>
+            <td>Pre-service and in-service educators receive structured, sustained AI literacy training.</td>
+            <td>No AI literacy requirements in EPPs or in-service PD; training ad hoc or absent.</td>
+            <td>Some PD available; AI mentioned in EPP coursework; no state strategy or incentive structure.</td>
+            <td>State strategy for educator AI capacity in place; EPPs include AI literacy; incentivized PD available to all educators.</td>
+            <td>Mandatory AI literacy in all EPPs; tiered PD pathway (introductory to AI Ambassador); incentives tied to participation; counselors and admins included.</td>
+          </tr>
+          <tr>
+            <td>4. District Policy &amp; Procurement Guidance</td>
+            <td>TEA provides model AI policies, vetting criteria, and procurement guidance for districts.</td>
+            <td>No state guidance; districts writing policies independently with no shared framework.</td>
+            <td>Some guidance available but not systematically distributed; no vetting process for tools.</td>
+            <td>TEA has published model AI policies and a tool vetting framework; districts can adapt to local context.</td>
+            <td>Comprehensive guidance suite: model policies (student + staff), procurement criteria, early-adopter vignettes, updated teacher code of conduct.</td>
+          </tr>
+          <tr>
+            <td>5. Data Privacy &amp; Student Safety</td>
+            <td>Districts have clear FERPA/COPPA compliance guidance for AI tools and student data protection.</td>
+            <td>No state guidance on AI-specific data privacy; districts uncertain about compliance.</td>
+            <td>General FERPA/COPPA guidance exists but does not address AI tools specifically.</td>
+            <td>AI-specific data privacy guidance published; vetting checklist addresses student PII; districts notified.</td>
+            <td>Robust AI data safety framework: tool vetting, data minimization standards, student safety protocols, annual review cycle.</td>
+          </tr>
+          <tr>
+            <td>6. Social-Emotional Learning &amp; Well-being</td>
+            <td>AI's psychological, social, and emotional impacts on students are explicitly addressed in guidance and preparation.</td>
+            <td>No mention of SEL or student well-being in any AI guidance; not a recognized priority.</td>
+            <td>SEL impacts acknowledged in discussions; not yet embedded in standards or training.</td>
+            <td>SEL dimensions of AI included in educator PD and counselor preparation; district guidance addresses student well-being.</td>
+            <td>Comprehensive SEL + AI framework: counselor preparation, student mental health protocols, parent resources, research investment in AI's psychological impacts on youth.</td>
+          </tr>
+          <tr>
+            <td>7. Family &amp; Community Engagement</td>
+            <td>Parents and community members have access to AI literacy resources and are included in district AI planning.</td>
+            <td>No parent-facing resources; families not engaged in AI policy or planning.</td>
+            <td>Some informational events held; no systematic outreach or multilingual resources.</td>
+            <td>Parent AI literacy resources available; town halls or community forums conducted; multilingual outreach underway.</td>
+            <td>Sustained, multi-format family engagement: workshops, multilingual materials, parent AI literacy pathways, family input channels embedded in district planning.</td>
+          </tr>
+          <tr>
+            <td>8. Equity &amp; Access</td>
+            <td>AI literacy opportunities are equitably distributed across student populations, geographies, and school types.</td>
+            <td>AI access concentrated in well-resourced districts; rural, low-income, and ELL students largely unserved.</td>
+            <td>Equity acknowledged as a concern; no targeted strategies or resource allocations in place.</td>
+            <td>Equity provisions embedded in state AI strategy; device/connectivity gaps addressed; underserved districts prioritized.</td>
+            <td>Equity as a first-order design principle: targeted funding, device parity, culturally responsive AI curriculum, disaggregated outcome data reported publicly.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="two-col" style="margin-top:1.5rem;">
+      <div class="card">
+        <h4 style="font-family:'DM Serif Display',serif; color:var(--navy); margin-bottom:.6rem;">How to Use This Rubric</h4>
+        <ul style="padding-left:1.1rem; font-size:0.88rem; color:var(--text-muted);">
+          <li style="margin-bottom:.3rem"><strong style="color:var(--navy)">Task force members:</strong> Assess current Texas state-level readiness; anchor white paper recommendations</li>
+          <li style="margin-bottom:.3rem"><strong style="color:var(--navy)">Districts:</strong> Adapt to assess local policy, training, and community engagement posture</li>
+          <li style="margin-bottom:.3rem"><strong style="color:var(--navy)">TEA / Legislature:</strong> Use domain scores to prioritize investment and set measurable targets</li>
+          <li><strong style="color:var(--navy)">Revision cycle:</strong> Review every two years alongside TEKS revision cycles</li>
+        </ul>
+      </div>
+      <div class="card" style="background:var(--navy-dark); border:none;">
+        <h4 style="font-family:'DM Serif Display',serif; color:var(--gold); margin-bottom:.6rem;">Texas's Current Score Estimate</h4>
+        <p style="color:rgba(255,255,255,.72); font-size:0.88rem; margin-bottom:.5rem;">Based on task force analysis as of March 26, 2026:</p>
+        <ul style="padding-left:1.1rem; font-size:0.88rem; color:rgba(255,255,255,.65);">
+          <li style="margin-bottom:.3rem">Domains 1, 2, 3, 4: <strong style="color:#e74c3c">Score 1 — Beginning</strong></li>
+          <li style="margin-bottom:.3rem">Domain 5 (Privacy): <strong style="color:#e67e22">Score 2 — Developing</strong></li>
+          <li style="margin-bottom:.3rem">Domain 6 (SEL): <strong style="color:#e74c3c">Score 1 — Beginning</strong></li>
+          <li style="margin-bottom:.3rem">Domain 7 (Family Engagement): <strong style="color:#e67e22">Score 2 — Developing</strong></li>
+          <li>Domain 8 (Equity): <strong style="color:#e74c3c">Score 1–2 — Beginning to Developing</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SCENARIOS ═════════════════════════════════════════════════════ -->
+<section id="scenarios">
+  <div class="container">
+    <span class="section-label">What Exemplary Looks Like</span>
+    <div class="gold-line"></div>
+    <h2>Scenarios: The Highest Order of What's Possible</h2>
+    <p>These illustrative scenarios reflect <strong>Level 4 (Exemplary)</strong> implementation — grounded in the rubric domains, task force recommendations, and the vision articulated on March 26. They show what becomes possible when Texas acts decisively and strategically.</p>
+
+    <div class="scenario-grid">
+
+      <div class="scenario-card">
+        <span class="sc-tag">Domain 3 · Educator Preparation</span>
+        <h3>The AI Ambassador Teacher</h3>
+        <p>A 4th-grade bilingual teacher in El Paso completes her district's AI Ambassador pathway — a three-year scaffolded PD track certified by her EPP and aligned to revised TEKS. She now leads monthly learning communities for 18 colleagues, co-designing bilingual AI literacy lessons that use student questions about local water quality to explore how AI models find patterns in data. Her students learn to interrogate outputs, not just accept them.</p>
+        <div class="sc-outcome">Outcome: AI literacy reaches 400+ students in a historically underserved district — through teacher leadership, not a vendor contract.</div>
+      </div>
+
+      <div class="scenario-card">
+        <span class="sc-tag">Domain 6 · Social-Emotional Learning</span>
+        <h3>The Counselor Who Was Ready</h3>
+        <p>A high school counselor in Houston notices a student withdrawing from peers and describing an AI chatbot as their primary source of emotional support. Because her preparation program now includes an AI + SEL module, she recognizes the pattern, uses the state's student well-being protocol, and connects the student with a parent-counselor-teacher triad. The school's AI policy — developed with community input — has clear guidance for this scenario.</p>
+        <div class="sc-outcome">Outcome: Texas doesn't repeat the failure to anticipate social media's impact on youth. Counselors are prepared, not caught off guard.</div>
+      </div>
+
+      <div class="scenario-card">
+        <span class="sc-tag">Domain 7 · Family Engagement</span>
+        <h3>The Parent Town Hall That Changed Everything</h3>
+        <p>A mid-size district in the Rio Grande Valley hosts a bilingual AI town hall for families — materials in Spanish and English, childcare provided. Parents see live demonstrations of the vetted AI tools their children use, learn how student data is protected, and help co-create the district's AI use expectations. A parent committee is formed and meets quarterly. Trust — the scarcest resource in AI adoption — is built before a crisis creates it.</p>
+        <div class="sc-outcome">Outcome: The district reports 78% parent approval for AI-integrated learning, up from 31% two years earlier. Engagement precedes adoption.</div>
+      </div>
+
+      <div class="scenario-card">
+        <span class="sc-tag">Domain 2 · Student Standards</span>
+        <h3>AI Literacy Across Every Subject</h3>
+        <p>In a rural East Texas school district, revised TEKS require every content teacher — from 3rd-grade science to high school history — to integrate one AI literacy benchmark per semester. A 7th-grade social studies teacher uses AI to help students analyze primary sources, identify bias in AI-generated summaries of historical events, and then write their own corrected accounts. "Does this AI add value to the learning objective?" becomes the question every lesson plan must answer.</p>
+        <div class="sc-outcome">Outcome: AI literacy is no longer a CTE elective for 3,000 students. It is the baseline for 5.2 million.</div>
+      </div>
+
+      <div class="scenario-card">
+        <span class="sc-tag">Domain 4 · Procurement &amp; Policy</span>
+        <h3>The District That Didn't Have to Start from Scratch</h3>
+        <p>A suburban superintendent receives TEA's model AI policy suite — student policy, staff policy, updated code of conduct, procurement checklist, and three district vignettes including one from a demographically similar district. Her board adopts a locally adapted version in a single meeting. Within 60 days, every teacher has a one-page guidance card, every parent has received an AI use notification in English and Spanish, and the district has completed a vendor vetting review.</p>
+        <div class="sc-outcome">Outcome: The 80% of districts that had no policy now have a clear, compliant, locally-owned starting point.</div>
+      </div>
+
+      <div class="scenario-card">
+        <span class="sc-tag">Domain 8 · Equity &amp; Access</span>
+        <h3>The White Paper That Reached the Legislature</h3>
+        <p>The Texas AI in Education Task Force white paper is submitted directly to the Public Education Committee's interim study on AI in classrooms — timed precisely to the legislature's own charge. The paper's equity section — showing that AI access is concentrated in 12% of districts — triggers targeted state funding for rural and high-poverty campuses. Device parity, connectivity, and teacher PD grants reach districts that had been watching from the sidelines.</p>
+        <div class="sc-outcome">Outcome: The gap between districts that can afford AI literacy and those that cannot begins to close — by policy design, not chance.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ GUIDANCE ═══════════════════════════════════════════════════════ -->
+<section id="guidance" style="background:var(--white);">
+  <div class="container">
+    <span class="section-label">National &amp; International Landscape</span>
+    <div class="gold-line"></div>
+    <h2>State AI Guidance — Progression &amp; Compilation</h2>
+
+    <p>The progression of state AI guidance documents reveals the pace at which the field is moving and the growing isolation of Texas's inaction:</p>
+
+    <div class="stat-strip" style="max-width:600px;">
+      <div class="stat-box">
+        <span class="stat-num">22</span>
+        <span class="stat-label">States with guidance<br>August 2024</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">27</span>
+        <span class="stat-label">States + Puerto Rico<br>August 2025</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">33</span>
+        <span class="stat-label">States + Puerto Rico<br>December 2025</span>
+      </div>
+    </div>
+
+    <p>Texas is classified as <strong>yellow</strong> on the national AI guidance map — no current action toward formal state-level guidance from the Department of Education. Below are the documented guidance resources from states that have acted, as compiled for the task force.</p>
+
+    <h3 style="margin-top:2rem;">U.S. State Guidance Documents</h3>
+    <ul class="state-guidance-list">
+      <li><a href="https://docs.google.com/document/d/1wvyEfkAxHrGZbYXazcKjfkmbldm1nl9i/edit" target="_blank" rel="noopener">Alabama — AI Policy Template for LEAs</a></li>
+      <li><a href="https://nau.edu/college-education/community-resources/arizona-institute-for-education-and-the-economy/generative-ai-k-12-education-guidance-arizona-educators/" target="_blank" rel="noopener">Arizona — AI Guidance for Arizona Schools</a></li>
+      <li><a href="https://www.cde.ca.gov/pd/ca/cs/aiincalifornia.asp" target="_blank" rel="noopener">California — Learning With AI, Learning About AI</a></li>
+      <li><a href="https://www.coloradoedinitiative.org/wp-content/uploads/2024/08/Colorado-Roadmap-for-AI-in-K-12-Education_August-2024.pdf" target="_blank" rel="noopener">Colorado — Roadmap for AI in K-12 Education</a></li>
+      <li><a href="https://portal.ct.gov/das/ctedtech/commission-for-educational-technology/initiatives/artificial-intelligence" target="_blank" rel="noopener">Connecticut — Guidance on Artificial Intelligence</a></li>
+      <li><a href="https://education.delaware.gov/wp-content/uploads/2024/07/delaware_generative_ai_guidance.pdf" target="_blank" rel="noopener">Delaware — Generative AI in the Classroom Guidance</a></li>
+      <li><a href="https://login.community.gadoe.org/documents/leveraging-ai-in-the-k-12-setting" target="_blank" rel="noopener">Georgia — Leveraging AI in the K-12 Setting</a></li>
+      <li><a href="https://www.ocid-ddt.k12.hi.us/programs/technology-integration/ai" target="_blank" rel="noopener">Hawaii — AI Guidance for Employees</a></li>
+      <li><a href="https://drive.google.com/file/d/155XYqyFR_YnHE6veanG7ZpM1NBPB2N44/view" target="_blank" rel="noopener">Indiana — Artificial Intelligence Guidance</a></li>
+      <li><a href="https://kets.news/AI" target="_blank" rel="noopener">Kentucky — AI Guidance Brief</a></li>
+      <li><a href="https://louisianabelieves.com/docs/default-source/technology-footprint/ldoe-ai-guidance.pdf" target="_blank" rel="noopener">Louisiana — AI Guidance for K-12 Schools</a></li>
+      <li><a href="https://view.genially.com/6717d13429a41768c92aa057" target="_blank" rel="noopener">Maine — AI Guidance Toolkit</a></li>
+      <li><a href="https://www.michigan.gov/mde/services/academic-standards/educational-technology/artificial-intelligence" target="_blank" rel="noopener">Michigan — Artificial Intelligence Resources</a></li>
+      <li><a href="https://education.mn.gov/MDE/dse/tech/AI/AIEd/" target="_blank" rel="noopener">Minnesota — Guiding Principles for AI in Education</a></li>
+      <li><a href="https://www.mdek12.org/sites/default/files/Offices/MDE/OTSS/DL/ai_guidance_final.pdf" target="_blank" rel="noopener">Mississippi — AI Guidance for K-12 Classrooms</a></li>
+      <li><a href="https://dese.mo.gov/media/pdf/artificial-intelligence-guidance-local-education-agencies" target="_blank" rel="noopener">Missouri — AI Guidance for Local Education Agencies</a></li>
+      <li><a href="https://webapp-strapi-paas-prod-nde-001.azurewebsites.net/uploads/nevadas_stellar_pathway_to_ai_teaching_and_learning_bfaf0ec049.pdf" target="_blank" rel="noopener">Nevada — Stellar Pathway to AI Teaching and Learning</a></li>
+      <li><a href="https://www.nj.gov/education/innovation/ai/" target="_blank" rel="noopener">New Jersey — Artificial Intelligence (AI)</a></li>
+      <li><a href="https://web.ped.nm.gov/wp-content/uploads/2025/05/NM-AI-Guidance-Signed-4-29-2025.pdf" target="_blank" rel="noopener">New Mexico — AI Guidance for K-12 Education 1.0</a></li>
+      <li><a href="https://go.ncdpi.gov/AI_Guidelines" target="_blank" rel="noopener">North Carolina — Generative AI Implementation Recommendations</a></li>
+      <li><a href="https://www.nd.gov/dpi/policyguidelines/north-dakota-k-12-ai-guidance-framework" target="_blank" rel="noopener">North Dakota — K-12 AI Guidance Framework</a></li>
+      <li><a href="https://innovateohio.gov/aitoolkit/ai-toolkit" target="_blank" rel="noopener">Ohio — AI Toolkit</a></li>
+      <li><a href="https://sde.ok.gov/sites/default/files/Guidance%20and%20Considerations%20for%20Artificial%20Intelligence%20in%20Oklahoma%20Schools_version1.0.pdf" target="_blank" rel="noopener">Oklahoma — Guidance for AI in Oklahoma K-12 Schools</a></li>
+      <li><a href="https://www.oregon.gov/ode/educator-resources/teachingcontent/Documents/ODE_Generative_Artificial_Intelligence_(AI)_in_K-12_Classrooms_2023.pdf" target="_blank" rel="noopener">Oregon — Generative AI in K-12 Classrooms</a></li>
+      <li><a href="https://www.schools.utah.gov/informationtechnology/artificialintelligence/AI_Framework_V2.pdf" target="_blank" rel="noopener">Utah — AI Framework for Utah P-12 Education</a></li>
+      <li><a href="https://education.vermont.gov/sites/aoe/files/documents/edu-aoe-ai-guidance-for-education.pdf" target="_blank" rel="noopener">Vermont — AI Guidance for Education</a></li>
+      <li><a href="https://www.education.virginia.gov/media/governorvirginiagov/secretary-of-education/pdf/AI-Education-Guidelines.pdf" target="_blank" rel="noopener">Virginia — Guidelines for AI Integration through Education</a></li>
+      <li><a href="https://ospi.k12.wa.us/student-success/resources-subject-area/human-centered-artificial-intelligence-schools" target="_blank" rel="noopener">Washington — Human-Centered AI Guidance for K-12</a></li>
+      <li><a href="https://wvde.us/ai/" target="_blank" rel="noopener">West Virginia — Guidance for AI in WV Schools</a></li>
+      <li><a href="https://dpi.wi.gov/imt/empowering-lifelong-learning-ai-guidance-enhancing-k12-and-library-education" target="_blank" rel="noopener">Wisconsin — AI Guidance for K-12 and Library Education</a></li>
+      <li><a href="https://edu.wyoming.gov/wp-content/uploads/2024/06/Guidance-for-AI-Policy-Development.pdf" target="_blank" rel="noopener">Wyoming — Guidance for AI Policy Development</a></li>
+    </ul>
+
+    <h3 style="margin-top:2.5rem;">International Guidance</h3>
+    <ul class="state-guidance-list">
+      <li><a href="https://www.education.gov.au/schooling/resources/australian-framework-generative-artificial-intelligence-ai-schools" target="_blank" rel="noopener">Australia — Framework for Generative AI in Schools</a></li>
+      <li><a href="https://www2.gov.bc.ca/assets/gov/education/administration/kindergarten-to-grade-12/ai-in-education/considerations-for-using-ai-tools-in-k-12-schools.pdf" target="_blank" rel="noopener">Canada (BC) — Considerations for AI Tools in K-12</a></li>
+      <li><a href="https://plhub.nbed.ca/wp-content/uploads/sites/10/2024/02/Recommended-Approaches-to-Generative-AI.pdf" target="_blank" rel="noopener">Canada (New Brunswick) — Recommended Approaches to Generative AI</a></li>
+      <li><a href="https://www.mext.go.jp/content/20230710-mxt_shuukyo02-000030823_003.pdf" target="_blank" rel="noopener">Japan — Interim Guidelines for Generative AI in K-12</a></li>
+      <li><a href="https://newzealand.ai/insights/ministry-of-education-generative-ai-guidance" target="_blank" rel="noopener">New Zealand — Generative AI Guidance</a></li>
+      <li><a href="https://www.gov.uk/government/publications/generative-artificial-intelligence-in-education/generative-artificial-intelligence-ai-in-education" target="_blank" rel="noopener">United Kingdom — Generative AI in Education</a></li>
+      <li><a href="https://www2.ed.gov/documents/ai-report/ai-report.pdf" target="_blank" rel="noopener">United States (Federal) — AI and the Future of Teaching and Learning</a></li>
+      <li><a href="https://pensamientocomputacional.ceibal.edu.uy/wp-content/uploads/2024/06/Building_ai_education_ori_digital-2.pdf" target="_blank" rel="noopener">Uruguay — Building Artificial Intelligence for Education</a></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══ NEXT STEPS ════════════════════════════════════════════════════ -->
+<section id="nextsteps">
+  <div class="container">
+    <span class="section-label">Action Items</span>
+    <div class="gold-line"></div>
+    <h2>Next Steps &amp; Timeline</h2>
+
+    <p>The following action items were confirmed at the close of the March 26 kickoff meeting. The white paper is the primary deliverable through which this task force will influence state and legislative policy.</p>
+
+    <div style="margin:2rem 0;">
+      <div style="display:flex; flex-wrap:wrap; gap:1rem;">
+        <div style="background:var(--white); border:1.5px solid var(--border); border-radius:10px; padding:1rem 1.5rem; flex:1; min-width:180px; text-align:center;">
+          <div style="font-family:'DM Serif Display',serif; font-size:1.5rem; color:var(--gold);">April 13</div>
+          <div style="font-size:0.82rem; color:var(--text-muted); font-weight:600;">First White Paper Draft Distributed</div>
+        </div>
+        <div style="background:var(--white); border:1.5px solid var(--border); border-radius:10px; padding:1rem 1.5rem; flex:1; min-width:180px; text-align:center;">
+          <div style="font-family:'DM Serif Display',serif; font-size:1.5rem; color:var(--gold);">April 20</div>
+          <div style="font-size:0.82rem; color:var(--text-muted); font-weight:600;">Member Feedback Deadline · Virtual Review Meeting</div>
+        </div>
+        <div style="background:var(--white); border:1.5px solid var(--border); border-radius:10px; padding:1rem 1.5rem; flex:1; min-width:180px; text-align:center;">
+          <div style="font-family:'DM Serif Display',serif; font-size:1.5rem; color:var(--gold);">May 18</div>
+          <div style="font-size:0.82rem; color:var(--text-muted); font-weight:600;">Online Meeting · Draft Ratification</div>
+        </div>
+        <div style="background:var(--white); border:1.5px solid var(--border); border-radius:10px; padding:1rem 1.5rem; flex:1; min-width:180px; text-align:center;">
+          <div style="font-family:'DM Serif Display',serif; font-size:1.5rem; color:var(--gold);">June 14–16</div>
+          <div style="font-size:0.82rem; color:var(--text-muted); font-weight:600;">Free Community AI Workshop · San Antonio</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="next-steps-grid">
+      <div class="ns-card">
+        <span class="ns-who">TAC / EPIC Team</span>
+        <ul>
+          <li>Draft first version of white paper by April 13</li>
+          <li>Distribute draft to task force members; collect feedback by April 20</li>
+          <li>Schedule virtual review meeting to confirm consensus</li>
+          <li>Digitize and archive all sticky notes from breakout sessions</li>
+          <li>Continue AI Symposium tour — Houston (April), Tyler and Lubbock planned</li>
+          <li>Send reimbursement and honorarium information within the week</li>
+          <li>Compile and distribute member contact list (opt-out basis)</li>
+        </ul>
+      </div>
+      <div class="ns-card">
+        <span class="ns-who">Task Force Members</span>
+        <ul>
+          <li>Review white paper draft upon receipt; provide feedback before April 20</li>
+          <li>Share additional resources with the TAC team</li>
+          <li>Review pre-read materials in the shared resource folder: <strong>tinyurl.com/task-force-resource-folder</strong></li>
+          <li>Consider volunteering to testify at Texas Legislature committee hearings on AI in education</li>
+          <li>Final sign-off: confirm agreement with recommendations and name attribution</li>
+        </ul>
+      </div>
+      <div class="ns-card">
+        <span class="ns-who">Legislative / Policy Track</span>
+        <ul>
+          <li>Texas Legislature has released interim charges — Public Education Committee directed to review AI in classrooms</li>
+          <li>Submit white paper to the interim select committee for consideration</li>
+          <li>Advocate for TEA to receive legislative direction to issue AI guidance (not mandates) to districts</li>
+          <li>Potential future task force: Dedicated K–12 + higher ed + industry curriculum development group</li>
+        </ul>
+      </div>
+    </div>
+
+    <blockquote style="margin-top:2.5rem;">
+      <p>"Today the Texas Legislature released their interim charges. The public education committee is charged with finding ways the state can address AI in the classroom. We should send this white paper directly to that committee."</p>
+      <cite>— Spencer Ward, Author of HB 114</cite>
+    </blockquote>
+
+    <blockquote>
+      <p>"The toothpaste is out of the tube. It is something that we definitely need to deal with head on."</p>
+      <cite>— Karen, Deputy Director, Texas Advanced Computing Center (TACC)</cite>
+    </blockquote>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ════════════════════════════════════════════════════════ -->
+<footer>
+  <p>
+    <strong>Texas AI in Education Task Force</strong> · Kickoff Meeting — March 26, 2026 · Texas Advanced Computing Center (TACC), Austin<br>
+    <span style="opacity:.6; margin-top:.4rem; display:block;">ALIGN Grant · Funded by <strong>Google.org</strong> · Hosted by TACC/EPIC, UT Austin · This document synthesizes task force proceedings and is prepared for member review.</span>
+  </p>
+</footer>
+
+</body>
+</html>
