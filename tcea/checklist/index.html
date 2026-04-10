@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generative AI Adoption Checklist | TCEA</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0A3476;
+    --navy-dark: #071f4a;
+    --navy-mid: #12428f;
+    --gold: #FCB040;
+    --gold-light: #fdd17a;
+    --gold-pale: #FEF0D0;
+    --pale-navy: #D0D8F0;
+    --white: #ffffff;
+    --off-white: #f7f8fc;
+    --text: #1a1a2e;
+    --text-muted: #5a6680;
+    --border: #e2e7f5;
+    --teal: #0e6b8a;
+    --sidebar-width: 270px;
+    --header-height: 64px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--off-white);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  /* ── TOP HEADER ── */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: var(--header-height);
+    background: var(--navy-dark);
+    display: flex;
+    align-items: center;
+    padding: 0 28px;
+    z-index: 100;
+    gap: 14px;
+    border-bottom: 3px solid var(--gold);
+  }
+
+  .header-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+
+  .logo-mark {
+    width: 36px; height: 36px;
+    background: var(--gold);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 15px;
+    color: var(--navy-dark);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    flex-shrink: 0;
+  }
+
+  .header-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 17px;
+    color: var(--white);
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+  }
+
+  .header-title span {
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    color: var(--gold-light);
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
+
+  .header-progress {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .progress-label {
+    font-size: 12px;
+    color: var(--gold-light);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .progress-bar-outer {
+    width: 120px;
+    height: 6px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .progress-bar-inner {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 100px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  /* ── HAMBURGER ── */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    margin-left: auto;
+    padding: 6px;
+    background: none;
+    border: none;
+  }
+  .hamburger span {
+    display: block;
+    width: 22px; height: 2px;
+    background: var(--white);
+    border-radius: 2px;
+    transition: 0.3s;
+  }
+
+  /* ── LAYOUT ── */
+  .layout {
+    display: flex;
+    margin-top: var(--header-height);
+    min-height: calc(100vh - var(--header-height));
+  }
+
+  /* ── SIDEBAR ── */
+  aside {
+    width: var(--sidebar-width);
+    background: var(--navy-dark);
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    bottom: 0;
+    overflow-y: auto;
+    z-index: 90;
+    scrollbar-width: thin;
+    scrollbar-color: var(--navy-mid) transparent;
+    transition: transform 0.3s ease;
+  }
+
+  aside::-webkit-scrollbar { width: 4px; }
+  aside::-webkit-scrollbar-track { background: transparent; }
+  aside::-webkit-scrollbar-thumb { background: var(--navy-mid); border-radius: 4px; }
+
+  .sidebar-inner {
+    padding: 24px 0 40px;
+  }
+
+  .sidebar-section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(252, 176, 64, 0.6);
+    padding: 20px 20px 8px;
+  }
+
+  .sidebar-link {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 20px;
+    text-decoration: none;
+    color: rgba(255,255,255,0.72);
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.35;
+    border-left: 3px solid transparent;
+    transition: all 0.2s;
+  }
+
+  .sidebar-link:hover {
+    background: rgba(255,255,255,0.06);
+    color: var(--white);
+    border-left-color: var(--gold-light);
+  }
+
+  .sidebar-link.active {
+    background: rgba(252,176,64,0.1);
+    color: var(--gold);
+    border-left-color: var(--gold);
+    font-weight: 600;
+  }
+
+  .sidebar-num {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    background: var(--navy-mid);
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold-light);
+    margin-top: 0px;
+    transition: background 0.2s;
+  }
+
+  .sidebar-link.active .sidebar-num {
+    background: var(--gold);
+    color: var(--navy-dark);
+  }
+
+  .sidebar-section-progress {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 20px 4px;
+  }
+
+  .section-prog-bar {
+    flex: 1;
+    height: 3px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .section-prog-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 100px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  .section-prog-count {
+    font-size: 10px;
+    color: rgba(255,255,255,0.4);
+    white-space: nowrap;
+    min-width: 28px;
+    text-align: right;
+  }
+
+  .sidebar-divider {
+    margin: 14px 20px;
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+
+  /* ── MAIN CONTENT ── */
+  main {
+    margin-left: var(--sidebar-width);
+    flex: 1;
+    padding: 48px 52px 80px;
+    max-width: 900px;
+  }
+
+  /* ── HERO BANNER ── */
+  .page-hero {
+    background: var(--navy);
+    border-radius: 14px;
+    padding: 40px 44px;
+    margin-bottom: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .page-hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, rgba(252,176,64,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .page-hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 50%, transparent 100%);
+  }
+
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .page-hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 30px;
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 14px;
+  }
+
+  .page-hero h1 em {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .page-hero p {
+    color: rgba(255,255,255,0.75);
+    font-size: 15px;
+    line-height: 1.65;
+    max-width: 540px;
+  }
+
+  /* ── SECTION ── */
+  .checklist-section {
+    background: var(--white);
+    border-radius: 12px;
+    border: 1.5px solid var(--border);
+    margin-bottom: 32px;
+    overflow: hidden;
+    scroll-margin-top: 88px;
+  }
+
+  .section-header {
+    background: var(--navy);
+    padding: 20px 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: relative;
+  }
+
+  .section-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(90deg, var(--gold) 0%, rgba(252,176,64,0.2) 80%, transparent 100%);
+  }
+
+  .section-badge {
+    flex-shrink: 0;
+    width: 34px; height: 34px;
+    background: var(--gold);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 16px;
+    color: var(--navy-dark);
+    font-weight: 700;
+  }
+
+  .section-header h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: var(--white);
+    font-weight: 400;
+    line-height: 1.25;
+  }
+
+  .section-count {
+    margin-left: auto;
+    font-size: 11px;
+    color: rgba(255,255,255,0.45);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .section-body {
+    padding: 24px 28px 20px;
+  }
+
+  /* ── CHECKLIST ITEMS ── */
+  .checklist {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border: 1.5px solid transparent;
+  }
+
+  .checklist li:hover {
+    background: var(--off-white);
+    border-color: var(--border);
+  }
+
+  .checklist li.checked {
+    background: var(--gold-pale);
+    border-color: rgba(252,176,64,0.3);
+  }
+
+  .checklist li label {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--text);
+  }
+
+  /* Custom checkbox */
+  .cb-box {
+    flex-shrink: 0;
+    width: 20px; height: 20px;
+    border: 2px solid var(--pale-navy);
+    border-radius: 5px;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    background: var(--white);
+  }
+
+  .checklist li.checked .cb-box {
+    background: var(--navy);
+    border-color: var(--navy);
+  }
+
+  .cb-check {
+    display: none;
+    width: 11px; height: 11px;
+    stroke: var(--gold);
+    stroke-width: 2.5;
+    fill: none;
+  }
+
+  .checklist li.checked .cb-check {
+    display: block;
+  }
+
+  .checklist li.checked label {
+    color: var(--text-muted);
+    text-decoration: line-through;
+    text-decoration-color: rgba(10,52,118,0.3);
+  }
+
+  /* ── KEY QUESTION ── */
+  .key-question {
+    background: var(--navy-dark);
+    border-radius: 8px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .kq-icon {
+    flex-shrink: 0;
+    width: 22px; height: 22px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--navy-dark);
+  }
+
+  .key-question p {
+    font-size: 13.5px;
+    color: rgba(255,255,255,0.88);
+    line-height: 1.55;
+  }
+
+  .key-question p strong {
+    color: var(--gold-light);
+    font-weight: 600;
+  }
+
+  /* ── QUICK START TABLE ── */
+  #quick-start {
+    scroll-margin-top: 88px;
+  }
+
+  .quickstart-card {
+    background: var(--white);
+    border-radius: 12px;
+    border: 1.5px solid var(--border);
+    overflow: hidden;
+    margin-bottom: 32px;
+  }
+
+  .quickstart-header {
+    background: var(--navy-dark);
+    padding: 18px 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 2px solid var(--gold);
+  }
+
+  .quickstart-header h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: var(--white);
+    font-weight: 400;
+  }
+
+  .qs-icon {
+    width: 30px; height: 30px;
+    background: var(--gold);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+  }
+
+  table.qs-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  table.qs-table thead th {
+    background: var(--navy);
+    color: var(--gold-light);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 12px 20px;
+    text-align: left;
+  }
+
+  table.qs-table thead th:first-child {
+    width: 160px;
+  }
+
+  table.qs-table tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+
+  table.qs-table tbody tr:last-child {
+    border-bottom: none;
+  }
+
+  table.qs-table tbody tr:hover {
+    background: var(--off-white);
+  }
+
+  table.qs-table td {
+    padding: 14px 20px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    vertical-align: top;
+  }
+
+  .qs-time-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--navy);
+    color: var(--gold-light);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+
+  .qs-time-badge.week  { background: var(--navy-dark); color: var(--gold); }
+  .qs-time-badge.month { background: var(--navy);      color: var(--gold-light); }
+  .qs-time-badge.qtr   { background: var(--navy-mid);  color: var(--white); }
+  .qs-time-badge.year  { background: var(--teal);      color: var(--white); }
+
+  /* ── BOTTOM LINE ── */
+  .bottom-line {
+    background: var(--navy-dark);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 48px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    border-left: 4px solid var(--gold);
+  }
+
+  .bl-icon {
+    flex-shrink: 0;
+    font-size: 22px;
+    margin-top: 2px;
+  }
+
+  .bottom-line p {
+    font-size: 14.5px;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.65;
+  }
+
+  .bottom-line strong {
+    color: var(--gold);
+  }
+
+  /* ── RESET BUTTON ── */
+  .reset-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: transparent;
+    border: 1.5px solid rgba(255,255,255,0.25);
+    border-radius: 8px;
+    color: rgba(255,255,255,0.6);
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 16px;
+  }
+  .reset-btn:hover {
+    border-color: var(--gold-light);
+    color: var(--gold-light);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    margin-left: var(--sidebar-width);
+    background: var(--navy-dark);
+    padding: 20px 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    border-top: 2px solid rgba(252,176,64,0.25);
+  }
+
+  footer p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
+  }
+
+  footer a {
+    color: var(--gold-light);
+    text-decoration: none;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 820px) {
+    .hamburger { display: flex; }
+    aside {
+      transform: translateX(calc(-1 * var(--sidebar-width)));
+    }
+    aside.open { transform: translateX(0); }
+    main { margin-left: 0; padding: 32px 20px 60px; }
+    footer { margin-left: 0; padding: 16px 20px; flex-direction: column; align-items: flex-start; }
+    .header-progress { display: none; }
+    .page-hero { padding: 28px 24px; }
+    .page-hero h1 { font-size: 24px; }
+    .section-body { padding: 18px 16px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a href="#" class="header-logo">
+    <div class="logo-mark">TCEA</div>
+    <div class="header-title">
+      AI Adoption Checklist
+      <span>K-16 Educational Institutions</span>
+    </div>
+  </a>
+  <div class="header-progress">
+    <span class="progress-label" id="prog-label">0 of 46 complete</span>
+    <div class="progress-bar-outer">
+      <div class="progress-bar-inner" id="prog-bar"></div>
+    </div>
+  </div>
+  <button class="hamburger" id="ham" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<!-- SIDEBAR -->
+<aside id="sidebar">
+  <div class="sidebar-inner">
+    <div class="sidebar-section-label">Sections</div>
+
+    <a href="#s1" class="sidebar-link active" data-section="s1">
+      <span class="sidebar-num">1</span>
+      <span>Establish Clear, Permission-Based Guidance</span>
+    </a>
+    <div class="sidebar-section-progress">
+      <div class="section-prog-bar"><div class="section-prog-fill" id="prog-s1"></div></div>
+      <span class="section-prog-count" id="cnt-s1">0/6</span>
+    </div>
+
+    <a href="#s2" class="sidebar-link" data-section="s2">
+      <span class="sidebar-num">2</span>
+      <span>Address Academic Integrity</span>
+    </a>
+    <div class="sidebar-section-progress">
+      <div class="section-prog-bar"><div class="section-prog-fill" id="prog-s2"></div></div>
+      <span class="section-prog-count" id="cnt-s2">0/6</span>
+    </div>
+
+    <a href="#s3" class="sidebar-link" data-section="s3">
+      <span class="sidebar-num">3</span>
+      <span>Protect Student Data</span>
+    </a>
+    <div class="sidebar-section-progress">
+      <div class="section-prog-bar"><div class="section-prog-fill" id="prog-s3"></div></div>
+      <span class="section-prog-count" id="cnt-s3">0/6</span>
+    </div>
+
+    <a href="#s4" class="sidebar-link" data-section="s4">
+      <span class="sidebar-num">4</span>
+      <span>Build Educator Capacity</span>
+    </a>
+    <div class="sidebar-section-progress">
+      <div class="section-prog-bar"><div class="section-prog-fill" id="prog-s4"></div></div>
+      <span class="section-prog-count" id="cnt-s4">0/6</span>
+    </div>
+
+    <a href="#s5" class="sidebar-link" data-section="s5">
+      <span class="sidebar-num">5</span>
+      <span>Anchor AI in Learning Outcomes</span>
+    </a>
+    <div class="sidebar-section-progress">
+      <div class="section-prog-bar"><div class="section-prog-fill" id="prog-s5"></div></div>
+      <span class="section-prog-count" id="cnt-s5">0/6</span>
+    </div>
+
+    <a href="#s6" class="sidebar-link" data-section="s6">
+      <span class="sidebar-num">6</span>
+      <span>Prioritize Equity and Access</span>
+    </a>
+    <div class="sidebar-section-progress">
+      <div class="section-prog-bar"><div class="section-prog-fill" id="prog-s6"></div></div>
+      <span class="section-prog-count" id="cnt-s6">0/5</span>
+    </div>
+
+    <a href="#s7" class="sidebar-link" data-section="s7">
+      <span class="sidebar-num">7</span>
+      <span>Engage Families and the Community</span>
+    </a>
+    <div class="sidebar-section-progress">
+      <div class="section-prog-bar"><div class="section-prog-fill" id="prog-s7"></div></div>
+      <span class="section-prog-count" id="cnt-s7">0/5</span>
+    </div>
+
+    <a href="#s8" class="sidebar-link" data-section="s8">
+      <span class="sidebar-num">8</span>
+      <span>Bridge K-12, Higher Ed, and Workforce</span>
+    </a>
+    <div class="sidebar-section-progress">
+      <div class="section-prog-bar"><div class="section-prog-fill" id="prog-s8"></div></div>
+      <span class="section-prog-count" id="cnt-s8">0/5</span>
+    </div>
+
+    <hr class="sidebar-divider">
+
+    <a href="#quick-start" class="sidebar-link" data-section="quick-start">
+      <span class="sidebar-num" style="font-size:13px;">⚡</span>
+      <span>Quick-Start Action Plan</span>
+    </a>
+
+    <div style="padding: 16px 20px 0;">
+      <button class="reset-btn" id="reset-btn">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5A4.5 4.5 0 1 1 6.5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M2 3.5V6.5H5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Reset all items
+      </button>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main>
+
+  <!-- HERO -->
+  <div class="page-hero">
+    <div class="hero-eyebrow">TCEA Professional Development Resource</div>
+    <h1>Generative AI Adoption Checklist<br><em>for K-16 Educational Institutions</em></h1>
+    <p>Adapted for schools, districts, and higher education institutions. Use this checklist to audit readiness, identify gaps, and build a responsible AI adoption plan grounded in student protection and learning outcomes.</p>
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="checklist-section" id="s1">
+    <div class="section-header">
+      <div class="section-badge">1</div>
+      <h2>Establish Clear, Permission-Based Guidance</h2>
+      <span class="section-count" id="hdr-s1">0 / 6</span>
+    </div>
+    <div class="section-body">
+      <ul class="checklist" data-section="s1">
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Publish a plain-language AI use policy distinct for students, faculty/staff, and administrators
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Frame policy as guidance with guardrails — not surveillance or prohibition
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Include a clear definition of AI appropriate to your context
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Address academic integrity explicitly, including citation and acknowledgment of AI use
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Distinguish between student-facing and educator-facing use expectations
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Build in a policy review cycle — AI moves fast and policies go stale
+        </label></li>
+      </ul>
+      <div class="key-question">
+        <div class="kq-icon">?</div>
+        <p><strong>Key question:</strong> Does your policy build responsible use, or just document what's forbidden?</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="checklist-section" id="s2">
+    <div class="section-header">
+      <div class="section-badge">2</div>
+      <h2>Address Academic Integrity Without Weaponizing It</h2>
+      <span class="section-count" id="hdr-s2">0 / 6</span>
+    </div>
+    <div class="section-body">
+      <ul class="checklist" data-section="s2">
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Move beyond detection-only approaches toward transparency expectations
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Teach students when and how to disclose AI use — and why it matters
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Distinguish AI-assisted work from AI-generated work across contexts
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Revisit assessment design so that AI use is either permitted and disclosed or structurally irrelevant
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Acknowledge cognitive offloading risks — especially in writing, math, and critical reasoning
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Avoid creating "AI guilt" that suppresses honest conversation
+        </label></li>
+      </ul>
+      <div class="key-question">
+        <div class="kq-icon">?</div>
+        <p><strong>Key question:</strong> Are your integrity expectations clear enough that a student knows exactly what is and isn't allowed in each course or assignment?</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="checklist-section" id="s3">
+    <div class="section-header">
+      <div class="section-badge">3</div>
+      <h2>Protect Student Data Without Exception</h2>
+      <span class="section-count" id="hdr-s3">0 / 6</span>
+    </div>
+    <div class="section-body">
+      <ul class="checklist" data-section="s3">
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Define a firm "never enter" list: student IEPs, 504 plans, behavioral records, identifying information
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Require privacy and data retention reviews before approving any AI tool for classroom use
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Create a simple, repeatable tool vetting process at the district or institution level
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Distinguish between tools approved for educator use and tools approved for direct student use
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Train staff using real scenarios — not just policy language
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Apply age and grade-level restrictions where warranted
+        </label></li>
+      </ul>
+      <div class="key-question">
+        <div class="kq-icon">?</div>
+        <p><strong>Key question:</strong> Do staff know exactly what student data cannot be entered into any AI tool?</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="checklist-section" id="s4">
+    <div class="section-header">
+      <div class="section-badge">4</div>
+      <h2>Build Educator Capacity Before Scaling Expectations</h2>
+      <span class="section-count" id="hdr-s4">0 / 6</span>
+    </div>
+    <div class="section-body">
+      <ul class="checklist" data-section="s4">
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Provide role-specific professional development: classroom teachers, counselors, paras, administrators, faculty
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Move beyond one-time training to ongoing, scaffolded development
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Develop "AI Ambassador" or peer-leader pathways to scale capacity from within
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Prioritize professional development that connects AI to pedagogy, not just tools
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Prepare pre-service and early-career educators through teacher prep programs
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Recognize and share what's working across campuses and departments
+        </label></li>
+      </ul>
+      <div class="key-question">
+        <div class="kq-icon">?</div>
+        <p><strong>Key question:</strong> Are educators being equipped to make sound instructional decisions about AI, or just taught to use specific tools?</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5 -->
+  <div class="checklist-section" id="s5">
+    <div class="section-header">
+      <div class="section-badge">5</div>
+      <h2>Anchor AI in Learning Outcomes, Not Novelty</h2>
+      <span class="section-count" id="hdr-s5">0 / 6</span>
+    </div>
+    <div class="section-body">
+      <ul class="checklist" data-section="s5">
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Ask explicitly: does AI use deepen learning, or replace it?
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Infuse AI literacy across subject areas rather than siloing it in technology courses
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Align AI integration with existing standards and learning objectives
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Preserve critical thinking, creativity, and problem-solving as non-negotiable outcomes
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Design learning experiences where AI is a thinking partner, not an answer machine
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Be framework- and process-based, not tool-dependent
+        </label></li>
+      </ul>
+      <div class="key-question">
+        <div class="kq-icon">?</div>
+        <p><strong>Key question:</strong> Would this use of AI produce better-prepared, more capable learners — or shortcuts that undermine development?</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6 -->
+  <div class="checklist-section" id="s6">
+    <div class="section-header">
+      <div class="section-badge">6</div>
+      <h2>Prioritize Equity and Access</h2>
+      <span class="section-count" id="hdr-s6">0 / 5</span>
+    </div>
+    <div class="section-body">
+      <ul class="checklist" data-section="s6">
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Audit which students and educators have access to AI tools and which do not
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Avoid creating a two-tier system where AI advantages are unevenly distributed
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Ensure AI tools work across languages, ability levels, and devices in use at your institution
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Examine whether AI recommendations and content reflect the diversity of your student population
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Engage communities most at risk of being left behind early and often
+        </label></li>
+      </ul>
+      <div class="key-question">
+        <div class="kq-icon">?</div>
+        <p><strong>Key question:</strong> Who benefits from your AI adoption — and who gets left further behind?</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 7 -->
+  <div class="checklist-section" id="s7">
+    <div class="section-header">
+      <div class="section-badge">7</div>
+      <h2>Engage Families and the Broader Community</h2>
+      <span class="section-count" id="hdr-s7">0 / 5</span>
+    </div>
+    <div class="section-body">
+      <ul class="checklist" data-section="s7">
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Communicate proactively with families about how AI is and isn't used in classrooms
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Provide plain-language explanations of AI policies and their rationale
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Invite parents and community members into the conversation — don't just notify them
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Address generational differences in AI attitudes with patience and transparency
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Offer resources that help families understand what their students are encountering
+        </label></li>
+      </ul>
+      <div class="key-question">
+        <div class="kq-icon">?</div>
+        <p><strong>Key question:</strong> Do families feel informed and included, or surprised by what they eventually learn?</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 8 -->
+  <div class="checklist-section" id="s8">
+    <div class="section-header">
+      <div class="section-badge">8</div>
+      <h2>Bridge K-12, Higher Education, and Workforce Expectations</h2>
+      <span class="section-count" id="hdr-s8">0 / 5</span>
+    </div>
+    <div class="section-body">
+      <ul class="checklist" data-section="s8">
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Build shared expectations across grade bands so AI literacy is cumulative, not repeated from scratch
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Coordinate with higher education on what AI-readiness looks like at college entry
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Connect workforce preparation to specific AI skills students will actually need
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Avoid assuming higher education and K-12 share the same norms — they don't yet
+        </label></li>
+        <li onclick="toggle(this)"><label>
+          <span class="cb-box"><svg class="cb-check" viewBox="0 0 12 9"><polyline points="1,4.5 4.5,8 11,1"/></svg></span>
+          Participate in or monitor state and national guidance development as it evolves
+        </label></li>
+      </ul>
+      <div class="key-question">
+        <div class="kq-icon">?</div>
+        <p><strong>Key question:</strong> Are your students graduating into environments where their AI expectations and skills will hold up?</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK START -->
+  <div class="quickstart-card" id="quick-start">
+    <div class="quickstart-header">
+      <div class="qs-icon">⚡</div>
+      <h2>Quick-Start Action Plan</h2>
+    </div>
+    <table class="qs-table">
+      <thead>
+        <tr>
+          <th>Timeframe</th>
+          <th>Focus</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="qs-time-badge week">This Week</span></td>
+          <td>Review your current AI policy against this checklist — identify gaps</td>
+        </tr>
+        <tr>
+          <td><span class="qs-time-badge month">This Month</span></td>
+          <td>Launch one low-risk, teacher-facing AI pilot with documentation</td>
+        </tr>
+        <tr>
+          <td><span class="qs-time-badge qtr">This Quarter</span></td>
+          <td>Finalize student data boundaries and a tool vetting process</td>
+        </tr>
+        <tr>
+          <td><span class="qs-time-badge qtr">This Quarter</span></td>
+          <td>Deliver role-specific professional development for at least one staff group</td>
+        </tr>
+        <tr>
+          <td><span class="qs-time-badge year">This Year</span></td>
+          <td>Build grade-level AI literacy progressions and a community communication plan</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- BOTTOM LINE -->
+  <div class="bottom-line">
+    <div class="bl-icon">💡</div>
+    <p><strong>Bottom line:</strong> Responsible AI adoption in K-16 education starts with protecting students, equipping educators, and asking hard questions about learning — not chasing the newest tools.</p>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 TCEA. All rights reserved. <a href="https://tcea.org" target="_blank">tcea.org</a></p>
+  <p>Adapted for K-16 Educational Institutions | Professional Development Resource</p>
+</footer>
+
+<script>
+  // ── DATA ──
+  const TOTALS = { s1:6, s2:6, s3:6, s4:6, s5:6, s6:5, s7:5, s8:5 };
+  const GRAND_TOTAL = Object.values(TOTALS).reduce((a,b)=>a+b,0);
+
+  // Load from localStorage
+  const STATE_KEY = 'tcea_ai_checklist_v1';
+  let state = {};
+  try { state = JSON.parse(localStorage.getItem(STATE_KEY)) || {}; } catch(e){}
+
+  function saveState() {
+    try { localStorage.setItem(STATE_KEY, JSON.stringify(state)); } catch(e){}
+  }
+
+  // ── TOGGLE ──
+  function toggle(li) {
+    li.classList.toggle('checked');
+    const ul = li.closest('ul');
+    const section = ul.dataset.section;
+    const items = ul.querySelectorAll('li');
+    const checked = [];
+    items.forEach((item, i) => { if (item.classList.contains('checked')) checked.push(i); });
+    state[section] = checked;
+    saveState();
+    updateProgress();
+  }
+
+  // ── RESTORE STATE ──
+  function restoreState() {
+    Object.entries(state).forEach(([section, checkedIdxs]) => {
+      const ul = document.querySelector(`ul[data-section="${section}"]`);
+      if (!ul) return;
+      const items = ul.querySelectorAll('li');
+      checkedIdxs.forEach(i => { if (items[i]) items[i].classList.add('checked'); });
+    });
+  }
+
+  // ── UPDATE PROGRESS ──
+  function updateProgress() {
+    let grand = 0;
+    Object.keys(TOTALS).forEach(sec => {
+      const ul = document.querySelector(`ul[data-section="${sec}"]`);
+      const done = ul ? ul.querySelectorAll('li.checked').length : 0;
+      const total = TOTALS[sec];
+      grand += done;
+
+      // section progress bar
+      const pct = total > 0 ? (done / total * 100) : 0;
+      const bar = document.getElementById(`prog-${sec}`);
+      if (bar) bar.style.width = pct + '%';
+
+      const cnt = document.getElementById(`cnt-${sec}`);
+      if (cnt) cnt.textContent = `${done}/${total}`;
+
+      const hdr = document.getElementById(`hdr-${sec}`);
+      if (hdr) hdr.textContent = `${done} / ${total}`;
+    });
+
+    // global progress
+    const pct = grand / GRAND_TOTAL * 100;
+    const bar = document.getElementById('prog-bar');
+    if (bar) bar.style.width = pct + '%';
+
+    const lbl = document.getElementById('prog-label');
+    if (lbl) lbl.textContent = `${grand} of ${GRAND_TOTAL} complete`;
+  }
+
+  // ── RESET ──
+  document.getElementById('reset-btn').addEventListener('click', () => {
+    if (!confirm('Reset all checklist items? This cannot be undone.')) return;
+    document.querySelectorAll('.checklist li.checked').forEach(li => li.classList.remove('checked'));
+    state = {};
+    saveState();
+    updateProgress();
+  });
+
+  // ── ACTIVE SIDEBAR LINK (scroll spy) ──
+  const sections = ['s1','s2','s3','s4','s5','s6','s7','s8','quick-start'];
+  const links = document.querySelectorAll('.sidebar-link[data-section]');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        links.forEach(l => {
+          l.classList.toggle('active', l.dataset.section === id);
+        });
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
+
+  // ── MOBILE HAMBURGER ──
+  document.getElementById('ham').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('open');
+  });
+
+  // Close sidebar on link click (mobile)
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    link.addEventListener('click', () => {
+      document.getElementById('sidebar').classList.remove('open');
+    });
+  });
+
+  // ── INIT ──
+  restoreState();
+  updateProgress();
+</script>
+</body>
+</html>
