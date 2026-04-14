@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Presentation Blueprint System — TCEA Professional Development</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0A3476;
+  --navy-dark: #071f4a;
+  --navy-mid: #12428f;
+  --gold: #FCB040;
+  --gold-light: #fdd17a;
+  --gold-pale: #FEF0D0;
+  --pale-navy: #D0D8F0;
+  --white: #ffffff;
+  --off-white: #f7f8fc;
+  --text: #1a1a2e;
+  --text-muted: #5a6680;
+  --border: #e2e7f5;
+  --teal: #0e6b8a;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; color: var(--text); background: var(--off-white); line-height: 1.6; }
+
+/* HEADER */
+.site-header { background: var(--navy-dark); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 16px rgba(0,0,0,0.35); }
+.header-inner { max-width: 1160px; margin: 0 auto; display: flex; align-items: center; padding: 0.7rem 2rem; gap: 2rem; }
+.logo-mark { width: 34px; height: 34px; background: var(--gold); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; font-size: 15px; font-weight: bold; color: var(--navy-dark); }
+.logo-text { font-family: 'DM Serif Display', serif; font-size: 1.05rem; color: var(--white); display: flex; align-items: center; gap: 0.4rem; }
+.logo-text em { color: var(--gold); font-style: italic; }
+.header-nav { margin-left: auto; display: flex; gap: 1.5rem; }
+.header-nav a { color: var(--pale-navy); text-decoration: none; font-size: 0.83rem; font-weight: 500; transition: color 0.2s; }
+.header-nav a:hover { color: var(--gold); }
+
+/* HERO */
+.hero { background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 100%); padding: 3.5rem 2rem; text-align: center; }
+.hero-label { display: inline-block; background: var(--gold); color: var(--navy-dark); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; padding: 0.22rem 0.75rem; border-radius: 2px; margin-bottom: 1rem; }
+.hero h1 { font-family: 'DM Serif Display', serif; font-size: 2.5rem; color: var(--white); line-height: 1.2; margin-bottom: 0.75rem; }
+.hero h1 em { color: var(--gold); font-style: italic; }
+.hero p { color: var(--pale-navy); font-size: 1rem; max-width: 580px; margin: 0 auto; }
+
+/* MAIN */
+.page-main { max-width: 1160px; margin: 0 auto; padding: 0 2rem 5rem; }
+.section-header { display: flex; align-items: center; gap: 1rem; margin: 3rem 0 1.5rem; }
+.section-number { width: 30px; height: 30px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; font-size: 0.9rem; font-weight: bold; color: var(--navy-dark); flex-shrink: 0; }
+.section-header h2 { font-family: 'DM Serif Display', serif; font-size: 1.55rem; color: var(--navy-dark); }
+
+/* INSTRUCTIONS */
+.instructions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem; }
+.instr-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 8px; padding: 1.4rem 1.5rem; }
+.instr-card h3 { font-family: 'DM Serif Display', serif; color: var(--navy); font-size: 1rem; margin-bottom: 0.65rem; padding-bottom: 0.45rem; border-bottom: 2px solid var(--gold); }
+.instr-card p, .instr-card li { font-size: 0.875rem; color: var(--text); margin-bottom: 0.35rem; }
+.instr-card ol { padding-left: 1.15rem; }
+.instr-card ul { padding-left: 1.1rem; list-style: disc; }
+.instr-card li { margin-bottom: 0.28rem; }
+.chain-flow { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; margin-top: 0.7rem; }
+.chain-pill { background: var(--navy-dark); color: var(--gold); font-size: 0.7rem; font-weight: 600; padding: 0.22rem 0.65rem; border-radius: 100px; }
+.chain-arrow { color: var(--text-muted); font-size: 0.8rem; }
+.chain-note { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.6rem; }
+
+/* PROMPTS */
+.prompts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.15rem; }
+.prompt-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 10px; padding: 1.2rem 1.4rem; transition: box-shadow 0.2s, border-color 0.2s; }
+.prompt-card:hover { box-shadow: 0 4px 18px rgba(10,52,118,0.1); border-color: var(--navy); }
+.prompt-card-header { display: flex; align-items: flex-start; gap: 0.7rem; margin-bottom: 0.7rem; }
+.prompt-badge { width: 27px; height: 27px; background: var(--navy-dark); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; font-size: 0.82rem; color: var(--gold); flex-shrink: 0; margin-top: 2px; }
+.prompt-name { font-family: 'DM Serif Display', serif; font-size: 1rem; color: var(--navy-dark); margin-bottom: 0.12rem; }
+.prompt-tag { font-size: 0.67rem; color: var(--text-muted); font-weight: 600; letter-spacing: 0.05em; }
+.prompt-text { background: var(--off-white); border: 1px solid var(--border); border-radius: 5px; padding: 0.8rem 0.9rem; font-size: 0.8rem; color: var(--text); line-height: 1.55; margin-bottom: 0.7rem; }
+.copy-btn { display: inline-flex; align-items: center; gap: 0.35rem; background: none; border: 1.5px solid var(--border); border-radius: 5px; padding: 0.3rem 0.8rem; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: all 0.2s; font-family: 'DM Sans', sans-serif; }
+.copy-btn:hover { border-color: var(--navy); color: var(--navy); }
+.copy-btn.copied { border-color: #16a34a; color: #16a34a; }
+
+/* DECK VIEWER */
+.deck-wrapper { background: #111827; border-radius: 12px; padding: 1.4rem; }
+.slide-stage { width: 100%; max-width: 900px; margin: 0 auto; aspect-ratio: 16 / 9; position: relative; overflow: hidden; border-radius: 3px; box-shadow: 0 10px 48px rgba(0,0,0,0.55); }
+.slide { position: absolute; inset: 0; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+.slide.active { opacity: 1; pointer-events: auto; }
+.slide-nav { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1rem; }
+.nav-btn { background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.18); color: white; border-radius: 5px; padding: 0.38rem 1rem; cursor: pointer; font-size: 0.82rem; font-family: 'DM Sans', sans-serif; transition: background 0.2s; }
+.nav-btn:hover { background: rgba(255,255,255,0.18); }
+.nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.slide-counter { color: rgba(255,255,255,0.6); font-size: 0.8rem; min-width: 80px; text-align: center; }
+.nav-dots { display: flex; gap: 0.4rem; align-items: center; }
+.nav-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.28); cursor: pointer; transition: background 0.2s; }
+.nav-dot.active { background: var(--gold); }
+
+/* ============================
+   CONSULTING SLIDE STYLES
+   (Georgia serif / hairline borders / McKinsey aesthetic)
+   ============================ */
+.slide * { box-sizing: border-box; }
+
+/* SLIDE 1: dark title */
+.s1 { background: #071f4a; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: center; }
+.s1-gold-bar { position: absolute; left: 0; top: 0; bottom: 0; width: 7px; background: #FCB040; }
+.s1-deco1 { position: absolute; right: -50px; top: -50px; width: 260px; height: 260px; border-radius: 50%; border: 36px solid rgba(252,176,64,0.055); }
+.s1-deco2 { position: absolute; right: 130px; bottom: -60px; width: 170px; height: 170px; border-radius: 50%; border: 24px solid rgba(252,176,64,0.04); }
+.s1-body { padding: 2.8rem 3rem 2.8rem 3.8rem; position: relative; z-index: 1; }
+.s1-label { font-family: 'DM Sans', sans-serif; font-size: 0.55rem; font-weight: 700; letter-spacing: 0.2em; color: #FCB040; margin-bottom: 1.1rem; }
+.s1-title { font-family: Georgia, 'Times New Roman', serif; font-size: 2.25rem; font-weight: bold; color: #ffffff; line-height: 1.15; margin-bottom: 0.8rem; }
+.s1-subtitle { font-family: 'DM Sans', sans-serif; font-size: 0.95rem; color: #FCB040; font-style: italic; margin-bottom: 1.6rem; }
+.s1-stat-box { display: inline-flex; align-items: baseline; gap: 0.45rem; border: 1px solid rgba(252,176,64,0.35); padding: 0.45rem 0.9rem; border-radius: 2px; }
+.s1-stat-label { font-family: 'DM Sans', sans-serif; font-size: 0.65rem; color: #9bafd0; }
+.s1-stat-value { font-family: Georgia, serif; font-size: 1.1rem; font-weight: bold; color: #ffffff; }
+
+/* SHARED CONTENT SLIDES */
+.cs { background: #ffffff; display: flex; flex-direction: column; }
+.cs-topbar { height: 5px; background: #071f4a; flex-shrink: 0; }
+.cs-body { flex: 1; padding: 0.65rem 1.4rem 0.45rem; display: flex; flex-direction: column; overflow: hidden; }
+.cs-title { font-family: Georgia, 'Times New Roman', serif; font-size: 1.12rem; font-weight: bold; color: #071f4a; line-height: 1.2; margin-bottom: 0.18rem; }
+.cs-sub { font-family: 'DM Sans', sans-serif; font-size: 0.58rem; color: #5a6680; font-style: italic; margin-bottom: 0.5rem; }
+.cs-src { font-family: 'DM Sans', sans-serif; font-size: 0.5rem; color: #5a6680; font-style: italic; margin-top: auto; padding-top: 0.25rem; }
+
+/* SLIDE 2: bar chart */
+.s2-layout { display: flex; gap: 0.85rem; flex: 1; overflow: hidden; }
+.s2-chart { flex: 1; display: flex; flex-direction: column; justify-content: center; padding-top: 0.6rem; }
+.bar-row { display: flex; align-items: center; margin-bottom: 0.55rem; gap: 0.4rem; }
+.bar-lbl { font-family: 'DM Sans', sans-serif; font-size: 0.57rem; color: #1a1a2e; width: 128px; flex-shrink: 0; text-align: right; }
+.bar-track { flex: 1; height: 20px; background: #eef0f7; border-radius: 1px; position: relative; overflow: visible; }
+.bar-fill { height: 100%; display: flex; align-items: center; justify-content: flex-end; padding-right: 5px; font-family: 'DM Sans', sans-serif; font-size: 0.58rem; font-weight: 700; color: white; border-radius: 1px; }
+.bar-fill.low { justify-content: flex-start; padding-left: 5px; color: #5a6680; padding-right: 0; }
+.s2-callouts { width: 185px; flex-shrink: 0; display: flex; flex-direction: column; gap: 0.4rem; }
+.cbox { padding: 0.55rem 0.65rem; border-radius: 2px; }
+.cbox-v { font-family: Georgia, serif; font-size: 1.35rem; font-weight: bold; line-height: 1; margin-bottom: 0.2rem; }
+.cbox-t { font-family: 'DM Sans', sans-serif; font-size: 0.55rem; line-height: 1.4; }
+
+/* SLIDE 3: phases */
+.s3-phases { display: flex; gap: 0.45rem; flex: 1; margin-bottom: 0.45rem; }
+.s3-phase { flex: 1; padding: 0.6rem 0.55rem; border-radius: 2px; }
+.ph-num { font-family: Georgia, serif; font-size: 1.35rem; font-weight: bold; color: #FCB040; line-height: 1; margin-bottom: 0.18rem; }
+.ph-name { font-family: 'DM Sans', sans-serif; font-size: 0.5rem; font-weight: 700; letter-spacing: 0.1em; color: white; padding-bottom: 0.28rem; border-bottom: 1px solid rgba(252,176,64,0.35); margin-bottom: 0.3rem; }
+.ph-items { list-style: none; padding: 0; }
+.ph-items li { font-family: 'DM Sans', sans-serif; font-size: 0.55rem; color: #c8d4e8; margin-bottom: 0.18rem; padding-left: 0.55rem; position: relative; }
+.ph-items li::before { content: '—'; position: absolute; left: 0; color: rgba(252,176,64,0.4); font-size: 0.45rem; top: 2px; }
+.s3-footer { display: flex; background: #f7f8fc; border: 0.5px solid #e2e7f5; border-radius: 2px; }
+.s3-fi { flex: 1; padding: 0.35rem 0.55rem; border-right: 0.5px solid #e2e7f5; }
+.s3-fi:last-child { border-right: none; }
+.s3-fl { font-family: 'DM Sans', sans-serif; font-size: 0.46rem; font-weight: 700; letter-spacing: 0.08em; color: #5a6680; margin-bottom: 0.12rem; }
+.s3-fv { font-family: Georgia, serif; font-size: 0.8rem; font-weight: bold; color: #071f4a; }
+
+/* SLIDE 4: table */
+.s4-tw { flex: 1; overflow: hidden; margin-bottom: 0.4rem; }
+.s4-tbl { width: 100%; border-collapse: collapse; font-family: 'DM Sans', sans-serif; font-size: 0.57rem; }
+.s4-tbl th { background: #071f4a; color: white; font-weight: 600; padding: 0.28rem 0.45rem; text-align: left; border: 0.5px solid rgba(255,255,255,0.1); font-size: 0.57rem; }
+.s4-tbl td { padding: 0.27rem 0.45rem; border: 0.5px solid #e2e7f5; vertical-align: top; line-height: 1.38; color: #1a1a2e; }
+.s4-tbl .ph-a td { background: #eef2ff; }
+.s4-tbl .ph-b td { background: #ffffff; }
+.s4-tbl .ph-c td { background: #eef2ff; }
+.ph-cell { font-weight: 700; color: #0A3476; font-family: Georgia, serif; }
+.s4-metrics { display: flex; gap: 0.4rem; }
+.s4-met { flex: 1; padding: 0.38rem 0.55rem; border-radius: 2px; }
+.s4-mv { font-family: Georgia, serif; font-size: 0.95rem; font-weight: bold; color: #FCB040; line-height: 1; }
+.s4-ml { font-family: 'DM Sans', sans-serif; font-size: 0.48rem; color: rgba(255,255,255,0.85); margin-top: 0.12rem; }
+
+/* SLIDE 5: recommendations */
+.s5-items { flex: 1; display: flex; flex-direction: column; gap: 0.3rem; }
+.s5-item { display: flex; align-items: flex-start; gap: 0.55rem; padding-bottom: 0.3rem; border-bottom: 0.5px solid #e2e7f5; }
+.s5-item:last-child { border-bottom: none; }
+.s5-num { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: Georgia, serif; font-size: 0.7rem; font-weight: bold; color: #FCB040; flex-shrink: 0; margin-top: 1px; }
+.s5-ttl { font-family: Georgia, serif; font-size: 0.7rem; font-weight: bold; color: #071f4a; margin-bottom: 0.08rem; }
+.s5-det { font-family: 'DM Sans', sans-serif; font-size: 0.57rem; color: #1a1a2e; line-height: 1.42; }
+.s5-tw { background: #FCB040; padding: 0.4rem 0.7rem; border-radius: 2px; font-family: 'DM Sans', sans-serif; font-size: 0.58rem; font-weight: 600; color: #071f4a; line-height: 1.42; margin-top: 0.25rem; }
+
+/* DOWNLOAD */
+.download-bar { background: var(--white); border: 1.5px solid var(--border); border-radius: 10px; padding: 1.2rem 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1.5rem; }
+.download-info h3 { font-family: 'DM Serif Display', serif; color: var(--navy-dark); margin-bottom: 0.22rem; font-size: 1rem; }
+.download-info p { font-size: 0.83rem; color: var(--text-muted); }
+.dl-btn { display: inline-flex; align-items: center; gap: 0.45rem; background: var(--navy-dark); color: var(--gold); border: none; border-radius: 6px; padding: 0.6rem 1.2rem; font-size: 0.87rem; font-weight: 600; cursor: pointer; text-decoration: none; font-family: 'DM Sans', sans-serif; transition: background 0.2s; }
+.dl-btn:hover { background: var(--navy); }
+
+/* FOOTER */
+.site-footer { background: var(--navy-dark); color: var(--pale-navy); text-align: center; padding: 1.4rem 2rem; font-size: 0.78rem; margin-top: 4rem; }
+.site-footer a { color: var(--gold-light); text-decoration: none; }
+
+@media (max-width: 760px) {
+  .instructions-grid, .prompts-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 1.75rem; }
+  .header-nav { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div style="display:flex;align-items:center;gap:0.65rem">
+      <div class="logo-mark">T</div>
+      <div class="logo-text">TCEA <em>Professional Development</em></div>
+    </div>
+    <nav class="header-nav">
+      <a href="#instructions">Instructions</a>
+      <a href="#prompts">Prompts</a>
+      <a href="#deck">Slide Deck</a>
+      <a href="#download">Download</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-label">PRESENTATION BLUEPRINT SYSTEM</div>
+  <h1>Seven Prompts for <em>Consulting-Grade</em> Presentations</h1>
+  <p>Precision-crafted for reasoning AI models. Apply them to build high-density, data-driven presentations that look and read like strategy firm deliverables.</p>
+</div>
+
+<main class="page-main">
+
+  <!-- SECTION 1: INSTRUCTIONS -->
+  <div class="section-header" id="instructions">
+    <div class="section-number">1</div>
+    <h2>Project Instructions</h2>
+  </div>
+
+  <div class="instructions-grid">
+    <div class="instr-card">
+      <h3>What This System Does</h3>
+      <p>The Presentation Blueprint System gives you seven prompts designed for reasoning-capable AI models — Claude, GPT-4o, Gemini Advanced, and similar tools. Each prompt targets a distinct phase of presentation creation: architecture, content, design, and refinement.</p>
+      <p style="margin-top:0.65rem">The sample slide deck below shows what these prompts produce when applied to video-based instructional coaching and micro-teaching, rendered in a McKinsey/BCG consulting aesthetic.</p>
+    </div>
+    <div class="instr-card">
+      <h3>How to Use These Prompts</h3>
+      <ol>
+        <li>Pick the prompt that matches your current phase</li>
+        <li>Replace bracketed placeholders with your topic, audience, and constraints</li>
+        <li>Add a brief context block before the prompt — audience, session length, and key message</li>
+        <li>Ask the model to reason through the structure before generating</li>
+        <li>Use multiple prompts in sequence for the best results</li>
+      </ol>
+    </div>
+    <div class="instr-card">
+      <h3>Recommended Chain for Reasoning AI</h3>
+      <p>Use this sequence when building a presentation from scratch:</p>
+      <div class="chain-flow">
+        <span class="chain-pill">Architect</span><span class="chain-arrow">→</span>
+        <span class="chain-pill">Spine Builder</span><span class="chain-arrow">→</span>
+        <span class="chain-pill">Synthesizer</span><span class="chain-arrow">→</span>
+        <span class="chain-pill">Clarity Distiller</span><span class="chain-arrow">→</span>
+        <span class="chain-pill">Resonance Refiner</span>
+      </div>
+      <p class="chain-note">For visual work, add The Visual Intelligence Director after the Synthesizer step.</p>
+    </div>
+    <div class="instr-card">
+      <h3>Tips for Reasoning AI Models</h3>
+      <p>These prompts are optimized for models that think before responding. They work best when you:</p>
+      <ul style="margin-top:0.4rem">
+        <li>Ask the model to state its reasoning before generating</li>
+        <li>Provide a concrete audience description, not a generic one</li>
+        <li>Iterate — use The Clarity Distiller on any output that feels too wordy</li>
+        <li>Use The Resonance Refiner as the final pass before designing</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 2: PROMPTS -->
+  <div class="section-header" id="prompts">
+    <div class="section-number">2</div>
+    <h2>Seven Sample Prompts</h2>
+  </div>
+
+  <div class="prompts-grid">
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div class="prompt-badge">1</div>
+        <div>
+          <div class="prompt-name">The Presentation Architect</div>
+          <div class="prompt-tag">BLUEPRINT · STRUCTURE · REASONING</div>
+        </div>
+      </div>
+      <div class="prompt-text">You are a senior presentation consultant. Before generating any slides, reason through the structure explicitly: define the objective, target audience, key message, and logical flow. Then produce a complete presentation blueprint for [topic] that includes: the central argument, a slide-by-slide outline with purpose statements, and a note on what the audience should believe or do differently after viewing it. Think step by step before you produce the outline.</div>
+      <button class="copy-btn" onclick="copyPrompt(this)">&#x2398; Copy prompt</button>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div class="prompt-badge">2</div>
+        <div>
+          <div class="prompt-name">The Narrative Spine Builder</div>
+          <div class="prompt-tag">SLIDE FLOW · ARGUMENT · STRUCTURE</div>
+        </div>
+      </div>
+      <div class="prompt-text">Design a slide-by-slide structure for a presentation on [topic]. Before writing the structure, identify the core narrative tension — the gap between where the audience is and where you need them to be. For each slide, specify: (1) the slide title, (2) the single purpose of that slide, (3) the one question it answers, and (4) how it connects to the next slide. The presentation should flow as a continuous argument, not a collection of topics.</div>
+      <button class="copy-btn" onclick="copyPrompt(this)">&#x2398; Copy prompt</button>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div class="prompt-badge">3</div>
+        <div>
+          <div class="prompt-name">The Deep Content Synthesizer</div>
+          <div class="prompt-tag">FULL CONTENT · BULLETS · SPEAKER NOTES</div>
+        </div>
+      </div>
+      <div class="prompt-text">Generate full presentation-ready content for each slide of a deck on [topic]. For each slide, write: one clear headline statement (not a topic label), three to five tight bullet points that support the headline, one concrete data point or example, and a brief speaker note. Audience: [describe audience]. Before writing, state the key insight each slide must land and explain why that ordering matters.</div>
+      <button class="copy-btn" onclick="copyPrompt(this)">&#x2398; Copy prompt</button>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div class="prompt-badge">4</div>
+        <div>
+          <div class="prompt-name">The Arc Weaver</div>
+          <div class="prompt-tag">STORY · NARRATIVE · HOOK</div>
+        </div>
+      </div>
+      <div class="prompt-text">Turn [topic] into a compelling presentation using a clear narrative arc: hook → problem → key insight → solution → call to action. Before drafting, identify: the strongest emotional or intellectual hook, the most counterintuitive insight in your material, and the single action you want the audience to take. Build each slide to serve the narrative, not just convey information.</div>
+      <button class="copy-btn" onclick="copyPrompt(this)">&#x2398; Copy prompt</button>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div class="prompt-badge">5</div>
+        <div>
+          <div class="prompt-name">The Visual Intelligence Director</div>
+          <div class="prompt-tag">DESIGN · LAYOUT · VISUALIZATION</div>
+        </div>
+      </div>
+      <div class="prompt-text">Provide professional visual and design direction for each slide of a presentation on [topic]. For each slide, recommend: the ideal layout type (two-column, split image, data callout, process diagram, etc.), the specific chart or diagram type if data is present, the dominant visual element and why it supports the message, and a typographic hierarchy note. Prioritize designs that work at a 10-foot reading distance and reduce cognitive load.</div>
+      <button class="copy-btn" onclick="copyPrompt(this)">&#x2398; Copy prompt</button>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div class="prompt-badge">6</div>
+        <div>
+          <div class="prompt-name">The Clarity Distiller</div>
+          <div class="prompt-tag">EDITING · SIMPLIFICATION · SHARPENING</div>
+        </div>
+      </div>
+      <div class="prompt-text">Review the following presentation content and rewrite it to be slide-ready. For each slide, apply these rules: (1) the title must be a complete insight statement, not a topic label; (2) each bullet must be one idea in ten words or fewer; (3) no slide should contain more than three to four bullet points; and (4) every number must earn its place. Output the rewritten version with a brief note on what you changed and why. Content: [paste content]</div>
+      <button class="copy-btn" onclick="copyPrompt(this)">&#x2398; Copy prompt</button>
+    </div>
+
+    <div class="prompt-card" style="grid-column: 1 / -1; max-width: 50%; justify-self: start;">
+      <div class="prompt-card-header">
+        <div class="prompt-badge">7</div>
+        <div>
+          <div class="prompt-name">The Resonance Refiner</div>
+          <div class="prompt-tag">FLOW · TRANSITIONS · IMPACT</div>
+        </div>
+      </div>
+      <div class="prompt-text">Improve the flow, transitions, and impact of this presentation. For each slide title, rewrite it as a confident, active-voice statement that advances the argument. Then review the transition between each pair of consecutive slides and write a one-sentence bridging note a presenter could say aloud. Finally, identify the three slides with the weakest impact and suggest specific improvements. Content: [paste content]</div>
+      <button class="copy-btn" onclick="copyPrompt(this)">&#x2398; Copy prompt</button>
+    </div>
+
+  </div>
+
+  <!-- SECTION 3: SLIDE DECK -->
+  <div class="section-header" id="deck">
+    <div class="section-number">3</div>
+    <h2>Sample Slide Deck: Instructional Coaching via Micro-Teaching</h2>
+  </div>
+  <p style="font-size:0.875rem;color:var(--text-muted);margin-bottom:1rem">Five slides in McKinsey/BCG consulting style — Georgia serif headlines, hairline table borders, a horizontal bar chart, and TCEA brand colors. Use arrow keys or the buttons below to navigate.</p>
+
+  <div class="deck-wrapper">
+    <div class="slide-stage" id="slideStage">
+
+      <!-- SLIDE 1 -->
+      <div class="slide s1 active" data-index="0">
+        <div class="s1-deco1"></div><div class="s1-deco2"></div>
+        <div class="s1-gold-bar"></div>
+        <div class="s1-body">
+          <div class="s1-label">TCEA PROFESSIONAL DEVELOPMENT · 2026</div>
+          <h1 class="s1-title">Instructional Coaching<br>Through Video-Based Practice</h1>
+          <p class="s1-subtitle">A Strategic Framework for High-Impact Teacher Development</p>
+          <div class="s1-stat-box">
+            <span class="s1-stat-label">Hattie Effect Size:</span>
+            <span class="s1-stat-value">d = 0.88</span>
+            <span class="s1-stat-label">for Micro-Teaching</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 2 -->
+      <div class="slide cs" data-index="1">
+        <div class="cs-topbar"></div>
+        <div class="cs-body">
+          <h2 class="cs-title">Video-Based Coaching Delivers Measurable Learning Gains</h2>
+          <p class="cs-sub">Hattie Effect Size Comparison — Professional Development Modalities (d &gt; 0.40 = high-impact threshold)</p>
+          <div class="s2-layout">
+            <div class="s2-chart">
+              <div class="bar-row">
+                <div class="bar-lbl">Micro-Teaching</div>
+                <div class="bar-track">
+                  <div class="bar-fill" style="width:100%;background:#071f4a">0.88</div>
+                </div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-lbl">Feedback Loops</div>
+                <div class="bar-track">
+                  <div class="bar-fill" style="width:84%;background:#0A3476">0.74</div>
+                </div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-lbl">Instructional Coaching</div>
+                <div class="bar-track">
+                  <div class="bar-fill" style="width:58%;background:#12428f">0.51</div>
+                </div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-lbl">Peer Observation</div>
+                <div class="bar-track">
+                  <div class="bar-fill" style="width:50%;background:#2e5090">0.44</div>
+                </div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-lbl">Traditional Workshops</div>
+                <div class="bar-track">
+                  <div class="bar-fill low" style="width:12.5%;background:#8a9bb0">0.11</div>
+                </div>
+              </div>
+              <div style="margin-top:0.5rem;font-family:'DM Sans',sans-serif;font-size:0.5rem;color:#5a6680">
+                <span style="display:inline-block;width:10px;height:2px;background:#FCB040;vertical-align:middle;margin-right:4px"></span>
+                d = 0.40 high-impact threshold (Hattie, 2023)
+              </div>
+            </div>
+            <div class="s2-callouts">
+              <div class="cbox" style="background:#071f4a">
+                <div class="cbox-v" style="color:#FCB040">0.88</div>
+                <div class="cbox-t" style="color:white">Micro-teaching effect size — nearly double the high-impact threshold</div>
+              </div>
+              <div class="cbox" style="background:#0A3476">
+                <div class="cbox-v" style="color:#FCB040">4×</div>
+                <div class="cbox-t" style="color:white">Greater impact than a traditional professional development workshop</div>
+              </div>
+              <div class="cbox" style="background:#f7f8fc;border:0.5px solid #e2e7f5">
+                <div class="cbox-v" style="color:#0A3476;font-size:0.85rem">Zone</div>
+                <div class="cbox-t" style="color:#1a1a2e">Effect sizes above 0.40 produce visible student learning gains (Hattie, 2023)</div>
+              </div>
+            </div>
+          </div>
+          <p class="cs-src">Source: Hattie, J. (2023). Visible Learning MetaX. Effect sizes from 2023 synthesis of 1,000+ meta-analyses.</p>
+        </div>
+      </div>
+
+      <!-- SLIDE 3 -->
+      <div class="slide cs" data-index="2">
+        <div class="cs-topbar"></div>
+        <div class="cs-body">
+          <h2 class="cs-title">The EIIR Video Analysis Cycle: From Capture to Growth</h2>
+          <p class="cs-sub">Four phases — anchored to the TCEA EIIR Coaching Cycle — guide teachers from observation goal to measurable student impact</p>
+          <div class="s3-phases">
+            <div class="s3-phase" style="background:#071f4a">
+              <div class="ph-num">01</div>
+              <div class="ph-name">ENGAGE</div>
+              <ul class="ph-items">
+                <li>Identify one focus strategy</li>
+                <li>Establish baseline data</li>
+                <li>Set observation goal</li>
+              </ul>
+            </div>
+            <div class="s3-phase" style="background:#0A3476">
+              <div class="ph-num">02</div>
+              <div class="ph-name">INVESTIGATE</div>
+              <ul class="ph-items">
+                <li>Record classroom video</li>
+                <li>Annotate key moments</li>
+                <li>Analyze patterns</li>
+              </ul>
+            </div>
+            <div class="s3-phase" style="background:#12428f">
+              <div class="ph-num">03</div>
+              <div class="ph-name">IMPLEMENT</div>
+              <ul class="ph-items">
+                <li>Apply targeted adjustments</li>
+                <li>Practice revised strategies</li>
+                <li>Collect student evidence</li>
+              </ul>
+            </div>
+            <div class="s3-phase" style="background:#1e5c9c">
+              <div class="ph-num">04</div>
+              <div class="ph-name">REFLECT</div>
+              <ul class="ph-items">
+                <li>Measure student impact</li>
+                <li>Review video evidence</li>
+                <li>Plan the next cycle</li>
+              </ul>
+            </div>
+          </div>
+          <div class="s3-footer">
+            <div class="s3-fi"><div class="s3-fl">DURATION</div><div class="s3-fv">2–4 weeks</div></div>
+            <div class="s3-fi"><div class="s3-fl">VIDEO LENGTH</div><div class="s3-fv">10–15 min</div></div>
+            <div class="s3-fi"><div class="s3-fl">COACHING SESSIONS</div><div class="s3-fv">Two per cycle</div></div>
+            <div class="s3-fi"><div class="s3-fl">TARGET EFFECT SIZE</div><div class="s3-fv">d &gt; 0.40</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 4 -->
+      <div class="slide cs" data-index="3">
+        <div class="cs-topbar"></div>
+        <div class="cs-body">
+          <h2 class="cs-title">12-Week Micro-Teaching Implementation Roadmap</h2>
+          <p class="cs-sub">Three phases align teacher activity, coaching support, and measurable success criteria across the full cycle</p>
+          <div class="s4-tw">
+            <table class="s4-tbl">
+              <thead>
+                <tr>
+                  <th style="width:11%">Phase</th>
+                  <th style="width:7%;text-align:center">Weeks</th>
+                  <th style="width:28%">Teacher Activity</th>
+                  <th style="width:28%">Coach Activity</th>
+                  <th style="width:26%">Success Metric</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="ph-a">
+                  <td class="ph-cell">Foundation</td>
+                  <td style="text-align:center;font-weight:700;color:#0A3476">1–4</td>
+                  <td>Identify one high-priority strategy; establish video baseline; select observation protocol</td>
+                  <td>Conduct needs assessment; co-create observation tool; review baseline video with teacher</td>
+                  <td style="font-style:italic;font-size:0.52rem">Baseline video captured; focus strategy confirmed; protocol agreed upon</td>
+                </tr>
+                <tr class="ph-b">
+                  <td class="ph-cell" style="color:#12428f">Practice</td>
+                  <td style="text-align:center;font-weight:700;color:#12428f">5–8</td>
+                  <td>Record two micro-lessons; annotate and self-assess with protocol; adjust between sessions</td>
+                  <td>Analyze videos with teacher; provide structured feedback; model targeted strategies</td>
+                  <td style="font-style:italic;font-size:0.52rem">70%+ of protocol criteria met by session four recording</td>
+                </tr>
+                <tr class="ph-a">
+                  <td class="ph-cell">Mastery</td>
+                  <td style="text-align:center;font-weight:700;color:#0A3476">9–12</td>
+                  <td>Lead peer review of own video; present evidence of student impact to colleagues</td>
+                  <td>Facilitate collegial rounds; connect strategy data to student achievement outcomes</td>
+                  <td style="font-style:italic;font-size:0.52rem">Measurable gain in student engagement or achievement data</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="s4-metrics">
+            <div class="s4-met" style="background:#071f4a"><div class="s4-mv">Six</div><div class="s4-ml">Video sessions per teacher</div></div>
+            <div class="s4-met" style="background:#0A3476"><div class="s4-mv">88%</div><div class="s4-ml">Avg. teacher retention rate</div></div>
+            <div class="s4-met" style="background:#12428f"><div class="s4-mv">0.88</div><div class="s4-ml">Average effect size (Hattie)</div></div>
+            <div class="s4-met" style="background:#1e5c9c"><div class="s4-mv">12 wks</div><div class="s4-ml">Full implementation cycle</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 5 -->
+      <div class="slide cs" data-index="4">
+        <div class="cs-topbar"></div>
+        <div class="cs-body">
+          <h2 class="cs-title">Five Conditions for Sustained Video Coaching Impact</h2>
+          <p class="cs-sub">Research confirms these five conditions separate high-growth programs from low-impact ones</p>
+          <div class="s5-items">
+            <div class="s5-item">
+              <div class="s5-num" style="background:#071f4a">1</div>
+              <div><div class="s5-ttl">Psychological Safety</div><div class="s5-det">Teachers who feel safe sharing imperfect practice show 2.3x greater growth than those who do not (Knight, 2022).</div></div>
+            </div>
+            <div class="s5-item">
+              <div class="s5-num" style="background:#0A3476">2</div>
+              <div><div class="s5-ttl">Structured Protocol</div><div class="s5-det">Observation protocols anchored to one or two look-fors outperform open-ended review in measurable strategy adoption.</div></div>
+            </div>
+            <div class="s5-item">
+              <div class="s5-num" style="background:#12428f">3</div>
+              <div><div class="s5-ttl">Student Evidence Linkage</div><div class="s5-det">Coaching cycles that connect video analysis directly to student work samples produce effect sizes above d = 0.60.</div></div>
+            </div>
+            <div class="s5-item">
+              <div class="s5-num" style="background:#1e5c9c">4</div>
+              <div><div class="s5-ttl">Teacher Agency</div><div class="s5-det">Teachers who select their own focus area and co-design the observation tool show higher implementation fidelity.</div></div>
+            </div>
+            <div class="s5-item">
+              <div class="s5-num" style="background:#2e5090">5</div>
+              <div><div class="s5-ttl">Administrative Support</div><div class="s5-det">Principals who view at least one annotated video per cycle report 40% stronger teacher buy-in schoolwide.</div></div>
+            </div>
+          </div>
+          <div class="s5-tw">Key Insight: When all five conditions are present, micro-teaching produces effect sizes consistent with the top 10% of all instructional interventions in Hattie's synthesis.</div>
+        </div>
+      </div>
+
+    </div><!-- end slide-stage -->
+
+    <div class="slide-nav">
+      <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" disabled>← Previous</button>
+      <div class="nav-dots" id="navDots"></div>
+      <span class="slide-counter" id="slideCounter">Slide 1 of 5</span>
+      <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+    </div>
+  </div>
+
+  <!-- DOWNLOAD -->
+  <div id="download">
+    <div class="download-bar">
+      <div class="download-info">
+        <h3>Download the PowerPoint Deck</h3>
+        <p>The same five slides in editable .pptx format — Georgia headlines, hairline table borders, a bar chart, and TCEA brand colors.</p>
+      </div>
+      <a href="instructional-coaching-deck.pptx" class="dl-btn" download>
+        ↓ Download .pptx
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <p>Presentation Blueprint System — <strong style="color:var(--gold)">TCEA Professional Development</strong> · 2026 · <a href="https://tcea.org">tcea.org</a></p>
+</footer>
+
+<script>
+let cur = 0;
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+const dotsEl = document.getElementById('navDots');
+const counter = document.getElementById('slideCounter');
+const prev = document.getElementById('prevBtn');
+const next = document.getElementById('nextBtn');
+
+for (let i = 0; i < total; i++) {
+  const d = document.createElement('div');
+  d.className = 'nav-dot' + (i === 0 ? ' active' : '');
+  d.onclick = () => go(i);
+  dotsEl.appendChild(d);
+}
+
+function go(idx) {
+  slides[cur].classList.remove('active');
+  dotsEl.children[cur].classList.remove('active');
+  cur = idx;
+  slides[cur].classList.add('active');
+  dotsEl.children[cur].classList.add('active');
+  counter.textContent = 'Slide ' + (cur + 1) + ' of ' + total;
+  prev.disabled = cur === 0;
+  next.disabled = cur === total - 1;
+}
+
+function changeSlide(dir) {
+  const n = cur + dir;
+  if (n >= 0 && n < total) go(n);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') changeSlide(-1);
+});
+
+function copyPrompt(btn) {
+  const txt = btn.previousElementSibling.textContent;
+  navigator.clipboard.writeText(txt).then(() => {
+    btn.classList.add('copied');
+    btn.textContent = '✓ Copied';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.textContent = '⎘ Copy prompt';
+    }, 2000);
+  });
+}
+</script>
+</body>
+</html>
