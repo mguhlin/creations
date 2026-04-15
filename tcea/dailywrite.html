@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Quick Write Generator | TCEA Inspired</title>
+    <style>
+        :root {
+            --tcea-blue: #003366;
+            --tcea-gold: #ffcc00;
+            --tcea-light-blue: #004d99;
+            --bg-gray: #f4f7f9;
+            --text-dark: #333;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-gray);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--tcea-blue);
+            color: var(--tcea-gold);
+            padding: 2rem 1rem;
+            text-align: center;
+            border-bottom: 5px solid var(--tcea-gold);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        header p {
+            margin: 0.5rem 0 0;
+            font-size: 1.1rem;
+            color: var(--white);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 1rem;
+            align-items: end;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            color: var(--tcea-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        select {
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        select:focus {
+            border-color: var(--tcea-blue);
+        }
+
+        button {
+            background-color: var(--tcea-blue);
+            color: var(--tcea-gold);
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: var(--tcea-light-blue);
+        }
+
+        .output-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .prompt-card {
+            background-color: #fff9e6;
+            border-left: 5px solid var(--tcea-gold);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .prompt-card h2 {
+            margin-top: 0;
+            color: var(--tcea-blue);
+            font-size: 1.2rem;
+            text-transform: uppercase;
+        }
+
+        .prompt-text {
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: #111;
+        }
+
+        .strategy-tag {
+            display: inline-block;
+            background: var(--tcea-blue);
+            color: var(--tcea-gold);
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .examples-table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th {
+            background-color: var(--tcea-blue);
+            color: var(--white);
+            text-align: left;
+            padding: 1rem;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
+        }
+
+        .grade-col {
+            font-weight: bold;
+            color: var(--tcea-blue);
+            width: 80px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        @media (max-width: 600px) {
+            .controls {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Quick Write Generator</h1>
+    <p>High-Impact Daily Reflection Tools</p>
+</header>
+
+<div class="container">
+    <div class="controls">
+        <div class="control-group">
+            <label for="grade">Select Grade Level</label>
+            <select id="grade">
+                <option value="2">Grade 2</option>
+                <option value="3">Grade 3</option>
+                <option value="4">Grade 4</option>
+                <option value="5">Grade 5</option>
+                <option value="6">Grade 6</option>
+                <option value="7">Grade 7</option>
+                <option value="8">Grade 8</option>
+                <option value="9">Grade 9</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <label for="subject">Content Area</label>
+            <select id="subject">
+                <option value="ELA">English Language Arts</option>
+                <option value="Math">Mathematics</option>
+                <option value="Science">Science</option>
+                <option value="Social Studies">Social Studies</option>
+            </select>
+        </div>
+        <button onclick="generatePrompt()">Generate Prompt</button>
+    </div>
+
+    <div id="output" class="output-section">
+        <div class="prompt-card">
+            <h2>Your Daily Quick Write</h2>
+            <div id="main-prompt" class="prompt-text"></div>
+            <div id="strategy-info" class="strategy-tag"></div>
+        </div>
+
+        <h3>Vertical Alignment Examples (Grades 2-9)</h3>
+        <p style="font-size: 0.9rem; color: #666;">How this prompt concept scales across development levels:</p>
+        <div class="examples-table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Grade</th>
+                        <th>Example Response / Scaling</th>
+                    </tr>
+                </thead>
+                <tbody id="examples-body">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<footer>
+    &copy; 2025 Instructional Strategy Generator | Grounded in Visible Learning Research
+</footer>
+
+<script>
+    const data = {
+        ELA: {
+            strategy: "Retrieval Practice (Effect Size: 0.49)",
+            base: "Without looking at your book, describe the most important decision a character made today. Why did they do it?",
+            scales: {
+                2: "Draw the character and write one word for their choice.",
+                3: "Write two sentences: what they did and if it was a good idea.",
+                4: "Identify the character's 'Turning Point' and list one piece of evidence.",
+                5: "Explain the character's motivation and how it changed the story's direction.",
+                6: "Analyze the character's internal conflict using the text as a guide.",
+                7: "Compare this decision to a real-world choice you or someone you know has made.",
+                8: "Evaluate the decision using a specific literary lens (e.g., social consequences).",
+                9: "Analyze how this specific choice reflects the broader theme of the novel."
+            }
+        },
+        Math: {
+            strategy: "Problem Solving (Effect Size: 0.88)",
+            base: "Explain the steps you took to solve the most difficult problem today. What was your 'aha!' moment?",
+            scales: {
+                2: "Show your work using a picture or counters.",
+                3: "Write the steps using 'First, Next, Last'.",
+                4: "Explain why you chose your specific operation (addition, mult, etc.).",
+                5: "Identify a mistake you almost made and how you caught it.",
+                6: "Teach your method to an imaginary student who is stuck on this step.",
+                7: "Connect today's math concept to a job (like a builder or chef).",
+                8: "Justify why your answer is reasonable using estimation.",
+                9: "Derive a general rule or shortcut from today's specific problem."
+            }
+        },
+        Science: {
+            strategy: "Prior Knowledge Activation (Effect Size: 0.93)",
+            base: "How does today's concept connect to something you have seen in the real world?",
+            scales: {
+                2: "Tell about a time you saw this at home or on the playground.",
+                3: "Predict what would happen if we changed one part of today's experiment.",
+                4: "Draw a diagram of the concept and label the parts you already knew.",
+                5: "Compare today's topic to a different system (like a machine or the body).",
+                6: "Formulate a 'What if?' question based on today's data.",
+                7: "Identify a common misconception someone might have about this topic.",
+                8: "Analyze how today's discovery changed the way people live their lives.",
+                9: "Propose a hypothesis for a new experiment based on your prior knowledge."
+            }
+        },
+        "Social Studies": {
+            strategy: "Argumentation & Critical Thinking (Effect Size: 0.86)",
+            base: "Take a stand: Was the event we studied today unavoidable? Support your claim with one reason.",
+            scales: {
+                2: "Was this fair or unfair? Write one reason why.",
+                3: "Imagine you were there. Would you have helped or stayed away?",
+                4: "List one 'Cause' and one 'Effect' of today's historical event.",
+                5: "Identify two different perspectives on the same event.",
+                6: "Analyze the primary source we used: Who wrote it and why?",
+                7: "Debate the long-term impact of this event on our world today.",
+                8: "Compare this historical conflict to a current event in the news.",
+                9: "Evaluate the ethics of the decisions made by the leaders we studied."
+            }
+        }
+    };
+
+    function generatePrompt() {
+        const grade = document.getElementById('grade').value;
+        const subject = document.getElementById('subject').value;
+        const output = document.getElementById('output');
+        const mainPrompt = document.getElementById('main-prompt');
+        const strategyInfo = document.getElementById('strategy-info');
+        const examplesBody = document.getElementById('examples-body');
+
+        const selectedData = data[subject];
+
+        // Update UI
+        mainPrompt.innerText = selectedData.base;
+        strategyInfo.innerText = "Strategy: " + selectedData.strategy;
+        
+        // Build Table
+        examplesBody.innerHTML = '';
+        for (let i = 2; i <= 9; i++) {
+            const row = document.createElement('tr');
+            if (i == grade) row.style.backgroundColor = '#fff9e6';
+            
+            row.innerHTML = `
+                <td class="grade-col">Grade ${i}</td>
+                <td>${selectedData.scales[i]}</td>
+            `;
+            examplesBody.appendChild(row);
+        }
+
+        output.style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
