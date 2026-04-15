@@ -37,7 +37,6 @@
 body { font-family: var(--font-sans); font-size: 15px; line-height: 1.5; color: var(--color-text-primary); background: var(--color-background-primary); }
 .wrapper { padding: 1.25rem; max-width: 1000px; margin: auto; }
 
-/* Progression bar */
 .progression-bar { display: flex; border: 1px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); overflow: hidden; margin-bottom: 1.25rem; }
 .prog-seg { flex: 1; padding: 10px; text-align: center; font-size: 12px; cursor: pointer; background: var(--color-background-secondary); border-right: 1px solid var(--color-border-tertiary); transition: 0.2s; }
 .prog-seg:last-child { border-right: none; }
@@ -45,7 +44,6 @@ body { font-family: var(--font-sans); font-size: 15px; line-height: 1.5; color: 
 .prog-seg.s-on.deep { background: #EEEDFE; color: #26215C; font-weight: 600; }
 .prog-seg.s-on.transfer { background: #FAECE7; color: #4A1B0C; font-weight: 600; }
 
-/* Tabs */
 .phase-tabs { display: flex; gap: 8px; margin-bottom: 1.25rem; }
 .tab-btn { flex: 1; padding: 12px; border: 1px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); cursor: pointer; font-size: 14px; color: var(--color-text-secondary); }
 .tab-btn.active { border-width: 2px; font-weight: 600; }
@@ -53,32 +51,26 @@ body { font-family: var(--font-sans); font-size: 15px; line-height: 1.5; color: 
 .tab-btn.t-deep.active { border-color: var(--accent-deep); color: #26215C; background: #EEEDFE; }
 .tab-btn.t-transfer.active { border-color: var(--accent-transfer); color: #4A1B0C; background: #FAECE7; }
 
-/* Panels */
 .panel { display: none; }
 .panel.active { display: block; }
 .panel-card { border-radius: var(--border-radius-lg); border: 1px solid var(--color-border-tertiary); background: var(--color-background-primary); overflow: hidden; }
 
-/* Headers */
 .panel-header { padding: 1.5rem; border-bottom: 1px solid var(--color-border-tertiary); }
 .phase-title { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
 
-/* Interactive SOLO Level */
 .solo-row { padding: 1rem 1.5rem; border-bottom: 1px solid var(--color-border-tertiary); background: var(--color-background-secondary); cursor: pointer; transition: background 0.2s; }
 .solo-row:hover { background: var(--color-border-tertiary); }
 .solo-details { display: none; padding-top: 10px; font-size: 14px; border-top: 1px dashed var(--color-border-secondary); margin-top: 10px; line-height: 1.6; }
 .solo-row.open .solo-details { display: block; }
 
-/* Strategy Chips */
 .strategy-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; padding: 1.5rem; }
 .strategy-chip { padding: 15px; border-radius: var(--border-radius-md); border: 1px solid var(--color-border-tertiary); background: var(--color-background-secondary); cursor: pointer; transition: 0.2s; position: relative; }
 .strategy-chip:hover { border-color: var(--color-border-primary); transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
 .chip-name { font-weight: 700; font-size: 15px; display: block; margin-bottom: 4px; }
 .chip-effect { font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 20px; text-transform: uppercase; }
 .content-box { display: none; margin-top: 12px; padding: 12px; background: var(--color-background-primary); border-left: 3px solid var(--color-border-primary); font-size: 13px; }
-.content-box strong { color: var(--color-text-primary); }
 .strategy-chip.open .content-box { display: block; }
 
-/* Color States */
 .es-surface { background: #D1FAE5; color: #065F46; }
 .es-deep { background: #EDE9FE; color: #4C1D95; }
 .es-transfer { background: #FEE2E2; color: #7F1D1D; }
@@ -104,14 +96,14 @@ body { font-family: var(--font-sans); font-size: 15px; line-height: 1.5; color: 
     <div class="panel-card">
       <div class="panel-header">
         <div class="phase-title" style="color: var(--accent-surface)">Phase 1: Surface Learning</div>
-        <p>This phase focuses on acquiring foundational facts and individual skills. Students learn the "parts" before they can see the "whole."</p>
+        <p>Acquire foundational knowledge and labels. Focus on the building blocks of the subject.</p>
       </div>
       
       <div class="solo-row" onclick="toggleSolo(this)">
         <strong>SOLO Levels: Uni-structural & Multi-structural (Click to view)</strong>
         <div class="solo-details">
-          <strong>Uni-structural:</strong> The student focuses on a single relevant aspect or fact (e.g., naming one planet).<br>
-          <strong>Multi-structural:</strong> The student identifies several relevant aspects but sees them as independent pieces (e.g., listing all planets without explaining their orbits or differences).
+          <strong>Uni-structural:</strong> Focusing on one relevant aspect (e.g., identifying a single character).<br>
+          <strong>Multi-structural:</strong> Identifying several relevant aspects independently (e.g., listing character traits without connecting them to plot).
         </div>
       </div>
 
@@ -120,32 +112,16 @@ body { font-family: var(--font-sans); font-size: 15px; line-height: 1.5; color: 
           <span class="chip-name">Jigsaw Method</span>
           <span class="chip-effect es-surface">d = 0.92</span>
           <div class="content-box">
-            <strong>Definition:</strong> A cooperative learning strategy where students become "experts" in one subtopic and teach it to their peers.<br><br>
-            <strong>Grade 3-6 Example:</strong> In a science unit on the Water Cycle, "Expert Group A" learns only about Evaporation, while Group B learns about Precipitation. They then return to their home groups to teach their specific term to their teammates.
-          </div>
-        </div>
-        <div class="strategy-chip" onclick="toggleExample(this)">
-          <span class="chip-name">Direct Instruction</span>
-          <span class="chip-effect es-surface">d = 0.56</span>
-          <div class="content-box">
-            <strong>Definition:</strong> Explicit teacher-led instruction that involves clear explanations, modeling, and guided practice.<br><br>
-            <strong>Grade 3-6 Example:</strong> A 4th-grade teacher uses an "I Do, We Do, You Do" approach to teach long division, modeling the steps on the board before students try three problems with a partner.
+            <strong>Definition:</strong> Students master a subtopic in expert groups and teach it to their home group.<br><br>
+            <strong>Example:</strong> In a 4th-grade geography lesson, each group learns about one specific landform (plateaus, valleys, etc.) to share with the class.
           </div>
         </div>
         <div class="strategy-chip" onclick="toggleExample(this)">
           <span class="chip-name">Spaced Practice</span>
           <span class="chip-effect es-surface">d = 0.62</span>
           <div class="content-box">
-            <strong>Definition:</strong> Breaking learning into shorter sessions over a long period rather than one long "massed" session.<br><br>
-            <strong>Grade 3-6 Example:</strong> Instead of a one-hour spelling marathon on Thursday, 3rd graders practice their spelling words for 10 minutes every morning for a week.
-          </div>
-        </div>
-        <div class="strategy-chip" onclick="toggleExample(this)">
-          <span class="chip-name">Retrieval Practice</span>
-          <span class="chip-effect es-surface">d = 0.49</span>
-          <div class="content-box">
-            <strong>Definition:</strong> Strengthening memory by forcing the brain to recall information without looking at notes.<br><br>
-            <strong>Grade 3-6 Example:</strong> After reading a chapter on the Gold Rush, 5th graders close their books and write down three things they remember on a sticky note.
+            <strong>Definition:</strong> Distributing learning over time rather than cramming into one session.<br><br>
+            <strong>Example:</strong> 3rd graders practice math facts for 5 minutes daily instead of one 25-minute block.
           </div>
         </div>
       </div>
@@ -156,39 +132,39 @@ body { font-family: var(--font-sans); font-size: 15px; line-height: 1.5; color: 
     <div class="panel-card">
       <div class="panel-header">
         <div class="phase-title" style="color: var(--accent-deep)">Phase 2: Deep Learning</div>
-        <p>This phase focuses on finding patterns and connecting ideas to build a deep conceptual understanding.</p>
+        <p>Connecting ideas to build conceptual understanding and seeing how the "parts" relate to each other.</p>
       </div>
 
       <div class="solo-row" onclick="toggleSolo(this)">
         <strong>SOLO Level: Relational (Click to view)</strong>
         <div class="solo-details">
-          <strong>Relational:</strong> The student integrates several parts into a coherent whole. They understand the relationship between different concepts (e.g., explaining how gravity affects planetary orbits).
+          <strong>Relational:</strong> Integrating several parts into a coherent whole. Understanding the "why" and "how" behind relationships.
         </div>
       </div>
 
       <div class="strategy-grid">
         <div class="strategy-chip" onclick="toggleExample(this)">
-          <span class="chip-name">Jigsaw Method (Deep)</span>
-          <span class="chip-effect es-deep">d = 0.92</span>
+          <span class="chip-name">Constructivist Teaching</span>
+          <span class="chip-effect es-deep">d = 0.90</span>
           <div class="content-box">
-            <strong>Definition:</strong> Using peer-teaching to not just share facts, but to synthesize how sub-topics relate to one another.<br><br>
-            <strong>Grade 3-6 Example:</strong> After the initial "fact-finding" jigsaw, students now work together to explain how Evaporation and Precipitation *work together* to sustain a local lake's water levels.
+            <strong>Definition:</strong> A learner-centered approach where students actively explore ideas to construction personal meaning.<br><br>
+            <strong>Example:</strong> 5th graders use a circuit kit to discover which materials are conductors or insulators through trial and error rather than being told.
           </div>
         </div>
         <div class="strategy-chip" onclick="toggleExample(this)">
-          <span class="chip-name">Argumentation</span>
-          <span class="chip-effect es-deep">d = 0.86</span>
+          <span class="chip-name">Feedback (Timing)</span>
+          <span class="chip-effect es-deep">d = 0.89</span>
           <div class="content-box">
-            <strong>Definition:</strong> Using evidence to construct and evaluate claims, fostering critical thinking and perspective-taking.<br><br>
-            <strong>Grade 3-6 Example:</strong> 6th graders hold a "Socratic Seminar" debating whether a historical figure was a hero or a villain, using specific quotes from their textbook to support their claim.
+            <strong>Definition:</strong> Providing insights at the most effective moment—delayed feedback often promotes deeper reflection for complex tasks.<br><br>
+            <strong>Example:</strong> A 6th-grade teacher provides feedback on an essay draft 24 hours later, allowing students time to re-read their own work with fresh eyes first.
           </div>
         </div>
         <div class="strategy-chip" onclick="toggleExample(this)">
-          <span class="chip-name">Concept Mapping</span>
-          <span class="chip-effect es-deep">d = 0.64</span>
+          <span class="chip-name">Elaboration and Organization</span>
+          <span class="chip-effect es-deep">d = 0.72</span>
           <div class="content-box">
-            <strong>Definition:</strong> Visualizing how ideas are linked using lines and arrows to show cause-and-effect or hierarchy.<br><br>
-            <strong>Grade 3-6 Example:</strong> Students create a web showing how "Climate," "Natural Resources," and "Jobs" were all connected in the development of the 13 Colonies.
+            <strong>Definition:</strong> Explaining ideas in detail, creating analogies, and arranging information logically/hierarchically.<br><br>
+            <strong>Example:</strong> 4th graders use a Venn Diagram to compare and contrast two different ecosystems (Tundra vs. Rainforest) to understand common survival traits.
           </div>
         </div>
       </div>
@@ -199,31 +175,39 @@ body { font-family: var(--font-sans); font-size: 15px; line-height: 1.5; color: 
     <div class="panel-card">
       <div class="panel-header">
         <div class="phase-title" style="color: var(--accent-transfer)">Phase 3: Transfer Learning</div>
-        <p>This phase is about taking what was learned in one context and applying it to a completely new situation or problem.</p>
+        <p>Applying knowledge flexibly to new, unfamiliar situations and creative problem-solving.</p>
       </div>
 
       <div class="solo-row" onclick="toggleSolo(this)">
         <strong>SOLO Level: Extended Abstract (Click to view)</strong>
         <div class="solo-details">
-          <strong>Extended Abstract:</strong> The student generalizes beyond the current subject. They can create new hypotheses or make connections to other domains (e.g., using planetary orbit concepts to explain how electrons move in an atom).
+          <strong>Extended Abstract:</strong> Generalizing beyond the subject. Creating new hypotheses or applying concepts to different domains.
         </div>
       </div>
 
       <div class="strategy-grid">
         <div class="strategy-chip" onclick="toggleExample(this)">
-          <span class="chip-name">Problem-Solving Teaching</span>
-          <span class="chip-effect es-transfer">d = 0.88</span>
+          <span class="chip-name">Self-Reported Grades</span>
+          <span class="chip-effect es-transfer">d = 0.96</span>
           <div class="content-box">
-            <strong>Definition:</strong> Presenting students with an unfamiliar, complex problem that requires them to pull from multiple areas of knowledge.<br><br>
-            <strong>Grade 3-6 Example:</strong> Students are told that a local park is flooding. They must use what they know about the water cycle, soil types, and topography to design a drainage solution.
+            <strong>Definition:</strong> Students predict their own performance against rubrics to foster self-regulation and ownership.<br><br>
+            <strong>Example:</strong> 5th graders review a rubric for their science project and "score" themselves before submitting, justifying why they believe they met the criteria.
           </div>
         </div>
         <div class="strategy-chip" onclick="toggleExample(this)">
-          <span class="chip-name">Transfer Strategies</span>
-          <span class="chip-effect es-transfer">d = 0.75</span>
+          <span class="chip-name">Math Problem Solving</span>
+          <span class="chip-effect es-transfer">d = 0.88</span>
           <div class="content-box">
-            <strong>Definition:</strong> Explicitly teaching students how to look for similarities between a "new" problem and an "old" one they've already solved.<br><br>
-            <strong>Grade 3-6 Example:</strong> A teacher asks students to explain how the "Persuasion Techniques" they learned in English class are being used in a cereal commercial they saw on TV.
+            <strong>Definition:</strong> Using mathematical concepts to solve novel, ill-structured problems in real-world contexts.<br><br>
+            <strong>Example:</strong> 6th graders are given a budget and a grocery flyer; they must plan a balanced meal for a family of four, applying decimals and percentages to a real scenario.
+          </div>
+        </div>
+        <div class="strategy-chip" onclick="toggleExample(this)">
+          <span class="chip-name">Virtual Reality (Science)</span>
+          <span class="chip-effect es-transfer">d = 0.80</span>
+          <div class="content-box">
+            <strong>Definition:</strong> Using immersive simulations to apply scientific theories in safe, high-stakes, or impossible environments.<br><br>
+            <strong>Example:</strong> 5th graders "visit" the International Space Station via VR to apply what they learned about gravity and orbit by simulating how an object moves in a vacuum.
           </div>
         </div>
       </div>
@@ -248,13 +232,8 @@ function switchTab(tab) {
   });
 }
 
-function toggleSolo(el) {
-  el.classList.toggle('open');
-}
-
-function toggleExample(el) {
-  el.classList.toggle('open');
-}
+function toggleSolo(el) { el.classList.toggle('open'); }
+function toggleExample(el) { el.classList.toggle('open'); }
 </script>
 
 </body>
