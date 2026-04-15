@@ -1,17 +1,84 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Surface · Deep · Transfer Learning</title>
 <style>
+:root {
+  --font-sans: system-ui, -apple-system, sans-serif;
+  --color-text-primary: #111827;
+  --color-text-secondary: #4B5563;
+  --color-background-primary: #ffffff;
+  --color-background-secondary: #F9FAFB;
+  --color-border-primary: #9CA3AF;
+  --color-border-secondary: #D1D5DB;
+  --color-border-tertiary: #E5E7EB;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-text-primary: #F9FAFB;
+    --color-text-secondary: #9CA3AF;
+    --color-background-primary: #111827;
+    --color-background-secondary: #1F2937;
+    --color-border-primary: #4B5563;
+    --color-border-secondary: #374151;
+    --color-border-tertiary: #374151;
+  }
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: var(--font-sans); }
+
+body {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--color-text-primary);
+  background: var(--color-background-primary);
+}
+
 .wrapper { padding: 1.25rem 0 2rem; }
+
+/* Progression bar */
+.progression-bar {
+  display: flex; align-items: stretch; gap: 0; margin-bottom: 1.25rem;
+  border: 1px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-md); overflow: hidden;
+}
+.prog-seg {
+  flex: 1; padding: 7px 8px; text-align: center;
+  font-size: 12px; font-weight: 400; color: var(--color-text-secondary);
+  border-right: 1px solid var(--color-border-tertiary);
+  background: var(--color-background-secondary);
+  cursor: pointer; transition: background 0.15s;
+}
+.prog-seg:last-child { border-right: none; }
+.prog-seg.s-on.surface { background: #E1F5EE; color: #085041; font-weight: 600; }
+.prog-seg.s-on.deep    { background: #EEEDFE; color: #26215C; font-weight: 600; }
+.prog-seg.s-on.transfer{ background: #FAECE7; color: #4A1B0C; font-weight: 600; }
+
+@media (prefers-color-scheme: dark) {
+  .prog-seg.s-on.surface { background: #085041; color: #9FE1CB; }
+  .prog-seg.s-on.deep    { background: #26215C; color: #CECBF6; }
+  .prog-seg.s-on.transfer{ background: #4A1B0C; color: #F5C4B3; }
+}
+
+/* Phase tabs */
 .phase-tabs { display: flex; gap: 8px; margin-bottom: 1.25rem; }
 .tab-btn {
-  flex: 1; padding: 10px 8px; border: 0.5px solid var(--color-border-secondary);
-  border-radius: var(--border-radius-md); background: var(--color-background-primary);
-  cursor: pointer; font-size: 13px; font-weight: 400; color: var(--color-text-secondary);
+  flex: 1; padding: 12px 8px;
+  border: 1px solid var(--color-border-secondary);
+  border-radius: var(--border-radius-md);
+  background: var(--color-background-primary);
+  cursor: pointer; font-size: 14px; font-weight: 400;
+  color: var(--color-text-secondary);
   transition: all 0.15s; text-align: center; line-height: 1.3;
 }
 .tab-btn:hover { background: var(--color-background-secondary); color: var(--color-text-primary); }
-.tab-btn.active { border-width: 1.5px; font-weight: 500; }
+.tab-btn.active { border-width: 2px; font-weight: 600; font-size: 15px; }
 .tab-btn.t-surface.active { border-color: #1D9E75; color: #085041; background: #E1F5EE; }
 .tab-btn.t-deep.active    { border-color: #7F77DD; color: #26215C; background: #EEEDFE; }
 .tab-btn.t-transfer.active{ border-color: #D85A30; color: #4A1B0C; background: #FAECE7; }
@@ -22,78 +89,98 @@ body { font-family: var(--font-sans); }
   .tab-btn.t-transfer.active{ border-color: #F0997B; color: #F5C4B3; background: #4A1B0C; }
 }
 
+/* Panels */
 .panel { display: none; }
 .panel.active { display: block; }
 
 .panel-card {
   border-radius: var(--border-radius-lg);
-  border: 0.5px solid var(--color-border-tertiary);
+  border: 1px solid var(--color-border-tertiary);
   background: var(--color-background-primary);
   overflow: hidden;
 }
+
+/* Panel header */
 .panel-header {
-  padding: 1.25rem 1.5rem 1rem;
-  border-bottom: 0.5px solid var(--color-border-tertiary);
+  padding: 1.4rem 1.6rem 1.1rem;
+  border-bottom: 1px solid var(--color-border-tertiary);
 }
 .phase-label {
-  font-size: 11px; font-weight: 500; letter-spacing: 0.06em;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.07em;
   text-transform: uppercase; margin-bottom: 6px;
 }
-.phase-title { font-size: 22px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
-.phase-desc  { font-size: 14px; color: var(--color-text-secondary); line-height: 1.5; }
+.phase-title {
+  font-size: 24px; font-weight: 600;
+  color: var(--color-text-primary); margin-bottom: 6px;
+}
+.phase-desc {
+  font-size: 15px; color: var(--color-text-secondary); line-height: 1.6;
+}
 
+/* SOLO row */
 .solo-row {
-  padding: 1rem 1.5rem;
-  border-bottom: 0.5px solid var(--color-border-tertiary);
+  padding: 1rem 1.6rem;
+  border-bottom: 1px solid var(--color-border-tertiary);
   display: flex; align-items: flex-start; gap: 12px;
 }
 .solo-badge {
-  flex-shrink: 0; font-size: 11px; font-weight: 500;
+  flex-shrink: 0; font-size: 11px; font-weight: 600;
   padding: 4px 10px; border-radius: var(--border-radius-md);
-  line-height: 1.4; margin-top: 1px;
+  line-height: 1.4; margin-top: 2px; white-space: nowrap;
 }
-.solo-label { font-size: 13px; color: var(--color-text-secondary); line-height: 1.5; }
-.solo-label strong { color: var(--color-text-primary); font-weight: 500; font-size: 13px; }
+.solo-label {
+  font-size: 15px; color: var(--color-text-secondary); line-height: 1.6;
+}
+.solo-label strong {
+  color: var(--color-text-primary); font-weight: 600; font-size: 15px;
+}
 
-.strategies-section { padding: 1rem 1.5rem 1.25rem; }
+/* Strategies section */
+.strategies-section { padding: 1.1rem 1.6rem 1.5rem; }
 .strategies-title {
-  font-size: 11px; font-weight: 500; letter-spacing: 0.06em;
-  text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 12px;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.07em;
+  text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 14px;
 }
-.strategy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; }
+.strategy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+/* Strategy chip */
 .strategy-chip {
-  padding: 10px 12px; border-radius: var(--border-radius-md);
-  border: 0.5px solid var(--color-border-tertiary);
+  padding: 12px 14px;
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--color-border-tertiary);
   background: var(--color-background-secondary);
-  font-size: 13px; font-weight: 400; color: var(--color-text-primary);
-  line-height: 1.3; cursor: pointer; transition: border-color 0.15s;
+  font-size: 14px; font-weight: 400;
+  color: var(--color-text-primary);
+  line-height: 1.4; transition: border-color 0.15s;
+  text-decoration: none; display: block;
 }
 .strategy-chip:hover { border-color: var(--color-border-primary); }
-.strategy-chip .chip-icon { font-size: 14px; margin-bottom: 4px; display: block; }
-.strategy-chip .chip-name { display: block; font-weight: 500; font-size: 13px; }
-.strategy-chip .chip-desc { display: block; font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
 
-.progression-bar {
-  display: flex; align-items: center; gap: 0; margin-bottom: 1.25rem;
-  border: 0.5px solid var(--color-border-tertiary);
-  border-radius: var(--border-radius-md); overflow: hidden;
+.chip-name {
+  display: block; font-weight: 600; font-size: 14px;
+  color: var(--color-text-primary); margin-bottom: 3px;
+  text-decoration: none;
 }
-.prog-seg {
-  flex: 1; padding: 6px 8px; text-align: center;
-  font-size: 11px; font-weight: 400; color: var(--color-text-secondary);
-  border-right: 0.5px solid var(--color-border-tertiary);
-  background: var(--color-background-secondary);
+.chip-name a {
+  color: inherit; text-decoration: none;
 }
-.prog-seg:last-child { border-right: none; }
-.prog-seg.s-on.surface { background: #E1F5EE; color: #085041; font-weight: 500; }
-.prog-seg.s-on.deep    { background: #EEEDFE; color: #26215C; font-weight: 500; }
-.prog-seg.s-on.transfer{ background: #FAECE7; color: #4A1B0C; font-weight: 500; }
-@media (prefers-color-scheme: dark) {
-  .prog-seg.s-on.surface { background: #085041; color: #9FE1CB; }
-  .prog-seg.s-on.deep    { background: #26215C; color: #CECBF6; }
-  .prog-seg.s-on.transfer{ background: #4A1B0C; color: #F5C4B3; }
+.chip-name a:hover { text-decoration: underline; }
+.chip-desc {
+  display: block; font-size: 13px;
+  color: var(--color-text-secondary); margin-top: 3px; line-height: 1.45;
+}
+.chip-effect {
+  display: inline-block; margin-top: 7px;
+  font-size: 12px; font-weight: 600;
+  padding: 2px 8px; border-radius: 20px;
+  letter-spacing: 0.02em;
 }
 
+/* Accent colors */
 .surface-accent { color: #0F6E56; }
 .deep-accent    { color: #534AB7; }
 .transfer-accent{ color: #993C1D; }
@@ -103,6 +190,7 @@ body { font-family: var(--font-sans); }
   .transfer-accent{ color: #F0997B; }
 }
 
+/* Badges */
 .badge-surface { background: #9FE1CB; color: #04342C; }
 .badge-deep    { background: #CECBF6; color: #26215C; }
 .badge-transfer{ background: #F5C4B3; color: #4A1B0C; }
@@ -111,123 +199,262 @@ body { font-family: var(--font-sans); }
   .badge-deep    { background: #26215C; color: #CECBF6; }
   .badge-transfer{ background: #4A1B0C; color: #F5C4B3; }
 }
-</style>
 
+/* Effect size pill colors per phase */
+.es-surface { background: #D1FAE5; color: #065F46; }
+.es-deep    { background: #EDE9FE; color: #4C1D95; }
+.es-transfer{ background: #FEE2E2; color: #7F1D1D; }
+@media (prefers-color-scheme: dark) {
+  .es-surface { background: #065F46; color: #A7F3D0; }
+  .es-deep    { background: #4C1D95; color: #DDD6FE; }
+  .es-transfer{ background: #7F1D1D; color: #FECACA; }
+}
+
+/* MetaX note */
+.metax-note {
+  margin-top: 14px; padding: 10px 14px;
+  border-radius: var(--border-radius-md);
+  background: var(--color-background-secondary);
+  border: 1px solid var(--color-border-tertiary);
+  font-size: 12px; color: var(--color-text-secondary); line-height: 1.5;
+}
+.metax-note a { color: inherit; font-weight: 600; }
+</style>
+</head>
+<body>
 <div class="wrapper">
 
-<div class="progression-bar" id="progBar">
-  <div class="prog-seg s-on surface" data-tab="surface">Uni-structural</div>
-  <div class="prog-seg s-on surface" data-tab="surface">Multi-structural</div>
-  <div class="prog-seg" data-tab="deep">Relational</div>
-  <div class="prog-seg" data-tab="transfer">Extended abstract</div>
-</div>
+  <div class="progression-bar" id="progBar">
+    <div class="prog-seg s-on surface" data-tab="surface" onclick="switchTab('surface')">Uni-structural</div>
+    <div class="prog-seg s-on surface" data-tab="surface" onclick="switchTab('surface')">Multi-structural</div>
+    <div class="prog-seg" data-tab="deep" onclick="switchTab('deep')">Relational</div>
+    <div class="prog-seg" data-tab="transfer" onclick="switchTab('transfer')">Extended abstract</div>
+  </div>
 
-<div class="phase-tabs">
-  <button class="tab-btn t-surface active" onclick="switchTab('surface')">Surface<br>learning</button>
-  <button class="tab-btn t-deep"          onclick="switchTab('deep')">Deep<br>learning</button>
-  <button class="tab-btn t-transfer"      onclick="switchTab('transfer')">Transfer<br>learning</button>
-</div>
+  <div class="phase-tabs">
+    <button class="tab-btn t-surface active" onclick="switchTab('surface')">Surface<br>learning</button>
+    <button class="tab-btn t-deep"           onclick="switchTab('deep')">Deep<br>learning</button>
+    <button class="tab-btn t-transfer"       onclick="switchTab('transfer')">Transfer<br>learning</button>
+  </div>
 
-<div id="panel-surface" class="panel active">
-  <div class="panel-card">
-    <div class="panel-header">
-      <div class="phase-label surface-accent">Phase 1</div>
-      <div class="phase-title">Surface learning</div>
-      <div class="phase-desc">Build foundational knowledge and vocabulary. Students acquire essential facts and skills before deeper connections are possible.</div>
-    </div>
-    <div class="solo-row">
-      <span class="solo-badge badge-surface">SOLO level</span>
-      <div class="solo-label"><strong>Uni-structural → Multi-structural</strong><br>Students identify single ideas, then collect multiple disconnected pieces of knowledge.</div>
-    </div>
-    <div class="strategies-section">
-      <div class="strategies-title">High-impact strategies</div>
-      <div class="strategy-grid">
-        <div class="strategy-chip">
-          <span class="chip-name">Spaced practice</span>
-          <span class="chip-desc">Revisit content across time intervals to strengthen retention</span>
+  <!-- SURFACE -->
+  <div id="panel-surface" class="panel active">
+    <div class="panel-card">
+      <div class="panel-header">
+        <div class="phase-label surface-accent">Phase 1</div>
+        <div class="phase-title">Surface learning</div>
+        <div class="phase-desc">Build foundational knowledge and vocabulary. Students acquire essential facts and skills before deeper connections are possible.</div>
+      </div>
+      <div class="solo-row">
+        <span class="solo-badge badge-surface">SOLO level</span>
+        <div class="solo-label">
+          <strong>Uni-structural → Multi-structural</strong><br>
+          Students identify single ideas, then collect multiple disconnected pieces of knowledge.
         </div>
-        <div class="strategy-chip">
-          <span class="chip-name">Retrieval practice</span>
-          <span class="chip-desc">Low-stakes quizzing and recall to consolidate memory</span>
+      </div>
+      <div class="strategies-section">
+        <div class="strategies-title">High-impact strategies</div>
+        <div class="strategy-grid">
+
+          <div class="strategy-chip">
+            <span class="chip-name"><a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">Spaced practice</a></span>
+            <span class="chip-desc">Revisit content across distributed time intervals to strengthen long-term retention</span>
+            <span class="chip-effect es-surface">d = 0.65</span>
+          </div>
+
+          <div class="strategy-chip">
+            <span class="chip-name"><a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">Retrieval practice</a></span>
+            <span class="chip-desc">Low-stakes quizzing and recall activities that consolidate memory more than re-reading</span>
+            <span class="chip-effect es-surface">d = 0.54</span>
+          </div>
+
+          <div class="strategy-chip">
+            <span class="chip-name"><a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">Direct instruction</a></span>
+            <span class="chip-desc">Explicit teacher-led explanation with modeling, checking for understanding, and corrective feedback</span>
+            <span class="chip-effect es-surface">d = 0.60</span>
+          </div>
+
+          <div class="strategy-chip">
+            <span class="chip-name"><a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">Vocabulary instruction</a></span>
+            <span class="chip-desc">Systematic word study tied to disciplinary concepts, with multiple exposures across contexts</span>
+            <span class="chip-effect es-surface">d = 0.62</span>
+          </div>
+
+          <div class="strategy-chip">
+            <span class="chip-name"><a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">Worked examples</a></span>
+            <span class="chip-desc">Step-by-step solutions that reduce cognitive load while students build schema</span>
+            <span class="chip-effect es-surface">d = 0.57</span>
+          </div>
+
+          <div class="strategy-chip">
+            <span class="chip-name"><a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">Summarization</a></span>
+            <span class="chip-desc">Students distill key ideas from text or instruction into their own words</span>
+            <span class="chip-effect es-surface">d = 0.74</span>
+          </div>
+
+          <div class="strategy-chip">
+            <span class="chip-name"><a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">Mnemonics</a></span>
+            <span class="chip-desc">Memory devices that create retrieval cues for facts, sequences, and terminology</span>
+            <span class="chip-effect es-surface">d = 0.76</span>
+          </div>
+
+          <div class="strategy-chip">
+            <span class="chip-name"><a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">Note-taking</a></span>
+            <span class="chip-desc">Structured recording of key ideas that promotes active processing during input</span>
+            <span class="chip-effect es-surface">d = 0.50</span>
+          </div>
+
         </div>
-        <div class="strategy-chip">
-          <span class="chip-name">Direct instruction</span>
-          <span class="chip-desc">Explicit teacher-led explanation with modeling and feedback</span>
-        </div>
-        <div class="strategy-chip">
-          <span class="chip-name">Vocabulary programs</span>
-          <span class="chip-desc">Systematic word study tied to disciplinary concepts</span>
+        <div class="metax-note">
+          Effect sizes sourced from Hattie's Visible Learning research. Verify current values in the
+          <a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">Visible Learning MetaX database</a>.
+          Hinge point for impact: d ≥ 0.40.
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<div id="panel-deep" class="panel">
-  <div class="panel-card">
-    <div class="panel-header">
-      <div class="phase-label deep-accent">Phase 2</div>
-      <div class="phase-title">Deep learning</div>
-      <div class="phase-desc">Connect ideas and build conceptual understanding. Students move from knowing facts in isolation to seeing how they relate.</div>
-    </div>
-    <div class="solo-row">
-      <span class="solo-badge badge-deep">SOLO level</span>
-      <div class="solo-label"><strong>Relational</strong><br>Students integrate multiple ideas into a coherent whole, understanding how parts relate to each other.</div>
-    </div>
-    <div class="strategies-section">
-      <div class="strategies-title">High-impact strategies</div>
-      <div class="strategy-grid">
-        <div class="strategy-chip">
-          <span class="chip-name">Jigsaw</span>
-          <span class="chip-desc">Collaborative expert groups teaching peers their piece of content</span>
+  <!-- DEEP -->
+  <div id="panel-deep" class="panel">
+    <div class="panel-card">
+      <div class="panel-header">
+        <div class="phase-label deep-accent">Phase 2</div>
+        <div class="phase-title">Deep learning</div>
+        <div class="phase-desc">Connect ideas and build conceptual understanding. Students move from knowing facts in isolation to seeing how they relate.</div>
+      </div>
+      <div class="solo-row">
+        <span class="solo-badge badge-deep">SOLO level</span>
+        <div class="solo-label">
+          <strong>Relational</strong><br>
+          Students integrate multiple ideas into a coherent whole, understanding how parts relate to each other and to the whole.
         </div>
-        <div class="strategy-chip">
-          <span class="chip-name">Reciprocal teaching</span>
-          <span class="chip-desc">Students alternate roles — summarizer, questioner, clarifier, predictor</span>
+      </div>
+      <div class="strategies-section">
+        <div class="strategies-title">High-impact strategies</div>
+        <div class="strategy-grid">
+
+          <div class="strategy-chip">
+            <span class="chip-name"><a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">Classroom discussion</a></span>
+            <span class="chip-desc">Structured dialogue where students share, challenge, and refine thinking with peers and teacher</span>
+            <span class="chip-effect es-deep">d = 0.82</span>
+          </div>
+
+          <div class="strategy-chip">
+            <span class="chip-name"><a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">Reciprocal teaching</a></span>
+            <span class="chip-desc">Students rotate roles — summarizer, questioner, clarifier, predictor — to build comprehension</span>
+            <span class="chip-effect es-deep">d = 0.74</span>
+          </div>
+
+          <div class="strategy-chip">
+            <span class="chip-name"><a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">Metacognitive strategies</a></span>
+            <span class="chip-desc">Students monitor, plan, and regulate their own understanding and thinking processes</span>
+            <span class="chip-effect es-deep">d = 0.60</span>
+          </div>
+
+          <div class="strategy-chip">
+            <span class="chip-name"><a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">Concept mapping</a></span>
+            <span class="chip-desc">Visual diagrams that make relationships between ideas explicit and spatially organized</span>
+            <span class="chip-effect es-deep">d = 0.64</span>
+          </div>
+
+          <div class="strategy-chip">
+            <span class="chip-name"><a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">Peer tutoring</a></span>
+            <span class="chip-desc">Students teaching students, which deepens understanding for both tutor and learner</span>
+            <span class="chip-effect es-deep">d = 0.55</span>
+          </div>
+
+          <div class="strategy-chip">
+            <span class="chip-name"><a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">Argumentation</a></span>
+            <span class="chip-desc">Structured use of evidence to construct, defend, and evaluate competing claims</span>
+            <span class="chip-effect es-deep">d = 0.54</span>
+          </div>
+
+          <div class="strategy-chip">
+            <span class="chip-name"><a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">Jigsaw</a></span>
+            <span class="chip-desc">Expert groups develop deep knowledge of one piece, then teach it to a mixed group</span>
+            <span class="chip-effect es-deep">d = 0.55</span>
+          </div>
+
+          <div class="strategy-chip">
+            <span class="chip-name"><a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">Questioning</a></span>
+            <span class="chip-desc">Higher-order questions that prompt students to analyze, evaluate, and justify their thinking</span>
+            <span class="chip-effect es-deep">d = 0.49</span>
+          </div>
+
         </div>
-        <div class="strategy-chip">
-          <span class="chip-name">Argumentation</span>
-          <span class="chip-desc">Structured debate using evidence to defend and challenge claims</span>
-        </div>
-        <div class="strategy-chip">
-          <span class="chip-name">Concept mapping</span>
-          <span class="chip-desc">Visual diagrams that make relationships between ideas explicit</span>
+        <div class="metax-note">
+          Effect sizes sourced from Hattie's Visible Learning research. Verify current values in the
+          <a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">Visible Learning MetaX database</a>.
+          Hinge point for impact: d ≥ 0.40.
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<div id="panel-transfer" class="panel">
-  <div class="panel-card">
-    <div class="panel-header">
-      <div class="phase-label transfer-accent">Phase 3</div>
-      <div class="phase-title">Transfer learning</div>
-      <div class="phase-desc">Apply knowledge to new, unfamiliar situations. Students demonstrate that understanding is flexible and generative, not just recalled.</div>
-    </div>
-    <div class="solo-row">
-      <span class="solo-badge badge-transfer">SOLO level</span>
-      <div class="solo-label"><strong>Extended abstract</strong><br>Students generalize beyond the taught content, creating new hypotheses, making connections across domains, and generating novel solutions.</div>
-    </div>
-    <div class="strategies-section">
-      <div class="strategies-title">High-impact strategies</div>
-      <div class="strategy-grid">
-        <div class="strategy-chip">
-          <span class="chip-name">Problem-solving teaching</span>
-          <span class="chip-desc">Novel, ill-structured problems that require flexible application of knowledge</span>
+  <!-- TRANSFER -->
+  <div id="panel-transfer" class="panel">
+    <div class="panel-card">
+      <div class="panel-header">
+        <div class="phase-label transfer-accent">Phase 3</div>
+        <div class="phase-title">Transfer learning</div>
+        <div class="phase-desc">Apply knowledge to new, unfamiliar situations. Students demonstrate that understanding is flexible and generative, not just recalled.</div>
+      </div>
+      <div class="solo-row">
+        <span class="solo-badge badge-transfer">SOLO level</span>
+        <div class="solo-label">
+          <strong>Extended abstract</strong><br>
+          Students generalize beyond taught content, create new hypotheses, make connections across domains, and generate novel solutions.
         </div>
-        <div class="strategy-chip">
-          <span class="chip-name">Service learning</span>
-          <span class="chip-desc">Real-world community tasks that demand authentic application</span>
+      </div>
+      <div class="strategies-section">
+        <div class="strategies-title">High-impact strategies</div>
+        <div class="strategy-grid">
+
+          <div class="strategy-chip">
+            <span class="chip-name"><a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">Problem-solving teaching</a></span>
+            <span class="chip-desc">Novel, ill-structured problems that require flexible application of knowledge across contexts</span>
+            <span class="chip-effect es-transfer">d = 0.68</span>
+          </div>
+
+          <div class="strategy-chip">
+            <span class="chip-name"><a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">Service learning</a></span>
+            <span class="chip-desc">Real-world community tasks that demand authentic application of academic content</span>
+            <span class="chip-effect es-transfer">d = 0.58</span>
+          </div>
+
+          <div class="strategy-chip">
+            <span class="chip-name"><a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">Self-regulation strategies</a></span>
+            <span class="chip-desc">Students set goals, monitor progress, and adapt strategies independently across new tasks</span>
+            <span class="chip-effect es-transfer">d = 0.52</span>
+          </div>
+
+          <div class="strategy-chip">
+            <span class="chip-name"><a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">Deliberate practice</a></span>
+            <span class="chip-desc">Focused, goal-directed repetition with feedback to build automaticity that frees cognitive resources</span>
+            <span class="chip-effect es-transfer">d = 0.79</span>
+          </div>
+
+          <div class="strategy-chip">
+            <span class="chip-name"><a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">Transfer strategies</a></span>
+            <span class="chip-desc">Explicit prompting for students to connect learning across contexts, subjects, and time periods</span>
+            <span class="chip-effect es-transfer">—</span>
+          </div>
+
+          <div class="strategy-chip">
+            <span class="chip-name"><a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">Project-based learning</a></span>
+            <span class="chip-desc">Extended, real-world inquiry tasks requiring students to synthesize and apply knowledge to produce an artifact</span>
+            <span class="chip-effect es-transfer">d = 0.43</span>
+          </div>
+
         </div>
-        <div class="strategy-chip">
-          <span class="chip-name">Transfer strategies</span>
-          <span class="chip-desc">Deliberate prompting to connect learning across contexts and subjects</span>
+        <div class="metax-note">
+          Effect sizes sourced from Hattie's Visible Learning research. Verify current values in the
+          <a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">Visible Learning MetaX database</a>.
+          Hinge point for impact: d ≥ 0.40. A dash (—) indicates no verified MetaX value was available.
         </div>
       </div>
     </div>
   </div>
-</div>
 
 </div>
 
@@ -250,3 +477,5 @@ function switchTab(tab) {
   });
 }
 </script>
+</body>
+</html>
