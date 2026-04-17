@@ -1,0 +1,757 @@
+<!-- ============================================================
+     TCEA AI Adoption Roadmap, compact landscape version
+     Single-file interactive for WordPress Custom HTML embed.
+     All CSS scoped under #tcea-ai-roadmap.
+     ============================================================ -->
+<div id="tcea-ai-roadmap">
+
+<style>
+  #tcea-ai-roadmap {
+    --tar-navy: #0A3476;
+    --tar-navy-dark: #071f4a;
+    --tar-gold: #FCB040;
+    --tar-gold-light: #fdd17a;
+    --tar-gold-pale: #FEF0D0;
+    --tar-pale-navy: #D0D8F0;
+    --tar-white: #ffffff;
+    --tar-off-white: #f7f8fc;
+    --tar-text: #1a1a2e;
+    --tar-muted: #5a6680;
+    --tar-border: #e2e7f5;
+
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--tar-text);
+    line-height: 1.5;
+    max-width: 880px;
+    margin: 0 auto;
+    background: var(--tar-off-white);
+    border-radius: 10px;
+    border: 1px solid var(--tar-border);
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  #tcea-ai-roadmap *,
+  #tcea-ai-roadmap *::before,
+  #tcea-ai-roadmap *::after { box-sizing: border-box; }
+
+  /* ===== Header strip ===== */
+  #tcea-ai-roadmap .tar-header {
+    background: linear-gradient(135deg, var(--tar-navy-dark) 0%, var(--tar-navy) 100%);
+    color: var(--tar-white);
+    padding: 16px 22px;
+    border-bottom: 3px solid var(--tar-gold);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 18px;
+    align-items: center;
+  }
+
+  #tcea-ai-roadmap .tar-eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--tar-gold-light);
+    margin-bottom: 3px;
+  }
+
+  #tcea-ai-roadmap .tar-title {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  #tcea-ai-roadmap .tar-meter {
+    min-width: 220px;
+    text-align: right;
+  }
+
+  #tcea-ai-roadmap .tar-meter-label {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--tar-gold-light);
+    margin-bottom: 5px;
+  }
+
+  #tcea-ai-roadmap .tar-meter-bar {
+    height: 6px;
+    background: rgba(255,255,255,0.14);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 5px;
+  }
+
+  #tcea-ai-roadmap .tar-meter-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--tar-gold) 0%, var(--tar-gold-light) 100%);
+    border-radius: 999px;
+    transition: width 0.4s ease;
+  }
+
+  #tcea-ai-roadmap .tar-meter-status {
+    font-size: 12px;
+    color: var(--tar-pale-navy);
+  }
+
+  #tcea-ai-roadmap .tar-meter-status strong {
+    color: var(--tar-white);
+    font-weight: 500;
+  }
+
+  /* ===== Stage tiles row ===== */
+  #tcea-ai-roadmap .tar-phases {
+    display: grid;
+    grid-template-columns: 3fr 2fr 3fr;
+    gap: 14px;
+    padding: 16px 22px 14px;
+    background: var(--tar-white);
+  }
+
+  #tcea-ai-roadmap .tar-phase {
+    min-width: 0;
+  }
+
+  #tcea-ai-roadmap .tar-phase-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--tar-navy);
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    border-bottom: 2px solid var(--tar-gold);
+  }
+
+  #tcea-ai-roadmap .tar-phase-label span {
+    color: var(--tar-muted);
+    font-weight: 500;
+    margin-left: 6px;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    font-size: 11px;
+  }
+
+  #tcea-ai-roadmap .tar-tiles {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 6px;
+  }
+
+  #tcea-ai-roadmap .tar-tile {
+    appearance: none;
+    -webkit-appearance: none;
+    background: var(--tar-off-white);
+    border: 1.5px solid var(--tar-border);
+    border-radius: 8px;
+    padding: 8px 4px 10px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-height: 62px;
+  }
+
+  #tcea-ai-roadmap .tar-tile:hover {
+    border-color: var(--tar-navy-dark);
+    background: var(--tar-white);
+  }
+
+  #tcea-ai-roadmap .tar-tile.is-selected {
+    border-color: var(--tar-navy);
+    background: var(--tar-white);
+    box-shadow: 0 2px 6px rgba(10,52,118,0.15);
+  }
+
+  #tcea-ai-roadmap .tar-tile-num {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 18px;
+    color: var(--tar-navy);
+    line-height: 1;
+  }
+
+  #tcea-ai-roadmap .tar-tile-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #e5e9f2;
+    border: 1.5px solid #c5cbdb;
+    transition: all 0.2s ease;
+  }
+
+  #tcea-ai-roadmap .tar-tile[data-level="0"] .tar-tile-dot {
+    background: #e5e9f2;
+    border-color: #a8b0c4;
+  }
+  #tcea-ai-roadmap .tar-tile[data-level="1"] .tar-tile-dot {
+    background: var(--tar-gold-pale);
+    border-color: var(--tar-gold);
+  }
+  #tcea-ai-roadmap .tar-tile[data-level="2"] .tar-tile-dot {
+    background: var(--tar-gold-light);
+    border-color: var(--tar-gold);
+  }
+  #tcea-ai-roadmap .tar-tile[data-level="3"] .tar-tile-dot {
+    background: var(--tar-navy);
+    border-color: var(--tar-navy-dark);
+  }
+
+  /* ===== Detail panel ===== */
+  #tcea-ai-roadmap .tar-detail {
+    padding: 16px 22px 18px;
+    background: var(--tar-off-white);
+    border-top: 1px solid var(--tar-border);
+    border-bottom: 1px solid var(--tar-border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+
+  #tcea-ai-roadmap .tar-detail-left {
+    min-width: 0;
+  }
+
+  #tcea-ai-roadmap .tar-detail-eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--tar-muted);
+    margin-bottom: 4px;
+  }
+
+  #tcea-ai-roadmap .tar-detail-title {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 17px;
+    color: var(--tar-navy-dark);
+    line-height: 1.25;
+    margin-bottom: 8px;
+  }
+
+  #tcea-ai-roadmap .tar-detail-question {
+    background: var(--tar-gold-pale);
+    border-left: 3px solid var(--tar-gold);
+    padding: 8px 11px;
+    font-size: 13px;
+    line-height: 1.5;
+    border-radius: 0 4px 4px 0;
+    color: var(--tar-text);
+  }
+
+  #tcea-ai-roadmap .tar-detail-question strong {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--tar-navy);
+    margin-bottom: 2px;
+  }
+
+  #tcea-ai-roadmap .tar-detail-right {
+    min-width: 0;
+  }
+
+  #tcea-ai-roadmap .tar-levels {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+    margin-bottom: 10px;
+  }
+
+  #tcea-ai-roadmap .tar-level-btn {
+    appearance: none;
+    -webkit-appearance: none;
+    background: var(--tar-white);
+    border: 1.5px solid var(--tar-border);
+    color: var(--tar-muted);
+    padding: 7px 3px;
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: 11.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    line-height: 1.15;
+  }
+
+  #tcea-ai-roadmap .tar-level-btn:hover {
+    border-color: var(--tar-navy-dark);
+    color: var(--tar-navy);
+  }
+
+  #tcea-ai-roadmap .tar-level-btn.is-active[data-level="0"] {
+    background: #e5e9f2; border-color: #a8b0c4; color: var(--tar-text); font-weight: 600;
+  }
+  #tcea-ai-roadmap .tar-level-btn.is-active[data-level="1"] {
+    background: var(--tar-gold-pale); border-color: var(--tar-gold); color: #7a4a0a; font-weight: 600;
+  }
+  #tcea-ai-roadmap .tar-level-btn.is-active[data-level="2"] {
+    background: var(--tar-gold-light); border-color: var(--tar-gold); color: var(--tar-navy-dark); font-weight: 600;
+  }
+  #tcea-ai-roadmap .tar-level-btn.is-active[data-level="3"] {
+    background: var(--tar-navy); border-color: var(--tar-navy-dark); color: var(--tar-white); font-weight: 600;
+  }
+
+  #tcea-ai-roadmap .tar-level-text {
+    font-size: 12.5px;
+    line-height: 1.5;
+    padding: 9px 11px;
+    background: var(--tar-white);
+    border: 1px solid var(--tar-border);
+    border-radius: 5px;
+    color: var(--tar-text);
+    min-height: 60px;
+  }
+
+  #tcea-ai-roadmap .tar-level-text.is-placeholder {
+    color: var(--tar-muted);
+    font-style: italic;
+  }
+
+  #tcea-ai-roadmap .tar-level-text strong {
+    display: block;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--tar-navy);
+    margin-bottom: 3px;
+    font-style: normal;
+  }
+
+  /* ===== Footer strip ===== */
+  #tcea-ai-roadmap .tar-footer {
+    background: var(--tar-navy-dark);
+    color: var(--tar-white);
+    padding: 12px 22px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 14px;
+    align-items: center;
+  }
+
+  #tcea-ai-roadmap .tar-focus-label {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--tar-gold-light);
+    margin-bottom: 2px;
+  }
+
+  #tcea-ai-roadmap .tar-focus-text {
+    font-size: 13px;
+    color: var(--tar-pale-navy);
+    line-height: 1.45;
+  }
+
+  #tcea-ai-roadmap .tar-focus-text strong {
+    color: var(--tar-white);
+    font-weight: 500;
+  }
+
+  #tcea-ai-roadmap .tar-actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  #tcea-ai-roadmap .tar-btn {
+    appearance: none;
+    -webkit-appearance: none;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 7px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border: 1.5px solid transparent;
+    text-decoration: none;
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  #tcea-ai-roadmap .tar-btn-primary {
+    background: var(--tar-gold);
+    color: var(--tar-navy-dark);
+    border-color: var(--tar-gold);
+  }
+
+  #tcea-ai-roadmap .tar-btn-primary:hover {
+    background: var(--tar-gold-light);
+    border-color: var(--tar-gold-light);
+  }
+
+  #tcea-ai-roadmap .tar-btn-secondary {
+    background: transparent;
+    color: var(--tar-pale-navy);
+    border-color: rgba(255,255,255,0.25);
+  }
+
+  #tcea-ai-roadmap .tar-btn-secondary:hover {
+    border-color: var(--tar-gold-light);
+    color: var(--tar-white);
+  }
+
+  /* ===== Mobile ===== */
+  @media (max-width: 680px) {
+    #tcea-ai-roadmap .tar-header {
+      grid-template-columns: 1fr;
+      padding: 14px 16px;
+    }
+    #tcea-ai-roadmap .tar-meter {
+      text-align: left;
+      min-width: 0;
+    }
+    #tcea-ai-roadmap .tar-phases {
+      grid-template-columns: 1fr;
+      padding: 14px 16px 10px;
+      gap: 10px;
+    }
+    #tcea-ai-roadmap .tar-detail {
+      grid-template-columns: 1fr;
+      padding: 14px 16px;
+      gap: 12px;
+    }
+    #tcea-ai-roadmap .tar-footer {
+      grid-template-columns: 1fr;
+      padding: 12px 16px;
+    }
+    #tcea-ai-roadmap .tar-actions {
+      flex-wrap: wrap;
+    }
+  }
+</style>
+
+<!-- ===== HEADER ===== -->
+<div class="tar-header">
+  <div>
+    <div class="tar-eyebrow">TCEA · Stakeholder Committee Tool</div>
+    <div class="tar-title">AI Adoption Roadmap for Districts and Campuses</div>
+  </div>
+  <div class="tar-meter">
+    <div class="tar-meter-label">Overall Readiness</div>
+    <div class="tar-meter-bar"><div class="tar-meter-fill" id="tar-fill"></div></div>
+    <div class="tar-meter-status" id="tar-status"><strong>Not yet started</strong></div>
+  </div>
+</div>
+
+<!-- ===== PHASES / TILES ===== -->
+<div class="tar-phases">
+  <div class="tar-phase">
+    <div class="tar-phase-label">Phase One · Foundation <span>Policy, integrity, data</span></div>
+    <div class="tar-tiles">
+      <button type="button" class="tar-tile is-selected" data-stage="1"><span class="tar-tile-num">1</span><span class="tar-tile-dot"></span></button>
+      <button type="button" class="tar-tile" data-stage="2"><span class="tar-tile-num">2</span><span class="tar-tile-dot"></span></button>
+      <button type="button" class="tar-tile" data-stage="3"><span class="tar-tile-num">3</span><span class="tar-tile-dot"></span></button>
+    </div>
+  </div>
+  <div class="tar-phase">
+    <div class="tar-phase-label">Phase Two · Practice <span>Capacity, outcomes</span></div>
+    <div class="tar-tiles">
+      <button type="button" class="tar-tile" data-stage="4"><span class="tar-tile-num">4</span><span class="tar-tile-dot"></span></button>
+      <button type="button" class="tar-tile" data-stage="5"><span class="tar-tile-num">5</span><span class="tar-tile-dot"></span></button>
+    </div>
+  </div>
+  <div class="tar-phase">
+    <div class="tar-phase-label">Phase Three · Extension <span>Equity, families, workforce</span></div>
+    <div class="tar-tiles">
+      <button type="button" class="tar-tile" data-stage="6"><span class="tar-tile-num">6</span><span class="tar-tile-dot"></span></button>
+      <button type="button" class="tar-tile" data-stage="7"><span class="tar-tile-num">7</span><span class="tar-tile-dot"></span></button>
+      <button type="button" class="tar-tile" data-stage="8"><span class="tar-tile-num">8</span><span class="tar-tile-dot"></span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DETAIL PANEL ===== -->
+<div class="tar-detail">
+  <div class="tar-detail-left">
+    <div class="tar-detail-eyebrow" id="tar-detail-eyebrow">Stage One</div>
+    <div class="tar-detail-title" id="tar-detail-title">Establish Clear, Permission-Based Guidance</div>
+    <div class="tar-detail-question">
+      <strong>Key Question</strong>
+      <span id="tar-detail-question">Does your policy build responsible use, or just document what is forbidden?</span>
+    </div>
+  </div>
+  <div class="tar-detail-right">
+    <div class="tar-levels" id="tar-levels"></div>
+    <div class="tar-level-text is-placeholder" id="tar-level-text">Select a maturity level above. Your choice saves to this browser.</div>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div class="tar-footer">
+  <div>
+    <div class="tar-focus-label">Where to Focus Next</div>
+    <div class="tar-focus-text" id="tar-focus-text">Start with Stage One. Review your current policy against the checklist and name the gaps before rushing to fix them.</div>
+  </div>
+  <div class="tar-actions">
+    <a class="tar-btn tar-btn-primary" href="https://blog.tcea.org/does-your-district-have-an-ai-plan-or-just-an-ai-problem/" target="_blank" rel="noopener">Read the post</a>
+    <button class="tar-btn tar-btn-secondary" id="tar-reset" type="button">Reset</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  var root = document.getElementById('tcea-ai-roadmap');
+  if (!root) return;
+
+  var LEVEL_LABELS = ['Not yet', 'Starting', 'Progressing', 'Established'];
+
+  var STAGES = {
+    1: {
+      title: 'Establish Clear, Permission-Based Guidance',
+      question: 'Does your policy build responsible use, or just document what is forbidden?',
+      details: [
+        'No written AI guidance exists for staff or students. Decisions happen classroom by classroom.',
+        'Draft policy is circulating. Most of it reads as a list of restrictions rather than permissions.',
+        'Policy names approved uses, includes stakeholder input, and covers both staff and students.',
+        'Living guidance reviewed at least yearly. Staff can point to specific permissions and guardrails.'
+      ],
+      next: 'Schedule a committee meeting this month to review current guidance and name gaps. Do not try to fix them yet.'
+    },
+    2: {
+      title: 'Address Academic Integrity Without Weaponizing It',
+      question: 'Do students know exactly what is and is not allowed in each assignment?',
+      details: [
+        'No shared expectations. Each teacher handles AI questions on their own.',
+        'Some teachers write their own rules. Students see different expectations course to course.',
+        'Assignment-level AI labels in use across most campuses. Appeals path exists.',
+        'Students can name exactly what is allowed on every assignment. Cases handled without assumptions.'
+      ],
+      next: 'Pick one assignment type, draft clear AI labels, and pilot those labels in two courses before scaling.'
+    },
+    3: {
+      title: 'Protect Student Data Without Exception',
+      question: 'Do staff know exactly what student information cannot enter any AI tool?',
+      details: [
+        'No tool vetting. Staff paste student names, grades, or IEP content into any AI tool they find.',
+        'Informal guidance given in meetings. No published list. No signed agreements.',
+        'Approved tools list published. Staff trained on what student information never belongs in a prompt.',
+        'Vendor data agreements on file. FERPA boundaries named, documented, and enforced.'
+      ],
+      next: 'Publish an approved-tools list and a one-pager on what student information never belongs in any AI prompt.'
+    },
+    4: {
+      title: 'Build Educator Capacity Before Scaling Expectations',
+      question: 'Are educators equipped to make instructional decisions, or just taught to use tools?',
+      details: [
+        'No AI professional learning offered to staff.',
+        'One-off tool demos. Sessions focus on buttons, not instructional decisions.',
+        'Ongoing, job-embedded learning. Coaches work with teachers on AI inside real units.',
+        'Tiered professional learning tied to roles and to student outcomes. Progress is tracked.'
+      ],
+      next: 'Move from tool demos to instructional coaching. Pair AI learning with a specific unit in progress.'
+    },
+    5: {
+      title: 'Anchor AI in Learning Outcomes, Not Novelty',
+      question: 'Would this use of AI produce better-prepared learners, or shortcuts?',
+      details: [
+        'AI use is random. Whatever shows up on a feed gets tried on Friday.',
+        'Some lessons use AI, but outcomes are not clear or tied to standards.',
+        'AI use is aligned to units, standards, and intended depth of learning.',
+        'Evidence shows AI use deepens thinking at Surface, Deep, and Transfer levels.'
+      ],
+      next: 'Take one unit and ask if AI use supports Deep and Transfer Learning. If only Surface, rework the task.'
+    },
+    6: {
+      title: 'Prioritize Equity and Access',
+      question: 'Who benefits from your AI adoption, and who gets left further behind?',
+      details: [
+        'No equity lens applied to AI rollout.',
+        'Device access addressed. Other access gaps not examined.',
+        'Multilingual access, accessibility, and opportunity gaps are named and tracked.',
+        'Data shows equitable access and outcomes across student groups.'
+      ],
+      next: 'Check access data by student group. Name who is getting less exposure and build a plan to close that gap.'
+    },
+    7: {
+      title: 'Engage Families and the Broader Community',
+      question: 'Do families feel informed and included, or surprised by what they eventually learn?',
+      details: [
+        'Families have not been informed about AI use in instruction.',
+        'One letter or blog post went out. No ongoing channel exists.',
+        'Regular family updates and at least one input channel are in place.',
+        'Families act as partners. Community conversations about AI happen on a cycle.'
+      ],
+      next: 'Set up a quarterly family communication cycle on AI. Invite family feedback, not just deliver updates.'
+    },
+    8: {
+      title: 'Bridge K-12, Higher Education, and Workforce Expectations',
+      question: 'Are students graduating into environments where their AI skills will hold up?',
+      details: [
+        'No conversations with higher education or local employers about AI expectations.',
+        'Aware of outside demand but no action taken yet.',
+        'Partnerships with colleges and employers are forming. Student experiences are shifting.',
+        'Graduates show AI literacy that aligns to college, trade, and workforce expectations.'
+      ],
+      next: 'Open one conversation with a local college or employer about what AI skills they expect from graduates.'
+    }
+  };
+
+  var STAGE_WORD = ['Zero','One','Two','Three','Four','Five','Six','Seven','Eight'];
+  var STORAGE_KEY = 'tcea_ai_roadmap_v2';
+  var state = loadState();
+  var selectedStage = 1;
+
+  function loadState() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return {};
+      var parsed = JSON.parse(raw);
+      return (parsed && typeof parsed === 'object') ? parsed : {};
+    } catch (e) { return {}; }
+  }
+
+  function saveState() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  // Build level buttons
+  var levelsEl = document.getElementById('tar-levels');
+  LEVEL_LABELS.forEach(function (label, idx) {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'tar-level-btn';
+    btn.setAttribute('data-level', String(idx));
+    btn.textContent = label;
+    btn.addEventListener('click', function () {
+      if (state[selectedStage] === idx) {
+        delete state[selectedStage];
+      } else {
+        state[selectedStage] = idx;
+      }
+      saveState();
+      renderTiles();
+      renderDetail();
+      renderMeter();
+      renderFocus();
+    });
+    levelsEl.appendChild(btn);
+  });
+
+  // Tile clicks
+  var tiles = root.querySelectorAll('.tar-tile');
+  tiles.forEach(function (tile) {
+    tile.addEventListener('click', function () {
+      selectedStage = parseInt(tile.getAttribute('data-stage'), 10);
+      renderTiles();
+      renderDetail();
+    });
+  });
+
+  function renderTiles() {
+    tiles.forEach(function (tile) {
+      var sId = parseInt(tile.getAttribute('data-stage'), 10);
+      if (sId === selectedStage) {
+        tile.classList.add('is-selected');
+      } else {
+        tile.classList.remove('is-selected');
+      }
+      if (typeof state[sId] === 'number') {
+        tile.setAttribute('data-level', String(state[sId]));
+      } else {
+        tile.removeAttribute('data-level');
+      }
+    });
+  }
+
+  function renderDetail() {
+    var s = STAGES[selectedStage];
+    document.getElementById('tar-detail-eyebrow').textContent = 'Stage ' + STAGE_WORD[selectedStage];
+    document.getElementById('tar-detail-title').textContent = s.title;
+    document.getElementById('tar-detail-question').textContent = s.question;
+
+    // Level buttons active state
+    var btns = levelsEl.querySelectorAll('.tar-level-btn');
+    var level = state[selectedStage];
+    var hasLevel = (typeof level === 'number');
+    btns.forEach(function (b) {
+      if (hasLevel && Number(b.getAttribute('data-level')) === level) {
+        b.classList.add('is-active');
+      } else {
+        b.classList.remove('is-active');
+      }
+    });
+
+    var textEl = document.getElementById('tar-level-text');
+    if (hasLevel) {
+      textEl.classList.remove('is-placeholder');
+      textEl.innerHTML = '<strong>' + LEVEL_LABELS[level] + ' looks like</strong>' + escapeHtml(s.details[level]);
+    } else {
+      textEl.classList.add('is-placeholder');
+      textEl.textContent = 'Select a maturity level above. Your choice saves to this browser.';
+    }
+  }
+
+  function renderMeter() {
+    var answered = 0, totalScore = 0;
+    for (var i = 1; i <= 8; i++) {
+      if (typeof state[i] === 'number') { answered++; totalScore += state[i]; }
+    }
+    var readiness = answered === 0 ? 0 : Math.round((totalScore / 24) * 100);
+    document.getElementById('tar-fill').style.width = readiness + '%';
+
+    var statusEl = document.getElementById('tar-status');
+    if (answered === 0) {
+      statusEl.innerHTML = '<strong>Not yet started</strong>';
+      return;
+    }
+    var label;
+    if (readiness < 15) label = 'Just beginning';
+    else if (readiness < 40) label = 'Early foundation';
+    else if (readiness < 65) label = 'Building momentum';
+    else if (readiness < 90) label = 'Well underway';
+    else label = 'Strong across the board';
+    statusEl.innerHTML = '<strong>' + label + '</strong> · ' + readiness + '% · ' + answered + '/8 rated';
+  }
+
+  function renderFocus() {
+    var textEl = document.getElementById('tar-focus-text');
+    var answered = [];
+    for (var i = 1; i <= 8; i++) {
+      if (typeof state[i] === 'number') answered.push({ stage: i, level: state[i] });
+    }
+    if (answered.length === 0) {
+      textEl.innerHTML = 'Start with Stage One. Review your current policy against the checklist and name the gaps before rushing to fix them.';
+      return;
+    }
+    var sorted = answered.slice().sort(function (a, b) {
+      if (a.level !== b.level) return a.level - b.level;
+      return a.stage - b.stage;
+    });
+    var focus = sorted[0];
+    textEl.innerHTML = '<strong>Stage ' + focus.stage + ':</strong> ' + escapeHtml(STAGES[focus.stage].next);
+  }
+
+  document.getElementById('tar-reset').addEventListener('click', function () {
+    if (!confirm('Clear all responses?')) return;
+    state = {};
+    saveState();
+    renderTiles();
+    renderDetail();
+    renderMeter();
+    renderFocus();
+  });
+
+  function escapeHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  // Initial render
+  renderTiles();
+  renderDetail();
+  renderMeter();
+  renderFocus();
+})();
+</script>
+
+</div>
