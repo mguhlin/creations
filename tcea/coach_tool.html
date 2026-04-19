@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>High-Effect Strategy Coach — K-12 Coaching Tool</title>
+<style>
+  :root {
+    --c-bg: #f7f7f4;
+    --c-panel: #ffffff;
+    --c-ink: #1f2a37;
+    --c-muted: #5b6470;
+    --c-line: #d9dde2;
+    --c-accent: #2a6f97;
+    --c-accent-soft: #e8f1f6;
+    --c-good: #1b8a5a;
+    --c-warn: #c47b00;
+    --c-bad:  #b43c3c;
+    --r: 6px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--c-bg); color: var(--c-ink); font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  a { color: var(--c-accent); }
+  header { background: var(--c-ink); color: #fff; padding: 18px 24px; }
+  header h1 { margin: 0 0 4px 0; font-size: 1.35em; }
+  header p  { margin: 0; color: #c9d1d9; font-size: 0.93em; }
+  nav.tabs { background: var(--c-panel); border-bottom: 1px solid var(--c-line); padding: 0 24px; position: sticky; top: 0; z-index: 10; display: flex; flex-wrap: wrap; gap: 2px; }
+  nav.tabs button { background: none; border: 0; border-bottom: 3px solid transparent; padding: 12px 14px; font: inherit; color: var(--c-muted); cursor: pointer; }
+  nav.tabs button:hover { color: var(--c-ink); }
+  nav.tabs button.active { color: var(--c-ink); border-bottom-color: var(--c-accent); font-weight: 600; }
+  main { max-width: 1050px; margin: 0 auto; padding: 22px 24px 60px; }
+  section.panel { display: none; }
+  section.panel.active { display: block; }
+  .card { background: var(--c-panel); border: 1px solid var(--c-line); border-radius: var(--r); padding: 18px 20px; margin-bottom: 16px; }
+  .card h2 { margin-top: 0; font-size: 1.1em; }
+  .card h3 { margin: 14px 0 6px; font-size: 1em; }
+  .muted { color: var(--c-muted); font-size: 0.9em; }
+  .sentence-stems { background: var(--c-accent-soft); border-left: 3px solid var(--c-accent); padding: 8px 12px; border-radius: 4px; font-style: italic; margin: 8px 0; }
+  .sentence-stems ul { margin: 4px 0; padding-left: 18px; }
+  textarea { width: 100%; min-height: 80px; padding: 8px 10px; border: 1px solid var(--c-line); border-radius: 4px; font: inherit; resize: vertical; }
+  input[type=text], input[type=search], select { padding: 8px 10px; border: 1px solid var(--c-line); border-radius: 4px; font: inherit; }
+  input[type=search] { min-width: 260px; }
+  label { display: block; font-weight: 600; margin: 10px 0 4px; font-size: 0.92em; }
+  label.inline { display: inline-block; font-weight: normal; margin-right: 14px; }
+  button.btn { background: var(--c-accent); color: #fff; border: 0; padding: 8px 14px; border-radius: 4px; font: inherit; cursor: pointer; }
+  button.btn:hover { background: #1f557a; }
+  button.btn.secondary { background: #6a747f; }
+  button.btn.secondary:hover { background: #505963; }
+  button.btn.mini { padding: 4px 10px; font-size: 0.85em; }
+  table { border-collapse: collapse; width: 100%; margin: 8px 0; }
+  th, td { border: 1px solid var(--c-line); padding: 6px 8px; text-align: left; vertical-align: top; font-size: 0.93em; }
+  th { background: #f0f2f5; font-weight: 600; }
+  tr.hidden { display: none; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.78em; font-weight: 600; }
+  .tag.high   { background: #dff5e9; color: var(--c-good); }
+  .tag.mid    { background: #fdf0d9; color: var(--c-warn); }
+  .tag.low    { background: #f9dede; color: var(--c-bad); }
+  .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .steps { counter-reset: step; list-style: none; padding: 0; }
+  .steps li { counter-increment: step; padding: 6px 0 6px 34px; position: relative; }
+  .steps li::before { content: counter(step); position: absolute; left: 0; top: 6px; width: 24px; height: 24px; background: var(--c-accent); color: #fff; border-radius: 50%; text-align: center; font-weight: 600; font-size: 0.82em; line-height: 24px; }
+  pre.output { background: #f0f2f5; padding: 10px 12px; border-radius: 4px; white-space: pre-wrap; font: 13px/1.5 ui-monospace, SFMono-Regular, Consolas, monospace; border: 1px solid var(--c-line); max-height: 420px; overflow: auto; }
+  .filter-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin: 8px 0 12px; }
+  .do-dont { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .do-dont ul { margin: 4px 0 0 18px; padding: 0; }
+  .do-dont .do   { border-left: 3px solid var(--c-good); padding-left: 10px; }
+  .do-dont .dont { border-left: 3px solid var(--c-bad);  padding-left: 10px; }
+  details summary { cursor: pointer; font-weight: 600; }
+  .score-input { width: 64px; }
+  footer { text-align: center; color: var(--c-muted); font-size: 0.85em; padding: 20px; }
+  @media print {
+    nav.tabs, button.btn, #print-btn { display: none !important; }
+    section.panel { display: block !important; page-break-before: always; }
+    section.panel:first-of-type { page-break-before: auto; }
+    .card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>High-Effect Strategy Coach</h1>
+  <p>An offline coaching tool for K-12 instructional coaches. Combines PRISM reasoning, high-effect-size research, and critical-thinking frameworks (FLOATER, Orwell, CRITIC, SIFT). No sign-in, no data sent anywhere — everything stays in your browser.</p>
+</header>
+
+<nav class="tabs" role="tablist">
+  <button class="tab active" data-target="overview">Overview</button>
+  <button class="tab" data-target="prism">PRISM Workflow</button>
+  <button class="tab" data-target="effects">Effect Sizes</button>
+  <button class="tab" data-target="floater">FLOATER</button>
+  <button class="tab" data-target="orwell">Orwell Test</button>
+  <button class="tab" data-target="critic">CRITIC</button>
+  <button class="tab" data-target="sift">SIFT</button>
+  <button class="tab" data-target="plan">Plan Builder</button>
+  <button class="tab" data-target="reference">Reference</button>
+</nav>
+
+<main>
+
+<!-- ============= OVERVIEW ============= -->
+<section id="overview" class="panel active">
+  <div class="card">
+    <h2>How to use this tool</h2>
+    <p>Open it in any browser. Nothing is transmitted — all your notes live only in this tab. When you close the tab, they're gone unless you copy them out first.</p>
+    <ol class="steps">
+      <li><b>Clarify the goal.</b> Start in <b>PRISM Workflow</b>. Answer each of the five prompts (Patterns → Reasoning → Ideas → Situation → Methods) as you think through the coaching scenario.</li>
+      <li><b>Pick strategies.</b> In <b>Effect Sizes</b>, filter by learning phase (surface / deep / transfer) and minimum effect size. Hattie's "zone of desired effects" starts at d = 0.40.</li>
+      <li><b>Evaluate any evidence.</b> Before accepting a claim (vendor pitch, study, blog post), run it through <b>FLOATER</b>, <b>Orwell</b>, <b>CRITIC</b>, or <b>SIFT</b>. Each produces a scored table you can copy into your notes.</li>
+      <li><b>Build the plan.</b> In <b>Plan Builder</b>, assemble the recommendation: goal, strategies, effect sizes, SOLO depth, success measure. Copy or print it.</li>
+    </ol>
+    <p class="muted">This page is a companion to the High-Effect Strategy Coach custom assistant. It is not the assistant itself — it is a reference and note-taking tool you can use on a laptop in the classroom, during a coaching cycle, or in a PLC meeting.</p>
+    <p><button class="btn" id="print-btn" onclick="window.print()">Print this tool</button></p>
+  </div>
+
+  <div class="card">
+    <h2>The four frameworks at a glance</h2>
+    <table>
+      <tr><th>Framework</th><th>Best used for</th><th>Criteria</th></tr>
+      <tr><td><b>PRISM</b></td><td>Structured reasoning through a coaching decision</td><td>Patterns, Reasoning, Ideas, Situation, Methods</td></tr>
+      <tr><td><b>FLOATER</b></td><td>Evaluating scientific or empirical claims</td><td>Falsifiability, Logic, Objectivity, Alternative explanations, Tentative conclusions, Evidence, Replicability</td></tr>
+      <tr><td><b>Orwell Test</b></td><td>News, media, or opinion articles</td><td>Facts, Source, Method</td></tr>
+      <tr><td><b>CRITIC</b></td><td>Claims where the claimant's motivation matters</td><td>Claim, Role of claimant, Information, Testing, Independent testing, Conclusion</td></tr>
+      <tr><td><b>SIFT</b></td><td>Rapid evaluation of online / social-media content</td><td>Stop, Investigate source, Find better coverage, Trace claim to original</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============= PRISM ============= -->
+<section id="prism" class="panel">
+  <div class="card">
+    <h2>PRISM workflow for a coaching scenario</h2>
+    <p class="muted">Work through each step. Don't skip ahead — the value is in pausing at each one. The stems are prompts; you don't have to use them literally.</p>
+    <label>Scenario / goal you're coaching on</label>
+    <textarea id="prism-scenario" placeholder="e.g. 7th-grade ELA teacher wants to improve argumentative writing for students who struggle with evidence use."></textarea>
+  </div>
+
+  <div class="card">
+    <h3>P — Patterns <span class="muted">(What patterns do you see?)</span></h3>
+    <div class="sentence-stems"><ul>
+      <li>"Here, I noticed that…"</li>
+      <li>"The pattern I see is…"</li>
+      <li>"This reminds me of…"</li>
+    </ul></div>
+    <textarea id="prism-p" placeholder="What recurring behavior, skill gap, or instructional pattern do you notice?"></textarea>
+  </div>
+
+  <div class="card">
+    <h3>R — Reasoning <span class="muted">(How do things fit together?)</span></h3>
+    <div class="sentence-stems"><ul>
+      <li>"This connects to… because…"</li>
+      <li>"The reason for this is…"</li>
+      <li>"One thing that makes sense is…"</li>
+    </ul></div>
+    <textarea id="prism-r" placeholder="Which evidence-based principle(s) explain the pattern? Link cause to effect."></textarea>
+  </div>
+
+  <div class="card">
+    <h3>I — Ideas <span class="muted">(What different ideas can we mix?)</span></h3>
+    <div class="sentence-stems"><ul>
+      <li>"Another way to think about this is…"</li>
+      <li>"I have a different viewpoint…"</li>
+      <li>"To add to that idea…"</li>
+    </ul></div>
+    <textarea id="prism-i" placeholder="Candidate strategies (2–4). For each, check the Effect Sizes tab for d, then list them here."></textarea>
+  </div>
+
+  <div class="card">
+    <h3>S — Situation <span class="muted">(What's the bigger picture?)</span></h3>
+    <div class="sentence-stems"><ul>
+      <li>"The bigger picture shows…"</li>
+      <li>"Beyond what we see here…"</li>
+      <li>"This connects to other things by…"</li>
+    </ul></div>
+    <textarea id="prism-s" placeholder="Where does this fit in a unit, semester, or coaching cycle? What constraints or supports matter?"></textarea>
+  </div>
+
+  <div class="card">
+    <h3>M — Methods <span class="muted">(How can we check our answers?)</span></h3>
+    <div class="sentence-stems"><ul>
+      <li>"We can test this by…"</li>
+      <li>"One way to check this is…"</li>
+      <li>"Another approach would be…"</li>
+    </ul></div>
+    <textarea id="prism-m" placeholder="How will the teacher know it's working? Name at least one formative and one summative check."></textarea>
+  </div>
+
+  <div class="card">
+    <button class="btn" onclick="exportPrism()">Build markdown summary</button>
+    <button class="btn secondary" onclick="copyElementText('prism-output')">Copy</button>
+    <pre class="output" id="prism-output" aria-live="polite"></pre>
+  </div>
+</section>
+
+<!-- ============= EFFECT SIZES ============= -->
+<section id="effects" class="panel">
+  <div class="card">
+    <h2>Effect sizes (Visible Learning MetaX, Feb 2025)</h2>
+    <p class="muted">Hattie's zone of desired effects starts at <b>d = 0.40</b>. Tagged <span class="tag high">≥ 0.80 considerably accelerate</span> <span class="tag mid">0.40–0.79 accelerate</span> <span class="tag low">&lt; 0.40 lower yield</span>.</p>
+    <div class="filter-row">
+      <input type="search" id="fx-search" placeholder="Search strategy name…">
+      <label class="inline"><input type="checkbox" class="fx-phase" value="Surface Learning" checked> Surface</label>
+      <label class="inline"><input type="checkbox" class="fx-phase" value="Deep Learning" checked> Deep</label>
+      <label class="inline"><input type="checkbox" class="fx-phase" value="Transfer Learning" checked> Transfer</label>
+      <label class="inline">Min d:
+        <select id="fx-min">
+          <option value="0">0.00 (show all)</option>
+          <option value="0.4" selected>0.40 (zone)</option>
+          <option value="0.6">0.60 (high yield)</option>
+          <option value="0.8">0.80 (considerable)</option>
+        </select>
+      </label>
+    </div>
+    <table id="fx-table">
+      <thead><tr><th>Phase</th><th>Strategy</th><th>Effect size (d)</th><th>Impact</th></tr></thead>
+      <tbody id="fx-body"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============= FLOATER ============= -->
+<section id="floater" class="panel">
+  <div class="card">
+    <h2>FLOATER — evaluate a scientific / empirical claim</h2>
+    <p class="muted">Use when a colleague, vendor, or article makes a claim about "what works" in education. Score each letter 1 (poor) to 5 (strong). The recommendation updates automatically.</p>
+    <label>Claim being evaluated</label>
+    <input type="text" id="floater-claim" style="width:100%" placeholder="e.g. Program X raises reading scores by 30%.">
+    <table>
+      <thead><tr><th>Letter</th><th>Criterion</th><th>What the source says</th><th>Score (1–5)</th></tr></thead>
+      <tbody id="floater-body"></tbody>
+    </table>
+    <button class="btn" onclick="scoreFramework('floater')">Build evaluation markdown</button>
+    <button class="btn secondary" onclick="copyElementText('floater-output')">Copy</button>
+    <pre class="output" id="floater-output"></pre>
+  </div>
+</section>
+
+<!-- ============= ORWELL ============= -->
+<section id="orwell" class="panel">
+  <div class="card">
+    <h2>Orwell Test — evaluate news / media / opinion</h2>
+    <p class="muted">If any criterion fails, be skeptical. Two or three failures signal likely propaganda.</p>
+    <label>Item being evaluated</label>
+    <input type="text" id="orwell-claim" style="width:100%" placeholder="e.g. News article claiming phonics-only instruction is best.">
+    <table>
+      <thead><tr><th>Criterion</th><th>Question</th><th>Your assessment</th><th>Pass?</th></tr></thead>
+      <tbody id="orwell-body"></tbody>
+    </table>
+    <button class="btn" onclick="scoreFramework('orwell')">Build evaluation markdown</button>
+    <button class="btn secondary" onclick="copyElementText('orwell-output')">Copy</button>
+    <pre class="output" id="orwell-output"></pre>
+  </div>
+</section>
+
+<!-- ============= CRITIC ============= -->
+<section id="critic" class="panel">
+  <div class="card">
+    <h2>CRITIC — six-step credibility evaluation</h2>
+    <p class="muted">Best when the claimant has an incentive or agenda (vendor, think tank, advocacy group).</p>
+    <label>Claim being evaluated</label>
+    <input type="text" id="critic-claim" style="width:100%" placeholder="e.g. Vendor says their adaptive platform improves outcomes by 2 grade levels.">
+    <table>
+      <thead><tr><th>Step</th><th>Prompt</th><th>Your notes</th><th>Score (1–5)</th></tr></thead>
+      <tbody id="critic-body"></tbody>
+    </table>
+    <button class="btn" onclick="scoreFramework('critic')">Build evaluation markdown</button>
+    <button class="btn secondary" onclick="copyElementText('critic-output')">Copy</button>
+    <pre class="output" id="critic-output"></pre>
+  </div>
+</section>
+
+<!-- ============= SIFT ============= -->
+<section id="sift" class="panel">
+  <div class="card">
+    <h2>SIFT — rapid check on online content</h2>
+    <p class="muted">Use for social posts, blog headlines, viral screenshots. Under two minutes per pass.</p>
+    <label>Item being checked</label>
+    <input type="text" id="sift-claim" style="width:100%" placeholder="e.g. Viral tweet claiming a new study proves AI tutors beat human teachers.">
+    <ol class="steps" id="sift-steps">
+      <li><b>Stop.</b> Pause before sharing or trusting. <label><input type="checkbox" class="sift-cb" data-k="stop"> Done</label>
+        <textarea class="sift-t" data-k="stop" placeholder="First reaction / why you paused."></textarea></li>
+      <li><b>Investigate the source.</b> <label><input type="checkbox" class="sift-cb" data-k="investigate"> Done</label>
+        <textarea class="sift-t" data-k="investigate" placeholder="Who made this? What's their track record, funding, agenda?"></textarea></li>
+      <li><b>Find better coverage.</b> <label><input type="checkbox" class="sift-cb" data-k="find"> Done</label>
+        <textarea class="sift-t" data-k="find" placeholder="What do high-quality outlets or primary sources say about this?"></textarea></li>
+      <li><b>Trace claim to original context.</b> <label><input type="checkbox" class="sift-cb" data-k="trace"> Done</label>
+        <textarea class="sift-t" data-k="trace" placeholder="Follow the link chain to the original study, quote, or image."></textarea></li>
+    </ol>
+    <button class="btn" onclick="exportSift()">Build SIFT summary</button>
+    <button class="btn secondary" onclick="copyElementText('sift-output')">Copy</button>
+    <pre class="output" id="sift-output"></pre>
+  </div>
+</section>
+
+<!-- ============= PLAN ============= -->
+<section id="plan" class="panel">
+  <div class="card">
+    <h2>Plan builder</h2>
+    <p class="muted">Assemble the recommendation you'll give to the teacher or take into a coaching cycle.</p>
+    <label>Coaching goal</label>
+    <textarea id="pl-goal" placeholder="What learning outcome or teaching shift are you working toward?"></textarea>
+
+    <label>Learners (grade, subject, special populations)</label>
+    <input type="text" id="pl-learners" style="width:100%" placeholder="e.g. 9th-grade Biology, 40% EL students, mixed prior knowledge.">
+
+    <label>Selected strategies (effect sizes auto-lookup)</label>
+    <select id="pl-strategy"></select>
+    <button class="btn mini" onclick="addStrategy()">Add strategy</button>
+    <ul id="pl-strategies-list" style="margin-top:8px;"></ul>
+
+    <label>SOLO depth target</label>
+    <select id="pl-solo">
+      <option value="Unistructural">Unistructural — one concept</option>
+      <option value="Multistructural" selected>Multistructural — several unconnected ideas</option>
+      <option value="Relational">Relational — ideas integrated</option>
+      <option value="Extended Abstract">Extended Abstract — applied and extended</option>
+    </select>
+
+    <label>Implementation frame</label>
+    <select id="pl-frame">
+      <option value="ALDO — Relationship-building">ALDO — Relationship-building</option>
+      <option value="ALDO — Pre-assessment">ALDO — Pre-assessment</option>
+      <option value="ALDO — Strategic instruction" selected>ALDO — Strategic instruction</option>
+      <option value="ALDO — Post-assessment">ALDO — Post-assessment</option>
+      <option value="ALDO — Reflection">ALDO — Reflection</option>
+      <option value="EIIR — Empower &amp; Engage">EIIR — Empower &amp; Engage</option>
+      <option value="EIIR — Investigate &amp; Innovate">EIIR — Investigate &amp; Innovate</option>
+      <option value="EIIR — Implement &amp; Improve">EIIR — Implement &amp; Improve</option>
+      <option value="EIIR — Reflect &amp; Realize">EIIR — Reflect &amp; Realize</option>
+    </select>
+
+    <label>Feedback level (Hattie)</label>
+    <select id="pl-feedback">
+      <option value="Task — correct / incorrect">Task — correct / incorrect</option>
+      <option value="Process — how you did it" selected>Process — how you did it</option>
+      <option value="Self-regulation — own your own learning">Self-regulation — own your own learning</option>
+      <option value="Self — praise (lowest impact, use sparingly)">Self — praise (lowest impact)</option>
+    </select>
+
+    <label>Formative measure</label>
+    <textarea id="pl-form" placeholder="Exit ticket, student work sample, thumb-check, etc."></textarea>
+
+    <label>Summative measure</label>
+    <textarea id="pl-summ" placeholder="Rubric-scored performance task, common assessment, unit test."></textarea>
+
+    <label>Next action (one concrete step for the teacher)</label>
+    <textarea id="pl-next" placeholder="e.g. Draft a jigsaw grouping for Tuesday's class using the claim–evidence–reasoning template."></textarea>
+
+    <div style="margin-top:12px;">
+      <button class="btn" onclick="buildPlan()">Build plan markdown</button>
+      <button class="btn secondary" onclick="copyElementText('pl-output')">Copy</button>
+    </div>
+    <pre class="output" id="pl-output"></pre>
+  </div>
+</section>
+
+<!-- ============= REFERENCE ============= -->
+<section id="reference" class="panel">
+  <div class="card">
+    <h2>SOLO taxonomy</h2>
+    <ol>
+      <li><b>Prestructural</b> — no connections between ideas; surface-level misunderstanding.</li>
+      <li><b>Unistructural</b> — grasps one relevant concept.</li>
+      <li><b>Multistructural</b> — identifies multiple concepts but does not connect them.</li>
+      <li><b>Relational</b> — integrates concepts into a coherent whole.</li>
+      <li><b>Extended Abstract</b> — generalizes, transfers, or creates new applications.</li>
+    </ol>
+    <p class="muted">Choose strategies that push students one level deeper than where they are today, not two.</p>
+  </div>
+
+  <div class="card">
+    <h2>Feedback levels (Hattie)</h2>
+    <ol>
+      <li><b>Task</b> — correct or incorrect information about the work itself. High impact on novel tasks.</li>
+      <li><b>Process</b> — feedback about the strategies used. Highest average impact on deep learning.</li>
+      <li><b>Self-regulation</b> — feedback that builds the student's capacity to monitor their own learning.</li>
+      <li><b>Self</b> — praise ("good job"). Low impact on learning; use sparingly.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2>Do / Don't</h2>
+    <div class="do-dont">
+      <div class="do">
+        <h3>Do</h3>
+        <ul>
+          <li>Ground every recommendation in the embedded effect-size table.</li>
+          <li>Pause coaching and evaluate whenever someone cites evidence.</li>
+          <li>Balance surface, deep, and transfer strategies across a unit.</li>
+          <li>Name at least one formative and one summative measure.</li>
+          <li>Match the feedback level to the learning phase.</li>
+        </ul>
+      </div>
+      <div class="dont">
+        <h3>Don't</h3>
+        <ul>
+          <li>Invent effect sizes or source them from memory.</li>
+          <li>Recommend Google Jamboard, Jamboard, Flip, or Flipgrid. Use digital whiteboards or Padlet Video Recording instead.</li>
+          <li>Advance past a PRISM step before the teacher has engaged with it.</li>
+          <li>Accept a vendor or marketing claim without running it through FLOATER, CRITIC, or SIFT first.</li>
+          <li>Pile on multiple strategies at once — pick one or two and measure impact.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Common biases and fallacies to flag</h2>
+    <ul>
+      <li><b>Confirmation bias</b> — accepting evidence that supports what you already believe, dismissing what doesn't.</li>
+      <li><b>Anecdote as evidence</b> — one classroom story is not a pattern.</li>
+      <li><b>Correlation presented as causation</b> — two things moving together does not mean one caused the other.</li>
+      <li><b>Appeal to authority</b> — "a famous educator said so" is not evidence.</li>
+      <li><b>Cherry-picking</b> — quoting only the results that support the claim.</li>
+      <li><b>Survivorship bias</b> — studying only the schools or students who succeeded and ignoring the ones who didn't.</li>
+      <li><b>Publication bias</b> — positive results get published; null results often don't.</li>
+      <li><b>Novelty effect</b> — any new thing can produce a short-term bump; watch for whether it persists.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>About this tool</h2>
+    <p class="muted">Self-contained HTML — no external code, no network calls, no data storage. Your notes exist only in this browser tab. To save, copy the generated markdown and paste it wherever you keep coaching records.</p>
+    <p class="muted">Companion to the <b>High-Effect Strategy Coach</b> custom assistant (see <code>prompt.md</code> and <code>README.md</code> in this folder). The underlying research, frameworks, and effect sizes are drawn from Visible Learning MetaX (Feb 2025), Melanie Trecek-King (FLOATER), Wayne Bartz (CRITIC), Mike Caulfield (SIFT), and the PRISM framework.</p>
+  </div>
+</section>
+
+</main>
+
+<footer>High-Effect Strategy Coach — offline coaching tool. No data leaves this browser.</footer>
+
+<script>
+// ---------- effect sizes (embedded) ----------
+const EFFECT_SIZES = [
+  // Surface
+  ["Surface Learning", "The Jigsaw Method", 0.92, "Potential to considerably accelerate"],
+  ["Surface Learning", "Captions and subtitles", 0.91, "Potential to considerably accelerate"],
+  ["Surface Learning", "Feedback: corrective reinforcement and cues", 0.92, "Potential to considerably accelerate"],
+  ["Surface Learning", "Augmented Reality", 0.63, "Potential to accelerate"],
+  ["Surface Learning", "Effects of testing", 0.63, "Potential to accelerate"],
+  ["Surface Learning", "Differentiation", 0.58, "Potential to accelerate"],
+  ["Surface Learning", "Flipped classrooms", 0.58, "Potential to accelerate"],
+  ["Surface Learning", "Direct instruction", 0.56, "Potential to accelerate"],
+  ["Surface Learning", "Inquiry-based teaching", 0.49, "Potential to accelerate"],
+  ["Surface Learning", "Exposure to reading", 0.48, "Potential to accelerate"],
+  ["Surface Learning", "Reading strategies", 0.47, "Potential to accelerate"],
+  ["Surface Learning", "Feedback from student re quality", 0.47, "Potential to accelerate"],
+  ["Surface Learning", "Feedback from tests", 0.41, "Potential to accelerate"],
+  // Deep
+  ["Deep Learning", "Cognitive task analysis", 1.09, "Potential to considerably accelerate"],
+  ["Deep Learning", "The Jigsaw Method", 0.92, "Potential to considerably accelerate"],
+  ["Deep Learning", "Constructivist teaching", 0.90, "Potential to considerably accelerate"],
+  ["Deep Learning", "Feedback timing", 0.89, "Potential to considerably accelerate"],
+  ["Deep Learning", "Argumentation", 0.86, "Potential to considerably accelerate"],
+  ["Deep Learning", "Outlining and organizing", 0.86, "Potential to considerably accelerate"],
+  ["Deep Learning", "Effort management", 0.77, "Potential to considerably accelerate"],
+  ["Deep Learning", "Evaluation and reflection", 0.75, "Potential to considerably accelerate"],
+  ["Deep Learning", "Elaboration and organization", 0.72, "Potential to considerably accelerate"],
+  ["Deep Learning", "Learning strategies", 0.67, "Potential to accelerate"],
+  ["Deep Learning", "Alternative assessment methods", 0.66, "Potential to accelerate"],
+  ["Deep Learning", "Feedback: tasks and processes", 0.63, "Potential to accelerate"],
+  ["Deep Learning", "Inductive teaching", 0.60, "Potential to accelerate"],
+  ["Deep Learning", "Design thinking", 0.51, "Potential to accelerate"],
+  // Transfer
+  ["Transfer Learning", "Collective teacher efficacy", 1.01, "Potential to considerably accelerate"],
+  ["Transfer Learning", "Virtual Reality in Languages", 0.93, "Potential to considerably accelerate"],
+  ["Transfer Learning", "The Jigsaw Method", 0.92, "Potential to considerably accelerate"],
+  ["Transfer Learning", "Mathematics problem solving", 0.88, "Potential to considerably accelerate"],
+  ["Transfer Learning", "Blended learning", 0.85, "Potential to considerably accelerate"],
+  ["Transfer Learning", "Virtual Reality in Science", 0.80, "Potential to considerably accelerate"],
+  ["Transfer Learning", "Transfer strategies", 0.75, "Potential to considerably accelerate"],
+  ["Transfer Learning", "Acceleration programs", 0.55, "Potential to accelerate"],
+];
+
+// ---------- framework definitions ----------
+const FLOATER = [
+  ["F", "Falsifiability", "Is the claim testable — could it be shown false?"],
+  ["L", "Logic", "Does the reasoning follow from sound premises?"],
+  ["O", "Objectivity", "Is the claim based on unbiased, independent evaluation?"],
+  ["A", "Alternative explanations", "Were other plausible explanations considered?"],
+  ["T", "Tentative conclusions", "Are the conclusions framed as tentative and revisable?"],
+  ["E", "Evidence", "Is the claim supported by sufficient, reliable evidence?"],
+  ["R", "Replicability", "Has the finding been independently verified?"],
+];
+
+const ORWELL = [
+  ["Facts",  "Does the information rely on verifiable facts that can be confirmed using legal, scientific, or logical standards of proof?"],
+  ["Source", "Is the source known for accurate and reliable reporting?"],
+  ["Method", "Does the source use professional techniques without logical fallacies or deceptive tactics?"],
+];
+
+const CRITIC = [
+  ["C", "Claim — identify what is being asserted."],
+  ["R", "Role of the claimant — who is making the claim, and what is their motivation?"],
+  ["I", "Information — what evidence is offered?"],
+  ["T", "Testing — has the claim been tested?"],
+  ["I", "Independent testing — has it been verified by unaffiliated parties?"],
+  ["C", "Conclusion — does the conclusion logically follow from the evidence?"],
+];
+
+// ---------- tabs ----------
+document.querySelectorAll("nav.tabs button.tab").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const target = btn.dataset.target;
+    document.querySelectorAll("nav.tabs button.tab").forEach(b => b.classList.toggle("active", b === btn));
+    document.querySelectorAll("section.panel").forEach(s => s.classList.toggle("active", s.id === target));
+    window.scrollTo({top: 0, behavior: "smooth"});
+  });
+});
+
+// ---------- effect sizes table render ----------
+function tagFor(d) {
+  if (d >= 0.80) return '<span class="tag high">' + d.toFixed(2) + '</span>';
+  if (d >= 0.40) return '<span class="tag mid">'  + d.toFixed(2) + '</span>';
+  return '<span class="tag low">'  + d.toFixed(2) + '</span>';
+}
+function renderEffects() {
+  const body = document.getElementById("fx-body");
+  const phases = Array.from(document.querySelectorAll(".fx-phase:checked")).map(el => el.value);
+  const minD = parseFloat(document.getElementById("fx-min").value);
+  const q = document.getElementById("fx-search").value.trim().toLowerCase();
+  const rows = EFFECT_SIZES
+    .filter(r => phases.includes(r[0]) && r[2] >= minD && r[1].toLowerCase().includes(q))
+    .sort((a,b) => b[2] - a[2]);
+  body.innerHTML = rows.length === 0
+    ? '<tr><td colspan="4" class="muted">No strategies match these filters.</td></tr>'
+    : rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${tagFor(r[2])}</td><td>${r[3]}</td></tr>`).join("");
+}
+document.getElementById("fx-search").addEventListener("input", renderEffects);
+document.querySelectorAll(".fx-phase").forEach(el => el.addEventListener("change", renderEffects));
+document.getElementById("fx-min").addEventListener("change", renderEffects);
+renderEffects();
+
+// ---------- build FLOATER rows ----------
+(function buildFloater() {
+  const tb = document.getElementById("floater-body");
+  tb.innerHTML = FLOATER.map((r, i) =>
+    `<tr><td><b>${r[0]}</b></td><td>${r[1]}<div class="muted">${r[2]}</div></td>` +
+    `<td><textarea data-k="assess" data-i="${i}" style="min-height:48px" placeholder="What the source says / your read"></textarea></td>` +
+    `<td><input type="number" class="score-input" min="1" max="5" data-k="score" data-i="${i}"></td></tr>`
+  ).join("");
+})();
+
+// ---------- build Orwell rows ----------
+(function buildOrwell() {
+  const tb = document.getElementById("orwell-body");
+  tb.innerHTML = ORWELL.map((r, i) =>
+    `<tr><td><b>${r[0]}</b></td><td>${r[1]}</td>` +
+    `<td><textarea data-k="assess" data-i="${i}" style="min-height:48px" placeholder="Your assessment"></textarea></td>` +
+    `<td><select data-k="score" data-i="${i}"><option value="">—</option><option value="Yes">Yes</option><option value="No">No</option></select></td></tr>`
+  ).join("");
+})();
+
+// ---------- build CRITIC rows ----------
+(function buildCritic() {
+  const tb = document.getElementById("critic-body");
+  tb.innerHTML = CRITIC.map((r, i) =>
+    `<tr><td><b>${r[0]}</b></td><td>${r[1]}</td>` +
+    `<td><textarea data-k="assess" data-i="${i}" style="min-height:48px" placeholder="Your notes"></textarea></td>` +
+    `<td><input type="number" class="score-input" min="1" max="5" data-k="score" data-i="${i}"></td></tr>`
+  ).join("");
+})();
+
+// ---------- framework scoring ----------
+function scoreFramework(which) {
+  const defs = which === "floater" ? FLOATER : which === "orwell" ? ORWELL : CRITIC;
+  const claim = (document.getElementById(which + "-claim").value || "(claim not stated)").trim();
+  const section = document.getElementById(which);
+  const rows = defs.map((def, i) => {
+    const assess = (section.querySelector(`textarea[data-k="assess"][data-i="${i}"]`).value || "").trim() || "—";
+    const scoreEl = section.querySelector(`[data-k="score"][data-i="${i}"]`);
+    const score = (scoreEl.value || "—").toString();
+    return { def, assess, score };
+  });
+
+  let md = `## ${which.toUpperCase()} evaluation\n\n**Claim:** ${claim}\n\n`;
+  if (which === "floater") {
+    md += "| Letter | Criterion | Assessment | Score (1–5) |\n|---|---|---|---|\n";
+    rows.forEach(r => md += `| ${r.def[0]} | ${r.def[1]} | ${r.assess} | ${r.score} |\n`);
+  } else if (which === "orwell") {
+    md += "| Criterion | Assessment | Pass |\n|---|---|---|\n";
+    rows.forEach(r => md += `| ${r.def[0]} | ${r.assess} | ${r.score} |\n`);
+  } else {
+    md += "| Step | Prompt | Notes | Score (1–5) |\n|---|---|---|---|\n";
+    rows.forEach(r => md += `| ${r.def[0]} | ${r.def[1]} | ${r.assess} | ${r.score} |\n`);
+  }
+
+  // Verdict
+  let verdict;
+  if (which === "orwell") {
+    const no = rows.filter(r => r.score === "No").length;
+    if (no === 0) verdict = "All three criteria pass. Treat as credible.";
+    else if (no === 1) verdict = "One criterion fails. Verify before acting.";
+    else verdict = `${no} criteria fail — high risk of propaganda or unreliable reporting.`;
+  } else {
+    const nums = rows.map(r => parseFloat(r.score)).filter(n => !isNaN(n));
+    if (nums.length === 0) verdict = "No scores provided.";
+    else {
+      const avg = nums.reduce((a,b) => a+b, 0) / nums.length;
+      const verdictLabel = avg >= 4 ? "Adopt" : avg >= 3 ? "Adopt with caution" : avg >= 2 ? "Seek more evidence" : "Reject";
+      verdict = `Average score: ${avg.toFixed(2)} / 5 → **${verdictLabel}**`;
+    }
+  }
+  md += `\n**Verdict:** ${verdict}\n`;
+  document.getElementById(which + "-output").textContent = md;
+}
+
+// ---------- PRISM export ----------
+function exportPrism() {
+  const scenario = (document.getElementById("prism-scenario").value || "").trim();
+  const p = (document.getElementById("prism-p").value || "").trim();
+  const r = (document.getElementById("prism-r").value || "").trim();
+  const i = (document.getElementById("prism-i").value || "").trim();
+  const s = (document.getElementById("prism-s").value || "").trim();
+  const m = (document.getElementById("prism-m").value || "").trim();
+  const md =
+`## PRISM coaching notes
+
+**Scenario:** ${scenario || "(none)"}
+
+### P — Patterns
+${p || "(blank)"}
+
+### R — Reasoning
+${r || "(blank)"}
+
+### I — Ideas (candidate strategies)
+${i || "(blank)"}
+
+### S — Situation
+${s || "(blank)"}
+
+### M — Methods (how we'll know it's working)
+${m || "(blank)"}
+`;
+  document.getElementById("prism-output").textContent = md;
+}
+
+// ---------- SIFT export ----------
+function exportSift() {
+  const claim = (document.getElementById("sift-claim").value || "").trim();
+  const keys = ["stop","investigate","find","trace"];
+  const labels = {stop:"Stop", investigate:"Investigate the source", find:"Find better coverage", trace:"Trace to original"};
+  let md = `## SIFT evaluation\n\n**Item:** ${claim || "(not stated)"}\n\n`;
+  keys.forEach(k => {
+    const cb = document.querySelector(`.sift-cb[data-k="${k}"]`).checked;
+    const t  = (document.querySelector(`.sift-t[data-k="${k}"]`).value || "").trim();
+    md += `### ${labels[k]} — ${cb ? "✓ done" : "not done"}\n${t || "(no notes)"}\n\n`;
+  });
+  document.getElementById("sift-output").textContent = md;
+}
+
+// ---------- Plan builder ----------
+function populateStrategyDropdown() {
+  const sel = document.getElementById("pl-strategy");
+  const sorted = [...EFFECT_SIZES].sort((a,b) => b[2] - a[2]);
+  sel.innerHTML = sorted.map(r =>
+    `<option value="${r[1]}|${r[0]}|${r[2]}">${r[1]} — d=${r[2].toFixed(2)} (${r[0].replace(" Learning","")})</option>`
+  ).join("");
+}
+populateStrategyDropdown();
+
+const pickedStrategies = [];
+function addStrategy() {
+  const sel = document.getElementById("pl-strategy");
+  const v = sel.value;
+  if (!v || pickedStrategies.includes(v)) return;
+  pickedStrategies.push(v);
+  renderPickedStrategies();
+}
+function removeStrategy(v) {
+  const i = pickedStrategies.indexOf(v);
+  if (i >= 0) pickedStrategies.splice(i, 1);
+  renderPickedStrategies();
+}
+function renderPickedStrategies() {
+  const ul = document.getElementById("pl-strategies-list");
+  ul.innerHTML = pickedStrategies.map(v => {
+    const [name, phase, d] = v.split("|");
+    return `<li>${name} — d=${parseFloat(d).toFixed(2)} (${phase.replace(" Learning","")}) ` +
+           `<button class="btn mini secondary" onclick="removeStrategy('${v.replace(/'/g, "\\'")}')">remove</button></li>`;
+  }).join("");
+}
+
+function buildPlan() {
+  const goal = (document.getElementById("pl-goal").value || "").trim() || "(not stated)";
+  const learners = (document.getElementById("pl-learners").value || "").trim() || "(not specified)";
+  const solo = document.getElementById("pl-solo").value;
+  const frame = document.getElementById("pl-frame").value;
+  const feedback = document.getElementById("pl-feedback").value;
+  const form = (document.getElementById("pl-form").value || "").trim() || "(none yet)";
+  const summ = (document.getElementById("pl-summ").value || "").trim() || "(none yet)";
+  const next = (document.getElementById("pl-next").value || "").trim() || "(none yet)";
+
+  let stratBlock;
+  if (pickedStrategies.length === 0) {
+    stratBlock = "_No strategies selected._";
+  } else {
+    stratBlock = "| Strategy | Effect size (d) | Phase |\n|---|---|---|\n" +
+      pickedStrategies.map(v => {
+        const [name, phase, d] = v.split("|");
+        return `| ${name} | ${parseFloat(d).toFixed(2)} | ${phase.replace(" Learning","")} |`;
+      }).join("\n");
+  }
+
+  const md =
+`## Coaching plan
+
+**Goal:** ${goal}
+
+**Learners:** ${learners}
+
+**Strategies selected:**
+${stratBlock}
+
+**Target SOLO depth:** ${solo}
+
+**Implementation frame:** ${frame}
+
+**Feedback level (Hattie):** ${feedback}
+
+**Formative measure:** ${form}
+
+**Summative measure:** ${summ}
+
+**Next action:** ${next}
+`;
+  document.getElementById("pl-output").textContent = md;
+}
+
+// ---------- clipboard ----------
+function copyElementText(id) {
+  const el = document.getElementById(id);
+  const text = el.textContent;
+  if (!text.trim()) return;
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = el.dataset.flash || el.style.background;
+    el.style.background = "#d9f0d9";
+    setTimeout(() => { el.style.background = orig || ""; }, 400);
+  }).catch(() => {
+    // Fallback: select
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  });
+}
+</script>
+</body>
+</html>
