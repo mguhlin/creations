@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buyback Technology Vendor Assessment Tool</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0A3476;
+  --navy-dark: #071f4a;
+  --navy-mid: #12428f;
+  --gold: #FCB040;
+  --gold-light: #fdd17a;
+  --gold-pale: #FEF0D0;
+  --pale-navy: #D0D8F0;
+  --white: #ffffff;
+  --off-white: #f7f8fc;
+  --text: #1a1a2e;
+  --text-muted: #5a6680;
+  --border: #e2e7f5;
+  --teal: #0e6b8a;
+  --green: #1a7a4a;
+  --green-pale: #d5ecdc;
+  --amber: #b8741a;
+  --amber-pale: #fce5c4;
+  --red: #a02828;
+  --red-pale: #f5d5d5;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--off-white);
+  color: var(--text);
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+/* ============ TOP NAV ============ */
+.topnav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--navy-dark);
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  flex-wrap: wrap;
+}
+.brand {
+  font-family: 'DM Serif Display', serif;
+  color: var(--white);
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+}
+.brand em { color: var(--gold); font-style: normal; }
+.nav-links {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+.nav-links a {
+  color: var(--pale-navy);
+  text-decoration: none;
+  padding: 6px 12px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  border-radius: 5px;
+  transition: background 0.2s, color 0.2s;
+}
+.nav-links a:hover { background: rgba(252,176,64,0.18); color: var(--white); }
+
+/* ============ HERO ============ */
+.hero {
+  background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 100%);
+  color: var(--white);
+  padding: 56px 32px 48px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 80% 30%, rgba(252,176,64,0.12) 0%, transparent 65%);
+}
+.hero-inner { max-width: 1100px; margin: 0 auto; position: relative; }
+.hero-eyebrow {
+  display: inline-block;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid rgba(252,176,64,0.4);
+  padding: 5px 14px;
+  border-radius: 100px;
+  font-weight: 500;
+  margin-bottom: 18px;
+}
+.hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2rem, 4.5vw, 3.2rem);
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+.hero h1 em { color: var(--gold); font-style: italic; }
+.hero p.lede {
+  font-size: 1.05rem;
+  color: var(--pale-navy);
+  max-width: 720px;
+  font-weight: 300;
+}
+
+/* ============ LAYOUT ============ */
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 32px 80px;
+}
+
+section {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 36px 40px;
+  margin-top: 32px;
+  scroll-margin-top: 80px;
+  box-shadow: 0 1px 3px rgba(10,52,118,0.04);
+}
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.section-num {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--gold);
+}
+h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.7rem;
+  color: var(--navy);
+  line-height: 1.2;
+}
+.section-sub {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 24px;
+  max-width: 780px;
+}
+
+/* ============ VENDOR INFO ============ */
+.vendor-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 18px;
+}
+.field label {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.field input, .field textarea, .field select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  color: var(--text);
+  background: var(--white);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.field input:focus, .field textarea:focus, .field select:focus {
+  outline: none;
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(10,52,118,0.1);
+}
+
+/* ============ QUESTIONS ============ */
+.question {
+  border-left: 3px solid var(--gold);
+  padding: 16px 0 16px 20px;
+  margin-bottom: 24px;
+}
+.question:last-child { margin-bottom: 0; }
+.q-num {
+  display: inline-block;
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--gold);
+  margin-right: 8px;
+}
+.q-text {
+  font-weight: 600;
+  color: var(--navy);
+  font-size: 1.02rem;
+  margin-bottom: 10px;
+  display: inline;
+}
+.question textarea {
+  width: 100%;
+  min-height: 90px;
+  padding: 12px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.94rem;
+  resize: vertical;
+  background: var(--off-white);
+}
+.question textarea:focus {
+  outline: none;
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(10,52,118,0.1);
+  background: var(--white);
+}
+
+/* ============ RUBRIC ============ */
+.rubric-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 24px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--border);
+  align-items: start;
+}
+.rubric-row:last-child { border-bottom: none; }
+.crit-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+.crit-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.15rem;
+  color: var(--navy);
+}
+.weight-badge {
+  background: var(--gold-pale);
+  color: var(--amber);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.crit-detail {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  max-width: 560px;
+}
+.score-block {
+  text-align: right;
+  min-width: 200px;
+}
+.score-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.score-buttons {
+  display: inline-flex;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.score-buttons label {
+  padding: 9px 15px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  background: var(--white);
+  border-right: 1px solid var(--border);
+  transition: background 0.15s, color 0.15s;
+  user-select: none;
+}
+.score-buttons label:last-child { border-right: none; }
+.score-buttons input { display: none; }
+.score-buttons label:hover { background: var(--off-white); }
+.score-buttons input:checked + span,
+.score-buttons label:has(input:checked) {
+  background: var(--navy);
+  color: var(--white);
+  font-weight: 600;
+}
+.weighted {
+  font-family: 'Courier New', monospace;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+.weighted strong { color: var(--navy); font-weight: 600; }
+
+/* ============ RESULT ============ */
+.result-card {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+  color: var(--white);
+  border-radius: 12px;
+  padding: 40px;
+  text-align: center;
+}
+.result-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+.result-score {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(3.5rem, 9vw, 5.5rem);
+  line-height: 1;
+  color: var(--white);
+}
+.result-score small {
+  font-size: 0.35em;
+  color: var(--pale-navy);
+  font-style: italic;
+  margin-left: 6px;
+}
+.verdict {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 24px;
+  border-radius: 100px;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.verdict.safe { background: var(--green-pale); color: var(--green); }
+.verdict.review { background: var(--amber-pale); color: var(--amber); }
+.verdict.reject { background: var(--red-pale); color: var(--red); }
+.verdict.none { background: rgba(208,216,240,0.2); color: var(--pale-navy); }
+.verdict-note {
+  margin-top: 18px;
+  font-size: 0.92rem;
+  color: var(--pale-navy);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: 300;
+}
+
+.breakdown {
+  margin-top: 28px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 28px;
+}
+.breakdown h3 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.15rem;
+  color: var(--navy);
+  margin-bottom: 16px;
+}
+.breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.92rem;
+}
+.breakdown-row:last-child { border-bottom: none; }
+.breakdown-name { color: var(--text); }
+.breakdown-score { font-family: 'Courier New', monospace; color: var(--text-muted); }
+.breakdown-score strong { color: var(--navy); }
+
+/* ============ ACTIONS ============ */
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+}
+button, .btn {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 11px 22px;
+  border-radius: 8px;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.15s;
+}
+button:hover, .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(10,52,118,0.15); }
+button:active, .btn:active { transform: translateY(0); }
+.btn-primary { background: var(--gold); color: var(--navy-dark); }
+.btn-primary:hover { background: var(--gold-light); }
+.btn-outline { background: var(--white); color: var(--navy); border-color: var(--navy); }
+.btn-outline:hover { background: var(--pale-navy); }
+.btn-ghost { background: transparent; color: var(--text-muted); border-color: var(--border); }
+.btn-ghost:hover { background: var(--off-white); color: var(--navy); }
+.btn-danger { background: var(--white); color: var(--red); border-color: var(--red-pale); }
+.btn-danger:hover { background: var(--red-pale); }
+
+/* ============ SAVED VENDORS ============ */
+.saved-list {
+  display: grid;
+  gap: 12px;
+}
+.saved-empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-muted);
+  font-style: italic;
+  background: var(--off-white);
+  border-radius: 8px;
+  border: 1px dashed var(--border);
+}
+.saved-item {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: var(--off-white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.saved-info { min-width: 0; }
+.saved-name {
+  font-weight: 600;
+  color: var(--navy);
+  font-size: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.saved-meta {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.saved-pts {
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  color: var(--navy);
+  font-size: 1rem;
+  padding: 4px 12px;
+  background: var(--white);
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+.saved-pts.safe { color: var(--green); border-color: var(--green-pale); background: var(--green-pale); }
+.saved-pts.review { color: var(--amber); border-color: var(--amber-pale); background: var(--amber-pale); }
+.saved-pts.reject { color: var(--red); border-color: var(--red-pale); background: var(--red-pale); }
+.mini-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+.mini-btn:hover { background: var(--white); color: var(--navy); border-color: var(--navy); }
+.mini-btn.danger:hover { color: var(--red); border-color: var(--red); background: var(--red-pale); }
+
+/* ============ FOOTER ============ */
+footer {
+  background: var(--navy-dark);
+  color: var(--pale-navy);
+  padding: 28px 32px;
+  text-align: center;
+  font-size: 0.85rem;
+  margin-top: 60px;
+}
+footer em { color: var(--gold); font-style: normal; font-weight: 500; }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 860px) {
+  main { padding: 0 16px 60px; }
+  section { padding: 24px 20px; }
+  .hero { padding: 40px 20px 36px; }
+  .vendor-grid { grid-template-columns: 1fr; }
+  .rubric-row { grid-template-columns: 1fr; gap: 14px; }
+  .score-block { text-align: left; }
+  .topnav { padding: 10px 16px; gap: 12px; }
+  .nav-links { margin-left: 0; }
+  .nav-links a { padding: 5px 9px; font-size: 0.78rem; }
+  .saved-item { grid-template-columns: 1fr auto; row-gap: 8px; }
+  .saved-item .mini-btn { grid-column: span 1; }
+}
+
+@media (max-width: 520px) {
+  .score-buttons label { padding: 8px 11px; font-size: 0.85rem; }
+  .brand { font-size: 1rem; }
+  .actions { flex-direction: column; }
+  .actions button { width: 100%; }
+}
+
+/* ============ PRINT ============ */
+@media print {
+  body { background: var(--white); font-size: 11pt; }
+  .topnav, .actions, .saved-vendors-section, footer, #print-btn, #save-btn, #clear-btn, #export-btn, .btn, button { display: none !important; }
+  .hero {
+    background: var(--white) !important;
+    color: var(--navy) !important;
+    padding: 0 0 20px;
+    border-bottom: 2px solid var(--navy);
+    margin-bottom: 20px;
+  }
+  .hero h1, .hero h1 em { color: var(--navy) !important; }
+  .hero p.lede, .hero-eyebrow { color: var(--text) !important; border-color: var(--navy) !important; }
+  main { padding: 0 20px; max-width: 100%; }
+  section {
+    box-shadow: none;
+    border: 1px solid var(--border);
+    margin-top: 16px;
+    page-break-inside: avoid;
+    padding: 16px 20px;
+  }
+  h2 { font-size: 1.3rem; }
+  .result-card {
+    background: var(--white) !important;
+    color: var(--navy) !important;
+    border: 2px solid var(--navy);
+  }
+  .result-score, .result-score small, .result-label, .verdict-note { color: var(--navy) !important; }
+  .question textarea, .field input {
+    border: 1px solid var(--text-muted);
+    background: var(--white);
+  }
+  .score-buttons label:has(input:checked) { background: var(--navy) !important; color: var(--white) !important; }
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="brand">Buyback Vendor <em>Assessment</em></div>
+  <div class="nav-links">
+    <a href="#overview">Overview</a>
+    <a href="#vendor">Vendor</a>
+    <a href="#questions">Questions</a>
+    <a href="#rubric">Rubric</a>
+    <a href="#result">Result</a>
+    <a href="#saved">Saved</a>
+  </div>
+</nav>
+
+<section class="hero" id="overview" style="margin-top:0; border-radius:0; border:none;">
+  <div class="hero-inner">
+    <span class="hero-eyebrow">K-12 Technology Disposition</span>
+    <h1>Assess Your Buyback <em>Technology Vendor</em></h1>
+    <p class="lede">Ask five questions. Score six criteria. Get a defensible recommendation you can take to a board or a procurement officer. Works entirely in your browser. Nothing is sent to a server.</p>
+  </div>
+</section>
+
+<main>
+
+<section id="vendor">
+  <div class="section-head">
+    <span class="section-num">01</span>
+    <h2>Vendor Information</h2>
+  </div>
+  <p class="section-sub">Start with the basics. This information prints at the top of your final report.</p>
+  <div class="vendor-grid">
+    <div class="field">
+      <label for="vendor-name">Vendor Name</label>
+      <input type="text" id="vendor-name" placeholder="e.g., TechCycle Recovery Partners">
+    </div>
+    <div class="field">
+      <label for="review-date">Review Date</label>
+      <input type="date" id="review-date">
+    </div>
+    <div class="field">
+      <label for="reviewer">Reviewer</label>
+      <input type="text" id="reviewer" placeholder="Your name">
+    </div>
+  </div>
+</section>
+
+<section id="questions">
+  <div class="section-head">
+    <span class="section-num">02</span>
+    <h2>Five Questions to Ask Every Vendor</h2>
+  </div>
+  <p class="section-sub">Record the vendor's response in their own words. Use the answers to inform your scoring below.</p>
+
+  <div class="question">
+    <span class="q-num">Q1.</span>
+    <span class="q-text">Do you provide a certificate of destruction for each drive?</span>
+    <textarea id="q1" placeholder="Record the vendor's response..."></textarea>
+  </div>
+
+  <div class="question">
+    <span class="q-num">Q2.</span>
+    <span class="q-text">What is your certification (R2v3, e-Stewards, NAID, or none)?</span>
+    <textarea id="q2" placeholder="Record the vendor's response..."></textarea>
+  </div>
+
+  <div class="question">
+    <span class="q-num">Q3.</span>
+    <span class="q-text">Do you handle palletizing and loading, or is that on us?</span>
+    <textarea id="q3" placeholder="Record the vendor's response..."></textarea>
+  </div>
+
+  <div class="question">
+    <span class="q-num">Q4.</span>
+    <span class="q-text">What is the turnaround from pickup to final report?</span>
+    <textarea id="q4" placeholder="Record the vendor's response..."></textarea>
+  </div>
+
+  <div class="question">
+    <span class="q-num">Q5.</span>
+    <span class="q-text">If the gear has resale value, how do you calculate the payout?</span>
+    <textarea id="q5" placeholder="Record the vendor's response..."></textarea>
+  </div>
+</section>
+
+<section id="rubric">
+  <div class="section-head">
+    <span class="section-num">03</span>
+    <h2>Selection Rubric</h2>
+  </div>
+  <p class="section-sub">Rate each criterion from one to five. Weights reflect priority. Data destruction carries the heaviest weight because it is the one thing that cannot be fixed after the fact.</p>
+
+  <div id="rubric-rows"></div>
+</section>
+
+<section id="result">
+  <div class="section-head">
+    <span class="section-num">04</span>
+    <h2>Result</h2>
+  </div>
+  <p class="section-sub">A vendor clearing 400 out of 500 is a safe pick. Scores between 300 and 399 warrant deeper review. Anything below 300 goes to the no pile.</p>
+
+  <div class="result-card">
+    <div class="result-label">Total Score</div>
+    <div class="result-score"><span id="total">0</span><small>/ 500</small></div>
+    <div class="verdict none" id="verdict">Awaiting scores</div>
+    <div class="verdict-note" id="verdict-note">Rate all six criteria to see a recommendation.</div>
+  </div>
+
+  <div class="breakdown">
+    <h3>Score Breakdown</h3>
+    <div id="breakdown-rows"></div>
+  </div>
+
+  <div class="actions">
+    <button class="btn-primary" id="save-btn">Save Vendor</button>
+    <button class="btn-outline" id="print-btn">Print Report</button>
+    <button class="btn-outline" id="export-btn">Export JSON</button>
+    <button class="btn-danger" id="clear-btn">Clear Form</button>
+  </div>
+</section>
+
+<section id="saved" class="saved-vendors-section">
+  <div class="section-head">
+    <span class="section-num">05</span>
+    <h2>Saved Vendors</h2>
+  </div>
+  <p class="section-sub">Saved entries stay in this browser only. Use them to compare multiple vendors side by side.</p>
+  <div id="saved-list" class="saved-list"></div>
+</section>
+
+</main>
+
+<footer>
+  Buyback Technology Vendor Assessment &middot; <em>All data stays in your browser</em> &middot; CC0 Open for reuse
+</footer>
+
+<script>
+// ============ RUBRIC DATA ============
+const CRITERIA = [
+  {
+    id: 'destruction',
+    title: 'Data Destruction Method',
+    weight: 25,
+    detail: 'R2v3, e-Stewards, or NAID certification; NIST 800-88 wipe or physical shred; certificate of destruction per drive.'
+  },
+  {
+    id: 'logistics',
+    title: 'Pickup Logistics',
+    weight: 20,
+    detail: 'Who packs, palletizes, loads, and transports; multi-site capability; handling of chain of custody.'
+  },
+  {
+    id: 'compliance',
+    title: 'Compliance Documentation',
+    weight: 15,
+    detail: 'FERPA alignment; serial-number tracking; board-ready audit reports.'
+  },
+  {
+    id: 'turnaround',
+    title: 'Turnaround Time',
+    weight: 15,
+    detail: 'Days from pickup to final report and payment.'
+  },
+  {
+    id: 'payout',
+    title: 'Payout Model',
+    weight: 15,
+    detail: 'Cash, credit, or free; transparent calculation; guaranteed minimum in writing.'
+  },
+  {
+    id: 'references',
+    title: 'References',
+    weight: 10,
+    detail: 'Three Texas K-12 references at comparable district size.'
+  }
+];
+
+// ============ BUILD RUBRIC ROWS ============
+const rubricContainer = document.getElementById('rubric-rows');
+CRITERIA.forEach(c => {
+  const row = document.createElement('div');
+  row.className = 'rubric-row';
+  row.innerHTML = `
+    <div>
+      <div class="crit-head">
+        <span class="crit-title">${c.title}</span>
+        <span class="weight-badge">Weight &times; ${c.weight}</span>
+      </div>
+      <div class="crit-detail">${c.detail}</div>
+    </div>
+    <div class="score-block">
+      <div class="score-label">Score 1 to 5</div>
+      <div class="score-buttons" data-crit="${c.id}">
+        ${[1,2,3,4,5].map(n => `
+          <label>
+            <input type="radio" name="score-${c.id}" value="${n}">
+            <span>${n}</span>
+          </label>
+        `).join('')}
+      </div>
+      <div class="weighted" id="weighted-${c.id}">Weighted: <strong>—</strong></div>
+    </div>
+  `;
+  rubricContainer.appendChild(row);
+});
+
+// ============ BUILD BREAKDOWN ROWS ============
+const breakdownContainer = document.getElementById('breakdown-rows');
+CRITERIA.forEach(c => {
+  const row = document.createElement('div');
+  row.className = 'breakdown-row';
+  row.innerHTML = `
+    <span class="breakdown-name">${c.title}</span>
+    <span class="breakdown-score" id="bd-${c.id}">— / ${c.weight * 5}</span>
+  `;
+  breakdownContainer.appendChild(row);
+});
+
+// ============ SCORING LOGIC ============
+function getScores() {
+  const scores = {};
+  CRITERIA.forEach(c => {
+    const checked = document.querySelector(`input[name="score-${c.id}"]:checked`);
+    scores[c.id] = checked ? parseInt(checked.value, 10) : 0;
+  });
+  return scores;
+}
+
+function updateResult() {
+  const scores = getScores();
+  let total = 0;
+  let allScored = true;
+
+  CRITERIA.forEach(c => {
+    const raw = scores[c.id];
+    const weighted = raw * c.weight;
+    total += weighted;
+    if (raw === 0) allScored = false;
+
+    const wElem = document.getElementById(`weighted-${c.id}`);
+    wElem.innerHTML = raw ? `Weighted: <strong>${weighted} / ${c.weight * 5}</strong>` : `Weighted: <strong>—</strong>`;
+
+    const bdElem = document.getElementById(`bd-${c.id}`);
+    bdElem.innerHTML = raw ? `<strong>${weighted}</strong> / ${c.weight * 5}` : `— / ${c.weight * 5}`;
+  });
+
+  document.getElementById('total').textContent = total;
+
+  const verdict = document.getElementById('verdict');
+  const note = document.getElementById('verdict-note');
+  verdict.className = 'verdict';
+
+  if (!allScored) {
+    verdict.classList.add('none');
+    verdict.textContent = 'Awaiting scores';
+    note.textContent = 'Rate all six criteria to see a recommendation.';
+  } else if (total >= 400) {
+    verdict.classList.add('safe');
+    verdict.textContent = 'Safe Pick';
+    note.textContent = 'This vendor clears the 400-point threshold. Move to contract review and reference checks.';
+  } else if (total >= 300) {
+    verdict.classList.add('review');
+    verdict.textContent = 'Needs Review';
+    note.textContent = 'This vendor is workable but has gaps. Identify the low-scoring criteria and ask for clarification before proceeding.';
+  } else {
+    verdict.classList.add('reject');
+    verdict.textContent = 'Do Not Proceed';
+    note.textContent = 'This vendor falls below the 300-point floor. Move to the no pile.';
+  }
+}
+
+// ============ LISTEN FOR CHANGES ============
+document.addEventListener('change', e => {
+  if (e.target.matches('input[type="radio"]')) {
+    updateResult();
+  }
+});
+
+// ============ DATA CAPTURE ============
+function captureAll() {
+  return {
+    vendor: document.getElementById('vendor-name').value.trim(),
+    date: document.getElementById('review-date').value,
+    reviewer: document.getElementById('reviewer').value.trim(),
+    responses: {
+      q1: document.getElementById('q1').value.trim(),
+      q2: document.getElementById('q2').value.trim(),
+      q3: document.getElementById('q3').value.trim(),
+      q4: document.getElementById('q4').value.trim(),
+      q5: document.getElementById('q5').value.trim()
+    },
+    scores: getScores(),
+    total: parseInt(document.getElementById('total').textContent, 10),
+    savedAt: new Date().toISOString()
+  };
+}
+
+function loadData(data) {
+  document.getElementById('vendor-name').value = data.vendor || '';
+  document.getElementById('review-date').value = data.date || '';
+  document.getElementById('reviewer').value = data.reviewer || '';
+  if (data.responses) {
+    ['q1','q2','q3','q4','q5'].forEach(q => {
+      const el = document.getElementById(q);
+      if (el) el.value = data.responses[q] || '';
+    });
+  }
+  CRITERIA.forEach(c => {
+    const val = data.scores && data.scores[c.id];
+    document.querySelectorAll(`input[name="score-${c.id}"]`).forEach(r => r.checked = false);
+    if (val) {
+      const radio = document.querySelector(`input[name="score-${c.id}"][value="${val}"]`);
+      if (radio) radio.checked = true;
+    }
+  });
+  updateResult();
+}
+
+function clearAll() {
+  document.getElementById('vendor-name').value = '';
+  document.getElementById('review-date').value = '';
+  document.getElementById('reviewer').value = '';
+  ['q1','q2','q3','q4','q5'].forEach(q => {
+    const el = document.getElementById(q);
+    if (el) el.value = '';
+  });
+  document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+  updateResult();
+}
+
+// ============ STORAGE (graceful fallback) ============
+const STORAGE_KEY = 'tcea-buyback-vendors';
+function storageAvailable() {
+  try {
+    localStorage.setItem('__test__', '1');
+    localStorage.removeItem('__test__');
+    return true;
+  } catch (e) { return false; }
+}
+function loadSaved() {
+  if (!storageAvailable()) return [];
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) { return []; }
+}
+function writeSaved(list) {
+  if (!storageAvailable()) return false;
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+    return true;
+  } catch (e) { return false; }
+}
+
+function verdictClass(score) {
+  if (score >= 400) return 'safe';
+  if (score >= 300) return 'review';
+  return 'reject';
+}
+
+function renderSaved() {
+  const list = loadSaved();
+  const container = document.getElementById('saved-list');
+  if (!storageAvailable()) {
+    container.innerHTML = `<div class="saved-empty">Saving is disabled in this preview. Download the file and open it locally to save vendors.</div>`;
+    return;
+  }
+  if (list.length === 0) {
+    container.innerHTML = `<div class="saved-empty">No saved vendors yet. Complete the rubric and press Save Vendor.</div>`;
+    return;
+  }
+  container.innerHTML = list.map((v, i) => {
+    const vClass = verdictClass(v.total);
+    const dateStr = v.date || new Date(v.savedAt).toLocaleDateString();
+    return `
+      <div class="saved-item">
+        <div class="saved-info">
+          <div class="saved-name">${escapeHtml(v.vendor || 'Unnamed Vendor')}</div>
+          <div class="saved-meta">${dateStr}${v.reviewer ? ' &middot; ' + escapeHtml(v.reviewer) : ''}</div>
+        </div>
+        <div class="saved-pts ${vClass}">${v.total} / 500</div>
+        <button class="mini-btn" data-load="${i}">Load</button>
+        <button class="mini-btn danger" data-delete="${i}">Delete</button>
+      </div>
+    `;
+  }).join('');
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+
+// ============ BUTTONS ============
+document.getElementById('save-btn').addEventListener('click', () => {
+  const data = captureAll();
+  if (!data.vendor) {
+    alert('Enter a vendor name before saving.');
+    document.getElementById('vendor-name').focus();
+    return;
+  }
+  if (data.total === 0) {
+    if (!confirm('No scores entered yet. Save anyway?')) return;
+  }
+  const list = loadSaved();
+  // Replace existing entry with same vendor name + date, or append
+  const idx = list.findIndex(v => v.vendor === data.vendor && v.date === data.date);
+  if (idx >= 0) {
+    if (!confirm(`An entry for "${data.vendor}" on ${data.date || 'this date'} already exists. Overwrite?`)) return;
+    list[idx] = data;
+  } else {
+    list.push(data);
+  }
+  if (writeSaved(list)) {
+    renderSaved();
+    alert(`Saved: ${data.vendor}`);
+  } else {
+    alert('Could not save. Browser storage may be disabled.');
+  }
+});
+
+document.getElementById('print-btn').addEventListener('click', () => window.print());
+
+document.getElementById('export-btn').addEventListener('click', () => {
+  const data = captureAll();
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const safeName = (data.vendor || 'vendor').replace(/[^a-z0-9]+/gi, '-').toLowerCase();
+  a.href = url;
+  a.download = `${safeName}-assessment.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('clear-btn').addEventListener('click', () => {
+  if (confirm('Clear the entire form? Saved vendors will not be affected.')) {
+    clearAll();
+  }
+});
+
+document.getElementById('saved-list').addEventListener('click', e => {
+  const loadIdx = e.target.dataset.load;
+  const delIdx = e.target.dataset.delete;
+  const list = loadSaved();
+
+  if (loadIdx !== undefined) {
+    const v = list[loadIdx];
+    if (v) {
+      loadData(v);
+      document.getElementById('vendor').scrollIntoView({ behavior: 'smooth' });
+    }
+  } else if (delIdx !== undefined) {
+    const v = list[delIdx];
+    if (v && confirm(`Delete saved entry for "${v.vendor}"?`)) {
+      list.splice(delIdx, 1);
+      writeSaved(list);
+      renderSaved();
+    }
+  }
+});
+
+// ============ INIT ============
+document.getElementById('review-date').valueAsDate = new Date();
+updateResult();
+renderSaved();
+</script>
+
+</body>
+</html>
