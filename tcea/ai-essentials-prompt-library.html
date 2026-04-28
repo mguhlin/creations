@@ -1,0 +1,1785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Essentials for Educators · Prompt Library of 100</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0A3476;
+  --navy-dark: #071f4a;
+  --navy-mid: #12428f;
+  --gold: #FCB040;
+  --gold-light: #fdd17a;
+  --gold-pale: #FEF0D0;
+  --pale-navy: #D0D8F0;
+  --white: #ffffff;
+  --off-white: #f7f8fc;
+  --text: #1a1a2e;
+  --text-muted: #5a6680;
+  --border: #e2e7f5;
+  --teal: #0e6b8a;
+  --shadow: 0 4px 20px rgba(10, 52, 118, 0.08);
+  --shadow-strong: 0 8px 40px rgba(10, 52, 118, 0.15);
+  --sidebar-w: 280px;
+  --header-h: 0px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--off-white);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* HERO */
+.hero {
+  background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 100%);
+  color: var(--white);
+  padding: 72px 24px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(252, 176, 64, 0.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.eyebrow {
+  display: inline-block;
+  background: rgba(252, 176, 64, 0.18);
+  color: var(--gold-light);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 100px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(252, 176, 64, 0.35);
+}
+
+h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  line-height: 1.1;
+  margin-bottom: 18px;
+  font-weight: 400;
+}
+
+h1 em { color: var(--gold); font-style: italic; }
+
+.hero p {
+  font-size: 1.05rem;
+  max-width: 680px;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 28px;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.hero-stat { display: flex; flex-direction: column; }
+
+.hero-stat-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2rem;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.hero-stat-label {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.75);
+  margin-top: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* MOBILE MENU TOGGLE */
+.menu-toggle {
+  display: none;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--white);
+  border-bottom: 1.5px solid var(--border);
+  padding: 12px 20px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--navy);
+  border: none;
+  border-bottom: 1.5px solid var(--border);
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  align-items: center;
+  gap: 10px;
+}
+
+/* LAYOUT */
+.layout {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  gap: 0;
+  position: relative;
+  align-items: flex-start;
+}
+
+/* SIDEBAR */
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 36px 20px 36px 24px;
+  border-right: 1.5px solid var(--border);
+  background: var(--white);
+  scrollbar-width: thin;
+}
+
+.sidebar::-webkit-scrollbar { width: 6px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--pale-navy); border-radius: 4px; }
+
+.sidebar-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.1rem;
+  color: var(--navy-dark);
+  margin-bottom: 4px;
+  font-weight: 400;
+}
+
+.sidebar-subtitle {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 24px;
+  font-weight: 600;
+}
+
+.sidebar-group {
+  margin-bottom: 28px;
+}
+
+.sidebar-group-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+.sidebar-group-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.group-classroom .sidebar-group-icon { background: var(--gold-pale); color: var(--navy-dark); }
+.group-office .sidebar-group-icon { background: var(--pale-navy); color: var(--navy-dark); }
+.group-library .sidebar-group-icon { background: var(--navy); color: var(--gold-light); }
+
+.sidebar-group-name {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--navy-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.sidebar-group-count {
+  margin-left: auto;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  background: var(--off-white);
+  padding: 2px 8px;
+  border-radius: 100px;
+  font-weight: 600;
+}
+
+.sidebar-links {
+  list-style: none;
+  border-left: 2px solid var(--border);
+  margin-left: 22px;
+  padding-left: 14px;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  margin: 2px 0;
+  font-size: 0.88rem;
+  color: var(--text);
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+  position: relative;
+  font-weight: 500;
+}
+
+.sidebar-link:hover {
+  background: var(--off-white);
+  color: var(--navy);
+}
+
+.sidebar-link.active {
+  background: var(--gold-pale);
+  color: var(--navy-dark);
+  font-weight: 600;
+}
+
+.sidebar-link.active::before {
+  content: "";
+  position: absolute;
+  left: -16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 22px;
+  background: var(--gold);
+  border-radius: 4px;
+}
+
+.sidebar-link-num {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.sidebar-link.active .sidebar-link-num { color: var(--gold); }
+
+.sidebar-footer {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.sidebar-footer strong { color: var(--navy-dark); }
+
+/* MAIN CONTENT */
+.main {
+  padding: 36px 32px 80px;
+  min-width: 0; /* prevents grid blowout */
+}
+
+/* SEARCH */
+.search-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+  padding: 16px 18px;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  position: sticky;
+  top: 16px;
+  z-index: 30;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 240px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: var(--off-white);
+  color: var(--text);
+  transition: all 0.15s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--gold);
+  background: var(--white);
+  box-shadow: 0 0 0 3px rgba(252, 176, 64, 0.18);
+}
+
+.search-count {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.search-count strong { color: var(--navy); font-weight: 700; }
+
+/* GROUP DIVIDER */
+.group-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 12px 0 24px;
+  padding-top: 8px;
+}
+
+.group-divider:not(:first-of-type) {
+  margin-top: 56px;
+  padding-top: 36px;
+  border-top: 1px solid var(--border);
+}
+
+.group-divider-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.group-divider.group-classroom .group-divider-icon { background: var(--gold-pale); }
+.group-divider.group-office .group-divider-icon { background: var(--pale-navy); }
+.group-divider.group-library .group-divider-icon { background: var(--navy); color: var(--gold-light); }
+
+.group-divider-text { flex: 1; }
+
+.group-divider-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.6rem;
+  color: var(--navy-dark);
+  line-height: 1.1;
+}
+
+.group-divider-tagline {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.group-divider-count {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--navy);
+  background: var(--off-white);
+  border: 1.5px solid var(--border);
+  padding: 6px 14px;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+/* SECTIONS */
+.section {
+  margin-bottom: 48px;
+  scroll-margin-top: 100px;
+}
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--gold);
+}
+
+.section-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.5rem;
+  color: var(--gold);
+  font-style: italic;
+}
+
+.section-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(1.4rem, 2.4vw, 1.8rem);
+  color: var(--navy);
+  font-weight: 400;
+  flex: 1;
+}
+
+.section-meta {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+}
+
+.section-intro {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 22px;
+  max-width: 760px;
+}
+
+/* PROMPT GRID */
+.prompt-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+}
+
+.prompt-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  position: relative;
+  transition: all 0.18s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.prompt-card:hover {
+  border-color: var(--gold);
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+
+.prompt-card.hidden { display: none; }
+
+.prompt-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+.prompt-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.3rem;
+  color: var(--gold);
+  font-style: italic;
+  line-height: 1;
+}
+
+.prompt-tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--navy);
+  background: var(--pale-navy);
+  padding: 4px 10px;
+  border-radius: 100px;
+}
+
+.prompt-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--navy-dark);
+  margin-bottom: 8px;
+  line-height: 1.35;
+}
+
+.prompt-text {
+  font-size: 0.9rem;
+  color: var(--text);
+  line-height: 1.55;
+  flex: 1;
+  margin-bottom: 14px;
+}
+
+.copy-btn {
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: var(--navy);
+  color: var(--white);
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  align-self: flex-start;
+}
+
+.copy-btn:hover { background: var(--gold); color: var(--navy-dark); }
+.copy-btn.copied { background: var(--teal); color: var(--white); }
+
+/* TRICK CARDS */
+.trick-card {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+  color: var(--white);
+  border: none;
+}
+
+.trick-card:hover { border: none; box-shadow: var(--shadow-strong); }
+.trick-card .prompt-num { color: var(--gold-light); }
+.trick-card .prompt-title { color: var(--white); }
+.trick-card .prompt-text { color: rgba(255, 255, 255, 0.88); }
+.trick-card .prompt-tag { background: rgba(252, 176, 64, 0.2); color: var(--gold-light); }
+.trick-card .copy-btn { background: var(--gold); color: var(--navy-dark); }
+.trick-card .copy-btn:hover { background: var(--white); color: var(--navy); }
+
+/* FOOTER */
+footer {
+  background: var(--navy-dark);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 48px 24px;
+  text-align: center;
+}
+
+.footer-inner { max-width: 800px; margin: 0 auto; }
+
+footer h3 {
+  font-family: 'DM Serif Display', serif;
+  color: var(--white);
+  font-size: 1.6rem;
+  margin-bottom: 12px;
+  font-weight: 400;
+}
+
+footer h3 em { color: var(--gold); font-style: italic; }
+
+footer p {
+  font-size: 0.92rem;
+  max-width: 600px;
+  margin: 0 auto 18px;
+}
+
+.footer-meta {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.55);
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* NO RESULTS */
+.no-results {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+  display: none;
+}
+
+.no-results.show { display: block; }
+
+.no-results h3 {
+  font-family: 'DM Serif Display', serif;
+  color: var(--navy);
+  font-size: 1.6rem;
+  margin-bottom: 10px;
+}
+
+/* MOBILE */
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+
+  .menu-toggle {
+    display: flex;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 86%;
+    max-width: 320px;
+    height: 100vh;
+    z-index: 200;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    box-shadow: 2px 0 24px rgba(0, 0, 0, 0.2);
+    padding-top: 24px;
+  }
+
+  .sidebar.open { transform: translateX(0); }
+
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(7, 31, 74, 0.5);
+    z-index: 150;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+
+  .sidebar-overlay.open { opacity: 1; pointer-events: auto; }
+
+  .sidebar-close {
+    display: flex;
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: var(--off-white);
+    border: 1.5px solid var(--border);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--navy);
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .main { padding: 24px 18px 60px; }
+  .hero { padding: 56px 20px 64px; }
+  .group-divider-name { font-size: 1.4rem; }
+  .search-row { padding: 12px; }
+}
+
+@media (min-width: 901px) {
+  .sidebar-close { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner">
+    <span class="eyebrow">AI Essentials for Educators</span>
+    <h1>One hundred <em>classroom-ready</em> prompts you can use today</h1>
+    <p>A working prompt library for K-16 teachers, instructional coaches, and central office leaders. Built around the tasks educators actually do, with copy-paste prompts you can drop into ChatGPT, Claude, Gemini, Perplexity, BoodleBox, or your local AI of choice.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hero-stat-num">100</span>
+        <span class="hero-stat-label">Prompts</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">3</span>
+        <span class="hero-stat-label">Sections</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">10</span>
+        <span class="hero-stat-label">Categories</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">K-16</span>
+        <span class="hero-stat-label">Audience</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- MOBILE MENU TOGGLE -->
+<button class="menu-toggle" id="menuToggle" type="button" aria-label="Open navigation">
+  <span style="font-size:18px;">☰</span> Browse all categories
+</button>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar" aria-label="Section navigation">
+    <button class="sidebar-close" id="sidebarClose" type="button" aria-label="Close navigation">×</button>
+
+    <div class="sidebar-title">Browse by section</div>
+    <div class="sidebar-subtitle">100 prompts · 10 categories</div>
+
+    <!-- CLASSROOM -->
+    <div class="sidebar-group group-classroom">
+      <div class="sidebar-group-header">
+        <div class="sidebar-group-icon">🎓</div>
+        <div class="sidebar-group-name">Classroom</div>
+        <div class="sidebar-group-count">60</div>
+      </div>
+      <ul class="sidebar-links">
+        <li><a class="sidebar-link" href="#rubrics" data-target="rubrics">Rubrics &amp; assessment <span class="sidebar-link-num">01</span></a></li>
+        <li><a class="sidebar-link" href="#quizzes" data-target="quizzes">Quiz &amp; question generation <span class="sidebar-link-num">02</span></a></li>
+        <li><a class="sidebar-link" href="#lessons" data-target="lessons">Lessons &amp; choice boards <span class="sidebar-link-num">03</span></a></li>
+        <li><a class="sidebar-link" href="#feedback" data-target="feedback">Feedback <span class="sidebar-link-num">04</span></a></li>
+        <li><a class="sidebar-link" href="#slides" data-target="slides">Slide outlines <span class="sidebar-link-num">05</span></a></li>
+        <li><a class="sidebar-link" href="#sub-plans" data-target="sub-plans">Sub plans <span class="sidebar-link-num">06</span></a></li>
+      </ul>
+    </div>
+
+    <!-- OFFICE -->
+    <div class="sidebar-group group-office">
+      <div class="sidebar-group-header">
+        <div class="sidebar-group-icon">🏛️</div>
+        <div class="sidebar-group-name">Office</div>
+        <div class="sidebar-group-count">30</div>
+      </div>
+      <ul class="sidebar-links">
+        <li><a class="sidebar-link" href="#parent-comms" data-target="parent-comms">Parent communication <span class="sidebar-link-num">07</span></a></li>
+        <li><a class="sidebar-link" href="#iep" data-target="iep">IEP &amp; student support <span class="sidebar-link-num">08</span></a></li>
+        <li><a class="sidebar-link" href="#central-office" data-target="central-office">Central office &amp; AI policy <span class="sidebar-link-num">09</span></a></li>
+      </ul>
+    </div>
+
+    <!-- LIBRARY -->
+    <div class="sidebar-group group-library">
+      <div class="sidebar-group-header">
+        <div class="sidebar-group-icon">📚</div>
+        <div class="sidebar-group-name">Library</div>
+        <div class="sidebar-group-count">10</div>
+      </div>
+      <ul class="sidebar-links">
+        <li><a class="sidebar-link" href="#tricks" data-target="tricks">Prompt tricks &amp; shortcuts <span class="sidebar-link-num">10</span></a></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-footer">
+      <strong>Tip.</strong> Use the search box at the top of the page to filter all 100 prompts by keyword across every section.
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <div class="search-row">
+      <input type="text" class="search-input" id="searchInput" placeholder="Filter by keyword (e.g., 'rubric', 'parent', 'IEP', 'choice board')" aria-label="Search prompts">
+      <div class="search-count">Showing <strong id="visibleCount">100</strong> of 100</div>
+    </div>
+
+    <div class="no-results" id="noResults">
+      <h3>No matches</h3>
+      <p>Try a broader keyword or clear your search.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- CLASSROOM GROUP -->
+    <!-- ============================================================ -->
+    <div class="group-divider group-classroom" data-group="classroom">
+      <div class="group-divider-icon">🎓</div>
+      <div class="group-divider-text">
+        <div class="group-divider-name">Classroom</div>
+        <div class="group-divider-tagline">For teachers planning lessons, building assessments, and giving feedback</div>
+      </div>
+      <div class="group-divider-count">60 prompts</div>
+    </div>
+
+    <!-- 1. RUBRICS -->
+    <section class="section" id="rubrics" data-group="classroom">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-title">Rubrics and assessment</h2>
+        <span class="section-meta">10 prompts</span>
+      </div>
+      <p class="section-intro">Rubrics that score what matters, in language students can read and parents can understand.</p>
+      <div class="prompt-grid">
+
+        <article class="prompt-card" data-tags="rubric analytic four-level scoring">
+          <div class="prompt-card-top"><span class="prompt-num">01</span><span class="prompt-tag">Analytic</span></div>
+          <h3 class="prompt-title">Four-level analytic rubric</h3>
+          <p class="prompt-text">Build a four-level analytic rubric for [assignment] with criteria for content accuracy, organization, language conventions, and creative thinking. Include descriptive language at each level so students can self-assess.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="rubric single-point holistic conversion">
+          <div class="prompt-card-top"><span class="prompt-num">02</span><span class="prompt-tag">Single-point</span></div>
+          <h3 class="prompt-title">Convert to a single-point rubric</h3>
+          <p class="prompt-text">Convert this holistic rubric into a single-point rubric that identifies the standard, then leaves space for specific feedback on what exceeds and what needs growth.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="rubric audience student parent teacher">
+          <div class="prompt-card-top"><span class="prompt-num">03</span><span class="prompt-tag">Audience</span></div>
+          <h3 class="prompt-title">Three audiences, one rubric</h3>
+          <p class="prompt-text">Generate three versions of the same rubric, one for students, one for parents, and one for me as the teacher. Keep the criteria identical but adjust the language for each audience.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="rubric performance task observable indicators">
+          <div class="prompt-card-top"><span class="prompt-num">04</span><span class="prompt-tag">Performance</span></div>
+          <h3 class="prompt-title">Performance task rubric</h3>
+          <p class="prompt-text">Create a rubric for a [content area] performance task aligned to [standard]. Include observable indicators that I can score in real time during a classroom presentation.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="rubric criteria assignment design">
+          <div class="prompt-card-top"><span class="prompt-num">05</span><span class="prompt-tag">Design</span></div>
+          <h3 class="prompt-title">Surface measurable criteria</h3>
+          <p class="prompt-text">Take this assignment description and propose four to six measurable criteria suitable for a rubric. Explain why each criterion matters.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="rubric research project sources">
+          <div class="prompt-card-top"><span class="prompt-num">06</span><span class="prompt-tag">Research</span></div>
+          <h3 class="prompt-title">Research project rubric</h3>
+          <p class="prompt-text">Draft a student-friendly rubric for a research project that evaluates source quality, synthesis of information, citation accuracy, and original argument.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="rubric process product collaboration">
+          <div class="prompt-card-top"><span class="prompt-num">07</span><span class="prompt-tag">Process</span></div>
+          <h3 class="prompt-title">Process and product rubric</h3>
+          <p class="prompt-text">Build a rubric that scores process as well as product. Include criteria for collaboration, revision based on feedback, and time management.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="rubric self-assessment student questions">
+          <div class="prompt-card-top"><span class="prompt-num">08</span><span class="prompt-tag">Self-assess</span></div>
+          <h3 class="prompt-title">Student self-assessment</h3>
+          <p class="prompt-text">Generate a self-assessment rubric students can complete before submitting [assignment]. Phrase each row as a question students ask themselves.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="rubric AI assisted contribution distinguish">
+          <div class="prompt-card-top"><span class="prompt-num">09</span><span class="prompt-tag">AI-assisted</span></div>
+          <h3 class="prompt-title">AI-assisted work rubric</h3>
+          <p class="prompt-text">Create a rubric for evaluating AI-assisted student work that distinguishes between the student's contribution and the AI's contribution.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="rubric tighten language concise">
+          <div class="prompt-card-top"><span class="prompt-num">10</span><span class="prompt-tag">Revise</span></div>
+          <h3 class="prompt-title">Tighten the language</h3>
+          <p class="prompt-text">Take this rubric and tighten the language so each performance level uses fewer than fifteen words while remaining specific.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- 2. QUIZZES -->
+    <section class="section" id="quizzes" data-group="classroom">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-title">Quiz and question generation</h2>
+        <span class="section-meta">10 prompts</span>
+      </div>
+      <p class="section-intro">Items that ask students to think, not just recall, with answer keys and rationale.</p>
+      <div class="prompt-grid">
+
+        <article class="prompt-card" data-tags="quiz ten question Bloom levels answer key">
+          <div class="prompt-card-top"><span class="prompt-num">11</span><span class="prompt-tag">Mixed</span></div>
+          <h3 class="prompt-title">Ten-question mixed quiz</h3>
+          <p class="prompt-text">Generate a ten-question quiz on [topic] with three knowledge questions, three application questions, three analysis questions, and one extended response. Include an answer key.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="exit ticket five question objective">
+          <div class="prompt-card-top"><span class="prompt-num">12</span><span class="prompt-tag">Exit ticket</span></div>
+          <h3 class="prompt-title">Five-question exit ticket</h3>
+          <p class="prompt-text">Build a five-question exit ticket for today's lesson on [topic] that helps me see whether students reached the day's objective.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="multiple choice bank distractors twenty">
+          <div class="prompt-card-top"><span class="prompt-num">13</span><span class="prompt-tag">MC bank</span></div>
+          <h3 class="prompt-title">Multiple-choice bank</h3>
+          <p class="prompt-text">Create a question bank of twenty multiple-choice items on [topic] with one correct answer and three plausible distractors per item.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="short answer thinking explain">
+          <div class="prompt-card-top"><span class="prompt-num">14</span><span class="prompt-tag">Short answer</span></div>
+          <h3 class="prompt-title">Short-answer thinking prompts</h3>
+          <p class="prompt-text">Generate ten short-answer prompts that ask students to explain their thinking, not just recall facts.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="constructed response convert multiple choice">
+          <div class="prompt-card-top"><span class="prompt-num">15</span><span class="prompt-tag">Convert</span></div>
+          <h3 class="prompt-title">Convert to constructed response</h3>
+          <p class="prompt-text">Convert this multiple-choice test into a constructed-response version that assesses the same standards.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="vocabulary quiz matching application">
+          <div class="prompt-card-top"><span class="prompt-num">16</span><span class="prompt-tag">Vocabulary</span></div>
+          <h3 class="prompt-title">Vocabulary quiz, four item types</h3>
+          <p class="prompt-text">Build a vocabulary quiz on [list of terms] with four item types, matching, fill in the blank, sentence use, and a short application paragraph.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="differentiated three versions support extension">
+          <div class="prompt-card-top"><span class="prompt-num">17</span><span class="prompt-tag">Differentiate</span></div>
+          <h3 class="prompt-title">Three differentiated versions</h3>
+          <p class="prompt-text">Generate three differentiated versions of this quiz, one for students who need additional support, one on grade level, and one for extension.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="warm up do now preview three minutes">
+          <div class="prompt-card-top"><span class="prompt-num">18</span><span class="prompt-tag">Warm-up</span></div>
+          <h3 class="prompt-title">Two-question do now</h3>
+          <p class="prompt-text">Create a do now warm-up that previews today's content with two questions students can answer in under three minutes.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="self check review unit test explanations">
+          <div class="prompt-card-top"><span class="prompt-num">19</span><span class="prompt-tag">Self-check</span></div>
+          <h3 class="prompt-title">Pre-test self-check quiz</h3>
+          <p class="prompt-text">Write a self-check quiz students can use to review before the unit test, with answers and brief explanations.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="higher order Bloom analyze evaluate create">
+          <div class="prompt-card-top"><span class="prompt-num">20</span><span class="prompt-tag">Higher order</span></div>
+          <h3 class="prompt-title">Higher-order questions</h3>
+          <p class="prompt-text">Draft five high-cognitive-demand questions on [topic] using verbs from the analyze, evaluate, and create levels of Bloom's Taxonomy.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- 3. LESSONS -->
+    <section class="section" id="lessons" data-group="classroom">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-title">Lesson plans and choice boards</h2>
+        <span class="section-meta">10 prompts</span>
+      </div>
+      <p class="section-intro">Plans that move students from surface knowledge to deep understanding to transfer.</p>
+      <div class="prompt-grid">
+
+        <article class="prompt-card" data-tags="lesson plan gradual release I do we do you do">
+          <div class="prompt-card-top"><span class="prompt-num">21</span><span class="prompt-tag">Gradual release</span></div>
+          <h3 class="prompt-title">Gradual release lesson plan</h3>
+          <p class="prompt-text">Build a sixty-minute lesson plan on [topic] using the gradual release of responsibility model. Include the I do, we do, you do segments with timing.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="choice board three by three cognitive demand">
+          <div class="prompt-card-top"><span class="prompt-num">22</span><span class="prompt-tag">Choice board</span></div>
+          <h3 class="prompt-title">Three-by-three choice board</h3>
+          <p class="prompt-text">Generate a three-by-three choice board for [unit] with low, medium, and high cognitive demand options across three content focus areas.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="unit overview five day surface deep transfer">
+          <div class="prompt-card-top"><span class="prompt-num">23</span><span class="prompt-tag">Unit</span></div>
+          <h3 class="prompt-title">Five-day unit overview</h3>
+          <p class="prompt-text">Draft a five-day unit overview on [topic] with a clear progression from surface to deep to transfer learning.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="hyperdoc engage explore explain apply reflect">
+          <div class="prompt-card-top"><span class="prompt-num">24</span><span class="prompt-tag">Hyperdoc</span></div>
+          <h3 class="prompt-title">Hyperdoc lesson plan</h3>
+          <p class="prompt-text">Build a hyperdoc lesson on [topic] with sections for engage, explore, explain, apply, and reflect.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="differentiation activity versions modalities">
+          <div class="prompt-card-top"><span class="prompt-num">25</span><span class="prompt-tag">Differentiate</span></div>
+          <h3 class="prompt-title">Three activity versions</h3>
+          <p class="prompt-text">Generate three versions of a learning activity for [topic] that hit different learning preferences without watering down the content.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="standard unpack learning targets student friendly">
+          <div class="prompt-card-top"><span class="prompt-num">26</span><span class="prompt-tag">Standards</span></div>
+          <h3 class="prompt-title">Unpack a state standard</h3>
+          <p class="prompt-text">Take this state standard and unpack it into a sequence of three to five learning targets in student-friendly language.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="PBL project based driving question audience">
+          <div class="prompt-card-top"><span class="prompt-num">27</span><span class="prompt-tag">PBL</span></div>
+          <h3 class="prompt-title">Project-based learning unit</h3>
+          <p class="prompt-text">Build a project-based learning unit framework on [topic] with a driving question, public product, and authentic audience.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="warm up routines library content area">
+          <div class="prompt-card-top"><span class="prompt-num">28</span><span class="prompt-tag">Routines</span></div>
+          <h3 class="prompt-title">Ten warm-up routines</h3>
+          <p class="prompt-text">Generate ten warm-up routines I can rotate through in [content area] across the year.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="station rotation block four stations digital">
+          <div class="prompt-card-top"><span class="prompt-num">29</span><span class="prompt-tag">Stations</span></div>
+          <h3 class="prompt-title">Station rotation plan</h3>
+          <p class="prompt-text">Create a station rotation plan for a fifty-minute block with four stations, including teacher-led, independent, collaborative, and digital options.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="closure routine library check understanding">
+          <div class="prompt-card-top"><span class="prompt-num">30</span><span class="prompt-tag">Closure</span></div>
+          <h3 class="prompt-title">Closure routine library</h3>
+          <p class="prompt-text">Draft a closure routine library with five different ways to end a lesson and check for understanding.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- 4. FEEDBACK -->
+    <section class="section" id="feedback" data-group="classroom">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-title">Feedback</h2>
+        <span class="section-meta">10 prompts</span>
+      </div>
+      <p class="section-intro">Feedback that drives revision instead of summarizing what already happened, for students and for adults.</p>
+      <div class="prompt-grid">
+
+        <article class="prompt-card" data-tags="feedback student writing rubric strength revision">
+          <div class="prompt-card-top"><span class="prompt-num">31</span><span class="prompt-tag">Student</span></div>
+          <h3 class="prompt-title">Rubric-based writing feedback</h3>
+          <p class="prompt-text">Read this student writing sample and provide feedback against this rubric. For each criterion, name one strength and one specific revision.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="feedback tone three versions warm direct">
+          <div class="prompt-card-top"><span class="prompt-num">32</span><span class="prompt-tag">Tone</span></div>
+          <h3 class="prompt-title">Three tones, same content</h3>
+          <p class="prompt-text">Generate three different feedback comments on the same student work, varying the tone, warm, neutral, and direct. Help me choose the right register.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="feedback to questions student thinking">
+          <div class="prompt-card-top"><span class="prompt-num">33</span><span class="prompt-tag">Questions</span></div>
+          <h3 class="prompt-title">Convert feedback to questions</h3>
+          <p class="prompt-text">Convert this written feedback into questions that ask the student to do the thinking instead of receiving the answer.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="observation see think wonder coaching">
+          <div class="prompt-card-top"><span class="prompt-num">34</span><span class="prompt-tag">Coaching</span></div>
+          <h3 class="prompt-title">Observation feedback, see-think-wonder</h3>
+          <p class="prompt-text">Take this teacher observation transcript and identify three areas of strength and two specific recommendations using the see, think, wonder structure.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="self feedback prompts review draft">
+          <div class="prompt-card-top"><span class="prompt-num">35</span><span class="prompt-tag">Self-review</span></div>
+          <h3 class="prompt-title">Self-feedback prompts for students</h3>
+          <p class="prompt-text">Generate self-feedback prompts a student can use to review their own draft before submitting.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="peer feedback sentence stems rubric aligned">
+          <div class="prompt-card-top"><span class="prompt-num">36</span><span class="prompt-tag">Peer</span></div>
+          <h3 class="prompt-title">Peer feedback sentence stems</h3>
+          <p class="prompt-text">Draft peer feedback sentence stems aligned to this rubric so students can give each other useful, specific feedback.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="lesson plan peer coach feedback questions">
+          <div class="prompt-card-top"><span class="prompt-num">37</span><span class="prompt-tag">Coaching</span></div>
+          <h3 class="prompt-title">Lesson plan peer coaching</h3>
+          <p class="prompt-text">Read this lesson plan and provide feedback as if you were a thoughtful peer coach. Use questions, not directives.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="audit feedback specificity tone growth">
+          <div class="prompt-card-top"><span class="prompt-num">38</span><span class="prompt-tag">Audit</span></div>
+          <h3 class="prompt-title">Audit your own feedback</h3>
+          <p class="prompt-text">Take this set of feedback comments I gave students and audit them for tone, specificity, and growth orientation.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="two stars wish project specific revision">
+          <div class="prompt-card-top"><span class="prompt-num">39</span><span class="prompt-tag">2 stars</span></div>
+          <h3 class="prompt-title">Two stars and a wish</h3>
+          <p class="prompt-text">Generate "two stars and a wish" feedback on this student project, with the wish phrased as one specific revision.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="walkthrough protocol three minutes campus">
+          <div class="prompt-card-top"><span class="prompt-num">40</span><span class="prompt-tag">Walkthrough</span></div>
+          <h3 class="prompt-title">Three-minute walkthrough protocol</h3>
+          <p class="prompt-text">Build a feedback protocol for me to use during walkthroughs that takes under three minutes per visit.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- 5. SLIDES -->
+    <section class="section" id="slides" data-group="classroom">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-title">Slide outlines and presentations</h2>
+        <span class="section-meta">10 prompts</span>
+      </div>
+      <p class="section-intro">Decks that make a claim, not just name a topic, with speaker notes that sound like you.</p>
+      <div class="prompt-grid">
+
+        <article class="prompt-card" data-tags="slide deck professional learning ten">
+          <div class="prompt-card-top"><span class="prompt-num">41</span><span class="prompt-tag">PD deck</span></div>
+          <h3 class="prompt-title">Ten-slide PD deck outline</h3>
+          <p class="prompt-text">Outline a ten-slide professional learning deck on [topic]. Include title slide, learning objectives, three content sections, an activity slide, a reflection slide, and a resources slide.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="document to slides one main idea speaker notes">
+          <div class="prompt-card-top"><span class="prompt-num">42</span><span class="prompt-tag">Convert</span></div>
+          <h3 class="prompt-title">Document to slide outline</h3>
+          <p class="prompt-text">Convert this written document into a slide deck outline with one main idea per slide and speaker notes for each slide.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="speaker notes natural spoken first person">
+          <div class="prompt-card-top"><span class="prompt-num">43</span><span class="prompt-tag">Speaker notes</span></div>
+          <h3 class="prompt-title">Speaker notes that sound human</h3>
+          <p class="prompt-text">Generate speaker notes for this slide deck that read as natural spoken language, not as bullet point summaries of what is on the slide.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="back to school night parents communication">
+          <div class="prompt-card-top"><span class="prompt-num">44</span><span class="prompt-tag">Family night</span></div>
+          <h3 class="prompt-title">Back-to-school night deck</h3>
+          <p class="prompt-text">Draft a six-slide back-to-school night presentation for parents that introduces my class, our values, our communication systems, and how to get in touch.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="lightning talk faculty meeting five minute">
+          <div class="prompt-card-top"><span class="prompt-num">45</span><span class="prompt-tag">Lightning</span></div>
+          <h3 class="prompt-title">Five-minute lightning talk</h3>
+          <p class="prompt-text">Build an outline for a five-minute lightning talk on [topic] for a faculty meeting.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="visual treatment images slide design">
+          <div class="prompt-card-top"><span class="prompt-num">46</span><span class="prompt-tag">Visual</span></div>
+          <h3 class="prompt-title">Slide-by-slide visual plan</h3>
+          <p class="prompt-text">Create a slide-by-slide visual treatment plan for this deck. For each slide, suggest one image, chart, or layout that would strengthen the message.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="slide titles claims topics rewrite">
+          <div class="prompt-card-top"><span class="prompt-num">47</span><span class="prompt-tag">Titles</span></div>
+          <h3 class="prompt-title">Make every title a claim</h3>
+          <p class="prompt-text">Take this deck outline and rewrite each slide title so it makes a clear claim instead of naming a topic.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="rule of three structure presentation">
+          <div class="prompt-card-top"><span class="prompt-num">48</span><span class="prompt-tag">Structure</span></div>
+          <h3 class="prompt-title">Rule of three rewrite</h3>
+          <p class="prompt-text">Generate a rule-of-three version of this presentation with three main points, three supporting examples each, and three calls to action at the end.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="board presentation update fifteen minutes asks">
+          <div class="prompt-card-top"><span class="prompt-num">49</span><span class="prompt-tag">Board</span></div>
+          <h3 class="prompt-title">Board update outline</h3>
+          <p class="prompt-text">Build a board-presentation outline for a fifteen-minute update on [district initiative] that ends with two clear asks of the board.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="handout one page accompany deck takeaway">
+          <div class="prompt-card-top"><span class="prompt-num">50</span><span class="prompt-tag">Handout</span></div>
+          <h3 class="prompt-title">Companion handout</h3>
+          <p class="prompt-text">Create handout language to accompany this slide deck so participants leave with the key ideas in writing.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- 6. SUB PLANS -->
+    <section class="section" id="sub-plans" data-group="classroom">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-title">Substitute plans</h2>
+        <span class="section-meta">10 prompts</span>
+      </div>
+      <p class="section-intro">Plans that work without you in the room, written for a substitute who has never met your students.</p>
+      <div class="prompt-grid">
+
+        <article class="prompt-card" data-tags="sub plan one day no new content">
+          <div class="prompt-card-top"><span class="prompt-num">51</span><span class="prompt-tag">One day</span></div>
+          <h3 class="prompt-title">One-day sub plan</h3>
+          <p class="prompt-text">Build a one-day sub plan for [grade and content] that does not require the substitute to teach new content. Include a warm-up, an independent task, and a closing reflection.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="sub plan convert lesson plan instructions">
+          <div class="prompt-card-top"><span class="prompt-num">52</span><span class="prompt-tag">Convert</span></div>
+          <h3 class="prompt-title">Sub-friendly conversion</h3>
+          <p class="prompt-text">Convert this lesson plan into a sub-friendly version with all teacher moves rewritten as clear, numbered instructions.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="sub plan stand alone packet flexible">
+          <div class="prompt-card-top"><span class="prompt-num">53</span><span class="prompt-tag">Flexible</span></div>
+          <h3 class="prompt-title">Stand-alone packet</h3>
+          <p class="prompt-text">Generate a stand-alone sub day packet with three different activities that can be used in any order based on student energy and time available.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="sub welcome letter routines expectations">
+          <div class="prompt-card-top"><span class="prompt-num">54</span><span class="prompt-tag">Welcome</span></div>
+          <h3 class="prompt-title">Substitute welcome letter</h3>
+          <p class="prompt-text">Write a substitute welcome letter that explains classroom routines, behavior expectations, helpful student leaders, and emergency procedures.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="sub plan emergency back up generic">
+          <div class="prompt-card-top"><span class="prompt-num">55</span><span class="prompt-tag">Emergency</span></div>
+          <h3 class="prompt-title">In case I am out</h3>
+          <p class="prompt-text">Create a back-up sub plan I can leave in my "in case I am out" folder that works for any day in [content area] this semester.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="sub plan video lesson comprehension questions">
+          <div class="prompt-card-top"><span class="prompt-num">56</span><span class="prompt-tag">Video</span></div>
+          <h3 class="prompt-title">Video lesson sub day</h3>
+          <p class="prompt-text">Build a sub plan that uses a video lesson with five embedded comprehension questions students answer on paper.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="sub reflection sheet feedback day">
+          <div class="prompt-card-top"><span class="prompt-num">57</span><span class="prompt-tag">Reflection</span></div>
+          <h3 class="prompt-title">Substitute reflection sheet</h3>
+          <p class="prompt-text">Draft a reflection sheet substitutes can complete at the end of the day so I know how class went.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="sub plan choice board independent">
+          <div class="prompt-card-top"><span class="prompt-num">58</span><span class="prompt-tag">Choice</span></div>
+          <h3 class="prompt-title">Sub-day choice board</h3>
+          <p class="prompt-text">Create a sub-friendly choice board with six independent activities students can choose from on a given day.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="sub plan five day series week">
+          <div class="prompt-card-top"><span class="prompt-num">59</span><span class="prompt-tag">Five-day</span></div>
+          <h3 class="prompt-title">Five-day emergency series</h3>
+          <p class="prompt-text">Generate a five-day emergency sub plan series for [content area] that can be used if I am out for a week.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="sub plan half day hand off return">
+          <div class="prompt-card-top"><span class="prompt-num">60</span><span class="prompt-tag">Half day</span></div>
+          <h3 class="prompt-title">Half-day hand-off plan</h3>
+          <p class="prompt-text">Write a sub plan for a half day that ends with a clear hand-off task students will complete with me when I return.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- OFFICE GROUP -->
+    <!-- ============================================================ -->
+    <div class="group-divider group-office" data-group="office">
+      <div class="group-divider-icon">🏛️</div>
+      <div class="group-divider-text">
+        <div class="group-divider-name">Office</div>
+        <div class="group-divider-tagline">For communication that goes beyond the classroom, to families, SPED teams, and district leadership</div>
+      </div>
+      <div class="group-divider-count">30 prompts</div>
+    </div>
+
+    <!-- 7. PARENT COMMS -->
+    <section class="section" id="parent-comms" data-group="office">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-title">Parent and family communication</h2>
+        <span class="section-meta">10 prompts</span>
+      </div>
+      <p class="section-intro">Family-facing writing that is warm, specific, and respectful of the time families have to read it.</p>
+      <div class="prompt-grid">
+
+        <article class="prompt-card" data-tags="parent email good news growth quarter">
+          <div class="prompt-card-top"><span class="prompt-num">61</span><span class="prompt-tag">Good news</span></div>
+          <h3 class="prompt-title">Positive growth email</h3>
+          <p class="prompt-text">Draft a warm, three-paragraph parent email reporting that [student first name] is showing strong growth in [area] this quarter. Include one specific example.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="parent email concern behavior academic SBIR">
+          <div class="prompt-card-top"><span class="prompt-num">62</span><span class="prompt-tag">Concern</span></div>
+          <h3 class="prompt-title">Concern email, structured</h3>
+          <p class="prompt-text">Write a parent email that addresses a concern about [behavior or academic issue] using the situation, behavior, impact, and request structure. Keep the tone respectful and solutions-oriented.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="parent email translate Spanish reading level">
+          <div class="prompt-card-top"><span class="prompt-num">63</span><span class="prompt-tag">Translate</span></div>
+          <h3 class="prompt-title">Translate to Spanish</h3>
+          <p class="prompt-text">Translate this parent email into Spanish at a sixth-grade reading level. Preserve the warmth and any specific details about the student.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="parent conference talking points data action">
+          <div class="prompt-card-top"><span class="prompt-num">64</span><span class="prompt-tag">Conference</span></div>
+          <h3 class="prompt-title">Conference talking points</h3>
+          <p class="prompt-text">Draft a parent conference talking points sheet for a fifteen-minute meeting. Include strengths, growth areas, current data, and one specific action the family can support at home.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="newsletter weekly families recap">
+          <div class="prompt-card-top"><span class="prompt-num">65</span><span class="prompt-tag">Newsletter</span></div>
+          <h3 class="prompt-title">Weekly class newsletter</h3>
+          <p class="prompt-text">Write a class newsletter for the week covering what we learned, what is coming up next week, and one way families can extend the learning at home.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="welcome letter back to school values">
+          <div class="prompt-card-top"><span class="prompt-num">66</span><span class="prompt-tag">Welcome</span></div>
+          <h3 class="prompt-title">Back-to-school welcome letter</h3>
+          <p class="prompt-text">Create a back-to-school welcome letter that introduces me as the teacher, shares my classroom values, and invites families to share what I should know about their child.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="parent email celebrate struggling specific praise">
+          <div class="prompt-card-top"><span class="prompt-num">67</span><span class="prompt-tag">Celebrate</span></div>
+          <h3 class="prompt-title">Unexpected win email</h3>
+          <p class="prompt-text">Draft a parent email celebrating an unexpected win for a student who has been struggling. Make the praise specific and authentic.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="phone call script discipline difficult conversation">
+          <div class="prompt-card-top"><span class="prompt-num">68</span><span class="prompt-tag">Phone call</span></div>
+          <h3 class="prompt-title">Difficult phone call script</h3>
+          <p class="prompt-text">Write a script for a difficult phone call to a parent about a discipline incident. Include three open-ended questions I can ask after sharing the facts.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="parent AI policy classroom one pager">
+          <div class="prompt-card-top"><span class="prompt-num">69</span><span class="prompt-tag">AI policy</span></div>
+          <h3 class="prompt-title">Family AI one-pager</h3>
+          <p class="prompt-text">Create a parent-facing one-pager that explains how my class uses AI tools and what students are still expected to do on their own.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="parent conference follow up agreed actions">
+          <div class="prompt-card-top"><span class="prompt-num">70</span><span class="prompt-tag">Follow-up</span></div>
+          <h3 class="prompt-title">Conference follow-up email</h3>
+          <p class="prompt-text">Draft a follow-up email after a parent conference summarizing what we discussed, what was agreed to, and the date of our next check-in.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- 8. IEP -->
+    <section class="section" id="iep" data-group="office">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-title">IEP and student support</h2>
+        <span class="section-meta">10 prompts</span>
+      </div>
+      <p class="section-intro">Special education writing that respects student dignity and gives general education teachers what they actually need.</p>
+      <div class="prompt-grid">
+
+        <article class="prompt-card" data-tags="IEP snapshot one page general education">
+          <div class="prompt-card-top"><span class="prompt-num">71</span><span class="prompt-tag">Snapshot</span></div>
+          <h3 class="prompt-title">IEP one-page snapshot</h3>
+          <p class="prompt-text">Summarize this IEP into a one-page snapshot for general education teachers. Include accommodations, modifications, related services, and key behavioral or academic notes.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="PLAAFP present levels academic functional">
+          <div class="prompt-card-top"><span class="prompt-num">72</span><span class="prompt-tag">PLAAFP</span></div>
+          <h3 class="prompt-title">Draft PLAAFP language</h3>
+          <p class="prompt-text">Draft present levels of academic achievement and functional performance (PLAAFP) language based on these data points: [paste data].</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="IEP measurable annual goals observable">
+          <div class="prompt-card-top"><span class="prompt-num">73</span><span class="prompt-tag">Goals</span></div>
+          <h3 class="prompt-title">Three measurable annual goals</h3>
+          <p class="prompt-text">Generate three measurable annual goals based on this student profile, written in observable, measurable language.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="IEP accommodations quick reference card">
+          <div class="prompt-card-top"><span class="prompt-num">74</span><span class="prompt-tag">Reference</span></div>
+          <h3 class="prompt-title">Accommodation quick-reference card</h3>
+          <p class="prompt-text">Convert this IEP accommodation list into a quick reference card I can keep at my desk for a specific student.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="ARD IEP meeting talking points progress">
+          <div class="prompt-card-top"><span class="prompt-num">75</span><span class="prompt-tag">Meeting</span></div>
+          <h3 class="prompt-title">ARD or IEP talking points</h3>
+          <p class="prompt-text">Draft talking points for an upcoming ARD or IEP meeting that highlight progress, current challenges, and proposed next steps.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="accommodations teacher moves whole group">
+          <div class="prompt-card-top"><span class="prompt-num">76</span><span class="prompt-tag">Translate</span></div>
+          <h3 class="prompt-title">Accommodations to teacher moves</h3>
+          <p class="prompt-text">Take this set of accommodations and translate them into specific teacher moves I can use during whole-group instruction.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="evaluation report parent friendly plain language">
+          <div class="prompt-card-top"><span class="prompt-num">77</span><span class="prompt-tag">Family</span></div>
+          <h3 class="prompt-title">Parent-friendly evaluation summary</h3>
+          <p class="prompt-text">Write a parent-friendly summary of an evaluation report that explains testing results in plain language without removing technical accuracy.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="IEP meeting parent questions advocate">
+          <div class="prompt-card-top"><span class="prompt-num">78</span><span class="prompt-tag">Advocacy</span></div>
+          <h3 class="prompt-title">Parent advocacy questions</h3>
+          <p class="prompt-text">Generate questions a parent or guardian might want to ask at an IEP meeting to advocate for their child.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="behavior intervention plan FBA template">
+          <div class="prompt-card-top"><span class="prompt-num">79</span><span class="prompt-tag">BIP</span></div>
+          <h3 class="prompt-title">Behavior intervention plan draft</h3>
+          <p class="prompt-text">Build a behavior intervention plan template based on this functional behavior assessment data.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="transition planning high school adult services">
+          <div class="prompt-card-top"><span class="prompt-num">80</span><span class="prompt-tag">Transition</span></div>
+          <h3 class="prompt-title">Transition planning checklist</h3>
+          <p class="prompt-text">Create a transition planning checklist for a high school student preparing to move from school to adult services.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- 9. CENTRAL OFFICE -->
+    <section class="section" id="central-office" data-group="office">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-title">Central office and AI policy</h2>
+        <span class="section-meta">10 prompts</span>
+      </div>
+      <p class="section-intro">District-level writing for cabinet, board, and campus leaders working through AI rollout.</p>
+      <div class="prompt-grid">
+
+        <article class="prompt-card" data-tags="acceptable use policy AUP staff AI">
+          <div class="prompt-card-top"><span class="prompt-num">81</span><span class="prompt-tag">AUP</span></div>
+          <h3 class="prompt-title">Staff acceptable use policy</h3>
+          <p class="prompt-text">Draft an acceptable use policy for staff use of generative AI tools in the district. Include guidance on student data, intellectual property, and disclosure.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="AI policy summary plain language teacher">
+          <div class="prompt-card-top"><span class="prompt-num">82</span><span class="prompt-tag">Summary</span></div>
+          <h3 class="prompt-title">Teacher-facing AI policy summary</h3>
+          <p class="prompt-text">Create a one-page AI policy summary for teachers that translates the full district AI policy into plain language.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="approval framework green yellow red privacy">
+          <div class="prompt-card-top"><span class="prompt-num">83</span><span class="prompt-tag">Tools</span></div>
+          <h3 class="prompt-title">Tiered tool approval framework</h3>
+          <p class="prompt-text">Build a tiered AI tool approval framework that defines green, yellow, and red tools based on data privacy review.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="principal memo academic integrity AI">
+          <div class="prompt-card-top"><span class="prompt-num">84</span><span class="prompt-tag">Principal memo</span></div>
+          <h3 class="prompt-title">Academic integrity guidance</h3>
+          <p class="prompt-text">Draft a memo to principals explaining how to handle AI-related academic integrity concerns at the campus level.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="parent FAQ AI classroom approach">
+          <div class="prompt-card-top"><span class="prompt-num">85</span><span class="prompt-tag">FAQ</span></div>
+          <h3 class="prompt-title">Parent-facing AI FAQ</h3>
+          <p class="prompt-text">Generate a parent-facing FAQ on the district's approach to AI in classrooms.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="board update AI implementation goals next steps">
+          <div class="prompt-card-top"><span class="prompt-num">86</span><span class="prompt-tag">Board</span></div>
+          <h3 class="prompt-title">Board AI implementation update</h3>
+          <p class="prompt-text">Build a school board update on AI implementation that includes goals, current state, lessons learned, and next steps.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="coaches PD sequence AI integration">
+          <div class="prompt-card-top"><span class="prompt-num">87</span><span class="prompt-tag">Coaches</span></div>
+          <h3 class="prompt-title">Coach PD sequence on AI</h3>
+          <p class="prompt-text">Draft a professional learning sequence for instructional coaches on supporting teachers with AI integration.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="vendor evaluation rubric privacy accessibility cost">
+          <div class="prompt-card-top"><span class="prompt-num">88</span><span class="prompt-tag">Vendor</span></div>
+          <h3 class="prompt-title">Vendor evaluation rubric</h3>
+          <p class="prompt-text">Create a vendor evaluation rubric for reviewing new AI tools that includes data privacy, instructional value, accessibility, and cost.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="purchase checklist campus leader subscription">
+          <div class="prompt-card-top"><span class="prompt-num">89</span><span class="prompt-tag">Purchase</span></div>
+          <h3 class="prompt-title">Before-you-subscribe checklist</h3>
+          <p class="prompt-text">Build a "before you click subscribe" checklist for campus leaders considering an AI product purchase.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+        <article class="prompt-card" data-tags="superintendent talking points community AI responsible">
+          <div class="prompt-card-top"><span class="prompt-num">90</span><span class="prompt-tag">Superintendent</span></div>
+          <h3 class="prompt-title">Community meeting talking points</h3>
+          <p class="prompt-text">Generate talking points for the superintendent's monthly community meeting on responsible AI use in the district.</p>
+          <button class="copy-btn" type="button">📋 Copy prompt</button>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- LIBRARY GROUP -->
+    <!-- ============================================================ -->
+    <div class="group-divider group-library" data-group="library">
+      <div class="group-divider-icon">📚</div>
+      <div class="group-divider-text">
+        <div class="group-divider-name">Library</div>
+        <div class="group-divider-tagline">Reusable techniques, shortcuts, and prompt-engineering moves that improve every other prompt</div>
+      </div>
+      <div class="group-divider-count">10 prompts</div>
+    </div>
+
+    <!-- 10. TRICKS -->
+    <section class="section" id="tricks" data-group="library">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-title">Prompt-engineering tricks and shortcuts</h2>
+        <span class="section-meta">10 techniques</span>
+      </div>
+      <p class="section-intro">Each card below is one technique, one shortcut, or one keyboard move that will save you time across every other prompt in this library.</p>
+      <div class="prompt-grid">
+
+        <article class="prompt-card trick-card" data-tags="role priming specificity expert">
+          <div class="prompt-card-top"><span class="prompt-num">91</span><span class="prompt-tag">Technique</span></div>
+          <h3 class="prompt-title">Role priming with specifics</h3>
+          <p class="prompt-text">Start your prompt with "Act as a [specific role with specific experience]." Specificity beats generic role names. "Act as a fourth-grade ELAR teacher with ten years in dual-language settings" outperforms "Act as a teacher" every time.</p>
+          <button class="copy-btn" type="button">📋 Copy technique</button>
+        </article>
+
+        <article class="prompt-card trick-card" data-tags="show example output structure">
+          <div class="prompt-card-top"><span class="prompt-num">92</span><span class="prompt-tag">Technique</span></div>
+          <h3 class="prompt-title">Show, do not tell</h3>
+          <p class="prompt-text">Paste an example of the output you want before asking for a new one. The model will match the structure, tone, and length of your example. One good example beats three paragraphs of instructions.</p>
+          <button class="copy-btn" type="button">📋 Copy technique</button>
+        </article>
+
+        <article class="prompt-card trick-card" data-tags="constrain format output rules">
+          <div class="prompt-card-top"><span class="prompt-num">93</span><span class="prompt-tag">Technique</span></div>
+          <h3 class="prompt-title">Constrain the output</h3>
+          <p class="prompt-text">End every prompt with format rules. "Respond as a table with three columns" or "Use exactly five bullet points, each fewer than fifteen words" gives you outputs you can use without reformatting.</p>
+          <button class="copy-btn" type="button">📋 Copy technique</button>
+        </article>
+
+        <article class="prompt-card trick-card" data-tags="audience tagging reading level family">
+          <div class="prompt-card-top"><span class="prompt-num">94</span><span class="prompt-tag">Technique</span></div>
+          <h3 class="prompt-title">Audience tagging</h3>
+          <p class="prompt-text">Name the audience explicitly. "Write this for a parent who has not finished high school" produces dramatically different output than "Write this for a parent." Audience tags are the cheapest revision you can make.</p>
+          <button class="copy-btn" type="button">📋 Copy technique</button>
+        </article>
+
+        <article class="prompt-card trick-card" data-tags="chain prompts sequence outline draft revise">
+          <div class="prompt-card-top"><span class="prompt-num">95</span><span class="prompt-tag">Technique</span></div>
+          <h3 class="prompt-title">Chain prompts instead of mega-prompts</h3>
+          <p class="prompt-text">Break complex tasks into a sequence: outline first, then draft, then revise. Each step is more controllable than one giant request, and you can stop and steer between steps.</p>
+          <button class="copy-btn" type="button">📋 Copy technique</button>
+        </article>
+
+        <article class="prompt-card trick-card" data-tags="what is missing review gaps">
+          <div class="prompt-card-top"><span class="prompt-num">96</span><span class="prompt-tag">Shortcut</span></div>
+          <h3 class="prompt-title">The "what is missing" question</h3>
+          <p class="prompt-text">After getting a draft, ask "What did you leave out that a thoughtful reviewer would expect to see?" This single question catches gaps that you would have caught yourself only on a third read.</p>
+          <button class="copy-btn" type="button">📋 Copy technique</button>
+        </article>
+
+        <article class="prompt-card trick-card" data-tags="keyboard shift enter line break">
+          <div class="prompt-card-top"><span class="prompt-num">97</span><span class="prompt-tag">Keyboard</span></div>
+          <h3 class="prompt-title">Shift + Enter for line breaks</h3>
+          <p class="prompt-text">In most chat tools, Shift + Enter creates a line break inside your prompt without sending it. Useful for multi-paragraph prompts, pasted source material, and structured instructions you want to send all at once.</p>
+          <button class="copy-btn" type="button">📋 Copy technique</button>
+        </article>
+
+        <article class="prompt-card trick-card" data-tags="rubric anchor evaluation lens feedback">
+          <div class="prompt-card-top"><span class="prompt-num">98</span><span class="prompt-tag">Technique</span></div>
+          <h3 class="prompt-title">Anchor with a rubric</h3>
+          <p class="prompt-text">When asking for feedback or evaluation, paste a rubric inside the prompt. The model will use it as the lens instead of inventing its own criteria. This is the single biggest upgrade for student-work feedback.</p>
+          <button class="copy-btn" type="button">📋 Copy technique</button>
+        </article>
+
+        <article class="prompt-card trick-card" data-tags="projects custom GPTs context save reuse">
+          <div class="prompt-card-top"><span class="prompt-num">99</span><span class="prompt-tag">Shortcut</span></div>
+          <h3 class="prompt-title">Use Projects or Custom GPTs</h3>
+          <p class="prompt-text">Save your context, files, and instructions once with Claude Projects, ChatGPT Custom GPTs, or BoodleBox bots, instead of pasting them every conversation. Setup takes ten minutes. Saves hours per week, every week.</p>
+          <button class="copy-btn" type="button">📋 Copy technique</button>
+        </article>
+
+        <article class="prompt-card trick-card" data-tags="reverse prompt meta write best">
+          <div class="prompt-card-top"><span class="prompt-num">100</span><span class="prompt-tag">Technique</span></div>
+          <h3 class="prompt-title">The reverse prompt</h3>
+          <p class="prompt-text">Ask the AI to write the prompt for you. "I want output that does X. Write the best prompt I should use to get that result." Then run that prompt. The AI knows how to ask itself for what you want better than you do.</p>
+          <button class="copy-btn" type="button">📋 Copy technique</button>
+        </article>
+
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <h3>Part of <em>AI Essentials for Educators</em></h3>
+    <p>This prompt library accompanies the AI Essentials for Educators course. Use, adapt, and share with attribution. Bracketed placeholders such as [topic] are meant for you to fill in with your own content.</p>
+    <div class="footer-meta">100 prompts · 3 sections · 10 categories · K-16 and central office friendly · Free to use</div>
+  </div>
+</footer>
+
+<script>
+// COPY BUTTONS
+document.querySelectorAll('.copy-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const card = btn.closest('.prompt-card');
+    const text = card.querySelector('.prompt-text').textContent.trim();
+    navigator.clipboard.writeText(text).then(() => {
+      const original = btn.textContent;
+      btn.textContent = '✓ Copied';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = original;
+        btn.classList.remove('copied');
+      }, 1600);
+    }).catch(() => {
+      btn.textContent = 'Copy failed';
+      setTimeout(() => { btn.textContent = '📋 Copy prompt'; }, 1600);
+    });
+  });
+});
+
+// SEARCH FILTER
+const searchInput = document.getElementById('searchInput');
+const visibleCount = document.getElementById('visibleCount');
+const noResults = document.getElementById('noResults');
+const allCards = document.querySelectorAll('.prompt-card');
+const allSections = document.querySelectorAll('.section');
+const allDividers = document.querySelectorAll('.group-divider');
+
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.trim().toLowerCase();
+  let count = 0;
+
+  allCards.forEach(card => {
+    const haystack = (
+      card.dataset.tags + ' ' +
+      card.querySelector('.prompt-title').textContent + ' ' +
+      card.querySelector('.prompt-text').textContent
+    ).toLowerCase();
+    if (q === '' || haystack.includes(q)) {
+      card.classList.remove('hidden');
+      count++;
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+
+  // Hide empty sections
+  const visibleGroups = new Set();
+  allSections.forEach(section => {
+    const visible = section.querySelectorAll('.prompt-card:not(.hidden)').length;
+    section.style.display = visible === 0 ? 'none' : '';
+    if (visible > 0) visibleGroups.add(section.dataset.group);
+  });
+
+  // Hide empty group dividers
+  allDividers.forEach(div => {
+    div.style.display = visibleGroups.has(div.dataset.group) ? '' : 'none';
+  });
+
+  visibleCount.textContent = count;
+  noResults.classList.toggle('show', count === 0);
+});
+
+// MOBILE SIDEBAR
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('sidebarOverlay');
+const menuToggle = document.getElementById('menuToggle');
+const sidebarClose = document.getElementById('sidebarClose');
+
+function openSidebar() {
+  sidebar.classList.add('open');
+  overlay.classList.add('open');
+}
+function closeSidebar() {
+  sidebar.classList.remove('open');
+  overlay.classList.remove('open');
+}
+
+menuToggle.addEventListener('click', openSidebar);
+sidebarClose.addEventListener('click', closeSidebar);
+overlay.addEventListener('click', closeSidebar);
+
+// Close mobile sidebar after a link is clicked
+document.querySelectorAll('.sidebar-link').forEach(link => {
+  link.addEventListener('click', () => {
+    if (window.innerWidth <= 900) closeSidebar();
+  });
+});
+
+// SCROLL SPY - highlight active section in sidebar
+const sidebarLinks = document.querySelectorAll('.sidebar-link');
+const sectionMap = new Map();
+sidebarLinks.forEach(link => {
+  const id = link.dataset.target;
+  const sec = document.getElementById(id);
+  if (sec) sectionMap.set(sec, link);
+});
+
+const observer = new IntersectionObserver((entries) => {
+  // Find topmost intersecting section
+  let topEntry = null;
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      if (!topEntry || entry.boundingClientRect.top < topEntry.boundingClientRect.top) {
+        topEntry = entry;
+      }
+    }
+  });
+  if (topEntry) {
+    sidebarLinks.forEach(l => l.classList.remove('active'));
+    const link = sectionMap.get(topEntry.target);
+    if (link) link.classList.add('active');
+  }
+}, {
+  rootMargin: '-100px 0px -55% 0px',
+  threshold: 0
+});
+
+sectionMap.forEach((link, sec) => observer.observe(sec));
+
+// Default highlight: first link
+if (sidebarLinks.length > 0) sidebarLinks[0].classList.add('active');
+</script>
+
+</body>
+</html>

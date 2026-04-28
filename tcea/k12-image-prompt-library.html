@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>K–12 Image Prompt Library | TCEA</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0A3476;
+  --navy-dark: #071f4a;
+  --navy-mid: #12428f;
+  --gold: #FCB040;
+  --gold-light: #fdd17a;
+  --gold-pale: #FEF0D0;
+  --pale-navy: #D0D8F0;
+  --white: #ffffff;
+  --off-white: #f7f8fc;
+  --text: #1a1a2e;
+  --text-muted: #5a6680;
+  --border: #e2e7f5;
+  --teal: #0e6b8a;
+  --radius: 10px;
+  --shadow: 0 2px 12px rgba(10,52,118,0.10);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--off-white);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+header {
+  background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 60%, var(--navy-mid) 100%);
+  padding: 2.2rem 2rem 1.6rem;
+  position: relative;
+  overflow: hidden;
+}
+header::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 280px; height: 280px;
+  background: radial-gradient(circle, rgba(252,176,64,0.18) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-end;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+.header-badge {
+  background: var(--gold);
+  color: var(--navy-dark);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.7rem;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+.header-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  color: var(--white);
+  line-height: 1.15;
+}
+.header-title em {
+  color: var(--gold);
+  font-style: italic;
+}
+.header-sub {
+  color: rgba(255,255,255,0.72);
+  font-size: 0.92rem;
+  margin-top: 0.35rem;
+  font-weight: 400;
+}
+.header-count {
+  margin-left: auto;
+  text-align: right;
+  color: rgba(255,255,255,0.5);
+  font-size: 0.8rem;
+}
+.header-count strong {
+  display: block;
+  font-family: 'DM Serif Display', serif;
+  font-size: 2rem;
+  color: var(--gold);
+  line-height: 1;
+}
+
+/* ── SEARCH BAR ── */
+.search-wrap {
+  background: var(--navy-dark);
+  padding: 0 2rem 1.2rem;
+  border-bottom: 3px solid var(--gold);
+}
+.search-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+.search-box {
+  flex: 1;
+  position: relative;
+}
+.search-box input {
+  width: 100%;
+  padding: 0.7rem 1rem 0.7rem 2.6rem;
+  border-radius: 8px;
+  border: 1.5px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.1);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+.search-box input::placeholder { color: rgba(255,255,255,0.45); }
+.search-box input:focus {
+  border-color: var(--gold);
+  background: rgba(255,255,255,0.15);
+}
+.search-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255,255,255,0.5);
+  pointer-events: none;
+}
+.search-clear {
+  background: var(--gold);
+  color: var(--navy-dark);
+  border: none;
+  padding: 0.65rem 1.1rem;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+.search-clear:hover { background: var(--gold-light); }
+
+/* ── TABS ── */
+.tabs-wrap {
+  background: var(--white);
+  border-bottom: 1.5px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(10,52,118,0.07);
+}
+.tabs-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  gap: 0;
+}
+.tab-btn {
+  padding: 0.95rem 1.8rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.tab-btn:hover { color: var(--navy); }
+.tab-btn.active {
+  color: var(--navy);
+  border-bottom-color: var(--gold);
+}
+.tab-btn .tab-count {
+  background: var(--pale-navy);
+  color: var(--navy);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.1rem 0.45rem;
+  border-radius: 100px;
+}
+.tab-btn.active .tab-count {
+  background: var(--gold-pale);
+  color: var(--navy-dark);
+}
+
+/* ── MAIN CONTENT ── */
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── NO RESULTS ── */
+.no-results {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--text-muted);
+  display: none;
+}
+.no-results.show { display: block; }
+.no-results svg { opacity: 0.3; margin-bottom: 1rem; }
+.no-results p { font-size: 1rem; }
+
+/* ── CATEGORY SECTIONS ── */
+.category {
+  margin-bottom: 2.5rem;
+}
+.category-header {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  user-select: none;
+}
+.category-icon {
+  width: 38px; height: 38px;
+  border-radius: 8px;
+  background: var(--navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1.1rem;
+}
+.category-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.2rem;
+  color: var(--navy);
+  flex: 1;
+}
+.category-pill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--navy);
+  background: var(--gold-pale);
+  border: 1px solid var(--gold-light);
+  padding: 0.2rem 0.6rem;
+  border-radius: 100px;
+}
+.category-toggle {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  transition: transform 0.25s;
+}
+.category.collapsed .category-toggle { transform: rotate(-90deg); }
+.category-divider {
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold) 0%, var(--border) 80%);
+  border-radius: 2px;
+  margin-bottom: 1rem;
+}
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1rem;
+  transition: opacity 0.2s;
+}
+.category.collapsed .card-grid { display: none; }
+
+/* ── PROMPT CARD ── */
+.prompt-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1rem 0.85rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+  position: relative;
+}
+.prompt-card:hover {
+  border-color: var(--navy-mid);
+  box-shadow: 0 4px 18px rgba(10,52,118,0.14);
+  transform: translateY(-1px);
+}
+.prompt-card.hidden { display: none; }
+.card-num {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.card-text {
+  font-size: 0.87rem;
+  line-height: 1.55;
+  color: var(--text);
+  flex: 1;
+}
+.card-text mark {
+  background: var(--gold-pale);
+  color: var(--navy-dark);
+  border-radius: 2px;
+  padding: 0 1px;
+}
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.2rem;
+}
+.card-tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--navy-mid);
+  background: var(--pale-navy);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+}
+.copy-btn {
+  background: var(--navy);
+  color: var(--white);
+  border: none;
+  border-radius: 6px;
+  padding: 0.35rem 0.75rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: background 0.2s, transform 0.1s;
+  letter-spacing: 0.02em;
+}
+.copy-btn:hover { background: var(--navy-mid); }
+.copy-btn:active { transform: scale(0.96); }
+.copy-btn.copied {
+  background: #1a7a4a;
+}
+
+/* ── TOAST ── */
+#toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--navy-dark);
+  color: var(--gold);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.65rem 1.4rem;
+  border-radius: 100px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+  opacity: 0;
+  transition: opacity 0.25s, transform 0.25s;
+  pointer-events: none;
+  z-index: 9999;
+  border: 1px solid rgba(252,176,64,0.3);
+}
+#toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--navy-dark);
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  padding: 1.5rem 2rem;
+  font-size: 0.8rem;
+  margin-top: 3rem;
+}
+footer strong { color: var(--gold); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  main { padding: 1.2rem 1rem; }
+  .header-inner { flex-direction: column; align-items: flex-start; }
+  .header-count { margin-left: 0; text-align: left; }
+  .tab-btn { padding: 0.85rem 1rem; font-size: 0.82rem; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div>
+      <div class="header-badge">TCEA · Professional Development</div>
+      <h1 class="header-title">K–12 <em>Image Prompt</em> Library</h1>
+      <p class="header-sub">Ready-to-use prompts for AI image generation tools — organized for classroom, library, and office use.</p>
+    </div>
+    <div class="header-count">
+      <strong id="total-count">65</strong>
+      curated prompts
+    </div>
+  </div>
+</header>
+
+<!-- SEARCH -->
+<div class="search-wrap">
+  <div class="search-inner">
+    <div class="search-box">
+      <svg class="search-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="text" id="search-input" placeholder="Search prompts… e.g. rubric, science, feedback" autocomplete="off">
+    </div>
+    <button class="search-clear" onclick="clearSearch()">Clear</button>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-wrap">
+  <div class="tabs-inner">
+    <button class="tab-btn active" onclick="switchTab('classroom', this)">
+      🏫 Classroom <span class="tab-count" id="count-classroom">35</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('library', this)">
+      📚 Library <span class="tab-count" id="count-library">15</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('office', this)">
+      🗂 Office <span class="tab-count" id="count-office">15</span>
+    </button>
+  </div>
+</div>
+
+<main>
+<!-- ═══════════════════════════════ CLASSROOM ═══════════════════════════════ -->
+<div id="tab-classroom" class="tab-panel active">
+
+  <!-- Rubrics -->
+  <div class="category" id="cat-rubrics">
+    <div class="category-header" onclick="toggleCat('cat-rubrics')">
+      <div class="category-icon">📋</div>
+      <h2 class="category-title">Rubrics &amp; Rubric Banks</h2>
+      <span class="category-pill">8 prompts</span>
+      <span class="category-toggle">▾</span>
+    </div>
+    <div class="category-divider"></div>
+    <div class="card-grid">
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#1</div>
+        <div class="card-text">Flat vector graphic of a grading rubric with four columns. Text "GRADING RUBRIC". All text must be clean, professional, and free of typos. Prioritize legibility over decorative fonts. No stylized or distorted lettering.</div>
+        <div class="card-footer"><span class="card-tag">Rubrics</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#2</div>
+        <div class="card-text">Simple 5-point scale graphic for peer review. Text "PEER REVIEW". All text must be clean, professional, and free of typos. No stylized or distorted lettering.</div>
+        <div class="card-footer"><span class="card-tag">Rubrics</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#3</div>
+        <div class="card-text">Visual checklist icon set with a clipboard and checkmarks. Text "CRITERIA". All text must be clean, professional, and free of typos. Prioritize legibility.</div>
+        <div class="card-footer"><span class="card-tag">Rubrics</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#4</div>
+        <div class="card-text">Blank grid template for a writing rubric, professional blue and white color scheme. Text "SCORING". All text must be clean, professional, and free of typos. No decorative fonts.</div>
+        <div class="card-footer"><span class="card-tag">Rubrics</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#5</div>
+        <div class="card-text">Vault icon graphic containing stacked papers. Text "RUBRIC BANK". All text must be clean, professional, and free of typos. Prioritize legibility.</div>
+        <div class="card-footer"><span class="card-tag">Rubrics</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#6</div>
+        <div class="card-text">Grid layout icon for a grading matrix collection. Text "EVALUATION TOOLS". All text must be clean, professional, and free of typos. No stylized or distorted lettering.</div>
+        <div class="card-footer"><span class="card-tag">Rubrics</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#7</div>
+        <div class="card-text">Minimalist document header featuring a pencil and ruler icon. Text "SELF-ASSESSMENT". All text must be clean, professional, and free of typos. Prioritize legibility over decorative fonts.</div>
+        <div class="card-footer"><span class="card-tag">Rubrics</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#8</div>
+        <div class="card-text">Flat icon of a magnifying glass over a document with star ratings. Text "HOLISTIC RUBRIC". All text must be clean, professional, and free of typos. No stylized lettering. High contrast.</div>
+        <div class="card-footer"><span class="card-tag">Rubrics</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quiz Questions -->
+  <div class="category" id="cat-quiz">
+    <div class="category-header" onclick="toggleCat('cat-quiz')">
+      <div class="category-icon">🔬</div>
+      <h2 class="category-title">Quiz Questions &amp; Diagrams</h2>
+      <span class="category-pill">8 prompts</span>
+      <span class="category-toggle">▾</span>
+    </div>
+    <div class="category-divider"></div>
+    <div class="card-grid">
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#9</div>
+        <div class="card-text">Clear line drawing of a plant cell biology diagram. Unlabeled. Clean, professional style, highly legible lines. No stylized or distorted lettering.</div>
+        <div class="card-footer"><span class="card-tag">Quiz</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#10</div>
+        <div class="card-text">Mathematical graph showing a parabola on an X-Y axis. Clean, professional style, highly legible grid lines.</div>
+        <div class="card-footer"><span class="card-tag">Quiz</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#11</div>
+        <div class="card-text">Historical map outline of the 13 American Colonies. Unlabeled, clear borders. Clean, professional style, high contrast.</div>
+        <div class="card-footer"><span class="card-tag">Quiz</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#12</div>
+        <div class="card-text">Physics diagram showing a block on an inclined plane with force vectors. Clean, professional style, no distorted shapes.</div>
+        <div class="card-footer"><span class="card-tag">Quiz</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#13</div>
+        <div class="card-text">Chemistry illustration of a beaker setup for titration. Clean, professional style, highly legible rendering.</div>
+        <div class="card-footer"><span class="card-tag">Quiz</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#14</div>
+        <div class="card-text">Simple fraction pie chart graphic divided into eighths. Clean, professional style, clear contrast.</div>
+        <div class="card-footer"><span class="card-tag">Quiz</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#15</div>
+        <div class="card-text">Diagram of the water cycle showing evaporation, condensation, and precipitation with arrows. Unlabeled. Clean, professional scientific illustration style.</div>
+        <div class="card-footer"><span class="card-tag">Quiz</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#16</div>
+        <div class="card-text">Blank human body outline diagram, front view, suitable for anatomy labeling activity. Unlabeled. Clean, professional medical illustration style, high contrast on white background.</div>
+        <div class="card-footer"><span class="card-tag">Quiz</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide Decks -->
+  <div class="category" id="cat-slides">
+    <div class="category-header" onclick="toggleCat('cat-slides')">
+      <div class="category-icon">🖥️</div>
+      <h2 class="category-title">Slide Outlines &amp; Decks</h2>
+      <span class="category-pill">10 prompts</span>
+      <span class="category-toggle">▾</span>
+    </div>
+    <div class="category-divider"></div>
+    <div class="card-grid">
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#17</div>
+        <div class="card-text">Minimalist presentation slide background with a geometric blue border. Clean, professional layout.</div>
+        <div class="card-footer"><span class="card-tag">Slides</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#18</div>
+        <div class="card-text">Title slide template for a history lesson featuring a subtle vintage map background. Text "HISTORY". All text must be clean, professional, and free of typos.</div>
+        <div class="card-footer"><span class="card-tag">Slides</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#19</div>
+        <div class="card-text">Science presentation background featuring a faint molecular pattern. Text "SCIENCE". All text must be clean, professional, and free of typos. Prioritize legibility.</div>
+        <div class="card-footer"><span class="card-tag">Slides</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#20</div>
+        <div class="card-text">Blank timeline graphic for a slide deck, 5 nodes. Clean, professional, highly legible lines.</div>
+        <div class="card-footer"><span class="card-tag">Slides</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#21</div>
+        <div class="card-text">Two-column comparison slide template background. Clean, professional style, no distorted elements.</div>
+        <div class="card-footer"><span class="card-tag">Slides</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#22</div>
+        <div class="card-text">Title slide image with a modern, flat-design school bus. Text "WELCOME". All text must be clean, professional, and free of typos.</div>
+        <div class="card-footer"><span class="card-tag">Slides</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#23</div>
+        <div class="card-text">Section divider slide background with a microscope motif. Text "LAB RULES". All text must be clean, professional, and free of typos.</div>
+        <div class="card-footer"><span class="card-tag">Slides</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#24</div>
+        <div class="card-text">Closing slide graphic with a stylized sunset and a school bell. Text "QUESTIONS?". All text must be clean, professional, and free of typos. No decorative fonts.</div>
+        <div class="card-footer"><span class="card-tag">Slides</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#25</div>
+        <div class="card-text">Flat-design slide background featuring a world map outline and compass rose motif. Text "SOCIAL STUDIES". All text must be clean, professional, and free of typos. Prioritize legibility.</div>
+        <div class="card-footer"><span class="card-tag">Slides</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#26</div>
+        <div class="card-text">Modern slide title banner featuring open books and reading glasses. Text "ELA". All text must be clean, professional, and free of typos. No stylized or distorted lettering.</div>
+        <div class="card-footer"><span class="card-tag">Slides</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback -->
+  <div class="category" id="cat-feedback">
+    <div class="category-header" onclick="toggleCat('cat-feedback')">
+      <div class="category-icon">⭐</div>
+      <h2 class="category-title">Feedback &amp; Grading Stamps</h2>
+      <span class="category-pill">6 prompts</span>
+      <span class="category-toggle">▾</span>
+    </div>
+    <div class="category-divider"></div>
+    <div class="card-grid">
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#27</div>
+        <div class="card-text">Digital sticker graphic of a gold star. Text "EXCELLENT". All text must be clean, professional, and free of typos. Prioritize legibility.</div>
+        <div class="card-footer"><span class="card-tag">Feedback</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#28</div>
+        <div class="card-text">Revision stamp graphic in red ink. Text "PLEASE REVISE". All text must be clean, professional, and free of typos. No stylized lettering.</div>
+        <div class="card-footer"><span class="card-tag">Feedback</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#29</div>
+        <div class="card-text">Digital feedback icon showing a lightbulb. Text "GREAT IDEA". All text must be clean, professional, and free of typos.</div>
+        <div class="card-footer"><span class="card-tag">Feedback</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#30</div>
+        <div class="card-text">Check-plus grading stamp graphic. Text "WELL DONE". All text must be clean, professional, and free of typos. No stylized or distorted lettering.</div>
+        <div class="card-footer"><span class="card-tag">Feedback</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#31</div>
+        <div class="card-text">Flat vector badge with a trophy icon. Text "MOST IMPROVED". All text must be clean, professional, and free of typos. No decorative fonts. Bright, motivating color scheme.</div>
+        <div class="card-footer"><span class="card-tag">Feedback</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#32</div>
+        <div class="card-text">Minimalist digital sticker showing a thumbs-up icon with a checkmark. Text "ON TRACK". All text must be clean, professional, and free of typos. Prioritize legibility over decorative fonts.</div>
+        <div class="card-footer"><span class="card-tag">Feedback</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lesson Packs & Choice Boards -->
+  <div class="category" id="cat-lessons">
+    <div class="category-header" onclick="toggleCat('cat-lessons')">
+      <div class="category-icon">📦</div>
+      <h2 class="category-title">Lesson Packs &amp; Choice Boards</h2>
+      <span class="category-pill">7 prompts</span>
+      <span class="category-toggle">▾</span>
+    </div>
+    <div class="category-divider"></div>
+    <div class="card-grid">
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#33</div>
+        <div class="card-text">Cover graphic for an instructional unit featuring diverse students learning. Text "LESSON PACK". All text must be clean, professional, and free of typos.</div>
+        <div class="card-footer"><span class="card-tag">Lesson Packs</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#34</div>
+        <div class="card-text">Subject header graphic featuring math tools like a compass and protractor. Text "GEOMETRY UNIT". All text must be clean, professional, and free of typos.</div>
+        <div class="card-footer"><span class="card-tag">Lesson Packs</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#35</div>
+        <div class="card-text">A 3x3 tic-tac-toe grid graphic for activity selection. Text "CHOICE BOARD". All text must be clean, professional, and free of typos. Prioritize legibility.</div>
+        <div class="card-footer"><span class="card-tag">Choice Board</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#36</div>
+        <div class="card-text">Menu graphic layout with three columns for tiered learning tasks. Text "LEARNING MENU". All text must be clean, professional, and free of typos. No decorative fonts.</div>
+        <div class="card-footer"><span class="card-tag">Choice Board</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#37</div>
+        <div class="card-text">Hexagon grid template background for a learning menu. Clean, professional style, highly legible.</div>
+        <div class="card-footer"><span class="card-tag">Choice Board</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#38</div>
+        <div class="card-text">Anchor chart header banner with a bold bordered frame. Text "TODAY'S LEARNING TARGET". All text must be clean, professional, and free of typos. High contrast, suitable for classroom display.</div>
+        <div class="card-footer"><span class="card-tag">Lesson Packs</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="classroom">
+        <div class="card-num">#39</div>
+        <div class="card-text">Exit ticket slip graphic with a door icon and a pencil. Text "EXIT TICKET". All text must be clean, professional, and free of typos. No stylized lettering. Clean, minimal design.</div>
+        <div class="card-footer"><span class="card-tag">Lesson Packs</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /tab-classroom -->
+
+
+<!-- ═══════════════════════════════ LIBRARY ═══════════════════════════════ -->
+<div id="tab-library" class="tab-panel">
+
+  <!-- Prompt Library / AI Projects -->
+  <div class="category" id="cat-prompts">
+    <div class="category-header" onclick="toggleCat('cat-prompts')">
+      <div class="category-icon">🤖</div>
+      <h2 class="category-title">Prompt Library &amp; AI Projects</h2>
+      <span class="category-pill">8 prompts</span>
+      <span class="category-toggle">▾</span>
+    </div>
+    <div class="category-divider"></div>
+    <div class="card-grid">
+      <div class="prompt-card" data-tab="library">
+        <div class="card-num">#40</div>
+        <div class="card-text">Cover page graphic for a teacher resource guide showing a computer and an open book. Text "PROMPT LIBRARY". All text must be clean, professional, and free of typos.</div>
+        <div class="card-footer"><span class="card-tag">AI Tools</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="library">
+        <div class="card-num">#41</div>
+        <div class="card-text">Folder icon graphic filled with glowing documents. Text "AI PROMPTS". All text must be clean, professional, and free of typos. Prioritize legibility.</div>
+        <div class="card-footer"><span class="card-tag">AI Tools</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="library">
+        <div class="card-num">#42</div>
+        <div class="card-text">Header banner for a prompt database, futuristic but professional design. Text "DATABASE". All text must be clean, professional, and free of typos.</div>
+        <div class="card-footer"><span class="card-tag">AI Tools</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="library">
+        <div class="card-num">#43</div>
+        <div class="card-text">Bot avatar icon wearing glasses and a graduation cap. Clean, professional style, vector art.</div>
+        <div class="card-footer"><span class="card-tag">AI Tools</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="library">
+        <div class="card-num">#44</div>
+        <div class="card-text">Brain and microchip fusion icon, simple dual-tone. Text "AI ASSISTANT". All text must be clean, professional, and free of typos. No distorted lettering.</div>
+        <div class="card-footer"><span class="card-tag">AI Tools</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="library">
+        <div class="card-num">#45</div>
+        <div class="card-text">Project dashboard cover graphic showing gear icons and chat bubbles. Text "CUSTOM GPT". All text must be clean, professional, and free of typos.</div>
+        <div class="card-footer"><span class="card-tag">AI Tools</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="library">
+        <div class="card-num">#46</div>
+        <div class="card-text">Flat icon of a wand and sparkles over a document. Text "AI-GENERATED". All text must be clean, professional, and free of typos. Prioritize legibility over decorative fonts.</div>
+        <div class="card-footer"><span class="card-tag">AI Tools</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="library">
+        <div class="card-num">#47</div>
+        <div class="card-text">Minimalist icon of a person talking to a chat bubble with a lightbulb inside. Text "ASK THE AI". All text must be clean, professional, and free of typos. No stylized or distorted lettering.</div>
+        <div class="card-footer"><span class="card-tag">AI Tools</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI Policy -->
+  <div class="category" id="cat-policy">
+    <div class="category-header" onclick="toggleCat('cat-policy')">
+      <div class="category-icon">🛡️</div>
+      <h2 class="category-title">AI Policy &amp; Academic Integrity</h2>
+      <span class="category-pill">5 prompts</span>
+      <span class="category-toggle">▾</span>
+    </div>
+    <div class="category-divider"></div>
+    <div class="card-grid">
+      <div class="prompt-card" data-tab="library">
+        <div class="card-num">#48</div>
+        <div class="card-text">Document header graphic featuring a shield and a robot icon. Text "AI POLICY". All text must be clean, professional, and free of typos. Prioritize legibility over decorative fonts.</div>
+        <div class="card-footer"><span class="card-tag">Policy</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="library">
+        <div class="card-num">#49</div>
+        <div class="card-text">Honor code graphic icon featuring a stylized digital fingerprint. Text "ACADEMIC INTEGRITY". All text must be clean, professional, and free of typos. No stylized lettering.</div>
+        <div class="card-footer"><span class="card-tag">Policy</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="library">
+        <div class="card-num">#50</div>
+        <div class="card-text">Syllabus section banner for technology rules. Text "TECHNOLOGY GUIDELINES". All text must be clean, professional, and free of typos. No distorted lettering.</div>
+        <div class="card-footer"><span class="card-tag">Policy</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="library">
+        <div class="card-num">#51</div>
+        <div class="card-text">Poster header graphic with a padlock and a laptop icon. Text "RESPONSIBLE USE". All text must be clean, professional, and free of typos. No stylized or distorted lettering. High contrast.</div>
+        <div class="card-footer"><span class="card-tag">Policy</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="library">
+        <div class="card-num">#52</div>
+        <div class="card-text">Minimalist icon of a hand with a stop symbol over a robot silhouette. Text "THINK BEFORE YOU USE AI". All text must be clean, professional, and free of typos. Prioritize legibility.</div>
+        <div class="card-footer"><span class="card-tag">Policy</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reading & Research -->
+  <div class="category" id="cat-reading">
+    <div class="category-header" onclick="toggleCat('cat-reading')">
+      <div class="category-icon">📖</div>
+      <h2 class="category-title">Reading, Research &amp; Literacy</h2>
+      <span class="category-pill">5 prompts</span>
+      <span class="category-toggle">▾</span>
+    </div>
+    <div class="category-divider"></div>
+    <div class="card-grid">
+      <div class="prompt-card" data-tab="library">
+        <div class="card-num">#53</div>
+        <div class="card-text">Reading log cover graphic with an open book and a pencil icon. Text "READING LOG". All text must be clean, professional, and free of typos. Prioritize legibility.</div>
+        <div class="card-footer"><span class="card-tag">Literacy</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="library">
+        <div class="card-num">#54</div>
+        <div class="card-text">Research guide cover graphic showing a magnifying glass over stacked books. Text "RESEARCH GUIDE". All text must be clean, professional, and free of typos. No stylized or distorted lettering.</div>
+        <div class="card-footer"><span class="card-tag">Research</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="library">
+        <div class="card-num">#55</div>
+        <div class="card-text">Citation guide header banner with a quotation mark and bookmark icon. Text "HOW TO CITE". All text must be clean, professional, and free of typos. No decorative fonts.</div>
+        <div class="card-footer"><span class="card-tag">Research</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="library">
+        <div class="card-num">#56</div>
+        <div class="card-text">Digital citizenship poster header with interconnected globe and device icons. Text "DIGITAL CITIZENSHIP". All text must be clean, professional, and free of typos. High contrast.</div>
+        <div class="card-footer"><span class="card-tag">Digital Literacy</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="library">
+        <div class="card-num">#57</div>
+        <div class="card-text">Book spine collection graphic showing a row of colorful books on a shelf. Clean, professional style. No text required. Suitable for a library section header background.</div>
+        <div class="card-footer"><span class="card-tag">Literacy</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /tab-library -->
+
+
+<!-- ═══════════════════════════════ OFFICE ═══════════════════════════════ -->
+<div id="tab-office" class="tab-panel">
+
+  <!-- Parent Emails -->
+  <div class="category" id="cat-emails">
+    <div class="category-header" onclick="toggleCat('cat-emails')">
+      <div class="category-icon">✉️</div>
+      <h2 class="category-title">Parent &amp; Family Communication</h2>
+      <span class="category-pill">6 prompts</span>
+      <span class="category-toggle">▾</span>
+    </div>
+    <div class="category-divider"></div>
+    <div class="card-grid">
+      <div class="prompt-card" data-tab="office">
+        <div class="card-num">#58</div>
+        <div class="card-text">Email header banner with a school building and sunrise. Text "WEEKLY UPDATE". All text must be clean, professional, and free of typos. No stylized or distorted lettering.</div>
+        <div class="card-footer"><span class="card-tag">Parent Email</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="office">
+        <div class="card-num">#59</div>
+        <div class="card-text">Friendly, minimalist email header graphic featuring an apple and books. Text "CLASS NEWS". All text must be clean, professional, and free of typos. Prioritize legibility over decorative fonts.</div>
+        <div class="card-footer"><span class="card-tag">Parent Email</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="office">
+        <div class="card-num">#60</div>
+        <div class="card-text">Bright, welcoming email banner for a field trip announcement. Text "FIELD TRIP". All text must be clean, professional, and free of typos. No stylized lettering.</div>
+        <div class="card-footer"><span class="card-tag">Parent Email</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="office">
+        <div class="card-num">#61</div>
+        <div class="card-text">Reminder alert graphic for parent-teacher conferences. Text "CONFERENCES". All text must be clean, professional, and free of typos. Prioritize legibility.</div>
+        <div class="card-footer"><span class="card-tag">Parent Email</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="office">
+        <div class="card-num">#62</div>
+        <div class="card-text">School newsletter masthead with a star and pencil icon. Text "CAMPUS NEWSLETTER". All text must be clean, professional, and free of typos. No decorative fonts.</div>
+        <div class="card-footer"><span class="card-tag">Newsletter</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="office">
+        <div class="card-num">#63</div>
+        <div class="card-text">Calendar reminder graphic with a bell icon and a date grid. Text "IMPORTANT DATES". All text must be clean, professional, and free of typos. Prioritize legibility over decorative fonts.</div>
+        <div class="card-footer"><span class="card-tag">Parent Email</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sub Plans -->
+  <div class="category" id="cat-sub">
+    <div class="category-header" onclick="toggleCat('cat-sub')">
+      <div class="category-icon">📁</div>
+      <h2 class="category-title">Substitute Plans</h2>
+      <span class="category-pill">4 prompts</span>
+      <span class="category-toggle">▾</span>
+    </div>
+    <div class="category-divider"></div>
+    <div class="card-grid">
+      <div class="prompt-card" data-tab="office">
+        <div class="card-num">#64</div>
+        <div class="card-text">Binder cover design for substitute teacher. Text "SUB PLANS". All text must be clean, professional, and free of typos. No stylized or distorted lettering. High contrast.</div>
+        <div class="card-footer"><span class="card-tag">Sub Plans</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="office">
+        <div class="card-num">#65</div>
+        <div class="card-text">Emergency procedures infographic icon for a sub folder. Text "EMERGENCY INFO". All text must be clean, professional, and free of typos. Prioritize legibility.</div>
+        <div class="card-footer"><span class="card-tag">Sub Plans</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="office">
+        <div class="card-num">#66</div>
+        <div class="card-text">Schedule graphic template with a clock icon. Text "DAILY SCHEDULE". All text must be clean, professional, and free of typos. No stylized lettering.</div>
+        <div class="card-footer"><span class="card-tag">Sub Plans</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="office">
+        <div class="card-num">#67</div>
+        <div class="card-text">Classroom map and seating chart header graphic. Text "SEATING CHART". All text must be clean, professional, and free of typos. Prioritize legibility over decorative fonts.</div>
+        <div class="card-footer"><span class="card-tag">Sub Plans</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IEP Summaries -->
+  <div class="category" id="cat-iep">
+    <div class="category-header" onclick="toggleCat('cat-iep')">
+      <div class="category-icon">🤝</div>
+      <h2 class="category-title">IEP &amp; Special Education Summaries</h2>
+      <span class="category-pill">4 prompts</span>
+      <span class="category-toggle">▾</span>
+    </div>
+    <div class="category-divider"></div>
+    <div class="card-grid">
+      <div class="prompt-card" data-tab="office">
+        <div class="card-num">#68</div>
+        <div class="card-text">Minimalist document header icon showing a handshake and puzzle piece. Text "AT A GLANCE". All text must be clean, professional, and free of typos. Prioritize legibility.</div>
+        <div class="card-footer"><span class="card-tag">IEP</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="office">
+        <div class="card-num">#69</div>
+        <div class="card-text">Accommodations checklist icon, simple and professional. Text "ACCOMMODATIONS". All text must be clean, professional, and free of typos. No decorative fonts.</div>
+        <div class="card-footer"><span class="card-tag">IEP</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="office">
+        <div class="card-num">#70</div>
+        <div class="card-text">Goal tracking chart graphic, upward trend line. Text "PROGRESS". All text must be clean, professional, and free of typos. No stylized lettering.</div>
+        <div class="card-footer"><span class="card-tag">IEP</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="office">
+        <div class="card-num">#71</div>
+        <div class="card-text">Support strategy icon featuring a teacher and student at a desk. Clean, professional style.</div>
+        <div class="card-footer"><span class="card-tag">IEP</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Administrative -->
+  <div class="category" id="cat-admin">
+    <div class="category-header" onclick="toggleCat('cat-admin')">
+      <div class="category-icon">🏢</div>
+      <h2 class="category-title">Administrative &amp; Campus Operations</h2>
+      <span class="category-pill">5 prompts</span>
+      <span class="category-toggle">▾</span>
+    </div>
+    <div class="category-divider"></div>
+    <div class="card-grid">
+      <div class="prompt-card" data-tab="office">
+        <div class="card-num">#72</div>
+        <div class="card-text">Staff meeting agenda header with a clipboard and calendar icon. Text "STAFF MEETING". All text must be clean, professional, and free of typos. No stylized or distorted lettering.</div>
+        <div class="card-footer"><span class="card-tag">Admin</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="office">
+        <div class="card-num">#73</div>
+        <div class="card-text">Professional development certificate border design with a laurel wreath and star motif. Text "CERTIFICATE OF COMPLETION". All text must be clean, professional, and free of typos. Prioritize legibility.</div>
+        <div class="card-footer"><span class="card-tag">Admin</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="office">
+        <div class="card-num">#74</div>
+        <div class="card-text">Department report cover graphic with a bar chart and pencil icon. Text "DEPARTMENT REPORT". All text must be clean, professional, and free of typos. No decorative fonts.</div>
+        <div class="card-footer"><span class="card-tag">Admin</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="office">
+        <div class="card-num">#75</div>
+        <div class="card-text">Visitor check-in desk sign with a front desk and welcome arrow icon. Text "WELCOME — PLEASE SIGN IN". All text must be clean, professional, and free of typos. High contrast.</div>
+        <div class="card-footer"><span class="card-tag">Admin</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+      <div class="prompt-card" data-tab="office">
+        <div class="card-num">#76</div>
+        <div class="card-text">Professional development session banner with a lightbulb and gear icon. Text "PD DAY". All text must be clean, professional, and free of typos. Prioritize legibility over decorative fonts.</div>
+        <div class="card-footer"><span class="card-tag">Admin</span><button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /tab-office -->
+
+<div class="no-results" id="no-results">
+  <svg width="48" height="48" fill="none" stroke="#5a6680" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+  <p>No prompts matched your search. Try a different keyword.</p>
+</div>
+
+</main>
+
+<footer>
+  <strong>TCEA</strong> · K–12 Image Prompt Library · For educator use. Prompts are designed for AI image generation tools.
+</footer>
+
+<div id="toast">✓ Prompt copied to clipboard</div>
+
+<script>
+// ── TAB SWITCHING ──
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+  // re-run search if active
+  const q = document.getElementById('search-input').value.trim();
+  if (q) runSearch(q);
+}
+
+// ── COLLAPSE ──
+function toggleCat(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+
+// ── SEARCH ──
+document.getElementById('search-input').addEventListener('input', function() {
+  runSearch(this.value.trim());
+});
+
+function runSearch(q) {
+  const term = q.toLowerCase();
+  let totalVisible = 0;
+  const activePanelId = document.querySelector('.tab-panel.active').id;
+  const panel = document.getElementById(activePanelId);
+
+  panel.querySelectorAll('.prompt-card').forEach(card => {
+    const text = card.querySelector('.card-text').textContent.toLowerCase();
+    const show = !term || text.includes(term);
+    card.classList.toggle('hidden', !show);
+    if (show) totalVisible++;
+
+    // highlight
+    const el = card.querySelector('.card-text');
+    el.innerHTML = el.textContent; // reset
+    if (term && show) {
+      const re = new RegExp('(' + term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+      el.innerHTML = el.textContent.replace(re, '<mark>$1</mark>');
+    }
+  });
+
+  // show/hide empty categories
+  panel.querySelectorAll('.category').forEach(cat => {
+    const visibleCards = cat.querySelectorAll('.prompt-card:not(.hidden)').length;
+    cat.style.display = visibleCards === 0 ? 'none' : '';
+    if (visibleCards > 0 && term) cat.classList.remove('collapsed');
+  });
+
+  document.getElementById('no-results').classList.toggle('show', totalVisible === 0);
+}
+
+function clearSearch() {
+  const input = document.getElementById('search-input');
+  input.value = '';
+  runSearch('');
+}
+
+// ── COPY ──
+function copyPrompt(btn) {
+  const text = btn.closest('.prompt-card').querySelector('.card-text').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Copied';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = '📋 Copy';
+      btn.classList.remove('copied');
+    }, 1800);
+    showToast();
+  });
+}
+
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ── COUNT PROMPTS ──
+(function updateCounts() {
+  const counts = { classroom: 0, library: 0, office: 0 };
+  document.querySelectorAll('.prompt-card').forEach(c => {
+    const tab = c.dataset.tab;
+    if (counts[tab] !== undefined) counts[tab]++;
+  });
+  document.getElementById('count-classroom').textContent = counts.classroom;
+  document.getElementById('count-library').textContent = counts.library;
+  document.getElementById('count-office').textContent = counts.office;
+  document.getElementById('total-count').textContent = counts.classroom + counts.library + counts.office;
+})();
+</script>
+</body>
+</html>
