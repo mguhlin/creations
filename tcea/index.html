@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TCEA Resource Directory</title>
+<title>Miguel's Resource Directory</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -336,6 +336,14 @@
     font-size: 0.85rem;
   }
   .footer strong { color: var(--gold); font-weight: 500; }
+  .footer a {
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 500;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s ease;
+  }
+  .footer a:hover { border-bottom-color: var(--gold); }
 
   @media (max-width: 640px) {
     .header { padding: 40px 20px 48px; }
@@ -350,8 +358,8 @@
 <!-- ====== HEADER ====== -->
 <header class="header">
   <div class="header-inner">
-    <div class="header-eyebrow">TCEA · Resource Directory</div>
-    <h1>A guide to the <span>tcea</span> folder</h1>
+    <div class="header-eyebrow">Miguel's · Resource Directory</div>
+    <h1>A guide to <span>Miguel's</span> resources</h1>
     <p class="header-lede">Browse every page in this collection. Tools, prompt libraries, dashboards, and instructional strategy guides for K-16 educators, organized by purpose.</p>
   </div>
 </header>
@@ -383,7 +391,7 @@
 
       <a class="card" href="custom-instructions-library.html">
         <div class="card-tag">Custom Instructions</div>
-        <h3>TCEA AI Custom Instructions Library</h3>
+        <h3>Miguel's AI Custom Instructions Library</h3>
         <p>A curated library of custom instructions for automating office tasks with AI, including BLUF Bot, Outline Helper, and other ready-built personas.</p>
         <div class="card-foot">
           <span class="card-path">custom-instructions-library.html</span>
@@ -571,8 +579,8 @@
 
       <a class="card" href="dashboard.html">
         <div class="card-tag">Course Tracker</div>
-        <h3>TCEA Registration Dashboard</h3>
-        <p>The course registration tracker with revenue and enrollment data across the TCEA professional development catalog.</p>
+        <h3>Miguel's Registration Dashboard</h3>
+        <p>The course registration tracker with revenue and enrollment data across the professional development catalog.</p>
         <div class="card-foot">
           <span class="card-path">dashboard.html · data.md</span>
           <span class="card-arrow">→</span>
@@ -645,17 +653,13 @@
       </div>
     </div>
 
-    <div class="root-note" style="margin-top: 24px;">
-      <strong>Note.</strong> The original <code>index.html</code> at the root has been renamed to <code>custom-instructions-library.html</code> to reflect its content. This page is the new directory guide.
-    </div>
-
   </section>
 
 </main>
 
 <!-- ====== FOOTER ====== -->
 <footer class="footer">
-  <p>TCEA <strong>·</strong> Resource Directory <strong>·</strong> Updated April 2026</p>
+  <p>Resource Directory <strong>·</strong> Updated April 2026 <strong>·</strong> <a href="https://mguhlin.org" target="_blank" rel="noopener">mguhlin.org</a></p>
 </footer>
 
 </body>
