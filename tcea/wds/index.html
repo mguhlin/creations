@@ -1,0 +1,1789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WHEN DISASTER STRIKES — K-12 Cyber Incident Response Game</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #070b14;
+    --surface: #0d1526;
+    --card: #111c33;
+    --border: #1e3058;
+    --cyan: #00d4ff;
+    --cyan-dim: rgba(0,212,255,0.15);
+    --orange: #ff6b35;
+    --red: #ff3366;
+    --green: #00ff88;
+    --yellow: #ffd700;
+    --text: #c8d8f0;
+    --text-dim: #5a7a9a;
+    --white: #e8f0fc;
+    --glow-cyan: 0 0 20px rgba(0,212,255,0.4);
+    --glow-orange: 0 0 20px rgba(255,107,53,0.4);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  /* SCANLINE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px);
+    pointer-events: none; z-index: 9999;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(7,11,20,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; gap: 0; overflow-x: auto;
+    scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  .nav-brand {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.75rem;
+    font-weight: 900;
+    color: var(--cyan);
+    white-space: nowrap;
+    letter-spacing: 0.1em;
+    padding: 1rem 1.5rem 1rem 0;
+    border-right: 1px solid var(--border);
+    margin-right: 0.5rem;
+  }
+  nav a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    padding: 1.1rem 0.9rem;
+    white-space: nowrap;
+    transition: color 0.2s;
+    border-bottom: 2px solid transparent;
+  }
+  nav a:hover { color: var(--cyan); border-bottom-color: var(--cyan); }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    min-height: 92vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    overflow: hidden;
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridPulse 8s ease-in-out infinite;
+  }
+  @keyframes gridPulse {
+    0%,100% { opacity: 0.5; } 50% { opacity: 1; }
+  }
+  .hero-glow {
+    position: absolute; top: 50%; left: 50%;
+    width: 800px; height: 400px;
+    background: radial-gradient(ellipse, rgba(0,80,160,0.3) 0%, transparent 70%);
+    transform: translate(-50%,-50%);
+    pointer-events: none;
+  }
+  .threat-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(255,51,102,0.1);
+    border: 1px solid rgba(255,51,102,0.4);
+    border-radius: 2px;
+    padding: 0.35rem 1rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--red);
+    letter-spacing: 0.15em;
+    margin-bottom: 1.5rem;
+    animation: blinkPulse 2s ease-in-out infinite;
+  }
+  @keyframes blinkPulse {
+    0%,100% { opacity: 1; } 50% { opacity: 0.6; }
+  }
+  .threat-badge::before {
+    content: ''; width: 6px; height: 6px;
+    background: var(--red); border-radius: 50%;
+    box-shadow: 0 0 8px var(--red);
+    animation: blinkPulse 1s ease-in-out infinite;
+  }
+  h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(2.5rem, 8vw, 6rem);
+    font-weight: 900;
+    color: var(--white);
+    letter-spacing: 0.05em;
+    line-height: 1;
+    position: relative;
+  }
+  h1 span { color: var(--cyan); }
+  .hero-subtitle {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(0.8rem, 2vw, 1rem);
+    color: var(--text-dim);
+    letter-spacing: 0.2em;
+    margin-top: 1rem;
+    text-transform: uppercase;
+  }
+  .hero-desc {
+    max-width: 680px;
+    margin: 2rem auto 0;
+    font-size: 1.05rem;
+    color: var(--text);
+    line-height: 1.7;
+  }
+  .hero-actions {
+    display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+    margin-top: 2.5rem;
+  }
+  .btn-primary {
+    background: var(--cyan);
+    color: var(--bg);
+    border: none;
+    padding: 0.85rem 2rem;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .btn-primary:hover {
+    background: var(--white);
+    box-shadow: var(--glow-cyan);
+  }
+  .btn-outline {
+    background: transparent;
+    color: var(--cyan);
+    border: 1px solid var(--cyan);
+    padding: 0.85rem 2rem;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .btn-outline:hover { background: var(--cyan-dim); box-shadow: var(--glow-cyan); }
+  .stat-bar {
+    display: flex; gap: 3rem; flex-wrap: wrap; justify-content: center;
+    margin-top: 3.5rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--border);
+    width: 100%; max-width: 700px;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--cyan);
+    display: block;
+  }
+  .stat-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 5rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .section-full { max-width: none; padding: 5rem 0; }
+  .section-inner { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+  .section-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    color: var(--cyan);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  h2 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+  }
+  h3 {
+    font-family: 'Orbitron', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 0.75rem;
+  }
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.75rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--cyan);
+  }
+  .card.orange::before { background: var(--orange); }
+  .card.red::before { background: var(--red); }
+  .card.green::before { background: var(--green); }
+  .card.yellow::before { background: var(--yellow); }
+
+  /* RULES GRID */
+  .rules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  .rule-step {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.5rem;
+    display: flex; gap: 1rem; align-items: flex-start;
+  }
+  .step-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--cyan);
+    opacity: 0.3;
+    line-height: 1;
+    flex-shrink: 0;
+    width: 2.5rem;
+  }
+  .rule-step h4 {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--cyan);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  .rule-step p { font-size: 0.9rem; color: var(--text); }
+
+  /* ANATOMY OF RESPONSE */
+  .response-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  .response-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.25rem;
+  }
+  .response-item .q-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--orange);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .response-item p { font-size: 0.88rem; color: var(--text); }
+
+  /* NIST CSF */
+  .csf-functions {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 2rem;
+  }
+  @media (max-width: 700px) { .csf-functions { grid-template-columns: 1fr 1fr; } }
+  .csf-fn {
+    background: var(--card);
+    padding: 1.5rem 1.25rem;
+    text-align: center;
+  }
+  .csf-fn .fn-letter {
+    font-family: 'Orbitron', monospace;
+    font-size: 2rem;
+    font-weight: 900;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+  .csf-fn .fn-name {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .csf-fn p { font-size: 0.78rem; color: var(--text-dim); line-height: 1.5; }
+  .fn-GV .fn-letter { color: #9b59b6; }
+  .fn-ID .fn-letter { color: #3498db; }
+  .fn-PR .fn-letter { color: #27ae60; }
+  .fn-DE .fn-letter { color: var(--yellow); }
+  .fn-RS .fn-letter { color: var(--orange); }
+  .fn-RC .fn-letter { color: var(--cyan); }
+
+  /* SCENARIO GENERATOR */
+  .generator-shell {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 2rem;
+  }
+  .gen-header {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 1.5rem;
+    display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+  }
+  .gen-header h3 { margin: 0; font-size: 0.85rem; }
+  .gen-controls {
+    display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+  }
+  select, .filter-btn {
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 0.55rem 1rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    cursor: pointer;
+    border-radius: 2px;
+    letter-spacing: 0.05em;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  select:hover, .filter-btn:hover { border-color: var(--cyan); }
+  select option { background: var(--card); }
+  .gen-btn {
+    background: var(--orange);
+    color: var(--bg);
+    border: none;
+    padding: 0.6rem 1.5rem;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .gen-btn:hover { background: var(--yellow); box-shadow: var(--glow-orange); }
+  .gen-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .gen-output {
+    padding: 2rem 1.5rem;
+    min-height: 300px;
+    position: relative;
+  }
+  .scenario-display { display: none; }
+  .scenario-display.active { display: block; }
+  .scenario-header {
+    display: flex; align-items: flex-start; gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .scenario-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    padding: 0.25rem 0.75rem;
+    border-radius: 2px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+  }
+  .tag-cyber { background: rgba(0,212,255,0.15); color: var(--cyan); border: 1px solid rgba(0,212,255,0.3); }
+  .tag-physical { background: rgba(255,107,53,0.15); color: var(--orange); border: 1px solid rgba(255,107,53,0.3); }
+  .tag-human { background: rgba(255,51,102,0.15); color: var(--red); border: 1px solid rgba(255,51,102,0.3); }
+  .tag-natural { background: rgba(0,255,136,0.15); color: var(--green); border: 1px solid rgba(0,255,136,0.3); }
+  .tag-mixed { background: rgba(255,215,0,0.15); color: var(--yellow); border: 1px solid rgba(255,215,0,0.3); }
+  .scenario-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--white);
+  }
+  .scenario-body { font-size: 0.95rem; color: var(--text); line-height: 1.8; margin-bottom: 1.5rem; }
+  .scenario-prompt {
+    background: var(--bg);
+    border-left: 3px solid var(--orange);
+    padding: 1rem 1.25rem;
+    font-size: 0.95rem;
+    color: var(--orange);
+    font-style: italic;
+    margin-bottom: 2rem;
+  }
+  .cisa-response { margin-top: 1.5rem; }
+  .cisa-response h4 {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--cyan);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .cisa-response h4::before {
+    content: '';
+    display: inline-block; width: 20px; height: 1px;
+    background: var(--cyan);
+  }
+  .response-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  @media (max-width: 640px) { .response-columns { grid-template-columns: 1fr; } }
+  .resp-col {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.25rem;
+  }
+  .resp-col h5 {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .resp-col ul { list-style: none; }
+  .resp-col li {
+    font-size: 0.85rem;
+    color: var(--text);
+    padding: 0.35rem 0;
+    border-bottom: 1px solid var(--border);
+    display: flex; gap: 0.5rem; align-items: flex-start;
+  }
+  .resp-col li:last-child { border: none; }
+  .resp-col li::before { content: '▸'; color: var(--cyan); flex-shrink: 0; }
+  .csf-tags {
+    display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1.25rem;
+  }
+  .csf-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+    border-radius: 2px;
+  }
+  .loading-state {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: 250px; gap: 1rem;
+  }
+  .loader {
+    width: 48px; height: 48px;
+    border: 2px solid var(--border);
+    border-top-color: var(--cyan);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loader-text {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--cyan);
+    letter-spacing: 0.1em;
+    animation: blinkPulse 1.5s ease-in-out infinite;
+  }
+  .empty-state {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: 250px; gap: 1rem; text-align: center;
+  }
+  .empty-icon {
+    font-size: 3rem; opacity: 0.2;
+  }
+  .empty-state p {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+  }
+
+  /* SCENARIOS LIBRARY */
+  .scenarios-filter {
+    display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem;
+  }
+  .filter-pill {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    padding: 0.4rem 1rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .filter-pill:hover, .filter-pill.active {
+    border-color: var(--cyan); color: var(--cyan); background: var(--cyan-dim);
+  }
+  .scenarios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.25rem;
+  }
+  .scenario-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: pointer;
+  }
+  .scenario-card:hover { border-color: var(--cyan); transform: translateY(-2px); }
+  .sc-top {
+    padding: 1.25rem 1.25rem 0.75rem;
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem;
+  }
+  .sc-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+  .sc-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--white);
+    font-weight: 400;
+    padding: 0 1.25rem 0.75rem;
+  }
+  .sc-excerpt {
+    font-size: 0.83rem;
+    color: var(--text-dim);
+    padding: 0 1.25rem 1rem;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .sc-footer {
+    border-top: 1px solid var(--border);
+    padding: 0.75rem 1.25rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .sc-footer span {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+  }
+  /* Modal */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(7,11,20,0.9);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: flex; align-items: center; justify-content: center;
+    padding: 1rem;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    max-width: 780px; width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: translateY(20px);
+    transition: transform 0.25s;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+  .modal-overlay.open .modal { transform: translateY(0); }
+  .modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    position: sticky; top: 0; background: var(--surface); z-index: 1;
+  }
+  .modal-close {
+    background: none; border: 1px solid var(--border);
+    color: var(--text-dim); width: 32px; height: 32px;
+    cursor: pointer; font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .modal-close:hover { border-color: var(--red); color: var(--red); }
+  .modal-body { padding: 1.75rem; }
+
+  /* CISA RESOURCES */
+  .resources-bg {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+    margin-top: 2rem;
+  }
+  .resource-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.5rem;
+    text-decoration: none;
+    display: block;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .resource-card:hover {
+    border-color: var(--cyan);
+    background: var(--surface);
+    transform: translateY(-2px);
+  }
+  .resource-org {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .resource-card h4 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+  }
+  .resource-card p { font-size: 0.82rem; color: var(--text-dim); line-height: 1.5; }
+  .resource-link {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--cyan);
+    letter-spacing: 0.05em;
+    margin-top: 1rem;
+    display: flex; align-items: center; gap: 0.35rem;
+  }
+  .resource-link::after { content: '→'; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+  footer p {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+    line-height: 2;
+  }
+  footer a { color: var(--cyan); text-decoration: none; }
+
+  /* DICE ROLLER */
+  .dice-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.5rem;
+    display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
+  }
+  .dice-display {
+    font-size: 4rem; line-height: 1;
+    cursor: pointer;
+    transition: transform 0.15s;
+    user-select: none;
+  }
+  .dice-display:active { transform: scale(0.85) rotate(15deg); }
+  .dice-result {
+    font-family: 'Orbitron', monospace;
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--cyan);
+    min-width: 3rem;
+  }
+  @keyframes shake {
+    0%,100% { transform: rotate(0deg); }
+    25% { transform: rotate(-20deg); }
+    75% { transform: rotate(20deg); }
+  }
+  .dice-display.rolling { animation: shake 0.3s ease-in-out 3; }
+
+  /* INFO CARDS */
+  .info-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+  .info-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.25rem;
+  }
+  .info-card .ic-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .info-card p { font-size: 0.88rem; color: var(--text); line-height: 1.6; }
+
+  /* SCROLL ANIMATION */
+  .fade-in {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">⚡ WDS:CYBER</div>
+  <a href="#overview">Overview</a>
+  <a href="#rules">Rules</a>
+  <a href="#framework">CSF 2.0</a>
+  <a href="#generator">Scenario Gen</a>
+  <a href="#library">Scenario Library</a>
+  <a href="#resources">Resources</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="overview">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="threat-badge">THREAT LEVEL: ELEVATED — EXERCISE IN PROGRESS</div>
+  <h1>WHEN <span>DISASTER</span><br>STRIKES</h1>
+  <p class="hero-subtitle">K-12 Cybersecurity &amp; Incident Response Tabletop Game</p>
+  <p class="hero-desc">
+    A tabletop exercise game for K-12 technology leaders, administrators, and educators. 
+    Navigate real-world data breaches, ransomware attacks, physical disasters, and cyber incidents 
+    using NIST Cybersecurity Framework 2.0 and CISA guidance.
+  </p>
+  <div class="hero-actions">
+    <a href="#generator" class="btn-primary">Generate Scenario</a>
+    <a href="#rules" class="btn-outline">How to Play</a>
+  </div>
+  <div class="stat-bar">
+    <div class="stat"><span class="stat-num">40+</span><span class="stat-label">Scenarios</span></div>
+    <div class="stat"><span class="stat-num">6</span><span class="stat-label">CSF Functions</span></div>
+    <div class="stat"><span class="stat-num">5</span><span class="stat-label">Threat Types</span></div>
+    <div class="stat"><span class="stat-num">∞</span><span class="stat-label">AI-Generated</span></div>
+  </div>
+</div>
+<hr class="divider">
+
+<!-- RULES -->
+<section id="rules" class="fade-in">
+  <div class="section-label">// game mechanics</div>
+  <h2>How to Play</h2>
+  <p style="max-width:680px;color:var(--text-dim);">
+    Designed for CTOs, Directors of Technology, campus administrators, and IT staff in K-12 school districts. 
+    Teams compete by crafting the best response to crisis scenarios — scored by peers.
+  </p>
+  <div class="rules-grid">
+    <div class="rule-step"><div class="step-num">01</div><div><h4>Form Teams</h4><p>Divide participants into 2–6 teams of 3–5 people. Each team selects a team name and designates a spokesperson.</p></div></div>
+    <div class="rule-step"><div class="step-num">02</div><div><h4>Draw a Scenario</h4><p>Use the Scenario Generator below or select from the library. Each team views the same scenario simultaneously.</p></div></div>
+    <div class="rule-step"><div class="step-num">03</div><div><h4>Deliberate (5–10 min)</h4><p>Teams discuss internally and draft a response using the Anatomy of a Response framework. Use the NIST CSF as a guide.</p></div></div>
+    <div class="rule-step"><div class="step-num">04</div><div><h4>Present &amp; Vote</h4><p>Each team's spokesperson presents their response. The group votes on the most complete, realistic response. Winning team advances on the board.</p></div></div>
+    <div class="rule-step"><div class="step-num">05</div><div><h4>Review CISA Guidance</h4><p>After voting, reveal the CISA-aligned response guidance embedded in each scenario card. Discuss gaps and lessons learned.</p></div></div>
+    <div class="rule-step"><div class="step-num">06</div><div><h4>First to Finish Wins</h4><p>Roll the die below to advance. The first team to reach the FINISH space on your physical or digital game board wins.</p></div></div>
+  </div>
+
+  <!-- DICE ROLLER -->
+  <div style="margin-top:2.5rem;">
+    <div class="section-label">// team advancement die</div>
+    <div class="dice-section" style="margin-top:1rem;">
+      <div class="dice-display" id="diceEmoji" onclick="rollDie()" title="Click to roll">🎲</div>
+      <div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--text-dim);letter-spacing:0.1em;margin-bottom:0.35rem;">RESULT</div>
+        <div class="dice-result" id="diceResult">—</div>
+      </div>
+      <div>
+        <p style="font-size:0.85rem;color:var(--text-dim);max-width:280px;">Click the die to roll for team movement. Winning team rolls after each round.</p>
+        <button class="gen-btn" onclick="rollDie()" style="margin-top:0.75rem;">Roll Die</button>
+      </div>
+    </div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- ANATOMY OF RESPONSE -->
+<section id="response-framework" class="fade-in">
+  <div class="section-label">// response framework</div>
+  <h2>Anatomy of a Response</h2>
+  <p style="max-width:680px;color:var(--text-dim);margin-bottom:0.5rem;">
+    All team responses must address these five questions as completely as possible within the time limit. 
+    Incomplete answers score lower when peers vote.
+  </p>
+  <div class="response-grid">
+    <div class="response-item"><div class="q-label">Q1 — Time</div><p><strong>What is your Recovery Time Objective (RTO)?</strong> How long can operations be offline before severe business impact?</p></div>
+    <div class="response-item"><div class="q-label">Q2 — Likelihood</div><p><strong>What is the probability of this scenario?</strong> Rate as Rare / Possible / Likely / Near-Certain and explain why.</p></div>
+    <div class="response-item"><div class="q-label">Q3 — Impact</div><p><strong>What is the impact on district operations?</strong> Consider students, staff, legal exposure, finances, and reputation.</p></div>
+    <div class="response-item"><div class="q-label">Q4 — Stakeholders</div><p><strong>Who needs to be involved?</strong> Name specific roles: CTO, Superintendent, Legal, Law Enforcement, CISA, Vendor, Media, etc.</p></div>
+    <div class="response-item"><div class="q-label">Q5 — Recovery</div><p><strong>What data/systems must be restored first?</strong> Prioritize by criticality to student safety and district operations.</p></div>
+    <div class="response-item"><div class="q-label">Q6 — Prevention (Bonus)</div><p><strong>What controls would prevent recurrence?</strong> Reference NIST CSF 2.0 Protect and Govern functions for bonus points.</p></div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- NIST CSF -->
+<section id="framework" class="fade-in">
+  <div class="section-label">// nist cybersecurity framework 2.0</div>
+  <h2>NIST CSF 2.0 Quick Reference</h2>
+  <p style="max-width:720px;color:var(--text-dim);">
+    The National Institute of Standards and Technology Cybersecurity Framework 2.0 provides six core functions 
+    that serve as the backbone for every scenario response in this game. Each scenario card maps to relevant CSF functions.
+  </p>
+  <div class="csf-functions">
+    <div class="csf-fn fn-GV"><span class="fn-letter">GV</span><div class="fn-name">Govern</div><p>Policies, roles, responsibilities, and risk strategy. The foundation of cybersecurity governance.</p></div>
+    <div class="csf-fn fn-ID"><span class="fn-letter">ID</span><div class="fn-name">Identify</div><p>Asset management, risk assessment, and understanding the cybersecurity environment.</p></div>
+    <div class="csf-fn fn-PR"><span class="fn-letter">PR</span><div class="fn-name">Protect</div><p>Access control, training, data security, and protective technology to limit impact.</p></div>
+    <div class="csf-fn fn-DE"><span class="fn-letter">DE</span><div class="fn-name">Detect</div><p>Continuous monitoring and detection processes to identify cybersecurity events.</p></div>
+    <div class="csf-fn fn-RS"><span class="fn-letter">RS</span><div class="fn-name">Respond</div><p>Response planning, communications, analysis, and mitigation after incidents.</p></div>
+    <div class="csf-fn fn-RC"><span class="fn-letter">RC</span><div class="fn-name">Recover</div><p>Recovery planning, improvements, and communications to restore capabilities.</p></div>
+  </div>
+  <div style="margin-top:1.5rem;display:flex;gap:1rem;flex-wrap:wrap;">
+    <a href="https://www.nist.gov/cyberframework" target="_blank" class="btn-outline" style="font-size:0.65rem;padding:0.6rem 1.2rem;">NIST CSF 2.0 →</a>
+    <a href="https://www.nist.gov/cyberframework/profiles" target="_blank" class="btn-outline" style="font-size:0.65rem;padding:0.6rem 1.2rem;">CSF Profiles →</a>
+    <a href="https://www.nist.gov/cyberframework/quick-start-guides" target="_blank" class="btn-outline" style="font-size:0.65rem;padding:0.6rem 1.2rem;">Quick-Start Guides →</a>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- SCENARIO GENERATOR -->
+<section id="generator" class="fade-in">
+  <div class="section-label">// ai-powered scenario generation</div>
+  <h2>Scenario Generator</h2>
+  <p style="max-width:680px;color:var(--text-dim);">
+    Generate a random scenario from the built-in library — or use AI to create a brand-new scenario 
+    tailored to your district's context. Each generated scenario includes CISA-aligned response guidance.
+  </p>
+  <div class="generator-shell">
+    <div class="gen-header">
+      <span style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--green);letter-spacing:0.05em;">● SYSTEM READY</span>
+      <h3>Incident Scenario Terminal</h3>
+    </div>
+    <div class="gen-controls">
+      <select id="genType">
+        <option value="random">Random Type</option>
+        <option value="cyber">Cyber Attack</option>
+        <option value="physical">Physical Disaster</option>
+        <option value="human">Human Factor</option>
+        <option value="natural">Natural Disaster</option>
+        <option value="mixed">Mixed / Complex</option>
+      </select>
+      <select id="genSeverity">
+        <option value="random">Random Severity</option>
+        <option value="low">Low — Contained</option>
+        <option value="medium">Medium — District-Wide</option>
+        <option value="high">High — Critical Systems</option>
+        <option value="critical">Critical — Multi-Agency</option>
+      </select>
+      <select id="genMode">
+        <option value="library">From Library</option>
+        <option value="ai">AI-Generated (New)</option>
+      </select>
+      <button class="gen-btn" id="genBtn" onclick="generateScenario()">▶ GENERATE</button>
+    </div>
+    <div class="gen-output" id="genOutput">
+      <div class="empty-state">
+        <div class="empty-icon">📡</div>
+        <p>Select options above and click GENERATE to draw a scenario</p>
+      </div>
+    </div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- SCENARIO LIBRARY -->
+<section id="library" class="fade-in">
+  <div class="section-label">// scenario library</div>
+  <h2>All Scenarios</h2>
+  <p style="max-width:680px;color:var(--text-dim);margin-bottom:2rem;">
+    Click any scenario card to view the full incident description, discussion prompts, and CISA-aligned response guidance.
+  </p>
+  <div class="scenarios-filter">
+    <button class="filter-pill active" onclick="filterScenarios('all', this)">All</button>
+    <button class="filter-pill" onclick="filterScenarios('cyber', this)">Cyber Attack</button>
+    <button class="filter-pill" onclick="filterScenarios('physical', this)">Physical</button>
+    <button class="filter-pill" onclick="filterScenarios('human', this)">Human Factor</button>
+    <button class="filter-pill" onclick="filterScenarios('natural', this)">Natural Disaster</button>
+    <button class="filter-pill" onclick="filterScenarios('mixed', this)">Mixed</button>
+  </div>
+  <div class="scenarios-grid" id="scenariosGrid"></div>
+</section>
+<hr class="divider">
+
+<!-- RESOURCES -->
+<div class="resources-bg section-full" id="resources">
+  <div class="section-inner">
+    <div class="section-label">// external resources</div>
+    <h2>CISA &amp; NIST Resources</h2>
+    <p style="max-width:680px;color:var(--text-dim);">
+      Official federal cybersecurity resources to support your district's preparedness, planning, and response efforts.
+    </p>
+    <div class="resources-grid">
+      <a href="https://www.nist.gov/cyberframework" target="_blank" class="resource-card">
+        <div class="resource-org" style="color:var(--cyan);">NIST</div>
+        <h4>NIST Cybersecurity Framework 2.0</h4>
+        <p>The foundational voluntary framework for managing and reducing cybersecurity risk — now including the Govern function.</p>
+        <div class="resource-link">nist.gov/cyberframework</div>
+      </a>
+      <a href="https://www.nist.gov/cyberframework/profiles" target="_blank" class="resource-card">
+        <div class="resource-org" style="color:var(--cyan);">NIST</div>
+        <h4>CSF Organizational Profiles</h4>
+        <p>Templates and examples for creating your district's Current Profile and Target Profile using the CSF.</p>
+        <div class="resource-link">nist.gov/cyberframework/profiles</div>
+      </a>
+      <a href="https://www.nist.gov/cyberframework/quick-start-guides" target="_blank" class="resource-card">
+        <div class="resource-org" style="color:var(--cyan);">NIST</div>
+        <h4>CSF Quick-Start Guides</h4>
+        <p>Step-by-step implementation guides tailored for small organizations, enterprises, and specific sectors.</p>
+        <div class="resource-link">nist.gov/cyberframework/quick-start-guides</div>
+      </a>
+      <a href="https://www.cisa.gov/resources-tools/services/cisa-tabletop-exercise-packages" target="_blank" class="resource-card">
+        <div class="resource-org" style="color:var(--orange);">CISA</div>
+        <h4>CISA Tabletop Exercise Packages (CTEPs)</h4>
+        <p>Free, ready-to-use tabletop exercise packages covering active shooters, ransomware, bomb threats, and more — designed for K-12.</p>
+        <div class="resource-link" style="color:var(--orange);">cisa.gov → CTEPs</div>
+      </a>
+      <a href="https://www.cisa.gov/resources-tools/resources/cybersecurity-scenarios" target="_blank" class="resource-card">
+        <div class="resource-org" style="color:var(--orange);">CISA</div>
+        <h4>CISA Cybersecurity Scenarios</h4>
+        <p>Official scenario-based training resources for cybersecurity awareness and incident response planning.</p>
+        <div class="resource-link" style="color:var(--orange);">cisa.gov → Cyber Scenarios</div>
+      </a>
+      <a href="https://www.cisa.gov/K12" target="_blank" class="resource-card">
+        <div class="resource-org" style="color:var(--orange);">CISA</div>
+        <h4>CISA K-12 Cybersecurity</h4>
+        <p>Dedicated CISA resources for K-12 schools including toolkits, assessments, and the Cyber Hygiene Vulnerability Scanning service (free).</p>
+        <div class="resource-link" style="color:var(--orange);">cisa.gov/K12</div>
+      </a>
+      <a href="https://www.cisa.gov/stopransomware" target="_blank" class="resource-card">
+        <div class="resource-org" style="color:var(--red);">CISA</div>
+        <h4>StopRansomware.gov</h4>
+        <p>The U.S. Government's one-stop resource for ransomware guidance, alerts, and incident reporting for critical infrastructure including schools.</p>
+        <div class="resource-link" style="color:var(--red);">stopransomware.gov</div>
+      </a>
+      <a href="https://www.cisa.gov/report" target="_blank" class="resource-card">
+        <div class="resource-org" style="color:var(--red);">CISA</div>
+        <h4>Report a Cyber Incident to CISA</h4>
+        <p>Schools can report significant cyber incidents directly to CISA. CISA provides no-cost technical assistance to affected organizations.</p>
+        <div class="resource-link" style="color:var(--red);">cisa.gov/report</div>
+      </a>
+      <a href="https://www.cisa.gov/sites/default/files/publications/CISA_MS-ISAC_Ransomware%20Guide_S508C_.pdf" target="_blank" class="resource-card">
+        <div class="resource-org" style="color:var(--yellow);">CISA / MS-ISAC</div>
+        <h4>Ransomware Guide (PDF)</h4>
+        <p>Joint CISA and MS-ISAC ransomware guide covering best practices, response steps, and recovery checklists.</p>
+        <div class="resource-link" style="color:var(--yellow);">Download PDF</div>
+      </a>
+    </div>
+
+    <!-- CTEP PACKAGES -->
+    <div style="margin-top:3rem;">
+      <div class="section-label">// cisa tabletop exercise packages (ctep) — direct links</div>
+      <h3 style="margin-top:0.75rem;margin-bottom:1rem;">CISA CTEP Situation Manuals (This Project)</h3>
+      <div class="info-cards">
+        <div class="info-card"><div class="ic-label">K-12 Active Threat</div><p>Comprehensive active threat scenario for K-12 campuses covering lockdown, evacuation, and communications protocols.</p></div>
+        <div class="info-card"><div class="ic-label">Bomb Threat</div><p>School bomb threat response covering threat assessment, evacuation decisions, law enforcement coordination, and communications.</p></div>
+        <div class="info-card"><div class="ic-label">Ransomware Attack</div><p>Ransomware incident response for K-12 IT departments covering isolation, reporting, recovery, and CISA coordination.</p></div>
+        <div class="info-card"><div class="ic-label">Vendor / Supply Chain Compromise</div><p>Third-party vendor compromise scenario addressing supply chain risk, breach notification, and vendor management controls.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div>
+        <div id="modalTag" style="margin-bottom:0.5rem;"></div>
+        <h3 id="modalTitle" style="font-size:1.1rem;"></h3>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p style="font-size:0.85rem;font-family:'Orbitron',monospace;font-weight:700;color:var(--cyan);margin-bottom:1rem;">WHEN DISASTER STRIKES: CYBER EDITION</p>
+  <p>Adapted from the original TCEA TechNotes blog entry <a href="https://blog.tcea.org/when-disaster-strikes-part-3/" target="_blank">"When Disaster Strikes" game</a> by <a href="https://mguhlin.org" target="_blank">Miguel Guhlin (@mguhlin)</a></p>
+  <p>Enhanced with NIST CSF 2.0 and CISA Tabletop Exercise Package (CTEP) guidance</p>
+  <p style="margin-top:0.75rem;">
+    <a href="https://www.nist.gov/cyberframework" target="_blank">NIST CSF</a> &nbsp;·&nbsp;
+    <a href="https://www.cisa.gov/resources-tools/services/cisa-tabletop-exercise-packages" target="_blank">CISA CTEPs</a> &nbsp;·&nbsp;
+    <a href="https://www.cisa.gov/K12" target="_blank">CISA K-12</a> &nbsp;·&nbsp;
+    <a href="https://www.cisa.gov/stopransomware" target="_blank">StopRansomware.gov</a>
+  </p>
+  <p style="margin-top:1rem;opacity:0.4;">Creative Commons Attribution-ShareAlike · For educational purposes</p>
+</footer>
+
+<script>
+// ── SCENARIO DATA ──────────────────────────────────────────────────────────────
+const SCENARIOS = [
+  {
+    id: 1, type: 'human', severity: 'medium',
+    title: 'External USB Drive Stolen',
+    excerpt: 'A car burglary exposes student PII stored on a teacher\'s unencrypted external hard drive.',
+    body: 'An April car burglary resulted in the exposure of student information. An external hard drive containing letters associated with students who applied to a campus was stolen from a teacher\'s vehicle. The letters contained applicant names, Social Security numbers, dates of birth, home addresses, phone numbers, and previous school district information. Your superintendent calls you immediately: "What are our next steps?"',
+    prompt: 'Your superintendent is waiting. What do you tell her in the next 10 minutes — and what happens in the next 72 hours?',
+    cisa: {
+      immediate: ['Determine exactly what data was on the device (scope the breach)', 'Report to law enforcement and file a police report', 'Notify your district legal counsel within hours', 'Begin breach notification timeline documentation (Texas: 60 days to notify)', 'Activate your Incident Response Plan'],
+      prevent: ['Enforce mandatory device encryption policy (BitLocker, FileVault)', 'Prohibit student PII on personal or unmanaged devices', 'Implement DLP (Data Loss Prevention) controls', 'Annual staff training on portable media handling', 'Audit current portable media usage across district'],
+      csf: ['GV: Policy', 'PR: Data Security', 'RS: Communications', 'RS: Analysis', 'RC: Improvements']
+    }
+  },
+  {
+    id: 2, type: 'human', severity: 'high',
+    title: 'Employee Posts PII on Public Wiki',
+    excerpt: 'Employee names, SSNs, disability plan info, and salary data found on a publicly accessible HR website.',
+    body: 'The District discovered that employee names, Social Security numbers, disability plan information, and salary information were available on a publicly accessible website. Employees enrolled in disability insurance had their sensitive information posted on the Employee Benefits/Risk Management website — visible to anyone on the internet. The school board is asking for a plan of action and has tasked you with developing it for the superintendent.',
+    prompt: 'The data has been public for an unknown period of time. What is your immediate action plan and your communication strategy for affected employees?',
+    cisa: {
+      immediate: ['Immediately take down or restrict access to the exposed web page', 'Preserve logs and evidence before any changes', 'Notify HR and Legal; assess how long data was exposed', 'Send breach notification to all affected employees', 'Offer credit monitoring services to affected staff', 'File required regulatory notifications (FTC, state AG if required)'],
+      prevent: ['Implement web content review process before publication', 'Conduct regular DLP scans of public-facing web properties', 'Role-based access controls on HR systems', 'Mandatory data classification training for staff who publish content', 'Quarterly audits of publicly accessible district web content'],
+      csf: ['GV: Roles & Responsibilities', 'PR: Data Security', 'PR: Awareness Training', 'DE: Anomalies', 'RS: Communications']
+    }
+  },
+  {
+    id: 3, type: 'cyber', severity: 'high',
+    title: 'Students Hack District Network Server',
+    excerpt: 'Students accessed an internal server containing PII for 63,000 students and 9,000 staff — and bragged about it on 4chan.',
+    body: 'Hackers accessed a District server and collected personal information of students, teachers and employees — including names, Social Security numbers, and addresses from approximately 63,000 students and 9,000 teachers stored on the district\'s internal network. Your Superintendent found out via a 4chan post where students were bragging about the breach. "Why did we find out this way?" she demanded. "I want a response I can share with PR and the school board."',
+    prompt: 'The breach is already public on social media. How do you simultaneously contain the incident, communicate with stakeholders, and protect remaining systems?',
+    cisa: {
+      immediate: ['Immediately isolate the compromised server from the network', 'Preserve all logs and chain of custody for law enforcement', 'Contact local law enforcement AND the FBI Cyber Division', 'Notify CISA (cisa.gov/report) — this is a critical infrastructure incident', 'Activate PR/Communications team; prepare holding statement within 2 hours', 'Begin mandatory breach notification process for all 72,000+ individuals'],
+      prevent: ['Network segmentation to limit lateral movement', 'Regular penetration testing and vulnerability scanning', 'Principle of least privilege on all network shares', 'Multi-factor authentication on all internal systems', 'CISA Free Vulnerability Scanning enrollment', 'Student acceptable use education and enforcement'],
+      csf: ['ID: Asset Management', 'DE: Continuous Monitoring', 'RS: Incident Management', 'RS: Communications', 'RC: Communications']
+    }
+  },
+  {
+    id: 4, type: 'human', severity: 'medium',
+    title: 'Grade Changing — Teacher Password Compromise',
+    excerpt: 'A student accessed a teacher\'s account and changed grades after obtaining the teacher\'s weak password.',
+    body: 'A local high school student is accused of hacking the school\'s computer system and changing grades. Investigation reveals the student obtained a teacher\'s password — which had never been changed from the default, was written on a sticky note under the keyboard, and was shared with other students. The student used the teacher\'s credentials to access the Student Information System and alter grades for multiple students.',
+    prompt: 'What controls would you put in place immediately to prevent this from happening again — and what are the legal and academic integrity implications for affected students?',
+    cisa: {
+      immediate: ['Force password reset for all SIS/LMS accounts immediately', 'Audit all recent grade changes in the SIS for the past 60 days', 'Preserve evidence for potential criminal referral (unauthorized computer access)', 'Notify parents of affected students through proper channels', 'Work with registrar to restore authentic grade records from backups', 'Review and apply disciplinary action per district policy'],
+      prevent: ['Enforce strong password policy via Active Directory/Entra ID Group Policy', 'Implement Multi-Factor Authentication on all staff SIS/LMS access', 'Mandatory password hygiene training — never write down, never share', 'Audit logs on all grade-modification events with anomaly alerts', 'Student password education included in AUP training'],
+      csf: ['PR: Identity Management', 'PR: Access Control', 'PR: Awareness Training', 'DE: Anomalies & Events', 'RS: Analysis']
+    }
+  },
+  {
+    id: 5, type: 'human', severity: 'low',
+    title: 'Lost Flash Drive with Student Data',
+    excerpt: 'A PEIMS clerk lost a USB drive containing the entire freshman class data set at a coffee shop.',
+    body: 'Liz, the PEIMS Data Clerk at the high school, is in tears. She saved student data from the SIS to a USB drive to analyze at home. At Starbucks the next morning, the drive fell out of her purse while paying. She cannot find it. "I had the entire freshman class data on an encrypted file. What do I do?" The data includes names, addresses, grades, demographic codes, and attendance records for approximately 450 students.',
+    prompt: 'The data is encrypted — does that change your response? What is your notification obligation? What policy changes do you implement?',
+    cisa: {
+      immediate: ['Verify the encryption status — was the encryption strong (AES-256)?', 'Document the incident; consult legal on notification requirements', 'Texas encryption safe harbor: if data is encrypted, notification may not be required', 'File a report documenting the loss for your records regardless', 'Remotely wipe the device if Mobile Device Management (MDM) covers USB tracking', 'Debrief with Liz on proper data handling procedures'],
+      prevent: ['Policy: no student PII on unmanaged/personal USB drives — ever', 'Use district-approved encrypted cloud storage (Google Drive, OneDrive) instead', 'If USB is unavoidable, issue only FIPS 140-2 certified encrypted drives', 'DLP software to block unencrypted transfer to USB', 'Annual FERPA and data handling refresher training for all data clerks'],
+      csf: ['GV: Policy', 'PR: Data Security', 'PR: Awareness Training', 'RS: Reporting', 'RC: Improvements']
+    }
+  },
+  {
+    id: 6, type: 'physical', severity: 'medium',
+    title: 'RAID Array Failure on Critical Server',
+    excerpt: 'The Eduphoria assessment server RAID array fails during STAAR testing season with no verified backup restore process.',
+    body: 'Jerry, the CTO for a small district, is at a conference when his phone rings. "Boss, the RAID array on the Eduphoria server just failed. We\'ve been making tape backups but with John gone, I\'m not sure we\'ll be able to restore them right away. Of course, you know we have STAAR testing coming up in 48 hours." Jerry has never personally tested a restore from the tape backup system. The Eduphoria data contains current year assessment data for all campuses.',
+    prompt: '"What do we do next?" What is your RTO and your immediate action plan? Who do you call first?',
+    cisa: {
+      immediate: ['Contact the Eduphoria vendor immediately — do they have cloud backups?', 'Locate and verify the most recent tape backup and test restore in a sandbox', 'Contact neighboring districts or your regional service center (ESC) for support', 'Assess whether testing can be postponed; contact TEA if necessary', 'Document the incident timeline for your post-incident report', 'Do NOT power cycle the failed array without vendor guidance'],
+      prevent: ['Implement 3-2-1 backup rule: 3 copies, 2 media types, 1 offsite', 'Quarterly tested restore drills — document results', 'Cross-train at minimum 2 staff on all critical restore procedures', 'Move critical assessment data to cloud-hosted SaaS to eliminate single points of failure', 'Annual Business Continuity Plan (BCP) review and tabletop test'],
+      csf: ['ID: Asset Management', 'PR: Data Security (Backup)', 'RS: Incident Management', 'RC: Recovery Planning', 'RC: Improvements']
+    }
+  },
+  {
+    id: 7, type: 'natural', severity: 'high',
+    title: 'Hurricane Landfall — New CTO',
+    excerpt: 'A Category 3 hurricane is about to make landfall. You\'re the new CTO and your predecessor left no documentation.',
+    body: '"Welcome to the District, they said. You\'ll love the weather here, they said." The hurricane klaxon alarm went off. You\'ve been CTO for three weeks. You cannot locate a current Business Continuity Plan, disaster recovery documentation, or an offsite backup inventory. You have roughly 18 hours before the storm makes landfall. Explain your next steps to notify key staff and prevent maximum data loss as the new CTO.',
+    prompt: 'You have 18 hours. What are the top 5 actions you take in priority order, and who do you contact?',
+    cisa: {
+      immediate: ['Immediately identify what systems are running and where data lives', 'Shut down and physically secure non-essential servers to prevent surge damage', 'Confirm cloud backups are current; initiate manual backup of any on-prem critical data', 'Stand up emergency communication channel (Remind, GroupMe, or satellite phone)', 'Notify Superintendent, school board, and facilities of technology shutdown plan', 'Contact CISA Region 6 and your ESC for pre-disaster support resources'],
+      prevent: ['Develop and annually test a formal Business Continuity Plan (BCP)', 'Migrate critical systems to geo-redundant cloud infrastructure', 'Maintain updated technology asset inventory with offsite copy', 'Establish Emergency Operations Center (EOC) integration for IT team', 'CISA\'s Pre-Disaster Mitigation planning resources (free for K-12)'],
+      csf: ['GV: Risk Management Strategy', 'ID: Asset Management', 'PR: Data Security', 'RC: Recovery Planning', 'RC: Communications']
+    }
+  },
+  {
+    id: 8, type: 'physical', severity: 'medium',
+    title: 'Extended Power Outage',
+    excerpt: 'An indefinite power outage. UPS systems have 2 hours. Critical district functions will begin failing.',
+    body: '"City Public Service just called," says your secretary. "They\'ve lost power for an indefinite period of time in our area. Could be 12–72 hours." Your UPS systems only have approximately two hours of runtime. Critical district functions — including student information systems, payroll processing, IP phone systems, and the door access control system — will fail. You start to wonder: what can I do now, and what can I do to avoid this problem in the future?',
+    prompt: 'What do you do in the next 2 hours before systems start failing? And what long-term infrastructure changes do you recommend to the board?',
+    cisa: {
+      immediate: ['Immediately begin graceful shutdown of non-essential systems to conserve UPS power', 'Activate generator for highest-priority systems (student safety, communications)', 'Switch to cellular/satellite backup for communications immediately', 'Notify campuses to switch to manual sign-in, paper attendance, and walkie-talkies', 'Coordinate with facilities on door access control contingency (manual override plan)', 'Estimate timeline with CPS; communicate to Superintendent every 30 minutes'],
+      prevent: ['Install adequate backup generators for data center and critical locations', 'Migrate SIS, payroll, and communications to cloud to reduce local dependency', 'Conduct annual power continuity test (simulated outage drill)', 'UPS runtime inventory: ensure 4+ hour rating for critical systems', 'Document manual backup procedures for all digital systems'],
+      csf: ['ID: Asset Management', 'PR: Protective Technology', 'RC: Recovery Planning', 'RC: Improvements', 'GV: Risk Management']
+    }
+  },
+  {
+    id: 9, type: 'cyber', severity: 'critical',
+    title: 'Ransomware — Point of Sale Server',
+    excerpt: 'The high school cafeteria POS server is hit with ransomware demanding Bitcoin. Lunch period is in 3 hours.',
+    body: 'The Cafeteria Manager just reported she cannot access her computer and it\'s displaying a ransom demand requesting Bitcoin payment. You realize her computer is the Point of Sale (POS) server for the entire high school cafeteria — all POS workstations depend on it. Lunch begins in 3 hours. The ransom note threatens permanent data deletion if not paid within 24 hours. You have no idea if the ransomware has spread to other network segments.',
+    prompt: 'Pay or don\'t pay? How do you handle lunch service? How do you contain the spread and what do you report, to whom, and when?',
+    cisa: {
+      immediate: ['IMMEDIATELY isolate the infected machine from the network (unplug ethernet, disable Wi-Fi)', 'Do NOT pay the ransom — CISA and FBI strongly advise against payment', 'Identify all machines on the same network segment and isolate the segment', 'Report to CISA (1-888-282-0870) and FBI immediately — they have decryptors for some variants', 'Activate incident response plan; contact cyber insurance carrier', 'Switch cafeteria to cash-only / manual transactions for the day', 'Preserve the ransomware note and encrypted files as forensic evidence'],
+      prevent: ['Network segmentation: POS systems isolated from administrative network', 'Regular offline/immutable backups tested for restore (3-2-1 rule)', 'Email filtering and endpoint protection on all staff machines', 'Enrollment in CISA\'s free Malicious Domain Blocking and Reporting (MDBR) service', 'CISA Ransomware Readiness Assessment (RRA) — free for K-12', 'Visit StopRansomware.gov for current variant guidance'],
+      csf: ['GV: Risk Management', 'PR: Data Security', 'DE: Anomalies & Events', 'RS: Incident Management', 'RS: Mitigation', 'RC: Recovery Planning']
+    }
+  },
+  {
+    id: 10, type: 'human', severity: 'high',
+    title: 'Disgruntled Employee — Departing Network Engineer',
+    excerpt: 'Your network engineer was just told today is his last day. He has admin credentials to everything.',
+    body: '"You need to be aware of something," says the Personnel Director. "Your network engineer was just notified two hours ago that today will be his last day with the district." You feel your stomach drop. This engineer has administrative access to the firewall, all switches, the Active Directory domain, cloud admin consoles, Wi-Fi infrastructure, and the VPN. He knows where every system lives and has every password. You have less than an hour before he might leave the building.',
+    prompt: 'What are your immediate next steps? How do you revoke access systematically and safely without triggering a retaliatory action?',
+    cisa: {
+      immediate: ['Immediately notify IT team — do NOT let engineer finish the workday with full access', 'Revoke access in this order: VPN, cloud consoles, email, AD admin, then physical access', 'Change all shared/service account passwords he had access to', 'Change firewall and network device admin credentials immediately', 'Escort the employee from the premises with HR present — professional and respectful', 'Enable enhanced logging on all systems to monitor for any unauthorized access attempts', 'Rotate all API keys, SSL certificates, and service account secrets he managed'],
+      prevent: ['Offboarding checklist: mandatory same-day access revocation for all departing staff', 'Privileged Access Management (PAM) solution for shared admin credentials', 'Role-based access: limit how many accounts one engineer has solo access to', 'Regular access reviews: quarterly audit of who has admin rights to what', 'Document all admin credentials in a secured vault (CyberArk, Bitwarden) not in one person\'s head'],
+      csf: ['GV: Roles & Responsibilities', 'PR: Identity Management', 'PR: Access Control', 'DE: Continuous Monitoring', 'RS: Incident Management']
+    }
+  },
+  {
+    id: 11, type: 'cyber', severity: 'high',
+    title: 'Phishing Attack — Payroll Redirect',
+    excerpt: 'A spear-phishing email redirected six staff payroll direct deposits to attacker-controlled accounts.',
+    body: 'Your HR Director calls you on a Friday afternoon. "Six employees just contacted payroll — they didn\'t get their paychecks." Investigation reveals that a convincing phishing email impersonating the district\'s payroll portal was sent to approximately 180 staff. At least 6 employees clicked the link, entered their credentials, and were then prompted to "update" their direct deposit banking information. The money has already been transferred. It is 3:00 PM on Friday.',
+    prompt: 'The money may still be recoverable if you act in the next 30 minutes. What do you do RIGHT NOW? Who do you call first?',
+    cisa: {
+      immediate: ['CALL YOUR BANK IMMEDIATELY — request a wire recall; there is a narrow window', 'Contact FBI Internet Crime Complaint Center (IC3.gov) and local FBI within the hour', 'Force password reset for ALL staff email and payroll portal accounts immediately', 'Identify and block the phishing domain; submit to CISA and Google Safe Browsing', 'Send emergency all-staff notice warning about the phishing campaign', 'Contact cyber insurance carrier; document timeline meticulously'],
+      prevent: ['Multi-Factor Authentication on email and ALL HR/payroll systems — mandatory', 'Anti-phishing email gateway (Google Workspace Advanced Protection or Microsoft Defender)', 'Enroll in CISA\'s free MDBR (Malicious Domain Blocking) service', 'Annual simulated phishing tests for all staff (KnowBe4 or similar)', 'Policy: payroll bank changes require in-person verification with photo ID'],
+      csf: ['PR: Awareness Training', 'PR: Identity Management', 'DE: Anomalies & Events', 'RS: Communications', 'RS: Mitigation']
+    }
+  },
+  {
+    id: 12, type: 'human', severity: 'medium',
+    title: 'Social Engineering — Fake Technicians',
+    excerpt: '"Technicians" with no work order enter the MDF. Campuses begin going offline one by one.',
+    body: '"The elementary school principal just called. She wants to know if it\'s OK to let the guys with \'TECHNICIAN\' stenciled on their polo shirts into the campus MDF." You wave your agreement, thinking nothing of it. Minutes later, campus after campus reports network outages. Then a panicked call: "The technicians were carrying boxes where the cables go in and out, and now they\'re gone." Realization strikes — these were not your technicians. Unknown individuals have physical access to your network infrastructure.',
+    prompt: 'Your campuses are going dark. What is your incident response, and what do you tell law enforcement when they ask what was taken?',
+    cisa: {
+      immediate: ['Call 911 — this is a physical intrusion and potential theft; get descriptions of individuals/vehicles', 'Lock down ALL remaining MDFs and server rooms immediately', 'Identify which network equipment was accessed or removed', 'Shut down district network if active intrusion is suspected to prevent further damage', 'Pull all physical security footage from the day', 'Contact CISA and FBI — this may be an advanced threat actor conducting reconnaissance'],
+      prevent: ['Zero-trust physical access: ALL visitors require escorted access to MDFs', 'MDF badge access logs and cameras — reviewed regularly', 'Work order verification policy: ALL outside technician work requires prior written authorization', 'Staff training on social engineering recognition (shoulder surfing, impersonation)', 'Annual physical security assessment of all network infrastructure locations'],
+      csf: ['GV: Policy', 'ID: Asset Management', 'PR: Physical Security', 'DE: Anomalies', 'RS: Incident Management']
+    }
+  },
+  {
+    id: 13, type: 'cyber', severity: 'critical',
+    title: 'Ransomware — District-Wide Encryption',
+    excerpt: 'At 2 AM, monitoring alerts show encryption activity spreading across the district network. 60% of systems are already encrypted.',
+    body: 'Your after-hours monitoring service calls at 2:17 AM. "We\'re seeing massive encryption activity spreading across your network. We believe this is ransomware — it started at one campus and has propagated through the VPN tunnels." By the time you assess the situation, approximately 60% of Windows endpoints and three file servers are encrypted. Schools open in 6 hours. The ransom note claims to be LockBit and threatens to publish student data publicly if the ransom is not paid in 72 hours.',
+    prompt: 'Schools open in 6 hours. Do you open? Do you pay? Walk through your first 6 hours minute by minute.',
+    cisa: {
+      immediate: ['Pull the plug on inter-campus network connections to stop propagation NOW', 'Activate your Incident Response Retainer (cyber insurance) — call them at 2 AM', 'Contact CISA Emergency Hotline: 1-888-282-0870 — they are 24/7', 'Contact FBI Cyber Division — they may have a LockBit decryptor', 'Do NOT pay. Assess whether backups are clean and isolated (immutable backups?)', 'Superintendent decision: delay school opening; activate paper-based contingency plans', 'Preserve all forensic evidence before any remediation'],
+      prevent: ['Immutable offsite backups (cannot be encrypted or deleted by ransomware)', 'Network micro-segmentation to prevent lateral movement', 'Endpoint Detection and Response (EDR) on all managed devices', 'CISA\'s Ransomware Readiness Assessment (RRA) — free for K-12 districts', 'StopRansomware.gov advisory subscription for current threat intelligence'],
+      csf: ['ID: Risk Assessment', 'PR: Data Security', 'DE: Security Continuous Monitoring', 'RS: Response Planning', 'RS: Communications', 'RC: Recovery Planning']
+    }
+  },
+  {
+    id: 14, type: 'natural', severity: 'high',
+    title: 'Flood — Data Center Under Water',
+    excerpt: 'Torrential rains flood the WAN room at the District Data Center. Servers are above water but systems are down.',
+    body: 'Rising waters from torrential rains have flooded critical areas, including the Wide Area Network (WAN) room at the District Data Center. Through advanced planning, the servers are above the water line and were gracefully shut down before the water entered. Before you can power everything back up, you need to empty the room, dry all equipment (minimum 72 hours), and assess for damage. All district connectivity is down.',
+    prompt: 'The building is cleared for safe entry. What is your sequenced recovery plan for the next 72 hours, and what do you tell the superintendent about when services will be restored?',
+    cisa: {
+      immediate: ['Do NOT power on wet equipment — water + electricity = destroyed components and fire risk', 'Document all damage with photos for insurance claims', 'Contact equipment vendors for assessment guidance — some equipment can be cleaned and recovered', 'Activate cloud or hosted backup systems for critical services (email, SIS) if available', 'Establish temporary connectivity via cellular bonding or satellite (StarLink, Verizon LTE)', 'Contact your regional ESC for temporary infrastructure support'],
+      prevent: ['Elevate all critical infrastructure minimum 18 inches above floor level', 'Install water detection sensors with automated alerts in all IDF/MDF locations', 'Migrate critical systems to cloud to reduce physical data center dependency', 'Flood insurance specifically covering technology equipment', 'Annual physical facility risk assessment including environmental hazards'],
+      csf: ['ID: Asset Management', 'PR: Protective Technology', 'RC: Recovery Planning', 'RC: Improvements', 'GV: Risk Management Strategy']
+    }
+  },
+  {
+    id: 15, type: 'cyber', severity: 'high',
+    title: 'Business Email Compromise — Superintendent Spoofed',
+    excerpt: 'An attacker spoofing the superintendent\'s email convinces the CFO to wire $350,000 for "emergency construction."',
+    body: 'The CFO received a series of urgent emails from what appeared to be the superintendent\'s email address, requesting an emergency wire transfer of $350,000 to a construction vendor for "emergency roof repairs before the storm." The emails were professionally written, referenced real ongoing projects, and included a PDF with bank routing details. The transfer was completed Friday afternoon. Monday morning, the real superintendent has no knowledge of any such request. The money is gone.',
+    prompt: 'You have been notified Monday at 7 AM. What is your next move? Is the money recoverable? What do you tell the board?',
+    cisa: {
+      immediate: ['Contact your bank\'s fraud department immediately — SWIFT wire recalls are possible within 72 hours', 'File a complaint with FBI IC3 (ic3.gov) AND contact your local FBI field office today', 'Contact FinCEN if the bank cannot help directly', 'Preserve all email headers and the spoofed emails as forensic evidence', 'Notify board of trustees and legal counsel today', 'Contact cyber insurance for Business Email Compromise (BEC) coverage'],
+      prevent: ['Mandatory voice verification callback for ANY wire transfer over $1,000', 'DMARC, DKIM, and SPF email authentication records to prevent spoofing', 'Out-of-band verification process: CFO must call superintendent directly for any fund transfer request', 'Finance staff training on BEC recognition — it is the #1 cybercrime by dollar loss', 'Two-person authorization required for all wire transfers'],
+      csf: ['GV: Policy', 'PR: Awareness Training', 'PR: Identity Management', 'RS: Communications', 'RC: Improvements']
+    }
+  },
+  {
+    id: 16, type: 'cyber', severity: 'high',
+    title: 'Vendor Supply Chain Compromise',
+    excerpt: 'Your SIS vendor notifies you that their system was compromised and your district\'s student data may be exposed.',
+    body: 'Your Student Information System vendor sends an emergency notification on a Sunday evening: "We have identified unauthorized access to our infrastructure. Forensic investigation indicates that an attacker may have accessed customer databases including student information. We are contacting all affected districts. We will provide more information as our investigation proceeds." You are the only IT staff member available. School opens tomorrow.',
+    prompt: 'You received this at 9 PM Sunday. What do you do before school opens at 7:30 AM, and what do you communicate to parents?',
+    cisa: {
+      immediate: ['Contact the vendor immediately — demand scope, timeline, and affected data fields', 'Review your contract for breach notification SLA obligations', 'Assess whether any district-controlled connections to the vendor should be temporarily suspended', 'Begin drafting parent/guardian notification even before full scope is known', 'Notify superintendent and legal counsel tonight', 'Check CISA Known Exploited Vulnerabilities catalog for related vendor vulnerabilities'],
+      prevent: ['Annual vendor security assessments using NIST CSF or CISA RVWP', 'Contract language requiring vendor breach notification within 24 hours', 'CISA Supply Chain Risk Management (C-SCRM) framework for third-party vendors', 'Data minimization: ensure vendors only hold the data they actually need', 'Review and inventory all third-party data sharing agreements annually'],
+      csf: ['GV: Roles & Responsibilities', 'ID: Supply Chain Risk', 'PR: Data Security', 'RS: Communications', 'RC: Communications']
+    }
+  },
+  {
+    id: 17, type: 'cyber', severity: 'medium',
+    title: 'DDoS Attack During Online Testing',
+    excerpt: 'State standardized testing is underway when a DDoS attack takes down the district\'s internet connectivity.',
+    body: 'It is the first day of state standardized testing. Students across all campuses are 45 minutes into the online assessments when all internet connectivity fails simultaneously. Your monitoring shows massive inbound traffic from thousands of sources — a Distributed Denial of Service (DDoS) attack. Testing is paused district-wide. You have 2,500 students mid-assessment. The State Education Agency is calling.',
+    prompt: 'Tests are paused. Students are sitting in classrooms staring at blank screens. What do you do in the next 30 minutes, the next 2 hours, and the next 24 hours?',
+    cisa: {
+      immediate: ['Contact your ISP immediately — they can implement upstream DDoS mitigation', 'Contact the testing vendor for emergency test suspension and reset instructions', 'Notify the State Education Agency of the situation and request testing make-up window', 'Document the attack traffic for law enforcement and insurance', 'Switch to cellular hotspot backup for any essential connectivity', 'File a report with CISA (cisa.gov/report)'],
+      prevent: ['DDoS protection service (Cloudflare, AWS Shield) on internet perimeter', 'Diversified internet connectivity: at least two ISPs with automatic failover', 'Offline/locally-cached testing capability for state assessments', 'Emergency testing contingency protocol agreed with State Education Agency in advance', 'Annual stress-testing of internet connectivity before testing windows'],
+      csf: ['ID: Risk Assessment', 'PR: Protective Technology', 'DE: Anomalies & Events', 'RS: Incident Management', 'RC: Recovery Planning']
+    }
+  },
+  {
+    id: 18, type: 'human', severity: 'medium',
+    title: 'Data Breach by Employee Error — SIS Export',
+    excerpt: 'An employee accidentally emailed a CSV containing 9,000 student records to the wrong distribution list.',
+    body: 'A district employee ran a data export from the SIS and intended to email it to three campus principals for enrollment planning. Due to autofill in Outlook, the email was sent to a districtwide staff email list — 847 staff received a CSV attachment containing names, dates of birth, addresses, emergency contacts, and disciplinary flags for 9,000 students. The error was discovered when a campus librarian replied-all to ask why she received student records.',
+    prompt: 'The email has already been received by 847 people. What is your incident response, and what is your legal obligation to parents?',
+    cisa: {
+      immediate: ['Send an immediate all-staff recall/delete request for the email (Outlook recall may be partial)', 'Alert email administrator to attempt server-side recall before opening by all recipients', 'Preserve the send logs and document the incident with timestamps', 'Consult legal on FERPA notification obligations — parent notification likely required', 'Contact the staff member; this is likely accidental, not malicious — treat accordingly', 'Assess how many staff actually opened and/or downloaded the attachment'],
+      prevent: ['Data Loss Prevention (DLP) rules blocking SIS exports from being emailed externally or to distribution lists', 'Two-person review requirement for any bulk student data export', 'Annual FERPA training for all staff with data access', 'Disable or restrict reply-all on large distribution lists', 'Secure file sharing portal for sensitive data (not email attachments)'],
+      csf: ['GV: Policy', 'PR: Data Security', 'PR: Awareness Training', 'RS: Communications', 'RC: Improvements']
+    }
+  },
+  {
+    id: 19, type: 'physical', severity: 'medium',
+    title: 'Bomb Threat — School Day',
+    excerpt: 'A written bomb threat is found in a restroom at the high school during 3rd period. Students are in classrooms.',
+    body: 'A student brings a written note to the front office at 10:15 AM. The note, found in the boys\' restroom, threatens a bomb detonation "at noon today." It is currently 10:22 AM. Campus is fully occupied with approximately 1,850 students and 140 staff. You are the technology director and are called into the principal\'s emergency meeting along with the principal, campus police officer, and SRO. The principal asks for your technology support role in the response.',
+    prompt: 'What is your role as technology director in the response? What technology systems support evacuation, communication, and documentation?',
+    cisa: {
+      immediate: ['Activate mass notification system immediately to notify parents (Remind, SchoolMessenger, etc.)', 'Provide communication infrastructure for Incident Command System (ICS) — radios, cellular, PA', 'Do NOT announce bomb threat over open PA; use predetermined emergency code', 'Pull and preserve security camera footage from restrooms, hallways, entrances', 'Support law enforcement with access to camera feeds, access control logs, visitor logs', 'Maintain network connectivity to support law enforcement digital communications'],
+      prevent: ['Anonymous tip line (STOPit, Sandy Hook Promise Say Something) for threat reporting', 'Mass notification system tested monthly — verify all parent contacts are current', 'Surveillance camera coverage review — ensure all high-traffic areas are covered', 'CISA Bomb Threat Guidance: Bomb-Threat-Specific-Procedures for schools', 'Interoperable communications with local law enforcement established in advance'],
+      csf: ['ID: Asset Management (Security Systems)', 'PR: Protective Technology', 'DE: Security Continuous Monitoring', 'RS: Communications', 'RS: Incident Management']
+    }
+  },
+  {
+    id: 20, type: 'mixed', severity: 'critical',
+    title: 'Active Threat + Network Intrusion (Simultaneous)',
+    excerpt: 'During an active threat lockdown, your network monitoring detects unauthorized remote access — possibly coordinated.',
+    body: 'At 1:45 PM, an active threat alert is called at a middle school campus. All campuses are in lockdown. Simultaneously, your network monitoring service alerts you to unauthorized remote access attempts on the district\'s firewall — possibly an inside actor taking advantage of the distraction. Law enforcement has command of the physical threat. You must manage a potential cyber intrusion while supporting the lockdown response.',
+    prompt: 'You cannot leave the district office — law enforcement has restricted movement. How do you manage the cyber threat remotely while supporting the physical response?',
+    cisa: {
+      immediate: ['Treat as coordinated attack — notify both local law enforcement AND FBI', 'Immediately increase network monitoring sensitivity and block suspicious IPs at perimeter', 'Contact CISA Emergency Operations: 1-888-282-0870', 'Do NOT take network offline during an active physical threat — cameras and communications depend on it', 'Prioritize protecting safety systems: door locks, cameras, PA, emergency communications', 'Preserve firewall logs with chain of custody — this is evidence'],
+      prevent: ['CISA K-12 Active Shooter and Cyber Combined Exercise Packages (CTEPs) for training', 'Joint tabletop exercises with local law enforcement annually', 'Emergency network segmentation capability: ability to isolate administrative network from safety systems', 'Out-of-band communications for IT team (cellular, satellite) independent of district network', 'CISA\'s School Safety resources: cisa.gov/school-safety'],
+      csf: ['GV: Risk Management Strategy', 'DE: Continuous Monitoring', 'RS: Response Planning', 'RS: Communications', 'RC: Recovery Planning']
+    }
+  },
+  {
+    id: 21, type: 'cyber', severity: 'high',
+    title: 'Zero-Day Exploit — Student Chromebooks',
+    excerpt: 'A zero-day vulnerability is announced in ChromeOS. Researchers confirm active exploitation. You manage 14,000 Chromebooks.',
+    body: 'CISA issues an emergency alert: a critical zero-day vulnerability in ChromeOS (CVE-XXXX-XXXXX) is being actively exploited. An attacker who exploits it can gain full device control and access to the user\'s Google account. A patch is being tested by Google but has not been released. Your district has 14,000 student and staff Chromebooks. School is currently in session. Your CISO asks: "What do we do right now?"',
+    prompt: 'No patch is available yet. Students are actively using these devices. What is your risk-based decision-making process?',
+    cisa: {
+      immediate: ['Add the CVE to your CISA Known Exploited Vulnerabilities (KEV) watch list immediately', 'Contact Google for school districts emergency support and patch timeline', 'Assess the actual attack vector: is this network-adjacent, local, or remote?', 'Consider temporarily restricting device use to offline mode until patch is available', 'Push mitigating Google Admin Console policies to all devices (disable specific features)', 'Communicate clearly to staff: what to watch for, what to do if device behaves oddly'],
+      prevent: ['Automatic ChromeOS update policy — devices update immediately without user opt-out', 'Enrollment in CISA\'s free Cyber Hygiene Vulnerability Scanning service', 'CISA KEV (Known Exploited Vulnerabilities) subscription for real-time alerts', 'Google Workspace Admin Console policy hardening baseline', 'CISA K-12 Cybersecurity Act implementation resources for vulnerability management'],
+      csf: ['ID: Vulnerability Management', 'PR: Protective Technology', 'DE: Security Continuous Monitoring', 'RS: Mitigation', 'RC: Improvements']
+    }
+  },
+  {
+    id: 22, type: 'human', severity: 'high',
+    title: 'Insider Threat — IT Staff Data Exfiltration',
+    excerpt: 'Audit logs reveal an IT technician has been copying student and staff PII to a personal Google Drive for months.',
+    body: 'Your new DLP (Data Loss Prevention) system generates an alert that has been firing for 87 days before someone noticed it. An IT technician — a trusted employee with 6 years at the district — has been systematically copying files containing student and staff PII to a personal Google account. The data includes approximately 45,000 student records and 2,200 staff records. The technician is currently at work and unaware the activity has been flagged.',
+    prompt: 'How do you handle the employee? What is your legal obligation? Who must be notified and when?',
+    cisa: {
+      immediate: ['Do NOT confront the employee yet — preserve element of surprise for forensics', 'Immediately revoke access while employee is out of the office (lunch, etc.) silently', 'Engage HR and legal before any employee interaction', 'Preserve all audit logs as legal evidence with chain of custody documentation', 'Contact local law enforcement — unauthorized data access and exfiltration may be criminal', 'Activate your breach notification process: 87 days of exfiltration = major breach'],
+      prevent: ['DLP alerts require a human review SLA — this went unnoticed for 87 days due to alert fatigue', 'Privileged user monitoring on all accounts with access to bulk PII', 'Data egress monitoring: flag any large-volume transfers to personal/consumer cloud services', 'Quarterly access rights reviews: does every technician need access to all that data?', 'CISA Insider Threat Mitigation Guide for K-12 institutions (free resource)'],
+      csf: ['GV: Roles & Responsibilities', 'ID: Risk Assessment', 'DE: Anomalies & Events', 'RS: Analysis', 'RS: Incident Management']
+    }
+  },
+  {
+    id: 23, type: 'cyber', severity: 'high',
+    title: 'Credential Stuffing — Student Portal',
+    excerpt: 'Automated bots used leaked passwords from a gaming site breach to access 3,200 student Google accounts.',
+    body: 'At 11 PM on a school night, Google Workspace alerts fire for 3,200 simultaneous suspicious login attempts on student accounts — all from overseas IP ranges. Investigation reveals that a credential stuffing attack used email/password combinations leaked from a popular gaming site. Students reused their school passwords on the gaming platform. By morning, at least 400 student accounts show signs of access, including altered recovery emails. Your Superintendent calls at 6 AM asking what happened.',
+    prompt: 'Hundreds of student accounts may be compromised and you have 90 minutes before the school day starts. What do you do, and what do you tell students and parents?',
+    cisa: {
+      immediate: ['Force password reset on all 3,200 flagged accounts before students arrive', 'Revoke all active sessions (Google Admin: Users > Reset sign-in cookies) district-wide', 'Enable Google\'s suspicious login challenge for all student accounts temporarily', 'Identify and restore altered recovery emails on compromised accounts', 'Pull a list of any accounts that sent emails or accessed Drive after the suspicious login', 'Send parent/student notification with password hygiene guidance'],
+      prevent: ['Enforce Google Workspace password strength requirements via Admin Console', 'Enable 2-Step Verification for all student accounts (Google Smart Lock)', 'Monitor HaveIBeenPwned.com feeds for district email domains', 'Annual student password hygiene curriculum — password reuse is the #1 risk', 'CISA\'s "Implementing Phishing-Resistant MFA" guidance for K-12'],
+      csf: ['PR: Identity Management', 'PR: Awareness Training', 'DE: Anomalies & Events', 'RS: Mitigation', 'RC: Improvements']
+    }
+  },
+  {
+    id: 24, type: 'cyber', severity: 'critical',
+    title: 'Active Directory Compromise — Golden Ticket',
+    excerpt: 'A threat actor has had domain admin access for an estimated 47 days. Your entire Windows infrastructure is potentially owned.',
+    body: 'Your new Managed Security Service Provider (MSSP), brought on last month, drops a bomb in their first full audit report: they have identified a Kerberos Golden Ticket attack within your Active Directory environment. Forensic indicators suggest the attacker first gained a foothold 47 days ago via a phishing email opened by a network technician. During that time, the attacker had domain administrator privileges across your entire Windows environment — every server, every workstation, every admin account. The MSSP\'s assessment: "Assume everything is compromised."',
+    prompt: 'The MSSP says your entire AD environment must be rebuilt from scratch to fully remediate. How do you plan, fund, and communicate a complete infrastructure overhaul while keeping schools running?',
+    cisa: {
+      immediate: ['Contact CISA (cisa.gov/report) and FBI Cyber Division immediately — this is a critical incident', 'Engage your cyber insurance carrier: this is a major claim', 'Reset ALL privileged accounts (krbtgt twice, all domain admins, all service accounts)', 'Isolate your domain controllers from the internet immediately', 'Identify and preserve forensic evidence with chain of custody before any remediation', 'Notify your state education agency and legal counsel today'],
+      prevent: ['Tiered Active Directory model: isolate Tier 0 domain controllers from general use', 'Privileged Access Workstations (PAWs) for all domain admin activity', 'Credential Guard and Protected Users security group enabled on all domain controllers', 'CISA free Cyber Hygiene Services including Vulnerability Scanning enrollment', 'Regular AD health audits using tools like PingCastle or BloodHound (defensive use)', 'CISA\'s Identity and Access Management guide for critical infrastructure'],
+      csf: ['ID: Risk Assessment', 'PR: Identity Management', 'PR: Access Control', 'DE: Security Continuous Monitoring', 'RS: Incident Management', 'RC: Recovery Planning']
+    }
+  },
+  {
+    id: 25, type: 'cyber', severity: 'medium',
+    title: 'Misconfigured AWS S3 Bucket',
+    excerpt: 'A security researcher emails the district: your AWS S3 bucket containing 5 years of student records is publicly accessible.',
+    body: 'A security researcher operating under responsible disclosure principles emails your generic info@ address on a Saturday morning: "Your district\'s AWS S3 bucket \'[districtname]-student-data\' is publicly accessible. I was able to download files containing what appear to be student records, IEPs, and disciplinary records going back to 2019. I am not sharing this data. I am giving you 72 hours before I disclose publicly." The bucket was created by a now-departed IT director and contains approximately 280,000 files. You have never heard of this bucket.',
+    prompt: 'You have 72 hours before public disclosure. What do you do in the first 4 hours — and do you contact the researcher back?',
+    cisa: {
+      immediate: ['Log into AWS immediately and make the S3 bucket private (Block Public Access toggle)', 'Audit what data is in the bucket — scope the breach before doing anything else', 'Respond to the researcher professionally and thank them — do NOT threaten legal action', 'Engage legal counsel on responsible disclosure and breach notification obligations', 'Audit your entire AWS environment for other misconfigured resources using AWS Trusted Advisor', 'Begin breach notification process — 5 years of student data is a significant FERPA exposure'],
+      prevent: ['AWS Organizations Service Control Policies (SCPs) blocking public S3 buckets org-wide', 'Cloud Security Posture Management (CSPM) tool to continuously scan for misconfigurations', 'Quarterly cloud resource inventory audit — find shadow IT before researchers do', 'Offboarding checklist: when an IT employee leaves, audit all cloud resources they created', 'CISA\'s Cloud Security Best Practices guidance for K-12 institutions'],
+      csf: ['GV: Policy', 'ID: Asset Management', 'PR: Data Security', 'DE: Continuous Monitoring', 'RS: Analysis']
+    }
+  },
+  {
+    id: 26, type: 'cyber', severity: 'high',
+    title: 'Man-in-the-Middle — Student Wi-Fi',
+    excerpt: 'A student set up a rogue access point mimicking the school Wi-Fi, intercepting credentials for 6 hours.',
+    body: 'During a routine wireless survey, your network team detects a rogue access point broadcasting the same SSID as the student Wi-Fi network. The rogue AP has been active for approximately 6 hours in the school library. It appears a technically sophisticated student set it up using a Raspberry Pi hidden behind a bookshelf. The rogue AP was configured to perform a man-in-the-middle attack, potentially intercepting HTTP traffic and credential submissions from any device that connected to it. You don\'t yet know how many devices connected.',
+    prompt: 'What is the scope of potential data exposure? How do you determine what was captured — and what are your obligations to students whose credentials may have been stolen?',
+    cisa: {
+      immediate: ['Immediately remove the rogue device and preserve it as evidence with chain of custody', 'Pull DHCP logs to identify every device that connected to the rogue AP in those 6 hours', 'Force credential reset for all users whose devices connected during that window', 'Analyze the Pi\'s storage (with legal guidance) to determine what data was actually captured', 'Refer to campus administration and potentially law enforcement — unauthorized network device is a crime', 'Notify parents of affected students per FERPA if credentials to student systems were exposed'],
+      prevent: ['802.1X port-based authentication on all wireless networks (certificates, not passwords)', 'Wireless Intrusion Prevention System (WIPS) for automated rogue AP detection', 'HTTPS-only browsing enforcement via DNS filtering and web proxy', 'Regular wireless site surveys — quarterly at minimum', 'Student AUP explicitly covering unauthorized network devices with clear consequences'],
+      csf: ['ID: Asset Management', 'PR: Protective Technology', 'DE: Anomalies & Events', 'RS: Incident Management', 'RS: Analysis']
+    }
+  },
+  {
+    id: 27, type: 'cyber', severity: 'high',
+    title: 'Deepfake Superintendent Audio — Wire Fraud Attempt',
+    excerpt: 'The CFO received a voicemail with an AI-generated voice clone of the superintendent requesting an emergency wire transfer.',
+    body: 'Your CFO received a voicemail at 7:45 AM that sounds exactly like the superintendent — same voice, cadence, and even a reference to the CFO\'s recent vacation. The caller instructs the CFO to wire $220,000 to a new vendor account "before 10 AM or the contract is lost." The real superintendent is at a conference and is in back-to-back sessions. The CFO is 80% sure it\'s real and is standing at the wire transfer terminal. You have less than 10 minutes.',
+    prompt: 'The CFO is about to press send. How do you stop it — and how do you build procedures that prevent deepfake audio attacks from succeeding in the future?',
+    cisa: {
+      immediate: ['Call the superintendent on their personal cell phone RIGHT NOW — do not use the number from the voicemail', 'Implement a verbal codeword protocol: CFO and superintendent agree on a private codeword for financial requests', 'Do NOT wire the money until voice identity is confirmed through a second channel', 'Preserve the voicemail as forensic evidence — report to FBI IC3 immediately', 'Alert all finance staff to the deepfake attempt via email/Slack immediately', 'Contact CISA — AI-generated voice fraud is an emerging threat they track'],
+      prevent: ['Out-of-band verification required for ALL financial transactions over $500 — no exceptions', 'Establish verbal/written codewords for emergency financial requests with all senior staff', 'Finance staff training on AI-generated voice/video fraud (deepfakes) — CISA awareness materials', 'Two-person authorization on all wire transfers', 'CISA\'s "Defending Against Vishing" and emerging AI fraud guidance'],
+      csf: ['GV: Policy', 'PR: Awareness Training', 'PR: Identity Management', 'RS: Communications', 'RC: Improvements']
+    }
+  },
+  {
+    id: 28, type: 'cyber', severity: 'medium',
+    title: 'Compromised Smart Building Systems',
+    excerpt: 'Hackers accessed the district\'s HVAC and door access control systems through an unpatched building automation controller.',
+    body: 'Facilities staff report that thermostats in three elementary schools are behaving erratically — cycling rapidly between 60°F and 90°F. Simultaneously, the electronic door lock system at the administration building stopped responding. Your network team discovers both systems connect to the same building automation controller that runs a web-based management interface — last patched in 2019. A quick check shows the management portal was accessible from the public internet with default credentials. It is unclear if this is malicious or a malfunction.',
+    prompt: 'You cannot confirm whether this is an attack or a software glitch. How do you respond to the physical safety implications while simultaneously investigating the cyber angle?',
+    cisa: {
+      immediate: ['Treat as malicious until proven otherwise — activate your ICS/OT incident response plan', 'Immediately disconnect the building automation controller from the network', 'Switch door locks to manual/fail-safe mode; notify campus security and facilities immediately', 'Restore manual HVAC control; check for physical safety issues (elderly, young students in extreme temps)', 'Change all default credentials and take the management portal offline', 'Report to CISA — attacks on building control systems are a critical infrastructure concern'],
+      prevent: ['Segment OT/IoT networks (HVAC, cameras, locks) from the administrative IT network', 'Prohibit internet-accessible management interfaces on OT systems — VPN-only access', 'Regular firmware update and patching schedule for all building automation systems', 'Default credential audit: every building automation device must have a unique strong password', 'CISA\'s ICS/OT Security guidance and free assessment tools for K-12'],
+      csf: ['ID: Asset Management', 'PR: Protective Technology', 'PR: Network Segmentation', 'DE: Anomalies & Events', 'RS: Incident Management']
+    }
+  },
+  {
+    id: 29, type: 'cyber', severity: 'high',
+    title: 'QR Code Phishing — Staff Devices',
+    excerpt: 'Printed QR code posters placed throughout the school redirected staff to a credential harvesting site mimicking the district login portal.',
+    body: 'Your help desk receives 14 tickets in one morning from staff who say their passwords "stopped working." Investigating the first ticket, you discover the staff member scanned a QR code from a poster in the teacher\'s lounge that said "IMPORTANT: Scan to verify your district account is active." The landing page was a pixel-perfect copy of your Microsoft 365 login portal. The posters appear to have been placed throughout multiple campuses — possibly overnight. You find similar posters in at least 6 buildings. Potentially 14+ staff credentials are compromised.',
+    prompt: 'The attacker may already have active access to staff Microsoft 365 accounts. What is your triage process — and how do you communicate this to 800 staff without creating panic?',
+    cisa: {
+      immediate: ['Force-revoke all active Microsoft 365 sessions for all staff via Azure AD (Entra ID) immediately', 'Force password reset for the 14 confirmed victims first, then assess district-wide reset', 'Review Azure AD sign-in logs for any suspicious access with the stolen credentials', 'Photograph and remove all rogue QR code posters — preserve as evidence', 'Alert ALL staff immediately about the QR code posters via a channel that doesn\'t require logging in (text/Remind)', 'Report to local law enforcement — physical trespassing was likely required to place posters'],
+      prevent: ['Multi-Factor Authentication (MFA) on all Microsoft 365 accounts — even if credentials are stolen, MFA blocks access', 'Microsoft Entra ID Conditional Access policies (block legacy auth, require compliant devices)', 'Staff awareness training: QR code phishing ("quishing") is a growing attack vector', 'Physical security review: after-hours campus access logs and camera coverage of common areas', 'Microsoft Defender for Office 365 safe links/attachments enabled'],
+      csf: ['PR: Identity Management', 'PR: Awareness Training', 'DE: Anomalies & Events', 'RS: Mitigation', 'RC: Improvements']
+    }
+  },
+  {
+    id: 30, type: 'cyber', severity: 'critical',
+    title: 'Wiper Malware — Student Records Destroyed',
+    excerpt: 'Destructive malware permanently wiped the district\'s on-premise student information system database and all local backups.',
+    body: 'On the morning of report card distribution day, your SIS administrator calls in a panic: "The database is gone. Not encrypted — gone. The transaction logs show a DROP DATABASE command executed at 3:12 AM from a service account. All tables wiped. Our local backup drive was also wiped. Our last verified offsite backup is from 11 days ago." The system holds current grades, attendance, and enrollment data for 12,000 students. Report cards were due to print today. The SIS vendor says restoration from their side will take 3–5 business days minimum.',
+    prompt: 'Eleven days of data are gone permanently. How do you reconstruct what you can, communicate with families, and address the legal/operational fallout — while simultaneously investigating who did this?',
+    cisa: {
+      immediate: ['Contact CISA (cisa.gov/report) and FBI — destructive malware is a federal crime', 'Preserve ALL forensic evidence including the service account logs before any restoration', 'Contact your SIS vendor\'s emergency line — begin vendor-side restoration immediately', 'Survey campus staff: do teachers have local gradebook data from the past 11 days? (Google Classroom, paper grade books)', 'Communicate to Superintendent and Board tonight — this will require board-level decisions', 'Notify State Education Agency — enrollment and attendance data loss has compliance implications'],
+      prevent: ['Immutable, air-gapped offsite backups that CANNOT be deleted remotely — non-negotiable', 'Service account principle of least privilege: no service account should have DROP DATABASE permissions', 'Database activity monitoring with alerts on unusual DDL commands (DROP, TRUNCATE)', '3-2-1-1-0 backup rule: 3 copies, 2 media, 1 offsite, 1 immutable, 0 unverified restores', 'Regular tested restore drills — monthly for critical systems'],
+      csf: ['GV: Risk Management', 'ID: Asset Management', 'PR: Data Security', 'DE: Anomalies & Events', 'RS: Incident Management', 'RC: Recovery Planning']
+    }
+  },
+  {
+    id: 31, type: 'cyber', severity: 'medium',
+    title: 'Malicious Chrome Extension — Student Browsers',
+    excerpt: 'A browser extension installed on 4,000 student Chromebooks is silently capturing keystrokes and screenshots.',
+    body: 'Your Google Workspace admin console generates an alert for an extension that was force-installed via a policy that no one on your team configured. The extension — named "ClassroomHelper Pro" — has been installed on 4,000 student Chromebooks for 23 days. Analyzing the extension\'s permissions reveals it has access to all keystrokes, clipboard data, and full-page screenshots. The extension was published on the Chrome Web Store but has since been removed by Google. The publisher domain was registered 30 days ago.',
+    prompt: 'The extension may have captured 23 days of student keystrokes including passwords and personal messages. How do you scope the damage and what are your obligations to students and parents?',
+    cisa: {
+      immediate: ['Remove the extension from all devices immediately via Google Admin Console forced removal policy', 'Force password reset for all 4,000 student accounts — assume all passwords are compromised', 'Review Google Admin Console for any unauthorized policy changes — how was this installed?', 'Audit admin account activity logs for the past 30 days for unauthorized access', 'Report to Google (Google Safe Browsing) and CISA — this is likely part of a broader campaign', 'Begin breach notification process — 23 days of keystroke data is a significant FERPA incident'],
+      prevent: ['Chrome Extension allowlist policy in Google Admin Console: only pre-approved extensions can install', 'Google Workspace Admin Console: disable Chrome Web Store access for student accounts', 'Multi-person approval process for any new extension policy deployment', 'Regular Google Admin Console policy audit — who changed what and when', 'CISA K-12 Cybersecurity guidance on browser and endpoint security'],
+      csf: ['GV: Policy', 'PR: Protective Technology', 'DE: Anomalies & Events', 'RS: Mitigation', 'RS: Analysis']
+    }
+  },
+  {
+    id: 32, type: 'cyber', severity: 'high',
+    title: 'DNS Hijacking — District Website Defaced',
+    excerpt: 'Attackers compromised the district\'s domain registrar account and redirected the public website to a politically-charged page.',
+    body: 'At 7:00 AM on a Monday, parents, staff, and media begin calling. The district\'s public website is displaying a politically inflammatory page with graphic imagery and a threatening message. Your web team confirms the actual web server is untouched — the DNS records for your domain were changed overnight, redirecting visitors to an attacker-controlled server. Your domain registrar account was secured with only a single password. A local TV news crew is already in the parking lot. Your superintendent is asking for answers in 15 minutes.',
+    prompt: 'Your public website is being seen by thousands of parents right now. What do you tell your superintendent in 15 minutes, and what is your technical and communications response?',
+    cisa: {
+      immediate: ['Log into your domain registrar immediately and restore correct DNS records (TTL may delay full fix 1–4 hours)', 'Enable Registrar Lock (domain transfer lock) and change registrar credentials with MFA now', 'Contact your registrar\'s emergency support line — expedite DNS propagation if possible', 'Post a status message on your district\'s social media accounts (which attackers don\'t control) explaining the situation', 'Brief the superintendent: your web server is safe, DNS was redirected, fix is underway, ETA is X hours', 'Contact local media proactively with accurate information before the story runs'],
+      prevent: ['DNSSEC (DNS Security Extensions) enabled on your domain to prevent unauthorized changes', 'MFA on ALL domain registrar and DNS provider accounts — mandatory', 'Registrar Lock enabled at all times; require out-of-band verification to change DNS records', 'Annual audit of all domain registrar accounts — who has access?', 'CISA\'s DNS Security guidance and secure domain management best practices'],
+      csf: ['GV: Policy', 'PR: Identity Management', 'PR: Protective Technology', 'RS: Communications', 'RC: Communications']
+    }
+  },
+  {
+    id: 33, type: 'cyber', severity: 'medium',
+    title: 'Unauthorized Cryptocurrency Mining — School Network',
+    excerpt: 'Network performance has been degrading for weeks. Investigation reveals a student-installed cryptominer running on 200+ school computers.',
+    body: 'Teachers have been complaining for three weeks that "the computers are slow." Your help desk has been reimaging machines one by one with no lasting improvement. A network traffic analysis finally reveals the culprit: 200+ school computers are connecting to cryptocurrency mining pool servers and using 80–100% CPU continuously. Tracing the infection back to a single high school computer lab, you determine that a student installed a browser-based mining script through a gaming website visited in the lab. The mining has been running for approximately 34 days.',
+    prompt: 'Beyond removing the miner, what are the broader policy, legal, and operational questions this scenario raises — and what does 34 days of unauthorized use of school computing resources mean legally?',
+    cisa: {
+      immediate: ['Deploy an endpoint detection script to identify all infected machines across the district', 'Block cryptocurrency mining pool domains at the DNS and web filter level immediately', 'Preserve forensic evidence of the student\'s activity before remediation', 'Reimage all infected machines with a clean, hardened baseline image', 'Estimate financial impact: electricity costs, hardware wear, lost instructional time for insurance/legal purposes', 'Refer to campus administration — unauthorized use of school computers is a disciplinary and potentially legal matter'],
+      prevent: ['Web content filtering: block known cryptomining domains and categories (already categorized by most filters)', 'Application whitelisting or browser extension controls to prevent unauthorized script execution', 'Disable USB ports and restrict software installation rights on all student-facing machines', 'Network traffic anomaly detection: cryptomining has a distinctive traffic signature', 'Annual computer lab acceptable use training with specific examples of prohibited activities'],
+      csf: ['GV: Policy', 'ID: Asset Management', 'PR: Protective Technology', 'DE: Anomalies & Events', 'RS: Mitigation']
+    }
+  },
+  {
+    id: 34, type: 'cyber', severity: 'high',
+    title: 'Multi-Factor Authentication Fatigue Attack',
+    excerpt: 'An attacker is sending hundreds of MFA push notifications to a district administrator\'s phone — and one finally said "approve."',
+    body: 'Your district recently rolled out Microsoft Authenticator push notifications for MFA. At 11:30 PM, your network monitoring alerts to a successful admin login from a Ukrainian IP address. Investigation reveals that an attacker obtained an administrator\'s username and password (likely from a previous breach) and bombarded her phone with 74 Authenticator push notifications over 45 minutes. Exhausted and half-asleep, she finally tapped "Approve" thinking it was a glitch. The attacker now has authenticated admin access to your Microsoft 365 tenant and has been in the environment for 18 minutes.',
+    prompt: 'An attacker is actively inside your Microsoft 365 tenant right now. You have confirmed it is not the legitimate admin. What do you do in the next 5 minutes?',
+    cisa: {
+      immediate: ['Immediately revoke all active sessions for the compromised admin account in Azure AD (Entra ID)', 'Disable the compromised account temporarily while you investigate scope of access', 'Review Azure AD audit logs for the past 18 minutes: what did the attacker access, create, or change?', 'Check for new forwarding rules on the compromised email account — attacker may have set up exfiltration', 'Check for new admin accounts or elevated permissions granted by the attacker', 'Change all tenant-level admin credentials and rotate API keys/app registrations'],
+      prevent: ['Replace push notification MFA with Phishing-Resistant MFA: FIDO2 security keys or Microsoft Authenticator Number Matching', 'Microsoft Entra ID: enable "Number Matching" and "Additional Context" in Authenticator — defeats fatigue attacks', 'CISA\'s "Implementing Phishing-Resistant MFA" guidance — free implementation guide', 'Conditional Access policy: block logins from non-US countries for admin accounts', 'Admin accounts should use dedicated cloud-only identities, not synced from AD'],
+      csf: ['PR: Identity Management', 'PR: Access Control', 'DE: Security Continuous Monitoring', 'RS: Incident Management', 'RS: Analysis']
+    }
+  },
+  {
+    id: 35, type: 'cyber', severity: 'medium',
+    title: 'Exposed Student Health Records — SIS Misconfiguration',
+    excerpt: 'A misconfigured SIS permission role allowed substitute teachers to view all student 504 plans, IEPs, and health alerts.',
+    body: 'During a routine internal audit, your data privacy team discovers that the "Substitute Teacher" permission role in your Student Information System was misconfigured 14 months ago during a software upgrade. The misconfiguration granted substitutes read access to all special education documents, 504 plans, health conditions, medication records, and behavioral intervention plans — data they should never have access to. You have approximately 340 substitute teachers in the pool, all of whom could have accessed this data.',
+    prompt: 'IDEA, Section 504, and FERPA regulations apply to this data. What is your notification obligation, to whom, and what does your remediation look like?',
+    cisa: {
+      immediate: ['Immediately correct the permission role in the SIS — remove special education data access from substitute role', 'Audit access logs for the past 14 months: which substitutes actually accessed any of these records?', 'Consult legal and your Special Education Director today — IDEA and FERPA notification requirements differ', 'Notify your State Education Agency — IDEA violations have specific reporting requirements', 'Prepare parent notification for affected special education students — required under FERPA', 'Brief the Superintendent and Board — this is a significant compliance exposure'],
+      prevent: ['Quarterly SIS permission role audit — compare actual permissions against documented role specifications', 'Any permission changes during software upgrades require explicit review and sign-off', 'Data classification policy: special education records require highest access restriction tier', 'SIS access logging with alerts when sensitive data categories (IEP, 504, health) are accessed by unusual roles', 'Annual FERPA and IDEA data governance training for IT staff who manage SIS permissions'],
+      csf: ['GV: Roles & Responsibilities', 'PR: Data Security', 'PR: Identity Management', 'DE: Anomalies & Events', 'RC: Improvements']
+    }
+  },
+  {
+    id: 36, type: 'cyber', severity: 'high',
+    title: 'Vishing Attack — IT Help Desk',
+    excerpt: 'A caller impersonating the superintendent convinced a help desk technician to reset admin credentials and read them aloud.',
+    body: 'A help desk technician received a call from someone identifying themselves as the superintendent, calling from a personal cell phone number. The caller said they were locked out before a critical board meeting and needed their Microsoft 365 admin password reset immediately. They used the superintendent\'s correct full name, employee ID, and the name of the board meeting. The technician, wanting to be helpful, reset the account and read the temporary password aloud. It was not the superintendent. The attacker used publicly available LinkedIn and district website information to conduct the attack.',
+    prompt: 'The attacker now has admin credentials that are 12 minutes old. Walk through your immediate technical response and your process for preventing help desk social engineering in the future.',
+    cisa: {
+      immediate: ['Immediately disable the compromised admin account and all active sessions', 'Check Azure AD audit logs: what did the attacker do in the past 12 minutes?', 'Brief the help desk technician — this is a learning opportunity, not a fireable offense', 'Review all other recent help desk credential resets for suspicious patterns', 'Contact the real superintendent: confirm their account status and have them verify identity in person', 'Report to CISA if tenant data was accessed — vishing attacks often precede larger breaches'],
+      prevent: ['Identity verification protocol: NEVER reset credentials via phone — require in-person with photo ID or self-service portal only', 'Help desk staff training on vishing and social engineering — role-play exercises', 'Out-of-band callback requirement: if a "VIP" user calls, hang up and call their known, documented number back', 'Self-service password reset (SSPR) portal with MFA — removes help desk from the equation entirely', 'CISA\'s "Recognizing and Reporting Social Engineering" training materials for IT staff'],
+      csf: ['GV: Policy', 'PR: Awareness Training', 'PR: Identity Management', 'DE: Anomalies & Events', 'RS: Incident Management']
+    }
+  },
+  {
+    id: 37, type: 'cyber', severity: 'critical',
+    title: 'ICS Attack — Bus GPS and Transportation Systems',
+    excerpt: 'Attackers compromised the district\'s student transportation management system, altering bus routes and disabling GPS tracking for 42 buses.',
+    body: 'At 6:15 AM — 45 minutes before first bell — your Transportation Director calls in a panic. The transportation management system is down. GPS tracking for 42 buses is offline. Several bus routes have been altered in the system to incorrect pickup locations. Drivers rely on the app for routes. Parents are calling the district because their children\'s bus never arrived at the designated stop. You discover the transportation management system vendor\'s web portal was accessed overnight from an unknown IP. Student safety is at immediate risk.',
+    prompt: 'Children are waiting at bus stops and buses are running wrong routes. Student safety is a live crisis. How do you simultaneously manage the cyber incident and the physical safety emergency?',
+    cisa: {
+      immediate: ['This is a student safety emergency — call 911 and notify law enforcement of missing/misdirected students immediately', 'Contact the transportation vendor emergency line — force a system rollback or restore from last known good state', 'Deploy all available administrators and staff to known bus stops with paper route sheets (always maintain paper backup)', 'Issue an emergency parent notification via mass messaging: explain delay, provide hotline number', 'Suspend all GPS-dependent routing until system integrity is confirmed', 'Report to CISA immediately — attacks on student transportation are critical infrastructure incidents'],
+      prevent: ['Transportation system access logs with anomaly alerts for off-hours access', 'MFA on ALL transportation vendor portals and management systems', 'Paper route backup: printed route sheets in every bus — never rely solely on digital', 'Annual penetration test of student transportation systems — treated as operational technology (OT)', 'CISA K-12 Transportation and Physical Security integration guidance'],
+      csf: ['GV: Risk Management', 'ID: Asset Management', 'PR: Protective Technology', 'DE: Anomalies & Events', 'RS: Communications', 'RC: Recovery Planning']
+    }
+  },
+  {
+    id: 38, type: 'cyber', severity: 'medium',
+    title: 'Impersonation on Social Media — Fake District Accounts',
+    excerpt: 'A network of fake social media accounts impersonating the district and principals is spreading disinformation to parents.',
+    body: 'Your public information officer alerts you to a coordinated campaign of fake social media accounts on X (Twitter), Facebook, and Instagram impersonating district leadership. The accounts have the district logo, similar handles (e.g., @DistrictNameISD vs @DistrictNameI5D), and have amassed over 2,000 followers. They are posting fabricated messages about school closures, fake safety incidents, and inflammatory content about school board members. Parent panic is rising. One fake "emergency closure" post was shared 400 times before being flagged.',
+    prompt: 'You cannot take down the accounts directly. How do you counter disinformation in real time, protect your authentic channels, and coordinate with the platforms?',
+    cisa: {
+      immediate: ['Report all fake accounts to each platform immediately using their official impersonation reporting process', 'Post an urgent clarification from your verified accounts: "Only follow [official handle] — fake accounts are circulating"', 'Contact your local FBI field office — coordinated impersonation campaigns may have a threat actor behind them', 'Immediately verify and badge all official district social media accounts (Meta Verified, X Verified)', 'Send a parent notification via your official mass messaging system with links to verified accounts only', 'Document all fake account handles, post screenshots, and follower counts for law enforcement'],
+      prevent: ['Proactive social media account verification (blue check/badge) on all official accounts', 'Brand monitoring tool (Google Alerts, Mention.com) to detect impersonation early', 'District social media policy: list all official accounts publicly on the website with direct links', 'CISA\'s guidance on countering disinformation and protecting official communications channels', 'Establish parent communication protocol: official communications ONLY come from [domain] email or [official app]'],
+      csf: ['GV: Policy', 'PR: Awareness Training', 'DE: Anomalies & Events', 'RS: Communications', 'RC: Communications']
+    }
+  },
+  {
+    id: 39, type: 'cyber', severity: 'high',
+    title: 'API Key Exposed in Public GitHub Repository',
+    excerpt: 'A developer accidentally pushed a repository containing live AWS and Google API keys to a public GitHub repo — and GitHub bots found it within minutes.',
+    body: 'A district developer was building a custom integration between the SIS and a scholarship tracking tool. While pushing code to GitHub, they accidentally included a .env file containing live AWS credentials, a Google Cloud API key, a database connection string with credentials, and the district\'s Twilio (SMS notification) API key. GitHub\'s automated secret scanning detected the exposure and sent an alert — but not before automated bots scraped the repository within 3 minutes of publication. The repo was public for 11 minutes before being made private.',
+    prompt: 'API keys are considered compromised the moment they are publicly exposed. Walk through your credential rotation plan and assess what damage may have occurred in those 11 minutes.',
+    cisa: {
+      immediate: ['Revoke and rotate ALL exposed credentials immediately — do not wait to assess damage first', 'Check AWS CloudTrail, Google Cloud Audit Logs, and Twilio logs for any activity using the exposed keys in the past 11+ minutes', 'Check AWS billing console for sudden unexpected resource creation (attackers spin up cryptomining VMs within minutes of getting AWS keys)', 'Make the GitHub repository private and scrub commit history (or delete and recreate)', 'Report any unauthorized AWS charges to AWS Support immediately — they have a compromised credentials program', 'Notify any vendor whose API keys were exposed (Google, Twilio, etc.)'],
+      prevent: ['Pre-commit hooks (git-secrets, truffleHog) that block commits containing secrets', 'All credentials must live in secrets managers (AWS Secrets Manager, Azure Key Vault) — NEVER in .env files committed to any repo', 'GitHub Advanced Security: enable secret scanning and push protection on all repositories', 'Developer training: secrets in code is one of the most common and costly developer security mistakes', 'Quarterly audit of all GitHub/GitLab repositories for exposed secrets — use truffleHog or similar'],
+      csf: ['GV: Policy', 'ID: Asset Management', 'PR: Data Security', 'DE: Continuous Monitoring', 'RS: Mitigation']
+    }
+  },
+  {
+    id: 40, type: 'cyber', severity: 'high',
+    title: 'Zoom-Bombing — Board Meeting & Classrooms',
+    excerpt: 'Multiple virtual board meetings and live online classes were disrupted by coordinated zoom-bombing with graphic content.',
+    body: 'During a high-profile virtual board meeting streamed publicly, an unknown participant gained entry and began sharing graphic and disturbing imagery before being removed. The same day, three teachers reported similar intrusions into their live online classes — one involving sexually explicit content viewed by students as young as 8. The meeting links had been posted publicly on the district website. Parents are furious. A local news station is running the story tonight.',
+    prompt: 'Students were exposed to harmful content. What is your immediate response to affected students and families — and how do you make the case to your board for stronger virtual meeting security?',
+    cisa: {
+      immediate: ['Brief the Superintendent and legal counsel: student exposure to explicit content during school hours has liability implications', 'Contact campus counselors immediately to support affected students — prioritize student wellbeing', 'File a report with the FBI\'s Internet Crimes Against Children (ICAC) task force', 'Secure all future meetings immediately: passwords, waiting rooms, host-only screen share, no public links', 'Draft a parent communication that is transparent, empathetic, and explains what you are changing', 'Report to CISA if the attack appears coordinated across multiple districts simultaneously'],
+      prevent: ['NEVER post live meeting links publicly — use registration-gated access or direct parent communication only', 'Zoom/Teams security baseline: waiting rooms enabled, attendees muted on entry, screen share host-only', 'Unique meeting IDs for every session — never reuse standing meeting links', 'Designated co-host for every online class with authority to remove and report disruptive participants', 'CISA\'s Video Teleconferencing Security guidance for education institutions'],
+      csf: ['GV: Policy', 'PR: Protective Technology', 'PR: Awareness Training', 'RS: Communications', 'RC: Communications']
+    }
+  }
+];
+
+// ── RENDER SCENARIO LIBRARY ─────────────────────────────────────────────────
+function tagClass(type) {
+  return { cyber:'tag-cyber', physical:'tag-physical', human:'tag-human', natural:'tag-natural', mixed:'tag-mixed' }[type] || 'tag-cyber';
+}
+function tagLabel(type) {
+  return { cyber:'Cyber Attack', physical:'Physical', human:'Human Factor', natural:'Natural Disaster', mixed:'Mixed' }[type] || type;
+}
+function severityColor(s) {
+  return { low:'var(--green)', medium:'var(--yellow)', high:'var(--orange)', critical:'var(--red)' }[s] || 'var(--text-dim)';
+}
+
+function renderLibrary(filter='all') {
+  const grid = document.getElementById('scenariosGrid');
+  const items = filter === 'all' ? SCENARIOS : SCENARIOS.filter(s => s.type === filter);
+  grid.innerHTML = items.map(s => `
+    <div class="scenario-card" onclick="openScenario(${s.id})" data-type="${s.type}">
+      <div class="sc-top">
+        <span class="sc-num">SCENARIO ${String(s.id).padStart(2,'0')}</span>
+        <span class="scenario-tag ${tagClass(s.type)}">${tagLabel(s.type)}</span>
+      </div>
+      <div class="sc-title">${s.title}</div>
+      <div class="sc-excerpt">${s.excerpt}</div>
+      <div class="sc-footer">
+        <span>Severity: <span style="color:${severityColor(s.severity)};text-transform:uppercase;">${s.severity}</span></span>
+        <span style="color:var(--cyan);">View → </span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterScenarios(type, btn) {
+  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  renderLibrary(type);
+}
+
+// ── MODAL ───────────────────────────────────────────────────────────────────
+function openScenario(id) {
+  const s = SCENARIOS.find(x => x.id === id);
+  if (!s) return;
+  document.getElementById('modalTag').innerHTML = `<span class="scenario-tag ${tagClass(s.type)}">${tagLabel(s.type)}</span>`;
+  document.getElementById('modalTitle').textContent = s.title;
+  document.getElementById('modalBody').innerHTML = buildScenarioHTML(s);
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeModalOnOverlay(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+function buildScenarioHTML(s) {
+  return `
+    <p class="scenario-body">${s.body}</p>
+    <div class="scenario-prompt">${s.prompt}</div>
+    <div class="cisa-response">
+      <h4>CISA-Aligned Response Guidance</h4>
+      <div class="response-columns">
+        <div class="resp-col">
+          <h5>Immediate Actions</h5>
+          <ul>${s.cisa.immediate.map(i=>`<li>${i}</li>`).join('')}</ul>
+        </div>
+        <div class="resp-col">
+          <h5>Preventive Controls</h5>
+          <ul>${s.cisa.prevent.map(i=>`<li>${i}</li>`).join('')}</ul>
+        </div>
+      </div>
+      <div class="csf-tags">
+        <span style="font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--text-dim);letter-spacing:0.1em;margin-right:0.25rem;">CSF:</span>
+        ${s.cisa.csf.map(t=>`<span class="csf-tag">${t}</span>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// ── SCENARIO GENERATOR ──────────────────────────────────────────────────────
+async function generateScenario() {
+  const type = document.getElementById('genType').value;
+  const severity = document.getElementById('genSeverity').value;
+  const mode = document.getElementById('genMode').value;
+  const btn = document.getElementById('genBtn');
+  const output = document.getElementById('genOutput');
+
+  btn.disabled = true;
+  btn.textContent = '⏳ LOADING...';
+  output.innerHTML = `<div class="loading-state"><div class="loader"></div><div class="loader-text">GENERATING SCENARIO...</div></div>`;
+
+  if (mode === 'library') {
+    // Pick from library
+    let pool = SCENARIOS;
+    if (type !== 'random') pool = pool.filter(s => s.type === type);
+    if (severity !== 'random') pool = pool.filter(s => s.severity === severity);
+    if (pool.length === 0) pool = SCENARIOS;
+    const s = pool[Math.floor(Math.random() * pool.length)];
+    setTimeout(() => {
+      output.innerHTML = buildGeneratorDisplay(s);
+      btn.disabled = false;
+      btn.textContent = '▶ GENERATE';
+    }, 600);
+  } else {
+    // AI-generated
+    const typeLabel = type === 'random' ? 'any type (cyber attack, physical disaster, human factor, natural disaster, or mixed)' : tagLabel(type);
+    const sevLabel = severity === 'random' ? 'random severity' : severity;
+    const prompt = `You are a K-12 cybersecurity tabletop exercise designer. Generate a NEW, realistic incident scenario for a K-12 school district technology leader (CTO/Director of Technology).
+
+Requirements:
+- Type: ${typeLabel}
+- Severity: ${sevLabel}
+- Must be realistic, specific, and based on real K-12 incidents
+- Must NOT duplicate any of these existing scenarios: ${SCENARIOS.map(s=>s.title).join(', ')}
+
+Respond ONLY with a JSON object in this exact format (no markdown, no preamble):
+{
+  "title": "Short compelling title (4-8 words)",
+  "type": "${type === 'random' ? 'cyber|physical|human|natural|mixed' : type}",
+  "severity": "${severity === 'random' ? 'low|medium|high|critical' : severity}",
+  "excerpt": "One sentence teaser (max 120 chars)",
+  "body": "The full scenario description in 2nd or 3rd person, 100-180 words. Include specific details: names, numbers, timing, system names. End with what the CTO has been asked to do.",
+  "prompt": "A challenging discussion question that requires teams to engage deeply (1-2 sentences)",
+  "immediate": ["5-7 specific immediate action steps aligned with CISA guidance"],
+  "prevent": ["5-6 specific preventive controls referencing NIST CSF and CISA resources"],
+  "csf": ["3-5 CSF function tags like GV: Policy, PR: Access Control, DE: Anomalies, RS: Communications, RC: Recovery Planning"]
+}`;
+
+    try {
+      const resp = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          messages: [{ role: 'user', content: prompt }]
+        })
+      });
+      const data = await resp.json();
+      const text = data.content?.map(c => c.text || '').join('').replace(/```json|```/g,'').trim();
+      const parsed = JSON.parse(text);
+      const aiScenario = {
+        id: 99,
+        type: parsed.type || type,
+        severity: parsed.severity || severity,
+        title: parsed.title,
+        excerpt: parsed.excerpt,
+        body: parsed.body,
+        prompt: parsed.prompt,
+        cisa: {
+          immediate: parsed.immediate || [],
+          prevent: parsed.prevent || [],
+          csf: parsed.csf || []
+        }
+      };
+      output.innerHTML = buildGeneratorDisplay(aiScenario, true);
+    } catch(e) {
+      // Fallback to library
+      const s = SCENARIOS[Math.floor(Math.random() * SCENARIOS.length)];
+      output.innerHTML = buildGeneratorDisplay(s);
+    }
+    btn.disabled = false;
+    btn.textContent = '▶ GENERATE';
+  }
+}
+
+function buildGeneratorDisplay(s, isAI=false) {
+  return `
+    <div class="scenario-display active">
+      <div class="scenario-header">
+        <span class="scenario-tag ${tagClass(s.type)}">${tagLabel(s.type)}</span>
+        ${isAI ? '<span class="scenario-tag" style="background:rgba(255,215,0,0.1);color:var(--yellow);border:1px solid rgba(255,215,0,0.3);">⚡ AI-GENERATED</span>' : ''}
+        <div>
+          <div class="scenario-title">${s.title}</div>
+          <div style="font-family:\'Share Tech Mono\',monospace;font-size:0.65rem;color:${severityColor(s.severity)};letter-spacing:0.1em;margin-top:0.25rem;text-transform:uppercase;">SEVERITY: ${s.severity}</div>
+        </div>
+      </div>
+      <p class="scenario-body">${s.body}</p>
+      <div class="scenario-prompt">${s.prompt}</div>
+      <div class="cisa-response">
+        <h4>CISA-Aligned Response Guidance</h4>
+        <div class="response-columns">
+          <div class="resp-col">
+            <h5>Immediate Actions</h5>
+            <ul>${s.cisa.immediate.map(i=>`<li>${i}</li>`).join('')}</ul>
+          </div>
+          <div class="resp-col">
+            <h5>Preventive Controls</h5>
+            <ul>${s.cisa.prevent.map(i=>`<li>${i}</li>`).join('')}</ul>
+          </div>
+        </div>
+        <div class="csf-tags">
+          <span style="font-family:\'Share Tech Mono\',monospace;font-size:0.65rem;color:var(--text-dim);letter-spacing:0.1em;margin-right:0.25rem;">CSF:</span>
+          ${s.cisa.csf.map(t=>`<span class="csf-tag">${t}</span>`).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ── DICE ────────────────────────────────────────────────────────────────────
+const diceEmoji = ['⚀','⚁','⚂','⚃','⚄','⚅'];
+function rollDie() {
+  const el = document.getElementById('diceEmoji');
+  const res = document.getElementById('diceResult');
+  el.classList.add('rolling');
+  let count = 0;
+  const interval = setInterval(() => {
+    const r = Math.floor(Math.random() * 6) + 1;
+    el.textContent = diceEmoji[r-1];
+    res.textContent = r;
+    count++;
+    if (count >= 9) {
+      clearInterval(interval);
+      el.classList.remove('rolling');
+    }
+  }, 100);
+}
+
+// ── SCROLL ANIMATIONS ────────────────────────────────────────────────────────
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+renderLibrary();
+</script>
+</body>
+</html>
