@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Family App Privacy Audit · 15-Minute Interactive Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0A3476;
+  --navy-dark: #071f4a;
+  --navy-mid: #12428f;
+  --gold: #FCB040;
+  --gold-light: #fdd17a;
+  --gold-pale: #FEF0D0;
+  --pale-navy: #D0D8F0;
+  --white: #ffffff;
+  --off-white: #f7f8fc;
+  --text: #1a1a2e;
+  --text-muted: #5a6680;
+  --border: #e2e7f5;
+  --teal: #0e6b8a;
+  --green-success: #2d7a4a;
+  --shadow-card: 0 4px 24px rgba(10,52,118,0.08);
+  --shadow-card-hover: 0 8px 32px rgba(10,52,118,0.14);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--off-white);
+  color: var(--text);
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+/* ============ HERO ============ */
+.hero {
+  background:
+    radial-gradient(ellipse 60% 70% at 80% 30%, rgba(252,176,64,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 15% 80%, rgba(252,176,64,0.06) 0%, transparent 55%),
+    linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 100%);
+  color: var(--white);
+  padding: 64px 24px 48px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(252,176,64,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(252,176,64,0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+  pointer-events: none;
+}
+
+.hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(252,176,64,0.14);
+  border: 1px solid rgba(252,176,64,0.35);
+  border-radius: 100px;
+  padding: 7px 18px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 24px;
+}
+.eyebrow::before {
+  content: '';
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: pulse 2.4s ease infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.4; transform: scale(0.7); }
+}
+
+h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2rem, 5.5vw, 3.6rem);
+  line-height: 1.05;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  margin-bottom: 18px;
+  max-width: 18ch;
+}
+h1 em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.hero-lede {
+  font-size: 1.05rem;
+  color: rgba(255,255,255,0.82);
+  max-width: 60ch;
+  margin-bottom: 36px;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 760px;
+  margin-bottom: 40px;
+}
+.stat {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(252,176,64,0.20);
+  border-radius: 12px;
+  padding: 20px 22px;
+  backdrop-filter: blur(8px);
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+.stat:hover {
+  transform: translateY(-3px);
+  border-color: rgba(252,176,64,0.50);
+}
+.stat-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2.6rem;
+  font-weight: 400;
+  color: var(--gold);
+  line-height: 1;
+  display: block;
+  margin-bottom: 8px;
+}
+.stat-text {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.78);
+  line-height: 1.45;
+  font-weight: 400;
+}
+.stat-source {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(252,176,64,0.6);
+  font-weight: 500;
+}
+
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+}
+.btn-primary, .btn-ghost {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 14px 28px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.btn-primary {
+  background: var(--gold);
+  color: var(--navy-dark);
+}
+.btn-primary:hover {
+  background: var(--gold-light);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(252,176,64,0.30);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--white);
+  border: 1.5px solid rgba(255,255,255,0.30);
+}
+.btn-ghost:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+/* ============ INTERACTIVE WORKSPACE ============ */
+.workspace {
+  max-width: 1200px;
+  margin: -48px auto 0;
+  padding: 0 24px 64px;
+  position: relative;
+  z-index: 5;
+}
+
+.workspace-card {
+  background: var(--white);
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+/* Progress bar */
+.progress-bar {
+  height: 6px;
+  background: var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%);
+  width: 0%;
+  transition: width 0.5s ease;
+  border-radius: 0 3px 3px 0;
+}
+
+/* Stepper */
+.stepper {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  background: var(--off-white);
+  border-bottom: 1px solid var(--border);
+}
+.step-tab {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 18px 14px;
+  border-right: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  transition: background 0.2s ease;
+  font-family: inherit;
+  position: relative;
+}
+.step-tab:last-child { border-right: none; }
+.step-tab:hover { background: var(--white); }
+.step-tab.active {
+  background: var(--white);
+}
+.step-tab.active::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: -1px;
+  height: 3px;
+  background: var(--gold);
+}
+
+.step-num-circle {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--pale-navy);
+  color: var(--navy);
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  position: relative;
+}
+.step-tab.active .step-num-circle {
+  background: var(--gold);
+  color: var(--navy-dark);
+  box-shadow: 0 4px 12px rgba(252,176,64,0.4);
+}
+.step-tab.complete .step-num-circle {
+  background: var(--green-success);
+  color: var(--white);
+}
+.step-tab.complete .step-num-circle::after {
+  content: '✓';
+  position: absolute;
+  font-size: 1.1rem;
+}
+.step-tab.complete .step-num-circle .num-text {
+  display: none;
+}
+
+.step-tab-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.step-tab-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.step-tab-title {
+  font-size: 0.92rem;
+  color: var(--navy);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Step content panel */
+.step-panel {
+  display: none;
+  padding: 40px 44px 36px;
+  animation: panelIn 0.4s ease;
+}
+.step-panel.active { display: block; }
+@keyframes panelIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.step-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.step-marker {
+  font-family: 'DM Serif Display', serif;
+  font-size: 4.2rem;
+  font-weight: 400;
+  color: var(--gold);
+  line-height: 0.9;
+}
+.step-meta {
+  flex: 1;
+  min-width: 0;
+}
+.step-meta-eyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.step-meta h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--navy);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+.step-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--gold-pale);
+  color: var(--navy-dark);
+  padding: 8px 16px;
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border: 1px solid rgba(252,176,64,0.30);
+}
+.step-time::before { content: '⏱'; }
+
+.step-body {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 36px;
+  margin-top: 28px;
+}
+.step-description {
+  font-size: 0.98rem;
+  color: var(--text);
+  line-height: 1.7;
+}
+.step-description p { margin-bottom: 14px; }
+.step-description strong { color: var(--navy); font-weight: 600; }
+.step-description code {
+  background: var(--off-white);
+  border: 1px solid var(--border);
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.86em;
+  color: var(--navy);
+}
+
+/* Platform toggle */
+.platform-toggle {
+  display: inline-flex;
+  background: var(--off-white);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 4px;
+  margin-bottom: 16px;
+}
+.platform-toggle button {
+  font-family: inherit;
+  background: none;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 100px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.platform-toggle button.active {
+  background: var(--navy);
+  color: var(--white);
+}
+
+.platform-content { display: none; }
+.platform-content.active { display: block; }
+
+/* Checklist */
+.checklist {
+  background: var(--off-white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 26px;
+}
+.checklist-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.15rem;
+  color: var(--navy);
+  margin-bottom: 4px;
+}
+.checklist-sub {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 18px;
+}
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s ease;
+  user-select: none;
+}
+.check-item:last-child { border-bottom: none; }
+.check-item:hover .check-box { border-color: var(--gold); }
+
+.check-box {
+  flex-shrink: 0;
+  width: 22px; height: 22px;
+  border: 2px solid var(--pale-navy);
+  border-radius: 5px;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  margin-top: 1px;
+}
+.check-item.checked .check-box {
+  background: var(--green-success);
+  border-color: var(--green-success);
+}
+.check-item.checked .check-box::after {
+  content: '✓';
+  color: var(--white);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+.check-label {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--text);
+}
+.check-item.checked .check-label {
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+/* Step nav buttons */
+.step-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.btn-nav {
+  font-family: inherit;
+  background: var(--white);
+  color: var(--navy);
+  border: 1.5px solid var(--border);
+  padding: 12px 22px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-nav:hover:not(:disabled) {
+  border-color: var(--navy);
+  background: var(--off-white);
+}
+.btn-nav:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.btn-nav-primary {
+  background: var(--navy);
+  color: var(--white);
+  border-color: var(--navy);
+}
+.btn-nav-primary:hover:not(:disabled) {
+  background: var(--navy-mid);
+  border-color: var(--navy-mid);
+  color: var(--white);
+}
+
+/* Completion celebration */
+.completion {
+  display: none;
+  padding: 56px 44px;
+  text-align: center;
+  background: linear-gradient(160deg, var(--gold-pale) 0%, var(--white) 100%);
+  border-radius: 16px;
+  margin: 32px;
+  border: 1.5px solid var(--gold);
+}
+.completion.visible { display: block; animation: panelIn 0.5s ease; }
+.completion-icon {
+  font-size: 3rem;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+.completion h3 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2rem;
+  color: var(--navy);
+  margin-bottom: 10px;
+  font-weight: 400;
+}
+.completion p {
+  color: var(--text);
+  margin-bottom: 22px;
+  max-width: 50ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+.completion-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+/* Pull quote / pro tip block */
+.pro-tip {
+  margin-top: 24px;
+  padding: 18px 22px;
+  background: var(--navy-dark);
+  border-left: 4px solid var(--gold);
+  border-radius: 8px;
+  color: var(--white);
+}
+.pro-tip-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.pro-tip-text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+.pro-tip-text em {
+  color: var(--gold-light);
+  font-style: italic;
+  font-weight: 600;
+}
+
+/* Sources footer */
+.sources {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px 48px;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 32px;
+  border-top: 1px solid var(--border);
+}
+.sources h4 {
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+.sources p {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+.sources a {
+  color: var(--navy);
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px solid var(--pale-navy);
+}
+.sources a:hover { border-color: var(--gold); }
+
+/* Reset link */
+.reset-link {
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: var(--pale-navy);
+  text-underline-offset: 3px;
+  padding: 0;
+}
+.reset-link:hover { color: var(--navy); }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 960px) {
+  .stats { grid-template-columns: 1fr 1fr; }
+  .step-body { grid-template-columns: 1fr; gap: 24px; }
+  .stepper { grid-template-columns: repeat(5, 1fr); }
+  .step-tab-meta { display: none; }
+  .step-tab { justify-content: center; padding: 14px 6px; }
+  .step-panel { padding: 28px 24px; }
+  .step-marker { font-size: 3rem; }
+  .step-meta h2 { font-size: 1.5rem; }
+  .sources { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .hero { padding: 44px 18px 36px; }
+  .stats { grid-template-columns: 1fr; }
+  .workspace { margin-top: -32px; padding: 0 14px 36px; }
+  .step-panel { padding: 22px 18px; }
+  .step-header { gap: 10px; align-items: flex-start; }
+  .step-header .step-time { order: 3; flex-basis: 100%; }
+  .step-marker { font-size: 2.4rem; }
+  .step-meta h2 { font-size: 1.4rem; }
+  .step-meta { flex: 1 1 calc(100% - 80px); }
+  .step-nav { flex-direction: column; }
+  .step-nav button { width: 100%; justify-content: center; }
+  .completion { margin: 18px; padding: 36px 22px; }
+}
+
+/* Print */
+@media print {
+  body { background: white; }
+  .hero { background: var(--navy-dark); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .step-panel { display: block !important; page-break-inside: avoid; padding: 24px; }
+  .step-nav, .stepper, .cta-row, .completion { display: none; }
+  .workspace { margin-top: 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">For Parents and Teachers · Digital Privacy</div>
+    <h1>Five Steps to a 15-Minute Family App Privacy <em>Audit</em></h1>
+    <p class="hero-lede">Apps gather location, contacts, microphone, and camera data on your child's device by default. Walk through this short interactive guide once a month to keep them collecting only what they need.</p>
+
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-num" data-target="81">0</span>
+        <span class="stat-text">of family-targeted Android apps use trackers, even though trackers are not allowed in children's apps.</span>
+        <span class="stat-source">ArXiv 2303.09008 · 20,195 apps</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num" data-target="59">0</span>
+        <span class="stat-text">of websites and apps used by children require an email address, and 46% require geolocation.</span>
+        <span class="stat-source">2025 Global Privacy Sweep</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num" data-target="72">0</span>
+        <span class="stat-text">of age verification checks could be bypassed by reviewers, most often when self-declared.</span>
+        <span class="stat-source">2025 Global Privacy Sweep</span>
+      </div>
+    </div>
+
+    <div class="cta-row">
+      <button class="btn-primary" onclick="startAudit()">Start the Audit →</button>
+      <button class="btn-ghost" onclick="window.print()">Print This Guide</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WORKSPACE ============ -->
+<div class="workspace">
+  <div class="workspace-card" id="workspace-card">
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+
+    <!-- STEPPER -->
+    <nav class="stepper" id="stepper">
+      <button class="step-tab active" data-step="1">
+        <div class="step-num-circle"><span class="num-text">1</span></div>
+        <div class="step-tab-meta">
+          <span class="step-tab-label">Setup</span>
+          <span class="step-tab-title">Gather devices</span>
+        </div>
+      </button>
+      <button class="step-tab" data-step="2">
+        <div class="step-num-circle"><span class="num-text">2</span></div>
+        <div class="step-tab-meta">
+          <span class="step-tab-label">Audit</span>
+          <span class="step-tab-title">Family Link</span>
+        </div>
+      </button>
+      <button class="step-tab" data-step="3">
+        <div class="step-num-circle"><span class="num-text">3</span></div>
+        <div class="step-tab-meta">
+          <span class="step-tab-label">Audit</span>
+          <span class="step-tab-title">Screen Time</span>
+        </div>
+      </button>
+      <button class="step-tab" data-step="4">
+        <div class="step-num-circle"><span class="num-text">4</span></div>
+        <div class="step-tab-meta">
+          <span class="step-tab-label">Verify</span>
+          <span class="step-tab-title">On the device</span>
+        </div>
+      </button>
+      <button class="step-tab" data-step="5">
+        <div class="step-num-circle"><span class="num-text">5</span></div>
+        <div class="step-tab-meta">
+          <span class="step-tab-label">Sustain</span>
+          <span class="step-tab-title">Monthly habit</span>
+        </div>
+      </button>
+    </nav>
+
+    <!-- STEP 1 -->
+    <section class="step-panel active" data-panel="1">
+      <div class="step-header">
+        <div class="step-marker">01</div>
+        <div class="step-meta">
+          <div class="step-meta-eyebrow">Setup · Both Devices</div>
+          <h2>Gather your devices</h2>
+        </div>
+        <div class="step-time">One minute</div>
+      </div>
+
+      <div class="step-body">
+        <div class="step-description">
+          <p>Hold both your phone and your child's device. If you use <strong>Google Family Link</strong> or <strong>Apple Screen Time</strong>, double-check that both devices are connected to the internet before you start.</p>
+          <p>Changes you make in the parent app sync automatically to the child's device, so the connection needs to be active. This step is short, but skipping it leads to silent sync failures and changes that don't actually take effect.</p>
+
+          <div class="pro-tip">
+            <div class="pro-tip-label">Quick check</div>
+            <div class="pro-tip-text">If your child's phone is in school mode or on a guest network, sync may stall. Switch to home Wi-Fi for the audit, then return to whatever network they were on.</div>
+          </div>
+        </div>
+
+        <div class="checklist" data-step-list="1">
+          <div class="checklist-title">Step one checklist</div>
+          <div class="checklist-sub">Tap each item as you complete it.</div>
+          <div class="check-item"><div class="check-box"></div><div class="check-label">Both devices in hand</div></div>
+          <div class="check-item"><div class="check-box"></div><div class="check-label">Both connected to Wi-Fi or cellular</div></div>
+          <div class="check-item"><div class="check-box"></div><div class="check-label">Signed in to your parent control app</div></div>
+        </div>
+      </div>
+
+      <div class="step-nav">
+        <button class="btn-nav" disabled>← Previous</button>
+        <button class="btn-nav btn-nav-primary" onclick="goToStep(2)">Next: Family Link →</button>
+      </div>
+    </section>
+
+    <!-- STEP 2 -->
+    <section class="step-panel" data-panel="2">
+      <div class="step-header">
+        <div class="step-marker">02</div>
+        <div class="step-meta">
+          <div class="step-meta-eyebrow">Audit · Android</div>
+          <h2>Review Family Link permissions</h2>
+        </div>
+        <div class="step-time">Five to seven minutes</div>
+      </div>
+
+      <div class="step-body">
+        <div class="step-description">
+          <p><strong>Google Family Link</strong> works on Android 6.0 and higher. It gives you one place to review permissions across every app your child has installed.</p>
+          <p>Open Family Link, select your child's profile, and tap <code>Controls</code> → <code>Signed-in devices</code> → <code>App permissions</code>. Start with the three permissions that matter most.</p>
+          <p>After that broad sweep, pick two or three apps your child opens every day and look at the permissions each one holds. A math app that requests Contacts access has no business having it. Revoke anything that doesn't belong.</p>
+
+          <div class="pro-tip">
+            <div class="pro-tip-label">Don't skip</div>
+            <div class="pro-tip-text">Confirm <em>App approvals</em> is on. This requires your sign-off before any new download installs, which is your single best defense against impulse installs.</div>
+          </div>
+        </div>
+
+        <div class="checklist" data-step-list="2">
+          <div class="checklist-title">Step two checklist</div>
+          <div class="checklist-sub">Family Link, on your phone</div>
+          <div class="check-item"><div class="check-box"></div><div class="check-label">Location set to Only Parents</div></div>
+          <div class="check-item"><div class="check-box"></div><div class="check-label">Camera set to Only Parents</div></div>
+          <div class="check-item"><div class="check-box"></div><div class="check-label">Microphone set to Only Parents</div></div>
+          <div class="check-item"><div class="check-box"></div><div class="check-label">Reviewed permissions on two or three daily-use apps</div></div>
+          <div class="check-item"><div class="check-box"></div><div class="check-label">App approvals turned on</div></div>
+        </div>
+      </div>
+
+      <div class="step-nav">
+        <button class="btn-nav" onclick="goToStep(1)">← Previous</button>
+        <button class="btn-nav btn-nav-primary" onclick="goToStep(3)">Next: Screen Time →</button>
+      </div>
+    </section>
+
+    <!-- STEP 3 -->
+    <section class="step-panel" data-panel="3">
+      <div class="step-header">
+        <div class="step-marker">03</div>
+        <div class="step-meta">
+          <div class="step-meta-eyebrow">Audit · iOS</div>
+          <h2>Review Screen Time restrictions</h2>
+        </div>
+        <div class="step-time">Five to seven minutes</div>
+      </div>
+
+      <div class="step-body">
+        <div class="step-description">
+          <p>On iPhone and iPad, your starting point is <strong>Content and Privacy Restrictions</strong>.</p>
+          <p>Go to <code>Settings</code> → <code>Screen Time</code> → select your child's name under Family Sharing → <code>Content and Privacy Restrictions</code> → enter your Screen Time passcode.</p>
+          <p>Under Privacy, review Location Services, Contacts, Photos, and Microphone, and revoke access for apps that don't need it. Then set those critical permissions to <strong>Don't Allow Changes</strong>. That step matters more than the revocation itself, because without it a determined ten-year-old can quietly restore everything you just changed.</p>
+
+          <div class="pro-tip">
+            <div class="pro-tip-label">Bonus lock</div>
+            <div class="pro-tip-text">Under iTunes and App Store Purchases, set <em>Installing Apps</em> to Don't Allow if you want to review every app before it lands on the device.</div>
+          </div>
+        </div>
+
+        <div class="checklist" data-step-list="3">
+          <div class="checklist-title">Step three checklist</div>
+          <div class="checklist-sub">Screen Time, on your phone</div>
+          <div class="check-item"><div class="check-box"></div><div class="check-label">Location Services reviewed and trimmed</div></div>
+          <div class="check-item"><div class="check-box"></div><div class="check-label">Contacts and Photos access reviewed</div></div>
+          <div class="check-item"><div class="check-box"></div><div class="check-label">Microphone access reviewed</div></div>
+          <div class="check-item"><div class="check-box"></div><div class="check-label">Don't Allow Changes locked in</div></div>
+          <div class="check-item"><div class="check-box"></div><div class="check-label">Allowed Apps trimmed of unused apps</div></div>
+        </div>
+      </div>
+
+      <div class="step-nav">
+        <button class="btn-nav" onclick="goToStep(2)">← Previous</button>
+        <button class="btn-nav btn-nav-primary" onclick="goToStep(4)">Next: Verify on Device →</button>
+      </div>
+    </section>
+
+    <!-- STEP 4 -->
+    <section class="step-panel" data-panel="4">
+      <div class="step-header">
+        <div class="step-marker">04</div>
+        <div class="step-meta">
+          <div class="step-meta-eyebrow">Verify · On the device</div>
+          <h2>Check the device directly</h2>
+        </div>
+        <div class="step-time">Two minutes</div>
+      </div>
+
+      <div class="step-body">
+        <div class="step-description">
+          <div class="platform-toggle" id="platform-toggle">
+            <button class="active" data-platform="android">Android</button>
+            <button data-platform="ios">iOS</button>
+          </div>
+
+          <div class="platform-content active" data-platform-content="android">
+            <p>Go to <code>Settings</code> → <code>Privacy</code> → <code>Permission Manager</code>. This view lists every app with access to a given category.</p>
+            <p>Start with <strong>Microphone</strong> and work down from there. For each app, ask the same question: does this app actually need this permission to do its job? If the answer is no, revoke it.</p>
+          </div>
+
+          <div class="platform-content" data-platform-content="ios">
+            <p>Go to <code>Settings</code> → <code>Privacy and Security</code>. For each category, you can see every app that has requested access and revoke individually.</p>
+            <p>Start with <strong>Microphone</strong> and work down. For each app, ask the same question: does this app actually need this permission to do its job? If the answer is no, revoke it.</p>
+          </div>
+
+          <div class="pro-tip">
+            <div class="pro-tip-label">One rule to keep permanently</div>
+            <div class="pro-tip-text">For location access, always pick <em>While Using the App</em>, never Always Allow. No homework or game app needs to track your child when the app is closed.</div>
+          </div>
+        </div>
+
+        <div class="checklist" data-step-list="4">
+          <div class="checklist-title">Step four checklist</div>
+          <div class="checklist-sub">Direct device check</div>
+          <div class="check-item"><div class="check-box"></div><div class="check-label">Microphone permissions reviewed</div></div>
+          <div class="check-item"><div class="check-box"></div><div class="check-label">Camera permissions reviewed</div></div>
+          <div class="check-item"><div class="check-box"></div><div class="check-label">Location set to While Using only</div></div>
+          <div class="check-item"><div class="check-box"></div><div class="check-label">Contacts and Photos permissions trimmed</div></div>
+        </div>
+      </div>
+
+      <div class="step-nav">
+        <button class="btn-nav" onclick="goToStep(3)">← Previous</button>
+        <button class="btn-nav btn-nav-primary" onclick="goToStep(5)">Next: Make It a Habit →</button>
+      </div>
+    </section>
+
+    <!-- STEP 5 -->
+    <section class="step-panel" data-panel="5">
+      <div class="step-header">
+        <div class="step-marker">05</div>
+        <div class="step-meta">
+          <div class="step-meta-eyebrow">Sustain · Calendar</div>
+          <h2>Make it a monthly habit</h2>
+        </div>
+        <div class="step-time">Under one minute</div>
+      </div>
+
+      <div class="step-body">
+        <div class="step-description">
+          <p>A single audit handles the backlog. What protects your child going forward is repeating it.</p>
+          <p>Set a monthly reminder and run this checklist again. That's <strong>twelve sessions per year</strong>, which adds up to less time than most families spend picking a movie on a Saturday night. Run an extra check whenever a new app becomes popular at school or lands on your child's wish list.</p>
+
+          <div class="pro-tip">
+            <div class="pro-tip-label">Download a reminder</div>
+            <div class="pro-tip-text">The button below downloads a calendar invite that recurs the first Saturday of each month. Open it in your calendar app and accept.</div>
+          </div>
+
+          <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;">
+            <button class="btn-primary" onclick="downloadCalendar()" style="background:var(--navy);color:var(--white);">📅 Download monthly reminder</button>
+          </div>
+        </div>
+
+        <div class="checklist" data-step-list="5">
+          <div class="checklist-title">Step five checklist</div>
+          <div class="checklist-sub">Build the habit</div>
+          <div class="check-item"><div class="check-box"></div><div class="check-label">Recurring monthly reminder added to calendar</div></div>
+          <div class="check-item"><div class="check-box"></div><div class="check-label">Plan to recheck after every new app install</div></div>
+          <div class="check-item"><div class="check-box"></div><div class="check-label">Shared this guide with another caregiver or teacher</div></div>
+        </div>
+      </div>
+
+      <div class="step-nav">
+        <button class="btn-nav" onclick="goToStep(4)">← Previous</button>
+        <button class="btn-nav btn-nav-primary" onclick="completeAudit()">Finish Audit ✓</button>
+      </div>
+    </section>
+
+    <!-- COMPLETION -->
+    <div class="completion" id="completion">
+      <div class="completion-icon">✓</div>
+      <h3>Audit complete</h3>
+      <p>You've trimmed unnecessary permissions, locked critical settings, and set a recurring reminder. Your child's device is collecting only what it needs. See you again in a month.</p>
+      <div class="completion-actions">
+        <button class="btn-primary" onclick="window.print()" style="background:var(--navy);color:var(--white);">🖨 Print summary</button>
+        <button class="btn-primary" onclick="downloadCalendar()">📅 Download reminder</button>
+        <button class="btn-nav" onclick="resetAudit()">Start over</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SOURCES ============ -->
+<footer class="sources">
+  <div>
+    <h4>Sources</h4>
+    <p>
+      <a href="https://www.privacyenforcement.net/content/2025-global-privacy-sweep-examined-websites-and-apps-used-children" target="_blank" rel="noopener">Global Privacy Enforcement Network 2025 Sweep</a> ·
+      <a href="https://arxiv.org/abs/2303.09008" target="_blank" rel="noopener">ArXiv 2303.09008</a> ·
+      <a href="https://families.google/familylink/" target="_blank" rel="noopener">Google Family Link</a> ·
+      <a href="https://support.apple.com/en-us/105121" target="_blank" rel="noopener">Apple Screen Time</a> ·
+      <a href="https://www.fosi.org" target="_blank" rel="noopener">Family Online Safety Institute</a>
+    </p>
+  </div>
+  <div>
+    <h4>Reset</h4>
+    <p><button class="reset-link" onclick="resetAudit()">Clear all checks and start over</button></p>
+  </div>
+</footer>
+
+<script>
+  // ===== STATE =====
+  let currentStep = 1;
+  const totalSteps = 5;
+
+  // ===== STAT COUNTERS =====
+  function animateCounters() {
+    document.querySelectorAll('.stat-num').forEach(el => {
+      const target = parseInt(el.dataset.target, 10);
+      const duration = 1400;
+      const start = performance.now();
+      function tick(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(eased * target) + '%';
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+  // Trigger when hero is visible
+  if ('IntersectionObserver' in window) {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          animateCounters();
+          obs.disconnect();
+        }
+      });
+    }, { threshold: 0.3 });
+    obs.observe(document.querySelector('.hero'));
+  } else {
+    animateCounters();
+  }
+
+  // ===== STEP NAVIGATION =====
+  function goToStep(n) {
+    if (n < 1 || n > totalSteps) return;
+    currentStep = n;
+    document.querySelectorAll('.step-tab').forEach(t => {
+      t.classList.toggle('active', parseInt(t.dataset.step, 10) === n);
+    });
+    document.querySelectorAll('.step-panel').forEach(p => {
+      p.classList.toggle('active', parseInt(p.dataset.panel, 10) === n);
+    });
+    // Hide completion if user navigates back
+    document.getElementById('completion').classList.remove('visible');
+    // Scroll to top of workspace card
+    const card = document.getElementById('workspace-card');
+    if (card) {
+      const y = card.getBoundingClientRect().top + window.scrollY - 16;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  }
+
+  document.querySelectorAll('.step-tab').forEach(tab => {
+    tab.addEventListener('click', () => goToStep(parseInt(tab.dataset.step, 10)));
+  });
+
+  function startAudit() {
+    goToStep(1);
+  }
+
+  // ===== CHECKLIST =====
+  function updateProgress() {
+    const all = document.querySelectorAll('.check-item');
+    const done = document.querySelectorAll('.check-item.checked');
+    const pct = all.length ? (done.length / all.length) * 100 : 0;
+    document.getElementById('progress-fill').style.width = pct + '%';
+
+    // Mark step complete if all items in that list are checked
+    document.querySelectorAll('[data-step-list]').forEach(list => {
+      const stepN = parseInt(list.dataset.stepList, 10);
+      const items = list.querySelectorAll('.check-item');
+      const checked = list.querySelectorAll('.check-item.checked');
+      const tab = document.querySelector(`.step-tab[data-step="${stepN}"]`);
+      if (items.length > 0 && items.length === checked.length) {
+        tab.classList.add('complete');
+      } else {
+        tab.classList.remove('complete');
+      }
+    });
+  }
+
+  document.querySelectorAll('.check-item').forEach(item => {
+    item.addEventListener('click', () => {
+      item.classList.toggle('checked');
+      updateProgress();
+    });
+  });
+
+  // ===== PLATFORM TOGGLE (step 4) =====
+  document.querySelectorAll('#platform-toggle button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const platform = btn.dataset.platform;
+      document.querySelectorAll('#platform-toggle button').forEach(b => b.classList.toggle('active', b === btn));
+      document.querySelectorAll('[data-platform-content]').forEach(c => {
+        c.classList.toggle('active', c.dataset.platformContent === platform);
+      });
+    });
+  });
+
+  // ===== COMPLETION =====
+  function completeAudit() {
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('completion').classList.add('visible');
+    document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('active'));
+    const card = document.getElementById('workspace-card');
+    const y = card.getBoundingClientRect().top + window.scrollY - 16;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  }
+
+  function resetAudit() {
+    document.querySelectorAll('.check-item').forEach(i => i.classList.remove('checked'));
+    document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('complete'));
+    document.getElementById('completion').classList.remove('visible');
+    updateProgress();
+    goToStep(1);
+  }
+
+  // ===== CALENDAR ICS DOWNLOAD =====
+  function downloadCalendar() {
+    const now = new Date();
+    // First Saturday of next month at 10:00 AM local
+    const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    while (nextMonth.getDay() !== 6) {
+      nextMonth.setDate(nextMonth.getDate() + 1);
+    }
+    nextMonth.setHours(10, 0, 0, 0);
+
+    const pad = n => n.toString().padStart(2, '0');
+    function fmt(d) {
+      return d.getUTCFullYear() + pad(d.getUTCMonth()+1) + pad(d.getUTCDate())
+           + 'T' + pad(d.getUTCHours()) + pad(d.getUTCMinutes()) + '00Z';
+    }
+    const start = fmt(nextMonth);
+    const endDate = new Date(nextMonth.getTime() + 15 * 60 * 1000);
+    const end = fmt(endDate);
+    const stamp = fmt(now);
+    const uid = 'privacy-audit-' + now.getTime() + '@local';
+
+    const ics = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//Family Privacy Audit//EN',
+      'CALSCALE:GREGORIAN',
+      'BEGIN:VEVENT',
+      'UID:' + uid,
+      'DTSTAMP:' + stamp,
+      'DTSTART:' + start,
+      'DTEND:' + end,
+      'RRULE:FREQ=MONTHLY;BYDAY=1SA',
+      'SUMMARY:Family App Privacy Audit (15 minutes)',
+      'DESCRIPTION:Run the 15-minute family app privacy audit. Check Family Link or Screen Time settings, review on-device permissions, and revoke anything an app does not need.',
+      'END:VEVENT',
+      'END:VCALENDAR'
+    ].join('\r\n');
+
+    const blob = new Blob([ics], { type: 'text/calendar' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'family-privacy-audit-monthly.ics';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+</script>
+</body>
+</html>
