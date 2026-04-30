@@ -1,0 +1,488 @@
+<!-- WordPress Custom HTML Block: Markdown to HTML Converter -->
+<div id="wp-md-converter">
+  <style>
+    #wp-md-converter {
+      --navy: #1E398D;
+      --gold: #FAA634;
+      --ink: #1f2937;
+      --paper: #ffffff;
+      --soft: #f4f7fb;
+      --line: #d8dee9;
+      --code-bg: #111827;
+      --code-text: #f9fafb;
+      --radius: 16px;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin: 1.5rem 0;
+    }
+
+    #wp-md-converter * {
+      box-sizing: border-box;
+    }
+
+    #wp-md-converter .mdc-header {
+      background: var(--navy);
+      color: #ffffff;
+      padding: 1.5rem;
+      border-bottom: 6px solid var(--gold);
+    }
+
+    #wp-md-converter .mdc-header h2 {
+      color: #ffffff;
+      margin: 0 0 .4rem;
+      font-size: clamp(1.6rem, 3vw, 2.25rem);
+      line-height: 1.15;
+    }
+
+    #wp-md-converter .mdc-header p {
+      margin: 0;
+      max-width: 900px;
+      line-height: 1.5;
+    }
+
+    #wp-md-converter .mdc-body {
+      padding: 1rem;
+    }
+
+    #wp-md-converter .mdc-toolbar {
+      display: flex;
+      gap: .75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    #wp-md-converter .mdc-button {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      padding: .75rem 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: .95rem;
+    }
+
+    #wp-md-converter .mdc-primary {
+      background: var(--navy);
+      color: #ffffff;
+    }
+
+    #wp-md-converter .mdc-secondary {
+      background: var(--gold);
+      color: #111827;
+    }
+
+    #wp-md-converter .mdc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    #wp-md-converter .mdc-panel {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(30, 57, 141, .08);
+    }
+
+    #wp-md-converter .mdc-panel h3 {
+      margin: 0;
+      padding: .85rem 1rem;
+      background: #eaf0ff;
+      color: var(--navy);
+      border-bottom: 1px solid var(--line);
+      font-size: 1.05rem;
+    }
+
+    #wp-md-converter textarea {
+      width: 100%;
+      min-height: 520px;
+      padding: 1rem;
+      border: 0;
+      resize: vertical;
+      outline: none;
+      font-family: Consolas, Monaco, monospace;
+      font-size: .95rem;
+      line-height: 1.45;
+      color: #111827;
+      background: #ffffff;
+    }
+
+    #wp-md-converter .mdc-preview {
+      min-height: 520px;
+      padding: 1rem;
+      overflow: auto;
+      background: #ffffff;
+      line-height: 1.6;
+    }
+
+    #wp-md-converter .mdc-preview h1,
+    #wp-md-converter .mdc-preview h2,
+    #wp-md-converter .mdc-preview h3 {
+      color: var(--navy);
+      line-height: 1.2;
+    }
+
+    #wp-md-converter .mdc-preview h1 {
+      border-bottom: 3px solid var(--gold);
+      padding-bottom: .25rem;
+    }
+
+    #wp-md-converter .mdc-preview table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+
+    #wp-md-converter .mdc-preview th,
+    #wp-md-converter .mdc-preview td {
+      border: 1px solid var(--line);
+      padding: .65rem;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    #wp-md-converter .mdc-preview th {
+      background: #fff4df;
+    }
+
+    #wp-md-converter .mdc-preview code {
+      background: #eef2ff;
+      padding: .15rem .3rem;
+      border-radius: 5px;
+      font-family: Consolas, Monaco, monospace;
+    }
+
+    #wp-md-converter .mdc-preview pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 1rem;
+      border-radius: 12px;
+      overflow: auto;
+      white-space: pre-wrap;
+    }
+
+    #wp-md-converter .mdc-preview blockquote {
+      border-left: 6px solid var(--gold);
+      background: #fffaf0;
+      padding: .65rem 1rem;
+      margin-left: 0;
+      border-radius: 10px;
+    }
+
+    #wp-md-converter .mdc-preview a {
+      color: var(--navy);
+      font-weight: 700;
+    }
+
+    #wp-md-converter .mdc-output {
+      margin-top: 1rem;
+    }
+
+    #wp-md-converter #wp-md-html-output {
+      min-height: 220px;
+      background: var(--code-bg);
+      color: var(--code-text);
+    }
+
+    #wp-md-converter .mdc-note {
+      margin: .85rem 0 0;
+      color: #5b6472;
+      font-size: .94rem;
+    }
+
+    @media (max-width: 900px) {
+      #wp-md-converter .mdc-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <div class="mdc-header">
+    <h2>Markdown to HTML Converter</h2>
+    <p>Type Markdown on the left. See the formatted preview on the right. Copy the generated HTML below.</p>
+  </div>
+
+  <div class="mdc-body">
+    <div class="mdc-toolbar">
+      <button class="mdc-button mdc-primary" type="button" id="wp-md-copy">Copy HTML</button>
+      <button class="mdc-button mdc-secondary" type="button" id="wp-md-reset">Reset Sample</button>
+    </div>
+
+    <div class="mdc-grid">
+      <div class="mdc-panel">
+        <h3>Markdown Input</h3>
+        <textarea id="wp-md-input" spellcheck="false"></textarea>
+      </div>
+
+      <div class="mdc-panel">
+        <h3>HTML Preview</h3>
+        <div id="wp-md-preview" class="mdc-preview"></div>
+      </div>
+    </div>
+
+    <div class="mdc-panel mdc-output">
+      <h3>Raw HTML Output</h3>
+      <textarea id="wp-md-html-output" readonly spellcheck="false"></textarea>
+    </div>
+
+    <p class="mdc-note">If the converter does not update in WordPress, your site may be blocking inline JavaScript in Custom HTML blocks. In that case, add this code through a trusted snippets plugin, child theme, or custom plugin.</p>
+  </div>
+
+  <script type="text/javascript">
+    (function () {
+      function initMarkdownConverter() {
+        var root = document.getElementById('wp-md-converter');
+        if (!root || root.getAttribute('data-ready') === 'true') return;
+        root.setAttribute('data-ready', 'true');
+
+        var input = document.getElementById('wp-md-input');
+        var preview = document.getElementById('wp-md-preview');
+        var output = document.getElementById('wp-md-html-output');
+        var copy = document.getElementById('wp-md-copy');
+        var reset = document.getElementById('wp-md-reset');
+
+        if (!input || !preview || !output || !copy || !reset) return;
+
+        var sample = [
+          '# GenAI Prompt Writing Checklist',
+          '',
+          '## Purpose',
+          'Use this checklist to create clearer prompts for ChatGPT, Claude, Gemini, NotebookLM, Perplexity, or similar tools.',
+          '',
+          '## Strong Prompt Elements',
+          '',
+          '- Clear task',
+          '- Specific audience',
+          '- Required format',
+          '- Source material separated in a code block',
+          '- Desired tone or reading level',
+          '',
+          '## Example Prompt',
+          '',
+          '```text',
+          'Create a 5th-grade reading activity about ecosystems.',
+          'Use short paragraphs, a vocabulary table, and five comprehension questions.',
+          '```',
+          '',
+          '## Vocabulary Table',
+          '',
+          '| Term | Student-Friendly Meaning | Example |',
+          '|---|---|---|',
+          '| Ecosystem | Living and nonliving things in one place | Pond, forest, desert |',
+          '| Habitat | Where an organism lives | A frog lives near water. |',
+          '| Adaptation | A trait that helps survival | A cactus stores water. |',
+          '',
+          '## Student Checklist',
+          '',
+          '- [ ] I explained my task clearly.',
+          '- [ ] I named my audience.',
+          '- [ ] I gave the AI a format to follow.',
+          '- [ ] I included source text when needed.',
+          '',
+          '> Tip: Better structure usually leads to better GenAI output.'
+        ].join('\n');
+
+        function escapeHtml(text) {
+          return String(text)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+        }
+
+        function inlineFormat(text) {
+          var safe = escapeHtml(text);
+          safe = safe.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+          safe = safe.replace(/`([^`]+)`/g, '<code>$1</code>');
+          safe = safe.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+          safe = safe.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+          return safe;
+        }
+
+        function isDivider(row) {
+          return /^\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?$/.test(row.trim());
+        }
+
+        function makeTable(lines, start) {
+          var rows = [];
+          var i = start;
+          while (i < lines.length && /^\|.*\|$/.test(lines[i].trim())) {
+            rows.push(lines[i].trim());
+            i++;
+          }
+          if (rows.length < 2 || !isDivider(rows[1])) return null;
+
+          var headers = rows[0].split('|').slice(1, -1);
+          var body = rows.slice(2);
+          var html = '<table><thead><tr>';
+
+          for (var h = 0; h < headers.length; h++) {
+            html += '<th>' + inlineFormat(headers[h].trim()) + '</th>';
+          }
+
+          html += '</tr></thead><tbody>';
+
+          for (var r = 0; r < body.length; r++) {
+            var cells = body[r].split('|').slice(1, -1);
+            html += '<tr>';
+            for (var c = 0; c < cells.length; c++) {
+              html += '<td>' + inlineFormat(cells[c].trim()) + '</td>';
+            }
+            html += '</tr>';
+          }
+
+          html += '</tbody></table>';
+          return { html: html, next: i };
+        }
+
+        function markdownToHtml(md) {
+          var lines = String(md).split(/\r?\n/);
+          var html = '';
+          var inCode = false;
+          var codeLines = [];
+          var codeLang = '';
+          var inUL = false;
+          var inOL = false;
+
+          function closeLists() {
+            if (inUL) {
+              html += '</ul>';
+              inUL = false;
+            }
+            if (inOL) {
+              html += '</ol>';
+              inOL = false;
+            }
+          }
+
+          for (var i = 0; i < lines.length; i++) {
+            var line = lines[i];
+            var t = line.trim();
+
+            if (t.indexOf('```') === 0) {
+              closeLists();
+              if (!inCode) {
+                inCode = true;
+                codeLang = t.replace('```', '').trim();
+                codeLines = [];
+              } else {
+                html += '<pre><code' + (codeLang ? ' class="language-' + escapeHtml(codeLang) + '"' : '') + '>' + escapeHtml(codeLines.join('\n')) + '</code></pre>';
+                inCode = false;
+                codeLang = '';
+              }
+              continue;
+            }
+
+            if (inCode) {
+              codeLines.push(line);
+              continue;
+            }
+
+            if (/^\|.*\|$/.test(t) && i + 1 < lines.length && isDivider(lines[i + 1])) {
+              closeLists();
+              var table = makeTable(lines, i);
+              if (table) {
+                html += table.html;
+                i = table.next - 1;
+                continue;
+              }
+            }
+
+            if (t === '') {
+              closeLists();
+              continue;
+            }
+
+            if (t.indexOf('### ') === 0) {
+              closeLists();
+              html += '<h3>' + inlineFormat(t.substring(4)) + '</h3>';
+            } else if (t.indexOf('## ') === 0) {
+              closeLists();
+              html += '<h2>' + inlineFormat(t.substring(3)) + '</h2>';
+            } else if (t.indexOf('# ') === 0) {
+              closeLists();
+              html += '<h1>' + inlineFormat(t.substring(2)) + '</h1>';
+            } else if (t.indexOf('> ') === 0) {
+              closeLists();
+              html += '<blockquote>' + inlineFormat(t.substring(2)) + '</blockquote>';
+            } else if (/^- \[[ xX]\] /.test(t)) {
+              if (!inUL) {
+                closeLists();
+                html += '<ul>';
+                inUL = true;
+              }
+              var checked = /^- \[[xX]\]/.test(t) ? ' checked' : '';
+              html += '<li><input type="checkbox" disabled' + checked + '> ' + inlineFormat(t.replace(/^- \[[ xX]\] /, '')) + '</li>';
+            } else if (t.indexOf('- ') === 0) {
+              if (!inUL) {
+                closeLists();
+                html += '<ul>';
+                inUL = true;
+              }
+              html += '<li>' + inlineFormat(t.substring(2)) + '</li>';
+            } else if (/^\d+\. /.test(t)) {
+              if (!inOL) {
+                closeLists();
+                html += '<ol>';
+                inOL = true;
+              }
+              html += '<li>' + inlineFormat(t.replace(/^\d+\. /, '')) + '</li>';
+            } else if (t === '---') {
+              closeLists();
+              html += '<hr>';
+            } else {
+              closeLists();
+              html += '<p>' + inlineFormat(t) + '</p>';
+            }
+          }
+
+          closeLists();
+          if (inCode) {
+            html += '<pre><code>' + escapeHtml(codeLines.join('\n')) + '</code></pre>';
+          }
+          return html;
+        }
+
+        function update() {
+          var html = markdownToHtml(input.value);
+          preview.innerHTML = html;
+          output.value = html;
+        }
+
+        function copyHtml() {
+          output.focus();
+          output.select();
+          try {
+            document.execCommand('copy');
+            copy.textContent = 'Copied!';
+          } catch (e) {
+            copy.textContent = 'Select HTML below';
+          }
+          window.setTimeout(function () {
+            copy.textContent = 'Copy HTML';
+          }, 1200);
+        }
+
+        function resetSample() {
+          input.value = sample;
+          update();
+        }
+
+        input.addEventListener('input', update);
+        copy.addEventListener('click', copyHtml);
+        reset.addEventListener('click', resetSample);
+        resetSample();
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initMarkdownConverter);
+      } else {
+        initMarkdownConverter();
+      }
+    })();
+  </script>
+</div>
