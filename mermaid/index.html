@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mermaid Syntax Basics: A Classroom-Friendly Tutorial</title>
+  <style>
+    :root {
+      --navy: #1E398D;
+      --gold: #FAA634;
+      --ink: #172033;
+      --muted: #5d6780;
+      --paper: #ffffff;
+      --soft: #f5f7fb;
+      --line: #d9e0ef;
+      --success: #0f766e;
+      --warning: #925c00;
+      --code-bg: #101827;
+      --code-text: #eaf0ff;
+      --radius: 18px;
+      --shadow: 0 18px 45px rgba(30, 57, 141, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(250,166,52,0.22), transparent 30rem),
+        radial-gradient(circle at top right, rgba(30,57,141,0.18), transparent 28rem),
+        var(--soft);
+      line-height: 1.55;
+    }
+
+    a { color: var(--navy); }
+
+    .skip-link {
+      position: absolute;
+      left: -999px;
+      top: 1rem;
+      background: var(--navy);
+      color: white;
+      padding: .75rem 1rem;
+      border-radius: .5rem;
+      z-index: 999;
+    }
+    .skip-link:focus { left: 1rem; }
+
+    header {
+      background: linear-gradient(135deg, var(--navy), #274fb8);
+      color: white;
+      padding: 4rem 1.25rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::after {
+      content: "";
+      position: absolute;
+      width: 28rem;
+      height: 28rem;
+      border-radius: 999px;
+      right: -10rem;
+      top: -12rem;
+      background: rgba(250,166,52,0.26);
+    }
+
+    .hero, main, footer {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .hero { position: relative; z-index: 1; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 999px;
+      padding: .45rem .85rem;
+      font-weight: 700;
+      letter-spacing: .02em;
+      font-size: .92rem;
+    }
+
+    h1 {
+      font-size: clamp(2.25rem, 5vw, 4.7rem);
+      line-height: .98;
+      margin: 1.2rem 0 .9rem;
+      letter-spacing: -0.055em;
+      max-width: 880px;
+    }
+
+    .lead {
+      font-size: clamp(1.08rem, 2vw, 1.35rem);
+      max-width: 770px;
+      color: rgba(255,255,255,0.9);
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: .8rem;
+      flex-wrap: wrap;
+      margin-top: 1.8rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .45rem;
+      border: 0;
+      border-radius: 999px;
+      padding: .85rem 1.1rem;
+      font-weight: 800;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease;
+      font-size: .98rem;
+    }
+
+    .button:hover { transform: translateY(-1px); }
+    .button.primary { background: var(--gold); color: #1b2340; box-shadow: 0 12px 28px rgba(0,0,0,.18); }
+    .button.secondary { background: rgba(255,255,255,.12); color: white; border: 1px solid rgba(255,255,255,.25); }
+    .button.small { padding: .5rem .75rem; font-size: .82rem; }
+
+    nav.toc {
+      margin: -1.5rem auto 2rem;
+      max-width: 1180px;
+      padding: 0 1.25rem;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .toc-inner {
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: flex;
+      gap: .35rem;
+      padding: .55rem;
+      overflow-x: auto;
+    }
+
+    .toc a {
+      white-space: nowrap;
+      text-decoration: none;
+      color: var(--ink);
+      font-weight: 800;
+      font-size: .9rem;
+      padding: .65rem .8rem;
+      border-radius: 999px;
+    }
+
+    .toc a:hover { background: #eef2ff; color: var(--navy); }
+
+    main { padding: 1.5rem 1.25rem 4rem; }
+
+    section { margin: 2.4rem 0; scroll-margin-top: 5.5rem; }
+
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: clamp(1rem, 2.5vw, 1.6rem);
+    }
+
+    .section-title {
+      display: grid;
+      gap: .35rem;
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: clamp(1.6rem, 3vw, 2.35rem);
+      line-height: 1.05;
+      margin: 0;
+      color: var(--navy);
+      letter-spacing: -0.035em;
+    }
+
+    h3 {
+      font-size: 1.18rem;
+      margin: 1.1rem 0 .55rem;
+      color: #24345f;
+    }
+
+    .subtext { color: var(--muted); margin: 0; max-width: 780px; }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    @media (max-width: 850px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      nav.toc { position: relative; top: auto; }
+    }
+
+    .mini-card {
+      background: #fbfcff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 1rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: .25rem .55rem;
+      font-size: .77rem;
+      font-weight: 900;
+      background: #fff2dc;
+      color: #663a00;
+      border: 1px solid #ffd99d;
+      width: fit-content;
+    }
+
+    .callout {
+      border-left: 5px solid var(--gold);
+      background: #fff8ec;
+      border-radius: 14px;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+
+    .success {
+      border-left-color: var(--success);
+      background: #ecfdf8;
+    }
+
+    .warning {
+      border-left-color: var(--warning);
+      background: #fff9e9;
+    }
+
+    .example {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 1rem;
+      margin: 1.2rem 0;
+      align-items: stretch;
+    }
+
+    @media (max-width: 980px) { .example { grid-template-columns: 1fr; } }
+
+    .code-panel, .diagram-panel {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      background: white;
+      min-width: 0;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      background: #eef2ff;
+      padding: .65rem .75rem;
+      border-bottom: 1px solid var(--line);
+      font-weight: 900;
+      color: var(--navy);
+    }
+
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    pre.code {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 1rem;
+      overflow: auto;
+      min-height: 100%;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: .9rem;
+      line-height: 1.45;
+    }
+
+    .diagram-wrap {
+      padding: 1rem;
+      overflow-x: auto;
+      min-height: 260px;
+      display: grid;
+      place-items: center;
+      background: #ffffff;
+    }
+
+    .mermaid { width: 100%; text-align: center; }
+
+    .ref-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .8rem;
+    }
+
+    @media (max-width: 900px) { .ref-grid { grid-template-columns: 1fr; } }
+
+    .ref-item {
+      border: 1px solid var(--line);
+      background: #fbfcff;
+      border-radius: 14px;
+      padding: .85rem;
+    }
+
+    .ref-item strong { color: var(--navy); display: block; margin-bottom: .25rem; }
+
+    .inline-code, code {
+      background: #eef2ff;
+      color: #14296e;
+      border: 1px solid #d9e2ff;
+      padding: .12rem .32rem;
+      border-radius: .35rem;
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: .92em;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: white;
+    }
+
+    th, td {
+      text-align: left;
+      vertical-align: top;
+      padding: .75rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    th { background: #eef2ff; color: var(--navy); }
+    tr:last-child td { border-bottom: 0; }
+
+    .try-box textarea {
+      width: 100%;
+      min-height: 240px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 1rem;
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: .92rem;
+      line-height: 1.45;
+      background: #fbfcff;
+      color: var(--ink);
+    }
+
+    .try-actions {
+      display: flex;
+      gap: .7rem;
+      align-items: center;
+      flex-wrap: wrap;
+      margin: .75rem 0;
+    }
+
+    .try-output {
+      min-height: 300px;
+      border: 1px dashed #aab6d8;
+      border-radius: 14px;
+      background: white;
+      padding: 1rem;
+      overflow-x: auto;
+    }
+
+    .status { color: var(--muted); font-weight: 700; }
+
+    footer {
+      padding: 2rem 1.25rem 4rem;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .print-card {
+      background: white;
+      border: 2px solid var(--navy);
+      border-radius: 18px;
+      overflow: hidden;
+    }
+
+    .print-card h3 {
+      background: var(--navy);
+      color: white;
+      margin: 0;
+      padding: .85rem 1rem;
+    }
+
+    .print-card .body { padding: 1rem; }
+
+    .kbd {
+      display: inline-block;
+      background: #f7f7f7;
+      border: 1px solid #c9ceda;
+      border-bottom-width: 2px;
+      border-radius: .4rem;
+      padding: .05rem .35rem;
+      font-family: inherit;
+      font-weight: 800;
+    }
+
+    @media print {
+      header, nav.toc, .hero-actions, .try-box, .button, footer { display: none !important; }
+      body { background: white; }
+      main { max-width: none; padding: 0; }
+      .card { box-shadow: none; break-inside: avoid; }
+      .example { grid-template-columns: 1fr 1fr; break-inside: avoid; }
+      section { margin: 1rem 0; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to tutorial</a>
+
+  <header>
+    <div class="hero">
+      <span class="eyebrow">Mermaid diagrams • classroom-ready • copy, edit, render</span>
+      <h1>Mermaid Syntax Basics: A Clean Tutorial for Educators</h1>
+      <p class="lead">Use simple text to create diagrams, timelines, flowcharts, concept maps, data models, and classroom visuals. This tutorial fixes common syntax problems, gives better examples, and includes a printable quick reference card.</p>
+      <div class="hero-actions">
+        <a class="button primary" href="#quickstart">Start the tutorial</a>
+        <a class="button secondary" href="#reference">Jump to quick reference</a>
+        <button class="button secondary" onclick="window.print()">Print / Save as PDF</button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="toc" aria-label="Page sections">
+    <div class="toc-inner">
+      <a href="#quickstart">Quick Start</a>
+      <a href="#prompting">Prompt Formula</a>
+      <a href="#examples">Examples</a>
+      <a href="#try">Try It</a>
+      <a href="#troubleshooting">Troubleshooting</a>
+      <a href="#reference">Reference Card</a>
+      <a href="#classroom">Classroom Uses</a>
+    </div>
+  </nav>
+
+  <main id="main">
+    <section id="quickstart" class="card">
+      <div class="section-title">
+        <h2>1. What Mermaid Does</h2>
+        <p class="subtext">Mermaid turns plain text into diagrams. Instead of dragging boxes around, you describe the structure. This makes diagrams easy to revise, copy, store, and generate with AI.</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="mini-card">
+          <span class="badge">Simple</span>
+          <h3>Write text</h3>
+          <p>Use short lines such as <code>A[Start] --&gt; B[Next Step]</code>. Each line adds a shape, connection, or label.</p>
+        </div>
+        <div class="mini-card">
+          <span class="badge">Visual</span>
+          <h3>Render diagrams</h3>
+          <p>Paste Mermaid code into a Mermaid-compatible editor, note app, documentation tool, or this webpage.</p>
+        </div>
+        <div class="mini-card">
+          <span class="badge">Editable</span>
+          <h3>Revise quickly</h3>
+          <p>Change words or connections in the code, then re-render. The diagram updates without redrawing from scratch.</p>
+        </div>
+      </div>
+
+      <div class="callout success">
+        <strong>Best beginner habit:</strong> Build one diagram in three passes: first the diagram type, then the main boxes, then the labels and styling.
+      </div>
+    </section>
+
+    <section id="prompting" class="card">
+      <div class="section-title">
+        <h2>2. A Better Prompt Formula</h2>
+        <p class="subtext">When asking AI to create Mermaid diagrams, describe the diagram like a teacher giving clear board directions.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="mini-card">
+          <h3>Use this four-part prompt</h3>
+          <ol>
+            <li><strong>Diagram type:</strong> flowchart, sequence diagram, timeline, Gantt chart, ER diagram, etc.</li>
+            <li><strong>Topic:</strong> the classroom concept, process, project, or relationship.</li>
+            <li><strong>Required parts:</strong> exact labels, steps, or categories.</li>
+            <li><strong>Connections:</strong> arrows, direction, labels, loops, decisions, or groups.</li>
+          </ol>
+        </div>
+        <div class="mini-card">
+          <h3>Copy-ready AI prompt</h3>
+          <pre class="code">Create a Mermaid [diagram type] about [topic].
+Use these exact labels: [list labels].
+Show these relationships: [describe arrows or sequence].
+Keep labels short and classroom-friendly.
+Return only valid Mermaid code in one code block.</pre>
+        </div>
+      </div>
+
+      <div class="callout warning">
+        <strong>Important:</strong> Ask for <em>valid Mermaid code</em>. AI tools sometimes use smart quotes, long dashes, or malformed arrows. Replace curly quotes with straight quotes and use Mermaid arrows such as <code>--&gt;</code>, <code>---&gt;</code>, <code>--&gt;|Label|</code>, or <code>&lt;--&gt;</code>.
+      </div>
+    </section>
+
+    <section id="examples" class="card">
+      <div class="section-title">
+        <h2>3. Core Examples</h2>
+        <p class="subtext">Each example includes a classroom use case, clean Mermaid code, and a rendered diagram. Use the copy buttons to reuse the code.</p>
+      </div>
+
+      <h3>Example A: Flowchart — Photosynthesis Inputs and Outputs</h3>
+      <p>A flowchart is best when students need to explain steps, inputs, outputs, or cause-and-effect.</p>
+      <div class="example">
+        <div class="code-panel">
+          <div class="panel-head"><span>Mermaid code</span><button class="button small" data-copy="flow-photosynthesis">Copy</button></div>
+          <pre class="code" id="flow-photosynthesis">flowchart TD
+    Sun[Sunlight] --> Process[Photosynthesis]
+    CO2[Carbon Dioxide] --> Process
+    Water[Water] --> Process
+    Process --> Sugar[Glucose]
+    Process --> Oxygen[Oxygen]</pre>
+        </div>
+        <div class="diagram-panel">
+          <div class="panel-head">Rendered diagram</div>
+          <div class="diagram-wrap"><pre class="mermaid">flowchart TD
+    Sun[Sunlight] --> Process[Photosynthesis]
+    CO2[Carbon Dioxide] --> Process
+    Water[Water] --> Process
+    Process --> Sugar[Glucose]
+    Process --> Oxygen[Oxygen]</pre></div>
+        </div>
+      </div>
+
+      <h3>Example B: Decision Flowchart — Choose a Research Source</h3>
+      <p>Decision diagrams help students make choices using evidence and conditions.</p>
+      <div class="example">
+        <div class="code-panel">
+          <div class="panel-head"><span>Mermaid code</span><button class="button small" data-copy="decision-source">Copy</button></div>
+          <pre class="code" id="decision-source">flowchart TD
+    A[Find a source] --> B{Is the author credible?}
+    B -- Yes --> C{Is it current enough?}
+    B -- No --> F[Find another source]
+    C -- Yes --> D[Use the source]
+    C -- No --> E[Check for newer evidence]
+    E --> F</pre>
+        </div>
+        <div class="diagram-panel">
+          <div class="panel-head">Rendered diagram</div>
+          <div class="diagram-wrap"><pre class="mermaid">flowchart TD
+    A[Find a source] --> B{Is the author credible?}
+    B -- Yes --> C{Is it current enough?}
+    B -- No --> F[Find another source]
+    C -- Yes --> D[Use the source]
+    C -- No --> E[Check for newer evidence]
+    E --> F</pre></div>
+        </div>
+      </div>
+
+      <h3>Example C: Sequence Diagram — Student Feedback Loop</h3>
+      <p>Sequence diagrams show who talks to whom, in what order. They work well for workflows, protocols, and feedback cycles.</p>
+      <div class="example">
+        <div class="code-panel">
+          <div class="panel-head"><span>Mermaid code</span><button class="button small" data-copy="sequence-feedback">Copy</button></div>
+          <pre class="code" id="sequence-feedback">sequenceDiagram
+    participant Student
+    participant AI as AI Tutor
+    participant Teacher
+    Student->>AI: Draft explanation
+    AI-->>Student: Ask clarifying question
+    Student->>Teacher: Submit revised draft
+    Teacher-->>Student: Give targeted feedback</pre>
+        </div>
+        <div class="diagram-panel">
+          <div class="panel-head">Rendered diagram</div>
+          <div class="diagram-wrap"><pre class="mermaid">sequenceDiagram
+    participant Student
+    participant AI as AI Tutor
+    participant Teacher
+    Student->>AI: Draft explanation
+    AI-->>Student: Ask clarifying question
+    Student->>Teacher: Submit revised draft
+    Teacher-->>Student: Give targeted feedback</pre></div>
+        </div>
+      </div>
+
+      <h3>Example D: State Diagram — States of Matter</h3>
+      <p>State diagrams show how something changes from one condition to another.</p>
+      <div class="example">
+        <div class="code-panel">
+          <div class="panel-head"><span>Mermaid code</span><button class="button small" data-copy="state-matter">Copy</button></div>
+          <pre class="code" id="state-matter">stateDiagram-v2
+    [*] --> Solid
+    Solid --> Liquid: Melting
+    Liquid --> Solid: Freezing
+    Liquid --> Gas: Vaporization
+    Gas --> Liquid: Condensation
+    Solid --> Gas: Sublimation
+    Gas --> Solid: Deposition</pre>
+        </div>
+        <div class="diagram-panel">
+          <div class="panel-head">Rendered diagram</div>
+          <div class="diagram-wrap"><pre class="mermaid">stateDiagram-v2
+    [*] --> Solid
+    Solid --> Liquid: Melting
+    Liquid --> Solid: Freezing
+    Liquid --> Gas: Vaporization
+    Gas --> Liquid: Condensation
+    Solid --> Gas: Sublimation
+    Gas --> Solid: Deposition</pre></div>
+        </div>
+      </div>
+
+      <h3>Example E: Timeline — Civil Rights Movement Milestones</h3>
+      <p>Timelines work well for historical events, project stages, book chapters, or scientific discoveries.</p>
+      <div class="example">
+        <div class="code-panel">
+          <div class="panel-head"><span>Mermaid code</span><button class="button small" data-copy="timeline-civil-rights">Copy</button></div>
+          <pre class="code" id="timeline-civil-rights">timeline
+    title Civil Rights Movement Milestones
+    1954 : Brown v. Board of Education
+    1955 : Montgomery Bus Boycott
+    1963 : March on Washington
+    1964 : Civil Rights Act
+    1965 : Voting Rights Act</pre>
+        </div>
+        <div class="diagram-panel">
+          <div class="panel-head">Rendered diagram</div>
+          <div class="diagram-wrap"><pre class="mermaid">timeline
+    title Civil Rights Movement Milestones
+    1954 : Brown v. Board of Education
+    1955 : Montgomery Bus Boycott
+    1963 : March on Washington
+    1964 : Civil Rights Act
+    1965 : Voting Rights Act</pre></div>
+        </div>
+      </div>
+
+      <h3>Example F: Gantt Chart — Science Fair Project</h3>
+      <p>Gantt charts are useful for project planning because they show tasks, dependencies, and timing.</p>
+      <div class="example">
+        <div class="code-panel">
+          <div class="panel-head"><span>Mermaid code</span><button class="button small" data-copy="gantt-science-fair">Copy</button></div>
+          <pre class="code" id="gantt-science-fair">gantt
+    title Science Fair Project Timeline
+    dateFormat  YYYY-MM-DD
+    axisFormat  %b %d
+    section Plan
+    Choose topic      :a1, 2026-09-01, 5d
+    Research question :a2, after a1, 5d
+    section Build
+    Run experiment    :a3, after a2, 10d
+    Analyze data      :a4, after a3, 5d
+    section Share
+    Create poster     :a5, after a4, 5d
+    Present findings  :milestone, after a5, 1d</pre>
+        </div>
+        <div class="diagram-panel">
+          <div class="panel-head">Rendered diagram</div>
+          <div class="diagram-wrap"><pre class="mermaid">gantt
+    title Science Fair Project Timeline
+    dateFormat  YYYY-MM-DD
+    axisFormat  %b %d
+    section Plan
+    Choose topic      :a1, 2026-09-01, 5d
+    Research question :a2, after a1, 5d
+    section Build
+    Run experiment    :a3, after a2, 10d
+    Analyze data      :a4, after a3, 5d
+    section Share
+    Create poster     :a5, after a4, 5d
+    Present findings  :milestone, after a5, 1d</pre></div>
+        </div>
+      </div>
+
+      <h3>Example G: Entity Relationship Diagram — School Courses</h3>
+      <p>ER diagrams show relationships between entities. They are useful for database design, information systems, and organizing complex records.</p>
+      <div class="example">
+        <div class="code-panel">
+          <div class="panel-head"><span>Mermaid code</span><button class="button small" data-copy="er-school">Copy</button></div>
+          <pre class="code" id="er-school">erDiagram
+    STUDENT ||--o{ ENROLLMENT : has
+    COURSE ||--o{ ENROLLMENT : includes
+    TEACHER ||--o{ COURSE : teaches
+
+    STUDENT {
+      int student_id
+      string name
+      string grade_level
+    }
+    COURSE {
+      int course_id
+      string course_name
+    }
+    TEACHER {
+      int teacher_id
+      string name
+      string department
+    }</pre>
+        </div>
+        <div class="diagram-panel">
+          <div class="panel-head">Rendered diagram</div>
+          <div class="diagram-wrap"><pre class="mermaid">erDiagram
+    STUDENT ||--o{ ENROLLMENT : has
+    COURSE ||--o{ ENROLLMENT : includes
+    TEACHER ||--o{ COURSE : teaches
+
+    STUDENT {
+      int student_id
+      string name
+      string grade_level
+    }
+    COURSE {
+      int course_id
+      string course_name
+    }
+    TEACHER {
+      int teacher_id
+      string name
+      string department
+    }</pre></div>
+        </div>
+      </div>
+
+      <h3>Example H: Pie Chart — Favorite Science Topics</h3>
+      <p>Pie charts work for quick category comparisons. Keep them simple and use clear labels.</p>
+      <div class="example">
+        <div class="code-panel">
+          <div class="panel-head"><span>Mermaid code</span><button class="button small" data-copy="pie-science">Copy</button></div>
+          <pre class="code" id="pie-science">pie showData
+    title Favorite Science Topics
+    "Biology" : 43
+    "Chemistry" : 30
+    "Physics" : 27</pre>
+        </div>
+        <div class="diagram-panel">
+          <div class="panel-head">Rendered diagram</div>
+          <div class="diagram-wrap"><pre class="mermaid">pie showData
+    title Favorite Science Topics
+    "Biology" : 43
+    "Chemistry" : 30
+    "Physics" : 27</pre></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="try" class="card try-box">
+      <div class="section-title">
+        <h2>4. Try Mermaid Here</h2>
+        <p class="subtext">Edit the code, then render it. This is useful for checking whether a diagram is valid before pasting it into a blog, LMS, document, or slide deck.</p>
+      </div>
+
+      <textarea id="liveCode" aria-label="Mermaid code editor">flowchart LR
+    A[Choose a topic] --> B[Draft Mermaid code]
+    B --> C{Does it render?}
+    C -- Yes --> D[Use the diagram]
+    C -- No --> E[Fix syntax]
+    E --> B</textarea>
+      <div class="try-actions">
+        <button class="button primary" id="renderBtn">Render diagram</button>
+        <button class="button" id="copyLiveBtn" style="background:#eef2ff;color:#1E398D;border:1px solid #d9e0ef;">Copy code</button>
+        <span class="status" id="renderStatus">Ready</span>
+      </div>
+      <div id="liveOutput" class="try-output" aria-live="polite"></div>
+    </section>
+
+    <section id="troubleshooting" class="card">
+      <div class="section-title">
+        <h2>5. Troubleshooting Mermaid Code</h2>
+        <p class="subtext">Most Mermaid errors come from punctuation, spacing, unsupported characters, or mixed diagram types.</p>
+      </div>
+
+      <table>
+        <thead>
+          <tr><th>Problem</th><th>Likely cause</th><th>Fix</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Diagram does not render</td><td>Wrong diagram starter or malformed line</td><td>Start with a valid type: <code>flowchart TD</code>, <code>sequenceDiagram</code>, <code>stateDiagram-v2</code>, <code>erDiagram</code>, <code>timeline</code>, or <code>gantt</code>.</td></tr>
+          <tr><td>Arrows look broken</td><td>Smart punctuation from a word processor or AI response</td><td>Use plain arrows: <code>--&gt;</code>, <code>--</code>, <code>--&gt;|Label|</code>, <code>&lt;--&gt;</code>.</td></tr>
+          <tr><td>Label text causes errors</td><td>Special characters inside labels</td><td>Keep labels short. For tricky text, wrap labels in quotes or simplify punctuation.</td></tr>
+          <tr><td>Gantt chart dates fail</td><td>Date does not match <code>dateFormat</code></td><td>If using <code>dateFormat YYYY-MM-DD</code>, every date should look like <code>2026-09-01</code>.</td></tr>
+          <tr><td>AI output includes Markdown fences</td><td>The code includes <code>```mermaid</code> lines</td><td>Remove the opening and closing code fence before rendering in this page.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="reference" class="card">
+      <div class="section-title">
+        <h2>6. Quick Reference Card</h2>
+        <p class="subtext">Print this section or copy the snippets into your notes. These are the most useful patterns for beginners.</p>
+      </div>
+
+      <div class="print-card">
+        <h3>Mermaid Quick Reference</h3>
+        <div class="body">
+          <div class="ref-grid">
+            <div class="ref-item"><strong>Flowchart starters</strong><code>flowchart TD</code> top-down<br><code>flowchart LR</code> left-to-right</div>
+            <div class="ref-item"><strong>Basic arrow</strong><code>A[Start] --&gt; B[Next]</code></div>
+            <div class="ref-item"><strong>Labeled arrow</strong><code>A --&gt;|Feedback| B</code></div>
+            <div class="ref-item"><strong>Decision diamond</strong><code>A{Question?}</code></div>
+            <div class="ref-item"><strong>Rounded start/end</strong><code>A([Start])</code></div>
+            <div class="ref-item"><strong>Database shape</strong><code>A[(Data)]</code></div>
+            <div class="ref-item"><strong>Subgraph</strong><code>subgraph Group<br>&nbsp;&nbsp;A --&gt; B<br>end</code></div>
+            <div class="ref-item"><strong>Sequence message</strong><code>Student-&gt;&gt;Teacher: Question</code></div>
+            <div class="ref-item"><strong>State transition</strong><code>Solid --&gt; Liquid: Melting</code></div>
+            <div class="ref-item"><strong>Timeline entry</strong><code>2026 : Event label</code></div>
+            <div class="ref-item"><strong>Pie entry</strong><code>"Category" : 25</code></div>
+            <div class="ref-item"><strong>Gantt task</strong><code>Research :a1, 2026-09-01, 7d</code></div>
+          </div>
+
+          <h3>Common diagram starters</h3>
+          <pre class="code">flowchart TD
+sequenceDiagram
+stateDiagram-v2
+erDiagram
+gantt
+timeline
+pie showData
+mindmap</pre>
+
+          <h3>Reliable AI prompt starter</h3>
+          <pre class="code">Create valid Mermaid code for a [diagram type] about [topic].
+Use short labels for K-12 educators and students.
+Return only the Mermaid code. Do not include explanations.</pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="classroom" class="card">
+      <div class="section-title">
+        <h2>7. Classroom Uses</h2>
+        <p class="subtext">Mermaid is most useful when students need to make thinking visible, not when they need a polished poster.</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="mini-card">
+          <h3>Science</h3>
+          <p>Model cycles, lab procedures, food webs, systems, variables, and cause-effect chains.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Social Studies</h3>
+          <p>Build timelines, decision trees, power structures, treaty relationships, and cause-effect maps.</p>
+        </div>
+        <div class="mini-card">
+          <h3>ELA</h3>
+          <p>Map plot structure, character relationships, argument claims, evidence trails, and revision workflows.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Math</h3>
+          <p>Show problem-solving steps, function-machine logic, proof structure, and multi-step reasoning.</p>
+        </div>
+        <div class="mini-card">
+          <h3>CTE / Computer Science</h3>
+          <p>Document workflows, app logic, database relationships, systems, and user interactions.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Teacher Planning</h3>
+          <p>Create lesson flows, intervention pathways, project timelines, PLC workflows, and curriculum maps.</p>
+        </div>
+      </div>
+
+      <div class="callout success">
+        <strong>Student task idea:</strong> Give students a finished diagram and ask them to write the Mermaid code that would recreate it. Then reverse the task: give them Mermaid code and ask them to explain the diagram in plain language.
+      </div>
+    </section>
+  </main>
+
+  <footer>
+
+  </footer>
+
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11.14.0/dist/mermaid.esm.min.mjs';
+
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'base',
+      securityLevel: 'loose',
+      flowchart: { htmlLabels: true, curve: 'basis' },
+      themeVariables: {
+        primaryColor: '#eef2ff',
+        primaryTextColor: '#172033',
+        primaryBorderColor: '#1E398D',
+        lineColor: '#1E398D',
+        secondaryColor: '#fff2dc',
+        tertiaryColor: '#ffffff',
+        noteBkgColor: '#fff8ec',
+        noteBorderColor: '#FAA634',
+        fontFamily: 'Inter, system-ui, sans-serif'
+      }
+    });
+
+    const copyText = async (text, button) => {
+      try {
+        await navigator.clipboard.writeText(text);
+        const original = button.textContent;
+        button.textContent = 'Copied';
+        setTimeout(() => button.textContent = original, 1200);
+      } catch (err) {
+        alert('Copy failed. Select the code manually and copy it.');
+      }
+    };
+
+    document.querySelectorAll('[data-copy]').forEach(button => {
+      button.addEventListener('click', () => {
+        const id = button.getAttribute('data-copy');
+        const source = document.getElementById(id);
+        copyText(source.textContent, button);
+      });
+    });
+
+    const liveCode = document.getElementById('liveCode');
+    const liveOutput = document.getElementById('liveOutput');
+    const renderBtn = document.getElementById('renderBtn');
+    const copyLiveBtn = document.getElementById('copyLiveBtn');
+    const renderStatus = document.getElementById('renderStatus');
+
+    async function renderLive() {
+      const code = liveCode.value.trim().replace(/^```mermaid\s*/i, '').replace(/```$/i, '').trim();
+      renderStatus.textContent = 'Rendering...';
+      liveOutput.innerHTML = '';
+      try {
+        const id = 'live-mermaid-' + Date.now();
+        const { svg } = await mermaid.render(id, code);
+        liveOutput.innerHTML = svg;
+        renderStatus.textContent = 'Rendered successfully';
+      } catch (error) {
+        liveOutput.innerHTML = '<div class="callout warning"><strong>Mermaid could not render this code.</strong><br><pre>' + String(error.message || error).replace(/[<>&]/g, s => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[s])) + '</pre></div>';
+        renderStatus.textContent = 'Check the syntax';
+      }
+    }
+
+    renderBtn.addEventListener('click', renderLive);
+    copyLiveBtn.addEventListener('click', () => copyText(liveCode.value, copyLiveBtn));
+    renderLive();
+  </script>
+</body>
+</html>
