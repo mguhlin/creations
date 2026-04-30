@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Submit | ShareSpace</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0A3476;
+    --navy-dark: #071f4a;
+    --navy-mid: #12428f;
+    --gold: #FCB040;
+    --gold-light: #fdd17a;
+    --gold-pale: #FEF0D0;
+    --pale-navy: #D0D8F0;
+    --white: #ffffff;
+    --off-white: #f7f8fc;
+    --text: #1a1a2e;
+    --text-muted: #5a6680;
+    --border: #e2e7f5;
+    --error: #b3261e;
+    --success: #1f7a3a;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    background: var(--off-white);
+    line-height: 1.5;
+    padding: 24px 16px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .wrapper {
+    max-width: 660px;
+    margin: 0 auto;
+    width: 100%;
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(10, 52, 118, 0.05);
+  }
+
+  .header {
+    background: var(--navy-dark);
+    color: var(--white);
+    padding: 28px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -40%; right: -20%;
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
+    opacity: 0.12;
+    pointer-events: none;
+  }
+  .header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    margin: 0 0 6px 0;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+  .header h1 em {
+    color: var(--gold);
+    font-style: italic;
+  }
+  .header p {
+    margin: 0;
+    color: var(--pale-navy);
+    font-size: 14px;
+  }
+
+  form { padding: 28px 32px 32px; }
+
+  .field { margin-bottom: 18px; }
+  .field label {
+    display: block;
+    font-weight: 500;
+    color: var(--navy);
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+  .field label .req { color: var(--gold); margin-left: 2px; }
+  .field input[type="text"],
+  .field input[type="email"],
+  .field select,
+  .field textarea {
+    width: 100%;
+    padding: 11px 14px;
+    font-family: inherit;
+    font-size: 15px;
+    color: var(--text);
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .field textarea {
+    resize: vertical;
+    min-height: 90px;
+    line-height: 1.45;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    outline: none;
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(10, 52, 118, 0.08);
+  }
+  .field select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%230A3476' d='M6 8L0 0h12z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+
+  .char-counter {
+    text-align: right;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+  .char-counter.over { color: var(--error); font-weight: 500; }
+
+  /* File format hints */
+  .format-hints {
+    margin-top: 8px;
+    padding: 10px 12px;
+    background: var(--off-white);
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .format-hints strong { color: var(--navy); font-weight: 600; }
+  .format-hints .row { margin-bottom: 2px; }
+  .format-hints .row:last-child { margin-bottom: 0; }
+
+  /* Drop zone */
+  .dropzone {
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    padding: 28px 20px;
+    text-align: center;
+    background: var(--off-white);
+    cursor: pointer;
+    transition: border-color 0.15s, background-color 0.15s;
+  }
+  .dropzone:hover, .dropzone.drag {
+    border-color: var(--navy);
+    background: #eef2fa;
+  }
+  .dropzone .icon {
+    font-size: 36px;
+    color: var(--navy);
+    margin-bottom: 8px;
+    line-height: 1;
+  }
+  .dropzone .title {
+    font-weight: 600;
+    color: var(--navy);
+    font-size: 15px;
+    margin-bottom: 4px;
+  }
+  .dropzone .hint {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .dropzone input[type="file"] { display: none; }
+
+  /* Preview */
+  .preview {
+    margin-top: 12px;
+    padding: 12px;
+    background: var(--off-white);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .preview img {
+    width: 64px; height: 64px;
+    object-fit: cover;
+    border-radius: 6px;
+    background: var(--pale-navy);
+  }
+  .preview .file-icon {
+    width: 64px; height: 64px;
+    background: var(--pale-navy);
+    color: var(--navy);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .preview .meta { flex: 1; min-width: 0; }
+  .preview .meta .name {
+    font-weight: 500;
+    color: var(--navy);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+  }
+  .preview .meta .size {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  .preview .remove {
+    background: transparent;
+    border: 1.5px solid var(--border);
+    color: var(--text-muted);
+    padding: 4px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 12px;
+  }
+  .preview .remove:hover { color: var(--error); border-color: var(--error); }
+
+  /* Submit */
+  .submit-row {
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  button.primary {
+    background: var(--gold);
+    color: var(--navy-dark);
+    border: none;
+    padding: 12px 24px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.15s, transform 0.1s;
+  }
+  button.primary:hover:not(:disabled) { background: var(--gold-light); }
+  button.primary:active:not(:disabled) { transform: translateY(1px); }
+  button.primary:disabled {
+    background: var(--border);
+    color: var(--text-muted);
+    cursor: not-allowed;
+  }
+
+  .status {
+    flex: 1;
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+  .status.error { color: var(--error); font-weight: 500; }
+  .status.success { color: var(--success); font-weight: 500; }
+
+  .progress {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-top: 14px;
+    overflow: hidden;
+    display: none;
+  }
+  .progress.active { display: block; }
+  .progress .bar {
+    height: 100%;
+    width: 30%;
+    background: var(--gold);
+    border-radius: 2px;
+    animation: slide 1.2s ease-in-out infinite;
+  }
+  @keyframes slide {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(400%); }
+  }
+
+  .success-panel {
+    display: none;
+    padding: 32px;
+    text-align: center;
+  }
+  .success-panel.active { display: block; }
+  .success-panel .check {
+    width: 64px; height: 64px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    background: var(--gold-pale);
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: 700;
+  }
+  .success-panel h2 {
+    font-family: 'DM Serif Display', serif;
+    color: var(--navy);
+    font-size: 22px;
+    margin: 0 0 6px;
+    font-weight: 400;
+  }
+  .success-panel p {
+    color: var(--text-muted);
+    margin: 0 0 8px;
+  }
+  .success-panel .redirect-note {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin: 0 0 20px;
+  }
+  .success-panel .btn-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .success-panel button, .success-panel a.btn-link {
+    background: var(--white);
+    color: var(--navy);
+    border: 1.5px solid var(--navy);
+    padding: 10px 20px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .success-panel a.btn-link.gold {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--navy-dark);
+  }
+  .success-panel button:hover { background: var(--off-white); }
+  .success-panel a.btn-link.gold:hover { background: var(--gold-light); border-color: var(--gold-light); }
+
+  /* Footer attribution */
+  .credit {
+    max-width: 660px;
+    margin: 16px auto 0;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 11px;
+    line-height: 1.5;
+  }
+  .credit a {
+    color: var(--text-muted);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--text-muted);
+  }
+  .credit a:hover { color: var(--navy); border-bottom-color: var(--navy); }
+</style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <h1><em>ShareSpace</em></h1>
+      <p>Share your work with the group.</p>
+    </div>
+
+    <form id="submission-form" autocomplete="on">
+      <div class="field">
+        <label for="name">Your name <span class="req">*</span></label>
+        <input type="text" id="name" name="name" required maxlength="100" autocomplete="name">
+      </div>
+
+      <div class="field">
+        <label for="email">Email <span class="req">*</span></label>
+        <input type="email" id="email" name="email" required maxlength="120" autocomplete="email">
+      </div>
+
+      <div class="field">
+        <label for="category">Category <span class="req">*</span></label>
+        <select id="category" name="category" required>
+          <option value="" disabled selected>Choose a category</option>
+          <!-- These options must match ALLOWED_CATEGORIES in Code.gs -->
+          <option value="General">General</option>
+          <option value="Category 1">Category 1</option>
+          <option value="Category 2">Category 2</option>
+          <option value="Category 3">Category 3</option>
+          <option value="Category 4">Category 4</option>
+          <option value="Category 5">Category 5</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Your file <span class="req">*</span></label>
+        <label for="file" class="dropzone" id="dropzone">
+          <div class="icon">&uarr;</div>
+          <div class="title">Tap or drag a file here</div>
+          <div class="hint">Up to 25 MB. Any format.</div>
+          <input type="file" id="file" name="file" required>
+        </label>
+        <div class="preview" id="preview" style="display: none;">
+          <div id="preview-thumb"></div>
+          <div class="meta">
+            <div class="name" id="preview-name"></div>
+            <div class="size" id="preview-size"></div>
+          </div>
+          <button type="button" class="remove" id="preview-remove">Remove</button>
+        </div>
+
+        <div class="format-hints">
+          <div class="row"><strong>Images</strong> (PNG, JPG, GIF, WebP, HEIC) - shown as inline thumbnail, click to enlarge</div>
+          <div class="row"><strong>PDFs</strong> - first-page thumbnail, click Open for full document</div>
+          <div class="row"><strong>Videos</strong> (MP4, MOV, M4V, WebM) - inline player on the board</div>
+          <div class="row"><strong>Audio</strong> (MP3, M4A, WAV) - inline player on the board</div>
+          <div class="row"><strong>Text</strong> (TXT, MD) - shown inline if under 50 KB</div>
+          <div class="row"><strong>Office docs</strong> (DOCX, PPTX, XLSX) - file card, click Open to view in Drive</div>
+          <div class="row"><strong>Other formats</strong> - file card, click Open to download</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="reflection">Reflection or short explanation</label>
+        <textarea id="reflection" name="reflection" maxlength="500" rows="3"
+                  placeholder="What is this, what did you learn, or how might you use it? (optional, 500 characters)"></textarea>
+        <div class="char-counter" id="char-counter">0 of 500</div>
+      </div>
+
+      <div class="submit-row">
+        <button type="submit" class="primary" id="submit-btn">Share to ShareSpace</button>
+        <span class="status" id="status">Your file goes to the ShareSpace board after upload.</span>
+      </div>
+      <div class="progress" id="progress"><div class="bar"></div></div>
+    </form>
+
+    <div class="success-panel" id="success-panel">
+      <div class="check">&#10003;</div>
+      <h2>Posted to ShareSpace</h2>
+      <p>Your submission is live for the group to see.</p>
+      <p class="redirect-note">Taking you to the board in <span id="countdown">3</span>...</p>
+      <div class="btn-row">
+        <a href="board.html" class="btn-link gold" id="board-link">View the board now</a>
+        <button type="button" id="another-btn">Submit another</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="credit">
+    Developed by Miguel Guhlin -
+    <a href="https://blog.tcea.org" target="_blank" rel="noopener">blog.tcea.org</a>
+    | Social: <a href="https://mguhlin.org" target="_blank" rel="noopener">mguhlin.org</a>
+  </div>
+
+<script>
+  // =====================================================================
+  // CONFIG - paste your Apps Script Web app URL here (ends in /exec)
+  // =====================================================================
+  const SCRIPT_URL = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+
+  // After successful submission, redirect to this page (relative or absolute).
+  const BOARD_URL = 'board.html';
+  const REDIRECT_DELAY_SECONDS = 3;
+
+  const MAX_BYTES = 25 * 1024 * 1024;
+  const MAX_REFLECTION = 500;
+
+  const form = document.getElementById('submission-form');
+  const fileInput = document.getElementById('file');
+  const dropzone = document.getElementById('dropzone');
+  const preview = document.getElementById('preview');
+  const previewThumb = document.getElementById('preview-thumb');
+  const previewName = document.getElementById('preview-name');
+  const previewSize = document.getElementById('preview-size');
+  const previewRemove = document.getElementById('preview-remove');
+  const submitBtn = document.getElementById('submit-btn');
+  const statusEl = document.getElementById('status');
+  const progressEl = document.getElementById('progress');
+  const successPanel = document.getElementById('success-panel');
+  const anotherBtn = document.getElementById('another-btn');
+  const reflectionEl = document.getElementById('reflection');
+  const charCounter = document.getElementById('char-counter');
+  const countdownEl = document.getElementById('countdown');
+  const boardLink = document.getElementById('board-link');
+
+  let chosenFile = null;
+  let redirectTimer = null;
+
+  // Set the board link href so it works even if user clicks before auto-redirect
+  boardLink.href = BOARD_URL;
+
+  // Reflection counter
+  reflectionEl.addEventListener('input', updateCharCounter);
+  function updateCharCounter() {
+    const len = reflectionEl.value.length;
+    charCounter.textContent = len + ' of ' + MAX_REFLECTION;
+    charCounter.classList.toggle('over', len > MAX_REFLECTION);
+  }
+
+  // Drag and drop
+  ['dragenter', 'dragover'].forEach(function (evt) {
+    dropzone.addEventListener(evt, function (e) {
+      e.preventDefault(); e.stopPropagation();
+      dropzone.classList.add('drag');
+    });
+  });
+  ['dragleave', 'drop'].forEach(function (evt) {
+    dropzone.addEventListener(evt, function (e) {
+      e.preventDefault(); e.stopPropagation();
+      dropzone.classList.remove('drag');
+    });
+  });
+  dropzone.addEventListener('drop', function (e) {
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleFile(e.dataTransfer.files[0]);
+    }
+  });
+
+  fileInput.addEventListener('change', function () {
+    if (fileInput.files && fileInput.files[0]) handleFile(fileInput.files[0]);
+  });
+
+  previewRemove.addEventListener('click', function () {
+    chosenFile = null;
+    fileInput.value = '';
+    preview.style.display = 'none';
+    dropzone.style.display = 'block';
+  });
+
+  function handleFile(file) {
+    if (file.size > MAX_BYTES) {
+      setStatus('That file is larger than 25 MB. Please choose a smaller one.', 'error');
+      return;
+    }
+    if (file.size === 0) {
+      setStatus('That file appears to be empty.', 'error');
+      return;
+    }
+    chosenFile = file;
+    previewName.textContent = file.name;
+    previewSize.textContent = formatBytes(file.size) + ' \u00b7 ' + (file.type || 'file');
+    previewThumb.innerHTML = '';
+
+    if (file.type.indexOf('image/') === 0) {
+      const img = document.createElement('img');
+      const reader = new FileReader();
+      reader.onload = function (e) { img.src = e.target.result; };
+      reader.readAsDataURL(file);
+      previewThumb.appendChild(img);
+    } else {
+      const ext = (file.name.split('.').pop() || 'file').slice(0, 4);
+      const div = document.createElement('div');
+      div.className = 'file-icon';
+      div.textContent = ext;
+      previewThumb.appendChild(div);
+    }
+
+    preview.style.display = 'flex';
+    dropzone.style.display = 'none';
+    setStatus('Ready to share.', '');
+  }
+
+  function formatBytes(b) {
+    if (b < 1024) return b + ' B';
+    if (b < 1024 * 1024) return (b / 1024).toFixed(1) + ' KB';
+    return (b / (1024 * 1024)).toFixed(1) + ' MB';
+  }
+
+  function setStatus(msg, kind) {
+    statusEl.textContent = msg;
+    statusEl.className = 'status' + (kind ? ' ' + kind : '');
+  }
+
+  function readAsBase64(file) {
+    return new Promise(function (resolve, reject) {
+      const r = new FileReader();
+      r.onload = function () {
+        const s = r.result;
+        const idx = s.indexOf(',');
+        resolve(idx === -1 ? s : s.slice(idx + 1));
+      };
+      r.onerror = function () { reject(new Error('Could not read file.')); };
+      r.readAsDataURL(file);
+    });
+  }
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    if (SCRIPT_URL.indexOf('PASTE_YOUR') === 0) {
+      setStatus('Backend not configured yet. Paste the Apps Script URL into SCRIPT_URL.', 'error');
+      return;
+    }
+    if (!chosenFile) {
+      setStatus('Please choose a file.', 'error');
+      return;
+    }
+    if (reflectionEl.value.length > MAX_REFLECTION) {
+      setStatus('Please trim your reflection to 500 characters.', 'error');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    progressEl.classList.add('active');
+    setStatus('Uploading...', '');
+
+    try {
+      const base64 = await readAsBase64(chosenFile);
+      const body = new URLSearchParams();
+      body.set('action', 'submit');
+      body.set('name', document.getElementById('name').value.trim());
+      body.set('email', document.getElementById('email').value.trim());
+      body.set('category', document.getElementById('category').value);
+      body.set('reflection', reflectionEl.value.trim());
+      body.set('fileName', chosenFile.name);
+      body.set('mimeType', chosenFile.type || 'application/octet-stream');
+      body.set('fileData', base64);
+
+      const res = await fetch(SCRIPT_URL, { method: 'POST', body: body });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error || 'Upload failed.');
+
+      // Show success panel and start countdown to board
+      form.style.display = 'none';
+      successPanel.classList.add('active');
+      startRedirectCountdown();
+    } catch (err) {
+      setStatus('Upload failed: ' + err.message, 'error');
+      submitBtn.disabled = false;
+    } finally {
+      progressEl.classList.remove('active');
+    }
+  });
+
+  function startRedirectCountdown() {
+    let remaining = REDIRECT_DELAY_SECONDS;
+    countdownEl.textContent = remaining;
+    redirectTimer = setInterval(function () {
+      remaining -= 1;
+      countdownEl.textContent = remaining;
+      if (remaining <= 0) {
+        clearInterval(redirectTimer);
+        window.location.href = BOARD_URL;
+      }
+    }, 1000);
+  }
+
+  anotherBtn.addEventListener('click', function () {
+    if (redirectTimer) {
+      clearInterval(redirectTimer);
+      redirectTimer = null;
+    }
+    form.reset();
+    chosenFile = null;
+    preview.style.display = 'none';
+    dropzone.style.display = 'block';
+    successPanel.classList.remove('active');
+    form.style.display = 'block';
+    submitBtn.disabled = false;
+    updateCharCounter();
+    setStatus('Your file goes to the ShareSpace board after upload.', '');
+  });
+
+  // Cancel auto-redirect if the user clicks the manual board link first
+  // (browser navigates away anyway, but kept here for clarity)
+  boardLink.addEventListener('click', function () {
+    if (redirectTimer) {
+      clearInterval(redirectTimer);
+      redirectTimer = null;
+    }
+  });
+
+  // Initialize
+  updateCharCounter();
+</script>
+</body>
+</html>

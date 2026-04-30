@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin | ShareSpace</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0A3476;
+    --navy-dark: #071f4a;
+    --navy-mid: #12428f;
+    --gold: #FCB040;
+    --gold-light: #fdd17a;
+    --gold-pale: #FEF0D0;
+    --pale-navy: #D0D8F0;
+    --white: #ffffff;
+    --off-white: #f7f8fc;
+    --text: #1a1a2e;
+    --text-muted: #5a6680;
+    --border: #e2e7f5;
+    --error: #b3261e;
+    --error-bg: #fdecea;
+    --success: #1f7a3a;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    background: var(--off-white);
+    line-height: 1.5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .topbar {
+    background: var(--navy-dark);
+    color: var(--white);
+    padding: 28px 24px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .topbar::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -10%;
+    width: 480px; height: 480px;
+    background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
+    opacity: 0.10;
+    pointer-events: none;
+  }
+  .topbar-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    position: relative;
+  }
+  .topbar h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    margin: 0 0 4px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+  .topbar h1 em { color: var(--gold); font-style: italic; }
+  .topbar .sub {
+    color: var(--pale-navy);
+    font-size: 14px;
+    margin: 0;
+  }
+  .topbar .actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .topbar-btn {
+    background: transparent;
+    color: var(--white);
+    border: 1.5px solid rgba(255,255,255,0.3);
+    padding: 7px 14px;
+    font-family: inherit;
+    font-size: 13px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .topbar-btn:hover { background: rgba(255,255,255,0.08); border-color: var(--gold); }
+
+  .lock {
+    max-width: 420px;
+    margin: 60px auto;
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 36px 32px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(10, 52, 118, 0.05);
+  }
+  .lock h2 {
+    font-family: 'DM Serif Display', serif;
+    color: var(--navy);
+    font-size: 22px;
+    margin: 0 0 4px;
+    font-weight: 400;
+  }
+  .lock p {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin: 0 0 22px;
+  }
+  .lock input {
+    width: 100%;
+    padding: 12px 14px;
+    font-family: inherit;
+    font-size: 15px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 14px;
+  }
+  .lock input:focus {
+    outline: none;
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(10, 52, 118, 0.08);
+  }
+  .lock button {
+    width: 100%;
+    background: var(--gold);
+    color: var(--navy-dark);
+    border: none;
+    padding: 12px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .lock button:hover:not(:disabled) { background: var(--gold-light); }
+  .lock button:disabled { background: var(--border); color: var(--text-muted); cursor: not-allowed; }
+  .lock .error {
+    color: var(--error);
+    font-size: 13px;
+    margin-top: 12px;
+    min-height: 18px;
+  }
+
+  .toolbar {
+    background: var(--white);
+    border-bottom: 1.5px solid var(--border);
+    padding: 14px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .toolbar-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .toolbar select, .toolbar input[type="search"] {
+    padding: 8px 12px;
+    font-family: inherit;
+    font-size: 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    background: var(--white);
+    color: var(--text);
+  }
+  .toolbar select:focus, .toolbar input:focus {
+    outline: none;
+    border-color: var(--navy);
+  }
+  .toolbar input[type="search"] {
+    flex: 1;
+    min-width: 180px;
+  }
+  .toolbar .count-badge {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-left: auto;
+  }
+
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+    width: 100%;
+    flex: 1;
+  }
+
+  .state {
+    padding: 60px 24px;
+    text-align: center;
+    color: var(--text-muted);
+  }
+  .state .big {
+    font-family: 'DM Serif Display', serif;
+    color: var(--navy);
+    font-size: 20px;
+    margin-bottom: 8px;
+    font-weight: 400;
+  }
+  .spinner {
+    display: inline-block;
+    width: 24px; height: 24px;
+    border: 3px solid var(--border);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 12px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .row {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 12px;
+    display: grid;
+    grid-template-columns: 88px 1fr auto;
+    gap: 14px;
+    align-items: start;
+  }
+  @media (max-width: 640px) {
+    .row { grid-template-columns: 64px 1fr; }
+    .row .row-actions { grid-column: 1 / -1; justify-content: flex-end; }
+  }
+
+  .row-thumb {
+    width: 88px;
+    height: 88px;
+    border-radius: 8px;
+    background: var(--off-white);
+    border: 1.5px solid var(--border);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--navy);
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  @media (max-width: 640px) {
+    .row-thumb { width: 64px; height: 64px; font-size: 11px; }
+  }
+  .row-thumb img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+
+  .row-body { min-width: 0; }
+  .row-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+  }
+  .row-name {
+    font-weight: 600;
+    color: var(--navy);
+    font-size: 15px;
+  }
+  .row-email {
+    color: var(--text-muted);
+    font-size: 13px;
+    word-break: break-all;
+  }
+  .row-meta {
+    color: var(--text-muted);
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+  .row-category-pill {
+    display: inline-block;
+    background: var(--pale-navy);
+    color: var(--navy);
+    padding: 2px 9px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-right: 6px;
+  }
+  .row-filename {
+    font-size: 12px;
+    color: var(--text-muted);
+    word-break: break-all;
+  }
+  .row-reflection {
+    margin-top: 10px;
+    background: var(--off-white);
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--text);
+    word-break: break-word;
+  }
+  .row-reflection.empty {
+    color: var(--text-muted);
+    font-style: italic;
+  }
+  .row-reflection-edit {
+    margin-top: 10px;
+  }
+  .row-reflection-edit textarea {
+    width: 100%;
+    padding: 8px 10px;
+    font-family: inherit;
+    font-size: 13px;
+    border: 1.5px solid var(--navy);
+    border-radius: 6px;
+    resize: vertical;
+    min-height: 70px;
+    line-height: 1.45;
+  }
+  .row-reflection-edit textarea:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(10, 52, 118, 0.08);
+  }
+  .row-reflection-edit .counter {
+    text-align: right;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  .row-reflection-edit .counter.over { color: var(--error); font-weight: 500; }
+  .row-reflection-edit .edit-actions {
+    margin-top: 8px;
+    display: flex;
+    gap: 8px;
+  }
+
+  .row-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: stretch;
+  }
+  .btn {
+    padding: 6px 12px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    color: var(--navy);
+    text-decoration: none;
+    text-align: center;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+    white-space: nowrap;
+  }
+  .btn:hover { border-color: var(--navy); }
+  .btn.gold { background: var(--gold); border-color: var(--gold); color: var(--navy-dark); }
+  .btn.gold:hover { background: var(--gold-light); border-color: var(--gold-light); }
+  .btn.danger { color: var(--error); border-color: var(--error); }
+  .btn.danger:hover { background: var(--error-bg); }
+  .btn.ghost { color: var(--text-muted); }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--navy-dark);
+    color: var(--white);
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    z-index: 100;
+  }
+  .toast.active { opacity: 1; }
+  .toast.error { background: var(--error); }
+
+  .credit {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 11px;
+    line-height: 1.5;
+    padding: 24px 16px 32px;
+  }
+  .credit a {
+    color: var(--text-muted);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--text-muted);
+  }
+  .credit a:hover { color: var(--navy); border-bottom-color: var(--navy); }
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div>
+        <h1><em>ShareSpace</em> Admin</h1>
+        <p class="sub">Manage submissions, edit reflections, remove items.</p>
+      </div>
+      <div class="actions" id="topbar-actions" style="display: none;">
+        <button class="topbar-btn" id="refresh-btn">Refresh</button>
+        <button class="topbar-btn" id="lock-btn">Lock</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="lock" id="lock-screen">
+    <h2>Enter passcode</h2>
+    <p>Access to delete and edit submissions.</p>
+    <input type="password" id="passcode-input" placeholder="Passcode" autocomplete="current-password">
+    <button id="unlock-btn">Unlock</button>
+    <div class="error" id="lock-error"></div>
+  </div>
+
+  <div id="admin-view" style="display: none;">
+    <nav class="toolbar">
+      <div class="toolbar-inner">
+        <select id="filter-category">
+          <option value="all">All categories</option>
+          <!-- Populated from CATEGORIES below -->
+        </select>
+        <input type="search" id="search-input" placeholder="Search by name, email, or filename">
+        <span class="count-badge" id="count-badge"></span>
+      </div>
+    </nav>
+
+    <main>
+      <div class="state" id="state">
+        <div class="spinner"></div>
+        <div>Loading submissions...</div>
+      </div>
+      <div id="list"></div>
+    </main>
+  </div>
+
+  <div class="credit">
+    Developed by Miguel Guhlin -
+    <a href="https://blog.tcea.org" target="_blank" rel="noopener">blog.tcea.org</a>
+    | Social: <a href="https://mguhlin.org" target="_blank" rel="noopener">mguhlin.org</a>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+  // =====================================================================
+  // CONFIG - paste your Apps Script Web app URL here (ends in /exec)
+  // =====================================================================
+  const SCRIPT_URL = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+  const MAX_REFLECTION = 500;
+
+  // These must match ALLOWED_CATEGORIES in Code.gs and the <option> list in submit.html
+  const CATEGORIES = [
+    'General',
+    'Category 1',
+    'Category 2',
+    'Category 3',
+    'Category 4',
+    'Category 5'
+  ];
+
+  // Optional shorter labels. Leave empty to use the full names.
+  const CATEGORY_LABELS = {};
+
+  function labelFor(c) { return CATEGORY_LABELS[c] || c; }
+
+  // Populate category dropdown
+  (function populateFilter() {
+    const sel = document.getElementById('filter-category');
+    CATEGORIES.forEach(function (c) {
+      const opt = document.createElement('option');
+      opt.value = c;
+      opt.textContent = c;
+      sel.appendChild(opt);
+    });
+  })();
+
+  const lockScreen = document.getElementById('lock-screen');
+  const adminView = document.getElementById('admin-view');
+  const topbarActions = document.getElementById('topbar-actions');
+  const passcodeInput = document.getElementById('passcode-input');
+  const unlockBtn = document.getElementById('unlock-btn');
+  const lockError = document.getElementById('lock-error');
+  const refreshBtn = document.getElementById('refresh-btn');
+  const lockBtn = document.getElementById('lock-btn');
+  const filterCategory = document.getElementById('filter-category');
+  const searchInput = document.getElementById('search-input');
+  const countBadge = document.getElementById('count-badge');
+  const stateEl = document.getElementById('state');
+  const listEl = document.getElementById('list');
+  const toast = document.getElementById('toast');
+
+  let passcode = '';
+  let allSubmissions = [];
+
+  unlockBtn.addEventListener('click', tryUnlock);
+  passcodeInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') tryUnlock();
+  });
+
+  async function tryUnlock() {
+    const code = passcodeInput.value.trim();
+    if (!code) {
+      lockError.textContent = 'Enter the passcode.';
+      return;
+    }
+    unlockBtn.disabled = true;
+    lockError.textContent = '';
+    try {
+      const data = await callApi('adminList', { passcode: code });
+      if (!data.ok) throw new Error(data.error || 'Could not unlock.');
+      passcode = code;
+      allSubmissions = data.submissions || [];
+      lockScreen.style.display = 'none';
+      adminView.style.display = 'block';
+      topbarActions.style.display = 'flex';
+      passcodeInput.value = '';
+      render();
+    } catch (err) {
+      lockError.textContent = err.message;
+    } finally {
+      unlockBtn.disabled = false;
+    }
+  }
+
+  lockBtn.addEventListener('click', function () {
+    passcode = '';
+    allSubmissions = [];
+    listEl.innerHTML = '';
+    adminView.style.display = 'none';
+    topbarActions.style.display = 'none';
+    lockScreen.style.display = 'block';
+    passcodeInput.focus();
+  });
+
+  refreshBtn.addEventListener('click', refresh);
+
+  async function refresh() {
+    if (!passcode) return;
+    stateEl.style.display = 'block';
+    stateEl.innerHTML = '<div class="spinner"></div><div>Loading submissions...</div>';
+    try {
+      const data = await callApi('adminList', { passcode: passcode });
+      if (!data.ok) throw new Error(data.error || 'Could not load.');
+      allSubmissions = data.submissions || [];
+      render();
+    } catch (err) {
+      stateEl.innerHTML = '<div class="big">Could not load</div><div>' + escapeHtml(err.message) + '</div>';
+      showToast(err.message, true);
+    }
+  }
+
+  filterCategory.addEventListener('change', render);
+  searchInput.addEventListener('input', render);
+
+  function render() {
+    const cat = filterCategory.value;
+    const search = searchInput.value.trim().toLowerCase();
+
+    let list = allSubmissions.slice();
+    if (cat !== 'all') list = list.filter(function (s) { return s.category === cat; });
+    if (search) {
+      list = list.filter(function (s) {
+        const blob = ((s.name || '') + ' ' + (s.email || '') + ' ' + (s.fileName || '') + ' ' + (s.reflection || '')).toLowerCase();
+        return blob.indexOf(search) !== -1;
+      });
+    }
+
+    countBadge.textContent = list.length + ' of ' + allSubmissions.length;
+
+    if (list.length === 0) {
+      stateEl.style.display = 'block';
+      stateEl.innerHTML = '<div class="big">No submissions match</div><div>Try a different filter or search term.</div>';
+      listEl.innerHTML = '';
+      return;
+    }
+
+    stateEl.style.display = 'none';
+    listEl.innerHTML = list.map(renderRow).join('');
+    wireRowEvents();
+  }
+
+  function renderRow(s) {
+    const mime = (s.mimeType || '').toLowerCase();
+    const fileId = s.fileId;
+    const driveOpenUrl = s.fileUrl || ('https://drive.google.com/file/d/' + fileId + '/view');
+
+    let thumbHtml = '';
+    if (mime.indexOf('image/') === 0 || mime === 'application/pdf') {
+      const thumb = 'https://drive.google.com/thumbnail?id=' + encodeURIComponent(fileId) + '&sz=w200';
+      thumbHtml = '<img src="' + thumb + '" alt="">';
+    } else {
+      const ext = (s.fileName || 'file').split('.').pop().slice(0, 5);
+      thumbHtml = escapeHtml(ext);
+    }
+
+    const categoryLabel = labelFor(s.category || '');
+    const reflection = (s.reflection || '').toString().trim();
+    const when = formatWhen(s.timestamp);
+
+    const reflectionHtml = reflection
+      ? '<div class="row-reflection" data-reflection-display>' + escapeHtml(reflection) + '</div>'
+      : '<div class="row-reflection empty" data-reflection-display>No reflection submitted.</div>';
+
+    return (
+      '<div class="row" data-file-id="' + escapeAttr(fileId) + '">' +
+        '<div class="row-thumb">' + thumbHtml + '</div>' +
+        '<div class="row-body">' +
+          '<div class="row-head">' +
+            '<span class="row-name">' + escapeHtml(s.name || '') + '</span>' +
+            '<span class="row-email">' + escapeHtml(s.email || '') + '</span>' +
+          '</div>' +
+          '<div class="row-meta">' +
+            '<span class="row-category-pill">' + escapeHtml(categoryLabel) + '</span>' +
+            escapeHtml(when) +
+          '</div>' +
+          '<div class="row-filename">' + escapeHtml(s.fileName || '') + '</div>' +
+          reflectionHtml +
+        '</div>' +
+        '<div class="row-actions">' +
+          '<button class="btn" data-action="edit">Edit reflection</button>' +
+          '<a class="btn ghost" href="' + escapeAttr(driveOpenUrl) + '" target="_blank" rel="noopener">Open in Drive</a>' +
+          '<button class="btn danger" data-action="delete">Delete</button>' +
+        '</div>' +
+      '</div>'
+    );
+  }
+
+  function wireRowEvents() {
+    listEl.querySelectorAll('.row').forEach(function (row) {
+      const fileId = row.getAttribute('data-file-id');
+      const editBtn = row.querySelector('[data-action="edit"]');
+      const deleteBtn = row.querySelector('[data-action="delete"]');
+      editBtn.addEventListener('click', function () { startEditReflection(row, fileId); });
+      deleteBtn.addEventListener('click', function () { confirmDelete(row, fileId); });
+    });
+  }
+
+  function startEditReflection(row, fileId) {
+    const display = row.querySelector('[data-reflection-display]');
+    const submission = allSubmissions.find(function (s) { return s.fileId === fileId; });
+    const current = submission ? (submission.reflection || '').toString() : '';
+
+    const editor = document.createElement('div');
+    editor.className = 'row-reflection-edit';
+    editor.innerHTML =
+      '<textarea maxlength="' + MAX_REFLECTION + '" rows="3"></textarea>' +
+      '<div class="counter">0 of ' + MAX_REFLECTION + '</div>' +
+      '<div class="edit-actions">' +
+        '<button class="btn gold" data-edit-action="save">Save</button>' +
+        '<button class="btn ghost" data-edit-action="cancel">Cancel</button>' +
+      '</div>';
+    display.replaceWith(editor);
+
+    const textarea = editor.querySelector('textarea');
+    const counter = editor.querySelector('.counter');
+    textarea.value = current;
+    textarea.focus();
+    updateCount();
+    textarea.addEventListener('input', updateCount);
+    function updateCount() {
+      counter.textContent = textarea.value.length + ' of ' + MAX_REFLECTION;
+      counter.classList.toggle('over', textarea.value.length > MAX_REFLECTION);
+    }
+
+    editor.querySelector('[data-edit-action="cancel"]').addEventListener('click', function () {
+      cancelEdit();
+    });
+    editor.querySelector('[data-edit-action="save"]').addEventListener('click', async function () {
+      const newReflection = textarea.value.trim();
+      const saveBtn = editor.querySelector('[data-edit-action="save"]');
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Saving...';
+      try {
+        const res = await callApi('updateReflection', {
+          passcode: passcode,
+          fileId: fileId,
+          reflection: newReflection
+        });
+        if (!res.ok) throw new Error(res.error || 'Save failed.');
+        if (submission) submission.reflection = newReflection;
+        showToast('Reflection updated.');
+        render();
+      } catch (err) {
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Save';
+        showToast(err.message, true);
+      }
+    });
+
+    function cancelEdit() {
+      const newDisplay = document.createElement('div');
+      newDisplay.setAttribute('data-reflection-display', '');
+      if (current) {
+        newDisplay.className = 'row-reflection';
+        newDisplay.textContent = current;
+      } else {
+        newDisplay.className = 'row-reflection empty';
+        newDisplay.textContent = 'No reflection submitted.';
+      }
+      editor.replaceWith(newDisplay);
+    }
+  }
+
+  async function confirmDelete(row, fileId) {
+    const submission = allSubmissions.find(function (s) { return s.fileId === fileId; });
+    const label = submission ? (submission.name + ' - ' + submission.fileName) : 'this submission';
+    const ok = window.confirm('Delete ' + label + '?\n\nThe file will be moved to Drive trash and the row removed from the log. This cannot be undone from the admin page (but the file is recoverable from Drive trash for 30 days).');
+    if (!ok) return;
+
+    const deleteBtn = row.querySelector('[data-action="delete"]');
+    deleteBtn.disabled = true;
+    deleteBtn.textContent = 'Deleting...';
+
+    try {
+      const res = await callApi('delete', { passcode: passcode, fileId: fileId });
+      if (!res.ok) throw new Error(res.error || 'Delete failed.');
+      allSubmissions = allSubmissions.filter(function (s) { return s.fileId !== fileId; });
+      showToast(res.driveError ? 'Removed from log (Drive file already gone).' : 'Submission deleted.');
+      render();
+    } catch (err) {
+      deleteBtn.disabled = false;
+      deleteBtn.textContent = 'Delete';
+      showToast(err.message, true);
+    }
+  }
+
+  async function callApi(action, params) {
+    if (SCRIPT_URL.indexOf('PASTE_YOUR') === 0) {
+      throw new Error('Backend not configured.');
+    }
+    const body = new URLSearchParams();
+    body.set('action', action);
+    Object.keys(params).forEach(function (k) { body.set(k, params[k]); });
+    const res = await fetch(SCRIPT_URL, { method: 'POST', body: body });
+    return await res.json();
+  }
+
+  function formatWhen(ts) {
+    if (!ts) return '';
+    const d = new Date(ts);
+    if (isNaN(d.getTime())) return '';
+    return d.toLocaleString(undefined, {
+      month: 'short', day: 'numeric', year: 'numeric',
+      hour: 'numeric', minute: '2-digit'
+    });
+  }
+  function escapeHtml(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+  function escapeAttr(s) { return escapeHtml(s); }
+
+  let toastTimer = null;
+  function showToast(msg, isError) {
+    toast.textContent = msg;
+    toast.classList.toggle('error', !!isError);
+    toast.classList.add('active');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toast.classList.remove('active'); }, 3000);
+  }
+
+  passcodeInput.focus();
+</script>
+</body>
+</html>

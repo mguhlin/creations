@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Board | ShareSpace</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0A3476;
+    --navy-dark: #071f4a;
+    --navy-mid: #12428f;
+    --gold: #FCB040;
+    --gold-light: #fdd17a;
+    --gold-pale: #FEF0D0;
+    --pale-navy: #D0D8F0;
+    --white: #ffffff;
+    --off-white: #f7f8fc;
+    --text: #1a1a2e;
+    --text-muted: #5a6680;
+    --border: #e2e7f5;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    background: var(--off-white);
+    line-height: 1.5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .topbar {
+    background: var(--navy-dark);
+    color: var(--white);
+    padding: 32px 24px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .topbar::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -10%;
+    width: 480px; height: 480px;
+    background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
+    opacity: 0.10;
+    pointer-events: none;
+  }
+  .topbar-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    position: relative;
+  }
+  .topbar h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    margin: 0 0 4px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+  .topbar h1 em { color: var(--gold); font-style: italic; }
+  .topbar .sub {
+    color: var(--pale-navy);
+    font-size: 15px;
+    margin: 0;
+  }
+  .topbar .actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .topbar-btn {
+    background: transparent;
+    color: var(--white);
+    border: 1.5px solid rgba(255,255,255,0.3);
+    padding: 8px 16px;
+    font-family: inherit;
+    font-size: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s, border-color 0.15s;
+    display: inline-block;
+  }
+  .topbar-btn:hover { background: rgba(255,255,255,0.08); border-color: var(--gold); }
+  .topbar-btn.gold {
+    background: var(--gold);
+    color: var(--navy-dark);
+    border-color: var(--gold);
+  }
+  .topbar-btn.gold:hover {
+    background: var(--gold-light);
+    border-color: var(--gold-light);
+  }
+  .refresh-meta {
+    color: var(--pale-navy);
+    font-size: 12px;
+  }
+
+  .filters {
+    background: var(--white);
+    border-bottom: 1.5px solid var(--border);
+    padding: 14px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .filters-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    gap: 8px;
+    flex-wrap: nowrap;
+  }
+  .filter-pill {
+    background: var(--off-white);
+    color: var(--navy);
+    border: 1.5px solid var(--border);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .filter-pill:hover { border-color: var(--navy); }
+  .filter-pill.active {
+    background: var(--navy);
+    color: var(--white);
+    border-color: var(--navy);
+  }
+  .filter-pill .count {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 1px 7px;
+    background: var(--pale-navy);
+    color: var(--navy);
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .filter-pill.active .count { background: var(--gold); color: var(--navy-dark); }
+
+  main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px;
+    width: 100%;
+    flex: 1;
+  }
+
+  .state {
+    padding: 80px 24px;
+    text-align: center;
+    color: var(--text-muted);
+  }
+  .state .big {
+    font-family: 'DM Serif Display', serif;
+    color: var(--navy);
+    font-size: 22px;
+    margin-bottom: 8px;
+    font-weight: 400;
+  }
+  .spinner {
+    display: inline-block;
+    width: 28px; height: 28px;
+    border: 3px solid var(--border);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 12px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .grid {
+    column-count: 1;
+    column-gap: 18px;
+  }
+  @media (min-width: 600px)  { .grid { column-count: 2; } }
+  @media (min-width: 980px)  { .grid { column-count: 3; } }
+  @media (min-width: 1300px) { .grid { column-count: 4; } }
+
+  .card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 0 0 18px;
+    break-inside: avoid;
+    box-shadow: 0 2px 6px rgba(10, 52, 118, 0.04);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(10, 52, 118, 0.10);
+  }
+
+  .card-media { display: block; width: 100%; background: var(--off-white); }
+  .card-media img {
+    display: block;
+    width: 100%;
+    height: auto;
+    cursor: zoom-in;
+  }
+  .card-media iframe {
+    display: block;
+    width: 100%;
+    border: none;
+  }
+  .card-media.video iframe { aspect-ratio: 16 / 9; height: auto; }
+  .card-media.audio iframe { height: 80px; }
+  .card-media.pdf iframe { aspect-ratio: 8.5 / 11; height: auto; }
+
+  .card-text {
+    padding: 18px 18px 6px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 260px;
+    overflow: hidden;
+    position: relative;
+  }
+  .card-text.collapsed::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 60px;
+    background: linear-gradient(transparent, var(--white));
+  }
+  .card-text-toggle {
+    background: transparent;
+    border: none;
+    color: var(--navy);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 4px 18px 12px;
+    cursor: pointer;
+  }
+
+  .card-fileicon {
+    padding: 36px 18px;
+    text-align: center;
+    background: var(--off-white);
+    border-bottom: 1.5px solid var(--border);
+  }
+  .card-fileicon .ext {
+    display: inline-block;
+    background: var(--navy);
+    color: var(--white);
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 10px;
+  }
+  .card-fileicon .name {
+    color: var(--text);
+    font-size: 13px;
+    word-break: break-word;
+  }
+
+  .card-reflection {
+    padding: 14px 18px 0;
+    color: var(--text);
+    font-size: 13.5px;
+    line-height: 1.5;
+    border-top: 1.5px solid var(--border);
+    background: var(--off-white);
+    font-style: italic;
+    position: relative;
+  }
+  .card-reflection::before {
+    content: '\201C';
+    font-family: 'DM Serif Display', serif;
+    font-style: normal;
+    color: var(--gold);
+    font-size: 28px;
+    line-height: 1;
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    opacity: 0.7;
+  }
+  .card-reflection-inner {
+    padding-left: 18px;
+    padding-bottom: 14px;
+    word-break: break-word;
+  }
+
+  .category-pill {
+    display: inline-block;
+    background: var(--pale-navy);
+    color: var(--navy);
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    margin: 10px 18px 0;
+  }
+
+  .card-footer {
+    padding: 12px 18px 14px;
+    border-top: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .card-footer .person {
+    flex: 1;
+    min-width: 0;
+  }
+  .card-footer .name {
+    font-weight: 600;
+    color: var(--navy);
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .card-footer .when {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 1px;
+  }
+
+  .open-link {
+    background: transparent;
+    color: var(--navy);
+    border: 1.5px solid var(--border);
+    padding: 6px 12px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .open-link:hover { border-color: var(--gold); color: var(--navy-dark); }
+
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(7, 31, 74, 0.92);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .lightbox.active { display: flex; }
+  .lightbox img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 8px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  }
+  .lightbox-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: var(--white);
+    border: none;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    color: var(--navy);
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+
+  .credit {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 11px;
+    line-height: 1.5;
+    padding: 24px 16px 32px;
+  }
+  .credit a {
+    color: var(--text-muted);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--text-muted);
+  }
+  .credit a:hover { color: var(--navy); border-bottom-color: var(--navy); }
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div>
+        <h1><em>ShareSpace</em> Board</h1>
+        <p class="sub">What participants are sharing.</p>
+      </div>
+      <div class="actions">
+        <span class="refresh-meta" id="refresh-meta"></span>
+        <a href="submit.html" class="topbar-btn gold">+ Add submission</a>
+        <button class="topbar-btn" id="refresh-btn">Refresh</button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="filters">
+    <div class="filters-inner" id="filter-pills"></div>
+  </nav>
+
+  <main>
+    <div class="state" id="state">
+      <div class="spinner"></div>
+      <div>Loading submissions...</div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </main>
+
+  <div class="credit">
+    Developed by Miguel Guhlin -
+    <a href="https://blog.tcea.org" target="_blank" rel="noopener">blog.tcea.org</a>
+    | Social: <a href="https://mguhlin.org" target="_blank" rel="noopener">mguhlin.org</a>
+  </div>
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
+    <button class="lightbox-close" id="lightbox-close" aria-label="Close">&times;</button>
+    <img id="lightbox-img" alt="">
+  </div>
+
+<script>
+  // =====================================================================
+  // CONFIG - paste your Apps Script Web app URL here (ends in /exec)
+  // =====================================================================
+  const SCRIPT_URL = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+
+  // These must match ALLOWED_CATEGORIES in Code.gs and the <option> list in submit.html
+  const CATEGORIES = [
+    'General',
+    'Category 1',
+    'Category 2',
+    'Category 3',
+    'Category 4',
+    'Category 5'
+  ];
+
+  // Optional shorter labels for filter pills. Leave empty to use the full names.
+  const CATEGORY_LABELS = {
+    // 'General': 'General',
+    // 'Category 1': 'Cat 1'
+  };
+
+  const grid = document.getElementById('grid');
+  const stateEl = document.getElementById('state');
+  const filterPills = document.getElementById('filter-pills');
+  const refreshBtn = document.getElementById('refresh-btn');
+  const refreshMeta = document.getElementById('refresh-meta');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const lightboxClose = document.getElementById('lightbox-close');
+
+  let allSubmissions = [];
+  let activeFilter = 'all';
+
+  function labelFor(cat) {
+    return CATEGORY_LABELS[cat] || cat;
+  }
+
+  function buildFilters() {
+    const fragments = ['<button class="filter-pill active" data-filter="all">All <span class="count" id="count-all">0</span></button>'];
+    CATEGORIES.forEach(function (c) {
+      fragments.push(
+        '<button class="filter-pill" data-filter="' + escapeAttr(c) + '">' +
+          escapeHtml(labelFor(c)) +
+          ' <span class="count" data-count="' + escapeAttr(c) + '">0</span>' +
+        '</button>'
+      );
+    });
+    filterPills.innerHTML = fragments.join('');
+    filterPills.querySelectorAll('.filter-pill').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        filterPills.querySelectorAll('.filter-pill').forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        activeFilter = btn.getAttribute('data-filter');
+        render();
+      });
+    });
+  }
+
+  async function fetchSubmissions() {
+    if (SCRIPT_URL.indexOf('PASTE_YOUR') === 0) {
+      stateEl.innerHTML = '<div class="big">Backend not configured</div><div>Paste the Apps Script URL into SCRIPT_URL.</div>';
+      return;
+    }
+    try {
+      const res = await fetch(SCRIPT_URL + '?_=' + Date.now(), { method: 'GET' });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      allSubmissions = data.submissions || [];
+      updateCounts();
+      render();
+      refreshMeta.textContent = 'Updated ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    } catch (err) {
+      stateEl.style.display = 'block';
+      grid.innerHTML = '';
+      stateEl.innerHTML = '<div class="big">Could not load submissions</div><div>' + escapeHtml(err.message) + '</div>';
+    }
+  }
+
+  function updateCounts() {
+    document.getElementById('count-all').textContent = allSubmissions.length;
+    CATEGORIES.forEach(function (c) {
+      const el = document.querySelector('[data-count="' + cssEscape(c) + '"]');
+      if (el) el.textContent = allSubmissions.filter(function (s) { return s.category === c; }).length;
+    });
+  }
+
+  function render() {
+    let list = activeFilter === 'all'
+      ? allSubmissions
+      : allSubmissions.filter(function (s) { return s.category === activeFilter; });
+
+    if (list.length === 0) {
+      stateEl.style.display = 'block';
+      stateEl.innerHTML = '<div class="big">Nothing here yet</div><div>Submissions will appear as soon as participants upload.</div>';
+      grid.innerHTML = '';
+      return;
+    }
+
+    stateEl.style.display = 'none';
+    grid.innerHTML = list.map(renderCard).join('');
+
+    grid.querySelectorAll('.card-media img[data-fullsrc]').forEach(function (img) {
+      img.addEventListener('click', function () {
+        lightboxImg.src = img.getAttribute('data-fullsrc');
+        lightbox.classList.add('active');
+      });
+    });
+
+    grid.querySelectorAll('.card-text-toggle').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const target = btn.previousElementSibling;
+        target.classList.toggle('collapsed');
+        btn.textContent = target.classList.contains('collapsed') ? 'Show more' : 'Show less';
+      });
+    });
+  }
+
+  function renderCard(s) {
+    const mime = (s.mimeType || '').toLowerCase();
+    const fileId = s.fileId;
+    const firstName = (s.name || '').split(' ')[0] || 'Anonymous';
+    const categoryLabel = labelFor(s.category || '');
+    const when = formatWhen(s.timestamp);
+    const driveOpenUrl = s.fileUrl || ('https://drive.google.com/file/d/' + fileId + '/view');
+    const reflection = (s.reflection || '').toString().trim();
+
+    let mediaHtml = '';
+
+    if (mime.indexOf('text/') === 0 && s.textContent) {
+      const isLong = s.textContent.length > 400;
+      mediaHtml =
+        '<div class="card-text' + (isLong ? ' collapsed' : '') + '">' + escapeHtml(s.textContent) + '</div>' +
+        (isLong ? '<button class="card-text-toggle">Show more</button>' : '');
+    } else if (mime.indexOf('image/') === 0) {
+      const thumb = 'https://drive.google.com/thumbnail?id=' + encodeURIComponent(fileId) + '&sz=w1200';
+      mediaHtml =
+        '<div class="card-media">' +
+          '<img loading="lazy" src="' + thumb + '" data-fullsrc="' + thumb +
+          '" alt="' + escapeAttr(s.fileName || '') + '">' +
+        '</div>';
+    } else if (mime.indexOf('video/') === 0) {
+      mediaHtml =
+        '<div class="card-media video">' +
+          '<iframe loading="lazy" src="https://drive.google.com/file/d/' + encodeURIComponent(fileId) + '/preview" allow="autoplay" allowfullscreen></iframe>' +
+        '</div>';
+    } else if (mime.indexOf('audio/') === 0) {
+      mediaHtml =
+        '<div class="card-media audio">' +
+          '<iframe loading="lazy" src="https://drive.google.com/file/d/' + encodeURIComponent(fileId) + '/preview"></iframe>' +
+        '</div>';
+    } else if (mime === 'application/pdf') {
+      const thumb = 'https://drive.google.com/thumbnail?id=' + encodeURIComponent(fileId) + '&sz=w1200';
+      mediaHtml =
+        '<div class="card-media">' +
+          '<img loading="lazy" src="' + thumb + '" data-fullsrc="' + thumb +
+          '" alt="PDF: ' + escapeAttr(s.fileName || '') + '">' +
+        '</div>';
+    } else {
+      const ext = (s.fileName || 'file').split('.').pop().slice(0, 5);
+      mediaHtml =
+        '<div class="card-fileicon">' +
+          '<div class="ext">' + escapeHtml(ext) + '</div>' +
+          '<div class="name">' + escapeHtml(s.fileName || '') + '</div>' +
+        '</div>';
+    }
+
+    const reflectionHtml = reflection
+      ? '<div class="card-reflection"><div class="card-reflection-inner">' + escapeHtml(reflection) + '</div></div>'
+      : '';
+
+    return (
+      '<article class="card">' +
+        mediaHtml +
+        reflectionHtml +
+        '<div class="category-pill">' + escapeHtml(categoryLabel) + '</div>' +
+        '<div class="card-footer">' +
+          '<div class="person">' +
+            '<div class="name">' + escapeHtml(firstName) + '</div>' +
+            '<div class="when">' + escapeHtml(when) + '</div>' +
+          '</div>' +
+          '<a class="open-link" href="' + escapeAttr(driveOpenUrl) + '" target="_blank" rel="noopener">Open</a>' +
+        '</div>' +
+      '</article>'
+    );
+  }
+
+  function formatWhen(ts) {
+    if (!ts) return '';
+    const d = new Date(ts);
+    if (isNaN(d.getTime())) return '';
+    const now = new Date();
+    const diffMs = now - d;
+    const diffMin = Math.floor(diffMs / 60000);
+    if (diffMin < 1) return 'just now';
+    if (diffMin < 60) return diffMin + ' min ago';
+    const diffH = Math.floor(diffMin / 60);
+    if (diffH < 24) return diffH + ' hr ago';
+    const diffD = Math.floor(diffH / 24);
+    if (diffD < 7) return diffD + ' day' + (diffD === 1 ? '' : 's') + ' ago';
+    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+  function escapeAttr(s) { return escapeHtml(s); }
+  function cssEscape(s) {
+    if (window.CSS && CSS.escape) return CSS.escape(s);
+    return String(s).replace(/"/g, '\\"');
+  }
+
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', function (e) { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeLightbox(); });
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+    lightboxImg.src = '';
+  }
+
+  refreshBtn.addEventListener('click', fetchSubmissions);
+  setInterval(fetchSubmissions, 60000);
+
+  buildFilters();
+  fetchSubmissions();
+</script>
+</body>
+</html>
