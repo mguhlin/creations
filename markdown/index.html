@@ -388,10 +388,7 @@ $1    #genai-md-guide .panel-titlebar {
     </div>
 
     <div class="converter-body">
-      <div class="toolbar">
-        <button class="md-btn primary-btn" id="genai-md-copy-btn" type="button">Copy Raw HTML</button>
-        <button class="md-btn secondary-btn" id="genai-md-reset-btn" type="button">Reset Sample</button>
-      </div>
+      
 
       <div class="converter-grid">
         <div class="panel">
@@ -418,7 +415,13 @@ $1    #genai-md-guide .panel-titlebar {
       </div>
 
       <div class="panel raw-output">
-        <h3>Raw HTML Output</h3>
+        <div class="panel-titlebar">
+          <h3>Raw HTML Output</h3>
+          <div class="panel-actions">
+            <button class="mini-btn primary" id="genai-md-copy-btn" type="button">Copy Raw HTML</button>
+            <button class="mini-btn secondary" id="genai-md-clear-raw-btn" type="button">Clear</button>
+          </div>
+        </div>
         <textarea id="genai-md-html-output" readonly spellcheck="false"></textarea>
       </div>
 
@@ -1107,11 +1110,11 @@ Use clean Markdown with:
       const preview = root.querySelector("#genai-md-preview");
       const htmlOutput = root.querySelector("#genai-md-html-output");
       const copyBtn = root.querySelector("#genai-md-copy-btn");
-      const resetBtn = root.querySelector("#genai-md-reset-btn");
       const copyMarkdownBtn = root.querySelector("#genai-md-copy-markdown-btn");
       const clearMarkdownBtn = root.querySelector("#genai-md-clear-markdown-btn");
       const copyFormattedBtn = root.querySelector("#genai-md-copy-formatted-btn");
       const clearPreviewBtn = root.querySelector("#genai-md-clear-preview-btn");
+      const clearRawBtn = root.querySelector("#genai-md-clear-raw-btn");
 
       function escapeHtml(text) {
         return text
@@ -1336,32 +1339,29 @@ Use clean Markdown with:
 
       function clearMarkdown() {
         input.value = "";
-        updatePreview();
       }
 
       function clearPreview() {
         preview.innerHTML = "";
-        htmlOutput.value = "";
       }
 
-      function resetSample() {
-        input.value = sampleMarkdown;
-        updatePreview();
+      function clearRawHtml() {
+        htmlOutput.value = "";
       }
 
       input.addEventListener("input", updatePreview);
       copyBtn.addEventListener("click", copyHtml);
-      resetBtn.addEventListener("click", resetSample);
       copyMarkdownBtn.addEventListener("click", copyMarkdown);
       clearMarkdownBtn.addEventListener("click", clearMarkdown);
       copyFormattedBtn.addEventListener("click", copyFormattedHtml);
       clearPreviewBtn.addEventListener("click", clearPreview);
-      resetSample();
+      clearRawBtn.addEventListener("click", clearRawHtml);
+      input.value = sampleMarkdown;
+      updatePreview();
     })();
   </script>
 </div>
 
-</div>
 <hr>
 <div id="genai-md-guide">
   <style>
