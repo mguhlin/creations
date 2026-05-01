@@ -1,4 +1,4 @@
-<!-- WordPress Custom HTML Block: Markdown Cleaner + Converter -->
+<!-- WordPress Custom HTML Block: Markdown Cleaner + Find/Replace + HTML Converter -->
 <div id="wp-md-converter">
   <style>
     #wp-md-converter {
@@ -40,7 +40,7 @@
 
     #wp-md-converter .mdc-header p {
       margin: 0;
-      max-width: 900px;
+      max-width: 920px;
       line-height: 1.5;
     }
 
@@ -54,12 +54,73 @@
       gap: 1rem;
     }
 
-    #wp-md-converter .mdc-panel {
+    #wp-md-converter .mdc-panel,
+    #wp-md-converter .mdc-findbar {
       background: var(--paper);
       border: 1px solid var(--line);
       border-radius: 14px;
       overflow: hidden;
       box-shadow: 0 8px 24px rgba(30, 57, 141, .08);
+    }
+
+    #wp-md-converter .mdc-findbar {
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    #wp-md-converter .mdc-findbar h3 {
+      color: var(--navy);
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      line-height: 1.2;
+    }
+
+    #wp-md-converter .mdc-find-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: .75rem;
+      align-items: end;
+    }
+
+    #wp-md-converter .mdc-field label {
+      display: block;
+      color: var(--navy);
+      font-size: .82rem;
+      font-weight: 700;
+      margin-bottom: .25rem;
+    }
+
+    #wp-md-converter .mdc-field input[type="text"] {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: .65rem .75rem;
+      font: inherit;
+      color: var(--ink);
+      background: #ffffff;
+    }
+
+    #wp-md-converter .mdc-find-actions {
+      display: flex;
+      gap: .45rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    #wp-md-converter .mdc-check {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      font-size: .85rem;
+      color: #384152;
+      margin-top: .65rem;
+    }
+
+    #wp-md-converter .mdc-status {
+      min-height: 1.2rem;
+      margin-top: .6rem;
+      font-size: .9rem;
+      color: #5b6472;
     }
 
     #wp-md-converter .mdc-titlebar {
@@ -207,7 +268,8 @@
     }
 
     @media (max-width: 900px) {
-      #wp-md-converter .mdc-grid {
+      #wp-md-converter .mdc-grid,
+      #wp-md-converter .mdc-find-grid {
         grid-template-columns: 1fr;
       }
 
@@ -216,18 +278,40 @@
         flex-direction: column;
       }
 
-      #wp-md-converter .mdc-actions {
+      #wp-md-converter .mdc-actions,
+      #wp-md-converter .mdc-find-actions {
         justify-content: flex-start;
       }
     }
   </style>
 
   <div class="mdc-header">
-    <h2>Markdown Cleaner + HTML Converter</h2>
-    <p>Paste Markdown on the left, clean it when needed, preview formatted HTML on the right, and copy either Markdown, formatted content, or raw HTML.</p>
+    <h2>Markdown Cleaner + Find/Replace + HTML Converter</h2>
+    <p>Paste Markdown, clean common formatting problems, find and replace text, preview formatted HTML, and copy Markdown, formatted content, or raw HTML.</p>
   </div>
 
   <div class="mdc-body">
+    <div class="mdc-findbar">
+      <h3>Find and Replace in Markdown</h3>
+      <div class="mdc-find-grid">
+        <div class="mdc-field">
+          <label for="wp-md-find">Find</label>
+          <input type="text" id="wp-md-find" placeholder="Text to find">
+        </div>
+        <div class="mdc-field">
+          <label for="wp-md-replace">Replace with</label>
+          <input type="text" id="wp-md-replace" placeholder="Replacement text">
+        </div>
+        <div class="mdc-find-actions">
+          <button class="mdc-button mdc-primary" type="button" id="wp-md-find-next">Find Next</button>
+          <button class="mdc-button mdc-primary" type="button" id="wp-md-replace-next">Replace Next</button>
+          <button class="mdc-button mdc-secondary" type="button" id="wp-md-replace-all">Replace All</button>
+        </div>
+      </div>
+      <label class="mdc-check"><input type="checkbox" id="wp-md-match-case"> Match case</label>
+      <div class="mdc-status" id="wp-md-status" aria-live="polite"></div>
+    </div>
+
     <div class="mdc-grid">
       <div class="mdc-panel">
         <div class="mdc-titlebar">
@@ -278,6 +362,14 @@
         var preview = document.getElementById('wp-md-preview');
         var rawOutput = document.getElementById('wp-md-html-output');
 
+        var findInput = document.getElementById('wp-md-find');
+        var replaceInput = document.getElementById('wp-md-replace');
+        var matchCase = document.getElementById('wp-md-match-case');
+        var status = document.getElementById('wp-md-status');
+        var findNextBtn = document.getElementById('wp-md-find-next');
+        var replaceNextBtn = document.getElementById('wp-md-replace-next');
+        var replaceAllBtn = document.getElementById('wp-md-replace-all');
+
         var copyMarkdownBtn = document.getElementById('wp-md-copy-markdown');
         var cleanMarkdownBtn = document.getElementById('wp-md-clean-markdown');
         var clearMarkdownBtn = document.getElementById('wp-md-clear-markdown');
@@ -296,13 +388,17 @@
           '## Purpose',
           'Use this checklist to create clearer prompts for ChatGPT, Claude, Gemini, NotebookLM, Perplexity, or similar tools.',
           '',
+          '### ### Key Takeaways for Districts',
+          '',
+          '### ## Broader Context & Historical Parallel',
+          '',
           '## Strong Prompt Elements',
           '',
-          '- Clear task',
-          '- Specific audience',
-          '- Required format',
-          '- Source material separated in a code block',
-          '- Desired tone or reading level',
+          '* Clear task',
+          '* Specific audience',
+          '* Required format',
+          '* Source material separated in a code block',
+          '* Desired tone or reading level',
           '',
           '## Example Prompt',
           '',
@@ -321,10 +417,10 @@
           '',
           '## Student Checklist',
           '',
-          '- [ ] I explained my task clearly.',
-          '- [ ] I named my audience.',
-          '- [ ] I gave the AI a format to follow.',
-          '- [ ] I included source text when needed.',
+          '-[ ] I explained my task clearly.',
+          '-[ ] I named my audience.',
+          '-[ ] I gave the AI a format to follow.',
+          '-[ ] I included source text when needed.',
           '',
           '> Tip: Better structure usually leads to better GenAI output.'
         ].join('\n');
@@ -491,6 +587,21 @@
           return html;
         }
 
+        function fixDuplicateHeadingMarkers(line) {
+          var match = line.match(/^(\s*)((?:#{1,6}\s+){2,})(.*)$/);
+          if (!match) return line;
+
+          var markers = match[2].trim().split(/\s+/).filter(function (part) {
+            return /^#{1,6}$/.test(part);
+          });
+
+          if (markers.length < 2) return line;
+
+          var chosenMarker = markers[markers.length - 1];
+          var text = match[3].trim();
+          return match[1] + chosenMarker + ' ' + text;
+        }
+
         function cleanMarkdownText(markdown) {
           var text = String(markdown || '');
 
@@ -499,6 +610,7 @@
           var lines = text.split('\n');
           for (var i = 0; i < lines.length; i++) {
             lines[i] = lines[i].replace(/[ \t]+$/g, '');
+            lines[i] = fixDuplicateHeadingMarkers(lines[i]);
           }
           text = lines.join('\n');
 
@@ -507,6 +619,12 @@
           text = text.replace(/^[ \t]*-\s*\[\s*[xX]\s*\]\s*/gm, '- [x] ');
           text = text.replace(/^(\s*\d+)[\)\.]\s*/gm, '$1. ');
           text = text.replace(/^(#{1,6})([^\s#])/gm, '$1 $2');
+
+          lines = text.split('\n');
+          for (var j = 0; j < lines.length; j++) {
+            lines[j] = fixDuplicateHeadingMarkers(lines[j]);
+          }
+          text = lines.join('\n');
 
           text = text.replace(/([^\n])\n(#{1,6}\s)/g, '$1\n\n$2');
           text = text.replace(/^(#{1,6}\s.+)\n([^\n#>\-\d`\|])/gm, '$1\n\n$2');
@@ -531,6 +649,89 @@
           var html = markdownToHtml(input.value);
           preview.innerHTML = html;
           rawOutput.value = html;
+        }
+
+        function setStatus(message) {
+          if (status) status.textContent = message || '';
+        }
+
+        function findText(startFromSelection) {
+          var find = findInput.value;
+          if (!find) {
+            setStatus('Enter text to find.');
+            return -1;
+          }
+
+          var source = input.value;
+          var sourceForSearch = matchCase.checked ? source : source.toLowerCase();
+          var findForSearch = matchCase.checked ? find : find.toLowerCase();
+
+          var start = startFromSelection ? input.selectionEnd : 0;
+          var index = sourceForSearch.indexOf(findForSearch, start);
+
+          if (index === -1 && start > 0) {
+            index = sourceForSearch.indexOf(findForSearch, 0);
+          }
+
+          if (index === -1) {
+            setStatus('No match found.');
+            return -1;
+          }
+
+          input.focus();
+          input.setSelectionRange(index, index + find.length);
+          setStatus('Match found.');
+          return index;
+        }
+
+        function replaceNext() {
+          var find = findInput.value;
+          var replacement = replaceInput.value;
+          if (!find) {
+            setStatus('Enter text to find.');
+            return;
+          }
+
+          var selected = input.value.substring(input.selectionStart, input.selectionEnd);
+          var selectedMatches = matchCase.checked ? selected === find : selected.toLowerCase() === find.toLowerCase();
+
+          if (!selectedMatches) {
+            var found = findText(true);
+            if (found === -1) return;
+          }
+
+          var start = input.selectionStart;
+          var end = input.selectionEnd;
+          input.value = input.value.substring(0, start) + replacement + input.value.substring(end);
+          input.focus();
+          input.setSelectionRange(start, start + replacement.length);
+          updatePreview();
+          setStatus('Replaced one match.');
+        }
+
+        function escapeRegExp(text) {
+          return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        function replaceAll() {
+          var find = findInput.value;
+          var replacement = replaceInput.value;
+          if (!find) {
+            setStatus('Enter text to find.');
+            return;
+          }
+
+          var flags = matchCase.checked ? 'g' : 'gi';
+          var regex = new RegExp(escapeRegExp(find), flags);
+          var count = 0;
+
+          input.value = input.value.replace(regex, function () {
+            count++;
+            return replacement;
+          });
+
+          updatePreview();
+          setStatus(count + ' replacement' + (count === 1 ? '' : 's') + ' made.');
         }
 
         function copyPlainText(text, button, originalLabel) {
@@ -602,22 +803,33 @@
           input.value = cleanMarkdownText(input.value);
           updatePreview();
           cleanMarkdownBtn.textContent = 'Cleaned!';
+          setStatus('Markdown cleaned. Duplicate heading markers were normalized.');
           window.setTimeout(function () { cleanMarkdownBtn.textContent = 'Clean Markdown'; }, 1200);
         }
 
         function clearMarkdownOnly() {
           input.value = '';
+          setStatus('Markdown cleared.');
         }
 
         function clearPreviewOnly() {
           preview.innerHTML = '';
+          setStatus('Formatted preview cleared. It will regenerate when Markdown changes.');
         }
 
         function clearRawOnly() {
           rawOutput.value = '';
+          setStatus('Raw HTML cleared. It will regenerate when Markdown changes.');
         }
 
         input.addEventListener('input', updatePreview);
+
+        findNextBtn.addEventListener('click', function () {
+          findText(true);
+        });
+
+        replaceNextBtn.addEventListener('click', replaceNext);
+        replaceAllBtn.addEventListener('click', replaceAll);
 
         copyMarkdownBtn.addEventListener('click', function () {
           copyPlainText(input.value, copyMarkdownBtn, 'Copy Markdown');
