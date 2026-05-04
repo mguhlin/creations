@@ -1,0 +1,2108 @@
+<!-- WordPress Custom HTML Block: Markdown Cleaner + Find/Replace + HTML Converter -->
+<div id="wp-md-converter">
+  <style>
+    #wp-md-converter {
+      --navy: #1E398D;
+      --gold: #FAA634;
+      --ink: #1f2937;
+      --paper: #ffffff;
+      --soft: #f4f7fb;
+      --line: #d8dee9;
+      --code-bg: #111827;
+      --code-text: #f9fafb;
+      --radius: 16px;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin: 1.5rem 0;
+    }
+
+    #wp-md-converter * {
+      box-sizing: border-box;
+    }
+
+    #wp-md-converter .mdc-header {
+      background: var(--navy);
+      color: #ffffff;
+      padding: 1.5rem;
+      border-bottom: 6px solid var(--gold);
+    }
+
+    #wp-md-converter .mdc-header h2 {
+      color: #ffffff;
+      margin: 0 0 .4rem;
+      font-size: clamp(1.6rem, 3vw, 2.25rem);
+      line-height: 1.15;
+    }
+
+    #wp-md-converter .mdc-header p {
+      margin: 0;
+      max-width: 920px;
+      line-height: 1.5;
+    }
+
+    #wp-md-converter .mdc-body {
+      padding: 1rem;
+    }
+
+    #wp-md-converter .mdc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    #wp-md-converter .mdc-panel,
+    #wp-md-converter .mdc-findbar {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(30, 57, 141, .08);
+    }
+
+    #wp-md-converter .mdc-findbar {
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    #wp-md-converter .mdc-findbar h3 {
+      color: var(--navy);
+      margin: 0 0 .75rem;
+      font-size: 1.05rem;
+      line-height: 1.2;
+    }
+
+    #wp-md-converter .mdc-find-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: .75rem;
+      align-items: end;
+    }
+
+    #wp-md-converter .mdc-field label {
+      display: block;
+      color: var(--navy);
+      font-size: .82rem;
+      font-weight: 700;
+      margin-bottom: .25rem;
+    }
+
+    #wp-md-converter .mdc-field input[type="text"] {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: .65rem .75rem;
+      font: inherit;
+      color: var(--ink);
+      background: #ffffff;
+    }
+
+    #wp-md-converter .mdc-find-actions {
+      display: flex;
+      gap: .45rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    #wp-md-converter .mdc-check {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      font-size: .85rem;
+      color: #384152;
+      margin-top: .65rem;
+    }
+
+    #wp-md-converter .mdc-status {
+      min-height: 1.2rem;
+      margin-top: .6rem;
+      font-size: .9rem;
+      color: #5b6472;
+    }
+
+    #wp-md-converter .mdc-titlebar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem;
+      padding: .75rem 1rem;
+      background: #eaf0ff;
+      color: var(--navy);
+      border-bottom: 1px solid var(--line);
+    }
+
+    #wp-md-converter .mdc-titlebar h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 1.05rem;
+      line-height: 1.2;
+    }
+
+    #wp-md-converter .mdc-actions {
+      display: flex;
+      gap: .45rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    #wp-md-converter .mdc-button {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      padding: .45rem .72rem;
+      font-size: .78rem;
+      font-weight: 700;
+      cursor: pointer;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    #wp-md-converter .mdc-primary {
+      background: var(--navy);
+      color: #ffffff;
+    }
+
+    #wp-md-converter .mdc-secondary {
+      background: var(--gold);
+      color: #111827;
+    }
+
+    #wp-md-converter textarea {
+      width: 100%;
+      min-height: 520px;
+      padding: 1rem;
+      border: 0;
+      resize: vertical;
+      outline: none;
+      font-family: Consolas, Monaco, monospace;
+      font-size: .95rem;
+      line-height: 1.45;
+      color: #111827;
+      background: #ffffff;
+    }
+
+    #wp-md-converter .mdc-preview {
+      min-height: 520px;
+      padding: 1rem;
+      overflow: auto;
+      background: #ffffff;
+      line-height: 1.6;
+    }
+
+    #wp-md-converter .mdc-preview h1,
+    #wp-md-converter .mdc-preview h2,
+    #wp-md-converter .mdc-preview h3 {
+      color: var(--navy);
+      line-height: 1.2;
+    }
+
+    #wp-md-converter .mdc-preview h1 {
+      border-bottom: 3px solid var(--gold);
+      padding-bottom: .25rem;
+    }
+
+    #wp-md-converter .mdc-preview table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+
+    #wp-md-converter .mdc-preview th,
+    #wp-md-converter .mdc-preview td {
+      border: 1px solid var(--line);
+      padding: .65rem;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    #wp-md-converter .mdc-preview th {
+      background: #fff4df;
+    }
+
+    #wp-md-converter .mdc-preview code {
+      background: #eef2ff;
+      padding: .15rem .3rem;
+      border-radius: 5px;
+      font-family: Consolas, Monaco, monospace;
+    }
+
+    #wp-md-converter .mdc-preview pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 1rem;
+      border-radius: 12px;
+      overflow: auto;
+      white-space: pre-wrap;
+    }
+
+    #wp-md-converter .mdc-preview blockquote {
+      border-left: 6px solid var(--gold);
+      background: #fffaf0;
+      padding: .65rem 1rem;
+      margin-left: 0;
+      border-radius: 10px;
+    }
+
+    #wp-md-converter .mdc-preview a {
+      color: var(--navy);
+      font-weight: 700;
+    }
+
+    #wp-md-converter .mdc-output {
+      margin-top: 1rem;
+    }
+
+    #wp-md-converter #wp-md-html-output {
+      min-height: 220px;
+      background: var(--code-bg);
+      color: var(--code-text);
+    }
+
+    #wp-md-converter .mdc-note {
+      margin: .85rem 0 0;
+      color: #5b6472;
+      font-size: .94rem;
+    }
+
+    @media (max-width: 900px) {
+      #wp-md-converter .mdc-grid,
+      #wp-md-converter .mdc-find-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #wp-md-converter .mdc-titlebar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      #wp-md-converter .mdc-actions,
+      #wp-md-converter .mdc-find-actions {
+        justify-content: flex-start;
+      }
+    }
+  </style>
+
+  <div class="mdc-header">
+    <h2>Markdown Cleaner + Find/Replace + HTML Converter</h2>
+    <p>Paste Markdown, clean common formatting problems, find and replace text, preview formatted HTML, and copy Markdown, formatted content, or raw HTML.</p>
+  </div>
+
+  <div class="mdc-body">
+    <div class="mdc-findbar">
+      <h3>Find and Replace in Markdown</h3>
+      <div class="mdc-find-grid">
+        <div class="mdc-field">
+          <label for="wp-md-find">Find</label>
+          <input type="text" id="wp-md-find" placeholder="Text to find">
+        </div>
+        <div class="mdc-field">
+          <label for="wp-md-replace">Replace with</label>
+          <input type="text" id="wp-md-replace" placeholder="Replacement text">
+        </div>
+        <div class="mdc-find-actions">
+          <button class="mdc-button mdc-primary" type="button" id="wp-md-find-next">Find Next</button>
+          <button class="mdc-button mdc-primary" type="button" id="wp-md-replace-next">Replace Next</button>
+          <button class="mdc-button mdc-secondary" type="button" id="wp-md-replace-all">Replace All</button>
+        </div>
+      </div>
+      <label class="mdc-check"><input type="checkbox" id="wp-md-match-case"> Match case</label>
+      <div class="mdc-status" id="wp-md-status" aria-live="polite"></div>
+    </div>
+
+    <div class="mdc-grid">
+      <div class="mdc-panel">
+        <div class="mdc-titlebar">
+          <h3>Markdown Input</h3>
+          <div class="mdc-actions">
+            <button class="mdc-button mdc-primary" type="button" id="wp-md-copy-markdown">Copy Markdown</button>
+            <button class="mdc-button mdc-primary" type="button" id="wp-md-clean-markdown">Clean Markdown</button>
+            <button class="mdc-button mdc-secondary" type="button" id="wp-md-clear-markdown">Clear</button>
+          </div>
+        </div>
+        <textarea id="wp-md-input" spellcheck="false"></textarea>
+      </div>
+
+      <div class="mdc-panel">
+        <div class="mdc-titlebar">
+          <h3>Formatted HTML Preview</h3>
+          <div class="mdc-actions">
+            <button class="mdc-button mdc-primary" type="button" id="wp-md-copy-formatted">Copy Formatted</button>
+            <button class="mdc-button mdc-secondary" type="button" id="wp-md-clear-preview">Clear</button>
+          </div>
+        </div>
+        <div id="wp-md-preview" class="mdc-preview"></div>
+      </div>
+    </div>
+
+    <div class="mdc-panel mdc-output">
+      <div class="mdc-titlebar">
+        <h3>Raw HTML Output</h3>
+        <div class="mdc-actions">
+          <button class="mdc-button mdc-primary" type="button" id="wp-md-copy-raw">Copy Raw HTML</button>
+          <button class="mdc-button mdc-secondary" type="button" id="wp-md-clear-raw">Clear</button>
+        </div>
+      </div>
+      <textarea id="wp-md-html-output" readonly spellcheck="false"></textarea>
+    </div>
+
+    <p class="mdc-note">Note: If this does not run inside a WordPress Custom HTML block, your site may be blocking inline JavaScript. Add the same code through a trusted snippets plugin, child theme, custom plugin, or approved footer scripts area.</p>
+  </div>
+
+  <script type="text/javascript">
+    (function () {
+      function initMarkdownConverter() {
+        var root = document.getElementById('wp-md-converter');
+        if (!root || root.getAttribute('data-ready') === 'true') return;
+        root.setAttribute('data-ready', 'true');
+
+        var input = document.getElementById('wp-md-input');
+        var preview = document.getElementById('wp-md-preview');
+        var rawOutput = document.getElementById('wp-md-html-output');
+
+        var findInput = document.getElementById('wp-md-find');
+        var replaceInput = document.getElementById('wp-md-replace');
+        var matchCase = document.getElementById('wp-md-match-case');
+        var status = document.getElementById('wp-md-status');
+        var findNextBtn = document.getElementById('wp-md-find-next');
+        var replaceNextBtn = document.getElementById('wp-md-replace-next');
+        var replaceAllBtn = document.getElementById('wp-md-replace-all');
+
+        var copyMarkdownBtn = document.getElementById('wp-md-copy-markdown');
+        var cleanMarkdownBtn = document.getElementById('wp-md-clean-markdown');
+        var clearMarkdownBtn = document.getElementById('wp-md-clear-markdown');
+
+        var copyFormattedBtn = document.getElementById('wp-md-copy-formatted');
+        var clearPreviewBtn = document.getElementById('wp-md-clear-preview');
+
+        var copyRawBtn = document.getElementById('wp-md-copy-raw');
+        var clearRawBtn = document.getElementById('wp-md-clear-raw');
+
+        if (!input || !preview || !rawOutput) return;
+
+        var sample = [
+          '# GenAI Prompt Writing Checklist',
+          '',
+          '## Purpose',
+          'Use this checklist to create clearer prompts for ChatGPT, Claude, Gemini, NotebookLM, Perplexity, or similar tools.',
+          '',
+          '### ### Key Takeaways for Districts',
+          '',
+          '### ## Broader Context & Historical Parallel',
+          '',
+          '## Strong Prompt Elements',
+          '',
+          '* Clear task',
+          '* Specific audience',
+          '* Required format',
+          '* Source material separated in a code block',
+          '* Desired tone or reading level',
+          '',
+          '## Example Prompt',
+          '',
+          '```text',
+          'Create a 5th-grade reading activity about ecosystems.',
+          'Use short paragraphs, a vocabulary table, and five comprehension questions.',
+          '```',
+          '',
+          '## Vocabulary Table',
+          '',
+          '| Term | Student-Friendly Meaning | Example |',
+          '|---|---|---|',
+          '| Ecosystem | Living and nonliving things in one place | Pond, forest, desert |',
+          '| Habitat | Where an organism lives | A frog lives near water. |',
+          '| Adaptation | A trait that helps survival | A cactus stores water. |',
+          '',
+          '## Student Checklist',
+          '',
+          '-[ ] I explained my task clearly.',
+          '-[ ] I named my audience.',
+          '-[ ] I gave the AI a format to follow.',
+          '-[ ] I included source text when needed.',
+          '',
+          '> Tip: Better structure usually leads to better GenAI output.'
+        ].join('\n');
+
+        function escapeHtml(text) {
+          return String(text)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+        }
+
+        function inlineFormat(text) {
+          var safe = escapeHtml(text);
+          safe = safe.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+          safe = safe.replace(/`([^`]+)`/g, '<code>$1</code>');
+          safe = safe.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+          safe = safe.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+          return safe;
+        }
+
+        function isDivider(row) {
+          return /^\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?$/.test(row.trim());
+        }
+
+        function makeTable(lines, start) {
+          var rows = [];
+          var i = start;
+
+          while (i < lines.length && /^\|.*\|$/.test(lines[i].trim())) {
+            rows.push(lines[i].trim());
+            i++;
+          }
+
+          if (rows.length < 2 || !isDivider(rows[1])) return null;
+
+          var headers = rows[0].split('|').slice(1, -1);
+          var body = rows.slice(2);
+          var html = '<table><thead><tr>';
+
+          for (var h = 0; h < headers.length; h++) {
+            html += '<th>' + inlineFormat(headers[h].trim()) + '</th>';
+          }
+
+          html += '</tr></thead><tbody>';
+
+          for (var r = 0; r < body.length; r++) {
+            var cells = body[r].split('|').slice(1, -1);
+            html += '<tr>';
+            for (var c = 0; c < cells.length; c++) {
+              html += '<td>' + inlineFormat(cells[c].trim()) + '</td>';
+            }
+            html += '</tr>';
+          }
+
+          html += '</tbody></table>';
+          return { html: html, next: i };
+        }
+
+        function markdownToHtml(md) {
+          var lines = String(md).split(/\r?\n/);
+          var html = '';
+          var inCode = false;
+          var codeLines = [];
+          var codeLang = '';
+          var inUL = false;
+          var inOL = false;
+
+          function closeLists() {
+            if (inUL) {
+              html += '</ul>';
+              inUL = false;
+            }
+            if (inOL) {
+              html += '</ol>';
+              inOL = false;
+            }
+          }
+
+          for (var i = 0; i < lines.length; i++) {
+            var line = lines[i];
+            var t = line.trim();
+
+            if (t.indexOf('```') === 0) {
+              closeLists();
+              if (!inCode) {
+                inCode = true;
+                codeLang = t.replace('```', '').trim();
+                codeLines = [];
+              } else {
+                html += '<pre><code' + (codeLang ? ' class="language-' + escapeHtml(codeLang) + '"' : '') + '>' + escapeHtml(codeLines.join('\n')) + '</code></pre>';
+                inCode = false;
+                codeLang = '';
+              }
+              continue;
+            }
+
+            if (inCode) {
+              codeLines.push(line);
+              continue;
+            }
+
+            if (/^\|.*\|$/.test(t) && i + 1 < lines.length && isDivider(lines[i + 1])) {
+              closeLists();
+              var table = makeTable(lines, i);
+              if (table) {
+                html += table.html;
+                i = table.next - 1;
+                continue;
+              }
+            }
+
+            if (t === '') {
+              closeLists();
+              continue;
+            }
+
+            if (t.indexOf('### ') === 0) {
+              closeLists();
+              html += '<h3>' + inlineFormat(t.substring(4)) + '</h3>';
+            } else if (t.indexOf('## ') === 0) {
+              closeLists();
+              html += '<h2>' + inlineFormat(t.substring(3)) + '</h2>';
+            } else if (t.indexOf('# ') === 0) {
+              closeLists();
+              html += '<h1>' + inlineFormat(t.substring(2)) + '</h1>';
+            } else if (t.indexOf('> ') === 0) {
+              closeLists();
+              html += '<blockquote>' + inlineFormat(t.substring(2)) + '</blockquote>';
+            } else if (/^- \[[ xX]\] /.test(t)) {
+              if (!inUL) {
+                closeLists();
+                html += '<ul>';
+                inUL = true;
+              }
+              var checked = /^- \[[xX]\]/.test(t) ? ' checked' : '';
+              html += '<li><input type="checkbox" disabled' + checked + '> ' + inlineFormat(t.replace(/^- \[[ xX]\] /, '')) + '</li>';
+            } else if (t.indexOf('- ') === 0) {
+              if (!inUL) {
+                closeLists();
+                html += '<ul>';
+                inUL = true;
+              }
+              html += '<li>' + inlineFormat(t.substring(2)) + '</li>';
+            } else if (/^\d+\. /.test(t)) {
+              if (!inOL) {
+                closeLists();
+                html += '<ol>';
+                inOL = true;
+              }
+              html += '<li>' + inlineFormat(t.replace(/^\d+\. /, '')) + '</li>';
+            } else if (t === '---') {
+              closeLists();
+              html += '<hr>';
+            } else {
+              closeLists();
+              html += '<p>' + inlineFormat(t) + '</p>';
+            }
+          }
+
+          closeLists();
+          if (inCode) {
+            html += '<pre><code>' + escapeHtml(codeLines.join('\n')) + '</code></pre>';
+          }
+          return html;
+        }
+
+        function fixDuplicateHeadingMarkers(line) {
+          var match = line.match(/^(\s*)((?:#{1,6}\s+){2,})(.*)$/);
+          if (!match) return line;
+
+          var markers = match[2].trim().split(/\s+/).filter(function (part) {
+            return /^#{1,6}$/.test(part);
+          });
+
+          if (markers.length < 2) return line;
+
+          var chosenMarker = markers[markers.length - 1];
+          var text = match[3].trim();
+          return match[1] + chosenMarker + ' ' + text;
+        }
+
+        function cleanMarkdownText(markdown) {
+          var text = String(markdown || '');
+
+          text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
+          var lines = text.split('\n');
+          for (var i = 0; i < lines.length; i++) {
+            lines[i] = lines[i].replace(/[ \t]+$/g, '');
+            lines[i] = fixDuplicateHeadingMarkers(lines[i]);
+          }
+          text = lines.join('\n');
+
+          text = text.replace(/^[ \t]*[•*]\s+/gm, '- ');
+          text = text.replace(/^[ \t]*-\s*\[\s*\]\s*/gm, '- [ ] ');
+          text = text.replace(/^[ \t]*-\s*\[\s*[xX]\s*\]\s*/gm, '- [x] ');
+          text = text.replace(/^(\s*\d+)[\)\.]\s*/gm, '$1. ');
+          text = text.replace(/^(#{1,6})([^\s#])/gm, '$1 $2');
+
+          lines = text.split('\n');
+          for (var j = 0; j < lines.length; j++) {
+            lines[j] = fixDuplicateHeadingMarkers(lines[j]);
+          }
+          text = lines.join('\n');
+
+          text = text.replace(/([^\n])\n(#{1,6}\s)/g, '$1\n\n$2');
+          text = text.replace(/^(#{1,6}\s.+)\n([^\n#>\-\d`\|])/gm, '$1\n\n$2');
+
+          text = text.replace(/([^\n])\n```/g, '$1\n\n```');
+          text = text.replace(/```\n([^\n])/g, '```\n\n$1');
+
+          text = text.replace(/^\|?[\s\-:|]+\|?$/gm, function (line) {
+            if (line.indexOf('|') === -1 || line.indexOf('-') === -1) return line;
+            var cells = line.split('|').filter(function (cell) {
+              return cell.trim() !== '';
+            });
+            if (cells.length < 2) return line;
+            return '|' + cells.map(function () { return '---'; }).join('|') + '|';
+          });
+
+          text = text.replace(/\n{3,}/g, '\n\n');
+          return text.trim();
+        }
+
+        function updatePreview() {
+          var html = markdownToHtml(input.value);
+          preview.innerHTML = html;
+          rawOutput.value = html;
+        }
+
+        function setStatus(message) {
+          if (status) status.textContent = message || '';
+        }
+
+        function findText(startFromSelection) {
+          var find = findInput.value;
+          if (!find) {
+            setStatus('Enter text to find.');
+            return -1;
+          }
+
+          var source = input.value;
+          var sourceForSearch = matchCase.checked ? source : source.toLowerCase();
+          var findForSearch = matchCase.checked ? find : find.toLowerCase();
+
+          var start = startFromSelection ? input.selectionEnd : 0;
+          var index = sourceForSearch.indexOf(findForSearch, start);
+
+          if (index === -1 && start > 0) {
+            index = sourceForSearch.indexOf(findForSearch, 0);
+          }
+
+          if (index === -1) {
+            setStatus('No match found.');
+            return -1;
+          }
+
+          input.focus();
+          input.setSelectionRange(index, index + find.length);
+          setStatus('Match found.');
+          return index;
+        }
+
+        function replaceNext() {
+          var find = findInput.value;
+          var replacement = replaceInput.value;
+          if (!find) {
+            setStatus('Enter text to find.');
+            return;
+          }
+
+          var selected = input.value.substring(input.selectionStart, input.selectionEnd);
+          var selectedMatches = matchCase.checked ? selected === find : selected.toLowerCase() === find.toLowerCase();
+
+          if (!selectedMatches) {
+            var found = findText(true);
+            if (found === -1) return;
+          }
+
+          var start = input.selectionStart;
+          var end = input.selectionEnd;
+          input.value = input.value.substring(0, start) + replacement + input.value.substring(end);
+          input.focus();
+          input.setSelectionRange(start, start + replacement.length);
+          updatePreview();
+          setStatus('Replaced one match.');
+        }
+
+        function escapeRegExp(text) {
+          return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        function replaceAll() {
+          var find = findInput.value;
+          var replacement = replaceInput.value;
+          if (!find) {
+            setStatus('Enter text to find.');
+            return;
+          }
+
+          var flags = matchCase.checked ? 'g' : 'gi';
+          var regex = new RegExp(escapeRegExp(find), flags);
+          var count = 0;
+
+          input.value = input.value.replace(regex, function () {
+            count++;
+            return replacement;
+          });
+
+          updatePreview();
+          setStatus(count + ' replacement' + (count === 1 ? '' : 's') + ' made.');
+        }
+
+        function copyPlainText(text, button, originalLabel) {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(function () {
+              button.textContent = 'Copied!';
+              window.setTimeout(function () { button.textContent = originalLabel; }, 1200);
+            }).catch(function () {
+              fallbackCopyText(text, button, originalLabel);
+            });
+          } else {
+            fallbackCopyText(text, button, originalLabel);
+          }
+        }
+
+        function fallbackCopyText(text, button, originalLabel) {
+          var temp = document.createElement('textarea');
+          temp.value = text;
+          temp.setAttribute('readonly', '');
+          temp.style.position = 'absolute';
+          temp.style.left = '-9999px';
+          document.body.appendChild(temp);
+          temp.select();
+          try { document.execCommand('copy'); } catch (e) {}
+          document.body.removeChild(temp);
+          button.textContent = 'Copied!';
+          window.setTimeout(function () { button.textContent = originalLabel; }, 1200);
+        }
+
+        function copyFormatted() {
+          var html = preview.innerHTML;
+          var plain = preview.innerText || preview.textContent || '';
+
+          if (navigator.clipboard && window.ClipboardItem) {
+            try {
+              var htmlBlob = new Blob([html], { type: 'text/html' });
+              var textBlob = new Blob([plain], { type: 'text/plain' });
+              navigator.clipboard.write([
+                new ClipboardItem({
+                  'text/html': htmlBlob,
+                  'text/plain': textBlob
+                })
+              ]).then(function () {
+                copyFormattedBtn.textContent = 'Copied!';
+                window.setTimeout(function () { copyFormattedBtn.textContent = 'Copy Formatted'; }, 1200);
+              }).catch(function () {
+                fallbackCopyFormatted();
+              });
+              return;
+            } catch (e) {}
+          }
+
+          fallbackCopyFormatted();
+        }
+
+        function fallbackCopyFormatted() {
+          var range = document.createRange();
+          range.selectNodeContents(preview);
+          var selection = window.getSelection();
+          selection.removeAllRanges();
+          selection.addRange(range);
+          try { document.execCommand('copy'); } catch (e) {}
+          selection.removeAllRanges();
+          copyFormattedBtn.textContent = 'Copied!';
+          window.setTimeout(function () { copyFormattedBtn.textContent = 'Copy Formatted'; }, 1200);
+        }
+
+        function cleanMarkdown() {
+          input.value = cleanMarkdownText(input.value);
+          updatePreview();
+          cleanMarkdownBtn.textContent = 'Cleaned!';
+          setStatus('Markdown cleaned. Duplicate heading markers were normalized.');
+          window.setTimeout(function () { cleanMarkdownBtn.textContent = 'Clean Markdown'; }, 1200);
+        }
+
+        function clearMarkdownOnly() {
+          input.value = '';
+          setStatus('Markdown cleared.');
+        }
+
+        function clearPreviewOnly() {
+          preview.innerHTML = '';
+          setStatus('Formatted preview cleared. It will regenerate when Markdown changes.');
+        }
+
+        function clearRawOnly() {
+          rawOutput.value = '';
+          setStatus('Raw HTML cleared. It will regenerate when Markdown changes.');
+        }
+
+        input.addEventListener('input', updatePreview);
+
+        findNextBtn.addEventListener('click', function () {
+          findText(true);
+        });
+
+        replaceNextBtn.addEventListener('click', replaceNext);
+        replaceAllBtn.addEventListener('click', replaceAll);
+
+        copyMarkdownBtn.addEventListener('click', function () {
+          copyPlainText(input.value, copyMarkdownBtn, 'Copy Markdown');
+        });
+
+        cleanMarkdownBtn.addEventListener('click', cleanMarkdown);
+        clearMarkdownBtn.addEventListener('click', clearMarkdownOnly);
+
+        copyFormattedBtn.addEventListener('click', copyFormatted);
+        clearPreviewBtn.addEventListener('click', clearPreviewOnly);
+
+        copyRawBtn.addEventListener('click', function () {
+          copyPlainText(rawOutput.value, copyRawBtn, 'Copy Raw HTML');
+        });
+
+        clearRawBtn.addEventListener('click', clearRawOnly);
+
+        input.value = sample;
+        updatePreview();
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initMarkdownConverter);
+      } else {
+        initMarkdownConverter();
+      }
+    })();
+  </script>
+</div>
+
+<hr>
+<div id="genai-md-guide">
+  <style>
+    #genai-md-guide {
+      --navy: #1E398D;
+      --gold: #FAA634;
+      --ink: #1f2937;
+      --muted: #5b6472;
+      --paper: #ffffff;
+      --soft: #f4f7fb;
+      --line: #d8dee9;
+      --code-bg: #111827;
+      --code-text: #f9fafb;
+      --radius: 16px;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      line-height: 1.6;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    #genai-md-guide * {
+      box-sizing: border-box;
+    }
+
+    #genai-md-guide .hero {
+      background: var(--navy);
+      color: #ffffff;
+      padding: 2rem;
+      border-radius: var(--radius);
+      border-bottom: 8px solid var(--gold);
+      margin: 0 0 1.5rem;
+    }
+
+    #genai-md-guide .hero h1 {
+      color: #ffffff;
+      margin: 0 0 .5rem;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.1;
+    }
+
+    #genai-md-guide .hero p {
+      margin: 0;
+      max-width: 900px;
+      font-size: 1.1rem;
+    }
+
+    #genai-md-guide .section {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1.4rem;
+      margin: 1.25rem 0;
+      box-shadow: 0 8px 24px rgba(30, 57, 141, 0.06);
+    }
+
+    #genai-md-guide .section > h2 {
+      color: var(--navy);
+      margin-top: 0;
+      padding-bottom: .35rem;
+      border-bottom: 3px solid var(--gold);
+      line-height: 1.2;
+    }
+
+    #genai-md-guide h3 {
+      color: var(--navy);
+      margin-top: 1.2rem;
+      line-height: 1.25;
+    }
+
+    #genai-md-guide h4 {
+      color: var(--ink);
+      margin-bottom: .35rem;
+    }
+
+    #genai-md-guide p {
+      margin: .65rem 0;
+    }
+
+    #genai-md-guide a {
+      color: var(--navy);
+      font-weight: 700;
+    }
+
+    #genai-md-guide .callout {
+      background: #fffaf0;
+      border-left: 7px solid var(--gold);
+      padding: .9rem 1rem;
+      margin: 1rem 0;
+      border-radius: 10px;
+    }
+
+    #genai-md-guide .mini-card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    #genai-md-guide .mini-card {
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 1rem;
+    }
+
+    #genai-md-guide .mini-card strong {
+      color: var(--navy);
+    }
+
+    #genai-md-guide ul,
+    #genai-md-guide ol {
+      padding-left: 1.4rem;
+    }
+
+    #genai-md-guide li {
+      margin: .35rem 0;
+    }
+
+    #genai-md-guide code {
+      background: #eef2ff;
+      color: #111827;
+      padding: .15rem .35rem;
+      border-radius: 5px;
+      font-family: Consolas, Monaco, monospace;
+      font-size: .92em;
+    }
+
+    #genai-md-guide pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 1rem;
+      border-radius: 14px;
+      overflow: auto;
+      white-space: pre-wrap;
+      border: 1px solid #30394a;
+    }
+
+    #genai-md-guide pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+      border-radius: 0;
+      font-size: .95rem;
+      line-height: 1.5;
+    }
+
+    #genai-md-guide table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: .97rem;
+    }
+
+    #genai-md-guide th,
+    #genai-md-guide td {
+      border: 1px solid var(--line);
+      padding: .7rem;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    #genai-md-guide th {
+      background: #fff4df;
+      color: #111827;
+    }
+
+    #genai-md-guide .converter {
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin: 1rem 0 1.25rem;
+    }
+
+    #genai-md-guide .converter-header {
+      background: var(--navy);
+      color: #ffffff;
+      padding: 1.2rem;
+      border-bottom: 6px solid var(--gold);
+    }
+
+    #genai-md-guide .converter-header h2 {
+      color: #ffffff;
+      margin: 0 0 .35rem;
+      border: 0;
+      padding: 0;
+    }
+
+    #genai-md-guide .converter-header p {
+      margin: 0;
+    }
+
+    #genai-md-guide .converter-body {
+      padding: 1rem;
+    }
+
+    #genai-md-guide .toolbar {
+      display: flex;
+      gap: .75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    #genai-md-guide button.md-btn {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      padding: .75rem 1rem;
+      font-weight: 700;
+      font-size: .95rem;
+      cursor: pointer;
+    }
+
+    #genai-md-guide .primary-btn {
+      background: var(--navy);
+      color: #ffffff;
+    }
+
+    #genai-md-guide .secondary-btn {
+      background: var(--gold);
+      color: #111827;
+    }
+
+    #genai-md-guide .converter-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    #genai-md-guide .panel {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    #genai-md-guide .panel h3 {
+      margin: 0;
+      padding: .85rem 1rem;
+      background: #eaf0ff;
+      color: var(--navy);
+      border-bottom: 1px solid var(--line);
+      font-size: 1.05rem;
+    }
+
+    #genai-md-guide textarea {
+      width: 100%;
+      min-height: 520px;
+      padding: 1rem;
+      border: 0;
+      resize: vertical;
+      outline: none;
+      font-family: Consolas, Monaco, monospace;
+      font-size: .95rem;
+      line-height: 1.45;
+      color: #111827;
+      background: #ffffff;
+    }
+
+    #genai-md-guide .preview-pane {
+      min-height: 520px;
+      padding: 1rem;
+      overflow: auto;
+      background: #ffffff;
+    }
+
+    #genai-md-guide .preview-pane h1,
+    #genai-md-guide .preview-pane h2,
+    #genai-md-guide .preview-pane h3 {
+      color: var(--navy);
+      border: 0;
+      padding: 0;
+    }
+
+    #genai-md-guide .preview-pane h1 {
+      border-bottom: 3px solid var(--gold);
+      padding-bottom: .25rem;
+    }
+
+    #genai-md-guide .preview-pane blockquote {
+      border-left: 6px solid var(--gold);
+      background: #fffaf0;
+      padding: .6rem 1rem;
+      margin-left: 0;
+      border-radius: 10px;
+    }
+
+    #genai-md-guide .preview-pane pre {
+      white-space: pre-wrap;
+    }
+
+    #genai-md-guide .raw-output {
+      margin-top: 1rem;
+    }
+
+    #genai-md-guide #genai-md-html-output {
+      min-height: 220px;
+      background: var(--code-bg);
+      color: var(--code-text);
+    }
+
+    #genai-md-guide .quick-card {
+      background: #f8fbff;
+      border: 2px solid var(--navy);
+      border-radius: var(--radius);
+      padding: 1.2rem;
+    }
+
+    #genai-md-guide .quick-card h2 {
+      color: var(--navy);
+      margin-top: 0;
+      border-bottom: 3px solid var(--gold);
+      padding-bottom: .35rem;
+    }
+
+    #genai-md-guide .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    #genai-md-guide .small-note {
+      color: var(--muted);
+      font-size: .94rem;
+    }
+
+    @media (max-width: 900px) {
+      #genai-md-guide .converter-grid,
+      #genai-md-guide .two-col,
+      #genai-md-guide .mini-card-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #genai-md-guide .hero,
+      #genai-md-guide .section {
+        padding: 1rem;
+      }
+    }
+  </style>
+
+  <section class="hero">
+    <h1>Markdown Basics for GenAI Tools</h1>
+    <p>A practical, copy-ready tutorial for writing clean Markdown that works well in ChatGPT, Claude, Gemini, NotebookLM, Perplexity, GitHub, blogs, LMS pages, and other AI-powered tools.</p>
+  </section>
+
+  <section class="converter" aria-label="Markdown to HTML converter">
+    <div class="converter-header">
+      <h2>Try It First: Markdown to HTML Converter</h2>
+      <p>Type Markdown on the left. See the formatted preview on the right. Copy the generated HTML below.</p>
+    </div>
+
+    <div class="converter-body">
+      <div class="toolbar">
+        <button class="md-btn primary-btn" id="genai-md-copy-btn" type="button">Copy HTML</button>
+        <button class="md-btn secondary-btn" id="genai-md-reset-btn" type="button">Reset Sample</button>
+      </div>
+
+      <div class="converter-grid">
+        <div class="panel">
+          <h3>Markdown Input</h3>
+          <textarea id="genai-md-input" spellcheck="false"></textarea>
+        </div>
+
+        <div class="panel">
+          <h3>HTML Preview</h3>
+          <div id="genai-md-preview" class="preview-pane"></div>
+        </div>
+      </div>
+
+      <div class="panel raw-output">
+        <h3>Raw HTML Output</h3>
+        <textarea id="genai-md-html-output" readonly spellcheck="false"></textarea>
+      </div>
+
+      <p class="small-note">Note: This lightweight converter supports common Markdown patterns used in prompts, tutorials, tables, checklists, and classroom materials. For production publishing workflows, use a full Markdown parser.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Why Markdown Matters</h2>
+    <p>Markdown is a simple way to format text using plain characters. It helps GenAI tools understand structure, sections, examples, source text, and reusable output patterns.</p>
+
+    <div class="mini-card-grid">
+      <div class="mini-card"><strong>Clearer prompts</strong><br>Use headings, bullets, and code blocks so AI tools can follow your instructions.</div>
+      <div class="mini-card"><strong>Cleaner outputs</strong><br>Ask for Markdown when you need content that is easy to copy, revise, and publish.</div>
+      <div class="mini-card"><strong>Reusable resources</strong><br>Turn AI responses into rubrics, tables, handouts, checklists, blog posts, and LMS pages.</div>
+    </div>
+
+    <div class="callout"><strong>Simple idea:</strong> Markdown is clean formatting for humans and AI.</div>
+  </section>
+
+  <section class="section">
+    <h2>1. Headings: Organize Your Ideas</h2>
+    <p>Use headings to divide content into clear sections.</p>
+
+<pre><code># Main Title
+## Major Section
+### Subsection
+#### Detail Section</code></pre>
+
+    <h3>Example</h3>
+<pre><code># Cell Respiration Lesson
+
+## Learning Goal
+Students will explain how cells release energy from glucose.
+
+## Vocabulary
+- Glucose
+- Oxygen
+- Carbon dioxide
+- ATP
+
+## Exit Ticket
+Explain why cells need oxygen during respiration.</code></pre>
+
+    <div class="callout"><strong>Best practice:</strong> Use one <code>#</code> heading for the main title. Use <code>##</code> and <code>###</code> for the rest.</div>
+  </section>
+
+  <section class="section">
+    <h2>2. Paragraphs: Keep Them Short</h2>
+    <p>Markdown paragraphs are regular text separated by blank lines.</p>
+
+<pre><code>This is one paragraph.
+
+This is another paragraph.</code></pre>
+
+    <h3>Instead of this</h3>
+<pre><code>Students will work in groups to read the article answer questions discuss their answers and then write a summary of what they learned about renewable energy sources and their impact on communities.</code></pre>
+
+    <h3>Use this</h3>
+<pre><code>Students will work in groups to read the article.
+
+They will answer discussion questions with their group.
+
+Then, each student will write a short summary about renewable energy and its impact on communities.</code></pre>
+  </section>
+
+  <section class="section">
+    <h2>3. Bold and Italics: Add Emphasis</h2>
+<pre><code>**Important idea**
+
+*Emphasized phrase*</code></pre>
+
+    <h3>Example</h3>
+<pre><code>**Claim:** School start times should be later.
+
+*Reason:* Students need enough sleep to learn effectively.</code></pre>
+
+    <div class="callout"><strong>Best practice:</strong> Do not overuse bold. If everything is bold, nothing stands out.</div>
+  </section>
+
+  <section class="section">
+    <h2>4. Bulleted Lists: Use for Simple Items</h2>
+<pre><code>- Pencil
+- Notebook
+- Highlighter
+- Chromebook</code></pre>
+
+    <h3>Example Prompt</h3>
+<pre><code>Create a student-friendly checklist for this lesson.
+
+Include:
+- Materials
+- Vocabulary
+- Partner task
+- Independent practice
+- Exit ticket</code></pre>
+  </section>
+
+  <section class="section">
+    <h2>5. Numbered Lists: Use for Steps</h2>
+<pre><code>1. Read the passage.
+2. Highlight key evidence.
+3. Discuss with a partner.
+4. Write a one-paragraph response.</code></pre>
+
+    <h3>GenAI Prompt Example</h3>
+<pre><code>Create a lesson plan using these steps:
+
+1. Begin with a hook.
+2. Introduce three vocabulary terms.
+3. Model one example.
+4. Give students guided practice.
+5. End with an exit ticket.</code></pre>
+  </section>
+
+  <section class="section">
+    <h2>6. Blockquotes: Highlight Source Text or Notes</h2>
+<pre><code>&gt; This is a quoted passage or highlighted note.</code></pre>
+
+    <h3>Example</h3>
+<pre><code>Read this sentence from the article:
+
+&gt; The river became polluted after chemicals entered the water supply.
+
+Explain the cause-and-effect relationship in student-friendly language.</code></pre>
+
+    <p>Blockquotes are useful when you want the AI to treat text as a passage, quote, note, or student sample.</p>
+  </section>
+
+  <section class="section">
+    <h2>7. Horizontal Lines: Separate Sections</h2>
+<pre><code>---</code></pre>
+
+    <h3>Example</h3>
+<pre><code>## Teacher Notes
+
+Use this section for planning.
+
+---
+
+## Student Version
+
+Use this section for student-facing directions.</code></pre>
+  </section>
+
+  <section class="section">
+    <h2>8. Inline Code: Mark Commands or Exact Text</h2>
+<pre><code>Use `Ctrl + C` to copy.
+
+The file is named `lesson-plan.md`.</code></pre>
+
+    <h3>Example</h3>
+<pre><code>In Mermaid, start a flowchart with `flowchart TD`.</code></pre>
+  </section>
+
+  <section class="section">
+    <h2>9. Fenced Code Blocks: Preserve Exact Formatting</h2>
+    <p>Code blocks are one of the most important Markdown features for GenAI tools.</p>
+
+<pre><code>```text
+Put exact text here.
+```</code></pre>
+
+    <p>Use code blocks to preserve line breaks, indentation, prompts, source text, examples, and code.</p>
+
+    <h3>Markdown Code Block Example</h3>
+<pre><code>```markdown
+# Lesson Title
+
+## Objective
+Students will identify the main idea of a nonfiction passage.
+
+## Activity
+- Read the passage.
+- Highlight key details.
+- Write a summary.
+```</code></pre>
+
+    <h3>Other Labeled Code Blocks</h3>
+<pre><code>```html
+&lt;h1&gt;Hello, world!&lt;/h1&gt;
+```
+
+```css
+body {
+  font-family: Arial, sans-serif;
+}
+```
+
+```javascript
+console.log("Hello, world!");
+```
+
+```python
+print("Hello, world!")
+```</code></pre>
+  </section>
+
+  <section class="section">
+    <h2>10. Safe Prompt Pattern for GenAI</h2>
+    <p>Separate your instructions from your source material.</p>
+
+<pre><code>You are helping me create a student-friendly reading activity.
+
+## Task
+Create a 6th-grade reading activity from the source text.
+
+## Requirements
+- Use simple language.
+- Include 5 vocabulary words.
+- Include 3 comprehension questions.
+- Include 1 short writing prompt.
+
+## Source Text
+```text
+Paste the article, passage, notes, or transcript here.
+```</code></pre>
+
+    <div class="callout"><strong>Why this works:</strong> The AI can clearly identify the role, task, requirements, and source text.</div>
+  </section>
+
+  <section class="section">
+    <h2>11. Tables: Organize Information Clearly</h2>
+    <p>Markdown tables use pipes <code>|</code> and hyphens <code>-</code>.</p>
+
+<pre><code>| Column 1 | Column 2 | Column 3 |
+|---|---|---|
+| Row 1 | Detail | Detail |
+| Row 2 | Detail | Detail |</code></pre>
+
+    <h3>Example</h3>
+<pre><code>| Term | Student-Friendly Definition | Example |
+|---|---|---|
+| Claim | What you believe or argue | School lunches should be healthier. |
+| Evidence | Facts that support your claim | A survey showed students want more fruit. |
+| Reasoning | Explanation that connects evidence to claim | More fruit can help students make healthier choices. |</code></pre>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Term</th>
+          <th>Student-Friendly Definition</th>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Claim</td>
+          <td>What you believe or argue</td>
+          <td>School lunches should be healthier.</td>
+        </tr>
+        <tr>
+          <td>Evidence</td>
+          <td>Facts that support your claim</td>
+          <td>A survey showed students want more fruit.</td>
+        </tr>
+        <tr>
+          <td>Reasoning</td>
+          <td>Explanation that connects evidence to claim</td>
+          <td>More fruit can help students make healthier choices.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <h2>12. Tables for GenAI Prompts</h2>
+    <p>Tables are excellent for giving AI tools structured requirements.</p>
+
+<pre><code>Create a rubric using this structure:
+
+| Criteria | 4 - Advanced | 3 - Proficient | 2 - Developing | 1 - Beginning |
+|---|---|---|---|---|
+| Claim | Clear, specific, and arguable | Clear and arguable | Somewhat clear | Missing or unclear |
+| Evidence | Strong, relevant evidence | Relevant evidence | Limited evidence | Little or no evidence |
+| Reasoning | Explains evidence thoroughly | Explains evidence clearly | Explanation is basic | Explanation is missing |</code></pre>
+
+    <h3>Best Uses for Tables</h3>
+    <ul>
+      <li>Rubrics</li>
+      <li>Comparison charts</li>
+      <li>Vocabulary lists</li>
+      <li>Lesson plan outlines</li>
+      <li>Assessment blueprints</li>
+      <li>Choice boards</li>
+    </ul>
+
+    <div class="callout"><strong>Best practice:</strong> Keep table cells short. Long paragraphs inside table cells are hard to read and hard to revise.</div>
+  </section>
+
+  <section class="section">
+    <h2>13. Checklists</h2>
+    <p>Use <code>- [ ]</code> for unchecked boxes and <code>- [x]</code> for checked boxes.</p>
+
+<pre><code>- [ ] Read the article.
+- [ ] Highlight three important details.
+- [ ] Write one question.
+- [ ] Share with a partner.</code></pre>
+
+    <h3>Example Prompt</h3>
+<pre><code>Create a student checklist for revising an argumentative paragraph.
+
+Use this format:
+
+- [ ] My claim is clear.
+- [ ] I included evidence.
+- [ ] I explained how the evidence supports my claim.
+- [ ] I checked spelling and punctuation.</code></pre>
+  </section>
+
+  <section class="section">
+    <h2>14. Links and Images</h2>
+
+    <h3>Links</h3>
+<pre><code>[Link Text](https://example.com)</code></pre>
+
+    <h4>Example</h4>
+<pre><code>Read more at [NASA Climate Kids](https://climatekids.nasa.gov/).</code></pre>
+
+    <div class="callout"><strong>Best practice:</strong> Use descriptive link text. Avoid “click here.”</div>
+
+    <h3>Images</h3>
+<pre><code>![Alt text describing the image](image-file.png)</code></pre>
+
+    <h4>Example</h4>
+<pre><code>![Diagram of the water cycle](water-cycle.png)</code></pre>
+  </section>
+
+  <section class="section">
+    <h2>15. Escaping Markdown Characters</h2>
+    <p>Sometimes you want to show Markdown symbols without activating them. Use a backslash before the symbol.</p>
+
+<pre><code>\# This will not become a heading.
+
+\* This will not become a bullet.</code></pre>
+  </section>
+
+  <section class="section">
+    <h2>16. Common Markdown Mistakes</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Mistake</th>
+          <th>Problem</th>
+          <th>Fix</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>No blank line between sections</td>
+          <td>Text may run together</td>
+          <td>Add blank lines</td>
+        </tr>
+        <tr>
+          <td>Unclosed code block</td>
+          <td>Everything after it may look like code</td>
+          <td>Add closing backticks</td>
+        </tr>
+        <tr>
+          <td>Tables with uneven columns</td>
+          <td>Table may break</td>
+          <td>Match the number of cells</td>
+        </tr>
+        <tr>
+          <td>Huge table cells</td>
+          <td>Hard to read</td>
+          <td>Keep cells short</td>
+        </tr>
+        <tr>
+          <td>Too many heading levels</td>
+          <td>Structure becomes confusing</td>
+          <td>Mostly use <code>#</code>, <code>##</code>, and <code>###</code></td>
+        </tr>
+        <tr>
+          <td>Smart quotes in code</td>
+          <td>Code may break</td>
+          <td>Use plain quotes</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <h2>17. Prompt Template: Ask for Clean Markdown Output</h2>
+
+<pre><code>Create the output in clean Markdown.
+
+## Requirements
+- Use `#`, `##`, and `###` headings.
+- Use short paragraphs.
+- Use bullets for lists.
+- Use tables only when they make information easier to scan.
+- Put copy-ready examples inside fenced code blocks.
+- Do not use decorative symbols.
+- Do not use emojis unless requested.
+- Make the result easy to copy into a blog, LMS, Google Doc, or GitHub page.
+
+## Topic
+[Insert your topic here]
+
+## Audience
+[Insert your audience here]
+
+## Purpose
+[Insert what the output should help the reader do]</code></pre>
+  </section>
+
+  <section class="section">
+    <h2>18. Prompt Template: Convert Notes into Markdown</h2>
+
+<pre><code>Convert these rough notes into clean Markdown.
+
+## Requirements
+- Add a clear title.
+- Organize ideas under headings.
+- Use bullets for lists.
+- Create a table if it helps compare ideas.
+- Keep wording clear and concise.
+- Preserve important details.
+
+## Rough Notes
+```text
+Paste notes here.
+```</code></pre>
+  </section>
+
+  <section class="section">
+    <h2>19. Prompt Template: Create a Markdown Table</h2>
+
+<pre><code>Turn this information into a clean Markdown table.
+
+## Requirements
+- Use short column headings.
+- Keep each cell brief.
+- Make the table easy to scan.
+- Do not include long paragraphs inside cells.
+
+## Information
+```text
+Paste information here.
+```</code></pre>
+  </section>
+
+  <section class="section">
+    <h2>20. Prompt Template: Create a Rubric in Markdown</h2>
+
+<pre><code>Create a student-friendly rubric in Markdown.
+
+## Audience
+[Grade level or student group]
+
+## Assignment
+[Describe the task]
+
+## Requirements
+- Use a Markdown table.
+- Include 4 performance levels.
+- Use student-friendly language.
+- Keep each cell short.
+- Add a brief self-reflection checklist after the rubric.
+
+## Criteria
+```text
+Paste criteria here.
+```</code></pre>
+  </section>
+
+  <section class="section">
+    <h2>21. Prompt Template: Create a Lesson Plan in Markdown</h2>
+
+<pre><code>Create a lesson plan in clean Markdown.
+
+## Topic
+[Insert topic]
+
+## Grade Level
+[Insert grade level]
+
+## Time
+[Insert lesson length]
+
+## Requirements
+- Use clear headings.
+- Include a learning objective.
+- Include vocabulary.
+- Include teacher steps.
+- Include student tasks.
+- Include checks for understanding.
+- Include an exit ticket.
+- Use tables only where helpful.</code></pre>
+  </section>
+
+  <section class="section">
+    <h2>22. Before-and-After Example</h2>
+
+    <h3>Rough Prompt</h3>
+<pre><code>make me a lesson about main idea with questions and stuff for 5th grade</code></pre>
+
+    <h3>Improved Markdown Prompt</h3>
+<pre><code>Create a 5th-grade lesson on identifying the main idea in nonfiction text.
+
+## Requirements
+- Use clean Markdown.
+- Include a learning objective.
+- Include 3 vocabulary terms.
+- Include teacher modeling steps.
+- Include guided practice.
+- Include independent practice.
+- Include 5 comprehension questions.
+- End with an exit ticket.
+
+## Format
+```markdown
+# Lesson Title
+
+## Learning Objective
+
+## Vocabulary
+
+## Teacher Modeling
+
+## Guided Practice
+
+## Independent Practice
+
+## Questions
+
+## Exit Ticket
+```</code></pre>
+
+    <p>The improved version gives the AI a clear grade level, topic, output format, checklist, and Markdown structure to follow.</p>
+  </section>
+
+  <section class="quick-card">
+    <h2>Quick Reference Card: Markdown for GenAI Tools</h2>
+
+    <div class="two-col">
+      <div>
+        <h3>Headings</h3>
+<pre><code># Title
+## Section
+### Subsection</code></pre>
+
+        <h3>Bold and Italics</h3>
+<pre><code>**Bold text**
+*Italic text*</code></pre>
+
+        <h3>Bullets</h3>
+<pre><code>- Item one
+- Item two
+- Item three</code></pre>
+
+        <h3>Numbered Steps</h3>
+<pre><code>1. First step
+2. Second step
+3. Third step</code></pre>
+
+        <h3>Blockquote</h3>
+<pre><code>&gt; Quoted text or source passage</code></pre>
+      </div>
+
+      <div>
+        <h3>Inline Code</h3>
+<pre><code>Use `inline code` for exact text.</code></pre>
+
+        <h3>Code Block</h3>
+<pre><code>```text
+Paste exact text here.
+```</code></pre>
+
+        <h3>Table</h3>
+<pre><code>| Column 1 | Column 2 |
+|---|---|
+| Row 1 | Detail |
+| Row 2 | Detail |</code></pre>
+
+        <h3>Checklist</h3>
+<pre><code>- [ ] Task one
+- [ ] Task two
+- [x] Completed task</code></pre>
+
+        <h3>Link and Image</h3>
+<pre><code>[Link text](https://example.com)
+
+![Alt text](image.png)</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>GenAI Markdown Rules of Thumb</h2>
+    <ol>
+      <li>Use headings to show structure.</li>
+      <li>Use bullets for scannable lists.</li>
+      <li>Use numbered lists for ordered steps.</li>
+      <li>Use code blocks for exact text, prompts, code, or templates.</li>
+      <li>Use tables for comparisons, rubrics, and structured information.</li>
+      <li>Keep table cells short.</li>
+      <li>Separate instructions from source material.</li>
+      <li>Label code blocks when possible.</li>
+      <li>Avoid decorative formatting.</li>
+      <li>Make the output easy to copy and reuse.</li>
+    </ol>
+  </section>
+
+  <section class="section">
+    <h2>Practice Activity</h2>
+    <p>Use Markdown to create a prompt for a GenAI tool. Your prompt should include a title, task, audience, requirements, source text, and requested output format.</p>
+
+<pre><code># GenAI Task Prompt
+
+## Task
+Create [type of output] about [topic].
+
+## Audience
+This is for [grade level or audience].
+
+## Requirements
+- Requirement one
+- Requirement two
+- Requirement three
+
+## Source Text
+```text
+Paste source text here.
+```
+
+## Output Format
+Use clean Markdown with:
+- Headings
+- Bullets
+- A table if helpful
+- A short summary</code></pre>
+  </section>
+
+  <section class="section">
+    <h2>Final Tip</h2>
+    <p>Markdown works best when it is simple. Clear headings, short lists, clean tables, and well-labeled code blocks help both people and GenAI tools understand exactly what you want.</p>
+  </section>
+
+  <script>
+    (function () {
+      const root = document.getElementById("genai-md-guide");
+      if (!root) return;
+
+      const sampleMarkdown = [
+        "# GenAI Prompt Writing Checklist",
+        "",
+        "## Purpose",
+        "Use this checklist to create clearer prompts for ChatGPT, Claude, Gemini, NotebookLM, Perplexity, or similar tools.",
+        "",
+        "## Strong Prompt Elements",
+        "",
+        "- Clear task",
+        "- Specific audience",
+        "- Required format",
+        "- Source material separated in a code block",
+        "- Desired tone or reading level",
+        "",
+        "## Example Prompt",
+        "",
+        "```text",
+        "Create a 5th-grade reading activity about ecosystems.",
+        "Use short paragraphs, a vocabulary table, and five comprehension questions.",
+        "```",
+        "",
+        "## Vocabulary Table",
+        "",
+        "| Term | Student-Friendly Meaning | Example |",
+        "|---|---|---|",
+        "| Ecosystem | Living and nonliving things in one place | Pond, forest, desert |",
+        "| Habitat | Where an organism lives | A frog lives near water. |",
+        "| Adaptation | A trait that helps survival | A cactus stores water. |",
+        "",
+        "## Student Checklist",
+        "",
+        "- [ ] I explained my task clearly.",
+        "- [ ] I named my audience.",
+        "- [ ] I gave the AI a format to follow.",
+        "- [ ] I included source text when needed.",
+        "",
+        "> Tip: Better structure usually leads to better GenAI output."
+      ].join("\n");
+
+      const input = root.querySelector("#genai-md-input");
+      const preview = root.querySelector("#genai-md-preview");
+      const htmlOutput = root.querySelector("#genai-md-html-output");
+      const copyBtn = root.querySelector("#genai-md-copy-btn");
+      const resetBtn = root.querySelector("#genai-md-reset-btn");
+
+      function escapeHtml(text) {
+        return text
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
+
+      function formatInline(text) {
+        let safe = escapeHtml(text);
+        safe = safe.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+        safe = safe.replace(/`([^`]+)`/g, "<code>$1</code>");
+        safe = safe.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+        safe = safe.replace(/\*([^*]+)\*/g, "<em>$1</em>");
+        return safe;
+      }
+
+      function parseTable(lines, startIndex) {
+        const rows = [];
+        let i = startIndex;
+
+        while (i < lines.length && /^\|.*\|$/.test(lines[i].trim())) {
+          rows.push(lines[i].trim());
+          i++;
+        }
+
+        if (rows.length < 2) return null;
+
+        const headers = rows[0].split("|").slice(1, -1).map(cell => formatInline(cell.trim()));
+        const bodyRows = rows.slice(2).map(row =>
+          row.split("|").slice(1, -1).map(cell => formatInline(cell.trim()))
+        );
+
+        let html = "<table><thead><tr>";
+        html += headers.map(h => "<th>" + h + "</th>").join("");
+        html += "</tr></thead><tbody>";
+        html += bodyRows.map(row => "<tr>" + row.map(cell => "<td>" + cell + "</td>").join("") + "</tr>").join("");
+        html += "</tbody></table>";
+        return { html: html, nextIndex: i };
+      }
+
+      function markdownToHtml(markdown) {
+        const lines = markdown.split("\n");
+        let html = "";
+        let inUL = false;
+        let inOL = false;
+        let inCode = false;
+        let codeBuffer = [];
+        let codeLang = "";
+
+        function closeLists() {
+          if (inUL) {
+            html += "</ul>";
+            inUL = false;
+          }
+          if (inOL) {
+            html += "</ol>";
+            inOL = false;
+          }
+        }
+
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i];
+          const trimmed = line.trim();
+
+          if (trimmed.startsWith("```")) {
+            closeLists();
+            if (!inCode) {
+              inCode = true;
+              codeLang = trimmed.replace("```", "").trim();
+              codeBuffer = [];
+            } else {
+              html += '<pre><code' + (codeLang ? ' class="language-' + codeLang + '"' : "") + ">" +
+                escapeHtml(codeBuffer.join("\n")) +
+                "</code></pre>";
+              inCode = false;
+              codeLang = "";
+            }
+            continue;
+          }
+
+          if (inCode) {
+            codeBuffer.push(line);
+            continue;
+          }
+
+          if (/^\|.*\|$/.test(trimmed) && i + 1 < lines.length && /^\|\s*:?-+:?\s*(\|\s*:?-+:?\s*)+\|?$/.test(lines[i + 1].trim())) {
+            closeLists();
+            const table = parseTable(lines, i);
+            if (table) {
+              html += table.html;
+              i = table.nextIndex - 1;
+              continue;
+            }
+          }
+
+          if (trimmed === "") {
+            closeLists();
+            continue;
+          }
+
+          if (trimmed.startsWith("### ")) {
+            closeLists();
+            html += "<h3>" + formatInline(trimmed.slice(4)) + "</h3>";
+          } else if (trimmed.startsWith("## ")) {
+            closeLists();
+            html += "<h2>" + formatInline(trimmed.slice(3)) + "</h2>";
+          } else if (trimmed.startsWith("# ")) {
+            closeLists();
+            html += "<h1>" + formatInline(trimmed.slice(2)) + "</h1>";
+          } else if (trimmed.startsWith("> ")) {
+            closeLists();
+            html += "<blockquote>" + formatInline(trimmed.slice(2)) + "</blockquote>";
+          } else if (/^- \[[ xX]\] /.test(trimmed)) {
+            if (!inUL) {
+              closeLists();
+              html += "<ul>";
+              inUL = true;
+            }
+            const checked = /^- \[[xX]\]/.test(trimmed) ? " checked" : "";
+            const text = trimmed.replace(/^- \[[ xX]\] /, "");
+            html += '<li><input type="checkbox" disabled' + checked + "> " + formatInline(text) + "</li>";
+          } else if (trimmed.startsWith("- ")) {
+            if (!inUL) {
+              closeLists();
+              html += "<ul>";
+              inUL = true;
+            }
+            html += "<li>" + formatInline(trimmed.slice(2)) + "</li>";
+          } else if (/^\d+\. /.test(trimmed)) {
+            if (!inOL) {
+              closeLists();
+              html += "<ol>";
+              inOL = true;
+            }
+            html += "<li>" + formatInline(trimmed.replace(/^\d+\. /, "")) + "</li>";
+          } else if (trimmed === "---") {
+            closeLists();
+            html += "<hr>";
+          } else {
+            closeLists();
+            html += "<p>" + formatInline(trimmed) + "</p>";
+          }
+        }
+
+        closeLists();
+        return html;
+      }
+
+      function updatePreview() {
+        const html = markdownToHtml(input.value);
+        preview.innerHTML = html;
+        htmlOutput.value = html;
+      }
+
+      async function copyHtml() {
+        try {
+          await navigator.clipboard.writeText(htmlOutput.value);
+          copyBtn.textContent = "Copied!";
+          setTimeout(function () {
+            copyBtn.textContent = "Copy HTML";
+          }, 1200);
+        } catch (error) {
+          htmlOutput.select();
+          document.execCommand("copy");
+          copyBtn.textContent = "Copied!";
+          setTimeout(function () {
+            copyBtn.textContent = "Copy HTML";
+          }, 1200);
+        }
+      }
+
+      function resetSample() {
+        input.value = sampleMarkdown;
+        updatePreview();
+      }
+
+      input.addEventListener("input", updatePreview);
+      copyBtn.addEventListener("click", copyHtml);
+      resetBtn.addEventListener("click", resetSample);
+      resetSample();
+    })();
+  </script>
+</div>
+
