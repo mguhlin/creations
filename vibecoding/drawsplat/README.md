@@ -140,3 +140,24 @@ This build includes:
 - multilingual entry pages
 - Simple / Advanced interface toggle
 - double-click inline shape text editing
+- icon-first toolbars with hover/focus tooltips
+- accessible icon buttons with `aria-label`, `title`, and keyboard-focus tooltip support
+
+## Icon-first interface
+
+This build reduces word-heavy controls by converting the most common toolbar buttons into self-explanatory icons. Hovering over an icon, focusing it with the keyboard, or using a screen reader still exposes the full action name.
+
+The icon pass is applied to:
+
+- drawing tools
+- shape tools
+- undo / redo
+- image load
+- duplicate
+- arrange tools
+- panel tools
+- export tools
+- common selected-object actions
+- zoom controls
+
+Less obvious teacher/admin actions can still show icon + text where clarity matters.
