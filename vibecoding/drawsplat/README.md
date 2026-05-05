@@ -1,4 +1,4 @@
-# DrawSplat
+# DrawSplat v2.4
 
 DrawSplat is a self-contained interactive whiteboard for K-16 educators and students. It runs as a static website, works in the browser, and can optionally save boards, templates, collaboration rooms, and turn-ins to Google Drive and Google Sheets.
 
