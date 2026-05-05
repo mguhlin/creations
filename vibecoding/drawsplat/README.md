@@ -163,3 +163,19 @@ The icon pass is applied to:
 - zoom controls
 
 Less obvious teacher/admin actions can still show icon + text where clarity matters.
+
+## Panel switching fix
+
+This build updates panel navigation so tabs switch by each panel's stable panel ID rather than by array position. This prevents the issue where adding a new panel and switching to it could make it difficult or impossible to return to Panel 1.
+
+Related behavior:
+
+- panel tab clicks use `data-panel-id`
+- `switchPanel(panelId)` finds the correct panel by ID
+- inline text edits are committed before switching panels
+- selection, connector state, marquee selection, drawing state, and drag state are cleared on panel switch
+- deleting a panel safely reassigns the active panel
+
+## Version
+
+Current build: **DrawSplat v2.1 — Stable Panel Switching Build**
