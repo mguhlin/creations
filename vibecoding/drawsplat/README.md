@@ -178,7 +178,7 @@ Related behavior:
 
 ## Version
 
-Current build: **DrawSplat v2.3 — Productivity Workspace Build**
+Current build: **DrawSplat v2.4 — Productivity Workspace Build**
 
 ## Version 2.2 panel hotfix
 
@@ -192,7 +192,7 @@ Updated panel behavior:
 - Panel tabs support both `data-panel-id` and a fallback `data-panel-index`.
 - Clicking Panel 1 after creating or switching to another panel should now work reliably.
 
-Current build: **DrawSplat v2.3 — Productivity Workspace Build**
+Current build: **DrawSplat v2.4 — Productivity Workspace Build**
 
 ## Version 2.3 productivity workspace update
 
@@ -210,4 +210,27 @@ The Workspace setting is separate from the existing **Simple / Advanced** interf
 - Education Tools + Simple
 - Education Tools + Advanced
 
-Current build: **DrawSplat v2.3 — Productivity Workspace Build**
+Current build: **DrawSplat v2.4 — Productivity Workspace Build**
+
+
+## Security and Internet-Facing Deployment Warning
+
+DrawSplat can be hosted as a static web app, but a public internet-facing deployment should be treated as a user-generated-content application, not just a simple HTML page.
+
+Before using DrawSplat on a public server, review these risks:
+
+- **Do not store secrets in the front-end.** Public HTML, JavaScript, Apps Script URLs, and client-side settings can be viewed by users.
+- **Rich text and imported board files can carry unsafe content.** DrawSplat includes basic cleanup, but public deployments should add stronger server-side validation and a strict Content Security Policy.
+- **Uploads can be abused.** This build blocks SVG uploads, limits common image/audio types, and adds file-size checks, but public deployments should also enforce server-side limits.
+- **Google Apps Script endpoints can be misused if deployed to “anyone.”** Use the narrowest permissions possible, keep Drive data in a dedicated folder, and do not expose administrative actions without additional protection.
+- **Front-end hiding is not security.** Productivity/Education mode, Teacher/Student mode, and hidden buttons are convenience controls only. Anything sensitive must be enforced by the backend.
+- **Avoid confidential student records.** Do not use public DrawSplat boards for protected student data unless your hosting, authentication, retention, and access controls have been reviewed.
+
+Recommended public-hosting protections:
+
+- Serve only over HTTPS.
+- Add security headers, especially `Content-Security-Policy`, `X-Content-Type-Options: nosniff`, and `frame-ancestors 'none'`.
+- Keep uploads small and limited to safe file types.
+- Use long, unguessable room or board IDs if cloud sharing is enabled.
+- Review Apps Script permissions and logs regularly.
+- Provide a way to clear local browser data on shared devices.
