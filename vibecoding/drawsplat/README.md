@@ -178,4 +178,18 @@ Related behavior:
 
 ## Version
 
-Current build: **DrawSplat v2.1 — Stable Panel Switching Build**
+Current build: **DrawSplat v2.2 — Panel Tab Hotfix Build**
+
+## Version 2.2 panel hotfix
+
+This hotfix strengthens panel behavior for both new boards and boards restored from older browser autosaves.
+
+Updated panel behavior:
+
+- Every panel is guaranteed to have a stable internal panel ID during migration.
+- Older autosaved boards with missing panel IDs are automatically repaired on load.
+- The top `+` tab for adding a panel uses delegated tab-click handling instead of a fragile direct handler.
+- Panel tabs support both `data-panel-id` and a fallback `data-panel-index`.
+- Clicking Panel 1 after creating or switching to another panel should now work reliably.
+
+Current build: **DrawSplat v2.2 — Panel Tab Hotfix Build**
