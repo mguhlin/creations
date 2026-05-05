@@ -14,12 +14,14 @@ DrawSplat is a self-contained interactive whiteboard for K-16 educators and stud
 
 ## Core features
 
+- Fast icon-tool switching
+  - Icon clicks now use direct event delegation so clicking on the icon or label switches tools immediately.
 - Simple / Advanced interface modes
   - **Simple** focuses on core classroom tools: select, pen, line, arrow, rectangle, ellipse, text, Post-it notes, image upload, duplicate, basic styling, panels, and save/load.
   - **Advanced** reveals the full toolkit: connectors, additional shapes, comments, audio notes, stickers, templates, fill patterns, restore points, collaboration, assignment mode, answer keys, moderation, and advanced arrangement tools.
-- Double-click shape text editing
-  - Double-click rectangles, circles/ellipses, diamonds, triangles, callouts, speech bubbles, text boxes, notes, comments, or audio-note labels to edit text directly on the canvas.
-  - The inline editor supports **Apply**, **Cancel**, **Ctrl/Cmd + Enter** to apply, and **Escape** to cancel.
+- Direct shape text editing
+  - Click a text-capable shape and start typing, or double-click rectangles, circles/ellipses, diamonds, triangles, callouts, speech bubbles, text boxes, notes, comments, or audio-note labels to edit text directly on the canvas.
+  - The inline editor appears directly over the selected shape. Type on the canvas, choose **Done** when finished, use **Ctrl/Cmd + Enter** to close, or **Escape** to cancel.
 - Multiple panels/pages for stations, lesson steps, group work, and collaborative activities
 - Pen, line, arrow, connector, rectangle, ellipse, diamond, triangle, callout, speech bubble, text, Post-it, comment pin, and audio note tools
 - Type inside shapes with wrapped text, alignment controls, rotation, auto-scaling, and double-click inline editing
