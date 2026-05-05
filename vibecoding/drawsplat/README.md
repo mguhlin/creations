@@ -178,7 +178,7 @@ Related behavior:
 
 ## Version
 
-Current build: **DrawSplat v2.2 — Panel Tab Hotfix Build**
+Current build: **DrawSplat v2.3 — Productivity Workspace Build**
 
 ## Version 2.2 panel hotfix
 
@@ -192,4 +192,22 @@ Updated panel behavior:
 - Panel tabs support both `data-panel-id` and a fallback `data-panel-index`.
 - Clicking Panel 1 after creating or switching to another panel should now work reliably.
 
-Current build: **DrawSplat v2.2 — Panel Tab Hotfix Build**
+Current build: **DrawSplat v2.3 — Productivity Workspace Build**
+
+## Version 2.3 productivity workspace update
+
+This build adds a **Workspace** selector so DrawSplat can be used as a general-purpose visual productivity board without showing classroom-specific tools by default.
+
+Workspace options:
+
+- **Productivity** — default mode. Hides education-only controls and keeps DrawSplat focused on visual work, planning, brainstorming, diagrams, notes, panels, export, and save/load.
+- **Education Tools** — reveals classroom features such as class/student fields, teacher/student mode, assignment mode, answer keys, moderation, student turn-ins, and classroom-use guidance.
+
+The Workspace setting is separate from the existing **Simple / Advanced** interface setting. This gives four practical combinations:
+
+- Productivity + Simple
+- Productivity + Advanced
+- Education Tools + Simple
+- Education Tools + Advanced
+
+Current build: **DrawSplat v2.3 — Productivity Workspace Build**
