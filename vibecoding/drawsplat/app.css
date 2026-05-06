@@ -105,6 +105,29 @@ dialog::backdrop{background:#0f172a88}
 }
 
 .cursor-tag{pointer-events:none}
+.laser-trail{pointer-events:none;filter:drop-shadow(0 0 6px #ef444488)}
+
+/* Simple mode — Jamboard-style minimal layout */
+.simple-only{display:none}
+body[data-view="simple"] .simple-only{display:inline-flex}
+body[data-view="simple"] .simple-only.row,body[data-view="simple"] .simple-only.dialog-row{display:flex}
+body[data-view="simple"] .advanced-only{display:none!important}
+body[data-view="simple"] .inspector{display:none!important}
+body[data-view="simple"] .app{grid-template-columns:80px 1fr}
+body[data-view="simple"] .sidebar{padding:6px}
+body[data-view="simple"] .sidebar .section{display:none}
+body[data-view="simple"] .sidebar .section[data-ui-section="core"]:has(>h2,>summary){display:none}
+body[data-view="simple"] .sidebar .section.simple-tools{display:block;border:0;padding:0;margin:0}
+body[data-view="simple"] .sidebar .section.simple-tools h2{display:none}
+body[data-view="simple"] .sidebar .section.simple-tools .grid{grid-template-columns:1fr;gap:6px}
+body[data-view="simple"] .sidebar .section.simple-tools .hint{display:none}
+body[data-view="simple"] .header-panels{display:none}
+body[data-view="simple"] .frame-nav{display:flex;align-items:center;gap:4px;background:#ffffff1a;border:1px solid #ffffff33;border-radius:12px;padding:4px 8px}
+body[data-view="simple"] .frame-nav #frameCounter{color:#fff;font-size:12px;font-weight:600;min-width:60px;text-align:center}
+body[data-view="simple"] .frame-nav button{min-height:32px;padding:6px 9px}
+body[data-view="simple"] #bgSelectSimple{border:1px solid var(--line);border-radius:10px;padding:6px 8px;background:#fff;min-height:32px}
+.more-options-list{display:flex;flex-direction:column;gap:8px;padding:8px 0}
+.more-options-list button{justify-content:flex-start;text-align:left;padding:10px 12px}
 .audio-card{background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:10px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:6px}
 .audio-pill{display:inline-block;background:#1E398D;color:#fff;border-radius:999px;padding:3px 8px;font-size:11px;font-weight:700}
 .shape-pattern-note{font-size:11px;color:var(--muted)}
