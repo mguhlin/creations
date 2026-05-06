@@ -22,18 +22,19 @@ DrawSplat is a self-contained interactive whiteboard for K-16 educators and stud
 - Fast icon-tool switching
   - Icon clicks now use direct event delegation so clicking on the icon or label switches tools immediately.
 - Simple / Advanced interface modes
-  - **Simple** focuses on core classroom tools: select, pen, line, arrow, rectangle, ellipse, text, Post-it notes, image upload, duplicate, basic styling, panels, and save/load.
+  - **Simple** focuses on core classroom tools: select, pen, line, arrow, rectangle, ellipse, text, sticky notes, image upload, duplicate, basic styling, panels, and save/load.
   - **Advanced** reveals the full toolkit: connectors, additional shapes, comments, audio notes, stickers, templates, fill patterns, restore points, collaboration, assignment mode, answer keys, moderation, and advanced arrangement tools.
 - Direct shape text editing
   - Click a text-capable shape and start typing, or double-click rectangles, circles/ellipses, diamonds, triangles, callouts, speech bubbles, text boxes, notes, comments, or audio-note labels to edit text directly on the canvas.
   - The inline editor appears directly over the selected shape. Type on the canvas, choose **Done** when finished, use **Ctrl/Cmd + Enter** to close, or **Escape** to cancel.
 - Multiple panels/pages for stations, lesson steps, group work, and collaborative activities
-- Pen, line, arrow, connector, rectangle, ellipse, diamond, triangle, callout, speech bubble, text, Post-it, comment pin, and audio note tools
+- Pen, line, arrow, connector, rectangle, ellipse, diamond, triangle, callout, speech bubble, text, sticky note, comment pin, and audio note tools
 - Type inside shapes with wrapped text, alignment controls, rotation, auto-scaling, and double-click inline editing
 - Load images, drag them, resize them, and include them on any panel
-- Post-its with optional image attachments
+- sticky notes with optional image attachments
 - Adjustable line color, fill color, fill patterns, opacity, and line thickness
 - Background choices: blank, grid, dots, graph, ruled, and isometric
+- Locked per-panel background images (Jamboard-style) — teacher loads a reference image, students see and work on top of it without being able to alter or remove it
 - Multi-select, marquee select, copy/paste, duplicate, group, ungroup, and bring-front/send-back tools
 - Custom sticker / stamp tools, including teacher-uploaded image stickers
 - Built-in classroom templates: Frayer Model, KWL, T-chart, storyboard, Venn diagram, brainstorm board, and timeline
@@ -183,7 +184,43 @@ Related behavior:
 
 ## Version
 
-Current build: **DrawSplat v2.5 — Consolidated Build**
+Current build: **DrawSplat v2.6 — Classroom UX Update**
+
+## Version 2.6 changes
+
+v2.6 is a classroom-UX pass. Existing v2.5 boards open without conversion; the migration shim updates `board.version` to `2.6` automatically.
+
+Layout & navigation
+- Header version badge — `DrawSplat v2.6` is shown in the title bar so teachers can see at a glance which build is running.
+- Panels controls (current panel, add, rename, delete, clear) moved from the sidebar into the top header.
+- Workspace and View selectors moved into a new **Options** dialog opened from the header.
+- New **About** dialog with creator info and links.
+- Inspector becomes a slide-in drawer below 1180 px; a header **Inspector** button opens it. Backdrop click and `Esc` close it.
+- Patterns / Templates / Restore Points sidebar sections are now collapsible to reclaim vertical space.
+
+Inspector
+- Per-object actions are grouped into collapsible **Audio actions / Sticky actions / Comment actions** blocks that auto-expand when the matching tool is active or that object type is selected, and collapse otherwise.
+- Universal actions (Lock, Unlock, Delete, Select Group, Toggle Answer Key) stay visible.
+
+Locked panel backgrounds
+- Teachers can load an image as a per-panel background from the Patterns section.
+- The image is downscaled client-side (≤1600 px, JPEG 0.85) so it doesn't blow up storage or sync payloads.
+- Students see the background through the existing local/cloud sync but have no UI to change it; the background is a panel attribute, not an object on any layer, so it can't be selected, moved, or deleted.
+
+Bug fixes
+- Title and other text inputs no longer reset the cursor to the start of the line when a render fires during typing.
+- Newly created sticky / comment / audio / text objects start with truly empty content; the visible "Add note…", "Voice note", and similar hints are now CSS placeholders, not real data baked into the object.
+- Existing boards are migrated: legacy placeholder strings stored as content are cleared on load.
+
+Internationalization
+- The DOM walker in `i18n.js` now also translates `aria-label`, `title`, and `data-tooltip` attributes, so iconized buttons (Options, About, Inspector, etc.) and their tooltips localize correctly.
+- Long instruction paragraphs (Tools, Collaboration, Workspace, Simple/Advanced, Setup, Inline editor, Classroom Uses, Student/Assignment/Answer Key/Moderation/Turn-In hints) are now translated across all five non-English locales.
+- Locales for Vietnamese, Arabic, Chinese, and Hindi/Urdu were back-filled with the previously English-only inspector strings (alignment, audio actions, layer names, sync controls, save/load, etc.).
+- New `Options`, `About`, `Inspector`, `Audio actions`, `Sticky actions`, `Comment actions`, `Google integration`, `Load Background`, and `Clear Background` keys translated for all five locales.
+
+Migration notes
+- `panel.bgImage` is added during board load; existing panels get an empty default.
+- Service worker cache key bumped to `drawsplat-v2.6.0`. Returning users get fresh assets automatically.
 
 ## Version 2.5 changes
 
@@ -230,7 +267,7 @@ Updated panel behavior:
 - Panel tabs support both `data-panel-id` and a fallback `data-panel-index`.
 - Clicking Panel 1 after creating or switching to another panel should now work reliably.
 
-Current build: **DrawSplat v2.5 — Consolidated Build**
+Current build: **DrawSplat v2.6 — Classroom UX Update**
 
 ## Version 2.3 productivity workspace update
 
@@ -248,7 +285,7 @@ The Workspace setting is separate from the existing **Simple / Advanced** interf
 - Education Tools + Simple
 - Education Tools + Advanced
 
-Current build: **DrawSplat v2.5 — Consolidated Build**
+Current build: **DrawSplat v2.6 — Classroom UX Update**
 
 
 ## Security and Internet-Facing Deployment Warning
