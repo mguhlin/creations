@@ -158,7 +158,7 @@ function render(){
   ui.layerBadge.textContent='Layer: '+((board.assignmentMode?(board.mode==='student'?'Student':'Teacher: '+(board.currentLayer||'shared')):'Shared').replace(/^Teacher: shared$/,'Shared'));
   refreshRestorePoints(); applyModeUI(); refreshFrameNav(); gid('zoomResetBtn').textContent=Math.round(zoom*100)+'%';
   const p=panel();
-  const bgImageSvg=p.bgImage?`<image x="0" y="0" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" href="${esc(p.bgImage)}"/>`:'';
+  const bgImageSvg=p.bgImage?`<image x="0" y="0" width="100%" height="100%" preserveAspectRatio="none" href="${esc(p.bgImage)}"/>`:'';
   svg.innerHTML='<defs>'+bgDefs(p.bg)+fillPatternDefs()+'</defs>'+(p.bg==='blank'?'<rect width="100%" height="100%" fill="#fff"/>':'<rect width="100%" height="100%" fill="url(#bgp)"/>')+bgImageSvg+'<g id="viewport" transform="scale('+zoom+')"></g>';
   _lasers.forEach(l=>svg.appendChild(l));
   const g=svg.querySelector('#viewport');
