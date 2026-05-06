@@ -28,6 +28,13 @@
     }});
     const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
     nodes.forEach(n=>{ const t = n.nodeValue.trim(); if(replaceMap[t]) n.nodeValue = n.nodeValue.replace(t, replaceMap[t]) });
+    /* Also translate aria-label, title, and data-tooltip attributes so iconization picks up translated labels. */
+    ['aria-label','title','data-tooltip'].forEach(attr=>{
+      document.querySelectorAll('['+attr+']').forEach(el=>{
+        const v = (el.getAttribute(attr)||'').trim();
+        if(replaceMap[v]) el.setAttribute(attr, replaceMap[v]);
+      });
+    });
     Object.entries(cfg.placeholders||{}).forEach(([id,val])=>{ const el = document.getElementById(id); if(el) el.placeholder = val });
     Object.entries(cfg.selects||{}).forEach(([id,map])=>{ const el = document.getElementById(id); if(!el) return; [...el.options].forEach(opt=>{ if(map[opt.value]) opt.textContent = map[opt.value] }) });
   }
