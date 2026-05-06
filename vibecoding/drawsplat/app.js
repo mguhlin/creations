@@ -75,7 +75,8 @@ function setStatus(msg,cls=''){if(ui.status){ui.status.className='hint '+cls;ui.
 function setSyncStatus(msg,cls=''){if(ui.syncStatus){ui.syncStatus.className='hint '+cls;ui.syncStatus.textContent=msg}}
 window.setStatus=setStatus; window.setSyncStatus=setSyncStatus;
 
-function setTool(next){tool=next; document.querySelectorAll('#toolButtons button').forEach(b=>b.classList.toggle('active',b.dataset.tool===tool)); if(tool!=='connector') connectorPendingFrom=null}
+function setTool(next){tool=next; document.querySelectorAll('#toolButtons button').forEach(b=>b.classList.toggle('active',b.dataset.tool===tool)); if(tool!=='connector') connectorPendingFrom=null; applyToolContext()}
+function applyToolContext(){const o=(selectedIds.length===1)?currentObj():null; const objType=o?o.type:null; document.querySelectorAll('.ctx-group').forEach(el=>{const ctx=el.dataset.context; const active=(tool===ctx)||(objType===ctx); el.open=active; el.classList.toggle('context-active',active)})}
 function applyInterfaceMode(mode,quiet=false){mode=mode||ui.interfaceMode?.value||localStorage.getItem('drawsplat.interfaceMode')||'simple'; if(ui.interfaceMode) ui.interfaceMode.value=mode; localStorage.setItem('drawsplat.interfaceMode',mode); document.querySelectorAll('[data-ui],[data-ui-section]').forEach(el=>{const level=el.dataset.uiSection||el.dataset.ui||'core'; el.classList.toggle('simple-hidden',mode==='simple'&&level==='advanced')}); if(mode==='simple'&&ADVANCED_TOOLS.includes(tool)) setTool('select'); if(!quiet) setStatus(mode==='simple'?'Simple interface enabled.':'Advanced interface enabled.','success')}
 function applyWorkspaceMode(mode,quiet=false){mode=mode||ui.workspaceMode?.value||localStorage.getItem('drawsplat.workspaceMode')||'productivity'; if(mode!=='education') mode='productivity'; document.body.dataset.workspace=mode; if(ui.workspaceMode) ui.workspaceMode.value=mode; localStorage.setItem('drawsplat.workspaceMode',mode); const msg=mode==='education'?'Education tools enabled.':'Productivity workspace enabled. Education-only controls are hidden.'; const ws=gid('workspaceStatus'); if(ws) ws.textContent=mode==='education'?'Education Tools shows class, student, answer-key, turn-in, assignment, and moderation controls.':'Productivity hides classroom-only controls. Choose Education Tools to reveal class, student, answer-key, turn-in, and moderation features.'; if(!quiet) setStatus(msg,'success')}
 
@@ -162,6 +163,7 @@ function render(){
   drawSelection();
   if(marquee&&marquee.active) g.appendChild(svgEl(`<rect class="marquee" x="${Math.min(marquee.x1,marquee.x2)}" y="${Math.min(marquee.y1,marquee.y2)}" width="${Math.abs(marquee.x2-marquee.x1)}" height="${Math.abs(marquee.y2-marquee.y1)}"/>`));
   updateInspector();
+  applyToolContext();
   if(inlineEditId) positionInlineTextEditor();
 }
 
