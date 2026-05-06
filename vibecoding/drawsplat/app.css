@@ -113,14 +113,15 @@ body[data-view="simple"] .simple-only{display:inline-flex}
 body[data-view="simple"] .simple-only.row,body[data-view="simple"] .simple-only.dialog-row{display:flex}
 body[data-view="simple"] .advanced-only{display:none!important}
 body[data-view="simple"] .inspector{display:none!important}
-body[data-view="simple"] .app{grid-template-columns:80px 1fr}
-body[data-view="simple"] .sidebar{padding:6px}
+body[data-view="simple"] .app{grid-template-columns:96px 1fr}
+body[data-view="simple"] .sidebar{padding:8px}
 body[data-view="simple"] .sidebar .section{display:none}
-body[data-view="simple"] .sidebar .section[data-ui-section="core"]:has(>h2,>summary){display:none}
 body[data-view="simple"] .sidebar .section.simple-tools{display:block;border:0;padding:0;margin:0}
 body[data-view="simple"] .sidebar .section.simple-tools h2{display:none}
+body[data-view="simple"] #toolButtons{grid-template-columns:1fr;gap:6px}
 body[data-view="simple"] .sidebar .section.simple-tools .grid{grid-template-columns:1fr;gap:6px}
 body[data-view="simple"] .sidebar .section.simple-tools .hint{display:none}
+body[data-view="simple"] .sidebar .icon-btn{min-width:44px;width:100%}
 body[data-view="simple"] .header-panels{display:none}
 body[data-view="simple"] .frame-nav{display:flex;align-items:center;gap:4px;background:#ffffff1a;border:1px solid #ffffff33;border-radius:12px;padding:4px 8px}
 body[data-view="simple"] .frame-nav #frameCounter{color:#fff;font-size:12px;font-weight:600;min-width:60px;text-align:center}
