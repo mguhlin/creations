@@ -31,9 +31,9 @@ const ui={};
 
 const SAFE_IMAGE_TYPES=['image/png','image/jpeg','image/webp','image/gif'];
 const SAFE_AUDIO_TYPES=['audio/webm','audio/mpeg','audio/mp4','audio/wav','audio/ogg'];
-const MAX_IMAGE_BYTES=5*1024*1024;
-const MAX_AUDIO_BYTES=12*1024*1024;
-const MAX_BOARD_BYTES=8*1024*1024;
+const MAX_IMAGE_BYTES=25*1024*1024;
+const MAX_AUDIO_BYTES=25*1024*1024;
+const MAX_BOARD_BYTES=64*1024*1024;
 
 /* v2.5: magic-byte sniff so a renamed .svg or .exe can't slip past the MIME whitelist. */
 const IMAGE_SIGS=[
