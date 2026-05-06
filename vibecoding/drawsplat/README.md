@@ -1,15 +1,20 @@
-# DrawSplat v2.4
+# DrawSplat
 
 DrawSplat is a self-contained interactive whiteboard for K-16 educators and students. It runs as a static website, works in the browser, and can optionally save boards, templates, collaboration rooms, and turn-ins to Google Drive and Google Sheets.
 
 ## Included files
 
-- `index.html` — English version
-- `index-sp.html` — Spanish version
-- `index-vn.html` — Vietnamese version
-- `index-ab.html` — Arabic version
-- `index-cn.html` — Chinese version
-- `index.uh.html` — Urdu / Hindi version
+- `index.html` — English entry page
+- `index-sp.html` — Spanish entry page
+- `index-vn.html` — Vietnamese entry page
+- `index-ab.html` — Arabic entry page (RTL)
+- `index-cn.html` — Chinese entry page
+- `index.uh.html` — Urdu / Hindi entry page
+- `app.css` — shared stylesheet (extracted in v2.5)
+- `app.js` — shared application code (extracted in v2.5)
+- `i18n.js` — runtime translation applicator (new in v2.5)
+- `locales.js` — single source of truth for every UI translation (new in v2.5)
+- `sw.js` — service worker for offline shell (new in v2.5)
 - `apps-script/Code.gs` — optional Google Apps Script backend for Drive + Sheets saving, cloud sync, templates, and student turn-ins
 
 ## Core features
@@ -178,7 +183,40 @@ Related behavior:
 
 ## Version
 
-Current build: **DrawSplat v2.4 — Productivity Workspace Build**
+Current build: **DrawSplat v2.5 — Consolidated Build**
+
+## Version 2.5 changes
+
+v2.5 is a consolidation and hardening release. The six per-language HTML files no longer each carry their own copy of the application — they share `app.css`, `app.js`, `locales.js`, and `i18n.js`. This cuts the on-disk footprint from ~700 KB across the six entry pages to ~155 KB total.
+
+Architecture
+- **Single source for code.** All application behaviour lives in `app.js`. All styling lives in `app.css`. Every entry page is a thin shell (~17 KB) that loads them.
+- **Single source for translations.** `locales.js` holds every UI string for every language. To add a language, add an entry there and a corresponding entry HTML.
+- **Service worker.** `sw.js` is registered automatically when served over HTTP/HTTPS. The app shell is cached so the whiteboard works offline after the first load.
+- **IndexedDB autosave fallback.** If `localStorage` runs out of room, autosave transparently falls back to IndexedDB so image-heavy boards don't lose work.
+
+Performance
+- Object lookup is now O(1) via a per-render `Map<id, object>`. Earlier versions did a linear scan of every object on every pointer event.
+- `render()` is coalesced through `requestAnimationFrame`. Pointermove during a drag, marquee, or pen stroke no longer triggers a synchronous redraw per event.
+- Undo history is capped at 50 snapshots and only grows on commit boundaries (drag end, edit commit) instead of per micro-change.
+- Live cursor broadcasts are throttled to ~20 Hz.
+
+Security
+- Strict `Content-Security-Policy` meta tag in every entry page (`script-src 'self'`, `object-src 'none'`, `frame-ancestors 'none'`, etc.). No inline scripts remain.
+- Image uploads are sniffed by magic bytes after the MIME header check, so a renamed file cannot bypass the whitelist.
+- Rich-text editor output is now passed through a tag-allowlist scrubber that strips `on*` attributes, `style`, `href`, `src`, `<script>`, and `<style>`.
+- The Apps Script backend uses `LockService` on every write path, hard-caps incoming payload size, validates board JSON and PNG sizes, and applies a soft per-instance rate limit via `CacheService`.
+
+Accessibility & UX
+- Visible `:focus-visible` ring on every focusable element.
+- Touch targets are now at least 44×44 px on toolbar/icon buttons.
+- All form controls have an `aria-label` (auto-derived from their visible label when not set explicitly).
+- New keyboard shortcut: press `?` to open the shortcuts help dialog. The header has a dedicated keyboard-shortcuts button as well.
+- `prefers-reduced-motion` users get a static TNT effect and minimal transitions.
+
+Migration notes
+- Existing v2.4 autosaves load cleanly; the migration shim updates `board.version` to `2.5` automatically.
+- The Apps Script web app must be re-deployed if you want the v2.5 backend hardening (lock, payload caps, rate limit). The wire format is unchanged.
 
 ## Version 2.2 panel hotfix
 
@@ -192,7 +230,7 @@ Updated panel behavior:
 - Panel tabs support both `data-panel-id` and a fallback `data-panel-index`.
 - Clicking Panel 1 after creating or switching to another panel should now work reliably.
 
-Current build: **DrawSplat v2.4 — Productivity Workspace Build**
+Current build: **DrawSplat v2.5 — Consolidated Build**
 
 ## Version 2.3 productivity workspace update
 
@@ -210,7 +248,7 @@ The Workspace setting is separate from the existing **Simple / Advanced** interf
 - Education Tools + Simple
 - Education Tools + Advanced
 
-Current build: **DrawSplat v2.4 — Productivity Workspace Build**
+Current build: **DrawSplat v2.5 — Consolidated Build**
 
 
 ## Security and Internet-Facing Deployment Warning
