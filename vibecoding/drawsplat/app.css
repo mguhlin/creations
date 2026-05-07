@@ -225,6 +225,7 @@ html[dir="rtl"] .inspector-close{right:auto;left:8px}
 
 /* v2.5: bigger touch targets for tablets. */
 .icon-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:44px;min-height:44px;padding:8px 10px}
+[hidden]{display:none!important}
 .icon-btn .icon-symbol{font-size:20px;line-height:1}
 .icon-btn .icon-label{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .icon-btn.icon-with-text .icon-label{position:static!important;width:auto;height:auto;margin:0;overflow:visible;clip:auto;white-space:normal}
