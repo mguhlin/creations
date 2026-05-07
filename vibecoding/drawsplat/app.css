@@ -106,6 +106,11 @@ dialog::backdrop{background:#0f172a88}
 
 .cursor-tag{pointer-events:none}
 .laser-trail{pointer-events:none;filter:drop-shadow(0 0 6px #ef444488)}
+.status-toast{position:fixed;top:74px;left:50%;transform:translateX(-50%) translateY(-16px);background:#1f2937;color:#fff;padding:10px 18px;border-radius:24px;box-shadow:0 10px 24px #0003;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s ease;z-index:50;max-width:90vw;text-align:center;line-height:1.35}
+.status-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.status-toast.success{background:#166534}
+.status-toast.danger{background:#991b1b}
+@media (prefers-reduced-motion: reduce){.status-toast{transition:none}}
 
 /* Simple mode — Jamboard-style minimal layout */
 .simple-only{display:none}
@@ -124,7 +129,7 @@ body[data-view="simple"] .sidebar .section.simple-tools .hint{display:none}
 body[data-view="simple"] .sidebar .icon-btn{min-width:44px;width:100%}
 body[data-view="simple"] .header-panels{display:none}
 body[data-view="simple"] .frame-nav{display:flex;align-items:center;gap:4px;background:#ffffff1a;border:1px solid #ffffff33;border-radius:12px;padding:4px 8px}
-body[data-view="simple"] .frame-nav #frameCounter{color:#fff;font-size:12px;font-weight:600;min-width:60px;text-align:center}
+body[data-view="simple"] .frame-nav #frameCounter{color:#fff;font-size:12px;font-weight:600;min-width:60px;max-width:180px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 body[data-view="simple"] .frame-nav button{min-height:32px;padding:6px 9px}
 body[data-view="simple"] #bgSelectSimple{border:1px solid var(--line);border-radius:10px;padding:6px 8px;background:#fff;min-height:32px}
 .more-options-list{display:flex;flex-direction:column;gap:8px;padding:8px 0}
