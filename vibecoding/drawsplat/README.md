@@ -184,7 +184,7 @@ Related behavior:
 
 ## Version
 
-Current build: **DrawSplat v2.7 — Polish & Brand Update**
+Current build: **DrawSplat v2.8 — Image Editing Update**
 
 ## License
 
@@ -200,6 +200,38 @@ Suggested attribution line:
 > *"DrawSplat by Miguel Guhlin (https://mguhlin.org), licensed under CC BY-SA 4.0. Modifications: \<describe your changes\>."*
 
 Boards, drawings, and student work created by users belong to their respective authors and are not covered by this license.
+
+## Version 2.8 changes
+
+v2.8 is an image-editing release. Boards from v2.6 / v2.7 open identically; nothing on disk changes.
+
+Image cropping (lossless)
+- New **Crop Image** button (✂️) appears in the floating selection toolbar whenever a single image object is selected.
+- Opens a styled dialog with four sliders (Top / Right / Bottom / Left) and a live canvas preview of the result.
+- The crop is **lossless**: the original image data stays untouched in the object's `src`. The crop is stored as four fractional bounds (`crop.x / .y / .w / .h`) and applied at render time via SVG `<svg viewBox=...>` with `preserveAspectRatio="xMidYMid meet"`. You can re-open the dialog any time to widen the crop, or reset back to the full image.
+- Each image has its natural width/height probed and cached on first display so crop math doesn't depend on guessing aspect ratio.
+- Goes through `saveState()` so Ctrl/Cmd+Z reverts.
+
+Clipboard interop
+- **Paste image from system clipboard** — Ctrl/Cmd+V (or right-click → Paste) pastes whatever image is on the device clipboard onto the canvas: copy from a webpage, screenshot, file manager, Photos / Visual Look Up "Copy Subject", etc. Validates the blob (size + magic bytes) before adding. Falls back to the internal clipboard when no system image is available.
+- **Copy image to system clipboard** — Ctrl/Cmd+C with a single image object selected writes its blob to the device clipboard via `ClipboardItem`, so you can paste straight into Slides, Word, email, etc. Internal copy still happens too for in-app paste.
+- All paste flows skip when focus is in a text input / textarea / contenteditable so normal text paste isn't disrupted.
+
+Image color removal upgrades
+- **Remove BG Color** is now context-aware: if a single image object is selected, it processes that image; otherwise it processes the panel background.
+- The dialog title and helper text adapt ("Remove Color from Image" vs "Remove Background Color").
+- Replaced the previous hidden `<input type="color">` + click-trigger pattern (which silently failed when the user accepted the pre-sampled corner color, because the `change` event only fires on actual change) with an explicit dialog (color preview + tolerance slider + Apply / Cancel).
+- Tolerance slider (0–100, default 40) lets you dial in how aggressive the matching is.
+
+Eraser polish
+- Cursor switches to a **crosshair** the moment any drawing tool (Eraser, Laser, Pen, shapes) becomes active so it's clear you're "in" that mode.
+- Status hint appears on tool selection: *"Eraser: click any object to delete it. Drag over pen strokes to wipe them."*
+- Click on object → erased, status confirms. Click on locked object → "That item is locked." Click on empty canvas → "Click an object to erase it." (No more silent misses.)
+- **Drag over pen strokes to wipe them** Jamboard-style. Drag-erase is limited to free-hand path strokes so you don't accidentally lose stickies/shapes/text mid-drag.
+
+Migration notes
+- No board-data migration. v2.7 boards open verbatim; image objects without `crop` stay uncropped, and the natural-dimension probe runs on first render.
+- Service-worker cache key bumped to `drawsplat-v2.8.0`.
 
 ## Version 2.7 changes
 
@@ -322,7 +354,7 @@ Updated panel behavior:
 - Panel tabs support both `data-panel-id` and a fallback `data-panel-index`.
 - Clicking Panel 1 after creating or switching to another panel should now work reliably.
 
-Current build: **DrawSplat v2.7 — Polish & Brand Update**
+Current build: **DrawSplat v2.8 — Image Editing Update**
 
 ## Version 2.3 productivity workspace update
 
@@ -340,7 +372,7 @@ The Workspace setting is separate from the existing **Simple / Advanced** interf
 - Education Tools + Simple
 - Education Tools + Advanced
 
-Current build: **DrawSplat v2.7 — Polish & Brand Update**
+Current build: **DrawSplat v2.8 — Image Editing Update**
 
 
 ## Security and Internet-Facing Deployment Warning
