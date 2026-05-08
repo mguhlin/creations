@@ -234,7 +234,12 @@ Attribution
 
 Migration notes
 - No board-data migration required — v2.6 boards open identically.
-- Service-worker cache key bumped to `drawsplat-v2.7.0`. Returning users receive the new theme + logo on next visit.
+- Service-worker cache key bumped to `drawsplat-v2.7.0` for the initial release; subsequent point releases (2.7.1, 2.7.2, …) increment the cache key the same way.
+
+### v2.7.1 follow-ups
+
+- **Remove BG Color** — new tool (🪄) lets a teacher knock out a solid background color from a loaded panel background image. The app samples the top-left pixel as a starting point and opens a color picker so the teacher can fine-tune which color to drop. Pixels within tolerance become transparent and the result is re-encoded as PNG (preserving alpha). Useful for turning a JPG-style classroom poster into a transparent overlay on top of the board's grid/dots/lines pattern. Available in the Simple-mode toolbar and in Advanced's Patterns section. The action goes through `saveState()` so it's undoable.
+- **Bottom toolbar stacking fix** — the Simple-mode bottom block (color chip, Add Image, Set Background, Clear Background, Remove BG Color, Delete Selected, TNT) was rendering side-by-side because `.simple-only` had `display: inline-flex` overriding `.grid`. Added a more specific rule so the block now stacks vertically, matching the rest of the toolbar.
 
 ## Version 2.6 changes
 

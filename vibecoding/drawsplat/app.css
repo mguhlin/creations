@@ -152,6 +152,7 @@ body[data-view="simple"] .sidebar .section.simple-tools{display:block;border:0;p
 body[data-view="simple"] .sidebar .section.simple-tools h2{display:none}
 body[data-view="simple"] #toolButtons{grid-template-columns:1fr;gap:6px}
 body[data-view="simple"] .sidebar .section.simple-tools .grid{grid-template-columns:1fr;gap:6px}
+body[data-view="simple"] .sidebar .grid.simple-only{display:flex;flex-direction:column;gap:6px;width:100%}
 body[data-view="simple"] .sidebar .section.simple-tools .hint{display:none}
 body[data-view="simple"] .sidebar .icon-btn{min-width:44px;width:100%}
 body[data-view="simple"] .header-panels{display:none}
