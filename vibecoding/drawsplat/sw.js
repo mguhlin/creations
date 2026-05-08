@@ -1,9 +1,9 @@
 /* DrawSplat v2.6 — minimal offline shell. Caches the static app on first load. */
-const CACHE = 'drawsplat-v2.6.13';
+const CACHE = 'drawsplat-v2.6.14';
 const SHELL = [
   './',
   './index.html','./index-sp.html','./index-vn.html','./index-ab.html','./index-cn.html','./index.uh.html',
-  './app.js','./app.css','./i18n.js','./locales.js'
+  './app.js','./app.css','./i18n.js','./locales.js','./DrawSplat_logo.png'
 ];
 
 self.addEventListener('install', e => {
