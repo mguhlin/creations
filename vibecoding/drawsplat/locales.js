@@ -1,4 +1,4 @@
-/* DrawSplat v2.6 — single source of truth for all UI translations.
+/* DrawSplat v2.7 — single source of truth for all UI translations.
    Add a new language by adding an entry to window.DRAWSPLAT_LOCALES.
    `texts` translates visible text nodes. `placeholders` matches input IDs.
    `runtime` is consulted by setStatus/confirm/alert/prompt at runtime. */

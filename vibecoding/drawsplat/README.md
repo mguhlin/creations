@@ -184,7 +184,57 @@ Related behavior:
 
 ## Version
 
-Current build: **DrawSplat v2.6 — Classroom UX Update**
+Current build: **DrawSplat v2.7 — Polish & Brand Update**
+
+## License
+
+DrawSplat is licensed under **Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)**. See the `LICENSE` file for the full text.
+
+You are free to **use, adapt, and share** the application — for classroom use, professional development, district deployment, or building a derivative project — under two conditions:
+
+1. **Attribution** — credit the original author (Miguel Guhlin) and link to the license.
+2. **ShareAlike** — if you remix or build on DrawSplat, your version must be released under the same CC BY-SA 4.0 license.
+
+Suggested attribution line:
+
+> *"DrawSplat by Miguel Guhlin (https://mguhlin.org), licensed under CC BY-SA 4.0. Modifications: \<describe your changes\>."*
+
+Boards, drawings, and student work created by users belong to their respective authors and are not covered by this license.
+
+## Version 2.7 changes
+
+v2.7 is a polish-and-brand release built on top of v2.6.
+
+Brand & visual identity
+- **New logo** (purple slime splat) appears in the top-left of the header, in the Welcome dialog, in About, and in Options.
+- **Color scheme refreshed** to match the logo: deep purple (`#7c3aed`) replaces navy as the primary brand color; the header now uses a purple gradient. Gold accents are kept where they provide best contrast (Save to Google primary button).
+- Service-worker pre-caches the logo so it's served instantly offline.
+
+Polish & UX
+- **Save state indicator chip** in the header (`Saved` / `Saving…` / `Saved 30s ago`) — continuous reassurance instead of disappearing toasts.
+- **Floating selection toolbar** appears at the top of the canvas when an object is selected (Edit / Duplicate / Delete) on phones, tablets, and Simple mode — solves the "hard to delete on responsive" pain.
+- **Contextual color chip** in the Simple-mode bottom toolbar — change pen / sticky / shape color without leaving Simple.
+- **First-run welcome dialog** with four orientation tips and a one-time-dismiss flag.
+- **Styled `confirmDialog`** replaces native `confirm()` calls (Clear Frame, Clear Panel, Restore Point, TNT) and the lone `alert()` for design consistency.
+
+Header & layout
+- Save to Google, Export PNG, Export PDF, and TNT moved out of the header and into the **⋮ More Options** menu — header is dramatically less cluttered.
+- The **⋮ More Options** menu is now visible in both Simple and Advanced views.
+- Frame counter shows the **panel name** along with the position (e.g., `Bell Ringer · 1/3`).
+- Status messages now appear as a **toast at the top of the canvas** with `aria-live="polite"`.
+
+Mobile & responsive fixes
+- Phone breakpoint (≤760 px): header stays on a single row with horizontal scroll instead of wrapping; sidebar in Simple mode becomes a horizontal bottom toolbar; canvas takes the bulk of the viewport.
+- The K-16 badge hides on phones to save space.
+- The `[hidden]` HTML attribute now wins over `display: inline-flex` from the icon-button class so genuinely-hidden buttons stay hidden.
+
+Attribution
+- About dialog credit changed from "Created by" to **"Vibe-coded by Miguel Guhlin"**.
+- New **License** paragraph in the About dialog with a link to CC BY-SA 4.0.
+
+Migration notes
+- No board-data migration required — v2.6 boards open identically.
+- Service-worker cache key bumped to `drawsplat-v2.7.0`. Returning users receive the new theme + logo on next visit.
 
 ## Version 2.6 changes
 
@@ -267,7 +317,7 @@ Updated panel behavior:
 - Panel tabs support both `data-panel-id` and a fallback `data-panel-index`.
 - Clicking Panel 1 after creating or switching to another panel should now work reliably.
 
-Current build: **DrawSplat v2.6 — Classroom UX Update**
+Current build: **DrawSplat v2.7 — Polish & Brand Update**
 
 ## Version 2.3 productivity workspace update
 
@@ -285,7 +335,7 @@ The Workspace setting is separate from the existing **Simple / Advanced** interf
 - Education Tools + Simple
 - Education Tools + Advanced
 
-Current build: **DrawSplat v2.6 — Classroom UX Update**
+Current build: **DrawSplat v2.7 — Polish & Brand Update**
 
 
 ## Security and Internet-Facing Deployment Warning

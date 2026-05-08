@@ -1,4 +1,4 @@
-/* DrawSplat v2.6 — single source of app behaviour.
+/* DrawSplat v2.7 — single source of app behaviour.
    v2.5 changes vs v2.4:
    - Object lookup is O(1) via a per-render Map.
    - render() is RAF-coalesced; pointermove no longer triggers a synchronous redraw per event.
@@ -10,7 +10,7 @@
    - Service worker registered for offline shell.
 */
 (function(){
-const VERSION='2.6';
+const VERSION='2.7';
 const svg=document.getElementById('boardSvg'), NS='http://www.w3.org/2000/svg', XHTML='http://www.w3.org/1999/xhtml';
 const TEXTABLE_TYPES=['text','sticky','comment','audio','rect','ellipse','diamond','triangle','callout','speech'], SHAPE_TEXT_TYPES=['rect','ellipse','diamond','triangle','callout','speech'];
 const ADVANCED_TOOLS=['connector','diamond','triangle','callout','speech','comment','audio'];
