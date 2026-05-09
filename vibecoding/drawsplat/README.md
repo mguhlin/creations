@@ -223,7 +223,13 @@ Compatibility
 - Existing image objects without `mermaidSource` are unaffected — they double-click to nothing, just like before.
 - Boards from v2.8 open identically; no data migration.
 - The CSP is unchanged: `script-src 'self'` covers a locally-hosted `mermaid.min.js`. Mermaid uses inline styles which are already permitted via `style-src 'self' 'unsafe-inline'`.
-- Service-worker cache key bumped to `drawsplat-v2.9.0`.
+- Service-worker cache key bumped to `drawsplat-v2.9.0` for the initial release.
+
+### v2.9.1 follow-ups
+
+- **Copy PNG button** added to the Mermaid dialog footer. One click rasterizes the rendered SVG to PNG via canvas and writes it to the system clipboard via `ClipboardItem`. Paste the result into Slides, Word, email, chat — anywhere that accepts a PNG. No need to insert the diagram first.
+- **Auto-rasterize on copy** — when you Ctrl/Cmd+C with a single image object selected and its `src` is an SVG data URL (Mermaid output, or any other SVG), DrawSplat now automatically converts it to PNG before writing to the clipboard. Most consumer apps reject SVG paste; this makes paste "just work" while leaving the original SVG intact on the canvas (no quality loss for the displayed/saved version). Non-SVG images (JPEG/PNG/WebP) still copy as their original blob — no re-encoding.
+- Service-worker cache bumped to `drawsplat-v2.9.1`.
 
 Note on diagrams.net / drawio import-export
 - Considered but not added: the drawio editor and mxGraph engine are far too large to ship inside DrawSplat, and writing a partial XML converter would be lossy. The clipboard paste flow already lets users design diagrams externally and paste a PNG/SVG export onto the board, which is the intended workflow for that use case.
