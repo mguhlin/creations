@@ -184,7 +184,7 @@ Related behavior:
 
 ## Version
 
-Current build: **DrawSplat v2.9 — Mermaid Diagrams**
+Current build: **DrawSplat v2.10 — Word Clouds**
 
 ## License
 
@@ -200,6 +200,36 @@ Suggested attribution line:
 > *"DrawSplat by Miguel Guhlin (https://mguhlin.org), licensed under CC BY-SA 4.0. Modifications: \<describe your changes\>."*
 
 Boards, drawings, and student work created by users belong to their respective authors and are not covered by this license.
+
+## Version 2.10 changes
+
+v2.10 adds a self-contained word cloud generator. No external library required — algorithm and rendering live in `app.js`.
+
+How it works
+- **Word Cloud** button in the **Insert / Arrange** sidebar section in **Advanced view** (`data-ui="advanced"`).
+- Opens a side-by-side dialog: textarea on the left, live SVG preview on the right, plus a controls row for **Layout** (Rectangle / Circle / Oval) and **Palette** (Vibrant / Pastel / Warm / Cool / Monochrome).
+- Words are sized by frequency: type the same word multiple times to make it bigger, or use explicit `word:weight` syntax (e.g. `learn:5`). Sort happens automatically — heaviest words placed first, others spiral around them.
+- Layout uses Archimedean spiral placement with axis-aligned bounding-box collision tests. Stops when a word can't fit; the rest are dropped silently rather than overlapping. Up to 800 spiral iterations per word.
+- **Insert** rasterizes the SVG to a `data:image/svg+xml;base64,...` URL and adds it to the canvas as a regular `image` object — resizable, draggable, croppable, copyable. Source/layout/palette are stored on the object for re-edit.
+- **Copy PNG** rasterizes via the same path used by Mermaid (white background fill, ≥1600 px target so it's sharp at retina resolution) and writes to the system clipboard via `ClipboardItem`.
+- **Re-edit:** double-click a word cloud on the canvas (or single-click then click again) to reopen the editor with the saved source / shape / palette pre-filled. Apply updates the existing object in place; the previous crop is cleared.
+
+Algorithm details (for tinkering)
+- `parseWordList` accepts newline- or comma-separated input. Lines matching `/^(.+?):\s*(\d+(?:\.\d+)?)$/` are read as explicit `word:weight`; other lines have their occurrences counted as implicit weight.
+- Font size mapping: `minSize + ((weight − minWeight) / range) × (maxSize − minSize)` with `minSize=14`, `maxSize=64`. Approximate word bounding box: `width = fontSize × 0.58 × wordLength + 10`, `height = fontSize × 1.18`.
+- Spiral placement: angular step `0.22` rad, radial step `0.55` px per iteration. Even-indexed words start at θ=0, odd-indexed at θ=π — gives the cloud bilateral spread instead of unrolling from one side.
+- Shape constraint: for `circle` / `oval`, all four corners of the candidate bounding box must satisfy `(dx/rx)² + (dy/ry)² ≤ 1` against the canvas's inscribed ellipse. Words that can't find a valid position within iteration cap are skipped.
+- Output canvas is 720×480 in the dialog preview. The SVG embeds its own `viewBox` so it scales cleanly when resized on the board.
+
+Compatibility
+- No board-data migration. v2.9 boards open verbatim.
+- New optional fields on image objects: `wordCloudSource`, `wordCloudShape`, `wordCloudPalette`. Image objects without them behave exactly like before — the double-click handler only reopens the word cloud editor when those fields are present.
+- Service-worker cache key bumped to `drawsplat-v2.10.0`.
+
+What's NOT in this release (deliberate)
+- **Custom shape masking** (heart-shaped, USA-shaped, etc.) — would require canvas pixel testing of an upload mask. Considered for v3.x.
+- **Word rotation** — all words horizontal for now to keep collision detection simple. Adding 90° rotation would require oriented-bounding-box collision instead of axis-aligned.
+- **Anti-stop-word filtering / stemming** — the algorithm uses raw input as-is. Users curate their word list before pasting.
 
 ## Version 2.9 changes
 
@@ -406,7 +436,7 @@ Updated panel behavior:
 - Panel tabs support both `data-panel-id` and a fallback `data-panel-index`.
 - Clicking Panel 1 after creating or switching to another panel should now work reliably.
 
-Current build: **DrawSplat v2.9 — Mermaid Diagrams**
+Current build: **DrawSplat v2.10 — Word Clouds**
 
 ## Version 2.3 productivity workspace update
 
@@ -424,7 +454,7 @@ The Workspace setting is separate from the existing **Simple / Advanced** interf
 - Education Tools + Simple
 - Education Tools + Advanced
 
-Current build: **DrawSplat v2.9 — Mermaid Diagrams**
+Current build: **DrawSplat v2.10 — Word Clouds**
 
 
 ## Security and Internet-Facing Deployment Warning
