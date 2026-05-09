@@ -184,7 +184,7 @@ Related behavior:
 
 ## Version
 
-Current build: **DrawSplat v2.8 — Image Editing Update**
+Current build: **DrawSplat v2.9 — Mermaid Diagrams**
 
 ## License
 
@@ -200,6 +200,33 @@ Suggested attribution line:
 > *"DrawSplat by Miguel Guhlin (https://mguhlin.org), licensed under CC BY-SA 4.0. Modifications: \<describe your changes\>."*
 
 Boards, drawings, and student work created by users belong to their respective authors and are not covered by this license.
+
+## Version 2.9 changes
+
+v2.9 adds [Mermaid](https://mermaid.js.org/) diagram support — flowcharts, sequence diagrams, ER, gantt, mind maps, and the rest of the Mermaid syntax — rendered locally inside DrawSplat.
+
+How it works
+- A new **Mermaid Diagram** button appears in the **Insert / Arrange** sidebar section in **Advanced view** (`data-ui="advanced"`, hidden in Simple). Click it to open a side-by-side editor: textarea on the left for Mermaid source, live SVG preview on the right.
+- Edits are debounced and re-rendered every ~300 ms so you can iterate quickly. Bad syntax shows the Mermaid error inline in red instead of crashing the dialog.
+- **Insert** rasterizes the rendered SVG to a `data:image/svg+xml;base64,...` URL and adds it to the canvas as a regular `image` object — so it's resizable, draggable, group-able, croppable, deletable, and exportable like any other image.
+- The **original Mermaid source is stored** on the object as `mermaidSource`. Double-click any inserted diagram to reopen the editor with that source pre-filled, edit, and Insert again — the existing object is updated in place (no duplicate).
+- Re-edits respect the existing object position/size and clear any prior crop so the new render fills the box.
+- Each render gets the natural width/height of the SVG probed and stored, so the existing v2.8 crop tool also works on Mermaid diagrams.
+
+Setup (one-time)
+- DrawSplat does not bundle Mermaid because the library is sizeable (~2.5 MB). Download `mermaid.min.js` (the standalone build) from npm or a release archive, place it at the project root next to `app.js`, and reload.
+- The HTML files load it via `<script src="mermaid.min.js" defer onerror="window.__mermaidMissing=true">`. If it's missing, the dialog still opens but the preview shows: *"Mermaid library not loaded. Drop mermaid.min.js into the project root and reload — see README."*
+- The service worker `SHELL` list includes a commented-out reference to `./mermaid.min.js`. Once you've added the file, uncomment that line so it pre-caches for offline use.
+- Mermaid is initialized lazily with `securityLevel: 'strict'` (no inline JavaScript in diagrams) and `startOnLoad: false` (DrawSplat controls when rendering happens).
+
+Compatibility
+- Existing image objects without `mermaidSource` are unaffected — they double-click to nothing, just like before.
+- Boards from v2.8 open identically; no data migration.
+- The CSP is unchanged: `script-src 'self'` covers a locally-hosted `mermaid.min.js`. Mermaid uses inline styles which are already permitted via `style-src 'self' 'unsafe-inline'`.
+- Service-worker cache key bumped to `drawsplat-v2.9.0`.
+
+Note on diagrams.net / drawio import-export
+- Considered but not added: the drawio editor and mxGraph engine are far too large to ship inside DrawSplat, and writing a partial XML converter would be lossy. The clipboard paste flow already lets users design diagrams externally and paste a PNG/SVG export onto the board, which is the intended workflow for that use case.
 
 ## Version 2.8 changes
 
@@ -354,7 +381,7 @@ Updated panel behavior:
 - Panel tabs support both `data-panel-id` and a fallback `data-panel-index`.
 - Clicking Panel 1 after creating or switching to another panel should now work reliably.
 
-Current build: **DrawSplat v2.8 — Image Editing Update**
+Current build: **DrawSplat v2.9 — Mermaid Diagrams**
 
 ## Version 2.3 productivity workspace update
 
@@ -372,7 +399,7 @@ The Workspace setting is separate from the existing **Simple / Advanced** interf
 - Education Tools + Simple
 - Education Tools + Advanced
 
-Current build: **DrawSplat v2.8 — Image Editing Update**
+Current build: **DrawSplat v2.9 — Mermaid Diagrams**
 
 
 ## Security and Internet-Facing Deployment Warning

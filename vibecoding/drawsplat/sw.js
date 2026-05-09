@@ -1,9 +1,10 @@
-/* DrawSplat v2.8 — minimal offline shell. Caches the static app on first load. */
-const CACHE = 'drawsplat-v2.8.0';
+/* DrawSplat v2.9 — minimal offline shell. Caches the static app on first load. */
+const CACHE = 'drawsplat-v2.9.0';
 const SHELL = [
   './',
   './index.html','./index-sp.html','./index-vn.html','./index-ab.html','./index-cn.html','./index.uh.html',
   './app.js','./app.css','./i18n.js','./locales.js','./DrawSplat_logo.png'
+  /* './mermaid.min.js' — add manually after downloading; not in SHELL by default so the SW install doesn't fail when it's absent */
 ];
 
 self.addEventListener('install', e => {
