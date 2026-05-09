@@ -231,6 +231,25 @@ Compatibility
 - **Auto-rasterize on copy** — when you Ctrl/Cmd+C with a single image object selected and its `src` is an SVG data URL (Mermaid output, or any other SVG), DrawSplat now automatically converts it to PNG before writing to the clipboard. Most consumer apps reject SVG paste; this makes paste "just work" while leaving the original SVG intact on the canvas (no quality loss for the displayed/saved version). Non-SVG images (JPEG/PNG/WebP) still copy as their original blob — no re-encoding.
 - Service-worker cache bumped to `drawsplat-v2.9.1`.
 
+### v2.9.2 follow-ups
+
+- **Higher-resolution Copy PNG** — `svgUrlToPngBlob` now renders at `max(1600 px, naturalWidth × 2)` instead of the SVG's natural pixel size. Mermaid diagrams that came out at ~400 px wide now copy as ~1600 px PNGs, sharp on Retina/4K and clean in Slides/Word/social posts. Aspect ratio preserved; white background filled so transparency-sensitive apps don't show black.
+- **Multi-object selection → PNG** — `smartCopy` (Ctrl/Cmd+C) now has three paths: single image (existing flow), multi-object selection or single non-image (new), empty selection (no-op). The new path renders the selection's union bounding box (with 20 px padding) by piping the existing 2× `exportCanvas()` output through a crop step, then writes the cropped PNG to the system clipboard. So a flowchart drawn from individual rectangles + diamond + arrows can be marquee-selected and pasted into other apps as a single image. Internal in-app paste with Ctrl+V keeps working unchanged because `copySelection()` still runs first.
+- Service-worker cache bumped to `drawsplat-v2.9.2`.
+
+### v2.9.3 follow-ups
+
+- **Mermaid re-edit (double-click) fixed** — clicking twice on a Mermaid diagram now reopens the editor with the saved source pre-filled. Root cause was that every `pointerdown` ends with a `render()` call that replaces the SVG `g.object` element, so the browser saw click 2 as happening on a different DOM node and never fired `dblclick`. Fixed with manual double-click detection in `objectDown` that tracks the **object id** (not the element) plus a 400 ms timestamp. Same path also covers any future image-with-extension behavior.
+- `openMermaidDialog` is now defensive (`if (!dlg || dlg.open) return`) so simultaneous fire from the manual detector + the lingering native `dblclick` listener doesn't throw `InvalidStateError`.
+- Service-worker cache bumped to `drawsplat-v2.9.3`.
+
+### v2.9.4 follow-ups
+
+- **Colored diagrams by default** — after Mermaid renders an SVG, DrawSplat post-processes it: locates each `g.node` element and assigns it a fill/stroke/text color from a 6-color rotating palette (blue → pink → green → orange → amber → purple). Lighter pastel fills with darker matching strokes for contrast. Plain `graph TD` syntax now produces colorful flowcharts without any explicit `classDef`. Sequence/gantt/pie/timeline diagrams keep their built-in palettes (no `g.node` elements to recolor).
+- **Custom styling still wins** — if your source contains `classDef` or `:::` the auto-palette is skipped entirely, so hand-authored colored diagrams render as you specified. Same palette is applied across live preview, Insert, and Copy PNG so previews match exports.
+- **Template starter buttons** — a new "Templates:" row above the editor with eight one-click starters: Flowchart, Pie Chart, Sequence, Mind Map, Gantt, Timeline, Class, State. Click a button → the textarea is replaced with a working template that you can tweak before Insert.
+- Service-worker cache bumped to `drawsplat-v2.9.4`.
+
 Note on diagrams.net / drawio import-export
 - Considered but not added: the drawio editor and mxGraph engine are far too large to ship inside DrawSplat, and writing a partial XML converter would be lossy. The clipboard paste flow already lets users design diagrams externally and paste a PNG/SVG export onto the board, which is the intended workflow for that use case.
 

@@ -122,6 +122,10 @@ dialog::backdrop{background:#0f172a88}
 .selection-toolbar button:hover{background:#eef2ff}
 .selection-toolbar button.danger{color:#991b1b}
 .mermaid-dialog{max-width:920px;width:calc(100% - 40px);padding:18px}
+.mermaid-dialog .mermaid-templates{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0 0}
+.mermaid-dialog .mermaid-templates-label{font-size:12px;color:var(--muted);font-weight:600;margin-right:4px}
+.mermaid-dialog .mermaid-templates button{font-size:12px;padding:4px 10px;min-height:28px;background:#fafbff;border:1px solid var(--line);border-radius:8px;color:var(--ink);font-weight:600}
+.mermaid-dialog .mermaid-templates button:hover{background:#eef2ff;border-color:var(--navy)}
 .mermaid-dialog .mermaid-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
 .mermaid-dialog textarea{width:100%;min-height:300px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;border:1px solid var(--line);border-radius:10px;padding:10px;background:#fafbff;resize:vertical;line-height:1.5}
 .mermaid-preview{min-height:300px;border:1px solid var(--line);border-radius:10px;padding:10px;background:#fff;overflow:auto;display:flex;align-items:center;justify-content:center}
