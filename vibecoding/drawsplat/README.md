@@ -226,9 +226,16 @@ Compatibility
 - New optional fields on image objects: `wordCloudSource`, `wordCloudShape`, `wordCloudPalette`. Image objects without them behave exactly like before — the double-click handler only reopens the word cloud editor when those fields are present.
 - Service-worker cache key bumped to `drawsplat-v2.10.0`.
 
+### v2.10.1 follow-ups
+
+- **Random word rotation.** New **Rotation** dropdown in the Word Cloud dialog: `Horizontal` (all words flat), `Mix 0/90°` (~32% of words rotated to vertical), or `Random angles` (each word picks from 0°, ±15°, ±30°, ±45°, ±60°, ±75°, ±90° with a bias toward 0°). Rotation is applied via SVG `transform="rotate(angle cx cy)"` around each word's visual center.
+- **Rotation-aware collision** — for non-axis-aligned angles, the collision rectangle expands to the word's rotated AABB: `w' = |w·cos θ| + |h·sin θ|`, `h' = |w·sin θ| + |h·cos θ|`. So rotated words still get conservative collision avoidance (slight gaps, no overlaps). 0° and ±90° hit fast paths that just swap or keep the original w/h.
+- **3D effects.** New **Effect** dropdown: `Flat`, `Drop Shadow`, `3D Extrude`. Drop Shadow renders one offset shadow `<text>` underneath each word at 28% black. 3D Extrude renders four progressively-darker offset layers underneath the top text plus a 0.6-px outline on the front face — gives an embossed/extruded look. All effects work with rotation; the transform is applied per-text.
+- **`type="button"` on every dialog button.** Defensive fix in case browser dialog/form interaction defaults caused the original "Generate doesn't do anything" report — buttons inside dialogs without explicit type can sometimes be treated as form submits.
+- **Cache key bumped to `drawsplat-v2.10.1`** to force fresh asset load.
+
 What's NOT in this release (deliberate)
 - **Custom shape masking** (heart-shaped, USA-shaped, etc.) — would require canvas pixel testing of an upload mask. Considered for v3.x.
-- **Word rotation** — all words horizontal for now to keep collision detection simple. Adding 90° rotation would require oriented-bounding-box collision instead of axis-aligned.
 - **Anti-stop-word filtering / stemming** — the algorithm uses raw input as-is. Users curate their word list before pasting.
 
 ## Version 2.9 changes
