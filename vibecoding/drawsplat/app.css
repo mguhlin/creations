@@ -121,6 +121,10 @@ dialog::backdrop{background:#0f172a88}
 .selection-toolbar button{min-height:36px;padding:6px 10px;border:0;background:transparent}
 .selection-toolbar button:hover{background:#eef2ff}
 .selection-toolbar button.danger{color:#991b1b}
+.wordcloud-dialog .wc-templates{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0 0}
+.wordcloud-dialog .wc-templates-label{font-size:12px;color:var(--muted);font-weight:600;margin-right:4px}
+.wordcloud-dialog .wc-templates button{font-size:12px;padding:4px 10px;min-height:28px;background:#fafbff;border:1px solid var(--line);border-radius:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.wordcloud-dialog .wc-templates button:hover{background:#f5f0ff;border-color:var(--brand,#7c3aed)}
 .wordcloud-dialog .wc-controls{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:8px 0}
 .wordcloud-dialog .wc-controls label{font-size:12px;color:var(--muted);font-weight:600;margin-right:2px}
 .wordcloud-dialog .wc-controls select{border:1px solid var(--line);border-radius:8px;padding:5px 8px;background:#fff;font-size:13px}
@@ -219,6 +223,8 @@ html[dir="rtl"] .canvas-toolbar{left:12px;right:auto}
 html[dir="rtl"] .board-layer-badge{right:14px;left:auto}
 html[dir="rtl"] .row label{text-align:right}
 #inspectorToggleBtn{display:none}
+body[data-view="advanced"] #inspectorToggleBtn{display:inline-flex}
+@media(min-width:1181px){body.inspector-collapsed .inspector{display:none}body.inspector-collapsed .app{grid-template-columns:290px 1fr}html[dir="rtl"] body.inspector-collapsed .app{grid-template-columns:1fr 290px}}
 .inspector-close{display:none;position:absolute;right:8px;top:8px;background:transparent;border:0;font-size:22px;line-height:1;padding:4px 8px;color:var(--muted);cursor:pointer;z-index:2}
 .inspector-backdrop{position:fixed;inset:0;background:#0f172a55;z-index:35;opacity:0;pointer-events:none;transition:opacity .2s ease}
 .inspector-backdrop.show{opacity:1;pointer-events:auto}

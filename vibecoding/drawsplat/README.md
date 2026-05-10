@@ -184,7 +184,7 @@ Related behavior:
 
 ## Version
 
-Current build: **DrawSplat v2.10 — Word Clouds**
+Current build: **DrawSplat v2.10.4 — Sidebar Polish**
 
 ## License
 
@@ -248,6 +248,30 @@ Compatibility
 - **Spiral iteration cap raised to 1500** for shape-masked layouts (vs. 800 for rect) to give odd shapes — narrow/concave like Lightning, Octopus — enough attempts to find valid placements.
 - **Pixel-mask placement test:** for each candidate position, nine sample points are tested against the mask (4 corners + 4 edge midpoints + center). All nine must be inside the opaque region or the position is rejected.
 - Cache key bumped to `drawsplat-v2.10.2`.
+
+### v2.10.3 follow-ups
+
+- **Wordart-style templates.** A new row of one-click templates appears at the top of the Word Cloud dialog. Each template loads a curated word list, shape, palette, rotation, and effect, then auto-generates the preview:
+  - 📚 **Classroom** (apple shape, vibrant), 💖 **Friendship** (heart, warm), 🌳 **Growth Mindset** (tree, cool), 🚀 **Science** (rocket, cool), 🌍 **Earth Day** (globe, cool), 🎃 **Halloween** (pumpkin, warm), ⭐ **Birthday** (star, vibrant), 🦋 **Kindness** (butterfly, pastel), ☁️ **Feelings** (cloud, pastel), 🐳 **Ocean** (whale, cool), 🌙 **Space** (moon, monochrome), ⭐ **Vocab** (star, vibrant).
+  - Templates ship with 25–35 words apiece, with key words repeated to weight them larger. The shape, palette, and effect are tuned per template (e.g. Halloween defaults to 3D-extrude on a pumpkin; Kindness uses pastel butterfly with drop shadow).
+  - Wired through `_WORDCLOUD_TEMPLATES` in `app.js` and a `[data-wctpl]` button group in each HTML file. Click handler calls `_wcApplyTemplate(key)` which sets all five controls and re-runs `generateWordCloudPreview`.
+- **Shape silhouette is rendered as a faint colored background** behind the placed words. Previously the shape was only visible if many words happened to fall along the silhouette edge — for sparser word lists, a "heart" cloud just looked like a blob of words. Now:
+  - Path-based shapes (Heart, Star, Cloud, Apple, House, Diamond, Pentagon, Lightning) render as a soft fill of the palette's primary color at 18% opacity behind the words.
+  - Emoji shapes render the emoji itself at 14% opacity behind the words — preserving the colorful artwork at a level that doesn't drown the text.
+  - Geometric shapes (Circle, Oval) get a 13% opacity tinted background; Rectangle stays plain white.
+- **Emoji mask uses alpha channel, not brightness threshold.** Previously the canvas was filled white before drawing the emoji, then thresholded by RGB brightness. That fragmented light-colored emoji parts (peach skin tones, light pink, gradients). Now the canvas stays transparent, the emoji is drawn directly, and any pixel with alpha > 40 is part of the mask. Cleaner silhouettes for animals and gradient-heavy emoji.
+- Cache key bumped to `drawsplat-v2.10.3`.
+
+### v2.10.4 follow-ups
+
+- **Background controls promoted in Advanced view.** Set Background, Clear Background, and Remove BG Color used to be tucked inside a collapsed `<details>` Patterns section. They are now first-class buttons in the **Insert / Arrange** section so Advanced view has feature parity with Simple view's `simple-only` strip. The Patterns section keeps its background-pattern presets (Blank/Grid/Dots/Graph/Ruled/Isometric); the file inputs (`#bgImageInput`, `#removeBgColorPicker`) stay in Patterns.
+- **Right inspector sidebar is now collapsible on desktop.** The `Inspector` button in the header (`#inspectorToggleBtn`) — which previously only showed up on viewports ≤ 1180 px — is now visible in Advanced view at any width. Clicking it toggles `body.inspector-collapsed`; when collapsed, the inspector is hidden and the canvas grid expands from `290px 1fr 340px` to `290px 1fr`. State is persisted to `localStorage['drawsplat.inspectorOpen']`. Mobile (≤ 1180 px) still uses the slide-in overlay pattern, and Escape still closes that overlay.
+- **Click-outside-to-deselect fixed.** Previously the SVG's `100% × 100%` background rect (drawn at the start of every render to provide the panel pattern fill) intercepted blank-canvas clicks, so `e.target === svg` never matched and the selection outline persisted. Now the deselect check uses `!e.target.closest('.object')` — clicking anywhere not on a real object clears the selection (and starts a marquee). Resize handles still capture their own pointerdown via `stopPropagation`, so they're unaffected.
+- **Kid-friendlier tool icons.** The `toolIcons` map now uses colorful emoji wherever a clear option exists:
+  - Select 👆 (was ↖) · Laser 🔆 (was 🔴) · Line 📏 (was ╱) · Arrow ➡️ (was ➜) · Rectangle 🟦 (was ▭) · Ellipse 🟢 (was ◯) · Text 🅰️ (was T) · Diamond 🔶 (was ◇) · Triangle 🔺 (was △) · Callout 📢 (was ▣) · Comment 📌 (was 📍).
+  - Pen ✏️ · Eraser 🧽 · Sticky 🗒️ · Connector 🔗 · Speech 💬 · Audio 🎙️ stay the same — they were already kid-readable.
+  - Set Background also gets `🌄` (matches Simple view's button) instead of the duplicate `🖼️` shared with Load Image and Add Image.
+- Cache key bumped to `drawsplat-v2.10.4`.
 
 What's NOT in this release (deliberate)
 - **Custom shape masking** (heart-shaped, USA-shaped, etc.) — would require canvas pixel testing of an upload mask. Considered for v3.x.
@@ -458,7 +482,7 @@ Updated panel behavior:
 - Panel tabs support both `data-panel-id` and a fallback `data-panel-index`.
 - Clicking Panel 1 after creating or switching to another panel should now work reliably.
 
-Current build: **DrawSplat v2.10 — Word Clouds**
+Current build: **DrawSplat v2.10.4 — Sidebar Polish**
 
 ## Version 2.3 productivity workspace update
 
@@ -476,7 +500,7 @@ The Workspace setting is separate from the existing **Simple / Advanced** interf
 - Education Tools + Simple
 - Education Tools + Advanced
 
-Current build: **DrawSplat v2.10 — Word Clouds**
+Current build: **DrawSplat v2.10.4 — Sidebar Polish**
 
 
 ## Security and Internet-Facing Deployment Warning
