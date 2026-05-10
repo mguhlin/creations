@@ -1,1 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vibe-Coding in the Classroom | TCEA</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #0A3476;
+      --navy-dark: #071f4a;
+      --navy-mid: #12428f;
+      --gold: #FCB040;
+      --gold-light: #fdd17a;
+      --gold-pale: #FEF0D0;
+      --pale-navy: #D0D8F0;
+      --white: #ffffff;
+      --off-white: #f7f8fc;
+      --text: #1a1a2e;
+      --text-muted: #5a6680;
+      --border: #e2e7f5;
+      --teal: #0e6b8a;
+      --green: #1e7d4b;
+      --radius: 10px;
+    }
 
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      background: var(--off-white);
+      line-height: 1.7;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--navy-dark);
+      background-image: radial-gradient(ellipse at 20% 50%, rgba(252,176,64,0.12) 0%, transparent 60%),
+                        radial-gradient(ellipse at 80% 20%, rgba(14,107,138,0.15) 0%, transparent 50%);
+      color: var(--white);
+      padding: 80px 24px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        90deg,
+        rgba(255,255,255,0.015) 0px,
+        rgba(255,255,255,0.015) 1px,
+        transparent 1px,
+        transparent 80px
+      );
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--navy-dark);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      line-height: 1.15;
+      margin-bottom: 18px;
+      max-width: 760px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.75);
+      max-width: 600px;
+      margin: 0 auto 32px;
+      font-weight: 400;
+    }
+
+    .hero-badges {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      border: 1.5px solid rgba(255,255,255,0.25);
+      border-radius: 100px;
+      padding: 5px 16px;
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.85);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── STICKY NAV TABS ── */
+    .grade-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--navy);
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      border-bottom: 3px solid var(--gold);
+      box-shadow: 0 4px 20px rgba(7,31,74,0.3);
+      overflow-x: auto;
+    }
+
+    .grade-nav a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 22px;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.88rem;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -3px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .grade-nav a:hover,
+    .grade-nav a.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    .grade-nav a .gn-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gold);
+      opacity: 0.4;
+      flex-shrink: 0;
+    }
+
+    .grade-nav a.active .gn-dot,
+    .grade-nav a:hover .gn-dot { opacity: 1; }
+
+    /* ── SECTIONS WRAPPER ── */
+    .content-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* ── INTRO ── */
+    #intro {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .intro-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 60px 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    @media (max-width: 700px) {
+      .intro-inner { grid-template-columns: 1fr; gap: 28px; }
+    }
+
+    .intro-text h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.9rem;
+      color: var(--navy);
+      margin-bottom: 14px;
+      line-height: 1.2;
+    }
+
+    .intro-text p {
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      font-size: 0.97rem;
+    }
+
+    .intro-text p strong { color: var(--text); }
+
+    .intro-pillars {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .pillar {
+      background: var(--off-white);
+      border: 1.5px solid var(--border);
+      border-left: 4px solid var(--gold);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+    }
+
+    .pillar-title {
+      font-weight: 700;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+
+    .pillar p {
+      font-size: 0.83rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    /* ── CURRICULUM MAP ── */
+    #map {
+      padding: 60px 24px;
+      background: var(--navy-dark);
+      background-image: radial-gradient(ellipse at 70% 80%, rgba(252,176,64,0.08) 0%, transparent 55%);
+    }
+
+    #map h2 {
+      font-family: 'DM Serif Display', serif;
+      color: var(--white);
+      font-size: 1.8rem;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    #map .map-sub {
+      text-align: center;
+      color: rgba(255,255,255,0.55);
+      font-size: 0.9rem;
+      margin-bottom: 48px;
+    }
+
+    .timeline {
+      max-width: 1060px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .timeline-rail {
+      position: absolute;
+      top: 42px;
+      left: calc(12.5% + 16px);
+      right: calc(12.5% + 16px);
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+      border-radius: 2px;
+    }
+
+    .timeline-nodes {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      position: relative;
+    }
+
+    .tnode {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .tnode-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--navy-dark);
+      border: 3px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem;
+      color: var(--gold);
+      font-weight: 700;
+      position: relative;
+      z-index: 2;
+      margin-bottom: 16px;
+      flex-shrink: 0;
+      box-shadow: 0 0 20px rgba(252,176,64,0.25);
+    }
+
+    .tnode-label {
+      font-weight: 700;
+      color: var(--gold);
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .tnode-title {
+      font-family: 'DM Serif Display', serif;
+      color: var(--white);
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+    }
+
+    .tnode-themes {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      width: 100%;
+    }
+
+    .tnode-theme {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 0.73rem;
+      color: rgba(255,255,255,0.7);
+      text-align: center;
+    }
+
+    @media (max-width: 680px) {
+      .timeline-rail { display: none; }
+      .timeline-nodes { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ── GRADE BAND SECTIONS ── */
+    .grade-section {
+      padding: 56px 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .grade-section:nth-child(even) { background: var(--white); }
+    .grade-section:nth-child(odd) { background: var(--off-white); }
+
+    .gs-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 36px;
+      max-width: 1100px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .gs-badge {
+      flex-shrink: 0;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'DM Serif Display', serif;
+      font-size: 1rem;
+      color: var(--gold);
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.1;
+      box-shadow: 0 4px 16px rgba(10,52,118,0.2);
+    }
+
+    .gs-title-group h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.7rem;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+
+    .gs-title-group p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      max-width: 640px;
+    }
+
+    /* ── CONTENT AREA GROUPS ── */
+    .ca-group {
+      max-width: 1100px;
+      margin: 0 auto 32px;
+    }
+
+    .ca-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 14px;
+      border-radius: 100px;
+      font-weight: 700;
+      font-size: 0.73rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .ca-ela   { background: #d8f0f5; color: #0a5570; }
+    .ca-math  { background: var(--gold-pale); color: #7a5200; }
+    .ca-sci   { background: #d5f0e2; color: #1a5c35; }
+    .ca-ss    { background: var(--pale-navy); color: var(--navy); }
+    .ca-cs    { background: #e8e0f4; color: #4a2880; }
+    .ca-idea  { background: var(--gold); color: var(--navy-dark); }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 16px;
+    }
+
+    .project-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 20px 20px 22px;
+      border-left: 4px solid var(--navy-mid);
+      transition: box-shadow 0.2s, transform 0.15s;
+      position: relative;
+    }
+
+    .project-card:hover {
+      box-shadow: 0 6px 28px rgba(10,52,118,0.1);
+      transform: translateY(-2px);
+    }
+
+    .project-card.ela  { border-left-color: var(--teal); }
+    .project-card.math { border-left-color: var(--gold); }
+    .project-card.sci  { border-left-color: var(--green); }
+    .project-card.ss   { border-left-color: var(--navy-mid); }
+    .project-card.cs   { border-left-color: #7c52c0; }
+
+    .project-card h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.05rem;
+      color: var(--navy);
+      margin-bottom: 8px;
+      line-height: 1.25;
+    }
+
+    .project-card p {
+      font-size: 0.87rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+
+    .project-card p strong { color: var(--text); font-weight: 600; }
+
+    .tool-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 8px;
+    }
+
+    .tool-chip {
+      background: var(--pale-navy);
+      color: var(--navy);
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .teks-chip {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* NON-OBVIOUS CARD */
+    .noi-card {
+      max-width: 1100px;
+      margin: 0 auto;
+      background: linear-gradient(135deg, var(--gold-pale) 0%, #fff8e8 100%);
+      border: 2px solid var(--gold);
+      border-radius: var(--radius);
+      padding: 28px 28px 28px 32px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .noi-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .noi-content h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.15rem;
+      color: var(--navy-dark);
+      margin-bottom: 6px;
+    }
+
+    .noi-content p {
+      font-size: 0.9rem;
+      color: #4a3800;
+      line-height: 1.65;
+    }
+
+    .noi-content .tool-row { margin-top: 10px; }
+    .noi-content .tool-chip { background: rgba(10,52,118,0.1); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy-dark);
+      color: rgba(255,255,255,0.65);
+      padding: 40px 24px;
+      text-align: center;
+      font-size: 0.88rem;
+      line-height: 1.8;
+    }
+
+    footer a { color: var(--gold); text-decoration: none; font-weight: 600; }
+    footer a:hover { text-decoration: underline; }
+
+    footer .footer-divider {
+      width: 48px;
+      height: 3px;
+      background: var(--gold);
+      margin: 20px auto;
+      border-radius: 2px;
+    }
+
+    footer .footer-note {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.35);
+      margin-top: 12px;
+    }
+
+    /* ── SCROLL ANIMATION ── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 500px) {
+      .intro-pillars { grid-template-columns: 1fr; }
+      .noi-card { grid-template-columns: 1fr; }
+      .gs-header { flex-direction: column; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<header class="hero">
+  <div class="hero-eyebrow">TCEA Professional Development</div>
+  <h1>Vibe-Coding<br><em>in the K–12 Classroom</em></h1>
+  <p class="hero-sub">A curriculum map of AI-powered student projects aligned to Texas TEKS — from Kindergarten through Grade 12.</p>
+  <div class="hero-badges">
+    <span class="badge">Grades K–2</span>
+    <span class="badge">Grades 3–5</span>
+    <span class="badge">Grades 6–8</span>
+    <span class="badge">Grades 9–12</span>
+    <span class="badge">Texas TEKS–Aligned</span>
+  </div>
+</header>
+
+<!-- ── STICKY NAV ── -->
+<nav class="grade-nav" aria-label="Grade band navigation">
+  <a href="#intro"><span class="gn-dot"></span>About</a>
+  <a href="#map"><span class="gn-dot"></span>Curriculum Map</a>
+  <a href="#k2"><span class="gn-dot"></span>K–2</a>
+  <a href="#g35"><span class="gn-dot"></span>3–5</a>
+  <a href="#g68"><span class="gn-dot"></span>6–8</a>
+  <a href="#g912"><span class="gn-dot"></span>9–12</a>
+</nav>
+
+<!-- ── INTRO ── -->
+<section id="intro">
+  <div class="intro-inner">
+    <div class="intro-text">
+      <h2>What Is Vibe-Coding?</h2>
+      <p><strong>Vibe-coding</strong> means describing what you want in plain language and letting AI generate it — then iterating, evaluating, and improving the result. For students, it's not a shortcut. It's a thinking scaffold.</p>
+      <p>At each grade band, the complexity shifts: in K–2, the teacher holds the prompt and the class shapes the output together. By high school, students write specs, deploy working apps, and defend every AI-assisted decision publicly.</p>
+      <p>Every project below requires students to <strong>prompt → evaluate → revise</strong>. AI produces the first draft. Students are responsible for everything that ships.</p>
+    </div>
+    <div class="intro-pillars">
+      <div class="pillar">
+        <div class="pillar-title">Prompt</div>
+        <p>Students describe what they need in precise language — the first act of computational thinking.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-title">Evaluate</div>
+        <p>AI output is never accepted at face value. Students fact-check, annotate, and identify errors.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-title">Revise</div>
+        <p>Students improve the output using content-area knowledge — the real learning moment.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-title">Publish</div>
+        <p>At every grade band, work is shared — with the class, a community partner, or the public.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CURRICULUM MAP ── -->
+<section id="map">
+  <h2>Curriculum Map</h2>
+  <p class="map-sub">How vibe-coding evolves from guided exploration to professional-grade production</p>
+  <div class="timeline">
+    <div class="timeline-rail"></div>
+    <div class="timeline-nodes">
+
+      <div class="tnode fade-in">
+        <div class="tnode-circle">K–2</div>
+        <div class="tnode-label">Grades K–2</div>
+        <div class="tnode-title">Guided Exploration</div>
+        <div class="tnode-themes">
+          <div class="tnode-theme">Teacher holds the prompt</div>
+          <div class="tnode-theme">Class shapes output together</div>
+          <div class="tnode-theme">Evaluate &amp; illustrate</div>
+          <div class="tnode-theme">No student logins needed</div>
+        </div>
+      </div>
+
+      <div class="tnode fade-in" style="transition-delay:0.1s">
+        <div class="tnode-circle">3–5</div>
+        <div class="tnode-label">Grades 3–5</div>
+        <div class="tnode-title">Scaffolded Agency</div>
+        <div class="tnode-themes">
+          <div class="tnode-theme">Students type own prompts</div>
+          <div class="tnode-theme">Iterate on AI output</div>
+          <div class="tnode-theme">Fact-check &amp; annotate</div>
+          <div class="tnode-theme">Data-first editorial</div>
+        </div>
+      </div>
+
+      <div class="tnode fade-in" style="transition-delay:0.2s">
+        <div class="tnode-circle">6–8</div>
+        <div class="tnode-label">Grades 6–8</div>
+        <div class="tnode-title">Code &amp; Critique</div>
+        <div class="tnode-themes">
+          <div class="tnode-theme">Write &amp; run real code</div>
+          <div class="tnode-theme">Debug AI-generated scripts</div>
+          <div class="tnode-theme">Build functional tools</div>
+          <div class="tnode-theme">Red-team AI outputs</div>
+        </div>
+      </div>
+
+      <div class="tnode fade-in" style="transition-delay:0.3s">
+        <div class="tnode-circle">9–12</div>
+        <div class="tnode-label">Grades 9–12</div>
+        <div class="tnode-title">Ship &amp; Defend</div>
+        <div class="tnode-themes">
+          <div class="tnode-theme">Deploy public-facing apps</div>
+          <div class="tnode-theme">Real datasets &amp; APIs</div>
+          <div class="tnode-theme">Portfolio-ready work</div>
+          <div class="tnode-theme">Present to real audiences</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     GRADE K–2
+════════════════════════════════════════ -->
+<section class="grade-section" id="k2">
+  <div class="gs-header fade-in">
+    <div class="gs-badge">K–2</div>
+    <div class="gs-title-group">
+      <h2>Grades K–2 — Guided Exploration</h2>
+      <p>The teacher controls the prompt. The whole class shapes the output together. No student logins required — just a projected screen and curious minds.</p>
+    </div>
+  </div>
+
+  <!-- ELA -->
+  <div class="ca-group fade-in">
+    <div class="ca-label ca-ela">📖 ELA / Reading</div>
+    <div class="project-grid">
+      <div class="project-card ela">
+        <h3>My Sight Word Story</h3>
+        <p>Kids dictate a 3-sentence story using weekly sight words. AI generates it with illustrations. Students illustrate a favorite part by hand.</p>
+        <div class="tool-row"><span class="tool-chip">Book Creator</span><span class="tool-chip">Diffit</span></div>
+        <div class="teks-chip">TEKS: ELA K.6, 1.6 — high-frequency words in context</div>
+      </div>
+      <div class="project-card ela">
+        <h3>Rhyme Machine</h3>
+        <p>Students say a word, ask AI to make a rhyming poem, then illustrate one stanza. Class compares which rhymes feel natural vs. forced.</p>
+        <div class="tool-row"><span class="tool-chip">ChatGPT (teacher-led)</span><span class="tool-chip">Adobe Express</span></div>
+        <div class="teks-chip">TEKS: ELA K.2.A — phonological awareness, rhyme</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MATH -->
+  <div class="ca-group fade-in">
+    <div class="ca-label ca-math">➕ Math</div>
+    <div class="project-grid">
+      <div class="project-card math">
+        <h3>Shape Town Builder</h3>
+        <p>Kids describe a scene ("a house made of squares and a triangle roof") → AI or tool generates it. Students label each shape and its attributes.</p>
+        <div class="tool-row"><span class="tool-chip">Google Slides</span><span class="tool-chip">Canva AI</span></div>
+        <div class="teks-chip">TEKS: Math K.6.A, 1.6.A — 2D shapes and their attributes</div>
+      </div>
+      <div class="project-card math">
+        <h3>My Number Book</h3>
+        <p>Students dictate: "Show me 7 frogs." AI generates image + equation. Class builds a counting book, one number per page.</p>
+        <div class="tool-row"><span class="tool-chip">Book Creator</span><span class="tool-chip">ChatGPT + Slides</span></div>
+        <div class="teks-chip">TEKS: Math K.2.B — counting sets, numerals</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCIENCE -->
+  <div class="ca-group fade-in">
+    <div class="ca-label ca-sci">🔬 Science</div>
+    <div class="project-grid">
+      <div class="project-card sci">
+        <h3>Weather Reporter Bot</h3>
+        <p>Kids tell AI what today's weather looks like; it writes a weather report they read aloud and record. Teacher uses a fill-in prompt template to scaffold.</p>
+        <div class="tool-row"><span class="tool-chip">Claude / ChatGPT</span><span class="tool-chip">Flip</span></div>
+        <div class="teks-chip">TEKS: Sci K.8.A, 1.8.A — observing and describing weather</div>
+      </div>
+      <div class="project-card sci">
+        <h3>Life Cycle Slideshow</h3>
+        <p>Students narrate each stage of a butterfly or frog life cycle → AI generates one sentence + image per slide. Students sequence and label.</p>
+        <div class="tool-row"><span class="tool-chip">Book Creator AI</span><span class="tool-chip">Canva</span></div>
+        <div class="teks-chip">TEKS: Sci 2.12.A — life cycles of organisms</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOCIAL STUDIES -->
+  <div class="ca-group fade-in">
+    <div class="ca-label ca-ss">🏘️ Social Studies</div>
+    <div class="project-grid">
+      <div class="project-card ss">
+        <h3>Community Helper Helper</h3>
+        <p>Kids describe a job; AI writes what that person does and generates an image. Class builds a "Community Helpers" book together.</p>
+        <div class="tool-row"><span class="tool-chip">Book Creator</span><span class="tool-chip">Google Slides</span></div>
+        <div class="teks-chip">TEKS: SS K.12, 1.7 — roles in the community</div>
+      </div>
+      <div class="project-card ss">
+        <h3>Texas Symbols Museum</h3>
+        <p>Each student picks a Texas symbol (bluebonnet, mockingbird, Lone Star), prompts AI for a "museum label" description, then designs the label.</p>
+        <div class="tool-row"><span class="tool-chip">Canva</span><span class="tool-chip">ChatGPT (teacher-led)</span></div>
+        <div class="teks-chip">TEKS: SS 2.12.A — state symbols and their significance</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NON-OBVIOUS -->
+  <div class="ca-group fade-in">
+    <div class="ca-label ca-idea">💡 Non-Obvious Idea</div>
+    <div class="noi-card">
+      <div class="noi-icon">💡</div>
+      <div class="noi-content">
+        <h3>Fix My Robot's Mistake</h3>
+        <p>Give students an AI-generated paragraph with one deliberate factual or grammar error. Their job: find it and fix it before the class "publishes" the work. Builds critical AI literacy from day one, aligns to ELA revision TEKS, and teaches kids that AI isn't always right — without a single lecture about it.</p>
+        <div class="tool-row"><span class="tool-chip">Claude / ChatGPT (teacher-generated)</span><span class="tool-chip">Google Docs</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     GRADE 3–5
+════════════════════════════════════════ -->
+<section class="grade-section" id="g35">
+  <div class="gs-header fade-in">
+    <div class="gs-badge">3–5</div>
+    <div class="gs-title-group">
+      <h2>Grades 3–5 — Scaffolded Agency</h2>
+      <p>Students type their own prompts with scaffolding, iterate on AI outputs, and evaluate results critically. The loop is always: <strong>Student → AI → Student.</strong> AI drafts; students publish.</p>
+    </div>
+  </div>
+
+  <!-- ELA -->
+  <div class="ca-group fade-in">
+    <div class="ca-label ca-ela">📖 ELA / Reading &amp; Writing</div>
+    <div class="project-grid">
+      <div class="project-card ela">
+        <h3>AI Writing Partner Showdown</h3>
+        <p>Students write a paragraph first, give the same prompt to AI, compare outputs side by side, and revise their own draft — not the AI's version.</p>
+        <div class="tool-row"><span class="tool-chip">Claude / ChatGPT</span><span class="tool-chip">Google Docs</span></div>
+        <div class="teks-chip">TEKS: ELA 3.11, 4.11, 5.11 — writing process, revision</div>
+      </div>
+      <div class="project-card ela">
+        <h3>Summarize This — But Make It Accurate</h3>
+        <p>Students paste a nonfiction article, ask AI to summarize, then fact-check the summary against the original and mark every error they find.</p>
+        <div class="tool-row"><span class="tool-chip">Claude / ChatGPT</span><span class="tool-chip">Diffit</span></div>
+        <div class="teks-chip">TEKS: ELA 3.8, 4.8, 5.8 — main idea, supporting details</div>
+      </div>
+      <div class="project-card ela">
+        <h3>Genre Transformer</h3>
+        <p>Take one historical event or science concept and prompt AI to write it as a poem, then a news article, then a diary entry. Students analyze how genre changes meaning.</p>
+        <div class="tool-row"><span class="tool-chip">ChatGPT / Claude</span><span class="tool-chip">Google Docs</span></div>
+        <div class="teks-chip">TEKS: ELA 3–5 — multiple text genres, author's craft</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MATH -->
+  <div class="ca-group fade-in">
+    <div class="ca-label ca-math">➕ Math</div>
+    <div class="project-grid">
+      <div class="project-card math">
+        <h3>Build a Word Problem Factory</h3>
+        <p>Students prompt AI to generate 5 problems at grade level, solve them, rate which were too easy/hard/just right, then write a better one themselves.</p>
+        <div class="tool-row"><span class="tool-chip">Claude / ChatGPT</span><span class="tool-chip">Google Forms</span></div>
+        <div class="teks-chip">TEKS: Math 3.4, 4.4, 5.3 — operations, fractions</div>
+      </div>
+      <div class="project-card math">
+        <h3>Data Story Generator</h3>
+        <p>Students collect real classroom data, enter it, prompt AI to describe the trend, then build their own graph and write their own interpretation.</p>
+        <div class="tool-row"><span class="tool-chip">Google Sheets</span><span class="tool-chip">Canva / Infogram</span><span class="tool-chip">Claude</span></div>
+        <div class="teks-chip">TEKS: Math 3.8, 4.9, 5.9 — data representation</div>
+      </div>
+      <div class="project-card math">
+        <h3>Math Explainer Video Script</h3>
+        <p>Students prompt AI to write a script explaining a concept (area vs. perimeter, equivalent fractions), then record themselves — correcting AI errors before filming.</p>
+        <div class="tool-row"><span class="tool-chip">Claude / ChatGPT</span><span class="tool-chip">Flip</span></div>
+        <div class="teks-chip">TEKS: Math 3.6, 4.5, 5.4 — geometry, fractions</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCIENCE -->
+  <div class="ca-group fade-in">
+    <div class="ca-label ca-sci">🔬 Science</div>
+    <div class="project-grid">
+      <div class="project-card sci">
+        <h3>Food Web Simulator Prompt</h3>
+        <p>Students describe a Texas ecosystem, ask AI to generate a food web description, then diagram it manually and identify any missing or wrong connections.</p>
+        <div class="tool-row"><span class="tool-chip">Claude / ChatGPT</span><span class="tool-chip">Canva / Slides</span></div>
+        <div class="teks-chip">TEKS: Sci 3.9, 4.9, 5.9 — ecosystems, food webs</div>
+      </div>
+      <div class="project-card sci">
+        <h3>Matter Matters Explainer</h3>
+        <p>Students prompt AI to explain a states-of-matter scenario, then annotate the output — highlighting what's correct, incomplete, and what needs a diagram.</p>
+        <div class="tool-row"><span class="tool-chip">Claude / ChatGPT</span><span class="tool-chip">Book Creator</span></div>
+        <div class="teks-chip">TEKS: Sci 3.5, 4.5, 5.5 — physical properties, changes</div>
+      </div>
+      <div class="project-card sci">
+        <h3>Design an Adaptation</h3>
+        <p>Students invent a fictional animal for a specific Texas biome, prompt AI to elaborate on survival advantages, then create a field guide entry with illustrations.</p>
+        <div class="tool-row"><span class="tool-chip">ChatGPT / Claude</span><span class="tool-chip">Canva</span></div>
+        <div class="teks-chip">TEKS: Sci 3.9.B, 4.9.B — adaptations and survival</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOCIAL STUDIES -->
+  <div class="ca-group fade-in">
+    <div class="ca-label ca-ss">🗺️ Social Studies</div>
+    <div class="project-grid">
+      <div class="project-card ss">
+        <h3>Texas History Podcast Script</h3>
+        <p>Students research one Texas history figure, feed notes to AI with "turn these into a 90-second podcast script," then revise for accuracy before recording.</p>
+        <div class="tool-row"><span class="tool-chip">Claude / ChatGPT</span><span class="tool-chip">Flip / Audacity</span></div>
+        <div class="teks-chip">TEKS: SS 4.2, 4.3 — Texas history figures and events</div>
+      </div>
+      <div class="project-card ss">
+        <h3>Economic Choices Simulator</h3>
+        <p>Students describe a simple business scenario and ask AI to model three economic decisions. They evaluate trade-offs and justify their best option in writing.</p>
+        <div class="tool-row"><span class="tool-chip">Claude / ChatGPT</span><span class="tool-chip">Google Slides</span></div>
+        <div class="teks-chip">TEKS: SS 3.9, 4.9 — scarcity, opportunity cost</div>
+      </div>
+      <div class="project-card ss">
+        <h3>U.S. Regions Travel Brochure</h3>
+        <p>Students prompt AI to draft a travel brochure for an assigned region, fact-check it against a textbook or vetted source, then design the final version.</p>
+        <div class="tool-row"><span class="tool-chip">Claude / ChatGPT</span><span class="tool-chip">Canva</span></div>
+        <div class="teks-chip">TEKS: SS 5.9 — U.S. geographic regions</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NON-OBVIOUS -->
+  <div class="ca-group fade-in">
+    <div class="ca-label ca-idea">💡 Non-Obvious Idea</div>
+    <div class="noi-card">
+      <div class="noi-icon">💡</div>
+      <div class="noi-content">
+        <h3>Prompt Grader</h3>
+        <p>Flip the dynamic entirely. Give every student the <em>same</em> AI output and several different prompts that could have produced it. Their job: figure out which prompt generated that response and rank all prompts from weakest to strongest. No coding, no tool login — just analytical thinking about how language shapes AI output. It builds prompt literacy, inference skills, and argument writing simultaneously, in one class period with zero setup.</p>
+        <div class="tool-row"><span class="tool-chip">Claude / ChatGPT (teacher-generated)</span><span class="tool-chip">Google Docs</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     GRADE 6–8
+════════════════════════════════════════ -->
+<section class="grade-section" id="g68">
+  <div class="gs-header fade-in">
+    <div class="gs-badge">6–8</div>
+    <div class="gs-title-group">
+      <h2>Grades 6–8 — Code &amp; Critique</h2>
+      <p>Students write and run actual AI-generated code, build functional tools, and work with real data. The standard: if it isn't run, it hasn't been tested. One working script they debugged beats ten AI outputs they passively accepted.</p>
+    </div>
+  </div>
+
+  <!-- ELA -->
+  <div class="ca-group fade-in">
+    <div class="ca-label ca-ela">📖 ELA / Reading &amp; Writing</div>
+    <div class="project-grid">
+      <div class="project-card ela">
+        <h3>Bias Detector</h3>
+        <p>Students find two articles covering the same event from different outlets. They prompt AI to analyze both for loaded language, then write their own comparison arguing which source is more reliable — with specific evidence.</p>
+        <div class="tool-row"><span class="tool-chip">Claude</span><span class="tool-chip">Perplexity</span><span class="tool-chip">Google Docs</span></div>
+        <div class="teks-chip">TEKS: ELA 6.10, 7.10, 8.10 — author's purpose, point of view</div>
+      </div>
+      <div class="project-card ela">
+        <h3>AI-Assisted Research, Human-Controlled Argument</h3>
+        <p>Students use AI to generate a counterargument to their own thesis, then write a rebuttal. Forces them to steelman the opposition before finalizing their essay.</p>
+        <div class="tool-row"><span class="tool-chip">Claude / ChatGPT</span><span class="tool-chip">Google Docs</span></div>
+        <div class="teks-chip">TEKS: ELA 6.11, 7.11, 8.11 — argumentative writing, counterclaim</div>
+      </div>
+      <div class="project-card ela">
+        <h3>Literary Analysis Chatbot</h3>
+        <p>Students vibe-code a simple Q&amp;A bot "trained" on a class novel's plot and themes via system prompt. They test it and document where it fails — and why.</p>
+        <div class="tool-row"><span class="tool-chip">Claude Projects</span><span class="tool-chip">Replit</span></div>
+        <div class="teks-chip">TEKS: ELA 6–8 — literary elements, theme, character analysis</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MATH -->
+  <div class="ca-group fade-in">
+    <div class="ca-label ca-math">➕ Math</div>
+    <div class="project-grid">
+      <div class="project-card math">
+        <h3>Ratio &amp; Proportion Calculator App</h3>
+        <p>Students describe a real-world ratio problem, ask AI to generate a working Python or JavaScript calculator, run it, find edge cases where it breaks, and fix one thing themselves.</p>
+        <div class="tool-row"><span class="tool-chip">Replit</span><span class="tool-chip">Google Colab</span><span class="tool-chip">Claude</span></div>
+        <div class="teks-chip">TEKS: Math 6.4, 7.4 — ratios, rates, proportional relationships</div>
+      </div>
+      <div class="project-card math">
+        <h3>Data Dashboard Builder</h3>
+        <p>Students import a real dataset, prompt AI to generate a visualization script, run it, and present findings with a written interpretation they authored themselves.</p>
+        <div class="tool-row"><span class="tool-chip">Google Colab</span><span class="tool-chip">Flourish</span><span class="tool-chip">Claude</span></div>
+        <div class="teks-chip">TEKS: Math 6.12, 7.12, 8.11 — statistical representations</div>
+      </div>
+      <div class="project-card math">
+        <h3>Equation Explainer Bot</h3>
+        <p>Students prompt AI to solve a multi-step equation and explain every step. Then they swap problems with a partner and verify whether the AI's reasoning is correct or flawed.</p>
+        <div class="tool-row"><span class="tool-chip">Claude / ChatGPT</span><span class="tool-chip">Desmos</span></div>
+        <div class="teks-chip">TEKS: Math 7.10, 8.8 — equations, algebraic reasoning</div>
+      </div>
+      <div class="project-card math">
+        <h3>Geometry Proof Checker</h3>
+        <p>Students write their own geometric proof, then prompt AI to check their reasoning. They annotate where AI agrees, disagrees, or introduces an error of its own.</p>
+        <div class="tool-row"><span class="tool-chip">Claude</span><span class="tool-chip">GeoGebra</span></div>
+        <div class="teks-chip">TEKS: Math 8.10 — geometric reasoning, transformations</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCIENCE -->
+  <div class="ca-group fade-in">
+    <div class="ca-label ca-sci">🔬 Science</div>
+    <div class="project-grid">
+      <div class="project-card sci">
+        <h3>Cell City Simulator</h3>
+        <p>Students describe a city where buildings represent organelles. AI generates the narrative. Students code a labeled HTML diagram — then test whether every label is biologically accurate.</p>
+        <div class="tool-row"><span class="tool-chip">Claude / ChatGPT</span><span class="tool-chip">Replit (HTML)</span></div>
+        <div class="teks-chip">TEKS: Sci 7.5 — cell structure and function</div>
+      </div>
+      <div class="project-card sci">
+        <h3>Ecosystem Impact Modeler</h3>
+        <p>Students describe a change to a Texas ecosystem and prompt AI to model ripple effects through a food web. They evaluate the response against a scientific source and flag inaccuracies.</p>
+        <div class="tool-row"><span class="tool-chip">Claude / Perplexity</span><span class="tool-chip">Canva / Slides</span></div>
+        <div class="teks-chip">TEKS: Sci 7.10 — ecosystems and environmental change</div>
+      </div>
+      <div class="project-card sci">
+        <h3>Punnett Square Generator</h3>
+        <p>Students describe a genetic cross in plain language, ask AI to generate a Punnett square and predict phenotype ratios, then verify manually. Advanced: prompt AI to generate a Python script that does it automatically.</p>
+        <div class="tool-row"><span class="tool-chip">Claude / ChatGPT</span><span class="tool-chip">Replit (Python)</span></div>
+        <div class="teks-chip">TEKS: Sci 7.6 — heredity and genetics</div>
+      </div>
+      <div class="project-card sci">
+        <h3>Chemical Reaction Predictor</h3>
+        <p>Students describe two substances combining, ask AI to predict the reaction type, cross-check with a simulation tool, and write a lab-style report on whether AI was right.</p>
+        <div class="tool-row"><span class="tool-chip">Claude / ChatGPT</span><span class="tool-chip">PhET Simulations</span></div>
+        <div class="teks-chip">TEKS: Sci 8.5 — physical and chemical properties</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOCIAL STUDIES -->
+  <div class="ca-group fade-in">
+    <div class="ca-label ca-ss">🗺️ Social Studies</div>
+    <div class="project-grid">
+      <div class="project-card ss">
+        <h3>Primary Source Interrogator</h3>
+        <p>Students paste a primary source and prompt AI with historical thinking questions: Who wrote this? Who benefits? What's missing? They write a sourcing analysis using AI output as a starting point only.</p>
+        <div class="tool-row"><span class="tool-chip">Claude / NotebookLM</span><span class="tool-chip">Google Docs</span></div>
+        <div class="teks-chip">TEKS: SS 8.29 — historical thinking, primary/secondary sources</div>
+      </div>
+      <div class="project-card ss">
+        <h3>World Geography Data Story</h3>
+        <p>Students pick two countries, pull real data (population density, GDP, climate), prompt AI for a comparative analysis, fact-check three claims, then build a corrected infographic.</p>
+        <div class="tool-row"><span class="tool-chip">Perplexity / Claude</span><span class="tool-chip">Canva</span></div>
+        <div class="teks-chip">TEKS: SS 6.9, 6.21 — human-environment interaction</div>
+      </div>
+      <div class="project-card ss">
+        <h3>Propaganda vs. Persuasion Analyzer</h3>
+        <p>Students feed AI examples of WWII-era propaganda and modern advertising, ask it to identify persuasion techniques, then write an argument about where persuasion ends and manipulation begins.</p>
+        <div class="tool-row"><span class="tool-chip">Claude / ChatGPT</span><span class="tool-chip">Google Docs</span></div>
+        <div class="teks-chip">TEKS: SS 7.28, 8.29 — media literacy, citizenship</div>
+      </div>
+      <div class="project-card ss">
+        <h3>Build a Constitution Simulator</h3>
+        <p>Students vibe-code a decision-tree app: users answer questions about rights → app outputs which constitutional amendment applies. Students write the logic; AI generates the code.</p>
+        <div class="tool-row"><span class="tool-chip">Replit (Python or JS)</span><span class="tool-chip">Claude</span></div>
+        <div class="teks-chip">TEKS: SS 8.16, 8.17 — U.S. Constitution, Bill of Rights</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NON-OBVIOUS -->
+  <div class="ca-group fade-in">
+    <div class="ca-label ca-idea">💡 Non-Obvious Idea</div>
+    <div class="noi-card">
+      <div class="noi-icon">💡</div>
+      <div class="noi-content">
+        <h3>Red-Team the Chatbot</h3>
+        <p>Students are assigned to <em>break</em> an AI tool using their content-area knowledge. Their job: find three prompts that get the AI to produce a confident but factually wrong answer on a topic they've studied. They document each failure, explain why the AI was wrong using evidence, and present it to the class. This requires genuine subject-matter knowledge to execute well — expertise beats the tool. No rubric needed. Proving AI wrong is the assessment.</p>
+        <div class="tool-row"><span class="tool-chip">Claude / ChatGPT (sandboxed)</span><span class="tool-chip">Google Docs (documentation)</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     GRADE 9–12
+════════════════════════════════════════ -->
+<section class="grade-section" id="g912">
+  <div class="gs-header fade-in">
+    <div class="gs-badge">9–12</div>
+    <div class="gs-title-group">
+      <h2>Grades 9–12 — Ship &amp; Defend</h2>
+      <p>Students build deployable tools, work with real APIs and datasets, and produce portfolio-ready work. The bar: <strong>public and defensible.</strong> If it isn't deployed, published, or presented to a real audience, it hasn't cleared the standard.</p>
+    </div>
+  </div>
+
+  <!-- ELA -->
+  <div class="ca-group fade-in">
+    <div class="ca-label ca-ela">📖 ELA / Research &amp; Writing</div>
+    <div class="project-grid">
+      <div class="project-card ela">
+        <h3>Synthesize or Plagiarize? The Source Audit</h3>
+        <p>Students write a research paper using AI assistance throughout, then conduct a documented audit of every AI contribution: what was used, changed, rejected, and why. The audit is a second deliverable.</p>
+        <div class="tool-row"><span class="tool-chip">Claude / ChatGPT</span><span class="tool-chip">Google Docs (version history)</span></div>
+        <div class="teks-chip">TEKS: ELA I–IV research strand — synthesis, source evaluation</div>
+      </div>
+      <div class="project-card ela">
+        <h3>Technical Writing for a Real Audience</h3>
+        <p>Students identify a genuine problem in their school or community, vibe-code a one-page technical brief, and present it to an actual decision-maker — principal, city council member, or nonprofit director.</p>
+        <div class="tool-row"><span class="tool-chip">Claude</span><span class="tool-chip">Canva / Google Docs</span></div>
+        <div class="teks-chip">TEKS: ELA III/IV — technical writing, purpose and audience</div>
+      </div>
+      <div class="project-card ela">
+        <h3>AI-Generated Text Forensics</h3>
+        <p>Students receive five anonymous text samples — human-written, AI-generated, and hybrid. Using close reading only (no detection tools), they argue in writing which is which and why.</p>
+        <div class="tool-row"><span class="tool-chip">Claude (teacher-generated samples)</span><span class="tool-chip">Google Docs</span></div>
+        <div class="teks-chip">TEKS: ELA 9–12 — author's craft, style, rhetorical analysis</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MATH -->
+  <div class="ca-group fade-in">
+    <div class="ca-label ca-math">➕ Math</div>
+    <div class="project-grid">
+      <div class="project-card math">
+        <h3>Predictive Model Builder</h3>
+        <p>Students select a real dataset (Texas climate, local property taxes, sports stats), write a plain-language spec for a regression model, prompt AI to generate the code, run it, and present findings with appropriate statistical caveats.</p>
+        <div class="tool-row"><span class="tool-chip">Google Colab</span><span class="tool-chip">pandas / matplotlib / scikit-learn</span><span class="tool-chip">Claude</span></div>
+        <div class="teks-chip">TEKS: Algebra II / Statistics — regression, correlation (A2.4, Stats 3)</div>
+      </div>
+      <div class="project-card math">
+        <h3>Function Behavior Explorer App</h3>
+        <p>Students describe a family of functions, prompt AI to build an interactive Streamlit app with adjustable parameters, and write a mathematical commentary explaining each behavior.</p>
+        <div class="tool-row"><span class="tool-chip">Replit / Streamlit</span><span class="tool-chip">Claude</span><span class="tool-chip">Desmos</span></div>
+        <div class="teks-chip">TEKS: Precalculus / Algebra II — function families (PC.2, A2.2)</div>
+      </div>
+      <div class="project-card math">
+        <h3>Personal Finance Simulator</h3>
+        <p>Students vibe-code a compound interest/loan amortization calculator with their own inputs, run three real financial scenarios, and present a recommendation report to a "financial advisor" panel.</p>
+        <div class="tool-row"><span class="tool-chip">Replit (Python or JS)</span><span class="tool-chip">Claude</span><span class="tool-chip">Google Slides</span></div>
+        <div class="teks-chip">TEKS: Financial Math FM.1, FM.2 — compound interest, debt</div>
+      </div>
+      <div class="project-card math">
+        <h3>Statistics Lie Detector</h3>
+        <p>Students find three real published statistics used in news or advertising, prompt AI to explain how each could mislead, then write a mathematical rebuttal. Final product: a public-facing fact-check post.</p>
+        <div class="tool-row"><span class="tool-chip">Perplexity</span><span class="tool-chip">Claude</span><span class="tool-chip">Canva</span></div>
+        <div class="teks-chip">TEKS: Statistics — sampling, bias, misleading representations (Stats 1, 4)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCIENCE -->
+  <div class="ca-group fade-in">
+    <div class="ca-label ca-sci">🔬 Science</div>
+    <div class="project-grid">
+      <div class="project-card sci">
+        <h3>Gene Expression Literature Review Bot</h3>
+        <p>Students load three to five peer-reviewed abstracts into a Claude Project, query it systematically, identify gaps and contradictions across sources, then write a synthesis that goes beyond any single article.</p>
+        <div class="tool-row"><span class="tool-chip">Claude Projects</span><span class="tool-chip">Google Scholar</span><span class="tool-chip">Google Docs</span></div>
+        <div class="teks-chip">TEKS: Biology — gene expression, DNA, biotechnology (Bio.6, Bio.7)</div>
+      </div>
+      <div class="project-card sci">
+        <h3>Climate Data Dashboard</h3>
+        <p>Students pull real NOAA or NASA climate data, prompt AI to generate a Python visualization pipeline, and build a public-facing dashboard showing one specific trend. They write the interpretive narrative themselves.</p>
+        <div class="tool-row"><span class="tool-chip">Google Colab / Observable</span><span class="tool-chip">Streamlit / GitHub Pages</span><span class="tool-chip">Claude</span></div>
+        <div class="teks-chip">TEKS: Environmental Systems — climate, human impact (ES.2, ES.10)</div>
+      </div>
+      <div class="project-card sci">
+        <h3>Stoichiometry Checker App</h3>
+        <p>Students describe a chemical reaction in plain English, prompt AI to generate a stoichiometry calculator, test it with known reactions, and document the chemistry behind each failure it produces.</p>
+        <div class="tool-row"><span class="tool-chip">Replit (Python)</span><span class="tool-chip">Claude</span><span class="tool-chip">PhET</span></div>
+        <div class="teks-chip">TEKS: Chemistry — stoichiometry, limiting reagents (Chem.8)</div>
+      </div>
+      <div class="project-card sci">
+        <h3>Physics Simulation Builder</h3>
+        <p>Students write a spec for a projectile motion or wave interference simulation, prompt AI to generate it as a web app, test it against known physics outcomes, and annotate every discrepancy from reality.</p>
+        <div class="tool-row"><span class="tool-chip">Replit (p5.js)</span><span class="tool-chip">Claude</span><span class="tool-chip">PhET</span></div>
+        <div class="teks-chip">TEKS: Physics — motion, forces, wave behavior (Phys.4, Phys.7)</div>
+      </div>
+      <div class="project-card sci">
+        <h3>Medical Case Study Analyzer</h3>
+        <p>Students receive a fictional patient case, prompt AI for a differential diagnosis, then evaluate it against anatomy/physiology knowledge — identifying where AI reasoning is sound vs. where it would harm a real patient.</p>
+        <div class="tool-row"><span class="tool-chip">Claude / ChatGPT</span><span class="tool-chip">Google Docs</span></div>
+        <div class="teks-chip">TEKS: Anatomy &amp; Physiology — body systems, homeostasis (A&amp;P 1–4)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOCIAL STUDIES -->
+  <div class="ca-group fade-in">
+    <div class="ca-label ca-ss">🗺️ Social Studies</div>
+    <div class="project-grid">
+      <div class="project-card ss">
+        <h3>Policy Brief Generator + Critic</h3>
+        <p>Students pick a current Texas legislative issue (TRAIGA, school vouchers, water rights), prompt AI to draft a brief from one stakeholder's perspective, then write a rebuttal from an opposing stakeholder using real legislative language.</p>
+        <div class="tool-row"><span class="tool-chip">Claude / Perplexity</span><span class="tool-chip">Google Docs</span></div>
+        <div class="teks-chip">TEKS: Government — legislative process, civic participation (Gov.18, Gov.22)</div>
+      </div>
+      <div class="project-card ss">
+        <h3>Historical Turning Point Simulator</h3>
+        <p>Students pick a historical decision point, prompt AI to model three alternate outcomes based on changed variables, then argue in writing which alternate history is most plausible and why.</p>
+        <div class="tool-row"><span class="tool-chip">Claude</span><span class="tool-chip">Google Docs</span></div>
+        <div class="teks-chip">TEKS: WH.29, USH.29 — causation, historical thinking</div>
+      </div>
+      <div class="project-card ss">
+        <h3>Economic Inequality Data Story</h3>
+        <p>Students pull real Census or FRED economic data, prompt AI to build a visualization and narrative, fact-check three claims, then publish a corrected data story as a public blog post or infographic.</p>
+        <div class="tool-row"><span class="tool-chip">FRED / Census data</span><span class="tool-chip">Google Colab / Flourish</span><span class="tool-chip">Canva</span></div>
+        <div class="teks-chip">TEKS: Economics — income distribution, policy tradeoffs (Econ.4, Econ.9)</div>
+      </div>
+      <div class="project-card ss">
+        <h3>Geopolitical Risk Briefing</h3>
+        <p>Students prompt AI to generate an intelligence-style briefing for an assigned world region, cross-check every factual claim against two vetted sources, and publish a corrected, sourced version.</p>
+        <div class="tool-row"><span class="tool-chip">Perplexity / Claude</span><span class="tool-chip">Canva</span></div>
+        <div class="teks-chip">TEKS: World Geography — political systems, global issues (WG.18, WG.20)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTE / CS -->
+  <div class="ca-group fade-in">
+    <div class="ca-label ca-cs">💻 Computer Science / CTE</div>
+    <div class="project-grid">
+      <div class="project-card cs">
+        <h3>Vibe-Code a Real MVP</h3>
+        <p>Students write a one-page product spec for a tool solving a real school or community problem, use AI to generate the full codebase, deploy it publicly, and pitch it — including what they changed from the AI's first output and why.</p>
+        <div class="tool-row"><span class="tool-chip">Cursor / Replit</span><span class="tool-chip">Claude / GitHub Copilot</span><span class="tool-chip">Vercel / GitHub Pages</span></div>
+        <div class="teks-chip">TEKS: CS I/II — program development, deployment (CS.4, CS.6)</div>
+      </div>
+      <div class="project-card cs">
+        <h3>Prompt Injection Red Team</h3>
+        <p>Students attempt to manipulate an AI system into producing outputs it's designed to refuse — using only text. They document every successful exploit, explain the mechanism, and propose one mitigation strategy. Ethical guardrails defined by teacher upfront.</p>
+        <div class="tool-row"><span class="tool-chip">Claude / ChatGPT (sandboxed)</span><span class="tool-chip">Google Docs</span></div>
+        <div class="teks-chip">TEKS: CS — cybersecurity, ethics, system vulnerabilities (CS.7, CS.8)</div>
+      </div>
+      <div class="project-card cs">
+        <h3>Train a Text Classifier</h3>
+        <p>Students collect 50 labeled examples in a content area, prompt AI to generate a Python classification model, run it on new examples, and report accuracy with a confusion matrix.</p>
+        <div class="tool-row"><span class="tool-chip">Google Colab + scikit-learn</span><span class="tool-chip">Claude (code scaffolding)</span></div>
+        <div class="teks-chip">TEKS: CS II — algorithms, ML concepts, data classification (CS.5)</div>
+      </div>
+      <div class="project-card cs">
+        <h3>Automate Something Real</h3>
+        <p>Students identify a repetitive task a teacher or administrator actually does and build a working automation. Deliverable: working tool + one-page implementation guide written for a non-technical user.</p>
+        <div class="tool-row"><span class="tool-chip">Python / Claude</span><span class="tool-chip">n8n / Google Apps Script</span></div>
+        <div class="teks-chip">TEKS: CS I/II — problem-solving, implementation, documentation (CS.4, CS.6)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NON-OBVIOUS -->
+  <div class="ca-group fade-in">
+    <div class="ca-label ca-idea">💡 Non-Obvious Idea</div>
+    <div class="noi-card">
+      <div class="noi-icon">💡</div>
+      <div class="noi-content">
+        <h3>The AI Consultant Engagement</h3>
+        <p>Students are hired (fictionally) as AI consultants by a real local organization — a school district, small business, city department, or nonprofit. Their deliverable is a professional recommendations report: what AI tools the organization should adopt, which tasks AI should <em>not</em> handle, what the risks are, and what staff training would be required. They present to an actual representative of that organization when possible.</p>
+        <p style="margin-top:10px;">This is the only project that integrates every content area simultaneously — research, writing, data, ethics, economics, and communication — and produces something with genuine external value. It also directly mirrors what many of these students will be asked to do in their first professional job within five years.</p>
+        <div class="tool-row">
+          <span class="tool-chip">Claude / Perplexity</span>
+          <span class="tool-chip">Canva (report design)</span>
+          <span class="tool-chip">Google Slides (presentation)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-divider"></div>
+  <p>
+    This was vibe-coded by <a href="https://mguhlin.org" target="_blank" rel="noopener">Miguel Guhlin</a>.
+    Learn more at <a href="https://blog.tcea.org" target="_blank" rel="noopener">TCEA</a>
+    or email <a href="mailto:mguhlin@tcea.org?Subject=Vibe-coded Examples">Miguel</a>.
+  </p>
+  <p class="footer-note">All projects align to Texas Essential Knowledge and Skills (TEKS). Tool suggestions are for educator reference; availability and features may change.</p>
+  <p class="footer-note" style="margin-top:8px;">
+    <a href="README.md">📄 README</a>
+  </p>
+</footer>
+
+<script>
+  // ── Scroll-fade observer ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // ── Active nav link on scroll ──
+  const sections = document.querySelectorAll('section[id], header');
+  const navLinks = document.querySelectorAll('.grade-nav a');
+
+  const sectionMap = {
+    'intro': 'About',
+    'map': 'Curriculum Map',
+    'k2': 'K–2',
+    'g35': '3–5',
+    'g68': '6–8',
+    'g912': '9–12'
+  };
+
+  const scrollObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === '#' + id) {
+            link.classList.add('active');
+          }
+        });
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+
+  document.querySelectorAll('section[id]').forEach(s => scrollObserver.observe(s));
+</script>
+
+</body>
+</html>
