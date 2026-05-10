@@ -234,6 +234,21 @@ Compatibility
 - **`type="button"` on every dialog button.** Defensive fix in case browser dialog/form interaction defaults caused the original "Generate doesn't do anything" report — buttons inside dialogs without explicit type can sometimes be treated as form submits.
 - **Cache key bumped to `drawsplat-v2.10.1`** to force fresh asset load.
 
+### v2.10.2 follow-ups
+
+- **Clipart-style shape masks added.** The Layout dropdown is now grouped into four sections:
+  - **Geometric** — Rectangle, Circle, Oval, Diamond, Pentagon
+  - **Symbols** — Heart, Star, Cloud, Lightning
+  - **Things** — Apple, House, Pumpkin, Tree, Flower, Leaf, Sun, Moon, Globe, Rocket
+  - **Animals** — Dog, Cat, Bird, Fish, Whale, Dolphin, Horse, Pig, Cow, Butterfly, Bear, Mouse, Lion, Tiger, Rabbit, Turtle, Panda, Monkey, Frog, Penguin, Owl, Unicorn, Dragon, Octopus, Snail, Ladybug
+- **How the masks are built.** Two paths:
+  - Geometric / Symbols / Things have hand-authored SVG path data (eight `Path2D` strings on a 100×100 viewBox, scaled into the canvas at 92% to leave a safe margin). Filled black on an offscreen canvas; the alpha channel becomes the mask.
+  - Animals and many of the Things use the system **emoji font** rendered to canvas at ~88% size. The pixel data is alpha-thresholded (any non-near-white pixel becomes "inside the mask"). This gives DrawSplat ~30 free silhouettes without shipping more SVG path data — the OS supplies the artwork.
+  - Caveat: emoji rendering varies by OS. Modern macOS, iOS, Windows 10+, Android, and major Linux desktops with Noto Color Emoji all produce recognizable silhouettes. Old Linux installs without an emoji font may show empty boxes — fallback in that case is to choose a geometric or symbol shape instead.
+- **Spiral iteration cap raised to 1500** for shape-masked layouts (vs. 800 for rect) to give odd shapes — narrow/concave like Lightning, Octopus — enough attempts to find valid placements.
+- **Pixel-mask placement test:** for each candidate position, nine sample points are tested against the mask (4 corners + 4 edge midpoints + center). All nine must be inside the opaque region or the position is rejected.
+- Cache key bumped to `drawsplat-v2.10.2`.
+
 What's NOT in this release (deliberate)
 - **Custom shape masking** (heart-shaped, USA-shaped, etc.) — would require canvas pixel testing of an upload mask. Considered for v3.x.
 - **Anti-stop-word filtering / stemming** — the algorithm uses raw input as-is. Users curate their word list before pasting.
