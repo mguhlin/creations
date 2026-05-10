@@ -184,7 +184,7 @@ Related behavior:
 
 ## Version
 
-Current build: **DrawSplat v2.10.5 — Eraser & Cloud Fixes**
+Current build: **DrawSplat v2.10.6 — Outline Word Cloud**
 
 ## License
 
@@ -283,6 +283,21 @@ Compatibility
   - Manual click-counter threshold raised from **400 ms → 500 ms** (the prior value was tight enough that the `render()` + `saveState()` between two clicks could push the second pointerdown past the window).
   - Added an **SVG-level `dblclick` listener** as a safety net: if a dblclick bubbles up to the `<svg>`, we look up the underlying `.object` and open Word Cloud / Mermaid / inline text editor as appropriate. This catches cases where the per-element listener is lost across a re-render.
 - Cache key bumped to `drawsplat-v2.10.5`.
+
+### v2.10.6 follow-ups
+
+- **Follow Outline** is a new option in the Word Cloud's **Rotation** dropdown (alongside Horizontal / Mix 0/90° / Random angles). When selected, words are placed along the silhouette's perimeter, each rotated to follow the local tangent angle, and the interior is then filled with smaller horizontal copies of the same words to occupy the nooks.
+- **Edge tracing pipeline** (in `_wcEdgeAnchors`):
+  1. Scan the mask's alpha channel: a pixel is an "edge" if it's inside the mask but at least one 4-neighbor is outside.
+  2. Trace the **longest contour** by walking 8-connected unvisited edge pixels. Multi-component shapes (e.g. butterfly wings) keep the dominant contour and skip islands.
+  3. Resample the contour into N evenly-spaced anchors via cumulative arc length. N defaults to `max(28, words.length × 2)` to give each word a few candidate positions.
+  4. Tangent angle per anchor is `atan2(next.y − prev.y, next.x − prev.x)` clamped to **±90°** so text always stays right-reading.
+  5. Anchors are inset 14 px toward the centroid so words don't poke off the silhouette.
+- **Layered placement.** Outline pass uses moderate font sizes (16–38 px) with collision avoidance. Once the outline is laid down, a second pass spirals smaller copies (10–20 px, horizontal) into the interior, checking against the already-placed outline rectangles. This is the "fill the nooks" step.
+- **Helper extraction.** Spiral-with-shrink-on-failure logic moved into `_wcSpiralPlace(wd, fontSize, angle, W, H, mask, placed, maxIters, checkMask, startTheta)` so both the standard layout and the Outline mode's filler pass share the same code path. The bilateral start theta (`(i%2===0)?0:Math.PI`) is preserved.
+- **Behavior on `rect` shape.** Outline mode requires a mask, so picking it with the Rectangle layout falls through to the standard horizontal layout — there's no perimeter to trace. Pick any other shape (Heart, Star, Apple, Whale, etc.) for the outline effect.
+- **Caveats.** The outline is sampled at fixed N anchors, so very short word lists place sparsely along the curve while very long lists may have words bumping into each other (collisions skip an anchor and try the next, so words after a conflict shift down the perimeter). Concave silhouettes — Octopus, Butterfly, Lightning — produce dramatic but uneven results because tentacles/wings have a lot of perimeter relative to interior.
+- Cache key bumped to `drawsplat-v2.10.6`.
 
 What's NOT in this release (deliberate)
 - **Custom shape masking** (heart-shaped, USA-shaped, etc.) — would require canvas pixel testing of an upload mask. Considered for v3.x.
@@ -493,7 +508,7 @@ Updated panel behavior:
 - Panel tabs support both `data-panel-id` and a fallback `data-panel-index`.
 - Clicking Panel 1 after creating or switching to another panel should now work reliably.
 
-Current build: **DrawSplat v2.10.5 — Eraser & Cloud Fixes**
+Current build: **DrawSplat v2.10.6 — Outline Word Cloud**
 
 ## Version 2.3 productivity workspace update
 
@@ -511,7 +526,7 @@ The Workspace setting is separate from the existing **Simple / Advanced** interf
 - Education Tools + Simple
 - Education Tools + Advanced
 
-Current build: **DrawSplat v2.10.5 — Eraser & Cloud Fixes**
+Current build: **DrawSplat v2.10.6 — Outline Word Cloud**
 
 
 ## Security and Internet-Facing Deployment Warning

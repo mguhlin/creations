@@ -10,7 +10,7 @@
    - Service worker registered for offline shell.
 */
 (function(){
-const VERSION='2.10.5';
+const VERSION='2.10.6';
 const svg=document.getElementById('boardSvg'), NS='http://www.w3.org/2000/svg', XHTML='http://www.w3.org/1999/xhtml';
 const TEXTABLE_TYPES=['text','sticky','comment','audio','rect','ellipse','diamond','triangle','callout','speech'], SHAPE_TEXT_TYPES=['rect','ellipse','diamond','triangle','callout','speech'];
 const ADVANCED_TOOLS=['connector','diamond','triangle','callout','speech','comment','audio'];
@@ -370,10 +370,143 @@ function _wcRotatedAABB(w,h,angleDeg){if(angleDeg===0) return [w,h]; if(Math.abs
 const _WORDCLOUD_SHAPES={heart:'M50 88 C20 65 5 45 5 28 C5 14 16 5 28 5 C38 5 46 11 50 22 C54 11 62 5 72 5 C84 5 95 14 95 28 C95 45 80 65 50 88 Z',star:'M50 5 L62 38 L97 38 L68 58 L80 92 L50 72 L20 92 L32 58 L3 38 L38 38 Z',cloud:'M30 70 C15 70 5 60 5 50 C5 40 15 32 25 33 C28 22 38 15 50 15 C62 15 72 22 75 33 C85 32 95 40 95 50 C95 60 85 70 70 70 Z',apple:'M50 25 C46 12 35 8 28 12 C20 16 18 25 22 32 C18 36 12 42 12 55 C12 75 28 92 50 92 C72 92 88 75 88 55 C88 42 82 36 78 32 C82 25 80 16 72 12 C65 8 54 12 50 25 Z',house:'M50 5 L92 35 L82 35 L82 92 L60 92 L60 65 L40 65 L40 92 L18 92 L18 35 L8 35 Z',diamond:'M50 5 L92 50 L50 95 L8 50 Z',pentagon:'M50 5 L93 38 L77 90 L23 90 L7 38 Z',bolt:'M58 5 L20 55 L42 55 L32 95 L75 40 L52 40 L62 5 Z'};
 const _WORDCLOUD_EMOJI_SHAPES={dog:'🐕',cat:'🐈',bird:'🐦',fish:'🐟',whale:'🐳',dolphin:'🐬',horse:'🐴',pig:'🐷',cow:'🐮',butterfly:'🦋',bear:'🐻',mouse:'🐭',lion:'🦁',tiger:'🐯',rabbit:'🐰',turtle:'🐢',panda:'🐼',monkey:'🐵',frog:'🐸',penguin:'🐧',owl:'🦉',unicorn:'🦄',dragon:'🐲',octopus:'🐙',snail:'🐌',ladybug:'🐞',pumpkin:'🎃',tree:'🌳',flower:'🌸',sun:'☀️',moon:'🌙',globe:'🌍',leaf:'🍃',rocket:'🚀'};
 function _wcEmojiToMask(emoji,W,H){const cv=document.createElement('canvas'); cv.width=W; cv.height=H; const ctx=cv.getContext('2d',{willReadFrequently:true}); const fontSize=Math.min(W,H)*0.92; ctx.font=fontSize+'px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji","Twemoji Mozilla",sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillStyle='#000'; ctx.fillText(emoji,W/2,H/2); let data; try{data=ctx.getImageData(0,0,W,H)}catch(_){return null} const px=data.data; for(let i=0;i<px.length;i+=4){px[i+3]=px[i+3]>40?255:0; px[i]=0; px[i+1]=0; px[i+2]=0} return data}
+function _wcEdgeAnchors(mask,W,H,count){
+  if(!mask) return [];
+  const data=mask.data;
+  const inside=(x,y)=>x>=0&&y>=0&&x<W&&y<H&&data[(y*W+x)*4+3]>128;
+  const edgeMap=new Uint8Array(W*H);
+  const edges=[];
+  for(let y=1;y<H-1;y++){for(let x=1;x<W-1;x++){if(!inside(x,y)) continue; if(!inside(x-1,y)||!inside(x+1,y)||!inside(x,y-1)||!inside(x,y+1)){edgeMap[y*W+x]=1; edges.push({x,y})}}}
+  if(edges.length<16) return [];
+  // Trace contours via 8-connected walk; keep the longest one
+  const visited=new Uint8Array(W*H);
+  let best=[];
+  for(const start of edges){
+    const sIdx=start.y*W+start.x;
+    if(visited[sIdx]) continue;
+    const contour=[start]; visited[sIdx]=1;
+    let cur=start;
+    while(true){
+      let next=null;
+      for(let dy=-1;dy<=1&&!next;dy++){for(let dx=-1;dx<=1&&!next;dx++){if(dx===0&&dy===0) continue; const nx=cur.x+dx,ny=cur.y+dy; if(nx<0||ny<0||nx>=W||ny>=H) continue; const nIdx=ny*W+nx; if(edgeMap[nIdx]&&!visited[nIdx]){next={x:nx,y:ny}; visited[nIdx]=1}}}
+      if(!next) break;
+      contour.push(next); cur=next;
+    }
+    if(contour.length>best.length) best=contour;
+  }
+  if(best.length<16) return [];
+  // Resample evenly along arc length, computing tangent angle per anchor
+  const cum=[0];
+  for(let i=1;i<best.length;i++){cum.push(cum[i-1]+Math.hypot(best[i].x-best[i-1].x, best[i].y-best[i-1].y))}
+  const total=cum[cum.length-1];
+  if(total<50) return [];
+  const cx=W/2,cy=H/2,inset=14;
+  const anchors=[];
+  for(let k=0;k<count;k++){
+    const target=(k/count)*total;
+    let i=0;
+    while(i<cum.length-1&&cum[i+1]<target) i++;
+    const ti=Math.max(1,Math.min(best.length-2,i));
+    const tp1=best[ti-1], tp2=best[Math.min(ti+1,best.length-1)];
+    let angle=Math.atan2(tp2.y-tp1.y, tp2.x-tp1.x)*180/Math.PI;
+    if(angle>90) angle-=180; else if(angle<-90) angle+=180;
+    const ex=best[i].x, ey=best[i].y;
+    const dx=cx-ex, dy=cy-ey, dist=Math.hypot(dx,dy)||1;
+    anchors.push({x:ex+(dx/dist)*inset, y:ey+(dy/dist)*inset, angle});
+  }
+  return anchors;
+}
 function _wcBuildMask(shape,W,H){if(shape==='rect') return null; if(_WORDCLOUD_EMOJI_SHAPES[shape]) return _wcEmojiToMask(_WORDCLOUD_EMOJI_SHAPES[shape],W,H); const cv=document.createElement('canvas'); cv.width=W; cv.height=H; const ctx=cv.getContext('2d',{willReadFrequently:true}); ctx.fillStyle='#000'; if(shape==='circle'){ctx.beginPath(); ctx.arc(W/2,H/2,Math.min(W,H)/2-6,0,Math.PI*2); ctx.fill()} else if(shape==='oval'){ctx.beginPath(); ctx.ellipse(W/2,H/2,W/2-6,H/2-6,0,0,Math.PI*2); ctx.fill()} else {const d=_WORDCLOUD_SHAPES[shape]; if(!d) return null; try{const p=new Path2D(d); const scale=Math.min(W,H)/100*0.92; const tx=(W-100*scale)/2, ty=(H-100*scale)/2; ctx.translate(tx,ty); ctx.scale(scale,scale); ctx.fill(p); ctx.setTransform(1,0,0,1,0,0)}catch(_){return null}} try{return ctx.getImageData(0,0,W,H)}catch(_){return null}}
 function _wcPointInMask(mask,x,y){if(!mask) return true; const ix=Math.floor(x),iy=Math.floor(y); if(ix<0||iy<0||ix>=mask.width||iy>=mask.height) return false; const idx=(iy*mask.width+ix)*4; return mask.data[idx+3]>128}
 function _wcPickAngle(mode,i){if(mode==='ninety') return (i>0&&Math.random()<0.32)?90:0; if(mode==='random'){if(i===0) return 0; const angles=[0,0,0,0,15,-15,30,-30,45,-45,60,-60,75,-75,90,-90]; return angles[Math.floor(Math.random()*angles.length)]} return 0}
-function placeWordsLayout(words,opts){const W=opts.width,H=opts.height,shape=opts.shape||'rect'; const rotMode=opts.rotation||'none'; const cx=W/2,cy=H/2; const mask=_wcBuildMask(shape,W,H); const minSize=opts.minSize||14,maxSize=opts.maxSize||(mask?54:64); const maxWt=Math.max(...words.map(w=>w.weight)),minWt=Math.min(...words.map(w=>w.weight)); const range=maxWt-minWt||1; const placed=[]; const maxIters=mask?1500:800; for(let i=0;i<words.length;i++){const wd=words[i]; const norm=(wd.weight-minWt)/range; let fontSize=minSize+norm*(maxSize-minSize); const angle=_wcPickAngle(rotMode,i); let placedIt=null; for(let shrink=0;shrink<6&&!placedIt;shrink++){if(fontSize<8) break; const baseW=fontSize*0.58*wd.word.length+10; const baseH=fontSize*1.18; const [w,h]=_wcRotatedAABB(baseW,baseH,angle); let theta=(i%2===0)?0:Math.PI; let radius=0; for(let it=0;it<maxIters;it++){const x=cx+radius*Math.cos(theta)-w/2; const y=cy+radius*Math.sin(theta)-h/2; if(x<4||y<4||x+w>W-4||y+h>H-4){theta+=0.22; radius+=0.55; continue} if(mask){const samples=[[x,y],[x+w,y],[x,y+h],[x+w,y+h],[x+w/2,y],[x+w,y+h/2],[x+w/2,y+h],[x,y+h/2],[x+w/2,y+h/2]]; let outside=false; for(const [px,py] of samples){if(!_wcPointInMask(mask,px,py)){outside=true; break}} if(outside){theta+=0.22; radius+=0.55; continue}} const cand={x,y,w,h}; let collides=false; for(const p of placed){if(_wcRectsOverlap(cand,p)){collides=true; break}} if(!collides){placedIt={x,y,w,h,fontSize}; break} theta+=0.22; radius+=0.55} if(!placedIt) fontSize*=0.8} if(placedIt) placed.push({...placedIt,word:wd.word,color:opts.palette[i%opts.palette.length],rotation:angle})} return placed}
+function _wcSpiralPlace(wd,fontSize,angle,W,H,mask,placed,maxIters,checkMask,startTheta){
+  const cx=W/2,cy=H/2;
+  let placedIt=null;
+  for(let shrink=0;shrink<6&&!placedIt;shrink++){
+    if(fontSize<8) break;
+    const baseW=fontSize*0.58*wd.word.length+10;
+    const baseH=fontSize*1.18;
+    const [w,h]=_wcRotatedAABB(baseW,baseH,angle);
+    let theta=startTheta||0,radius=0;
+    for(let it=0;it<maxIters;it++){
+      const x=cx+radius*Math.cos(theta)-w/2, y=cy+radius*Math.sin(theta)-h/2;
+      if(x<4||y<4||x+w>W-4||y+h>H-4){theta+=0.22; radius+=0.55; continue}
+      if(checkMask&&mask){
+        const samples=[[x,y],[x+w,y],[x,y+h],[x+w,y+h],[x+w/2,y],[x+w,y+h/2],[x+w/2,y+h],[x,y+h/2],[x+w/2,y+h/2]];
+        let outside=false;
+        for(const [px,py] of samples){if(!_wcPointInMask(mask,px,py)){outside=true; break}}
+        if(outside){theta+=0.22; radius+=0.55; continue}
+      }
+      const cand={x,y,w,h};
+      let collides=false;
+      for(const p of placed){if(_wcRectsOverlap(cand,p)){collides=true; break}}
+      if(!collides){placedIt={x,y,w,h,fontSize}; break}
+      theta+=0.22; radius+=0.55;
+    }
+    if(!placedIt) fontSize*=0.8;
+  }
+  return placedIt;
+}
+function placeWordsLayout(words,opts){
+  const W=opts.width,H=opts.height,shape=opts.shape||'rect';
+  const rotMode=opts.rotation||'none';
+  const mask=_wcBuildMask(shape,W,H);
+  const minSize=opts.minSize||14, maxSize=opts.maxSize||(mask?54:64);
+  const maxWt=Math.max(...words.map(w=>w.weight));
+  const minWt=Math.min(...words.map(w=>w.weight));
+  const range=maxWt-minWt||1;
+  const placed=[];
+  const maxIters=mask?1500:800;
+
+  // Outline mode: place along the perimeter, then fill nooks with smaller copies
+  if(rotMode==='outline'&&mask){
+    const anchors=_wcEdgeAnchors(mask,W,H,Math.max(28,words.length*2));
+    if(anchors.length){
+      const olMin=Math.min(16,minSize+2), olMax=Math.min(38,maxSize-10);
+      let anchorIdx=0;
+      for(let i=0;i<words.length;i++){
+        const wd=words[i];
+        const norm=(wd.weight-minWt)/range;
+        const fontSize=olMin+norm*(olMax-olMin);
+        let placedIt=null;
+        for(let attempt=0;attempt<anchors.length&&!placedIt;attempt++){
+          const a=anchors[(anchorIdx+attempt)%anchors.length];
+          const baseW=fontSize*0.58*wd.word.length+10;
+          const baseH=fontSize*1.18;
+          const [w,h]=_wcRotatedAABB(baseW,baseH,a.angle);
+          const x=a.x-w/2, y=a.y-h/2;
+          if(x<4||y<4||x+w>W-4||y+h>H-4) continue;
+          const cand={x,y,w,h};
+          let collides=false;
+          for(const p of placed){if(_wcRectsOverlap(cand,p)){collides=true; break}}
+          if(!collides){placedIt={x,y,w,h,fontSize,angle:a.angle}; anchorIdx=(anchorIdx+attempt+1)%anchors.length}
+        }
+        if(placedIt) placed.push({...placedIt,word:wd.word,color:opts.palette[i%opts.palette.length],rotation:placedIt.angle});
+      }
+    }
+    // Fill nooks: smaller, horizontal copies of every word, spiraled into the interior
+    const fillerMin=10, fillerMax=20;
+    for(let i=0;i<words.length;i++){
+      const wd=words[i];
+      const norm=(wd.weight-minWt)/range;
+      const fontSize=fillerMin+norm*(fillerMax-fillerMin);
+      const placedIt=_wcSpiralPlace(wd,fontSize,0,W,H,mask,placed,maxIters,true,(i%2===0)?0:Math.PI);
+      if(placedIt) placed.push({...placedIt,word:wd.word,color:opts.palette[(i+3)%opts.palette.length],rotation:0});
+    }
+    return placed;
+  }
+
+  // Standard mode: spiral fill with shrink-on-failure
+  for(let i=0;i<words.length;i++){
+    const wd=words[i];
+    const norm=(wd.weight-minWt)/range;
+    const fontSize=minSize+norm*(maxSize-minSize);
+    const angle=_wcPickAngle(rotMode,i);
+    const placedIt=_wcSpiralPlace(wd,fontSize,angle,W,H,mask,placed,maxIters,!!mask,(i%2===0)?0:Math.PI);
+    if(placedIt) placed.push({...placedIt,word:wd.word,color:opts.palette[i%opts.palette.length],rotation:angle});
+  }
+  return placed;
+}
 function _wcDarken(hex,amount){const m=hex.match(/^#?([0-9a-f]{6})$/i); if(!m) return hex; const n=parseInt(m[1],16); const r=Math.max(0,Math.floor(((n>>16)&255)*(1-amount))), g=Math.max(0,Math.floor(((n>>8)&255)*(1-amount))), b=Math.max(0,Math.floor((n&255)*(1-amount))); return '#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('')}
 function _wcShapeBackgroundSvg(shape,W,H,color){if(shape==='rect') return ''; if(_WORDCLOUD_EMOJI_SHAPES[shape]){const emoji=_WORDCLOUD_EMOJI_SHAPES[shape]; const fontSize=Math.min(W,H)*0.92; return `<text x="${W/2}" y="${H/2}" text-anchor="middle" dominant-baseline="central" font-size="${fontSize}" opacity="0.14">${emoji}</text>`} if(shape==='circle') return `<circle cx="${W/2}" cy="${H/2}" r="${Math.min(W,H)/2-6}" fill="${color}" opacity="0.13"/>`; if(shape==='oval') return `<ellipse cx="${W/2}" cy="${H/2}" rx="${W/2-6}" ry="${H/2-6}" fill="${color}" opacity="0.13"/>`; const d=_WORDCLOUD_SHAPES[shape]; if(!d) return ''; const scale=Math.min(W,H)/100*0.92; const tx=(W-100*scale)/2, ty=(H-100*scale)/2; return `<g transform="translate(${tx} ${ty}) scale(${scale})"><path d="${d}" fill="${color}" opacity="0.18"/></g>`}
 function renderWordCloudSvg(placed,W,H,effect,shape,palette){effect=effect||'flat'; const bgColor=(palette&&palette[0])||'#7c3aed'; const bg=_wcShapeBackgroundSvg(shape||'rect',W,H,bgColor); const items=placed.map(p=>{const cx=p.x+p.w/2; const cy=p.y+p.h/2+p.fontSize*0.32; const tr=p.rotation?` transform="rotate(${p.rotation} ${cx} ${cy})"`:''; const baseAttrs=`text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="${p.fontSize}" font-weight="700"`; const word=esc(p.word); if(effect==='shadow'){return `<text x="${cx+2}" y="${cy+2}" ${baseAttrs} fill="rgba(0,0,0,0.28)"${tr}>${word}</text><text x="${cx}" y="${cy}" ${baseAttrs} fill="${p.color}"${tr}>${word}</text>`} if(effect==='3d'){const dark=_wcDarken(p.color,0.55); let layers=''; for(let dz=4;dz>=1;dz--){layers+=`<text x="${cx+dz}" y="${cy+dz}" ${baseAttrs} fill="${dark}" opacity="${0.55+(4-dz)*0.08}"${tr}>${word}</text>`} return layers+`<text x="${cx}" y="${cy}" ${baseAttrs} fill="${p.color}" stroke="rgba(0,0,0,0.35)" stroke-width="0.6"${tr}>${word}</text>`} return `<text x="${cx}" y="${cy}" ${baseAttrs} fill="${p.color}"${tr}>${word}</text>`}).join(''); return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><rect width="${W}" height="${H}" fill="#ffffff"/>${bg}${items}</svg>`}
