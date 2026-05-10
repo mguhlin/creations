@@ -184,7 +184,7 @@ Related behavior:
 
 ## Version
 
-Current build: **DrawSplat v2.10.4 — Sidebar Polish**
+Current build: **DrawSplat v2.10.5 — Eraser & Cloud Fixes**
 
 ## License
 
@@ -272,6 +272,17 @@ Compatibility
   - Pen ✏️ · Eraser 🧽 · Sticky 🗒️ · Connector 🔗 · Speech 💬 · Audio 🎙️ stay the same — they were already kid-readable.
   - Set Background also gets `🌄` (matches Simple view's button) instead of the duplicate `🖼️` shared with Load Image and Add Image.
 - Cache key bumped to `drawsplat-v2.10.4`.
+
+### v2.10.5 follow-ups
+
+- **Eraser tool restored.** Clicking an object with the eraser had been getting consumed by `objectDown`'s `e.stopPropagation()` (which runs before the SVG-level eraser handler can see the event), so the click selected the object instead of erasing it. Fix: `objectDown` now early-returns *without* calling `stopPropagation` when `tool === 'eraser'`, letting the click bubble to the SVG-level handler that filters and removes the object.
+- **Word cloud big-word placement.** With weights like `Diana:50, Peggy:50, Bruce:50, teamwork, amazing, incredible`, the heavy three were silently dropped because their fontSize-64 bounding boxes wouldn't fit inside concave masks like the star or butterfly. Two related changes:
+  - Default `maxSize` is now **54 for masked shapes** (up to 64 only when `shape === 'rect'`). Heavy words start smaller so they have a real chance of fitting.
+  - **Shrink-on-failure retry loop** — if a word can't be placed within the spiral iteration budget, fontSize is multiplied by 0.8 and the placement is retried. Up to 6 retries per word, floor of 8 px. In practice every requested word now gets placed somewhere.
+- **Word cloud double-click-to-edit hardened.** Two changes:
+  - Manual click-counter threshold raised from **400 ms → 500 ms** (the prior value was tight enough that the `render()` + `saveState()` between two clicks could push the second pointerdown past the window).
+  - Added an **SVG-level `dblclick` listener** as a safety net: if a dblclick bubbles up to the `<svg>`, we look up the underlying `.object` and open Word Cloud / Mermaid / inline text editor as appropriate. This catches cases where the per-element listener is lost across a re-render.
+- Cache key bumped to `drawsplat-v2.10.5`.
 
 What's NOT in this release (deliberate)
 - **Custom shape masking** (heart-shaped, USA-shaped, etc.) — would require canvas pixel testing of an upload mask. Considered for v3.x.
@@ -482,7 +493,7 @@ Updated panel behavior:
 - Panel tabs support both `data-panel-id` and a fallback `data-panel-index`.
 - Clicking Panel 1 after creating or switching to another panel should now work reliably.
 
-Current build: **DrawSplat v2.10.4 — Sidebar Polish**
+Current build: **DrawSplat v2.10.5 — Eraser & Cloud Fixes**
 
 ## Version 2.3 productivity workspace update
 
@@ -500,7 +511,7 @@ The Workspace setting is separate from the existing **Simple / Advanced** interf
 - Education Tools + Simple
 - Education Tools + Advanced
 
-Current build: **DrawSplat v2.10.4 — Sidebar Polish**
+Current build: **DrawSplat v2.10.5 — Eraser & Cloud Fixes**
 
 
 ## Security and Internet-Facing Deployment Warning
