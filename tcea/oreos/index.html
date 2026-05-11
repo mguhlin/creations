@@ -369,6 +369,182 @@ body {
 .status-msg.error { color: #b3261e; }
 .status-msg.sending { color: var(--text-muted); }
 
+/* ===== Live Results Panel ===== */
+.results-card {
+  background: var(--white);
+  border-radius: 18px;
+  margin-top: 22px;
+  padding: 32px clamp(20px, 4vw, 40px);
+  box-shadow: var(--shadow-deep);
+  position: relative;
+}
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.results-header h2 {
+  font-family: 'DM Serif Display', serif;
+  font-weight: 400;
+  color: var(--navy);
+  font-size: 1.55rem;
+}
+.results-meta {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 22px;
+}
+.results-meta strong {
+  color: var(--navy);
+  font-size: 1.2rem;
+  font-family: 'DM Serif Display', serif;
+  font-weight: 400;
+}
+.results-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+.result-row {
+  display: grid;
+  grid-template-columns: 220px 1fr 52px;
+  gap: 14px;
+  align-items: center;
+}
+@media (max-width: 640px) {
+  .result-row { grid-template-columns: 1fr; gap: 4px; }
+  .result-count { text-align: left; }
+}
+.result-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+.result-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--cookie-dark);
+  color: var(--cream);
+  font-family: 'DM Serif Display', serif;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+.result-name {
+  font-weight: 600;
+  color: var(--navy);
+  font-size: 0.95rem;
+}
+.result-bar-track {
+  background: var(--off-white);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  height: 32px;
+  overflow: hidden;
+  position: relative;
+}
+.result-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--navy) 0%, var(--navy-mid) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 10px;
+  color: var(--white);
+  font-weight: 600;
+  font-size: 0.82rem;
+  transition: width 0.7s cubic-bezier(.2,.7,.3,1);
+  min-width: 0;
+  width: 0;
+  border-radius: 5px;
+}
+.result-bar.leader {
+  background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%);
+  color: var(--navy-dark);
+}
+.result-bar.zero {
+  background: transparent;
+  color: var(--text-muted);
+  font-weight: 500;
+  justify-content: flex-start;
+  padding-left: 10px;
+  padding-right: 0;
+}
+.result-pct {
+  white-space: nowrap;
+}
+.result-count {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.55rem;
+  color: var(--navy);
+  text-align: right;
+  line-height: 1;
+}
+.results-empty {
+  text-align: center;
+  padding: 28px 12px;
+  color: var(--text-muted);
+  background: var(--off-white);
+  border-radius: 10px;
+  font-size: 0.95rem;
+}
+.results-loading {
+  color: var(--text-muted);
+  font-style: italic;
+}
+.results-error {
+  color: #b3261e;
+  background: #fdecea;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.92rem;
+}
+.results-recent h3 {
+  font-family: 'DM Serif Display', serif;
+  font-weight: 400;
+  color: var(--navy);
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+.recent-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.recent-list li {
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  flex-wrap: wrap;
+  font-size: 0.93rem;
+  color: var(--text);
+}
+.recent-list li:first-child { border-top: none; }
+.recent-list .recent-name {
+  font-weight: 600;
+  color: var(--navy);
+}
+.recent-list .recent-time {
+  color: var(--text-muted);
+  font-size: 0.83rem;
+  margin-left: auto;
+}
+.btn-small {
+  font-size: 0.88rem;
+  padding: 8px 14px;
+}
+
 /* ===== Footer ===== */
 .footer {
   text-align: center;
@@ -492,6 +668,18 @@ body {
     </section>
 
   </main>
+
+  <section class="results-card" aria-labelledby="resultsHeading">
+    <div class="results-header">
+      <h2 id="resultsHeading">Live Session Results</h2>
+      <button type="button" class="btn btn-ghost btn-small" id="refreshResults">Refresh</button>
+    </div>
+    <p class="results-meta" id="resultsMeta">
+      <span class="results-loading">Loading the room's answers...</span>
+    </p>
+    <div class="results-chart" id="resultsChart"></div>
+    <div class="results-recent" id="resultsRecent"></div>
+  </section>
 
   <p class="footer">
     Built for TCEA professional learning. Source content adapted from a classic teacher icebreaker.
@@ -648,6 +836,8 @@ body {
         statusMsg.textContent = "Saved. Thanks for playing along.";
         statusMsg.className = "status-msg success";
         submitBtn.textContent = "Saved";
+        // Refresh the live results so the participant sees their answer counted
+        loadResults();
       } else {
         throw new Error(data.message || "Unknown server response.");
       }
@@ -658,6 +848,145 @@ body {
       submitBtn.disabled = false;
     }
   });
+
+  // ============ LIVE RESULTS ============
+  const STYLE_NAMES = {
+    "1": "The Whole Thing",
+    "2": "One Bite at a Time",
+    "3": "Slow Methodical Nibbles",
+    "4": "Dunked in a Liquid",
+    "5": "Twist, Cream, Cookie"
+  };
+
+  const resultsMeta = document.getElementById("resultsMeta");
+  const resultsChart = document.getElementById("resultsChart");
+  const resultsRecent = document.getElementById("resultsRecent");
+  const refreshBtn = document.getElementById("refreshResults");
+
+  function escapeHtml(s) {
+    return String(s).replace(/[<>&"']/g, function(c) {
+      return { "<":"&lt;", ">":"&gt;", "&":"&amp;", '"':"&quot;", "'":"&#39;" }[c];
+    });
+  }
+
+  function formatRelative(timestamp) {
+    if (!timestamp) return "";
+    const date = new Date(timestamp);
+    const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+    if (isNaN(seconds) || seconds < 0) return "just now";
+    if (seconds < 45) return "just now";
+    if (seconds < 3600) {
+      const m = Math.floor(seconds / 60);
+      return m + " minute" + (m === 1 ? "" : "s") + " ago";
+    }
+    if (seconds < 86400) {
+      const h = Math.floor(seconds / 3600);
+      return h + " hour" + (h === 1 ? "" : "s") + " ago";
+    }
+    const d = Math.floor(seconds / 86400);
+    return d + " day" + (d === 1 ? "" : "s") + " ago";
+  }
+
+  function renderResults(data) {
+    if (!data.total) {
+      resultsMeta.innerHTML = "Waiting for the first answer.";
+      resultsChart.innerHTML = '<div class="results-empty">No responses yet. Be the first to save your answer above.</div>';
+      resultsRecent.innerHTML = "";
+      return;
+    }
+
+    resultsMeta.innerHTML =
+      "<strong>" + data.total + "</strong> " +
+      (data.total === 1 ? "response" : "responses") +
+      " so far. Updated " + formatRelative(data.asOf) + ".";
+
+    // Find the leading count(s)
+    let maxCount = 0;
+    for (const k in data.counts) {
+      if (data.counts[k] > maxCount) maxCount = data.counts[k];
+    }
+
+    // Build chart rows
+    resultsChart.innerHTML = "";
+    for (let i = 1; i <= 5; i++) {
+      const count = data.counts[String(i)] || 0;
+      const pct = data.total ? Math.round((count / data.total) * 100) : 0;
+      const isLeader = count > 0 && count === maxCount;
+      const isZero = count === 0;
+
+      const row = document.createElement("div");
+      row.className = "result-row";
+      row.innerHTML =
+        '<div class="result-label">' +
+          '<span class="result-num">' + i + '</span>' +
+          '<span class="result-name">' + STYLE_NAMES[String(i)] + '</span>' +
+        '</div>' +
+        '<div class="result-bar-track">' +
+          '<div class="result-bar ' + (isLeader ? "leader" : "") + ' ' + (isZero ? "zero" : "") + '">' +
+            '<span class="result-pct">' + (isZero ? "0%" : pct + "%") + '</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="result-count">' + count + '</div>';
+      resultsChart.appendChild(row);
+
+      // Animate the bar width in
+      const bar = row.querySelector(".result-bar");
+      setTimeout(function () {
+        bar.style.width = (isZero ? 0 : Math.max(pct, 4)) + "%";
+      }, 60 + i * 80);
+    }
+
+    // Recent submissions
+    if (data.recent && data.recent.length) {
+      let html = "<h3>Most recent answers</h3><ul class=\"recent-list\">";
+      for (let i = 0; i < data.recent.length; i++) {
+        const r = data.recent[i];
+        const name = escapeHtml(r.name || "Anonymous");
+        const style = escapeHtml(r.styleName || STYLE_NAMES[String(r.choice)] || "");
+        html +=
+          "<li>" +
+            '<span class="recent-name">' + name + '</span>' +
+            '<span>chose &ldquo;' + style + '&rdquo;</span>' +
+            '<span class="recent-time">' + formatRelative(r.timestamp) + '</span>' +
+          "</li>";
+      }
+      html += "</ul>";
+      resultsRecent.innerHTML = html;
+    } else {
+      resultsRecent.innerHTML = "";
+    }
+  }
+
+  async function loadResults() {
+    if (APPS_SCRIPT_URL.startsWith("PASTE_")) {
+      resultsMeta.innerHTML = '<span class="results-error">Live results need the Apps Script URL. Paste it into the HTML.</span>';
+      resultsChart.innerHTML = "";
+      resultsRecent.innerHTML = "";
+      return;
+    }
+    refreshBtn.disabled = true;
+    const originalText = refreshBtn.textContent;
+    refreshBtn.textContent = "Refreshing...";
+    try {
+      // Cache-bust to defeat any intermediary caching
+      const url = APPS_SCRIPT_URL + "?action=results&t=" + Date.now();
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data.status !== "success") throw new Error(data.message || "Bad response");
+      renderResults(data);
+    } catch (err) {
+      console.error(err);
+      resultsMeta.innerHTML = '<span class="results-error">Could not load live results. Try the refresh button.</span>';
+      resultsChart.innerHTML = "";
+      resultsRecent.innerHTML = "";
+    } finally {
+      refreshBtn.disabled = false;
+      refreshBtn.textContent = originalText;
+    }
+  }
+
+  refreshBtn.addEventListener("click", loadResults);
+  loadResults();
 </script>
 </body>
 </html>
