@@ -611,6 +611,225 @@ gid('saveLocalBtn').onclick=()=>download('data:application/json;charset=utf-8,'+
 gid('loadLocalBtn').onclick=()=>gid('jsonInput').click();
 gid('jsonInput').onchange=e=>{const f=e.target.files[0]; if(!f)return; if(f.size>MAX_BOARD_BYTES){setStatus('Board import blocked. Maximum board file size is '+Math.round(MAX_BOARD_BYTES/1024/1024)+' MB.','danger'); e.target.value=''; return} const r=new FileReader(); r.onload=()=>{try{const loaded=JSON.parse(r.result); board=loaded; migrateBoard(board); clearSelection(); initHistory(); render(); persistLocal(); setStatus('Board loaded.','success')}catch(err){setStatus('Board import failed. The file is not valid DrawSplat JSON.','danger')}}; r.readAsText(f); e.target.value=''};
 
+/* Panel import: PDF (rendered to bgImage per page), PPTX/ODP (text + images extracted per slide). */
+const PANEL_IMPORT_MAX_PAGES=100;
+const PANEL_IMPORT_MAX_FILE_BYTES=64*1024*1024;
+const PANEL_IMPORT_TARGET_LONG_EDGE=1600;
+function importLibsReady(format){
+  if(format==='pdf')  return typeof window.pdfjsLib!=='undefined' && !window.__pdfjsMissing;
+  if(format==='pptx'||format==='odp') return typeof window.JSZip!=='undefined' && !window.__jszipMissing;
+  return false;
+}
+function detectPanelImportFormat(file){
+  const n=(file&&file.name||'').toLowerCase();
+  const t=file&&file.type||'';
+  if(n.endsWith('.pdf')||t==='application/pdf') return 'pdf';
+  if(n.endsWith('.pptx')||t==='application/vnd.openxmlformats-officedocument.presentationml.presentation') return 'pptx';
+  if(n.endsWith('.odp')||t==='application/vnd.oasis.opendocument.presentation') return 'odp';
+  return null;
+}
+function showImportProgress(label){
+  const dlg=gid('importProgressDialog'); if(!dlg) return null;
+  const labelEl=gid('importProgressLabel'); if(labelEl) labelEl.textContent=label||'Importing…';
+  const bar=gid('importProgressBar'); if(bar) bar.value=0;
+  const state={cancelled:false};
+  const cancelBtn=gid('importProgressCancel');
+  if(cancelBtn) cancelBtn.onclick=()=>{state.cancelled=true};
+  try{if(!dlg.open) dlg.showModal()}catch(_){}
+  return {
+    update(text,frac){if(labelEl&&text) labelEl.textContent=text; if(bar&&typeof frac==='number') bar.value=Math.max(0,Math.min(1,frac))*100;},
+    cancelled(){return state.cancelled},
+    close(){try{dlg.close()}catch(_){}}
+  };
+}
+function fileToArrayBuffer(f){return new Promise((res,rej)=>{const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=()=>rej(new Error('read failed')); r.readAsArrayBuffer(f)})}
+async function importPanelsFromFile(file){
+  if(!file) return;
+  if(file.size>PANEL_IMPORT_MAX_FILE_BYTES){setStatus('Import blocked: file is larger than '+Math.round(PANEL_IMPORT_MAX_FILE_BYTES/1024/1024)+' MB.','danger'); return}
+  const format=detectPanelImportFormat(file);
+  if(!format){setStatus('Unsupported file. Use PDF, PPTX, or ODP.','danger'); return}
+  if(!importLibsReady(format)){
+    setStatus(format==='pdf'?'PDF import unavailable: vendor/pdf.min.js is missing.':'Slide import unavailable: vendor/jszip.min.js is missing.','danger');
+    return;
+  }
+  const progress=showImportProgress('Reading '+file.name+'…');
+  try{
+    let result;
+    if(format==='pdf')  result=await importPdfAsPanels(file,progress);
+    else if(format==='pptx') result=await importPptxAsPanels(file,progress);
+    else if(format==='odp')  result=await importOdpAsPanels(file,progress);
+    progress&&progress.close();
+    if(result&&result.added){
+      clearSelection(); render(); saveState(); persistLocal();
+      const msg=format==='pdf'
+        ? 'Imported '+result.added+' PDF page'+(result.added===1?'':'s')+' as panels.'
+        : 'Imported '+result.added+' slide'+(result.added===1?'':'s')+'. Text and images extracted only — for full fidelity, export to PDF and import that.';
+      setStatus(msg,'success');
+    } else if(result&&result.cancelled){
+      setStatus('Import cancelled.','danger');
+    } else {
+      setStatus('Nothing imported from that file.','danger');
+    }
+  } catch(err){
+    progress&&progress.close();
+    setStatus('Import failed: '+(err&&err.message?err.message:String(err)),'danger');
+  }
+}
+async function importPdfAsPanels(file,progress){
+  pdfjsLib.GlobalWorkerOptions.workerSrc='vendor/pdf.worker.min.js';
+  const buf=await fileToArrayBuffer(file);
+  const pdf=await pdfjsLib.getDocument({data:buf,disableFontFace:false,useSystemFonts:false,isEvalSupported:false}).promise;
+  const total=Math.min(pdf.numPages,PANEL_IMPORT_MAX_PAGES);
+  const baseName=(file.name||'PDF').replace(/\.[^.]+$/,'');
+  let added=0;
+  for(let i=1;i<=total;i++){
+    if(progress&&progress.cancelled()) return {cancelled:true};
+    progress&&progress.update('Rendering page '+i+' of '+total+'…',(i-1)/total);
+    const page=await pdf.getPage(i);
+    const baseVp=page.getViewport({scale:1});
+    const scale=PANEL_IMPORT_TARGET_LONG_EDGE/Math.max(baseVp.width,baseVp.height);
+    const vp=page.getViewport({scale});
+    const cv=document.createElement('canvas');
+    cv.width=Math.max(1,Math.round(vp.width));
+    cv.height=Math.max(1,Math.round(vp.height));
+    const cx=cv.getContext('2d');
+    cx.fillStyle='#fff'; cx.fillRect(0,0,cv.width,cv.height);
+    await page.render({canvasContext:cx,viewport:vp}).promise;
+    const dataUrl=cv.toDataURL('image/jpeg',0.85);
+    board.panels.push({id:'panel_'+id(),name:baseName+' p.'+i,bg:'blank',bgImage:dataUrl,objects:[]});
+    added++;
+    if(page.cleanup) page.cleanup();
+  }
+  if(added>0) board.active=board.panels.length-added;
+  progress&&progress.update('Done',1);
+  return {added};
+}
+function _xmlLocal(el){return el&&(el.localName||(el.tagName||'').replace(/^[^:]+:/,''))}
+function _emuToPx(v){const n=parseInt(v||'0',10); return Math.round((n/914400)*96)}
+function _odfLenToPx(s){if(!s) return 0; const m=String(s).match(/^(-?[\d.]+)(cm|mm|in|pt|px|pc)?$/i); if(!m) return 0; const v=parseFloat(m[1]); const u=(m[2]||'cm').toLowerCase(); if(u==='in') return Math.round(v*96); if(u==='cm') return Math.round(v/2.54*96); if(u==='mm') return Math.round(v/25.4*96); if(u==='pt') return Math.round(v/72*96); if(u==='pc') return Math.round(v*16); return Math.round(v)}
+function _parseXml(text){const d=new DOMParser().parseFromString(text,'application/xml'); if(d.getElementsByTagName('parsererror').length) throw new Error('XML parse error'); return d}
+function _allOfLocalName(root,name){return Array.from(root.getElementsByTagName('*')).filter(n=>_xmlLocal(n)===name)}
+function _childOfLocalName(root,name){return Array.from(root.children||[]).find(n=>_xmlLocal(n)===name)}
+function _extOrMimeForName(name){const ext=(String(name).split('.').pop()||'png').toLowerCase(); if(ext==='jpg'||ext==='jpeg') return 'image/jpeg'; if(ext==='gif') return 'image/gif'; if(ext==='webp') return 'image/webp'; if(ext==='svg') return 'image/svg+xml'; return 'image/png'}
+async function importPptxAsPanels(file,progress){
+  const buf=await fileToArrayBuffer(file);
+  const zip=await JSZip.loadAsync(buf);
+  const slideEntries=Object.keys(zip.files).filter(k=>/^ppt\/slides\/slide\d+\.xml$/.test(k)).sort((a,b)=>parseInt(a.match(/slide(\d+)\.xml/)[1])-parseInt(b.match(/slide(\d+)\.xml/)[1]));
+  const total=Math.min(slideEntries.length,PANEL_IMPORT_MAX_PAGES);
+  if(!total) throw new Error('No slides found in PPTX.');
+  const baseName=(file.name||'Slides').replace(/\.[^.]+$/,'');
+  let added=0;
+  for(let i=0;i<total;i++){
+    if(progress&&progress.cancelled()) return {cancelled:true};
+    progress&&progress.update('Reading slide '+(i+1)+' of '+total+'…',i/total);
+    const slidePath=slideEntries[i];
+    const slideXml=await zip.file(slidePath).async('text');
+    const relsPath=slidePath.replace(/slides\/slide(\d+)\.xml$/,'slides/_rels/slide$1.xml.rels');
+    const relMap={};
+    const relsFile=zip.file(relsPath);
+    if(relsFile){
+      try{
+        const rdoc=_parseXml(await relsFile.async('text'));
+        Array.from(rdoc.getElementsByTagName('Relationship')).forEach(r=>{relMap[r.getAttribute('Id')]=r.getAttribute('Target')});
+      }catch(_){}
+    }
+    let doc; try{doc=_parseXml(slideXml)}catch(_){continue}
+    const objects=[];
+    for(const sp of _allOfLocalName(doc,'sp')){
+      const xfrm=_allOfLocalName(sp,'xfrm')[0];
+      let x=40,y=40,w=300,h=80;
+      if(xfrm){
+        const off=_childOfLocalName(xfrm,'off'), ext=_childOfLocalName(xfrm,'ext');
+        if(off){x=_emuToPx(off.getAttribute('x')); y=_emuToPx(off.getAttribute('y'))}
+        if(ext){w=_emuToPx(ext.getAttribute('cx'))||w; h=_emuToPx(ext.getAttribute('cy'))||h}
+      }
+      const paras=_allOfLocalName(sp,'p');
+      const lines=paras.map(p=>_allOfLocalName(p,'t').map(t=>t.textContent||'').join('')).filter(s=>s.length);
+      const text=lines.join('\n').trim();
+      if(text){
+        const html=plainTextToHtml(text);
+        objects.push(makeObj('text',Math.max(0,x),Math.max(0,y),Math.max(80,w),Math.max(40,h),{fill:'none',stroke:'none',html,text,fontSize:Math.min(36,Math.max(14,Math.round(h/Math.max(1,lines.length)/1.6))),textColor:'#111827',hAlign:'left',vAlign:'top',autoScaleText:true}));
+      }
+    }
+    for(const pic of _allOfLocalName(doc,'pic')){
+      const xfrm=_allOfLocalName(pic,'xfrm')[0];
+      let x=80,y=80,w=320,h=240;
+      if(xfrm){
+        const off=_childOfLocalName(xfrm,'off'), ext=_childOfLocalName(xfrm,'ext');
+        if(off){x=_emuToPx(off.getAttribute('x')); y=_emuToPx(off.getAttribute('y'))}
+        if(ext){w=_emuToPx(ext.getAttribute('cx'))||w; h=_emuToPx(ext.getAttribute('cy'))||h}
+      }
+      const blip=_allOfLocalName(pic,'blip')[0];
+      const rId=blip&&(blip.getAttribute('r:embed')||blip.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships','embed'));
+      if(!rId) continue;
+      const target=relMap[rId]; if(!target) continue;
+      const cleanTarget=target.replace(/^\.\.\//,'');
+      const fullPath=cleanTarget.startsWith('ppt/')?cleanTarget:('ppt/'+cleanTarget);
+      const entry=zip.file(fullPath); if(!entry) continue;
+      const b64=await entry.async('base64');
+      const dataUrl='data:'+_extOrMimeForName(target)+';base64,'+b64;
+      objects.push(makeObj('image',Math.max(0,x),Math.max(0,y),Math.max(40,w),Math.max(40,h),{src:dataUrl,fill:'none',stroke:'#000',strokeWidth:0}));
+    }
+    board.panels.push({id:'panel_'+id(),name:baseName+' #'+(i+1),bg:'blank',bgImage:'',objects});
+    added++;
+  }
+  if(added>0) board.active=board.panels.length-added;
+  return {added};
+}
+async function importOdpAsPanels(file,progress){
+  const buf=await fileToArrayBuffer(file);
+  const zip=await JSZip.loadAsync(buf);
+  const contentEntry=zip.file('content.xml');
+  if(!contentEntry) throw new Error('ODP is missing content.xml.');
+  const doc=_parseXml(await contentEntry.async('text'));
+  const pages=_allOfLocalName(doc,'page').filter(n=>n.namespaceURI&&n.namespaceURI.includes('drawing'));
+  const total=Math.min(pages.length,PANEL_IMPORT_MAX_PAGES);
+  if(!total) throw new Error('No slides found in ODP.');
+  const baseName=(file.name||'Slides').replace(/\.[^.]+$/,'');
+  let added=0;
+  for(let i=0;i<total;i++){
+    if(progress&&progress.cancelled()) return {cancelled:true};
+    progress&&progress.update('Reading slide '+(i+1)+' of '+total+'…',i/total);
+    const page=pages[i];
+    const objects=[];
+    for(const fr of _allOfLocalName(page,'frame')){
+      const x=_odfLenToPx(fr.getAttribute('svg:x'));
+      const y=_odfLenToPx(fr.getAttribute('svg:y'));
+      const w=_odfLenToPx(fr.getAttribute('svg:width'))||300;
+      const h=_odfLenToPx(fr.getAttribute('svg:height'))||80;
+      const img=_childOfLocalName(fr,'image');
+      if(img){
+        const href=img.getAttribute('xlink:href')||img.getAttributeNS('http://www.w3.org/1999/xlink','href');
+        if(href){
+          const entry=zip.file(href);
+          if(entry){
+            const b64=await entry.async('base64');
+            const dataUrl='data:'+_extOrMimeForName(href)+';base64,'+b64;
+            objects.push(makeObj('image',Math.max(0,x),Math.max(0,y),Math.max(40,w),Math.max(40,h),{src:dataUrl,fill:'none',stroke:'#000',strokeWidth:0}));
+          }
+        }
+        continue;
+      }
+      const tb=_childOfLocalName(fr,'text-box');
+      if(tb){
+        const paras=_allOfLocalName(tb,'p');
+        const text=paras.map(p=>p.textContent||'').join('\n').trim();
+        if(text){
+          const html=plainTextToHtml(text);
+          objects.push(makeObj('text',Math.max(0,x),Math.max(0,y),Math.max(80,w),Math.max(40,h),{fill:'none',stroke:'none',html,text,fontSize:Math.min(32,Math.max(14,Math.round(h/Math.max(1,paras.length)/1.6))),textColor:'#111827',hAlign:'left',vAlign:'top',autoScaleText:true}));
+        }
+      }
+    }
+    board.panels.push({id:'panel_'+id(),name:baseName+' #'+(i+1),bg:'blank',bgImage:'',objects});
+    added++;
+  }
+  if(added>0) board.active=board.panels.length-added;
+  return {added};
+}
+gid('importPanelsBtn')&&(gid('importPanelsBtn').onclick=()=>gid('importPanelsInput')&&gid('importPanelsInput').click());
+gid('more_importPanelsBtn')&&(gid('more_importPanelsBtn').onclick=()=>{gid('moreOptionsDialog')&&gid('moreOptionsDialog').close(); gid('importPanelsInput')&&gid('importPanelsInput').click()});
+gid('importPanelsInput')&&(gid('importPanelsInput').onchange=async e=>{const f=e.target.files[0]; e.target.value=''; if(f) await importPanelsFromFile(f)});
+
 function startLocalSync(){stopSync('local'); collabRoom=ui.collabRoom.value.trim(); if(!collabRoom)return setSyncStatus('Enter a room name first.','danger'); if(!('BroadcastChannel' in window))return setSyncStatus('This browser does not support local BroadcastChannel sync.','danger'); localChannel=new BroadcastChannel('drawsplat_'+collabRoom); localChannel.onmessage=(evt)=>{const m=evt.data||{}; if(!m||typeof m!=='object'||m.instanceId===instanceId)return; if(m.type==='board' && m.board && Array.isArray(m.board.panels)){board=m.board; migrateBoard(board); clearSelection(); connectorPendingFrom=null; persistLocal(); lastSnapshot=snapshot(); render(); setSyncStatus('Local sync active for room: '+collabRoom,'success')} if(m.type==='cursor' && m.cursor && typeof m.cursor.x==='number'){liveCursors[m.instanceId]={...m.cursor,ts:Date.now()}; requestRender()}}; setSyncStatus('Local sync active for room: '+collabRoom,'success'); broadcastLocal()}
 function stopSync(which='both'){if((which==='both'||which==='local')&&localChannel){localChannel.close(); localChannel=null; liveCursors={}} if((which==='both'||which==='cloud')&&cloudTimer){clearInterval(cloudTimer); cloudTimer=null; lastCloudTs=''} if(which==='both') collabRoom=''; setSyncStatus('Sync stopped.'); if(ui.cursorStatus) ui.cursorStatus.textContent=''}
 function broadcastLocal(){if(localChannel) localChannel.postMessage({type:'board',instanceId,room:collabRoom,board})}
@@ -743,8 +962,8 @@ function registerServiceWorker(){
 /* v2.5: icon-ization. Identical to v2.4 but with explicit aria-labels on every entry. */
 (function(){
   const toolIcons={ select:['👆','Select'], pen:['✏️','Pen'], eraser:['🧽','Eraser'], laser:['🔆','Laser Pointer'], line:['📏','Line'], arrow:['➡️','Arrow'], rect:['🟦','Rectangle'], ellipse:['🟢','Ellipse'], text:['🅰️','Text'], sticky:['🗒️','Sticky Note'], connector:['🔗','Connector'], diamond:['🔶','Diamond'], triangle:['🔺','Triangle'], callout:['📢','Callout'], speech:['💬','Speech'], comment:['📌','Comment'], audio:['🎙️','Audio'] };
-  const buttonIcons={ undoBtn:['↶','Undo'], redoBtn:['↷','Redo'], saveDriveBtn:['☁️','Save to Google'], exportBtn:['🖼️','Export PNG'], exportPdfBtn:['📄','Export PDF'], tntBtn:['🧨','TNT Reset'], imageBtn:['🖼️','Load Image'], duplicateBtn:['⧉','Duplicate'], frontBtn:['⬆️','Bring Front'], backBtn:['⬇️','Send Back'], groupBtn:['⛓️','Group'], ungroupBtn:['⛓','Ungroup'], openStickerLibraryBtn:['⭐','Open Sticker Library'], insertStickerBtn:['➕','Insert Sticker'], createCustomStickerBtn:['🖼️','Create Custom Sticker'], insertTemplateBtn:['▦','Insert Template'], newTemplatePanelBtn:['▣','New Template Panel'], saveTemplateBtn:['💾','Save as Template'], loadTemplateGalleryBtn:['📚','Load Gallery'], addPanelBtn:['＋','Add Panel'], renamePanelBtn:['✎','Rename Panel'], deletePanelBtn:['🗑️','Delete Panel'], clearPanelBtn:['🧹','Clear Panel'], saveRestorePointBtn:['📌','Save Restore Point'], restorePointBtn:['⏪','Restore Point'], applyTextBtn:['✓','Apply Text'], attachStickyImageBtn:['🖼️','Attach Sticky Image'], toggleCommentResolvedBtn:['✓','Resolve/Reopen Comment'], recordAudioBtn:['🎙️','Record Audio'], loadAudioBtn:['🎵','Load Audio'], playAudioBtn:['▶','Play Audio'], selectGroupBtn:['▦','Select Group'], answerKeyBtn:['🔑','Answer Key'], lockBtn:['🔒','Lock'], unlockBtn:['🔓','Unlock'], deleteBtn:['🗑️','Delete'], startSyncBtn:['🔁','Start Local Sync'], startCloudSyncBtn:['☁️','Start Cloud Sync'], stopSyncBtn:['■','Stop Sync'], refreshCloudBtn:['↧','Pull Cloud'], saveLocalBtn:['💾','Save File'], loadLocalBtn:['📂','Load File'], loadDriveBtn:['☁️','Load from Google'], settingsBtn:['⚙️','Setup'], submitTurnInBtn:['📤','Submit Turn-In'], reviewTurnInsBtn:['📥','Review Turn-Ins'], openModerationBtn:['🛡️','Open Moderation Dashboard'], refreshModerationBtn:['↻','Refresh Data'], zoomOutBtn:['−','Zoom Out'], zoomResetBtn:['100%','Reset Zoom'], zoomInBtn:['+','Zoom In'], closeSetup:['×','Close'], closeStickerDialog:['×','Close'], closeModerationDialog:['×','Close'], inlineTextCancelBtn:['×','Cancel'], inlineTextSaveBtn:['✓','Done'], shortcutsBtn:['⌨','Keyboard Shortcuts'], optionsBtn:['⚙','Options'], closeOptions:['×','Close'], aboutBtn:['ⓘ','About'], closeAbout:['×','Close'], viewToggleBtn:['⇄','Switch View'], loadBgImageBtn:['🌄','Set Background'], clearBgImageBtn:['🚫','Clear Background'], frameNavPrev:['◀','Previous Frame'], frameNavNext:['▶','Next Frame'], frameNavAdd:['＋','Add Frame'], clearFrameBtn:['🧹','Clear Frame'], moreOptionsBtn:['⋮','More Options'], closeMoreOptions:['×','Close'], inspectorToggleBtn:['📋','Toggle Inspector'], simpleImageBtn:['🖼️','Add Image'], simpleTntBtn:['🧨','TNT Reset'], simpleBgImageBtn:['🌄','Set Background'], simpleClearBgBtn:['🚫','Clear Background'], simpleRemoveBgColorBtn:['🪄','Remove BG Color'], removeBgColorBtn:['🪄','Remove BG Color'], simpleDeleteBtn:['🗑️','Delete Selected'], floatDeleteBtn:['🗑️','Delete'], floatDuplicateBtn:['⧉','Duplicate'], floatEditBtn:['✎','Edit Text'], floatCropBtn:['✂️','Crop Image'], insertMermaidBtn:['📊','Mermaid Diagram'], closeMermaid:['×','Close'], insertWordCloudBtn:['☁️','Word Cloud'], closeWordCloud:['×','Close'] };
-  const keepTextIds=new Set(['saveDriveBtn','exportBtn','exportPdfBtn','tntBtn','submitTurnInBtn','reviewTurnInsBtn','openModerationBtn','refreshModerationBtn','settingsBtn','loadDriveBtn','saveLocalBtn','loadLocalBtn','inlineTextSaveBtn','inlineTextCancelBtn','optionsBtn','aboutBtn','viewToggleBtn']);
+  const buttonIcons={ undoBtn:['↶','Undo'], redoBtn:['↷','Redo'], saveDriveBtn:['☁️','Save to Google'], exportBtn:['🖼️','Export PNG'], exportPdfBtn:['📄','Export PDF'], tntBtn:['🧨','TNT Reset'], imageBtn:['🖼️','Load Image'], duplicateBtn:['⧉','Duplicate'], frontBtn:['⬆️','Bring Front'], backBtn:['⬇️','Send Back'], groupBtn:['⛓️','Group'], ungroupBtn:['⛓','Ungroup'], openStickerLibraryBtn:['⭐','Open Sticker Library'], insertStickerBtn:['➕','Insert Sticker'], createCustomStickerBtn:['🖼️','Create Custom Sticker'], insertTemplateBtn:['▦','Insert Template'], newTemplatePanelBtn:['▣','New Template Panel'], saveTemplateBtn:['💾','Save as Template'], loadTemplateGalleryBtn:['📚','Load Gallery'], addPanelBtn:['＋','Add Panel'], renamePanelBtn:['✎','Rename Panel'], deletePanelBtn:['🗑️','Delete Panel'], clearPanelBtn:['🧹','Clear Panel'], saveRestorePointBtn:['📌','Save Restore Point'], restorePointBtn:['⏪','Restore Point'], applyTextBtn:['✓','Apply Text'], attachStickyImageBtn:['🖼️','Attach Sticky Image'], toggleCommentResolvedBtn:['✓','Resolve/Reopen Comment'], recordAudioBtn:['🎙️','Record Audio'], loadAudioBtn:['🎵','Load Audio'], playAudioBtn:['▶','Play Audio'], selectGroupBtn:['▦','Select Group'], answerKeyBtn:['🔑','Answer Key'], lockBtn:['🔒','Lock'], unlockBtn:['🔓','Unlock'], deleteBtn:['🗑️','Delete'], startSyncBtn:['🔁','Start Local Sync'], startCloudSyncBtn:['☁️','Start Cloud Sync'], stopSyncBtn:['■','Stop Sync'], refreshCloudBtn:['↧','Pull Cloud'], saveLocalBtn:['💾','Save File'], loadLocalBtn:['📂','Load File'], importPanelsBtn:['📥','Import Panels'], loadDriveBtn:['☁️','Load from Google'], settingsBtn:['⚙️','Setup'], submitTurnInBtn:['📤','Submit Turn-In'], reviewTurnInsBtn:['📥','Review Turn-Ins'], openModerationBtn:['🛡️','Open Moderation Dashboard'], refreshModerationBtn:['↻','Refresh Data'], zoomOutBtn:['−','Zoom Out'], zoomResetBtn:['100%','Reset Zoom'], zoomInBtn:['+','Zoom In'], closeSetup:['×','Close'], closeStickerDialog:['×','Close'], closeModerationDialog:['×','Close'], inlineTextCancelBtn:['×','Cancel'], inlineTextSaveBtn:['✓','Done'], shortcutsBtn:['⌨','Keyboard Shortcuts'], optionsBtn:['⚙','Options'], closeOptions:['×','Close'], aboutBtn:['ⓘ','About'], closeAbout:['×','Close'], viewToggleBtn:['⇄','Switch View'], loadBgImageBtn:['🌄','Set Background'], clearBgImageBtn:['🚫','Clear Background'], frameNavPrev:['◀','Previous Frame'], frameNavNext:['▶','Next Frame'], frameNavAdd:['＋','Add Frame'], clearFrameBtn:['🧹','Clear Frame'], moreOptionsBtn:['⋮','More Options'], closeMoreOptions:['×','Close'], inspectorToggleBtn:['📋','Toggle Inspector'], simpleImageBtn:['🖼️','Add Image'], simpleTntBtn:['🧨','TNT Reset'], simpleBgImageBtn:['🌄','Set Background'], simpleClearBgBtn:['🚫','Clear Background'], simpleRemoveBgColorBtn:['🪄','Remove BG Color'], removeBgColorBtn:['🪄','Remove BG Color'], simpleDeleteBtn:['🗑️','Delete Selected'], floatDeleteBtn:['🗑️','Delete'], floatDuplicateBtn:['⧉','Duplicate'], floatEditBtn:['✎','Edit Text'], floatCropBtn:['✂️','Crop Image'], insertMermaidBtn:['📊','Mermaid Diagram'], closeMermaid:['×','Close'], insertWordCloudBtn:['☁️','Word Cloud'], closeWordCloud:['×','Close'] };
+  const keepTextIds=new Set(['saveDriveBtn','exportBtn','exportPdfBtn','tntBtn','submitTurnInBtn','reviewTurnInsBtn','openModerationBtn','refreshModerationBtn','settingsBtn','loadDriveBtn','saveLocalBtn','loadLocalBtn','importPanelsBtn','inlineTextSaveBtn','inlineTextCancelBtn','optionsBtn','aboutBtn','viewToggleBtn']);
   function currentLabel(el,fallback){ const text=(el.textContent||'').trim(); return el.getAttribute('aria-label')||el.getAttribute('title')||text||fallback }
   function iconize(el,icon,label,withText=false){ if(!el||el.dataset.iconized==='1') return; const finalLabel=currentLabel(el,label); el.dataset.iconized='1'; el.classList.add('icon-btn'); if(withText) el.classList.add('icon-with-text'); el.setAttribute('aria-label',finalLabel); el.setAttribute('title',finalLabel); el.setAttribute('data-tooltip',finalLabel); el.innerHTML=`<span class="icon-symbol" aria-hidden="true">${icon}</span><span class="icon-label">${esc(finalLabel)}</span>` }
   function applyIcons(){
