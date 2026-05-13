@@ -20,6 +20,7 @@ The app runs entirely in the browser and uses public WordPress APIs. No build st
 - Source-specific result styling
 - Per-entry sharing for Mastodon, LinkedIn, X, Lemmy, native device sharing, and link copying
 - Downloadable RSS XML for the currently displayed result set
+- Featured images when available, with a generic fallback image for entries without one
 
 ## Use the Site
 

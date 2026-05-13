@@ -4,6 +4,7 @@ const TCEA_POSTS_URL = "https://blog.tcea.org/wp-json/wp/v2/posts";
 const TCEA_PAGES_URL = "https://blog.tcea.org/wp-json/wp/v2/pages";
 const TCEA_AUTHOR_ID = 29;
 const BLOGGER_POSTS_URL = "https://mguhlin.blogspot.com/feeds/posts/default";
+const FALLBACK_IMAGE = "./fallback-image.svg";
 const SPECIAL_SEARCHES = {
   nspa: {
     variants: ["NSPA:", "NSPA1", "NSPA2", "NSPA3", "NSPA4"],
@@ -118,7 +119,7 @@ function buildMguhlinUrl(perPage, page, query = state.query) {
   url.searchParams.set("number", String(perPage));
   url.searchParams.set("page", String(page));
   url.searchParams.set("type", state.type);
-  url.searchParams.set("fields", "ID,title,URL,date,modified,excerpt,tags,categories,type");
+  url.searchParams.set("fields", "ID,title,URL,date,modified,excerpt,tags,categories,type,featured_image,post_thumbnail");
 
   if (query) {
     url.searchParams.set("search", query);
@@ -143,7 +144,8 @@ function buildTceaUrl(baseUrl, perPage, page, query = state.query) {
   url.searchParams.set("author", String(TCEA_AUTHOR_ID));
   url.searchParams.set("per_page", String(perPage));
   url.searchParams.set("page", String(page));
-  url.searchParams.set("_fields", "id,title,link,date,modified,excerpt,author");
+  url.searchParams.set("_embed", "1");
+  url.searchParams.set("_fields", "id,title,link,date,modified,excerpt,author,type,featured_media,_embedded");
 
   if (query) {
     url.searchParams.set("search", query);
@@ -360,6 +362,9 @@ function termNames(terms = {}) {
 function normalizeMguhlinPost(post) {
   const title = post.title || "";
   const excerpt = post.excerpt || "";
+  const imageUrl = post.post_thumbnail && post.post_thumbnail.URL
+    ? post.post_thumbnail.URL
+    : post.featured_image || FALLBACK_IMAGE;
 
   return {
     id: `mguhlin-${post.ID}`,
@@ -371,6 +376,7 @@ function normalizeMguhlinPost(post) {
     date: post.date,
     modified: post.modified,
     excerpt,
+    imageUrl,
     searchableText: stripHtml(`${title} ${excerpt} ${post.URL}`),
     terms: [...termNames(post.categories), ...termNames(post.tags)],
   };
@@ -379,6 +385,17 @@ function normalizeMguhlinPost(post) {
 function normalizeTceaPost(post) {
   const title = post.title && post.title.rendered ? post.title.rendered : "";
   const excerpt = post.excerpt && post.excerpt.rendered ? post.excerpt.rendered : "";
+  const media = post._embedded && post._embedded["wp:featuredmedia"]
+    ? post._embedded["wp:featuredmedia"][0]
+    : null;
+  const mediaSizes = media && media.media_details ? media.media_details.sizes : {};
+  const imageUrl = mediaSizes.medium_large && mediaSizes.medium_large.source_url
+    ? mediaSizes.medium_large.source_url
+    : mediaSizes.medium && mediaSizes.medium.source_url
+      ? mediaSizes.medium.source_url
+      : media && media.source_url
+        ? media.source_url
+        : FALLBACK_IMAGE;
 
   return {
     id: `tcea-${post.id}`,
@@ -390,6 +407,7 @@ function normalizeTceaPost(post) {
     date: post.date,
     modified: post.modified,
     excerpt,
+    imageUrl,
     searchableText: stripHtml(`${title} ${excerpt} ${post.link}`),
     terms: ["Miguel Guhlin"],
   };
@@ -401,6 +419,9 @@ function normalizeBloggerPost(entry) {
   const alternateLink = (entry.link || []).find((link) => link.rel === "alternate");
   const url = alternateLink ? alternateLink.href : "";
   const labels = (entry.category || []).map((category) => category.term).filter(Boolean);
+  const imageUrl = entry.media$thumbnail && entry.media$thumbnail.url
+    ? entry.media$thumbnail.url.replace(/\/s72-[^/]+\//, "/s400/")
+    : FALLBACK_IMAGE;
 
   return {
     id: `blogger-${entry.id && entry.id.$t ? entry.id.$t : url}`,
@@ -412,6 +433,7 @@ function normalizeBloggerPost(entry) {
     date: entry.published && entry.published.$t ? entry.published.$t : entry.updated.$t,
     modified: entry.updated && entry.updated.$t ? entry.updated.$t : "",
     excerpt: content,
+    imageUrl,
     searchableText: stripHtml(`${title} ${content} ${url} ${labels.join(" ")}`),
     terms: labels,
   };
@@ -550,6 +572,25 @@ function renderResults(posts) {
     const card = document.createElement("article");
     card.className = `result-card result-card-${post.sourceKey}`;
 
+    const imageLink = document.createElement("a");
+    imageLink.href = post.url;
+    imageLink.target = "_blank";
+    imageLink.rel = "noreferrer";
+    imageLink.className = "result-image-link";
+
+    const image = document.createElement("img");
+    image.className = "result-image";
+    image.src = post.imageUrl || FALLBACK_IMAGE;
+    image.alt = "";
+    image.loading = "lazy";
+    image.addEventListener("error", () => {
+      image.src = FALLBACK_IMAGE;
+    }, { once: true });
+    imageLink.append(image);
+
+    const body = document.createElement("div");
+    body.className = "result-body";
+
     const title = document.createElement("h2");
     const link = document.createElement("a");
     link.href = post.url;
@@ -568,7 +609,7 @@ function renderResults(posts) {
     excerpt.className = "result-excerpt";
     excerpt.textContent = stripHtml(post.excerpt) || "No excerpt available.";
 
-    card.append(title, date, excerpt);
+    body.append(title, date, excerpt);
 
     if (post.terms.length) {
       const tagList = document.createElement("div");
@@ -579,10 +620,11 @@ function renderResults(posts) {
         tag.textContent = name;
         tagList.append(tag);
       });
-      card.append(tagList);
+      body.append(tagList);
     }
 
-    card.append(renderShareButtons(post));
+    body.append(renderShareButtons(post));
+    card.append(imageLink, body);
     fragment.append(card);
   });
 

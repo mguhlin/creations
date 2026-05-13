@@ -253,7 +253,30 @@ button:disabled {
   border: 1px solid var(--line);
   border-left: 5px solid var(--accent);
   border-radius: 8px;
+  display: grid;
+  gap: 18px;
+  grid-template-columns: 180px minmax(0, 1fr);
   padding: 18px;
+}
+
+.result-image-link {
+  align-self: start;
+  aspect-ratio: 16 / 10;
+  background: var(--card-accent-soft, var(--accent-soft));
+  border-radius: 8px;
+  display: block;
+  overflow: hidden;
+}
+
+.result-image {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.result-body {
+  min-width: 0;
 }
 
 .result-card-mguhlin {
@@ -420,6 +443,15 @@ button:disabled {
   .search-controls,
   .filters {
     grid-template-columns: 1fr;
+  }
+
+  .result-card {
+    grid-template-columns: 1fr;
+  }
+
+  .result-image-link {
+    max-width: 280px;
+    width: 100%;
   }
 
   button {
