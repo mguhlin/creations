@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Miguel's Writings Search</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="search-panel" aria-labelledby="page-title">
+        <div class="brand-row">
+          <a class="site-link" href="https://mguhlin.org" target="_blank" rel="noreferrer">mguhlin.org</a>
+          <span class="api-status" id="api-status">Ready</span>
+        </div>
+
+        <div class="title-row">
+          <div>
+            <h1 id="page-title">Search Miguel's Writings</h1>
+            <p class="title-subhead">Find public posts and pages from mguhlin.org and Miguel's TCEA TechNotes articles.</p>
+          </div>
+          <img
+            class="author-photo"
+            src="https://blog.tcea.org/wp-content/uploads/2020/06/IMG_20200619_185656_553.jpg"
+            alt="Miguel Guhlin"
+          >
+        </div>
+
+        <form class="search-form" id="search-form">
+          <label class="search-label" for="search-input">Search terms</label>
+          <div class="search-controls">
+            <input
+              id="search-input"
+              name="q"
+              type="search"
+              autocomplete="off"
+              placeholder="Try AI, Google, TCEA, notebooks..."
+            >
+            <button type="submit">Search</button>
+          </div>
+
+          <div class="quick-searches" aria-label="Common searches">
+            <span>Common searches</span>
+            <div class="quick-search-list">
+              <button type="button" data-search="AI">AI</button>
+              <button type="button" data-search="ChatGPT">ChatGPT</button>
+              <button type="button" data-search="vibe coding" data-search-variants="vibe coding|vibe coded|vibe-code|vibe code|vibecoding|vibecoded">Vibe Coding</button>
+              <button type="button" data-search="NSPA">NSPA</button>
+              <button type="button" data-search="Google">Google</button>
+              <button type="button" data-search="Good Teaching">Good Teaching</button>
+              <button type="button" data-search="Professional Learning">Professional Learning</button>
+              <button type="button" data-search="Online Tools">Online Tools</button>
+              <button type="button" data-search="Leadership">Leadership</button>
+              <button type="button" data-search="STEM">STEM</button>
+              <button type="button" data-search="Digital Literacy">Digital Literacy</button>
+              <button type="button" data-search="Coding">Coding</button>
+              <button type="button" data-search="Cybersecurity">Cybersecurity</button>
+              <button type="button" data-search="Writing">Writing</button>
+            </div>
+          </div>
+
+          <div class="filters" aria-label="Search filters">
+            <label>
+              <span>Source</span>
+              <select id="source-select" name="source">
+                <option value="all">All sources</option>
+                <option value="mguhlin">mguhlin.org</option>
+                <option value="tcea">TCEA by Miguel Guhlin</option>
+              </select>
+            </label>
+
+            <label>
+              <span>Content</span>
+              <select id="type-select" name="type">
+                <option value="any">Posts and pages</option>
+                <option value="post">Posts</option>
+                <option value="page">Pages</option>
+              </select>
+            </label>
+
+            <label>
+              <span>Sort</span>
+              <select id="sort-select" name="sort">
+                <option value="relevance">Relevance</option>
+                <option value="date">Newest</option>
+                <option value="modified">Recently updated</option>
+                <option value="title">Title</option>
+              </select>
+            </label>
+          </div>
+        </form>
+      </section>
+
+      <section class="results-panel" aria-live="polite">
+        <div class="results-meta">
+          <p id="results-count">Enter a search term or load recent entries.</p>
+          <button class="secondary-button" id="recent-button" type="button">Recent entries</button>
+        </div>
+
+        <div class="message" id="message" hidden></div>
+        <div class="results-list" id="results-list"></div>
+
+        <div class="pagination">
+          <button class="secondary-button" id="prev-button" type="button" disabled>Previous</button>
+          <span id="page-label">Page 1</span>
+          <button class="secondary-button" id="next-button" type="button" disabled>Next</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
