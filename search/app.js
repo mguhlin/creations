@@ -29,6 +29,7 @@ let state = {
   query: "",
   queryVariants: [],
   exactPattern: null,
+  exactTerm: "",
   source: "all",
   type: "any",
   sort: "relevance",
@@ -51,17 +52,29 @@ function readUrlState() {
   sortSelect.value = state.sort;
 }
 
-function configureQuery(query, variants = []) {
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function buildExactTermPattern(term) {
+  const escapedTerm = escapeRegExp(term.trim()).replace(/\s+/g, "\\s+");
+  return new RegExp(`(^|[^A-Za-z0-9])${escapedTerm}([^A-Za-z0-9]|$)`, "i");
+}
+
+function configureQuery(query, variants = [], exactTerm = "") {
   const normalizedQuery = query.trim();
   const specialSearch = SPECIAL_SEARCHES[normalizedQuery.replace(/^#/, "").toLowerCase()];
 
   state.query = normalizedQuery;
   state.queryVariants = variants;
   state.exactPattern = null;
+  state.exactTerm = exactTerm.trim();
 
   if (!variants.length && specialSearch) {
     state.queryVariants = specialSearch.variants;
     state.exactPattern = specialSearch.exactPattern;
+  } else if (state.exactTerm) {
+    state.exactPattern = buildExactTermPattern(state.exactTerm);
   }
 }
 
@@ -466,7 +479,7 @@ quickSearchButtons.forEach((button) => {
     const variants = button.dataset.searchVariants
       ? button.dataset.searchVariants.split("|").map((query) => query.trim()).filter(Boolean)
       : [];
-    configureQuery(button.dataset.search, variants);
+    configureQuery(button.dataset.search, variants, button.dataset.exactTerm || "");
     state.source = sourceSelect.value;
     state.type = typeSelect.value;
     state.sort = sortSelect.value;
