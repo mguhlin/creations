@@ -1,1 +1,233 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Water Company Work Manager</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Water Company</p>
+        <h1>Work Manager</h1>
+      </div>
+      <div class="top-actions">
+        <button id="exportCsvBtn" class="ghost">Export CSV</button>
+        <button id="exportJsonBtn" class="ghost">Backup JSON</button>
+        <label class="file-button">
+          Restore
+          <input id="importJsonInput" type="file" accept="application/json" />
+        </label>
+      </div>
+    </header>
 
+    <main class="app-shell">
+      <section class="left-panel">
+        <form id="workOrderForm" class="entry-form">
+          <div class="form-header">
+            <h2>New Work Order</h2>
+            <span id="editModeBadge" class="badge hidden">Editing</span>
+          </div>
+
+          <input id="editingId" type="hidden" />
+
+          <label>
+            Customer
+            <input id="customerName" required placeholder="Customer name or account" />
+          </label>
+
+          <div class="grid two">
+            <label>
+              Account #
+              <input id="accountNumber" placeholder="Optional" />
+            </label>
+            <label>
+              Phone
+              <input id="phone" placeholder="Optional" />
+            </label>
+          </div>
+
+          <label>
+            Service address
+            <input id="serviceAddress" placeholder="Street, town, notes" />
+          </label>
+
+          <div class="grid two">
+            <label>
+              Type
+              <select id="workType">
+                <option>Leak</option>
+                <option>Meter</option>
+                <option>Turn on/off</option>
+                <option>Water quality</option>
+                <option>Billing follow-up</option>
+                <option>Maintenance</option>
+                <option>Other</option>
+              </select>
+            </label>
+            <label>
+              Priority
+              <select id="priority">
+                <option>Normal</option>
+                <option>Urgent</option>
+                <option>Low</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="grid two">
+            <label>
+              Assigned to
+              <input id="assignedTo" placeholder="Crew/person" />
+            </label>
+            <label>
+              Status
+              <select id="status">
+                <option>Open</option>
+                <option>Scheduled</option>
+                <option>Waiting on customer</option>
+                <option>Waiting on parts</option>
+                <option>Completed</option>
+              </select>
+            </label>
+          </div>
+
+          <label>
+            Problem / request
+            <textarea id="requestText" required rows="4" placeholder="What needs to be done?"></textarea>
+          </label>
+
+          <label>
+            Action note
+            <textarea id="actionNote" rows="4" placeholder="What action was taken? Include dates, readings, parts, follow-up, etc."></textarea>
+          </label>
+
+          <div class="grid two">
+            <label>
+              Due date
+              <input id="dueDate" type="date" />
+            </label>
+            <label>
+              Completed date
+              <input id="completedDate" type="date" />
+            </label>
+          </div>
+
+          <div class="form-actions">
+            <button id="cancelEditBtn" type="button" class="ghost hidden">Cancel</button>
+            <button type="submit">Save Work Order</button>
+          </div>
+        </form>
+
+        <section class="guidance">
+          <h2>Recommended Team Setup</h2>
+          <p>
+            For several people editing at once, use a shared Google Sheet or a small
+            cloud database as the source of truth. A shared Google Drive folder lets
+            everyone open the same files without sharing anyone's whole computer.
+          </p>
+          <ol>
+            <li>Create one shared Drive folder named <strong>Work Orders</strong>.</li>
+            <li>Share only that folder with staff emails.</li>
+            <li>Keep backups exported from this app in that folder.</li>
+            <li>When ready, move the CSV into Google Sheets for live multi-user editing.</li>
+          </ol>
+        </section>
+      </section>
+
+      <section class="workspace">
+        <section class="summary-strip" aria-label="Work order totals">
+          <div>
+            <span id="totalCount">0</span>
+            <p>Total</p>
+          </div>
+          <div>
+            <span id="openCount">0</span>
+            <p>Open</p>
+          </div>
+          <div>
+            <span id="urgentCount">0</span>
+            <p>Urgent</p>
+          </div>
+          <div>
+            <span id="completedCount">0</span>
+            <p>Completed</p>
+          </div>
+        </section>
+
+        <section class="controls">
+          <label class="search">
+            <span>Search</span>
+            <input id="searchInput" placeholder="Customer, address, account, note..." />
+          </label>
+          <label>
+            Status
+            <select id="statusFilter">
+              <option value="All">All</option>
+              <option>Open</option>
+              <option>Scheduled</option>
+              <option>Waiting on customer</option>
+              <option>Waiting on parts</option>
+              <option>Completed</option>
+            </select>
+          </label>
+          <label>
+            Priority
+            <select id="priorityFilter">
+              <option value="All">All</option>
+              <option>Urgent</option>
+              <option>Normal</option>
+              <option>Low</option>
+            </select>
+          </label>
+        </section>
+
+        <section class="table-wrap" aria-live="polite">
+          <table>
+            <thead>
+              <tr>
+                <th>Customer</th>
+                <th>Request</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th>Assigned</th>
+                <th>Due</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTable"></tbody>
+          </table>
+          <div id="emptyState" class="empty-state hidden">
+            <h2>No work orders yet</h2>
+            <p>Add the first customer request using the form on the left.</p>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <template id="rowTemplate">
+      <tr>
+        <td data-label="Customer">
+          <strong class="customer"></strong>
+          <span class="details"></span>
+        </td>
+        <td data-label="Request">
+          <span class="request"></span>
+          <small class="note"></small>
+        </td>
+        <td data-label="Status"><span class="status-pill"></span></td>
+        <td data-label="Priority"><span class="priority-pill"></span></td>
+        <td data-label="Assigned" class="assigned"></td>
+        <td data-label="Due" class="due"></td>
+        <td data-label="Actions" class="row-actions">
+          <button class="icon-button edit" title="Edit work order">Edit</button>
+          <button class="icon-button complete" title="Mark completed">Done</button>
+          <button class="icon-button delete" title="Delete work order">Delete</button>
+        </td>
+      </tr>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
