@@ -22,6 +22,7 @@ const messageEl = document.querySelector("#message");
 const resultsList = document.querySelector("#results-list");
 const quickSearchButtons = document.querySelectorAll("[data-search]");
 const recentButton = document.querySelector("#recent-button");
+const rssButton = document.querySelector("#rss-button");
 const prevButton = document.querySelector("#prev-button");
 const nextButton = document.querySelector("#next-button");
 const pageLabel = document.querySelector("#page-label");
@@ -37,6 +38,7 @@ let state = {
   page: 1,
   found: 0,
   loading: false,
+  currentPosts: [],
 };
 
 function readUrlState() {
@@ -95,6 +97,7 @@ function setLoading(isLoading) {
   state.loading = isLoading;
   form.querySelector("button").disabled = isLoading;
   recentButton.disabled = isLoading;
+  rssButton.disabled = isLoading || !state.currentPosts.length;
   prevButton.disabled = isLoading || state.page <= 1;
   nextButton.disabled = isLoading || state.page >= totalPages();
   statusEl.textContent = isLoading ? "Searching" : "Ready";
@@ -283,6 +286,70 @@ function renderShareButtons(post) {
   return sharePanel;
 }
 
+function xmlEscape(value = "") {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
+
+function currentSearchLabel() {
+  return state.query ? `Search results for ${state.query}` : "Recent entries";
+}
+
+function buildRssFeed(posts) {
+  const pageUrl = window.location.href;
+  const updated = new Date().toUTCString();
+  const items = posts.map((post) => {
+    const title = stripHtml(post.title) || "Untitled entry";
+    const description = stripHtml(post.excerpt) || "";
+    const pubDate = post.date ? new Date(post.date).toUTCString() : updated;
+
+    return `    <item>
+      <title>${xmlEscape(title)}</title>
+      <link>${xmlEscape(post.url)}</link>
+      <guid isPermaLink="true">${xmlEscape(post.url)}</guid>
+      <pubDate>${xmlEscape(pubDate)}</pubDate>
+      <source>${xmlEscape(post.source)}</source>
+      <description>${xmlEscape(description)}</description>
+    </item>`;
+  }).join("\n");
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>${xmlEscape(`Miguel's Writings - ${currentSearchLabel()}`)}</title>
+    <link>${xmlEscape(pageUrl)}</link>
+    <description>${xmlEscape("Generated RSS feed for the currently displayed search results.")}</description>
+    <lastBuildDate>${xmlEscape(updated)}</lastBuildDate>
+${items}
+  </channel>
+</rss>
+`;
+}
+
+function downloadRssFeed() {
+  if (!state.currentPosts.length) return;
+
+  const blob = new Blob([buildRssFeed(state.currentPosts)], {
+    type: "application/rss+xml;charset=utf-8",
+  });
+  const link = document.createElement("a");
+  const slug = (state.query || "recent")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "") || "results";
+
+  link.href = URL.createObjectURL(blob);
+  link.download = `miguel-writings-${slug}.rss`;
+  document.body.append(link);
+  link.click();
+  URL.revokeObjectURL(link.href);
+  link.remove();
+}
+
 function termNames(terms = {}) {
   return Object.values(terms)
     .map((term) => term && term.name)
@@ -463,6 +530,8 @@ async function fetchPosts() {
 
 function renderResults(posts) {
   resultsList.innerHTML = "";
+  state.currentPosts = posts;
+  rssButton.disabled = !posts.length;
 
   if (!posts.length) {
     countEl.textContent = state.query
@@ -556,6 +625,8 @@ recentButton.addEventListener("click", () => {
   sortSelect.value = "date";
   runSearch();
 });
+
+rssButton.addEventListener("click", downloadRssFeed);
 
 quickSearchButtons.forEach((button) => {
   button.addEventListener("click", () => {

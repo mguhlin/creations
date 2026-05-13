@@ -19,6 +19,7 @@ The app runs entirely in the browser and uses public WordPress APIs. No build st
 - Special `NSPA` search that only returns entries containing `NSPA:`, `NSPA1`, `NSPA2`, `NSPA3`, or `NSPA4`
 - Source-specific result styling
 - Per-entry sharing for Mastodon, LinkedIn, X, Lemmy, native device sharing, and link copying
+- Downloadable RSS XML for the currently displayed result set
 
 ## Use the Site
 
@@ -49,3 +50,5 @@ http://localhost:8000/
 This only searches public content exposed by WordPress APIs. Password-protected or private WordPress content is not available to this static site.
 
 Instagram does not provide a standard web share URL for arbitrary links, so the Instagram share control copies the entry title and URL for manual posting.
+
+The RSS option generates a downloadable XML file from the results currently shown in the browser. It is not a permanent hosted RSS endpoint.

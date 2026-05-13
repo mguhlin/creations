@@ -221,6 +221,13 @@ button:disabled {
   margin-bottom: 18px;
 }
 
+.results-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
 .results-meta p,
 .pagination span {
   color: var(--muted);
@@ -404,7 +411,8 @@ button:disabled {
   }
 
   .brand-row,
-  .results-meta {
+  .results-meta,
+  .results-actions {
     align-items: flex-start;
     flex-direction: column;
   }
