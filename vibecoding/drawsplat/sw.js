@@ -1,5 +1,5 @@
 /* DrawSplat v2.10 — minimal offline shell. Caches the static app on first load. */
-const CACHE = 'drawsplat-v2.10.6';
+const CACHE = 'drawsplat-v2.10.7-import';
 const SHELL = [
   './',
   './index.html','./index-sp.html','./index-vn.html','./index-ab.html','./index-cn.html','./index.uh.html',
