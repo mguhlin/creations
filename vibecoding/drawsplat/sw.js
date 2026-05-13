@@ -1,5 +1,5 @@
 /* DrawSplat v2.10 — minimal offline shell. Caches the static app on first load. */
-const CACHE = 'drawsplat-v2.10.7-import';
+const CACHE = 'drawsplat-v2.10.8-import';
 const SHELL = [
   './',
   './index.html','./index-sp.html','./index-vn.html','./index-ab.html','./index-cn.html','./index.uh.html',
@@ -19,19 +19,21 @@ self.addEventListener('activate', e => {
   })());
 });
 
+const NETWORK_FIRST_PATHS = ['/app.js','/app.css','/locales.js','/i18n.js'];
 self.addEventListener('fetch', e => {
   const req = e.request;
   if(req.method !== 'GET') return;
   /* Same-origin only — never intercept Apps Script POSTs or any third-party. */
   const url = new URL(req.url);
   if(url.origin !== self.location.origin) return;
+  const isShellScript = NETWORK_FIRST_PATHS.some(p => url.pathname.endsWith(p));
   e.respondWith((async()=>{
-    /* Network first for HTML so updates land quickly. */
-    if(req.mode === 'navigate' || req.destination === 'document'){
-      try{ const fresh = await fetch(req); const c = await caches.open(CACHE); c.put(req, fresh.clone()); return fresh }
-      catch(_){ const cached = await caches.match(req); return cached || caches.match('./index.html') }
+    /* Network first for HTML and app-shell scripts so edits land on next reload. */
+    if(req.mode === 'navigate' || req.destination === 'document' || isShellScript){
+      try{ const fresh = await fetch(req); if(fresh && fresh.ok){ const c = await caches.open(CACHE); c.put(req, fresh.clone()) } return fresh }
+      catch(_){ const cached = await caches.match(req); return cached || (req.mode==='navigate'?caches.match('./index.html'):new Response('', {status: 504})) }
     }
-    /* Cache first for static assets. */
+    /* Cache first for vendor and other static assets. */
     const cached = await caches.match(req);
     if(cached) return cached;
     try{ const fresh = await fetch(req); if(fresh && fresh.ok){ const c = await caches.open(CACHE); c.put(req, fresh.clone()) } return fresh }
