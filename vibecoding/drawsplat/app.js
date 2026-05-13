@@ -10,7 +10,7 @@
    - Service worker registered for offline shell.
 */
 (function(){
-const VERSION='2.11.1-import';
+const VERSION='2.11.2-import';
 const svg=document.getElementById('boardSvg'), NS='http://www.w3.org/2000/svg', XHTML='http://www.w3.org/1999/xhtml';
 const TEXTABLE_TYPES=['text','sticky','comment','audio','rect','ellipse','diamond','triangle','callout','speech'], SHAPE_TEXT_TYPES=['rect','ellipse','diamond','triangle','callout','speech'];
 const ADVANCED_TOOLS=['connector','diamond','triangle','callout','speech','comment','audio'];
@@ -711,6 +711,26 @@ function _parseXml(text){const d=new DOMParser().parseFromString(text,'applicati
 function _allOfLocalName(root,name){return Array.from(root.getElementsByTagName('*')).filter(n=>_xmlLocal(n)===name)}
 function _childOfLocalName(root,name){return Array.from(root.children||[]).find(n=>_xmlLocal(n)===name)}
 function _extOrMimeForName(name){const ext=(String(name).split('.').pop()||'png').toLowerCase(); if(ext==='jpg'||ext==='jpeg') return 'image/jpeg'; if(ext==='gif') return 'image/gif'; if(ext==='webp') return 'image/webp'; if(ext==='svg') return 'image/svg+xml'; return 'image/png'}
+function _pptxRId(blip){
+  if(!blip) return null;
+  const RELN='http://schemas.openxmlformats.org/officeDocument/2006/relationships';
+  let v=blip.getAttributeNS && blip.getAttributeNS(RELN,'embed');
+  if(v) return v;
+  v=blip.getAttribute && blip.getAttribute('r:embed');
+  if(v) return v;
+  if(blip.attributes) for(const a of Array.from(blip.attributes)){
+    if((a.localName||a.name||'').toLowerCase()==='embed' && a.value) return a.value;
+  }
+  return null;
+}
+async function _pptxResolveImage(zip,relMap,rId){
+  const target=relMap[rId]; if(!target) return null;
+  const cleanTarget=target.replace(/^\.\.\//,'');
+  const fullPath=cleanTarget.startsWith('ppt/')?cleanTarget:('ppt/'+cleanTarget);
+  const entry=zip.file(fullPath); if(!entry) return null;
+  const b64=await entry.async('base64');
+  return 'data:'+_extOrMimeForName(target)+';base64,'+b64;
+}
 async function importPptxAsPanels(file,progress){
   const buf=await fileToArrayBuffer(file);
   const zip=await JSZip.loadAsync(buf);
@@ -718,7 +738,7 @@ async function importPptxAsPanels(file,progress){
   const total=Math.min(slideEntries.length,PANEL_IMPORT_MAX_PAGES);
   if(!total) throw new Error('No slides found in PPTX.');
   const baseName=(file.name||'Slides').replace(/\.[^.]+$/,'');
-  let added=0;
+  let added=0, totalImgs=0;
   for(let i=0;i<total;i++){
     if(progress&&progress.cancelled()) return {cancelled:true};
     progress&&progress.update('Reading slide '+(i+1)+' of '+total+'…',i/total);
@@ -730,11 +750,24 @@ async function importPptxAsPanels(file,progress){
     if(relsFile){
       try{
         const rdoc=_parseXml(await relsFile.async('text'));
-        Array.from(rdoc.getElementsByTagName('Relationship')).forEach(r=>{relMap[r.getAttribute('Id')]=r.getAttribute('Target')});
+        Array.from(rdoc.getElementsByTagName('*')).filter(n=>_xmlLocal(n)==='Relationship').forEach(r=>{
+          const id=r.getAttribute('Id'); const tgt=r.getAttribute('Target');
+          if(id&&tgt) relMap[id]=tgt;
+        });
       }catch(_){}
     }
     let doc; try{doc=_parseXml(slideXml)}catch(_){continue}
     const objects=[];
+    let panelBgImage='';
+    /* Slide-level background <p:bg><p:bgPr><a:blipFill><a:blip r:embed="..."/></a:blipFill></p:bgPr></p:bg> */
+    const bgEl=_allOfLocalName(doc,'bg')[0];
+    if(bgEl){
+      const bgBlip=_allOfLocalName(bgEl,'blip')[0];
+      const bgRid=_pptxRId(bgBlip);
+      if(bgRid){
+        try{ const url=await _pptxResolveImage(zip,relMap,bgRid); if(url) panelBgImage=url }catch(_){}
+      }
+    }
     for(const sp of _allOfLocalName(doc,'sp')){
       const xfrm=_allOfLocalName(sp,'xfrm')[0];
       let x=40,y=40,w=300,h=80;
@@ -759,21 +792,17 @@ async function importPptxAsPanels(file,progress){
         if(off){x=_emuToPx(off.getAttribute('x')); y=_emuToPx(off.getAttribute('y'))}
         if(ext){w=_emuToPx(ext.getAttribute('cx'))||w; h=_emuToPx(ext.getAttribute('cy'))||h}
       }
-      const blip=_allOfLocalName(pic,'blip')[0];
-      const rId=blip&&(blip.getAttribute('r:embed')||blip.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships','embed'));
+      const rId=_pptxRId(_allOfLocalName(pic,'blip')[0]);
       if(!rId) continue;
-      const target=relMap[rId]; if(!target) continue;
-      const cleanTarget=target.replace(/^\.\.\//,'');
-      const fullPath=cleanTarget.startsWith('ppt/')?cleanTarget:('ppt/'+cleanTarget);
-      const entry=zip.file(fullPath); if(!entry) continue;
-      const b64=await entry.async('base64');
-      const dataUrl='data:'+_extOrMimeForName(target)+';base64,'+b64;
-      objects.push(makeObj('image',Math.max(0,x),Math.max(0,y),Math.max(40,w),Math.max(40,h),{src:dataUrl,fill:'none',stroke:'#000',strokeWidth:0}));
+      const dataUrl=await _pptxResolveImage(zip,relMap,rId); if(!dataUrl) continue;
+      objects.push(makeObj('image',Math.max(0,x),Math.max(0,y),Math.max(40,w),Math.max(40,h),{src:dataUrl,fill:'none',stroke:'none',strokeWidth:0}));
+      totalImgs++;
     }
-    board.panels.push({id:'panel_'+id(),name:baseName+' #'+(i+1),bg:'blank',bgImage:'',objects});
+    board.panels.push({id:'panel_'+id(),name:baseName+' #'+(i+1),bg:'blank',bgImage:panelBgImage,objects});
     added++;
   }
   if(added>0) board.active=board.panels.length-added;
+  if(window.__importDebug) console.info('[DrawSplat import] PPTX:',{slides:added,imagesExtracted:totalImgs});
   return {added};
 }
 async function importOdpAsPanels(file,progress){
@@ -799,13 +828,17 @@ async function importOdpAsPanels(file,progress){
       const h=_odfLenToPx(fr.getAttribute('svg:height'))||80;
       const img=_childOfLocalName(fr,'image');
       if(img){
-        const href=img.getAttribute('xlink:href')||img.getAttributeNS('http://www.w3.org/1999/xlink','href');
+        let href=img.getAttributeNS && img.getAttributeNS('http://www.w3.org/1999/xlink','href');
+        if(!href) href=img.getAttribute && img.getAttribute('xlink:href');
+        if(!href && img.attributes) for(const a of Array.from(img.attributes)){
+          if((a.localName||a.name||'').toLowerCase()==='href' && a.value){ href=a.value; break }
+        }
         if(href){
           const entry=zip.file(href);
           if(entry){
             const b64=await entry.async('base64');
             const dataUrl='data:'+_extOrMimeForName(href)+';base64,'+b64;
-            objects.push(makeObj('image',Math.max(0,x),Math.max(0,y),Math.max(40,w),Math.max(40,h),{src:dataUrl,fill:'none',stroke:'#000',strokeWidth:0}));
+            objects.push(makeObj('image',Math.max(0,x),Math.max(0,y),Math.max(40,w),Math.max(40,h),{src:dataUrl,fill:'none',stroke:'none',strokeWidth:0}));
           }
         }
         continue;
