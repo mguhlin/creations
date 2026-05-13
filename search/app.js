@@ -145,7 +145,6 @@ function buildTceaUrl(baseUrl, perPage, page, query = state.query) {
   url.searchParams.set("per_page", String(perPage));
   url.searchParams.set("page", String(page));
   url.searchParams.set("_embed", "1");
-  url.searchParams.set("_fields", "id,title,link,date,modified,excerpt,author,type,featured_media,_embedded");
 
   if (query) {
     url.searchParams.set("search", query);
@@ -385,17 +384,21 @@ function normalizeMguhlinPost(post) {
 function normalizeTceaPost(post) {
   const title = post.title && post.title.rendered ? post.title.rendered : "";
   const excerpt = post.excerpt && post.excerpt.rendered ? post.excerpt.rendered : "";
+  const content = post.content && post.content.rendered ? post.content.rendered : "";
   const media = post._embedded && post._embedded["wp:featuredmedia"]
     ? post._embedded["wp:featuredmedia"][0]
     : null;
   const mediaSizes = media && media.media_details ? media.media_details.sizes : {};
+  const contentImageMatch = content.match(/<img[^>]+src=["']([^"']+)["']/i);
   const imageUrl = mediaSizes.medium_large && mediaSizes.medium_large.source_url
     ? mediaSizes.medium_large.source_url
     : mediaSizes.medium && mediaSizes.medium.source_url
       ? mediaSizes.medium.source_url
       : media && media.source_url
         ? media.source_url
-        : FALLBACK_IMAGE;
+        : contentImageMatch
+          ? contentImageMatch[1]
+          : FALLBACK_IMAGE;
 
   return {
     id: `tcea-${post.id}`,
