@@ -10,7 +10,7 @@
    - Service worker registered for offline shell.
 */
 (function(){
-const VERSION='2.11.2-import';
+const VERSION='2.11.4-import';
 const svg=document.getElementById('boardSvg'), NS='http://www.w3.org/2000/svg', XHTML='http://www.w3.org/1999/xhtml';
 const TEXTABLE_TYPES=['text','sticky','comment','audio','rect','ellipse','diamond','triangle','callout','speech'], SHAPE_TEXT_TYPES=['rect','ellipse','diamond','triangle','callout','speech'];
 const ADVANCED_TOOLS=['connector','diamond','triangle','callout','speech','comment','audio'];
@@ -723,15 +723,26 @@ function _pptxRId(blip){
   }
   return null;
 }
+const _PPTX_IMG_DIAG={skipped:[],warned:[]};
+function _pptxResetDiag(){_PPTX_IMG_DIAG.skipped=[];_PPTX_IMG_DIAG.warned=[]}
 async function _pptxResolveImage(zip,relMap,rId){
-  const target=relMap[rId]; if(!target) return null;
+  const target=relMap[rId];
+  if(!target){_PPTX_IMG_DIAG.skipped.push({rId,reason:'no rel target'}); return null}
   const cleanTarget=target.replace(/^\.\.\//,'');
   const fullPath=cleanTarget.startsWith('ppt/')?cleanTarget:('ppt/'+cleanTarget);
-  const entry=zip.file(fullPath); if(!entry) return null;
+  const entry=zip.file(fullPath);
+  if(!entry){_PPTX_IMG_DIAG.skipped.push({rId,target,fullPath,reason:'zip file missing'}); return null}
+  const ext=(target.split('.').pop()||'').toLowerCase();
+  const UNSUPPORTED=['emf','wmf','tiff','tif','bmp'];
+  if(UNSUPPORTED.includes(ext)){
+    _PPTX_IMG_DIAG.warned.push({rId,target,ext,reason:'browser cannot render this format'});
+    return null;
+  }
   const b64=await entry.async('base64');
   return 'data:'+_extOrMimeForName(target)+';base64,'+b64;
 }
 async function importPptxAsPanels(file,progress){
+  _pptxResetDiag();
   const buf=await fileToArrayBuffer(file);
   const zip=await JSZip.loadAsync(buf);
   const slideEntries=Object.keys(zip.files).filter(k=>/^ppt\/slides\/slide\d+\.xml$/.test(k)).sort((a,b)=>parseInt(a.match(/slide(\d+)\.xml/)[1])-parseInt(b.match(/slide(\d+)\.xml/)[1]));
@@ -802,7 +813,11 @@ async function importPptxAsPanels(file,progress){
     added++;
   }
   if(added>0) board.active=board.panels.length-added;
-  if(window.__importDebug) console.info('[DrawSplat import] PPTX:',{slides:added,imagesExtracted:totalImgs});
+  console.info('[DrawSplat import] PPTX summary:',{slides:added,imagesExtracted:totalImgs,skipped:_PPTX_IMG_DIAG.skipped,unsupportedFormat:_PPTX_IMG_DIAG.warned});
+  if(_PPTX_IMG_DIAG.warned.length){
+    const fmts=[...new Set(_PPTX_IMG_DIAG.warned.map(w=>w.ext.toUpperCase()))].join(', ');
+    setStatus('Imported '+added+' slides. '+_PPTX_IMG_DIAG.warned.length+' image(s) in '+fmts+' format were skipped — browsers can\'t render those. Re-export images as PNG/JPEG.','danger');
+  }
   return {added};
 }
 async function importOdpAsPanels(file,progress){
@@ -902,6 +917,19 @@ gid('submitTurnInBtn').onclick=submitTurnIn;
 gid('reviewTurnInsBtn').onclick=reviewTurnIns;
 gid('loadDriveBtn').onclick=async()=>{const url=ui.scriptUrl.value.trim(),boardId=prompt('Paste DrawSplat boardId from the Sheet:'); if(!url||!boardId)return; try{const res=await fetch(url+'?action=load&boardId='+encodeURIComponent(boardId)); const out=await res.json(); if(out.ok){board=out.board; migrateBoard(board); clearSelection(); initHistory(); render(); persistLocal(); setStatus('Loaded board from Google.','success')} else setStatus(out.error||'Load failed.','danger')}catch(err){setStatus('Google load failed. '+err.message,'danger')}};
 gid('settingsBtn').onclick=()=>gid('setupDialog').showModal();
+gid('resetBoardBtn')?.addEventListener('click',()=>{
+  askConfirm('Wipe every panel and start with a blank board? This can\'t be undone.',{okLabel:'Reset',cancelLabel:'Keep'}).then(ok=>{
+    if(!ok) return;
+    const optionsDlg=gid('optionsDialog'); if(optionsDlg&&optionsDlg.open) optionsDlg.close();
+    stopSync('both');
+    board={version:VERSION,title:'',className:'',studentName:board.studentName||'',mode:board.mode||'teacher',assignmentMode:false,currentLayer:'shared',restorePoints:[],showAnswerKey:true,active:0,panels:[{id:'panel_'+id(),name:'Panel 1',bg:'grid',objects:[]}]};
+    clearSelection(); resetInteractionState();
+    try{localStorage.removeItem('drawsplat.autosave')}catch(_){}
+    try{if(typeof idbPut==='function') idbPut(null)}catch(_){}
+    initHistory(); render(); persistLocal();
+    setStatus('Board reset.','success');
+  });
+});
 gid('closeSetup').onclick=()=>gid('setupDialog').close();
 gid('optionsBtn').onclick=()=>gid('optionsDialog').showModal();
 gid('closeOptions').onclick=()=>gid('optionsDialog').close();
