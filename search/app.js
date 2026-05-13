@@ -3,6 +3,7 @@ const MG_URL = "https://public-api.wordpress.com/rest/v1.1/sites/mguhlin.org/pos
 const TCEA_POSTS_URL = "https://blog.tcea.org/wp-json/wp/v2/posts";
 const TCEA_PAGES_URL = "https://blog.tcea.org/wp-json/wp/v2/pages";
 const TCEA_AUTHOR_ID = 29;
+const BLOGGER_POSTS_URL = "https://mguhlin.blogspot.com/feeds/posts/default";
 const SPECIAL_SEARCHES = {
   nspa: {
     variants: ["NSPA:", "NSPA1", "NSPA2", "NSPA3", "NSPA4"],
@@ -159,6 +160,44 @@ function buildTceaUrl(baseUrl, perPage, page, query = state.query) {
   return url;
 }
 
+function buildBloggerUrl(perPage, page, query = state.query) {
+  const url = new URL(BLOGGER_POSTS_URL);
+  url.searchParams.set("alt", "json-in-script");
+  url.searchParams.set("max-results", String(perPage));
+  url.searchParams.set("start-index", String((page - 1) * perPage + 1));
+
+  if (query) {
+    url.searchParams.set("q", query);
+  }
+
+  return url;
+}
+
+function fetchJsonp(url) {
+  return new Promise((resolve, reject) => {
+    const callbackName = `bloggerSearchCallback_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    const script = document.createElement("script");
+    const cleanup = () => {
+      delete window[callbackName];
+      script.remove();
+    };
+
+    window[callbackName] = (data) => {
+      cleanup();
+      resolve(data);
+    };
+
+    script.onerror = () => {
+      cleanup();
+      reject(new Error("Blogger returned a script loading error"));
+    };
+
+    url.searchParams.set("callback", callbackName);
+    script.src = url.toString();
+    document.body.append(script);
+  });
+}
+
 function stripHtml(html = "") {
   const template = document.createElement("template");
   template.innerHTML = html;
@@ -289,6 +328,28 @@ function normalizeTceaPost(post) {
   };
 }
 
+function normalizeBloggerPost(entry) {
+  const title = entry.title && entry.title.$t ? entry.title.$t : "";
+  const content = entry.content && entry.content.$t ? entry.content.$t : "";
+  const alternateLink = (entry.link || []).find((link) => link.rel === "alternate");
+  const url = alternateLink ? alternateLink.href : "";
+  const labels = (entry.category || []).map((category) => category.term).filter(Boolean);
+
+  return {
+    id: `blogger-${entry.id && entry.id.$t ? entry.id.$t : url}`,
+    sourceKey: "blogger",
+    source: "Blogger",
+    type: "post",
+    title,
+    url,
+    date: entry.published && entry.published.$t ? entry.published.$t : entry.updated.$t,
+    modified: entry.updated && entry.updated.$t ? entry.updated.$t : "",
+    excerpt: content,
+    searchableText: stripHtml(`${title} ${content} ${url} ${labels.join(" ")}`),
+    terms: labels,
+  };
+}
+
 function uniquePosts(posts) {
   return [...new Map(posts.map((post) => [post.url, post])).values()];
 }
@@ -350,6 +411,24 @@ async function fetchTceaPosts(perPage, page, query = state.query) {
   };
 }
 
+async function fetchBloggerPosts(perPage, page, query = state.query) {
+  if (state.type === "page") {
+    return { found: 0, posts: [] };
+  }
+
+  const data = await fetchJsonp(buildBloggerUrl(perPage, page, query));
+  const feed = data.feed || {};
+  const entries = feed.entry || [];
+  const total = feed.openSearch$totalResults && feed.openSearch$totalResults.$t
+    ? Number(feed.openSearch$totalResults.$t)
+    : entries.length;
+
+  return {
+    found: total,
+    posts: entries.map(normalizeBloggerPost),
+  };
+}
+
 async function fetchPosts() {
   const queries = state.queryVariants.length ? state.queryVariants : [state.query];
   const requests = [];
@@ -361,6 +440,10 @@ async function fetchPosts() {
 
     if (state.source === "all" || state.source === "tcea") {
       requests.push(fetchTceaPosts(PAGE_SIZE, state.page, query));
+    }
+
+    if (state.source === "all" || state.source === "blogger") {
+      requests.push(fetchBloggerPosts(PAGE_SIZE, state.page, query));
     }
   });
 

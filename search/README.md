@@ -3,6 +3,7 @@
 A standalone static search page for public entries from:
 
 - `mguhlin.org`
+- `mguhlin.blogspot.com`
 - TCEA TechNotes posts authored by Miguel Guhlin
 
 The app runs entirely in the browser and uses public WordPress APIs. No build step, package manager, backend, or API keys are required.
@@ -10,6 +11,7 @@ The app runs entirely in the browser and uses public WordPress APIs. No build st
 ## Features
 
 - Search public posts and pages from `mguhlin.org`
+- Search public Blogger posts from `mguhlin.blogspot.com`
 - Search TCEA TechNotes entries authored by Miguel Guhlin
 - Filter by source and content type
 - Sort by relevance, date, modified date, or title
@@ -18,9 +20,13 @@ The app runs entirely in the browser and uses public WordPress APIs. No build st
 - Source-specific result styling
 - Per-entry sharing for Mastodon, LinkedIn, X, Lemmy, native device sharing, and link copying
 
-## Run Locally
+## Use the Site
 
-From this folder:
+Open the deployed GitHub Pages URL in a browser. No installation, Python, package manager, or build step is required for normal use.
+
+## Preview Locally
+
+If you want to test the files before publishing, you can run a temporary local web server from this folder:
 
 ```bash
 python3 -m http.server 8000

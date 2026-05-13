@@ -278,6 +278,24 @@ button:disabled {
   color: #073763;
 }
 
+.result-card-blogger {
+  --card-accent: #f57c00;
+  --card-accent-strong: #a94600;
+  --card-accent-soft: #fff1df;
+  border-color: #f2cfaa;
+  border-left-color: var(--card-accent);
+}
+
+.result-card-blogger h2 a {
+  color: #f57c00;
+  font-weight: 800;
+}
+
+.result-card-blogger .tag {
+  background: #fff1df;
+  color: #a94600;
+}
+
 .result-card h2 {
   font-size: 1.25rem;
   line-height: 1.25;
