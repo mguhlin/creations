@@ -206,6 +206,7 @@ v2.13 is an interface polish release focused on clearer controls and cleaner ins
 - Added per-tool color accents in Simple view while keeping Advanced view more restrained.
 - Added Simple-view buttons for Mermaid Diagram and Word Cloud.
 - Added sticky-note color swatches in Simple view directly beneath the Sticky Note tool and in Advanced view beneath the Sticky color selector.
+- Updated the Simple-view TNT reset button with a red three-stick dynamite icon and a canvas detonation effect before clearing the current panel.
 - Tightened generated word cloud SVGs so inserted clouds use a content-sized transparent viewBox instead of a large white rectangle.
 - Tightened Mermaid diagram SVGs before insertion where the rendered SVG exposes a measurable content box.
 - Added non-destructive transparent-image cropping on insert for PNG/WebP/GIF-style images with unused transparent padding. Regular photos keep their full rectangle.
