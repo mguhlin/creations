@@ -137,6 +137,14 @@ DrawSplat includes multiple entry pages so schools can share the interface in di
 
 This build includes:
 
+- modern inline SVG toolbar icons with consistent visual style
+- traditional File / Edit / Insert / Tools / Options dropdown menus in the top bar
+- a cleaner top navigation bar with bulky action buttons moved into menus
+- more colorful simple-mode tool icons
+- Mermaid Diagram and Word Cloud access from the Simple interface
+- sticky-note color swatches in both Simple and Advanced views
+- tighter selection bounds for generated word clouds and Mermaid diagrams
+- transparent image auto-cropping on insert when the file has unused transparent padding
 - text-inside-shape support
 - grouped template insertion
 - zoom display fix
@@ -184,7 +192,25 @@ Related behavior:
 
 ## Version
 
-Current build: **DrawSplat v2.10.6 — Outline Word Cloud**
+Current build: **DrawSplat v2.13 — Modern Icon and Insert Polish**
+
+## Version 2.13 changes
+
+v2.13 is an interface polish release focused on clearer controls and cleaner inserted objects.
+
+- Replaced the older emoji/glyph toolbar icons with a centralized inline SVG icon system in `app.js`.
+- Added traditional File, Edit, Insert, Tools, and Options dropdown menus to the top bar.
+- Moved bulky header action buttons such as Undo, Redo, Shortcuts, Options, About, Export, and TNT into those menus while preserving the existing button IDs and event handlers.
+- Moved built-in classroom templates into Insert menu submenus and hid the old Templates sidebar section.
+- Kept Google-backed template actions available from Insert as "Save Current Frame as Template" and "Load Saved Template Gallery".
+- Added per-tool color accents in Simple view while keeping Advanced view more restrained.
+- Added Simple-view buttons for Mermaid Diagram and Word Cloud.
+- Added sticky-note color swatches in Simple view directly beneath the Sticky Note tool and in Advanced view beneath the Sticky color selector.
+- Tightened generated word cloud SVGs so inserted clouds use a content-sized transparent viewBox instead of a large white rectangle.
+- Tightened Mermaid diagram SVGs before insertion where the rendered SVG exposes a measurable content box.
+- Added non-destructive transparent-image cropping on insert for PNG/WebP/GIF-style images with unused transparent padding. Regular photos keep their full rectangle.
+- Preserved existing board behavior and object formats; older boards still open normally.
+- Service-worker cache key bumped to `drawsplat-v2.13.0`.
 
 ## License
 
@@ -508,7 +534,7 @@ Updated panel behavior:
 - Panel tabs support both `data-panel-id` and a fallback `data-panel-index`.
 - Clicking Panel 1 after creating or switching to another panel should now work reliably.
 
-Current build: **DrawSplat v2.10.6 — Outline Word Cloud**
+Current build: **DrawSplat v2.13 — Modern Icon and Insert Polish**
 
 ## Version 2.3 productivity workspace update
 
@@ -526,7 +552,7 @@ The Workspace setting is separate from the existing **Simple / Advanced** interf
 - Education Tools + Simple
 - Education Tools + Advanced
 
-Current build: **DrawSplat v2.10.6 — Outline Word Cloud**
+Current build: **DrawSplat v2.13 — Modern Icon and Insert Polish**
 
 
 ## Security and Internet-Facing Deployment Warning

@@ -1,4 +1,4 @@
-/* DrawSplat v2.10 — single source of app behaviour.
+/* DrawSplat v2.13 — single source of app behaviour.
    v2.5 changes vs v2.4:
    - Object lookup is O(1) via a per-render Map.
    - render() is RAF-coalesced; pointermove no longer triggers a synchronous redraw per event.
@@ -10,7 +10,7 @@
    - Service worker registered for offline shell.
 */
 (function(){
-const VERSION='2.11.4-import';
+const VERSION='2.13';
 const svg=document.getElementById('boardSvg'), NS='http://www.w3.org/2000/svg', XHTML='http://www.w3.org/1999/xhtml';
 const TEXTABLE_TYPES=['text','sticky','comment','audio','rect','ellipse','diamond','triangle','callout','speech'], SHAPE_TEXT_TYPES=['rect','ellipse','diamond','triangle','callout','speech'];
 const ADVANCED_TOOLS=['connector','diamond','triangle','callout','speech','comment','audio'];
@@ -69,6 +69,20 @@ async function validateImageDeep(file){
 }
 
 function gid(x){return document.getElementById(x)}
+function setButtonChrome(elOrId,label,icon){
+  const el=typeof elOrId==='string'?gid(elOrId):elOrId;
+  if(!el) return;
+  if(label){
+    el.setAttribute('aria-label',label);
+    el.setAttribute('title',label);
+    el.setAttribute('data-tooltip',label);
+  }
+  const lbl=el.querySelector?.('.icon-label');
+  if(lbl&&label) lbl.textContent=label;
+  const sym=el.querySelector?.('.icon-symbol');
+  if(sym&&icon) sym.innerHTML=icon;
+  if(!sym&&label) el.textContent=label;
+}
 function id(){return 'ib_'+Math.random().toString(36).slice(2,10)+Date.now().toString(36)}
 function panel(){return board.panels[board.active]}
 let _statusToastTimer=null;
@@ -81,6 +95,116 @@ function setSaveState(state,msg){const chip=document.getElementById('saveStateCh
 if(!_saveStateTimer) _saveStateTimer=setInterval(()=>setSaveState('tick'),30000);
 function refreshSelectionToolbar(){const tb=document.getElementById('selectionToolbar'); if(!tb) return; const visible=selectedIds.length>0&&!inlineEditId; tb.classList.toggle('show',visible); if(visible){const o=currentObj(); const editable=o&&TEXTABLE_TYPES.includes(o.type)&&canEditObject(o); const cropable=o&&o.type==='image'&&canEditObject(o); const editBtn=document.getElementById('floatEditBtn'); if(editBtn) editBtn.style.display=editable?'inline-flex':'none'; const cropBtn=document.getElementById('floatCropBtn'); if(cropBtn) cropBtn.style.display=cropable?'inline-flex':'none'}}
 function syncSimpleColor(){const inp=document.getElementById('simpleColorInput'); if(!inp) return; inp.value=tool==='sticky'?(ui.stickyColor?.value||'#fff59d'):(ui.strokeColor?.value||'#1E398D')}
+function syncSimpleStickyPalette(){document.querySelectorAll('.sticky-color-swatch').forEach(btn=>btn.classList.toggle('active',btn.dataset.stickyColor===(ui.stickyColor?.value||'')))}
+function buildStickyPalette(className){
+  const palette=document.createElement('div'); palette.className=className; palette.setAttribute('aria-label','Sticky note colors');
+  [['#fff59d','Yellow'],['#bae6fd','Blue'],['#bbf7d0','Green'],['#fecdd3','Pink'],['#fed7aa','Orange']].forEach(([color,label])=>{const b=document.createElement('button'); b.type='button'; b.className='sticky-color-swatch'; b.dataset.stickyColor=color; b.style.setProperty('--swatch',color); b.setAttribute('aria-label',label+' sticky note'); b.setAttribute('title',label+' sticky note'); b.addEventListener('click',()=>{if(ui.stickyColor){ui.stickyColor.value=color; ui.stickyColor.dispatchEvent(new Event('change',{bubbles:true}))} setTool('sticky'); syncSimpleColor(); syncSimpleStickyPalette()}); palette.appendChild(b)});
+  return palette;
+}
+function ensureSimpleExtras(){
+  const grid=document.querySelector('.simple-tools .grid.simple-only');
+  if(!grid||grid.dataset.extrasReady==='1') return;
+  grid.dataset.extrasReady='1';
+  const mer=document.createElement('button'); mer.id='simpleMermaidBtn'; mer.type='button'; mer.textContent='Mermaid Diagram'; mer.addEventListener('click',()=>gid('insertMermaidBtn')?.click());
+  const wc=document.createElement('button'); wc.id='simpleWordCloudBtn'; wc.type='button'; wc.textContent='Word Cloud'; wc.addEventListener('click',()=>gid('insertWordCloudBtn')?.click());
+  const palette=buildStickyPalette('simple-sticky-palette');
+  palette.id='simpleStickyPalette';
+  const stickyTool=document.querySelector('#toolButtons [data-tool="sticky"]');
+  if(stickyTool&&stickyTool.parentNode) stickyTool.insertAdjacentElement('afterend',palette);
+  const ref=gid('simpleDeleteBtn')||gid('simpleTntBtn');
+  grid.insertBefore(mer,ref);
+  grid.insertBefore(wc,ref);
+  syncSimpleStickyPalette();
+}
+function ensureAdvancedStickyPalette(){
+  const stickySelect=gid('stickyColor');
+  if(!stickySelect||gid('advancedStickyPalette')) return;
+  const row=stickySelect.closest('.row');
+  if(!row) return;
+  const palette=buildStickyPalette('advanced-sticky-palette');
+  palette.id='advancedStickyPalette';
+  row.insertAdjacentElement('afterend',palette);
+  syncSimpleStickyPalette();
+}
+function ensureTopMenus(){
+  const header=document.querySelector('header');
+  if(!header||gid('topMenuBar')) return;
+  const menuDefs=[
+    ['File',[['Save File','saveLocalBtn'],['Load File','loadLocalBtn'],['Import Panels...','importPanelsBtn'],['Export PNG','exportBtn'],['Export PDF','exportPdfBtn'],['Save to Google','saveDriveBtn'],['Load from Google','loadDriveBtn']]],
+    ['Edit',[['Undo','undoBtn'],['Redo','redoBtn'],['Duplicate','duplicateBtn'],['Delete Selected','deleteBtn'],['Group','groupBtn'],['Ungroup','ungroupBtn'],['Bring Front','frontBtn'],['Send Back','backBtn']]],
+    ['Insert',[['Load Image','imageBtn'],['Mermaid Diagram','insertMermaidBtn'],['Word Cloud','insertWordCloudBtn'],['Sticker Library','openStickerLibraryBtn'],['Insert Sticker','insertStickerBtn'],['Custom Sticker','createCustomStickerBtn'],['Template: add to current frame','insertTemplateBtn','templateSubmenu'],['Template: new frame','newTemplatePanelBtn','templateSubmenu'],['Save Current Frame as Template','saveTemplateBtn'],['Load Saved Template Gallery','loadTemplateGalleryBtn']]],
+    ['Tools',[['Set Background','loadBgImageBtn'],['Clear Background','clearBgImageBtn'],['Remove BG Color','removeBgColorBtn'],['Save Restore Point','saveRestorePointBtn'],['Restore Point','restorePointBtn'],['Keyboard Shortcuts','shortcutsBtn'],['TNT Reset','tntBtn']]],
+    ['Options',[['Switch Simple/Advanced','viewToggleBtn'],['Inspector','inspectorToggleBtn'],['Mode','optionsBtn'],['About','aboutBtn']]]
+  ];
+  const nav=document.createElement('nav');
+  nav.id='topMenuBar';
+  nav.className='top-menubar';
+  nav.setAttribute('aria-label','Application menus');
+  menuDefs.forEach(([title,items])=>{
+    const details=document.createElement('details');
+    details.className='top-menu';
+    const summary=document.createElement('summary');
+    summary.textContent=title;
+    details.appendChild(summary);
+    details.addEventListener('toggle',()=>{if(details.open) nav.querySelectorAll('details[open]').forEach(d=>{if(d!==details)d.open=false})});
+    const list=document.createElement('div');
+    list.className='top-menu-list';
+    items.forEach(([label,target,submenu])=>{
+      if(submenu==='templateSubmenu'){
+        const row=document.createElement('div');
+        row.className='top-menu-submenu';
+        const btn=document.createElement('button');
+        btn.type='button';
+        btn.textContent=label;
+        btn.dataset.menuTarget=target;
+        const panel=document.createElement('div');
+        panel.className='top-submenu-list';
+        const sel=gid('templateSelect');
+        const options=sel?[...sel.options]:[];
+        options.forEach(opt=>{
+          const choice=document.createElement('button');
+          choice.type='button';
+          choice.textContent=opt.textContent;
+          choice.addEventListener('click',()=>{if(sel) sel.value=opt.value; nav.querySelectorAll('details[open]').forEach(d=>d.open=false); gid(target)?.click()});
+          panel.appendChild(choice);
+        });
+        row.appendChild(btn);
+        row.appendChild(panel);
+        list.appendChild(row);
+        return;
+      }
+      const btn=document.createElement('button');
+      btn.type='button';
+      btn.textContent=label;
+      btn.dataset.menuTarget=target;
+      const src=gid(target);
+      if(src?.classList.contains('teacher-only')) btn.classList.add('teacher-only');
+      btn.addEventListener('click',()=>{nav.querySelectorAll('details[open]').forEach(d=>d.open=false); gid(target)?.click()});
+      list.appendChild(btn);
+    });
+    if(title==='Options'){
+      const lang=gid('languageSwitcher');
+      if(lang){
+        const wrap=document.createElement('label');
+        wrap.className='top-menu-select';
+        wrap.textContent='Language';
+        wrap.appendChild(lang);
+        list.appendChild(wrap);
+      }
+    }
+    details.appendChild(list);
+    nav.appendChild(details);
+  });
+  const anchor=gid('saveStateChip')||header.querySelector('h1');
+  anchor?.insertAdjacentElement('afterend',nav);
+  ['undoBtn','redoBtn','shortcutsBtn','viewToggleBtn','optionsBtn','aboutBtn','inspectorToggleBtn','moreOptionsBtn','saveDriveBtn','exportBtn','exportPdfBtn','tntBtn'].forEach(idv=>gid(idv)?.classList.add('top-menu-source-hidden'));
+  document.addEventListener('click',e=>{if(nav.contains(e.target)) return; nav.querySelectorAll('details[open]').forEach(d=>d.open=false)});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape') nav.querySelectorAll('details[open]').forEach(d=>d.open=false)});
+}
+function hideSidebarTemplateSection(){
+  const summary=[...document.querySelectorAll('.sidebar .section-collapsible>summary')].find(el=>el.textContent.trim()==='Templates');
+  summary?.parentElement?.classList.add('templates-section-hidden');
+}
 
 function setTool(next){tool=next; document.body.dataset.tool=next; document.querySelectorAll('#toolButtons button').forEach(b=>b.classList.toggle('active',b.dataset.tool===tool)); if(tool!=='connector') connectorPendingFrom=null; applyToolContext(); syncSimpleColor(); if(next==='eraser') setStatus('Eraser: click any object to delete it. Drag over pen strokes to wipe them.'); else if(next==='laser') setStatus('Laser pointer: drag to draw a temporary trail.')}
 function applyToolContext(){const o=(selectedIds.length===1)?currentObj():null; const objType=o?o.type:null; document.querySelectorAll('.ctx-group').forEach(el=>{const ctx=el.dataset.context; const active=(tool===ctx)||(objType===ctx); el.open=active; el.classList.toggle('context-active',active)})}
@@ -163,7 +287,7 @@ function render(){
   const _lasers=[...svg.querySelectorAll('.laser-trail')];
   setInputIfIdle(ui.boardTitle,board.title); setInputIfIdle(ui.className,board.className); setInputIfIdle(ui.studentName,board.studentName||''); ui.userMode.value=board.mode||'teacher'; ui.assignmentModeToggle.checked=!!board.assignmentMode; ui.activeLayerSelect.value=board.currentLayer||'shared'; ui.showAnswerKeyToggle.checked=!!board.showAnswerKey;
   ui.layerBadge.textContent='Layer: '+((board.assignmentMode?(board.mode==='student'?'Student':'Teacher: '+(board.currentLayer||'shared')):'Shared').replace(/^Teacher: shared$/,'Shared'));
-  refreshRestorePoints(); applyModeUI(); refreshFrameNav(); gid('zoomResetBtn').textContent=Math.round(zoom*100)+'%';
+  refreshRestorePoints(); applyModeUI(); refreshFrameNav(); setButtonChrome('zoomResetBtn',Math.round(zoom*100)+'%'); gid('zoomResetBtn')?.setAttribute('aria-label','Reset Zoom'); gid('zoomResetBtn')?.setAttribute('title','Reset Zoom'); gid('zoomResetBtn')?.setAttribute('data-tooltip','Reset Zoom');
   const p=panel();
   const bgImageSvg=p.bgImage?`<image x="0" y="0" width="100%" height="100%" preserveAspectRatio="none" href="${esc(p.bgImage)}"/>`:'';
   svg.innerHTML='<defs>'+bgDefs(p.bg)+fillPatternDefs()+'</defs>'+(p.bg==='blank'?'<rect width="100%" height="100%" fill="#fff"/>':'<rect width="100%" height="100%" fill="url(#bgp)"/>')+bgImageSvg+'<g id="viewport" transform="scale('+zoom+')"></g>';
@@ -199,7 +323,7 @@ function createAudioObject(o,b){const fo=document.createElementNS(NS,'foreignObj
 function svgEl(s){const t=document.createElementNS(NS,'g');t.innerHTML=s.trim();return t.firstChild}
 
 function selectionBounds(ids=selectedIds){const objs=ids.map(findObj).filter(Boolean);if(!objs.length)return null;const boxes=objs.map(normBox);const x=Math.min(...boxes.map(b=>b.x)),y=Math.min(...boxes.map(b=>b.y)),r=Math.max(...boxes.map(b=>b.x+b.w)),bt=Math.max(...boxes.map(b=>b.y+b.h));return{x,y,w:r-x,h:bt-y}}
-function drawSelection(){const g=svg.querySelector('#viewport');if(!selectedIds.length||!g)return;selectedIds.forEach(idv=>{const o=findObj(idv);if(!o)return;const b=normBox(o);g.appendChild(svgEl(`<rect class="selection" x="${b.x-4}" y="${b.y-4}" width="${b.w+8}" height="${b.h+8}"/>`))});if(selectedIds.length===1){const o=findObj(selectedIds[0]);if(o&&o.type!=='connector'){const b=normBox(o);const h=svgEl(`<rect class="handle" x="${b.x+b.w-6}" y="${b.y+b.h-6}" width="12" height="12" rx="2"/>`);h.addEventListener('pointerdown',resizeDown);g.appendChild(h)}}else{const b=selectionBounds(); if(b) g.appendChild(svgEl(`<rect class="selection" x="${b.x-8}" y="${b.y-8}" width="${b.w+16}" height="${b.h+16}"/>`))}}
+function drawSelection(){const g=svg.querySelector('#viewport');if(!selectedIds.length||!g)return;selectedIds.forEach(idv=>{const o=findObj(idv);if(!o)return;const b=normBox(o),pad=(o.type==='image'||o.type==='stamp')?1:4;g.appendChild(svgEl(`<rect class="selection" x="${b.x-pad}" y="${b.y-pad}" width="${b.w+pad*2}" height="${b.h+pad*2}"/>`))});if(selectedIds.length===1){const o=findObj(selectedIds[0]);if(o&&o.type!=='connector'){const b=normBox(o);const h=svgEl(`<rect class="handle" x="${b.x+b.w-6}" y="${b.y+b.h-6}" width="12" height="12" rx="2"/>`);h.addEventListener('pointerdown',resizeDown);g.appendChild(h)}}else{const b=selectionBounds(); if(b) g.appendChild(svgEl(`<rect class="selection" x="${b.x-8}" y="${b.y-8}" width="${b.w+16}" height="${b.h+16}"/>`))}}
 function groupMembers(o){if(!o||!o.groupId)return[o?.id].filter(Boolean);return panel().objects.filter(x=>x.groupId===o.groupId).map(x=>x.id)}
 
 let _lastObjClick={id:null,t:0};
@@ -255,11 +379,12 @@ gid('closeStickerDialog').onclick=()=>gid('stickerDialog').close();
 buildStickerUI();
 
 gid('imageBtn').onclick=()=>gid('imageInput').click();
-gid('imageInput').onchange=async e=>{const f=e.target.files[0]; if(!f)return; const importFmt=(typeof detectPanelImportFormat==='function')?detectPanelImportFormat(f):null; if(importFmt){ e.target.value=''; await importPanelsFromFile(f); return } if(!(await validateImageDeep(f))){e.target.value='';return} const r=new FileReader(); r.onload=()=>addObj(makeObj('image',80,80,320,220,{src:r.result,fill:'none',stroke:'#000',strokeWidth:1})); r.readAsDataURL(f); e.target.value=''};
+gid('imageInput').onchange=async e=>{const f=e.target.files[0]; if(!f)return; const importFmt=(typeof detectPanelImportFormat==='function')?detectPanelImportFormat(f):null; if(importFmt){ e.target.value=''; await importPanelsFromFile(f); return } if(!(await validateImageDeep(f))){e.target.value='';return} const r=new FileReader(); r.onload=async()=>{const src=r.result; const meta=await transparentContentCrop(src); let naturalW=meta.naturalW||0,naturalH=meta.naturalH||0,w=320,h=220; if(naturalW&&naturalH){const visibleW=meta.crop?meta.crop.w*naturalW:naturalW, visibleH=meta.crop?meta.crop.h*naturalH:naturalH; const s=Math.min(1,480/Math.max(visibleW,visibleH)); w=Math.max(40,Math.round(visibleW*s)); h=Math.max(40,Math.round(visibleH*s))} addObj(makeObj('image',80,80,w,h,{src,fill:'none',stroke:'#000',strokeWidth:1,naturalW,naturalH,...(meta.crop?{crop:meta.crop}: {})}))}; r.readAsDataURL(f); e.target.value=''};
 gid('stickyImageInput').onchange=async e=>{const f=e.target.files[0], o=currentObj(); if(!f||!o||o.type!=='sticky') return; if(!(await validateImageDeep(f))){e.target.value='';return} const r=new FileReader(); r.onload=()=>{o.imageSrc=r.result; render(); saveState()}; r.readAsDataURL(f); e.target.value=''};
 gid('customStickerInput').onchange=async e=>{const f=e.target.files[0]; if(!f) return; if(!(await validateImageDeep(f))){e.target.value='';return} const r=new FileReader(); r.onload=()=>addObj(makeObj('stamp',90,90,104,104,{stampLabel:(f.name||'Sticker').replace(/\.[^.]+$/,''),stampBg:'#ffffff',stampSrc:r.result,fill:'none',stroke:'none',strokeWidth:0})); r.readAsDataURL(f); e.target.value=''};
 gid('audioInput').onchange=e=>{const f=e.target.files[0], o=currentObj(); if(!f||!o||o.type!=='audio') return; if(!validateUpload(f,'audio')){e.target.value='';return} const r=new FileReader(); r.onload=()=>setAudioOnCurrent(r.result,f.name||'Audio file'); r.readAsDataURL(f); e.target.value=''};
 function compressImageForBg(file,maxDim=1600,quality=0.85){return new Promise((resolve,reject)=>{const fr=new FileReader(); fr.onload=()=>{const img=new Image(); img.onload=()=>{const scale=Math.min(1,maxDim/Math.max(img.width,img.height)); const w=Math.max(1,Math.round(img.width*scale)), h=Math.max(1,Math.round(img.height*scale)); const cv=document.createElement('canvas'); cv.width=w; cv.height=h; const cx=cv.getContext('2d'); cx.drawImage(img,0,0,w,h); resolve(cv.toDataURL('image/jpeg',quality))}; img.onerror=()=>reject(new Error('decode failed')); img.src=fr.result}; fr.onerror=()=>reject(new Error('read failed')); fr.readAsDataURL(file)})}
+function transparentContentCrop(dataUrl){return new Promise(resolve=>{const img=new Image(); img.onload=()=>{try{const w=img.width,h=img.height;if(!w||!h||w*h>12000000)return resolve({naturalW:w,naturalH:h});const cv=document.createElement('canvas');cv.width=w;cv.height=h;const cx=cv.getContext('2d',{willReadFrequently:true});cx.drawImage(img,0,0);const px=cx.getImageData(0,0,w,h).data;let minX=w,minY=h,maxX=-1,maxY=-1,hasAlpha=false;for(let y=0;y<h;y++){for(let x=0;x<w;x++){const a=px[(y*w+x)*4+3];if(a<250)hasAlpha=true;if(a>12){if(x<minX)minX=x;if(y<minY)minY=y;if(x>maxX)maxX=x;if(y>maxY)maxY=y}}}if(!hasAlpha||maxX<0)return resolve({naturalW:w,naturalH:h});const pad=Math.max(2,Math.round(Math.min(w,h)*0.01));minX=Math.max(0,minX-pad);minY=Math.max(0,minY-pad);maxX=Math.min(w-1,maxX+pad);maxY=Math.min(h-1,maxY+pad);const cropW=maxX-minX+1,cropH=maxY-minY+1;if(cropW>w*0.96&&cropH>h*0.96)return resolve({naturalW:w,naturalH:h});resolve({naturalW:w,naturalH:h,crop:{x:minX/w,y:minY/h,w:cropW/w,h:cropH/h}})}catch(_){resolve({naturalW:img.width||0,naturalH:img.height||0})}};img.onerror=()=>resolve({});img.src=dataUrl})}
 function removeColorFromImage(dataUrl,hexColor,tolerance=40){return new Promise((resolve,reject)=>{const img=new Image(); img.onload=()=>{try{const cv=document.createElement('canvas'); cv.width=img.width; cv.height=img.height; const cx=cv.getContext('2d'); cx.drawImage(img,0,0); const data=cx.getImageData(0,0,cv.width,cv.height); const p=data.data; const tR=parseInt(hexColor.slice(1,3),16),tG=parseInt(hexColor.slice(3,5),16),tB=parseInt(hexColor.slice(5,7),16); const tol2=tolerance*tolerance*3; for(let i=0;i<p.length;i+=4){const dr=p[i]-tR,dg=p[i+1]-tG,db=p[i+2]-tB; if(dr*dr+dg*dg+db*db<=tol2) p[i+3]=0} cx.putImageData(data,0,0); resolve(cv.toDataURL('image/png'))}catch(err){reject(err)}}; img.onerror=()=>reject(new Error('decode failed')); img.src=dataUrl})}
 function sampleCornerColor(dataUrl){return new Promise((resolve,reject)=>{const img=new Image(); img.onload=()=>{try{const cv=document.createElement('canvas'); cv.width=img.width; cv.height=img.height; const cx=cv.getContext('2d'); cx.drawImage(img,0,0); const px=cx.getImageData(0,0,1,1).data; resolve('#'+[px[0],px[1],px[2]].map(v=>v.toString(16).padStart(2,'0')).join(''))}catch(err){reject(err)}}; img.onerror=()=>reject(new Error('decode failed')); img.src=dataUrl})}
 gid('loadBgImageBtn').onclick=()=>gid('bgImageInput').click();
@@ -299,11 +424,11 @@ gid('closeModerationDialog').onclick=()=>gid('moderationDialog').close();
 gid('tntBtn').onclick=()=>runTntReset();
 gid('lockBtn').onclick=()=>{selectedIds.forEach(i=>{const o=findObj(i); if(o) o.locked=true}); render(); saveState()};
 gid('unlockBtn').onclick=()=>{selectedIds.forEach(i=>{const o=findObj(i); if(o) o.locked=false}); render(); saveState()};
-gid('noFillBtn').onclick=()=>{fillEnabled=!fillEnabled; gid('noFillBtn').textContent=fillEnabled?'No fill':'Use fill'};
+gid('noFillBtn').onclick=()=>{fillEnabled=!fillEnabled; setButtonChrome('noFillBtn',fillEnabled?'No fill':'Use fill')};
 gid('createCustomStickerBtn').onclick=()=>gid('customStickerInput').click();
 
 ['strokeColor','strokeWidth','fillColor','opacity','fillPattern'].forEach(k=>gid(k).addEventListener('input',()=>{selectedIds.forEach(idv=>{const o=findObj(idv); if(o&&!o.locked&&o.type!=='connector') Object.assign(o,style())}); const c=currentObj(); if(c&&c.type==='sticky') c.fill=ui.stickyColor.value; render(); saveState()}));
-ui.stickyColor.addEventListener('change',()=>{selectedIds.forEach(idv=>{const o=findObj(idv); if(o&&o.type==='sticky') o.fill=ui.stickyColor.value}); render(); saveState()});
+ui.stickyColor.addEventListener('change',()=>{selectedIds.forEach(idv=>{const o=findObj(idv); if(o&&o.type==='sticky') o.fill=ui.stickyColor.value}); syncSimpleStickyPalette(); syncSimpleColor(); render(); saveState()});
 ui.fontSize.addEventListener('input',()=>{ui.fontSizeValue.textContent=ui.fontSize.value+'px'; const o=currentObj(); if(o&&TEXTABLE_TYPES.includes(o.type)&&selectedIds.length===1){o.fontSize=+ui.fontSize.value; render(); saveState()}});
 ui.textColor.addEventListener('input',()=>{const o=currentObj(); if(o&&TEXTABLE_TYPES.includes(o.type)&&selectedIds.length===1){o.textColor=ui.textColor.value; render(); saveState()}});
 ui.textRotation.addEventListener('input',()=>{ui.textRotationValue.textContent=ui.textRotation.value+'°'; const o=currentObj(); if(o&&TEXTABLE_TYPES.includes(o.type)&&selectedIds.length===1){o.textRotation=+ui.textRotation.value; render(); saveState()}});
@@ -315,7 +440,7 @@ document.querySelectorAll('[data-axis="h"]').forEach(btn=>btn.onclick=()=>{const
 document.querySelectorAll('[data-axis="v"]').forEach(btn=>btn.onclick=()=>{const o=currentObj(); if(o&&TEXTABLE_TYPES.includes(o.type)&&selectedIds.length===1){o.vAlign=btn.dataset.align; markAlignButtons(); render(); saveState()}});
 function markAlignButtons(){const o=currentObj(); document.querySelectorAll('[data-axis="h"]').forEach(btn=>btn.classList.toggle('active',selectedIds.length===1&&o&&o.hAlign===btn.dataset.align)); document.querySelectorAll('[data-axis="v"]').forEach(btn=>btn.classList.toggle('active',selectedIds.length===1&&o&&o.vAlign===btn.dataset.align))}
 
-function updateInspector(){const info=gid('selectedInfo'), wrap=gid('textEditorWrap'); if(!selectedIds.length){info.textContent='No object selected.'; wrap.hidden=true; gid('answerKeyBtn').textContent='Toggle Answer Key'; return} if(selectedIds.length>1){info.innerHTML=`<b>${esc(selectedIds.length)} items selected</b><br>${esc('Use group drag, group/ungroup, delete, duplicate, and front/back ordering.')}`; wrap.hidden=true; gid('answerKeyBtn').textContent='Toggle Answer Key'; return} const o=currentObj(), b=normBox(o); info.innerHTML=`<b>${esc(o.type)}</b><br>${Math.round(b.x)}, ${Math.round(b.y)} · ${Math.round(b.w)} × ${Math.round(b.h)}${o.groupId?' · grouped':''}${o.locked?' · locked':''}${o.layer?' · layer: '+esc(o.layer):''}${o.answerKey?' · answer key':''}${o.audioSrc?' · has audio':''}`; if(ui.fillPattern && typeof o.fillPattern!=='undefined') ui.fillPattern.value=o.fillPattern||''; gid('answerKeyBtn').textContent=o.answerKey?'Remove Answer Key':'Mark Answer Key'; wrap.hidden=!TEXTABLE_TYPES.includes(o.type); if(!wrap.hidden){const ph=o.type==='sticky'?'Add note...':(o.type==='audio'?'Voice note':(o.type==='comment'?'Add feedback...':(o.type==='text'?'Type here':'Type text'))); ui.richEditor.dataset.placeholder=ph; if(document.activeElement!==ui.richEditor){const desired=o.html||''; if(ui.richEditor.innerHTML!==desired) ui.richEditor.innerHTML=desired} refreshRichEditorEmpty(); setInputIfIdle(ui.textColor,o.textColor||'#111827'); setInputIfIdle(ui.fontSize,String(o.fontSize||20)); ui.fontSizeValue.textContent=(o.fontSize||20)+'px'; setInputIfIdle(ui.textRotation,String(o.textRotation||0)); ui.textRotationValue.textContent=(o.textRotation||0)+'°'; ui.autoScaleText.checked=!!o.autoScaleText; markAlignButtons()}}
+function updateInspector(){const info=gid('selectedInfo'), wrap=gid('textEditorWrap'); if(!selectedIds.length){info.textContent='No object selected.'; wrap.hidden=true; setButtonChrome('answerKeyBtn','Toggle Answer Key'); return} if(selectedIds.length>1){info.innerHTML=`<b>${esc(selectedIds.length)} items selected</b><br>${esc('Use group drag, group/ungroup, delete, duplicate, and front/back ordering.')}`; wrap.hidden=true; setButtonChrome('answerKeyBtn','Toggle Answer Key'); return} const o=currentObj(), b=normBox(o); info.innerHTML=`<b>${esc(o.type)}</b><br>${Math.round(b.x)}, ${Math.round(b.y)} · ${Math.round(b.w)} × ${Math.round(b.h)}${o.groupId?' · grouped':''}${o.locked?' · locked':''}${o.layer?' · layer: '+esc(o.layer):''}${o.answerKey?' · answer key':''}${o.audioSrc?' · has audio':''}`; if(ui.fillPattern && typeof o.fillPattern!=='undefined') ui.fillPattern.value=o.fillPattern||''; setButtonChrome('answerKeyBtn',o.answerKey?'Remove Answer Key':'Mark Answer Key'); wrap.hidden=!TEXTABLE_TYPES.includes(o.type); if(!wrap.hidden){const ph=o.type==='sticky'?'Add note...':(o.type==='audio'?'Voice note':(o.type==='comment'?'Add feedback...':(o.type==='text'?'Type here':'Type text'))); ui.richEditor.dataset.placeholder=ph; if(document.activeElement!==ui.richEditor){const desired=o.html||''; if(ui.richEditor.innerHTML!==desired) ui.richEditor.innerHTML=desired} refreshRichEditorEmpty(); setInputIfIdle(ui.textColor,o.textColor||'#111827'); setInputIfIdle(ui.fontSize,String(o.fontSize||20)); ui.fontSizeValue.textContent=(o.fontSize||20)+'px'; setInputIfIdle(ui.textRotation,String(o.textRotation||0)); ui.textRotationValue.textContent=(o.textRotation||0)+'°'; ui.autoScaleText.checked=!!o.autoScaleText; markAlignButtons()}}
 function refreshRichEditorEmpty(){if(!ui.richEditor) return; const txt=(ui.richEditor.textContent||'').replace(/ /g,' ').trim(); ui.richEditor.dataset.empty=txt===''?'true':'false'}
 
 gid('applyTextBtn').onclick=()=>{const o=currentObj(); if(o&&selectedIds.length===1){o.html=cleanEditorHtml(ui.richEditor.innerHTML); o.text=htmlToPlainText(o.html); o.textColor=ui.textColor.value; o.fontSize=+ui.fontSize.value; o.textRotation=+ui.textRotation.value; o.autoScaleText=ui.autoScaleText.checked; render(); saveState()}};
@@ -354,13 +479,14 @@ let _mermaidInitDone=false, _mermaidPreviewTimer=null;
 function ensureMermaidInit(){if(_mermaidInitDone) return; if(typeof window.mermaid==='undefined') return; try{window.mermaid.initialize({startOnLoad:false,theme:'default',securityLevel:'strict'}); _mermaidInitDone=true}catch(_){}}
 const _MERMAID_PALETTE=[{fill:'#dbeafe',stroke:'#2563eb',text:'#1e3a8a'},{fill:'#fce7f3',stroke:'#db2777',text:'#831843'},{fill:'#d1fae5',stroke:'#059669',text:'#064e3b'},{fill:'#ffedd5',stroke:'#ea580c',text:'#7c2d12'},{fill:'#fef3c7',stroke:'#ca8a04',text:'#713f12'},{fill:'#e9d5ff',stroke:'#7c3aed',text:'#581c87'}];
 function applyMermaidPalette(svgString,source){if(/classDef|:::/.test(source||'')) return svgString; try{const parser=new DOMParser(); const doc=parser.parseFromString(svgString,'image/svg+xml'); const nodes=doc.querySelectorAll('g.node'); if(!nodes.length) return svgString; nodes.forEach((node,i)=>{const c=_MERMAID_PALETTE[i%_MERMAID_PALETTE.length]; node.querySelectorAll('rect, polygon, circle, ellipse, path').forEach(shape=>{const cls=(shape.getAttribute('class')||''); if(cls.includes('label-container')||shape.tagName==='path'&&!cls.includes('basic')) {} shape.setAttribute('fill',c.fill); shape.setAttribute('stroke',c.stroke); shape.setAttribute('stroke-width','1.5')}); node.querySelectorAll('text, tspan').forEach(t=>{t.setAttribute('fill',c.text); t.setAttribute('style',(t.getAttribute('style')||'')+';color:'+c.text)}); node.querySelectorAll('foreignObject div, foreignObject span, foreignObject p').forEach(el=>{if(el.style) el.style.color=c.text})}); return new XMLSerializer().serializeToString(doc)}catch(_){return svgString}}
+function tightenSvgString(svgString,pad=12){return new Promise(resolve=>{try{const wrap=document.createElement('div');Object.assign(wrap.style,{position:'absolute',left:'-10000px',top:'-10000px',opacity:'0',pointerEvents:'none'});wrap.innerHTML=svgString;const s=wrap.querySelector('svg');if(!s)return resolve(svgString);s.querySelectorAll('rect').forEach(r=>{const x=r.getAttribute('x')||'0',y=r.getAttribute('y')||'0',w=r.getAttribute('width')||'',h=r.getAttribute('height')||'',fill=(r.getAttribute('fill')||'').toLowerCase();if((x==='0'||x==='0px')&&(y==='0'||y==='0px')&&(w==='100%'||h==='100%'||fill==='#fff'||fill==='#ffffff'||fill==='white'))r.style.display='none'});document.body.appendChild(wrap);requestAnimationFrame(()=>{try{const b=s.getBBox();document.body.removeChild(wrap);if(!b||!isFinite(b.width)||!isFinite(b.height)||b.width<1||b.height<1)return resolve(svgString);const x=Math.floor(b.x-pad),y=Math.floor(b.y-pad),w=Math.ceil(b.width+pad*2),h=Math.ceil(b.height+pad*2);s.setAttribute('viewBox',`${x} ${y} ${w} ${h}`);s.setAttribute('width',String(w));s.setAttribute('height',String(h));s.style.maxWidth='';s.style.height='';resolve(new XMLSerializer().serializeToString(s))}catch(_){try{document.body.removeChild(wrap)}catch(__){}resolve(svgString)}})}catch(_){resolve(svgString)}})}
 async function renderMermaidTo(target,source){if(!target) return; ensureMermaidInit(); if(typeof window.mermaid==='undefined'){target.innerHTML='<div class="mermaid-error">Mermaid library not loaded. Drop mermaid.min.js into the project root and reload — see README.</div>'; return} if(!source||!source.trim()){target.innerHTML='<div class="mermaid-error" style="color:var(--muted)">Type Mermaid syntax on the left to preview here.</div>'; return} try{const renderId='mp_'+Math.random().toString(36).slice(2); const out=await window.mermaid.render(renderId,source); const raw=out&&out.svg?out.svg:String(out||''); target.innerHTML=applyMermaidPalette(raw,source)}catch(err){target.innerHTML='<div class="mermaid-error">'+esc(err&&err.message?err.message:String(err))+'</div>'}}
 function openMermaidDialog(existingId){const dlg=gid('mermaidDialog'); if(!dlg||dlg.open) return; const ta=gid('mermaidSource'); const preview=gid('mermaidPreview'); const obj=existingId?findObj(existingId):null; const starter=obj&&obj.mermaidSource?obj.mermaidSource:'graph TD\n  A[Start] --> B{Decision}\n  B -->|Yes| C[Continue]\n  B -->|No| D[Stop]'; ta.value=starter; dlg.dataset.editId=obj?obj.id:''; renderMermaidTo(preview,ta.value); dlg.showModal()}
 gid('mermaidSource')?.addEventListener('input',()=>{clearTimeout(_mermaidPreviewTimer); _mermaidPreviewTimer=setTimeout(()=>renderMermaidTo(gid('mermaidPreview'),gid('mermaidSource').value),300)});
 gid('mermaidCancel')?.addEventListener('click',()=>gid('mermaidDialog').close());
 gid('closeMermaid')?.addEventListener('click',()=>gid('mermaidDialog').close());
 gid('insertMermaidBtn')?.addEventListener('click',()=>openMermaidDialog());
-async function renderMermaidColoredSvg(source){const renderId='mr_'+Math.random().toString(36).slice(2); const out=await window.mermaid.render(renderId,source); const svg=out&&out.svg?out.svg:String(out||''); return applyMermaidPalette(svg,source)}
+async function renderMermaidColoredSvg(source){const renderId='mr_'+Math.random().toString(36).slice(2); const out=await window.mermaid.render(renderId,source); const svg=out&&out.svg?out.svg:String(out||''); return tightenSvgString(applyMermaidPalette(svg,source),14)}
 const MERMAID_TEMPLATES={flowchart:'graph TD\n  A[Start] --> B{Decision}\n  B -->|Yes| C[Continue]\n  B -->|No| D[Stop]',pie:'pie title Favorite Subjects\n  "Math" : 30\n  "Science" : 25\n  "English" : 20\n  "Art" : 15\n  "Other" : 10',sequence:'sequenceDiagram\n  Student->>Teacher: Has a question\n  Teacher->>Student: Provides an answer\n  Student->>Notebook: Writes down notes',mindmap:'mindmap\n  root((Topic))\n    Idea 1\n      Detail A\n      Detail B\n    Idea 2\n      Detail C\n    Idea 3\n      Detail D\n      Detail E',gantt:'gantt\n  title Project Timeline\n  dateFormat YYYY-MM-DD\n  section Planning\n    Outline   :a1, 2026-01-01, 7d\n    Research  :a2, after a1, 14d\n  section Build\n    Draft     :b1, after a2, 21d\n    Review    :b2, after b1, 7d',timeline:'timeline\n  title School Year\n  August    : Welcome week\n  October   : Midterms\n  December  : Holiday break\n  March     : Spring break\n  May       : Final exams',class:'classDiagram\n  class Animal {\n    +String name\n    +int age\n    +makeSound()\n  }\n  class Dog {\n    +String breed\n    +bark()\n  }\n  Animal <|-- Dog',state:'stateDiagram-v2\n  [*] --> Idle\n  Idle --> Working : start\n  Working --> Review : submit\n  Review --> Working : revise\n  Review --> Done : approve\n  Done --> [*]'};
 document.querySelectorAll('[data-mtpl]').forEach(btn=>btn.addEventListener('click',()=>{const key=btn.dataset.mtpl; const tpl=MERMAID_TEMPLATES[key]; if(!tpl) return; gid('mermaidSource').value=tpl; renderMermaidTo(gid('mermaidPreview'),tpl)}));
 const _WORDCLOUD_PALETTES={vibrant:['#7c3aed','#db2777','#059669','#ea580c','#ca8a04','#2563eb'],pastel:['#a78bfa','#f472b6','#34d399','#fb923c','#facc15','#60a5fa'],warm:['#dc2626','#ea580c','#ca8a04','#c2410c','#b91c1c','#92400e'],cool:['#1e40af','#0e7490','#059669','#7c3aed','#0891b2','#1d4ed8'],monochrome:['#1e293b','#334155','#475569','#64748b','#94a3b8','#cbd5e1']};
@@ -509,7 +635,8 @@ function placeWordsLayout(words,opts){
 }
 function _wcDarken(hex,amount){const m=hex.match(/^#?([0-9a-f]{6})$/i); if(!m) return hex; const n=parseInt(m[1],16); const r=Math.max(0,Math.floor(((n>>16)&255)*(1-amount))), g=Math.max(0,Math.floor(((n>>8)&255)*(1-amount))), b=Math.max(0,Math.floor((n&255)*(1-amount))); return '#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('')}
 function _wcShapeBackgroundSvg(shape,W,H,color){if(shape==='rect') return ''; if(_WORDCLOUD_EMOJI_SHAPES[shape]){const emoji=_WORDCLOUD_EMOJI_SHAPES[shape]; const fontSize=Math.min(W,H)*0.92; return `<text x="${W/2}" y="${H/2}" text-anchor="middle" dominant-baseline="central" font-size="${fontSize}" opacity="0.14">${emoji}</text>`} if(shape==='circle') return `<circle cx="${W/2}" cy="${H/2}" r="${Math.min(W,H)/2-6}" fill="${color}" opacity="0.13"/>`; if(shape==='oval') return `<ellipse cx="${W/2}" cy="${H/2}" rx="${W/2-6}" ry="${H/2-6}" fill="${color}" opacity="0.13"/>`; const d=_WORDCLOUD_SHAPES[shape]; if(!d) return ''; const scale=Math.min(W,H)/100*0.92; const tx=(W-100*scale)/2, ty=(H-100*scale)/2; return `<g transform="translate(${tx} ${ty}) scale(${scale})"><path d="${d}" fill="${color}" opacity="0.18"/></g>`}
-function renderWordCloudSvg(placed,W,H,effect,shape,palette){effect=effect||'flat'; const bgColor=(palette&&palette[0])||'#7c3aed'; const bg=_wcShapeBackgroundSvg(shape||'rect',W,H,bgColor); const items=placed.map(p=>{const cx=p.x+p.w/2; const cy=p.y+p.h/2+p.fontSize*0.32; const tr=p.rotation?` transform="rotate(${p.rotation} ${cx} ${cy})"`:''; const baseAttrs=`text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="${p.fontSize}" font-weight="700"`; const word=esc(p.word); if(effect==='shadow'){return `<text x="${cx+2}" y="${cy+2}" ${baseAttrs} fill="rgba(0,0,0,0.28)"${tr}>${word}</text><text x="${cx}" y="${cy}" ${baseAttrs} fill="${p.color}"${tr}>${word}</text>`} if(effect==='3d'){const dark=_wcDarken(p.color,0.55); let layers=''; for(let dz=4;dz>=1;dz--){layers+=`<text x="${cx+dz}" y="${cy+dz}" ${baseAttrs} fill="${dark}" opacity="${0.55+(4-dz)*0.08}"${tr}>${word}</text>`} return layers+`<text x="${cx}" y="${cy}" ${baseAttrs} fill="${p.color}" stroke="rgba(0,0,0,0.35)" stroke-width="0.6"${tr}>${word}</text>`} return `<text x="${cx}" y="${cy}" ${baseAttrs} fill="${p.color}"${tr}>${word}</text>`}).join(''); return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><rect width="${W}" height="${H}" fill="#ffffff"/>${bg}${items}</svg>`}
+function _wcContentBox(placed,W,H,pad=22){if(!placed.length)return{x:0,y:0,w:W,h:H};let minX=W,minY=H,maxX=0,maxY=0;placed.forEach(p=>{minX=Math.min(minX,p.x);minY=Math.min(minY,p.y);maxX=Math.max(maxX,p.x+p.w);maxY=Math.max(maxY,p.y+p.h)});minX=Math.max(0,Math.floor(minX-pad));minY=Math.max(0,Math.floor(minY-pad));maxX=Math.min(W,Math.ceil(maxX+pad));maxY=Math.min(H,Math.ceil(maxY+pad));return{x:minX,y:minY,w:Math.max(80,maxX-minX),h:Math.max(60,maxY-minY)}}
+function renderWordCloudSvg(placed,W,H,effect,shape,palette){effect=effect||'flat'; const box=_wcContentBox(placed,W,H); const bgColor=(palette&&palette[0])||'#7c3aed'; const bg=_wcShapeBackgroundSvg(shape||'rect',W,H,bgColor); const items=placed.map(p=>{const cx=p.x+p.w/2; const cy=p.y+p.h/2+p.fontSize*0.32; const tr=p.rotation?` transform="rotate(${p.rotation} ${cx} ${cy})"`:''; const baseAttrs=`text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="${p.fontSize}" font-weight="700"`; const word=esc(p.word); if(effect==='shadow'){return `<text x="${cx+2}" y="${cy+2}" ${baseAttrs} fill="rgba(0,0,0,0.28)"${tr}>${word}</text><text x="${cx}" y="${cy}" ${baseAttrs} fill="${p.color}"${tr}>${word}</text>`} if(effect==='3d'){const dark=_wcDarken(p.color,0.55); let layers=''; for(let dz=4;dz>=1;dz--){layers+=`<text x="${cx+dz}" y="${cy+dz}" ${baseAttrs} fill="${dark}" opacity="${0.55+(4-dz)*0.08}"${tr}>${word}</text>`} return layers+`<text x="${cx}" y="${cy}" ${baseAttrs} fill="${p.color}" stroke="rgba(0,0,0,0.35)" stroke-width="0.6"${tr}>${word}</text>`} return `<text x="${cx}" y="${cy}" ${baseAttrs} fill="${p.color}"${tr}>${word}</text>`}).join(''); return `<svg xmlns="http://www.w3.org/2000/svg" width="${box.w}" height="${box.h}" viewBox="${box.x} ${box.y} ${box.w} ${box.h}">${bg}${items}</svg>`}
 let _wcPreviewTimer=null;
 function generateWordCloudPreview(){const target=gid('wcPreview'); if(!target) return; const source=gid('wcSource').value; const shape=gid('wcShape').value; const rotation=gid('wcRotation')?gid('wcRotation').value:'none'; const effect=gid('wcEffect')?gid('wcEffect').value:'flat'; const palette=_WORDCLOUD_PALETTES[gid('wcPalette').value]||_WORDCLOUD_PALETTES.vibrant; const words=parseWordList(source); if(!words.length){target.innerHTML='<div class="mermaid-error" style="color:var(--muted)">Add some words on the left.</div>'; return} const W=720,H=480; const placed=placeWordsLayout(words,{width:W,height:H,shape,palette,rotation}); if(!placed.length){target.innerHTML='<div class="mermaid-error">Could not lay out any words. Try shorter words or fewer items.</div>'; return} target.innerHTML=renderWordCloudSvg(placed,W,H,effect,shape,palette); target.dataset.wcPlaced='1'}
 function openWordCloudDialog(existingId){const dlg=gid('wordCloudDialog'); if(!dlg||dlg.open) return; const obj=existingId?findObj(existingId):null; if(obj&&obj.wordCloudSource){gid('wcSource').value=obj.wordCloudSource; gid('wcShape').value=obj.wordCloudShape||'rect'; gid('wcPalette').value=obj.wordCloudPalette||'vibrant'; if(gid('wcRotation')) gid('wcRotation').value=obj.wordCloudRotation||'none'; if(gid('wcEffect')) gid('wcEffect').value=obj.wordCloudEffect||'flat'; dlg.dataset.editId=obj.id} else {if(!gid('wcSource').value.trim()) gid('wcSource').value='curiosity\nimagination\nplay\nlearn\nlearn\ndiscover\nteamwork\ngrowth\nquestions\ngrowth\nwonder\ncuriosity\ncreate\nask\nlearn\nshare'; dlg.dataset.editId=''} generateWordCloudPreview(); dlg.showModal()}
@@ -550,7 +677,7 @@ gid('cropReset')?.addEventListener('click',()=>{gid('cropTop').value=0; gid('cro
 gid('cropApply')?.addEventListener('click',()=>{const id=gid('cropDialog').dataset.objectId; const o=findObj(id); if(!o){gid('cropDialog').close(); return} const top=+gid('cropTop').value, right=+gid('cropRight').value, bottom=+gid('cropBottom').value, left=+gid('cropLeft').value; if(top+bottom>=95||left+right>=95){setStatus('Crop too aggressive — leave at least 5% visible.','danger'); return} if(top===0&&right===0&&bottom===0&&left===0){delete o.crop} else {o.crop={x:left/100,y:top/100,w:(100-left-right)/100,h:(100-top-bottom)/100}} render(); saveState(); setStatus('Image cropped.','success'); gid('cropDialog').close()});
 gid('welcomeDismiss')?.addEventListener('click',()=>{try{localStorage.setItem('drawsplat.welcomed','1')}catch(_){} const dlg=gid('welcomeDialog'); if(dlg) dlg.close()});
 gid('simpleColorInput')?.addEventListener('input',e=>{const v=e.target.value; if(tool==='sticky'){if(ui.stickyColor){ui.stickyColor.value=v; ui.stickyColor.dispatchEvent(new Event('change',{bubbles:true}))}} else if(ui.strokeColor){ui.strokeColor.value=v; ui.strokeColor.dispatchEvent(new Event('input',{bubbles:true}))}});
-function refreshViewToggle(){const btn=gid('viewToggleBtn'); if(!btn) return; const m=ui.interfaceMode?.value||'simple'; const text=m==='simple'?'Simple':'Advanced'; const lbl=btn.querySelector('.icon-label'); if(lbl) lbl.textContent=text; else btn.textContent=text; const tip=m==='simple'?'Switch to Advanced view':'Switch to Simple view'; btn.setAttribute('title',tip); btn.setAttribute('aria-label',tip)}
+function refreshViewToggle(){const btn=gid('viewToggleBtn'); if(!btn) return; const m=ui.interfaceMode?.value||'simple'; const text=m==='simple'?'Simple':'Advanced'; const tip=m==='simple'?'Switch to Advanced view':'Switch to Simple view'; setButtonChrome(btn,text); btn.setAttribute('title',tip); btn.setAttribute('aria-label',tip); btn.setAttribute('data-tooltip',tip)}
 gid('viewToggleBtn')?.addEventListener('click',()=>{const next=(ui.interfaceMode?.value||'simple')==='simple'?'advanced':'simple'; if(ui.interfaceMode) ui.interfaceMode.value=next; applyInterfaceMode(next); refreshViewToggle()});
 function refreshFrameNav(){const c=gid('frameCounter'); if(c){const p=panel(); const name=p?.name||('Panel '+(board.active+1)); c.textContent=name+' · '+(board.active+1)+'/'+board.panels.length; c.title=name+' ('+(board.active+1)+' of '+board.panels.length+')'} const bs=gid('bgSelectSimple'); if(bs) bs.value=panel().bg||'grid'}
 gid('renamePanelBtn').onclick=()=>{const n=prompt('Panel name:',panel().name); if(n){panel().name=n; render(); saveState()}};
@@ -945,10 +1072,18 @@ gid('inspectorBackdrop').onclick=()=>setInspectorOpen(false);
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&_isInspectorMobile()&&document.querySelector('.inspector')?.classList.contains('show')) setInspectorOpen(false)});
 async function loadTurnInById(turninId){const url=ui.scriptUrl.value.trim(); if(!url||!turninId) return; const load=await fetch(url+'?action=turnInLoad&turninId='+encodeURIComponent(turninId)); const loaded=await load.json(); if(loaded.ok&&loaded.turnin&&loaded.turnin.board){board=loaded.turnin.board; migrateBoard(board); clearSelection(); initHistory(); render(); persistLocal(); gid('moderationDialog').close(); setStatus('Loaded turn-in from '+(loaded.turnin.studentName||'student')+'.','success')}}
 async function openModerationDashboard(){const comments=[]; board.panels.forEach((p,pi)=>p.objects.filter(o=>o.type==='comment').forEach(o=>comments.push({panelIndex:pi,panelName:p.name,obj:o}))); const unresolved=comments.filter(c=>!c.obj.resolved).length, resolved=comments.length-unresolved; gid('moderationSummary').innerHTML=`<span class="pill warn">${esc(unresolved)} unresolved</span> <span class="pill ok">${esc(resolved)} resolved</span> <span class="pill">${esc(comments.length)} total comments</span>`; gid('moderationComments').innerHTML=comments.length?comments.map((c,i)=>`<div class="list-item"><h4>${esc(c.panelName)} — ${c.obj.resolved?'Resolved':'Open'}</h4><p>${esc(c.obj.text||htmlToPlainText(c.obj.html)||'No text')}</p><button data-jump-comment="${i}">Jump to Comment</button></div>`).join(''):'<div class="list-item">No comments on this board.</div>'; gid('moderationComments').querySelectorAll('[data-jump-comment]').forEach(btn=>btn.onclick=()=>{const c=comments[+btn.dataset.jumpComment]; board.active=c.panelIndex; setSingleSelection(c.obj.id); gid('moderationDialog').close(); render()}); let turnins=[]; const url=ui.scriptUrl.value.trim(); if(url){ try{const res=await fetch(url+'?action=turnInList'); const out=await res.json(); if(out.ok&&out.turnins) turnins=out.turnins}catch(err){} } gid('moderationTurnins').innerHTML=turnins.length?turnins.map(t=>`<div class="list-item"><h4>${esc(t.studentName||'Student')} — ${esc(t.title||'Untitled')}</h4><p>${esc(t.className||'No class')} · ${esc(t.updatedAt||'')}</p><button data-load-turnin="${esc(t.turninId)}">Load Turn-In</button></div>`).join(''):'<div class="list-item">No Google turn-ins found yet.</div>'; gid('moderationTurnins').querySelectorAll('[data-load-turnin]').forEach(btn=>btn.onclick=()=>loadTurnInById(btn.dataset.loadTurnin)); gid('moderationDialog').showModal()}
-function runTntReset(){askConfirm('Blow up the current panel and start over?',{okLabel:'Blow up!'}).then(ok=>{if(!ok) return; const overlay=gid('boomOverlay'); overlay.classList.add('show'); setTimeout(()=>{panel().objects=[]; clearSelection(); render(); saveState(); setStatus('Boom! Panel cleared.','success')},1100); setTimeout(()=>overlay.classList.remove('show'),1700)})}
+function playCanvasDetonation(){
+  const shell=document.querySelector('.canvas-shell');
+  if(!shell) return;
+  shell.classList.remove('tnt-detonating');
+  void shell.offsetWidth;
+  shell.classList.add('tnt-detonating');
+  setTimeout(()=>shell.classList.remove('tnt-detonating'),1700);
+}
+function runTntReset(){askConfirm('Blow up the current panel and start over?',{okLabel:'Blow up!'}).then(ok=>{if(!ok) return; const overlay=gid('boomOverlay'); overlay.classList.add('show'); playCanvasDetonation(); setTimeout(()=>{panel().objects=[]; clearSelection(); render(); saveState(); setStatus('Boom! Panel cleared.','success')},1100); setTimeout(()=>overlay.classList.remove('show'),1700)})}
 
 function setAudioOnCurrent(dataUrl,name='Audio note'){const o=currentObj(); if(!o||o.type!=='audio') return setStatus('Select an audio note first.','danger'); o.audioSrc=dataUrl; o.audioName=name; render(); saveState(); setStatus('Audio attached.','success')}
-async function startAudioRecording(){const o=currentObj(); if(!o||o.type!=='audio') return setStatus('Select an audio note first.','danger'); if(mediaRecorder&&mediaRecorder.state==='recording'){mediaRecorder.stop(); return} if(!navigator.mediaDevices?.getUserMedia||typeof MediaRecorder==='undefined') return setStatus('Audio recording is not supported in this browser.','danger'); try{const stream=await navigator.mediaDevices.getUserMedia({audio:true}); recordChunks=[]; mediaRecorder=new MediaRecorder(stream); mediaRecorder.ondataavailable=e=>{if(e.data&&e.data.size) recordChunks.push(e.data)}; mediaRecorder.onstop=()=>{const blob=new Blob(recordChunks,{type:mediaRecorder.mimeType||'audio/webm'}); const r=new FileReader(); r.onload=()=>setAudioOnCurrent(r.result,'Recorded audio'); r.readAsDataURL(blob); stream.getTracks().forEach(t=>t.stop()); gid('recordAudioBtn').textContent='Record Audio'}; mediaRecorder.start(); gid('recordAudioBtn').textContent='Stop Recording'; setStatus('Recording audio... click again to stop.','success')}catch(err){setStatus('Audio recording failed. '+err.message,'danger')}}
+async function startAudioRecording(){const o=currentObj(); if(!o||o.type!=='audio') return setStatus('Select an audio note first.','danger'); if(mediaRecorder&&mediaRecorder.state==='recording'){mediaRecorder.stop(); return} if(!navigator.mediaDevices?.getUserMedia||typeof MediaRecorder==='undefined') return setStatus('Audio recording is not supported in this browser.','danger'); try{const stream=await navigator.mediaDevices.getUserMedia({audio:true}); recordChunks=[]; mediaRecorder=new MediaRecorder(stream); mediaRecorder.ondataavailable=e=>{if(e.data&&e.data.size) recordChunks.push(e.data)}; mediaRecorder.onstop=()=>{const blob=new Blob(recordChunks,{type:mediaRecorder.mimeType||'audio/webm'}); const r=new FileReader(); r.onload=()=>setAudioOnCurrent(r.result,'Recorded audio'); r.readAsDataURL(blob); stream.getTracks().forEach(t=>t.stop()); setButtonChrome('recordAudioBtn','Record Audio')}; mediaRecorder.start(); setButtonChrome('recordAudioBtn','Stop Recording'); setStatus('Recording audio... click again to stop.','success')}catch(err){setStatus('Audio recording failed. '+err.message,'danger')}}
 function playSelectedAudio(){const o=currentObj(); if(!o||o.type!=='audio'||!o.audioSrc) return setStatus('Select an audio note with audio attached.','danger'); new Audio(o.audioSrc).play().catch(err=>setStatus('Playback failed. '+err.message,'danger'))}
 
 /* v2.5: keyboard shortcuts dialog. Opened by '?' key or by the new button if present. */
@@ -997,10 +1132,15 @@ function registerServiceWorker(){
 
 (async function init(){
   await loadAutosnapshot();
+  ensureSimpleExtras();
+  ensureAdvancedStickyPalette();
+  ensureTopMenus();
+  hideSidebarTemplateSection();
   initHistory();
   applyWorkspaceMode(ui.workspaceMode?.value||'productivity',true);
   applyInterfaceMode(ui.interfaceMode?.value||'simple',true);
   refreshViewToggle?.();
+  syncSimpleStickyPalette();
   syncSimpleColor();
   try{if(!localStorage.getItem('drawsplat.welcomed')){setTimeout(()=>{const w=gid('welcomeDialog'); if(w&&typeof w.showModal==='function') w.showModal()},700)}}catch(_){}
   render();
@@ -1020,19 +1160,132 @@ function registerServiceWorker(){
   if(sel){ sel.value=current; sel.addEventListener('change',()=>{ location.href=pages[sel.value]||'index.html' }) }
 })();
 
-/* v2.5: icon-ization. Identical to v2.4 but with explicit aria-labels on every entry. */
+/* v2.12: modern inline SVG icon system for every core toolbar/control button. */
 (function(){
-  const toolIcons={ select:['👆','Select'], pen:['✏️','Pen'], eraser:['🧽','Eraser'], laser:['🔆','Laser Pointer'], line:['📏','Line'], arrow:['➡️','Arrow'], rect:['🟦','Rectangle'], ellipse:['🟢','Ellipse'], text:['🅰️','Text'], sticky:['🗒️','Sticky Note'], connector:['🔗','Connector'], diamond:['🔶','Diamond'], triangle:['🔺','Triangle'], callout:['📢','Callout'], speech:['💬','Speech'], comment:['📌','Comment'], audio:['🎙️','Audio'] };
-  const buttonIcons={ undoBtn:['↶','Undo'], redoBtn:['↷','Redo'], saveDriveBtn:['☁️','Save to Google'], exportBtn:['🖼️','Export PNG'], exportPdfBtn:['📄','Export PDF'], tntBtn:['🧨','TNT Reset'], imageBtn:['🖼️','Load Image'], duplicateBtn:['⧉','Duplicate'], frontBtn:['⬆️','Bring Front'], backBtn:['⬇️','Send Back'], groupBtn:['⛓️','Group'], ungroupBtn:['⛓','Ungroup'], openStickerLibraryBtn:['⭐','Open Sticker Library'], insertStickerBtn:['➕','Insert Sticker'], createCustomStickerBtn:['🖼️','Create Custom Sticker'], insertTemplateBtn:['▦','Insert Template'], newTemplatePanelBtn:['▣','New Template Panel'], saveTemplateBtn:['💾','Save as Template'], loadTemplateGalleryBtn:['📚','Load Gallery'], addPanelBtn:['＋','Add Panel'], renamePanelBtn:['✎','Rename Panel'], deletePanelBtn:['🗑️','Delete Panel'], clearPanelBtn:['🧹','Clear Panel'], saveRestorePointBtn:['📌','Save Restore Point'], restorePointBtn:['⏪','Restore Point'], applyTextBtn:['✓','Apply Text'], attachStickyImageBtn:['🖼️','Attach Sticky Image'], toggleCommentResolvedBtn:['✓','Resolve/Reopen Comment'], recordAudioBtn:['🎙️','Record Audio'], loadAudioBtn:['🎵','Load Audio'], playAudioBtn:['▶','Play Audio'], selectGroupBtn:['▦','Select Group'], answerKeyBtn:['🔑','Answer Key'], lockBtn:['🔒','Lock'], unlockBtn:['🔓','Unlock'], deleteBtn:['🗑️','Delete'], startSyncBtn:['🔁','Start Local Sync'], startCloudSyncBtn:['☁️','Start Cloud Sync'], stopSyncBtn:['■','Stop Sync'], refreshCloudBtn:['↧','Pull Cloud'], saveLocalBtn:['💾','Save File'], loadLocalBtn:['📂','Load File'], importPanelsBtn:['📥','Import Panels'], loadDriveBtn:['☁️','Load from Google'], settingsBtn:['⚙️','Setup'], submitTurnInBtn:['📤','Submit Turn-In'], reviewTurnInsBtn:['📥','Review Turn-Ins'], openModerationBtn:['🛡️','Open Moderation Dashboard'], refreshModerationBtn:['↻','Refresh Data'], zoomOutBtn:['−','Zoom Out'], zoomResetBtn:['100%','Reset Zoom'], zoomInBtn:['+','Zoom In'], closeSetup:['×','Close'], closeStickerDialog:['×','Close'], closeModerationDialog:['×','Close'], inlineTextCancelBtn:['×','Cancel'], inlineTextSaveBtn:['✓','Done'], shortcutsBtn:['⌨','Keyboard Shortcuts'], optionsBtn:['⚙','Options'], closeOptions:['×','Close'], aboutBtn:['ⓘ','About'], closeAbout:['×','Close'], viewToggleBtn:['⇄','Switch View'], loadBgImageBtn:['🌄','Set Background'], clearBgImageBtn:['🚫','Clear Background'], frameNavPrev:['◀','Previous Frame'], frameNavNext:['▶','Next Frame'], frameNavAdd:['＋','Add Frame'], clearFrameBtn:['🧹','Clear Frame'], moreOptionsBtn:['⋮','More Options'], closeMoreOptions:['×','Close'], inspectorToggleBtn:['📋','Toggle Inspector'], simpleImageBtn:['🖼️','Add Image'], simpleTntBtn:['🧨','TNT Reset'], simpleBgImageBtn:['🌄','Set Background'], simpleClearBgBtn:['🚫','Clear Background'], simpleRemoveBgColorBtn:['🪄','Remove BG Color'], removeBgColorBtn:['🪄','Remove BG Color'], simpleDeleteBtn:['🗑️','Delete Selected'], floatDeleteBtn:['🗑️','Delete'], floatDuplicateBtn:['⧉','Duplicate'], floatEditBtn:['✎','Edit Text'], floatCropBtn:['✂️','Crop Image'], insertMermaidBtn:['📊','Mermaid Diagram'], closeMermaid:['×','Close'], insertWordCloudBtn:['☁️','Word Cloud'], closeWordCloud:['×','Close'] };
-  const keepTextIds=new Set(['saveDriveBtn','exportBtn','exportPdfBtn','tntBtn','submitTurnInBtn','reviewTurnInsBtn','openModerationBtn','refreshModerationBtn','settingsBtn','loadDriveBtn','saveLocalBtn','loadLocalBtn','importPanelsBtn','inlineTextSaveBtn','inlineTextCancelBtn','optionsBtn','aboutBtn','viewToggleBtn']);
-  function currentLabel(el,fallback){ const text=(el.textContent||'').trim(); return el.getAttribute('aria-label')||el.getAttribute('title')||text||fallback }
-  function iconize(el,icon,label,withText=false){ if(!el||el.dataset.iconized==='1') return; const finalLabel=currentLabel(el,label); el.dataset.iconized='1'; el.classList.add('icon-btn'); if(withText) el.classList.add('icon-with-text'); el.setAttribute('aria-label',finalLabel); el.setAttribute('title',finalLabel); el.setAttribute('data-tooltip',finalLabel); el.innerHTML=`<span class="icon-symbol" aria-hidden="true">${icon}</span><span class="icon-label">${esc(finalLabel)}</span>` }
+  const S='stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"';
+  const F='fill="currentColor"';
+  const svg=body=>`<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">${body}</svg>`;
+  const icons={
+    select:svg(`<path ${S} d="M5 3l12 8-5 1.5 3.5 6-3 1.7-3.4-5.9L5 18V3z"/>`),
+    pen:svg(`<path ${S} d="M4 20l4.5-1 10-10a2.1 2.1 0 0 0-3-3L5.5 16 4 20z"/><path ${S} d="M13.5 7.5l3 3"/>`),
+    eraser:svg(`<path ${S} d="M4 15l8-8a3 3 0 0 1 4.2 0l2.8 2.8a3 3 0 0 1 0 4.2l-6 6H8l-4-4z"/><path ${S} d="M9 10l6 6"/><path ${S} d="M13 20h7"/>`),
+    laser:svg(`<path ${S} d="M4 20l8-16 2.5 7L21 13l-6.5 2L12 22l-2.1-6.1L4 20z"/><path ${S} d="M16 4l2-2M20 8h3M19 12l2 2"/>`),
+    line:svg(`<path ${S} d="M4 19L20 5"/><circle ${F} cx="4" cy="19" r="2"/><circle ${F} cx="20" cy="5" r="2"/>`),
+    arrow:svg(`<path ${S} d="M4 18L18 4"/><path ${S} d="M11 4h7v7"/>`),
+    rect:svg(`<rect ${S} x="4" y="6" width="16" height="12" rx="2"/>`),
+    ellipse:svg(`<ellipse ${S} cx="12" cy="12" rx="8" ry="5.5"/>`),
+    text:svg(`<path ${S} d="M5 6h14M12 6v13M9 19h6"/>`),
+    sticky:svg(`<path ${S} d="M6 4h12v10l-5 5H6V4z"/><path ${S} d="M13 19v-5h5"/><path ${S} d="M8.5 8.5h7M8.5 11.5h5"/>`),
+    connector:svg(`<circle ${S} cx="6" cy="12" r="3"/><circle ${S} cx="18" cy="12" r="3"/><path ${S} d="M9 12h6"/>`),
+    diamond:svg(`<path ${S} d="M12 3l9 9-9 9-9-9 9-9z"/>`),
+    triangle:svg(`<path ${S} d="M12 4l9 16H3L12 4z"/>`),
+    callout:svg(`<path ${S} d="M4 5h16v10H9l-5 4V5z"/><path ${S} d="M8 9h8M8 12h5"/>`),
+    speech:svg(`<path ${S} d="M5 6h14v9H9l-4 4V6z"/><path ${S} d="M9 10h6"/>`),
+    comment:svg(`<path ${S} d="M12 3a5 5 0 0 1 5 5c0 4-5 9-5 9S7 12 7 8a5 5 0 0 1 5-5z"/><circle ${F} cx="12" cy="8" r="1.4"/><path ${S} d="M9 21h6"/>`),
+    audio:svg(`<path ${S} d="M12 4a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V7a3 3 0 0 0-3-3z"/><path ${S} d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"/>`),
+    undo:svg(`<path ${S} d="M9 7H4v5"/><path ${S} d="M4 12a8 8 0 1 0 2.3-5.7L4 8"/>`),
+    redo:svg(`<path ${S} d="M15 7h5v5"/><path ${S} d="M20 12a8 8 0 1 1-2.3-5.7L20 8"/>`),
+    cloudUp:svg(`<path ${S} d="M7 18h10a4 4 0 0 0 .4-8 6 6 0 0 0-11.3 1.7A3.5 3.5 0 0 0 7 18z"/><path ${S} d="M12 16V9M9 12l3-3 3 3"/>`),
+    cloudDown:svg(`<path ${S} d="M7 18h10a4 4 0 0 0 .4-8 6 6 0 0 0-11.3 1.7A3.5 3.5 0 0 0 7 18z"/><path ${S} d="M12 9v7M9 13l3 3 3-3"/>`),
+    image:svg(`<rect ${S} x="4" y="5" width="16" height="14" rx="2"/><circle ${S} cx="9" cy="10" r="1.5"/><path ${S} d="M5 17l5-5 4 4 2-2 3 3"/>`),
+    file:svg(`<path ${S} d="M7 3h7l5 5v13H7V3z"/><path ${S} d="M14 3v6h5"/><path ${S} d="M9 14h6M9 17h4"/>`),
+    pdf:svg(`<path ${S} d="M7 3h7l5 5v13H7V3z"/><path ${S} d="M14 3v6h5"/><path ${S} d="M8.5 16h7"/>`),
+    tnt:svg(`<g transform="rotate(-8 12 12)"><rect x="4.5" y="9" width="5.2" height="10" rx="1.5" fill="#ef4444" stroke="#7f1d1d" stroke-width="1.4"/><rect x="9.4" y="7" width="5.2" height="12" rx="1.5" fill="#dc2626" stroke="#7f1d1d" stroke-width="1.4"/><rect x="14.3" y="9" width="5.2" height="10" rx="1.5" fill="#ef4444" stroke="#7f1d1d" stroke-width="1.4"/><path d="M5.3 12h13.4M5.3 16h13.4" stroke="#fee2e2" stroke-width="1.2" stroke-linecap="round"/><path d="M12 7c.2-2.5 2.8-4.3 5.2-3" fill="none" stroke="#111827" stroke-width="1.5" stroke-linecap="round"/><path d="M17.4 3.8l1-1.8M18.1 4.8h2M17.2 5.5l1.3 1.5" stroke="#facc15" stroke-width="1.4" stroke-linecap="round"/></g>`),
+    duplicate:svg(`<rect ${S} x="8" y="8" width="11" height="11" rx="2"/><path ${S} d="M5 16V5h11"/>`),
+    front:svg(`<rect ${S} x="8" y="5" width="11" height="11" rx="2"/><rect ${S} x="5" y="10" width="11" height="9" rx="2"/>`),
+    back:svg(`<rect ${S} x="5" y="5" width="11" height="11" rx="2"/><rect ${S} x="8" y="10" width="11" height="9" rx="2"/>`),
+    group:svg(`<rect ${S} x="4" y="5" width="7" height="7" rx="1.5"/><rect ${S} x="13" y="5" width="7" height="7" rx="1.5"/><rect ${S} x="8.5" y="14" width="7" height="5" rx="1.5"/>`),
+    ungroup:svg(`<rect ${S} x="3" y="5" width="6" height="6" rx="1.5"/><rect ${S} x="15" y="5" width="6" height="6" rx="1.5"/><rect ${S} x="9" y="15" width="6" height="5" rx="1.5"/><path ${S} d="M9 8h6M12 11v4"/>`),
+    star:svg(`<path ${S} d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9L12 3z"/>`),
+    plus:svg(`<path ${S} d="M12 5v14M5 12h14"/>`),
+    template:svg(`<rect ${S} x="4" y="5" width="16" height="14" rx="2"/><path ${S} d="M4 11h16M10 5v14"/>`),
+    panel:svg(`<rect ${S} x="4" y="5" width="16" height="14" rx="2"/><path ${S} d="M8 9h8M8 13h5"/>`),
+    save:svg(`<path ${S} d="M5 4h12l2 2v14H5V4z"/><path ${S} d="M8 4v6h8V4M8 20v-6h8v6"/>`),
+    library:svg(`<path ${S} d="M5 5h4v15H5zM10 4h4v16h-4zM15 7h4v13h-4z"/><path ${S} d="M16 10h2"/>`),
+    edit:svg(`<path ${S} d="M4 20l4-1 10-10-3-3L5 16l-1 4z"/><path ${S} d="M13.5 7.5l3 3"/>`),
+    trash:svg(`<path ${S} d="M5 7h14M10 11v6M14 11v6M8 7l1-3h6l1 3M7 7l1 13h8l1-13"/>`),
+    clear:svg(`<path ${S} d="M4 18h16M8 18l-3-5 8-8 5 5-8 8H8z"/><path ${S} d="M12 6l5 5"/>`),
+    restore:svg(`<path ${S} d="M8 7H4v4"/><path ${S} d="M4 11a8 8 0 1 0 2.3-5.7L4 8"/><path ${S} d="M12 8v5l3 2"/>`),
+    check:svg(`<path ${S} d="M4 13l5 5L20 6"/>`),
+    close:svg(`<path ${S} d="M6 6l12 12M18 6L6 18"/>`),
+    mic:svg(`<path ${S} d="M12 4a3 3 0 0 0-3 3v4a3 3 0 0 0 6 0V7a3 3 0 0 0-3-3z"/><path ${S} d="M5 11a7 7 0 0 0 14 0M12 18v3"/>`),
+    music:svg(`<path ${S} d="M9 18a3 3 0 1 1-2-2.8V5l11-2v11"/><path ${S} d="M18 14a3 3 0 1 1-2-2.8"/>`),
+    play:svg(`<path ${F} d="M8 5v14l11-7z"/>`),
+    lock:svg(`<rect ${S} x="5" y="10" width="14" height="10" rx="2"/><path ${S} d="M8 10V7a4 4 0 0 1 8 0v3"/>`),
+    unlock:svg(`<rect ${S} x="5" y="10" width="14" height="10" rx="2"/><path ${S} d="M8 10V7a4 4 0 0 1 7.5-2"/>`),
+    sync:svg(`<path ${S} d="M17 3l4 4-4 4"/><path ${S} d="M3 11V9a6 6 0 0 1 6-6h12"/><path ${S} d="M7 21l-4-4 4-4"/><path ${S} d="M21 13v2a6 6 0 0 1-6 6H3"/>`),
+    cloudSync:svg(`<path ${S} d="M7 18h10a4 4 0 0 0 .4-8 6 6 0 0 0-11.3 1.7A3.5 3.5 0 0 0 7 18z"/><path ${S} d="M10 13l2-2 2 2M14 15l-2 2-2-2"/>`),
+    stop:svg(`<rect ${F} x="7" y="7" width="10" height="10" rx="1.5"/>`),
+    download:svg(`<path ${S} d="M12 4v11M8 11l4 4 4-4M5 20h14"/>`),
+    folder:svg(`<path ${S} d="M3 7h7l2 3h9v9H3V7z"/>`),
+    import:svg(`<path ${S} d="M12 4v10M8 10l4 4 4-4"/><path ${S} d="M5 20h14"/>`),
+    settings:svg(`<path ${S} d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/><path ${S} d="M4 12h2M18 12h2M12 4v2M12 18v2M6.3 6.3l1.4 1.4M16.3 16.3l1.4 1.4M17.7 6.3l-1.4 1.4M7.7 16.3l-1.4 1.4"/>`),
+    submit:svg(`<path ${S} d="M4 12l16-8-5 16-3-7-8-1z"/><path ${S} d="M12 13l8-9"/>`),
+    review:svg(`<path ${S} d="M7 3h10v18H7z"/><path ${S} d="M9 8h6M9 12h4M9 16h5"/><path ${S} d="M15 18l2 2 4-5"/>`),
+    shield:svg(`<path ${S} d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path ${S} d="M9 12l2 2 4-5"/>`),
+    refresh:svg(`<path ${S} d="M20 6v5h-5"/><path ${S} d="M4 18v-5h5"/><path ${S} d="M18 11a6 6 0 0 0-10-4.5L4 10M6 13a6 6 0 0 0 10 4.5l4-3.5"/>`),
+    zoomOut:svg(`<circle ${S} cx="11" cy="11" r="6"/><path ${S} d="M8 11h6M16 16l4 4"/>`),
+    zoomIn:svg(`<circle ${S} cx="11" cy="11" r="6"/><path ${S} d="M8 11h6M11 8v6M16 16l4 4"/>`),
+    keyboard:svg(`<rect ${S} x="3" y="6" width="18" height="12" rx="2"/><path ${S} d="M7 10h.01M11 10h.01M15 10h.01M18 10h.01M7 14h10"/>`),
+    options:svg(`<circle ${F} cx="12" cy="5" r="1.8"/><circle ${F} cx="12" cy="12" r="1.8"/><circle ${F} cx="12" cy="19" r="1.8"/>`),
+    info:svg(`<circle ${S} cx="12" cy="12" r="9"/><path ${S} d="M12 11v6M12 7h.01"/>`),
+    switch:svg(`<path ${S} d="M7 7h13l-4-4M17 17H4l4 4"/>`),
+    bg:svg(`<rect ${S} x="4" y="5" width="16" height="14" rx="2"/><path ${S} d="M4 15l5-5 4 4 2-2 5 5"/><path ${S} d="M15 8h3"/>`),
+    clearBg:svg(`<rect ${S} x="4" y="5" width="16" height="14" rx="2"/><path ${S} d="M6 18L18 6"/>`),
+    prev:svg(`<path ${S} d="M15 6l-6 6 6 6"/>`),
+    next:svg(`<path ${S} d="M9 6l6 6-6 6"/>`),
+    more:svg(`<circle ${F} cx="5" cy="12" r="1.8"/><circle ${F} cx="12" cy="12" r="1.8"/><circle ${F} cx="19" cy="12" r="1.8"/>`),
+    inspector:svg(`<rect ${S} x="4" y="4" width="16" height="16" rx="2"/><path ${S} d="M9 4v16M12 8h5M12 12h5M12 16h3"/>`),
+    magic:svg(`<path ${S} d="M4 20l10-10"/><path ${S} d="M13 5l6 6M15 3l1 3 3 1-3 1-1 3-1-3-3-1 3-1 1-3z"/>`),
+    crop:svg(`<path ${S} d="M6 3v15h15"/><path ${S} d="M3 6h15v15"/><path ${S} d="M10 10h8v8"/>`),
+    chart:svg(`<path ${S} d="M4 19V5M4 19h16"/><rect ${S} x="7" y="11" width="3" height="5"/><rect ${S} x="12" y="8" width="3" height="8"/><rect ${S} x="17" y="6" width="3" height="10"/>`),
+    wordcloud:svg(`<path ${S} d="M7 17h10a4 4 0 0 0 .3-8 5.5 5.5 0 0 0-10.5 1.4A3.4 3.4 0 0 0 7 17z"/><path ${S} d="M8 13h8M10 10h4"/>`),
+    noFill:svg(`<rect ${S} x="5" y="5" width="14" height="14" rx="2"/><path ${S} d="M5 19L19 5"/>`),
+    blank:svg(`<rect ${S} x="5" y="5" width="14" height="14" rx="2"/>`),
+    grid:svg(`<rect ${S} x="4" y="4" width="16" height="16" rx="1"/><path ${S} d="M4 10h16M4 15h16M10 4v16M15 4v16"/>`),
+    dots:svg(`<circle ${F} cx="7" cy="7" r="1.2"/><circle ${F} cx="12" cy="7" r="1.2"/><circle ${F} cx="17" cy="7" r="1.2"/><circle ${F} cx="7" cy="12" r="1.2"/><circle ${F} cx="12" cy="12" r="1.2"/><circle ${F} cx="17" cy="12" r="1.2"/><circle ${F} cx="7" cy="17" r="1.2"/><circle ${F} cx="12" cy="17" r="1.2"/><circle ${F} cx="17" cy="17" r="1.2"/>`),
+    graph:svg(`<rect ${S} x="4" y="4" width="16" height="16" rx="1"/><path ${S} d="M4 12h16M12 4v16M8 4v16M16 4v16M4 8h16M4 16h16"/>`),
+    lines:svg(`<path ${S} d="M5 7h14M5 12h14M5 17h14"/>`),
+    isometric:svg(`<path ${S} d="M12 3v18M4 8l8 4 8-4M4 16l8-4 8 4"/>`),
+    reset:svg(`<path ${S} d="M9 5H5v4"/><path ${S} d="M5 9a8 8 0 1 0 2.3-5.7L5 6"/><path ${S} d="M9 12h6M12 9v6"/>`)
+  };
+  const toolIcons={select:['select','Select'],pen:['pen','Pen'],eraser:['eraser','Eraser'],laser:['laser','Laser Pointer'],line:['line','Line'],arrow:['arrow','Arrow'],rect:['rect','Rectangle'],ellipse:['ellipse','Ellipse'],text:['text','Text'],sticky:['sticky','Sticky Note'],connector:['connector','Connector'],diamond:['diamond','Diamond'],triangle:['triangle','Triangle'],callout:['callout','Callout'],speech:['speech','Speech'],comment:['comment','Comment'],audio:['audio','Audio']};
+  const buttonIcons={
+    undoBtn:['undo','Undo'],redoBtn:['redo','Redo'],saveDriveBtn:['cloudUp','Save to Google'],exportBtn:['image','Export PNG'],exportPdfBtn:['pdf','Export PDF'],tntBtn:['tnt','TNT Reset'],
+    imageBtn:['image','Load Image'],duplicateBtn:['duplicate','Duplicate'],frontBtn:['front','Bring Front'],backBtn:['back','Send Back'],groupBtn:['group','Group'],ungroupBtn:['ungroup','Ungroup'],
+    openStickerLibraryBtn:['star','Open Sticker Library'],insertStickerBtn:['plus','Insert Sticker'],createCustomStickerBtn:['image','Create Custom Sticker'],
+    insertTemplateBtn:['template','Insert Template'],newTemplatePanelBtn:['panel','New Template Panel'],saveTemplateBtn:['save','Save as Template'],loadTemplateGalleryBtn:['library','Load Gallery'],
+    addPanelBtn:['plus','Add Panel'],renamePanelBtn:['edit','Rename Panel'],deletePanelBtn:['trash','Delete Panel'],clearPanelBtn:['clear','Clear Panel'],
+    saveRestorePointBtn:['comment','Save Restore Point'],restorePointBtn:['restore','Restore Point'],applyTextBtn:['check','Apply Text'],noFillBtn:['noFill','No fill'],
+    attachStickyImageBtn:['image','Attach Sticky Image'],toggleCommentResolvedBtn:['check','Resolve/Reopen Comment'],recordAudioBtn:['mic','Record Audio'],loadAudioBtn:['music','Load Audio'],playAudioBtn:['play','Play Audio'],
+    selectGroupBtn:['group','Select Group'],answerKeyBtn:['check','Answer Key'],lockBtn:['lock','Lock'],unlockBtn:['unlock','Unlock'],deleteBtn:['trash','Delete'],
+    startSyncBtn:['sync','Start Local Sync'],startCloudSyncBtn:['cloudSync','Start Cloud Sync'],stopSyncBtn:['stop','Stop Sync'],refreshCloudBtn:['cloudDown','Pull Cloud'],
+    saveLocalBtn:['save','Save File'],loadLocalBtn:['folder','Load File'],importPanelsBtn:['import','Import Panels'],loadDriveBtn:['cloudDown','Load from Google'],settingsBtn:['settings','Setup'],
+    submitTurnInBtn:['submit','Submit Turn-In'],reviewTurnInsBtn:['review','Review Turn-Ins'],openModerationBtn:['shield','Open Moderation Dashboard'],refreshModerationBtn:['refresh','Refresh Data'],
+    zoomOutBtn:['zoomOut','Zoom Out'],zoomResetBtn:['zoomIn','Reset Zoom'],zoomInBtn:['zoomIn','Zoom In'],shortcutsBtn:['keyboard','Keyboard Shortcuts'],optionsBtn:['settings','Options'],aboutBtn:['info','About'],
+    viewToggleBtn:['switch','Switch View'],loadBgImageBtn:['bg','Set Background'],clearBgImageBtn:['clearBg','Clear Background'],frameNavPrev:['prev','Previous Frame'],frameNavNext:['next','Next Frame'],
+    frameNavAdd:['plus','Add Frame'],clearFrameBtn:['clear','Clear Frame'],moreOptionsBtn:['more','More Options'],inspectorToggleBtn:['inspector','Toggle Inspector'],
+    simpleImageBtn:['image','Add Image'],simpleMermaidBtn:['chart','Mermaid Diagram'],simpleWordCloudBtn:['wordcloud','Word Cloud'],simpleTntBtn:['tnt','TNT Reset'],simpleBgImageBtn:['bg','Set Background'],simpleClearBgBtn:['clearBg','Clear Background'],simpleRemoveBgColorBtn:['magic','Remove BG Color'],
+    removeBgColorBtn:['magic','Remove BG Color'],simpleDeleteBtn:['trash','Delete Selected'],floatDeleteBtn:['trash','Delete'],floatDuplicateBtn:['duplicate','Duplicate'],floatEditBtn:['edit','Edit Text'],floatCropBtn:['crop','Crop Image'],
+    insertMermaidBtn:['chart','Mermaid Diagram'],insertWordCloudBtn:['wordcloud','Word Cloud'],resetBoardBtn:['reset','Reset Board'],
+    closeSetup:['close','Close'],closeStickerDialog:['close','Close'],closeModerationDialog:['close','Close'],inlineTextCancelBtn:['close','Cancel'],inlineTextSaveBtn:['check','Done'],
+    closeOptions:['close','Close'],closeAbout:['close','Close'],closeMoreOptions:['close','Close'],closeMermaid:['close','Close'],closeWordCloud:['close','Close'],
+    more_saveLocalBtn:['save','Save File'],more_loadLocalBtn:['folder','Load File'],more_importPanelsBtn:['import','Import Panels'],more_exportBtn:['image','Export PNG'],more_exportPdfBtn:['pdf','Export PDF'],
+    more_saveDriveBtn:['cloudUp','Save to Google'],more_loadDriveBtn:['cloudDown','Load from Google'],more_deletePanelBtn:['trash','Delete Frame'],more_tntBtn:['tnt','TNT Reset'],
+    wcGenerate:['wordcloud','Generate'],wcCopyPng:['image','Copy PNG'],wcCancel:['close','Cancel'],wcInsert:['check','Insert'],mermaidCopyPng:['image','Copy PNG'],mermaidCancel:['close','Cancel'],mermaidInsert:['check','Insert'],
+    cropReset:['reset','Reset'],cropCancel:['close','Cancel'],cropApply:['crop','Apply'],bgRemoveCancel:['close','Cancel'],bgRemoveApply:['magic','Apply'],confirmDialogCancel:['close','Cancel'],confirmDialogOk:['check','OK'],welcomeDismiss:['check','Got it']
+  };
+  const keepTextIds=new Set(['saveDriveBtn','exportBtn','exportPdfBtn','tntBtn','submitTurnInBtn','reviewTurnInsBtn','openModerationBtn','refreshModerationBtn','settingsBtn','loadDriveBtn','saveLocalBtn','loadLocalBtn','importPanelsBtn','inlineTextSaveBtn','inlineTextCancelBtn','optionsBtn','aboutBtn','viewToggleBtn','zoomResetBtn','confirmDialogOk','confirmDialogCancel','welcomeDismiss']);
+  function currentLabel(el,fallback){const text=(el.textContent||'').trim();return el.getAttribute('aria-label')||el.getAttribute('title')||text||fallback}
+  function iconize(el,iconKey,label,withText=false){if(!el||el.dataset.iconized==='1') return;const finalLabel=currentLabel(el,label);el.dataset.iconized='1';el.classList.add('icon-btn');if(withText) el.classList.add('icon-with-text');el.setAttribute('aria-label',finalLabel);el.setAttribute('title',finalLabel);el.setAttribute('data-tooltip',finalLabel);el.innerHTML=`<span class="icon-symbol" aria-hidden="true">${icons[iconKey]||iconKey}</span><span class="icon-label">${esc(finalLabel)}</span>`}
   function applyIcons(){
+    ensureSimpleExtras?.();
+    ensureAdvancedStickyPalette?.();
+    ensureTopMenus?.();
     document.body.classList.add('tool-palette-condensed');
-    document.querySelectorAll('#toolButtons [data-tool]').forEach(btn=>{const data=toolIcons[btn.dataset.tool]; if(data) iconize(btn,data[0],data[1],false)});
-    Object.entries(buttonIcons).forEach(([elid,data])=>{const el=document.getElementById(elid); if(el) iconize(el,data[0],data[1],keepTextIds.has(elid))});
-    document.querySelectorAll('[data-bg]').forEach(btn=>{const label=currentLabel(btn,'Background'); const map={blank:'□',grid:'▦',dots:'⠿',graph:'⊞',lines:'☰',isometric:'◇'}; iconize(btn,map[btn.dataset.bg]||'▦',label,false)});
-    /* v2.5: explicit aria-labels on form controls without visible labels. */
+    document.querySelectorAll('#toolButtons [data-tool]').forEach(btn=>{const data=toolIcons[btn.dataset.tool];if(data) iconize(btn,data[0],data[1],false)});
+    Object.entries(buttonIcons).forEach(([elid,data])=>{const el=document.getElementById(elid);if(el) iconize(el,data[0],data[1],keepTextIds.has(elid))});
+    document.querySelectorAll('[data-bg]').forEach(btn=>{const label=currentLabel(btn,'Background');const map={blank:'blank',grid:'grid',dots:'dots',graph:'graph',lines:'lines',isometric:'isometric'};iconize(btn,map[btn.dataset.bg]||'grid',label,false)});
     document.querySelectorAll('input,select,textarea').forEach(el=>{
       if(el.getAttribute('aria-label')) return;
       const lbl=el.closest('.row,.checkrow')?.querySelector('label')?.textContent?.trim();
