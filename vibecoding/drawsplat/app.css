@@ -1,7 +1,7 @@
 /* DrawSplat v2.13 — extracted shared styles. */
 :root{--navy:#7c3aed;--gold:#FAA634;--ink:#1f2937;--muted:#6b7280;--bg:#f5f7fb;--panel:#fff;--line:#d7dce8;--focus:#a855f7}
 *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
-header{height:58px;background:linear-gradient(90deg,#7c3aed,#a855f7);color:#fff;display:flex;align-items:center;gap:10px;padding:0 18px;box-shadow:0 2px 10px #0002}
+header{position:relative;z-index:120;height:58px;background:linear-gradient(90deg,#7c3aed,#a855f7);color:#fff;display:flex;align-items:center;gap:10px;padding:0 18px;box-shadow:0 2px 10px #0002}
 .header-logo{height:42px;width:auto;flex:0 0 auto;display:block}
 header h1{font-size:20px;margin:0;font-weight:800}
 .app-version{font-size:12px;font-weight:600;opacity:.85;letter-spacing:.04em;margin-left:4px}
@@ -124,7 +124,7 @@ dialog::backdrop{background:#0f172a88}
 .save-state.saved{color:#bbf7d0}
 .save-state.error{color:#fecaca;background:#7f1d1d99;border-color:#dc2626}
 .top-menubar{display:flex;align-items:center;gap:2px;margin-left:2px}
-.top-menu{position:relative}
+.top-menu{position:relative;z-index:130}
 .top-menu>summary{list-style:none;cursor:pointer;user-select:none;border:1px solid #ffffff33;border-radius:8px;padding:7px 10px;font-size:13px;font-weight:700;color:#fff;background:#ffffff12;line-height:1}
 .top-menu>summary::-webkit-details-marker{display:none}
 .top-menu[open]>summary,.top-menu>summary:hover{background:#ffffff24}
@@ -301,6 +301,10 @@ body[data-view="advanced"] #inspectorToggleBtn{display:inline-flex}
   header h1{font-size:16px}
   .badge{display:none}
   header button{flex:0 0 auto;min-height:36px;padding:6px 10px}
+  .top-menubar{flex:0 0 auto}
+  .top-menu-list{position:fixed;top:54px;left:8px;right:8px;z-index:300;min-width:0;max-height:calc(100vh - 70px);overflow:auto}
+  .top-submenu-list{position:static;display:none;margin:2px 0 4px 14px;min-width:0;box-shadow:none;border-color:#e5e7eb;background:#fafafa}
+  .top-menu-submenu:hover>.top-submenu-list,.top-menu-submenu:focus-within>.top-submenu-list{display:flex}
   /* Default phone layout */
   .app{grid-template-columns:1fr;height:calc(100vh - 56px);grid-template-rows:1fr auto;gap:4px;padding:4px}
   .sidebar{order:2;max-height:84px;overflow:auto;padding:4px}
