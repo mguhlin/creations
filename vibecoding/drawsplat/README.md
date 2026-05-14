@@ -87,12 +87,12 @@ The Script URL field and setup button are teacher-only UI. When students join th
 1. Teacher opens DrawSplat, switches to **Education Tools**, and enables assignment mode.
 2. Teacher creates the panels needed for table groups, adds backgrounds/templates/prompts, and starts **Cloud Sync** with a unique room name.
 3. Optional but recommended: teacher enters a room password before starting Cloud Sync.
-4. Teacher uses **Copy Student Link** in the Collaboration section.
+4. Teacher clicks **Copy Student Link** in the Collaboration section. DrawSplat generates the student URL for the current room and copies it to the clipboard.
 5. Students open that link, enter the room password, and join in student mode.
 6. Students can add student-layer work such as images, sticky notes, Mermaid diagrams, word clouds, text, and drawings.
 7. Student saves are merged into the room state in Google Drive. The Apps Script backend preserves teacher panel backgrounds and teacher-layer objects when a student client saves.
 
-This is designed for small-group whiteboards where each shared DrawSplat room is a unique whiteboard instance.
+This is designed for small-group whiteboards where each shared DrawSplat room is a unique whiteboard instance. The generated student link includes `role=student` and the room name so students open directly into the correct shared board.
 
 The Apps Script backend can store:
 

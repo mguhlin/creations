@@ -41,10 +41,10 @@ For a hosted classroom deployment, you can place that URL in `DEFAULT_GOOGLE_SCR
 6. Enter a unique room name in **Collaboration**.
 7. Optionally enter a room password.
 8. Start **Cloud Sync**.
-9. Use **Copy Student Link**.
+9. Click **Copy Student Link**. DrawSplat generates the student URL for the current room and copies it to the clipboard.
 10. Share the copied link with students.
 
-Each room name acts as a unique shared whiteboard instance.
+Each room name acts as a unique shared whiteboard instance. The generated student link includes `role=student` and the room name so students open directly into the correct shared board.
 
 ## 4. Student Workflow
 
