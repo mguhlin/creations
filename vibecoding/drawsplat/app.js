@@ -790,7 +790,7 @@ async function importPanelsFromFile(file){
       clearSelection(); render(); saveState(); persistLocal();
       const msg=format==='pdf'
         ? 'Imported '+result.added+' PDF page'+(result.added===1?'':'s')+' as panels.'
-        : 'Imported '+result.added+' slide'+(result.added===1?'':'s')+'. Text and images extracted only — for full fidelity, export to PDF and import that.';
+        : 'Imported '+result.added+' slide'+(result.added===1?'':'s')+'. Text, images, and slide background images extracted where supported — for full fidelity, export to PDF and import that.';
       setStatus(msg,'success');
     } else if(result&&result.cancelled){
       setStatus('Import cancelled.','danger');
@@ -837,13 +837,54 @@ function _odfLenToPx(s){if(!s) return 0; const m=String(s).match(/^(-?[\d.]+)(cm
 function _parseXml(text){const d=new DOMParser().parseFromString(text,'application/xml'); if(d.getElementsByTagName('parsererror').length) throw new Error('XML parse error'); return d}
 function _allOfLocalName(root,name){return Array.from(root.getElementsByTagName('*')).filter(n=>_xmlLocal(n)===name)}
 function _childOfLocalName(root,name){return Array.from(root.children||[]).find(n=>_xmlLocal(n)===name)}
-function _extOrMimeForName(name){const ext=(String(name).split('.').pop()||'png').toLowerCase(); if(ext==='jpg'||ext==='jpeg') return 'image/jpeg'; if(ext==='gif') return 'image/gif'; if(ext==='webp') return 'image/webp'; if(ext==='svg') return 'image/svg+xml'; return 'image/png'}
+function _extOrMimeForName(name){const ext=(String(name).split('.').pop()||'png').toLowerCase(); if(ext==='jpg'||ext==='jpeg') return 'image/jpeg'; if(ext==='gif') return 'image/gif'; if(ext==='webp') return 'image/webp'; if(ext==='svg') return 'image/svg+xml'; if(ext==='bmp') return 'image/bmp'; return 'image/png'}
+function _zipPathDir(path){const p=String(path||''); const i=p.lastIndexOf('/'); return i>=0?p.slice(0,i):''}
+function _zipNormalizePath(path){
+  const parts=[];
+  String(path||'').replace(/^\/+/,'').split('/').forEach(part=>{
+    if(!part||part==='.') return;
+    if(part==='..') parts.pop();
+    else parts.push(part);
+  });
+  return parts.join('/');
+}
+function _pptxRelPathForPart(partPath){
+  const dir=_zipPathDir(partPath);
+  const name=String(partPath||'').split('/').pop();
+  return (dir?dir+'/':'')+'_rels/'+name+'.rels';
+}
+function _pptxResolveTargetPath(ownerPartPath,target){
+  const t=String(target||'');
+  if(!t) return '';
+  if(/^https?:\/\//i.test(t)||/^data:/i.test(t)) return t;
+  if(t.startsWith('/')) return _zipNormalizePath(t);
+  if(t.startsWith('ppt/')) return _zipNormalizePath(t);
+  return _zipNormalizePath(_zipPathDir(ownerPartPath)+'/'+t);
+}
+async function _pptxReadRels(zip,ownerPartPath){
+  const relsPath=_pptxRelPathForPart(ownerPartPath);
+  const relsFile=zip.file(relsPath);
+  const relMap={};
+  if(!relsFile) return relMap;
+  try{
+    const rdoc=_parseXml(await relsFile.async('text'));
+    Array.from(rdoc.getElementsByTagName('*')).filter(n=>_xmlLocal(n)==='Relationship').forEach(r=>{
+      const id=r.getAttribute('Id'); const target=r.getAttribute('Target'); const type=r.getAttribute('Type')||'';
+      if(id&&target) relMap[id]={target,path:_pptxResolveTargetPath(ownerPartPath,target),type};
+    });
+  }catch(_){}
+  return relMap;
+}
 function _pptxRId(blip){
   if(!blip) return null;
   const RELN='http://schemas.openxmlformats.org/officeDocument/2006/relationships';
   let v=blip.getAttributeNS && blip.getAttributeNS(RELN,'embed');
   if(v) return v;
   v=blip.getAttribute && blip.getAttribute('r:embed');
+  if(v) return v;
+  v=blip.getAttributeNS && blip.getAttributeNS(RELN,'link');
+  if(v) return v;
+  v=blip.getAttribute && blip.getAttribute('r:link');
   if(v) return v;
   if(blip.attributes) for(const a of Array.from(blip.attributes)){
     if((a.localName||a.name||'').toLowerCase()==='embed' && a.value) return a.value;
@@ -853,20 +894,48 @@ function _pptxRId(blip){
 const _PPTX_IMG_DIAG={skipped:[],warned:[]};
 function _pptxResetDiag(){_PPTX_IMG_DIAG.skipped=[];_PPTX_IMG_DIAG.warned=[]}
 async function _pptxResolveImage(zip,relMap,rId){
-  const target=relMap[rId];
-  if(!target){_PPTX_IMG_DIAG.skipped.push({rId,reason:'no rel target'}); return null}
-  const cleanTarget=target.replace(/^\.\.\//,'');
-  const fullPath=cleanTarget.startsWith('ppt/')?cleanTarget:('ppt/'+cleanTarget);
+  const rel=relMap[rId];
+  if(!rel){_PPTX_IMG_DIAG.skipped.push({rId,reason:'no rel target'}); return null}
+  const target=typeof rel==='string'?rel:rel.target;
+  const fullPath=typeof rel==='string'?_zipNormalizePath(rel):rel.path;
+  if(/^https?:\/\//i.test(fullPath||'')){_PPTX_IMG_DIAG.warned.push({rId,target,reason:'linked external image'}); return null}
   const entry=zip.file(fullPath);
   if(!entry){_PPTX_IMG_DIAG.skipped.push({rId,target,fullPath,reason:'zip file missing'}); return null}
   const ext=(target.split('.').pop()||'').toLowerCase();
-  const UNSUPPORTED=['emf','wmf','tiff','tif','bmp'];
+  const UNSUPPORTED=['emf','wmf','tiff','tif'];
   if(UNSUPPORTED.includes(ext)){
     _PPTX_IMG_DIAG.warned.push({rId,target,ext,reason:'browser cannot render this format'});
     return null;
   }
   const b64=await entry.async('base64');
   return 'data:'+_extOrMimeForName(target)+';base64,'+b64;
+}
+async function _pptxBackgroundImageFromPart(zip,partPath,seen=new Set()){
+  if(!partPath||seen.has(partPath)) return '';
+  seen.add(partPath);
+  const entry=zip.file(partPath);
+  if(!entry) return '';
+  let doc; try{doc=_parseXml(await entry.async('text'))}catch(_){return ''}
+  const relMap=await _pptxReadRels(zip,partPath);
+  const bgEl=_allOfLocalName(doc,'bg')[0];
+  if(bgEl){
+    const bgBlip=_allOfLocalName(bgEl,'blip')[0];
+    const bgRid=_pptxRId(bgBlip);
+    if(bgRid){
+      try{ const url=await _pptxResolveImage(zip,relMap,bgRid); if(url) return url }catch(_){}
+    }
+  }
+  const layoutRel=Object.values(relMap).find(r=>/\/slideLayout$/i.test(r.type||''));
+  if(layoutRel){
+    const url=await _pptxBackgroundImageFromPart(zip,layoutRel.path,seen);
+    if(url) return url;
+  }
+  const masterRel=Object.values(relMap).find(r=>/\/slideMaster$/i.test(r.type||''));
+  if(masterRel){
+    const url=await _pptxBackgroundImageFromPart(zip,masterRel.path,seen);
+    if(url) return url;
+  }
+  return '';
 }
 async function importPptxAsPanels(file,progress){
   _pptxResetDiag();
@@ -882,30 +951,10 @@ async function importPptxAsPanels(file,progress){
     progress&&progress.update('Reading slide '+(i+1)+' of '+total+'…',i/total);
     const slidePath=slideEntries[i];
     const slideXml=await zip.file(slidePath).async('text');
-    const relsPath=slidePath.replace(/slides\/slide(\d+)\.xml$/,'slides/_rels/slide$1.xml.rels');
-    const relMap={};
-    const relsFile=zip.file(relsPath);
-    if(relsFile){
-      try{
-        const rdoc=_parseXml(await relsFile.async('text'));
-        Array.from(rdoc.getElementsByTagName('*')).filter(n=>_xmlLocal(n)==='Relationship').forEach(r=>{
-          const id=r.getAttribute('Id'); const tgt=r.getAttribute('Target');
-          if(id&&tgt) relMap[id]=tgt;
-        });
-      }catch(_){}
-    }
+    const relMap=await _pptxReadRels(zip,slidePath);
     let doc; try{doc=_parseXml(slideXml)}catch(_){continue}
     const objects=[];
-    let panelBgImage='';
-    /* Slide-level background <p:bg><p:bgPr><a:blipFill><a:blip r:embed="..."/></a:blipFill></p:bgPr></p:bg> */
-    const bgEl=_allOfLocalName(doc,'bg')[0];
-    if(bgEl){
-      const bgBlip=_allOfLocalName(bgEl,'blip')[0];
-      const bgRid=_pptxRId(bgBlip);
-      if(bgRid){
-        try{ const url=await _pptxResolveImage(zip,relMap,bgRid); if(url) panelBgImage=url }catch(_){}
-      }
-    }
+    const panelBgImage=await _pptxBackgroundImageFromPart(zip,slidePath);
     for(const sp of _allOfLocalName(doc,'sp')){
       const xfrm=_allOfLocalName(sp,'xfrm')[0];
       let x=40,y=40,w=300,h=80;
