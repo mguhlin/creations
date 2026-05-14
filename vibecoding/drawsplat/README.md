@@ -71,11 +71,28 @@ You can host DrawSplat on:
 1. Create a Google Sheet named **DrawSplat Saves**.
 2. Open **Extensions → Apps Script**.
 3. Paste in the code from `apps-script/Code.gs`.
-4. Deploy it as a **Web app**.
-5. Set **Execute as** to yourself.
-6. Set access according to your classroom or district needs.
-7. Copy the Web App URL.
-8. Paste the URL into the **Script URL** field inside DrawSplat.
+4. Run the `setup()` function once and approve the requested Drive/Sheets permissions.
+5. Deploy it as a **Web app**.
+6. Set **Execute as** to yourself.
+7. Set access according to your classroom or district needs.
+8. Copy the Web App URL.
+9. Paste the URL into the **Script URL** field inside DrawSplat.
+
+For a hosted classroom deployment, you can also place the Web App URL in `DEFAULT_GOOGLE_SCRIPT_URL` in `app.js`. That lets student links omit the script URL query parameter while still joining the same backend.
+
+The Script URL field and setup button are teacher-only UI. When students join through a `role=student` link, DrawSplat locks them into student mode and hides the Google Web App Script settings.
+
+### Shared classroom board workflow
+
+1. Teacher opens DrawSplat, switches to **Education Tools**, and enables assignment mode.
+2. Teacher creates the panels needed for table groups, adds backgrounds/templates/prompts, and starts **Cloud Sync** with a unique room name.
+3. Optional but recommended: teacher enters a room password before starting Cloud Sync.
+4. Teacher uses **Copy Student Link** in the Collaboration section.
+5. Students open that link, enter the room password, and join in student mode.
+6. Students can add student-layer work such as images, sticky notes, Mermaid diagrams, word clouds, text, and drawings.
+7. Student saves are merged into the room state in Google Drive. The Apps Script backend preserves teacher panel backgrounds and teacher-layer objects when a student client saves.
+
+This is designed for small-group whiteboards where each shared DrawSplat room is a unique whiteboard instance.
 
 The Apps Script backend can store:
 
@@ -85,7 +102,7 @@ The Apps Script backend can store:
 - shared templates
 - student turn-ins
 
-It also logs metadata in Google Sheets tabs for boards, rooms, templates, and turn-ins.
+It also logs metadata in Google Sheets tabs for boards, rooms, templates, and turn-ins. Room passwords are stored as salted SHA-256 hashes, not as plain text.
 
 ## Collaboration modes
 
@@ -203,6 +220,8 @@ v2.13 is an interface polish release focused on clearer controls and cleaner ins
 - Moved bulky header action buttons such as Undo, Redo, Shortcuts, Options, About, Export, and TNT into those menus while preserving the existing button IDs and event handlers.
 - Moved built-in classroom templates into Insert menu submenus and hid the old Templates sidebar section.
 - Kept Google-backed template actions available from Insert as "Save Current Frame as Template" and "Load Saved Template Gallery".
+- Recreated `apps-script/Code.gs` for Google Drive/Sheets saves, templates, turn-ins, password-protected collaboration rooms, and student-safe room merging.
+- Added a classroom sharing flow with room passwords, copied student links, and URL-based student role lock so students cannot edit the Google Web App Script setting or teacher backgrounds.
 - Added per-tool color accents in Simple view while keeping Advanced view more restrained.
 - Added Simple-view buttons for Mermaid Diagram and Word Cloud.
 - Added sticky-note color swatches in Simple view directly beneath the Sticky Note tool and in Advanced view beneath the Sticky color selector.

@@ -10,7 +10,11 @@
    - Service worker registered for offline shell.
 */
 (function(){
+/* Google Apps Script Web App URL.
+   Replace the placeholder below after deploying apps-script/Code.gs. */
+const DEFAULT_GOOGLE_SCRIPT_URL='PUT GOOGLE APPS SCRIPT WEB APP URL HERE';
 const VERSION='2.13';
+const SCRIPT_URL_STORAGE_KEY='drawsplat.googleScriptUrl';
 const svg=document.getElementById('boardSvg'), NS='http://www.w3.org/2000/svg', XHTML='http://www.w3.org/1999/xhtml';
 const TEXTABLE_TYPES=['text','sticky','comment','audio','rect','ellipse','diamond','triangle','callout','speech'], SHAPE_TEXT_TYPES=['rect','ellipse','diamond','triangle','callout','speech'];
 const ADVANCED_TOOLS=['connector','diamond','triangle','callout','speech','comment','audio'];
@@ -18,7 +22,7 @@ const STICKERS=[{id:'star',label:'Star',icon:'⭐',bg:'#fde68a'},{id:'check',lab
 
 let board={version:VERSION,title:'',className:'',studentName:'',mode:'teacher',assignmentMode:false,currentLayer:'shared',restorePoints:[],showAnswerKey:true,active:0,panels:[{id:id(),name:'Panel 1',bg:'grid',objects:[]}]};
 let tool='select', selectedIds=[], drawing=null, drag=null, zoom=1, fillEnabled=true, connectorPendingFrom=null, marquee=null, clipboard=null;
-let history=[], future=[], lastSnapshot=''; let localChannel=null, cloudTimer=null, collabRoom='', instanceId=id(), lastCloudTs=''; let liveCursors={}, mediaRecorder=null, recordChunks=[]; let inlineEditId=null, inlineEditOriginal=null;
+let history=[], future=[], lastSnapshot=''; let localChannel=null, cloudTimer=null, collabRoom='', instanceId=id(), lastCloudTs='', roleLock=''; let liveCursors={}, mediaRecorder=null, recordChunks=[]; let inlineEditId=null, inlineEditOriginal=null;
 
 /* v2.5: O(1) object lookup. Rebuilt every render. */
 let objectIndex=new Map();
@@ -178,7 +182,7 @@ function ensureTopMenus(){
       btn.textContent=label;
       btn.dataset.menuTarget=target;
       const src=gid(target);
-      if(src?.classList.contains('teacher-only')) btn.classList.add('teacher-only');
+      if(src?.classList.contains('teacher-only')||src?.closest('.teacher-only')) btn.classList.add('teacher-only');
       btn.addEventListener('click',()=>{nav.querySelectorAll('details[open]').forEach(d=>d.open=false); gid(target)?.click()});
       list.appendChild(btn);
     });
@@ -205,6 +209,59 @@ function hideSidebarTemplateSection(){
   const summary=[...document.querySelectorAll('.sidebar .section-collapsible>summary')].find(el=>el.textContent.trim()==='Templates');
   summary?.parentElement?.classList.add('templates-section-hidden');
 }
+function googleScriptUrl(){return (ui.scriptUrl?.value||DEFAULT_GOOGLE_SCRIPT_URL||'').trim()}
+function cloudPassword(){return (gid('cloudPassword')?.value||'').trim()}
+function enforceRoleLock(){
+  if(roleLock!=='student') return;
+  board.mode='student';
+  board.assignmentMode=true;
+  board.currentLayer='student';
+  board.showAnswerKey=false;
+}
+function ensureCloudClassroomControls(){
+  const room=gid('collabRoom');
+  if(!room||gid('cloudPassword')) return;
+  const roomRow=room.closest('.row');
+  const passRow=document.createElement('div');
+  passRow.className='row';
+  passRow.innerHTML='<label>Password</label><input id="cloudPassword" type="password" autocomplete="current-password" placeholder="Optional room password">';
+  roomRow?.insertAdjacentElement('afterend',passRow);
+  const actions=document.createElement('div');
+  actions.className='grid teacher-only';
+  actions.innerHTML='<button id="createStudentLinkBtn" type="button">Copy Student Link</button>';
+  passRow.insertAdjacentElement('afterend',actions);
+  ui.cloudPassword=gid('cloudPassword');
+  gid('createStudentLinkBtn')?.addEventListener('click',copyStudentShareLink);
+}
+function applyLaunchParams(){
+  const params=new URLSearchParams(location.search);
+  roleLock=params.get('role')==='student'?'student':'';
+  const scriptParam=params.get('script')||'';
+  const savedScript=(()=>{try{return localStorage.getItem(SCRIPT_URL_STORAGE_KEY)||''}catch(_){return ''}})();
+  if(ui.scriptUrl){
+    ui.scriptUrl.value=scriptParam||savedScript||DEFAULT_GOOGLE_SCRIPT_URL||ui.scriptUrl.value||'';
+    ui.scriptUrl.addEventListener('change',()=>{try{if(roleLock!=='student') localStorage.setItem(SCRIPT_URL_STORAGE_KEY,googleScriptUrl())}catch(_){}});
+  }
+  if(ui.collabRoom&&params.get('room')) ui.collabRoom.value=params.get('room');
+  if(ui.cloudPassword&&params.get('password')) ui.cloudPassword.value=params.get('password');
+  if(params.get('student')){board.studentName=params.get('student'); if(ui.studentName) ui.studentName.value=board.studentName}
+  enforceRoleLock();
+}
+function copyStudentShareLink(){
+  const room=(ui.collabRoom?.value||'').trim();
+  if(!room) return setStatus('Enter a room name before creating a student link.','danger');
+  const url=new URL(location.href);
+  url.search='';
+  url.hash='';
+  url.searchParams.set('role','student');
+  url.searchParams.set('room',room);
+  if(!DEFAULT_GOOGLE_SCRIPT_URL&&googleScriptUrl()) url.searchParams.set('script',googleScriptUrl());
+  const link=url.toString();
+  const done=()=>setStatus('Student link copied. Students will enter the room password when they join.','success');
+  if(navigator.clipboard?.writeText) navigator.clipboard.writeText(link).then(done).catch(()=>prompt('Student link:',link));
+  else prompt('Student link:',link);
+}
+function shouldAutoCloudJoin(){return !!(new URLSearchParams(location.search).get('room')&&googleScriptUrl()&&roleLock==='student')}
 
 function setTool(next){tool=next; document.body.dataset.tool=next; document.querySelectorAll('#toolButtons button').forEach(b=>b.classList.toggle('active',b.dataset.tool===tool)); if(tool!=='connector') connectorPendingFrom=null; applyToolContext(); syncSimpleColor(); if(next==='eraser') setStatus('Eraser: click any object to delete it. Drag over pen strokes to wipe them.'); else if(next==='laser') setStatus('Laser pointer: drag to draw a temporary trail.')}
 function applyToolContext(){const o=(selectedIds.length===1)?currentObj():null; const objType=o?o.type:null; document.querySelectorAll('.ctx-group').forEach(el=>{const ctx=el.dataset.context; const active=(tool===ctx)||(objType===ctx); el.open=active; el.classList.toggle('context-active',active)})}
@@ -220,7 +277,7 @@ function canEditObject(o){return !!o && !o.locked && !(board.assignmentMode && b
 function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]||c))}
 window.esc=esc;
 
-function makeObj(type,x,y,w=120,h=80,extra={}){return{id:id(),type,x,y,w,h,locked:false,layer:activeInsertLayer(),...style(),...(TEXTABLE_TYPES.includes(type)?defaultTextProps(type):{}),...extra}}
+function makeObj(type,x,y,w=120,h=80,extra={}){const layer=activeInsertLayer();return{id:id(),type,x,y,w,h,locked:false,layer,...(board.assignmentMode&&board.mode==='student'?{studentOwner:instanceId}:{}),...style(),...(TEXTABLE_TYPES.includes(type)?defaultTextProps(type):{}),...extra}}
 function findObj(idv){return objectIndex.get(idv)||panel().objects.find(o=>o.id===idv)}
 function currentObj(){return findObj(selectedIds[0])}
 function isSelected(idv){return selectedIds.includes(idv)}
@@ -454,15 +511,15 @@ ui.userMode.onchange=()=>{board.mode=ui.userMode.value; if(board.mode==='student
 ui.assignmentModeToggle.onchange=()=>{board.assignmentMode=ui.assignmentModeToggle.checked; if(board.assignmentMode && board.currentLayer==='shared') board.currentLayer='teacher'; if(!board.assignmentMode) board.currentLayer='shared'; render(); saveState()};
 ui.activeLayerSelect.onchange=()=>{board.currentLayer=ui.activeLayerSelect.value; render(); saveState(false)};
 ui.showAnswerKeyToggle.onchange=()=>{board.showAnswerKey=ui.showAnswerKeyToggle.checked; render(); saveState(false)};
-function applyModeUI(){document.querySelectorAll('.teacher-only').forEach(el=>el.classList.toggle('hidden-by-mode',board.mode==='student')); ui.assignmentModeToggle.disabled=board.mode==='student'; ui.activeLayerSelect.disabled=board.mode==='student' || !board.assignmentMode; ui.showAnswerKeyToggle.disabled=(board.mode==='student'); if(board.mode==='student'&&board.assignmentMode) ui.layerBadge.textContent='Layer: Student'}
+function applyModeUI(){enforceRoleLock(); document.querySelectorAll('.teacher-only').forEach(el=>el.classList.toggle('hidden-by-mode',board.mode==='student')); ['bgSelectSimple','clearFrameBtn','frameNavAdd'].forEach(idv=>gid(idv)?.classList.toggle('hidden-by-mode',board.mode==='student')); if(ui.userMode) ui.userMode.disabled=roleLock==='student'; ui.assignmentModeToggle.disabled=board.mode==='student'; ui.activeLayerSelect.disabled=board.mode==='student' || !board.assignmentMode; ui.showAnswerKeyToggle.disabled=(board.mode==='student'); if(board.mode==='student'&&board.assignmentMode) ui.layerBadge.textContent='Layer: Student'}
 
-function addPanel(){ensureActivePanel(); resetInteractionState(); const newPanel={id:'panel_'+id(),name:'Panel '+(board.panels.length+1),bg:'grid',objects:[]}; board.panels.push(newPanel); board.active=board.panels.length-1; render(); saveState(); setStatus('Added '+newPanel.name+'.','success')}
+function addPanel(){if(board.mode==='student'){setStatus('Students cannot add panels to this shared board.','danger'); return false} ensureActivePanel(); resetInteractionState(); const newPanel={id:'panel_'+id(),name:'Panel '+(board.panels.length+1),bg:'grid',objects:[]}; board.panels.push(newPanel); board.active=board.panels.length-1; render(); saveState(); setStatus('Added '+newPanel.name+'.','success'); return true}
 gid('addPanelBtn').onclick=addPanel;
 gid('frameNavPrev')?.addEventListener('click',()=>{if(board.active>0) switchPanel(board.panels[board.active-1].id)});
 gid('frameNavNext')?.addEventListener('click',()=>{if(board.active<board.panels.length-1) switchPanel(board.panels[board.active+1].id)});
 gid('frameNavAdd')?.addEventListener('click',addPanel);
-gid('clearFrameBtn')?.addEventListener('click',()=>{askConfirm('Clear this frame?',{okLabel:'Clear'}).then(ok=>{if(ok){panel().objects=[]; clearSelection(); render(); saveState(); setStatus('Frame cleared.','success')}})});
-gid('bgSelectSimple')?.addEventListener('change',e=>{panel().bg=e.target.value; render(); saveState()});
+gid('clearFrameBtn')?.addEventListener('click',()=>{if(board.mode==='student') return setStatus('Students cannot clear shared panels.','danger'); askConfirm('Clear this frame?',{okLabel:'Clear'}).then(ok=>{if(ok){panel().objects=[]; clearSelection(); render(); saveState(); setStatus('Frame cleared.','success')}})});
+gid('bgSelectSimple')?.addEventListener('change',e=>{if(board.mode==='student'){e.target.value=panel().bg||'grid'; return setStatus('Students cannot change the panel background.','danger')} panel().bg=e.target.value; render(); saveState()});
 gid('moreOptionsBtn')?.addEventListener('click',()=>gid('moreOptionsDialog').showModal());
 gid('closeMoreOptions')?.addEventListener('click',()=>gid('moreOptionsDialog').close());
 ['saveLocalBtn','loadLocalBtn','exportBtn','exportPdfBtn','saveDriveBtn','loadDriveBtn','deletePanelBtn','tntBtn'].forEach(target=>{const m=gid('more_'+target); if(m) m.onclick=()=>{gid('moreOptionsDialog').close(); gid(target)?.click()}});
@@ -1059,10 +1116,10 @@ function stopSync(which='both'){if((which==='both'||which==='local')&&localChann
 function broadcastLocal(){if(localChannel) localChannel.postMessage({type:'board',instanceId,room:collabRoom,board})}
 function broadcastCursor(x,y){if(localChannel) localChannel.postMessage({type:'cursor',instanceId,room:collabRoom,cursor:{x,y,panel:board.active,name:presenceName(),color:cursorColorFor(instanceId)}})}
 
-async function startCloudSync(){stopSync('cloud'); collabRoom=ui.collabRoom.value.trim(); const url=ui.scriptUrl.value.trim(); if(!collabRoom)return setSyncStatus('Enter a room name first.','danger'); if(!url)return setSyncStatus('Add your Google Apps Script URL for cloud sync.','danger'); await pullCloudRoom(true); cloudTimer=setInterval(()=>pullCloudRoom(false),4000); setSyncStatus('Cloud sync active for room: '+collabRoom,'success'); pushCloudRoom()}
+async function startCloudSync(){stopSync('cloud'); enforceRoleLock(); collabRoom=ui.collabRoom.value.trim(); const url=googleScriptUrl(); if(!collabRoom)return setSyncStatus('Enter a room name first.','danger'); if(!url)return setSyncStatus('Add your Google Apps Script URL for cloud sync.','danger'); if(roleLock==='student'&&!cloudPassword()) return setSyncStatus('Enter the room password first.','danger'); await pullCloudRoom(true); cloudTimer=setInterval(()=>pullCloudRoom(false),4000); setSyncStatus('Cloud sync active for room: '+collabRoom,'success'); if(roleLock!=='student') pushCloudRoom()}
 let cloudPushPending=false;
-async function pushCloudRoom(){if(!cloudTimer&& !ui.syncStatus.textContent.includes('Cloud sync active')) return; const url=ui.scriptUrl.value.trim(); if(!url||!collabRoom||cloudPushPending) return; cloudPushPending=true; try{const res=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'roomSave',room:collabRoom,instanceId,board})}); const out=await res.json(); if(out.ok && out.updatedAt) lastCloudTs=out.updatedAt}catch(err){} finally{cloudPushPending=false}}
-async function pullCloudRoom(force){const url=ui.scriptUrl.value.trim(); if(!url||!collabRoom) return; try{const ref='?action=roomLoad&room='+encodeURIComponent(collabRoom)+(force?'':'&since='+encodeURIComponent(lastCloudTs||'')); const res=await fetch(url+ref); const out=await res.json(); if(out.ok && out.board && out.updatedAt && out.updatedAt!==lastCloudTs && out.instanceId!==instanceId){board=out.board; migrateBoard(board); clearSelection(); connectorPendingFrom=null; persistLocal(); lastSnapshot=snapshot(); lastCloudTs=out.updatedAt; render(); setSyncStatus('Cloud sync active for room: '+collabRoom,'success')} else if(out.ok && out.updatedAt){lastCloudTs=out.updatedAt}}catch(err){setSyncStatus('Cloud sync error: '+err.message,'danger')}}
+async function pushCloudRoom(){if(!cloudTimer&& !ui.syncStatus.textContent.includes('Cloud sync active')) return; enforceRoleLock(); const url=googleScriptUrl(); if(!url||!collabRoom||cloudPushPending) return; cloudPushPending=true; try{const res=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'roomSave',room:collabRoom,password:cloudPassword(),role:board.mode||'teacher',instanceId,board})}); const out=await res.json(); if(out.ok && out.updatedAt) lastCloudTs=out.updatedAt; else if(out.error) setSyncStatus(out.error,'danger')}catch(err){} finally{cloudPushPending=false}}
+async function pullCloudRoom(force){const url=googleScriptUrl(); if(!url||!collabRoom) return; try{const ref='?action=roomLoad&room='+encodeURIComponent(collabRoom)+'&password='+encodeURIComponent(cloudPassword())+(force?'':'&since='+encodeURIComponent(lastCloudTs||'')); const res=await fetch(url+ref); const out=await res.json(); if(out.ok && out.board && out.updatedAt && out.updatedAt!==lastCloudTs && out.instanceId!==instanceId){board=out.board; migrateBoard(board); enforceRoleLock(); clearSelection(); connectorPendingFrom=null; persistLocal(); lastSnapshot=snapshot(); lastCloudTs=out.updatedAt; render(); setSyncStatus('Cloud sync active for room: '+collabRoom,'success')} else if(out.ok && out.updatedAt){lastCloudTs=out.updatedAt} else if(out.error){setSyncStatus(out.error,'danger')}}catch(err){setSyncStatus('Cloud sync error: '+err.message,'danger')}}
 gid('startSyncBtn').onclick=startLocalSync;
 gid('startCloudSyncBtn').onclick=startCloudSync;
 gid('stopSyncBtn').onclick=()=>stopSync('both');
@@ -1077,21 +1134,21 @@ function templateObjects(name){const objs=[]; const add=(o)=>objs.push(o);
   if(name==='brainstorm'){add(makeObj('ellipse',230,140,180,100,{fill:'#FFF7E6',html:'Main Idea',text:'Main Idea',hAlign:'center',vAlign:'middle'})); [[80,40],[420,40],[40,230],[460,230],[220,280]].forEach((p,i)=>{add(makeObj('sticky',p[0],p[1],120,90,{fill:['#fff59d','#bae6fd','#bbf7d0','#fecdd3','#fed7aa'][i%5],html:'Idea',text:'Idea'})); add(makeObj('connector',0,0,0,0,{fromId:objs[0]?.id||'',toId:objs[objs.length-1].id,fill:'none'}))})}
   if(name==='timeline'){add(makeObj('line',80,220,500,0,{fill:'none',strokeWidth:5})); for(let i=0;i<5;i++){const x=100+i*110; add(makeObj('ellipse',x,200,20,20,{fill:'#1E398D'})); add(makeObj('text',x-30,150,80,40,{fill:'none',stroke:'none',html:'Event '+(i+1),text:'Event '+(i+1),fontSize:18,hAlign:'center'}))}}
   return objs}
-function insertTemplate(newPanel){const name=ui.templateSelect.value; if(newPanel) addPanel(); const objects=templateObjects(name); const groupId='grp_tpl_'+id(); objects.forEach(o=>{o.groupId=groupId; if(board.assignmentMode&&board.mode==='teacher'&&board.currentLayer==='shared') o.layer='teacher'}); panel().objects.push(...objects); selectedIds=objects.filter(o=>o.type!=='connector').map(o=>o.id); render(); saveState(); setStatus('Template inserted and grouped: '+name,'success')}
+function insertTemplate(newPanel){const name=ui.templateSelect.value; if(newPanel&&!addPanel()) return; const objects=templateObjects(name); const groupId='grp_tpl_'+id(); objects.forEach(o=>{o.groupId=groupId; if(board.assignmentMode&&board.mode==='teacher'&&board.currentLayer==='shared') o.layer='teacher'}); panel().objects.push(...objects); selectedIds=objects.filter(o=>o.type!=='connector').map(o=>o.id); render(); saveState(); setStatus('Template inserted and grouped: '+name,'success')}
 gid('insertTemplateBtn').onclick=()=>insertTemplate(false);
 gid('newTemplatePanelBtn').onclick=()=>insertTemplate(true);
 
-async function saveToGoogle(){const url=ui.scriptUrl.value.trim(); if(!url)return setStatus('Add your Google Apps Script Web App URL first.','danger'); setStatus('Saving board to Google Drive and Sheets...'); try{const png=await exportPng(); const res=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'save',board,png})}); const out=await res.json(); if(out.ok)setStatus('Saved: '+(out.folderUrl||out.fileUrl),'success'); else setStatus(out.error||'Save failed.','danger')}catch(err){setStatus('Google save failed. '+err.message,'danger')}}
-async function saveCurrentAsTemplate(){const url=ui.scriptUrl.value.trim(); if(!url)return setStatus('Add your Google Apps Script URL first.','danger'); const name=prompt('Template name:', board.title+' Template'); if(!name)return; const payload={name,bg:panel().bg,objects:JSON.parse(JSON.stringify(panel().objects))}; try{const res=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'templateSave',template:payload})}); const out=await res.json(); if(out.ok) setStatus('Template saved to Google Drive.','success'); else setStatus(out.error||'Template save failed.','danger')}catch(err){setStatus('Template save failed. '+err.message,'danger')}}
-async function loadTemplateGallery(){const url=ui.scriptUrl.value.trim(); if(!url)return setStatus('Add your Google Apps Script URL first.','danger'); try{const res=await fetch(url+'?action=templateList'); const out=await res.json(); if(!out.ok||!out.templates||!out.templates.length) return setStatus('No templates found in Google Drive.','danger'); const menu=out.templates.map((t,i)=>`${i+1}. ${t.name}`).join('\n'); const choice=prompt('Choose a template number:\n'+menu); const idx=Math.max(1,parseInt(choice||'0',10))-1; if(!out.templates[idx]) return; const load=await fetch(url+'?action=templateLoad&templateId='+encodeURIComponent(out.templates[idx].templateId)); const loaded=await load.json(); if(loaded.ok&&loaded.template){const tpl=loaded.template; panel().bg=tpl.bg||panel().bg; panel().objects=(tpl.objects||[]).map(o=>migrateObject(o)); clearSelection(); render(); saveState(); setStatus('Template loaded: '+tpl.name,'success')} else setStatus(loaded.error||'Template load failed.','danger')}catch(err){setStatus('Template gallery failed. '+err.message,'danger')}}
-async function submitTurnIn(){const url=ui.scriptUrl.value.trim(); if(!url)return setStatus('Add your Google Apps Script URL first.','danger'); const student=board.studentName||prompt('Student name:',board.studentName||''); if(!student)return setStatus('Enter a student name first.','danger'); board.studentName=student; ui.studentName.value=student; try{const png=await exportPng(); const res=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'turnInSave',turnin:{studentName:student,className:board.className,title:board.title,board},png})}); const out=await res.json(); if(out.ok) setStatus('Turn-in submitted.','success'); else setStatus(out.error||'Turn-in failed.','danger')}catch(err){setStatus('Turn-in failed. '+err.message,'danger')}}
-async function reviewTurnIns(){const url=ui.scriptUrl.value.trim(); if(!url)return setStatus('Add your Google Apps Script URL first.','danger'); try{const res=await fetch(url+'?action=turnInList'); const out=await res.json(); if(!out.ok||!out.turnins||!out.turnins.length) return setStatus('No turn-ins found.','danger'); const menu=out.turnins.map((t,i)=>`${i+1}. ${t.studentName} — ${t.title} (${t.className||'No class'})`).join('\n'); const choice=prompt('Choose a turn-in number to load:\n'+menu); const idx=Math.max(1,parseInt(choice||'0',10))-1; if(!out.turnins[idx]) return; const load=await fetch(url+'?action=turnInLoad&turninId='+encodeURIComponent(out.turnins[idx].turninId)); const loaded=await load.json(); if(loaded.ok&&loaded.turnin&&loaded.turnin.board){board=loaded.turnin.board; migrateBoard(board); clearSelection(); initHistory(); render(); persistLocal(); setStatus('Loaded turn-in from '+(loaded.turnin.studentName||'student')+'.','success')} else setStatus(loaded.error||'Turn-in load failed.','danger')}catch(err){setStatus('Turn-in review failed. '+err.message,'danger')}}
+async function saveToGoogle(){const url=googleScriptUrl(); if(!url)return setStatus('Add your Google Apps Script Web App URL first.','danger'); setStatus('Saving board to Google Drive and Sheets...'); try{const png=await exportPng(); const res=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'save',board,png})}); const out=await res.json(); if(out.ok)setStatus('Saved: '+(out.folderUrl||out.fileUrl),'success'); else setStatus(out.error||'Save failed.','danger')}catch(err){setStatus('Google save failed. '+err.message,'danger')}}
+async function saveCurrentAsTemplate(){const url=googleScriptUrl(); if(!url)return setStatus('Add your Google Apps Script URL first.','danger'); const name=prompt('Template name:', board.title+' Template'); if(!name)return; const payload={name,bg:panel().bg,objects:JSON.parse(JSON.stringify(panel().objects))}; try{const res=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'templateSave',template:payload})}); const out=await res.json(); if(out.ok) setStatus('Template saved to Google Drive.','success'); else setStatus(out.error||'Template save failed.','danger')}catch(err){setStatus('Template save failed. '+err.message,'danger')}}
+async function loadTemplateGallery(){const url=googleScriptUrl(); if(!url)return setStatus('Add your Google Apps Script URL first.','danger'); try{const res=await fetch(url+'?action=templateList'); const out=await res.json(); if(!out.ok||!out.templates||!out.templates.length) return setStatus('No templates found in Google Drive.','danger'); const menu=out.templates.map((t,i)=>`${i+1}. ${t.name}`).join('\n'); const choice=prompt('Choose a template number:\n'+menu); const idx=Math.max(1,parseInt(choice||'0',10))-1; if(!out.templates[idx]) return; const load=await fetch(url+'?action=templateLoad&templateId='+encodeURIComponent(out.templates[idx].templateId)); const loaded=await load.json(); if(loaded.ok&&loaded.template){const tpl=loaded.template; panel().bg=tpl.bg||panel().bg; panel().objects=(tpl.objects||[]).map(o=>migrateObject(o)); clearSelection(); render(); saveState(); setStatus('Template loaded: '+tpl.name,'success')} else setStatus(loaded.error||'Template load failed.','danger')}catch(err){setStatus('Template gallery failed. '+err.message,'danger')}}
+async function submitTurnIn(){const url=googleScriptUrl(); if(!url)return setStatus('Add your Google Apps Script URL first.','danger'); const student=board.studentName||prompt('Student name:',board.studentName||''); if(!student)return setStatus('Enter a student name first.','danger'); board.studentName=student; ui.studentName.value=student; try{const png=await exportPng(); const res=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'turnInSave',turnin:{studentName:student,className:board.className,title:board.title,board},png})}); const out=await res.json(); if(out.ok) setStatus('Turn-in submitted.','success'); else setStatus(out.error||'Turn-in failed.','danger')}catch(err){setStatus('Turn-in failed. '+err.message,'danger')}}
+async function reviewTurnIns(){const url=googleScriptUrl(); if(!url)return setStatus('Add your Google Apps Script URL first.','danger'); try{const res=await fetch(url+'?action=turnInList'); const out=await res.json(); if(!out.ok||!out.turnins||!out.turnins.length) return setStatus('No turn-ins found.','danger'); const menu=out.turnins.map((t,i)=>`${i+1}. ${t.studentName} — ${t.title} (${t.className||'No class'})`).join('\n'); const choice=prompt('Choose a turn-in number to load:\n'+menu); const idx=Math.max(1,parseInt(choice||'0',10))-1; if(!out.turnins[idx]) return; const load=await fetch(url+'?action=turnInLoad&turninId='+encodeURIComponent(out.turnins[idx].turninId)); const loaded=await load.json(); if(loaded.ok&&loaded.turnin&&loaded.turnin.board){board=loaded.turnin.board; migrateBoard(board); clearSelection(); initHistory(); render(); persistLocal(); setStatus('Loaded turn-in from '+(loaded.turnin.studentName||'student')+'.','success')} else setStatus(loaded.error||'Turn-in load failed.','danger')}catch(err){setStatus('Turn-in review failed. '+err.message,'danger')}}
 gid('saveDriveBtn').onclick=saveToGoogle;
 gid('saveTemplateBtn').onclick=saveCurrentAsTemplate;
 gid('loadTemplateGalleryBtn').onclick=loadTemplateGallery;
 gid('submitTurnInBtn').onclick=submitTurnIn;
 gid('reviewTurnInsBtn').onclick=reviewTurnIns;
-gid('loadDriveBtn').onclick=async()=>{const url=ui.scriptUrl.value.trim(),boardId=prompt('Paste DrawSplat boardId from the Sheet:'); if(!url||!boardId)return; try{const res=await fetch(url+'?action=load&boardId='+encodeURIComponent(boardId)); const out=await res.json(); if(out.ok){board=out.board; migrateBoard(board); clearSelection(); initHistory(); render(); persistLocal(); setStatus('Loaded board from Google.','success')} else setStatus(out.error||'Load failed.','danger')}catch(err){setStatus('Google load failed. '+err.message,'danger')}};
+gid('loadDriveBtn').onclick=async()=>{const url=googleScriptUrl(),boardId=prompt('Paste DrawSplat boardId from the Sheet:'); if(!url||!boardId)return; try{const res=await fetch(url+'?action=load&boardId='+encodeURIComponent(boardId)); const out=await res.json(); if(out.ok){board=out.board; migrateBoard(board); clearSelection(); initHistory(); render(); persistLocal(); setStatus('Loaded board from Google.','success')} else setStatus(out.error||'Load failed.','danger')}catch(err){setStatus('Google load failed. '+err.message,'danger')}};
 gid('settingsBtn').onclick=()=>gid('setupDialog').showModal();
 gid('resetBoardBtn')?.addEventListener('click',()=>{
   askConfirm('Wipe every panel and start with a blank board? This can\'t be undone.',{okLabel:'Reset',cancelLabel:'Keep'}).then(ok=>{
@@ -1119,8 +1176,8 @@ gid('inspectorToggleBtn').onclick=()=>setInspectorOpen(!_isInspectorOpen());
 gid('inspectorCloseBtn').onclick=()=>setInspectorOpen(false);
 gid('inspectorBackdrop').onclick=()=>setInspectorOpen(false);
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&_isInspectorMobile()&&document.querySelector('.inspector')?.classList.contains('show')) setInspectorOpen(false)});
-async function loadTurnInById(turninId){const url=ui.scriptUrl.value.trim(); if(!url||!turninId) return; const load=await fetch(url+'?action=turnInLoad&turninId='+encodeURIComponent(turninId)); const loaded=await load.json(); if(loaded.ok&&loaded.turnin&&loaded.turnin.board){board=loaded.turnin.board; migrateBoard(board); clearSelection(); initHistory(); render(); persistLocal(); gid('moderationDialog').close(); setStatus('Loaded turn-in from '+(loaded.turnin.studentName||'student')+'.','success')}}
-async function openModerationDashboard(){const comments=[]; board.panels.forEach((p,pi)=>p.objects.filter(o=>o.type==='comment').forEach(o=>comments.push({panelIndex:pi,panelName:p.name,obj:o}))); const unresolved=comments.filter(c=>!c.obj.resolved).length, resolved=comments.length-unresolved; gid('moderationSummary').innerHTML=`<span class="pill warn">${esc(unresolved)} unresolved</span> <span class="pill ok">${esc(resolved)} resolved</span> <span class="pill">${esc(comments.length)} total comments</span>`; gid('moderationComments').innerHTML=comments.length?comments.map((c,i)=>`<div class="list-item"><h4>${esc(c.panelName)} — ${c.obj.resolved?'Resolved':'Open'}</h4><p>${esc(c.obj.text||htmlToPlainText(c.obj.html)||'No text')}</p><button data-jump-comment="${i}">Jump to Comment</button></div>`).join(''):'<div class="list-item">No comments on this board.</div>'; gid('moderationComments').querySelectorAll('[data-jump-comment]').forEach(btn=>btn.onclick=()=>{const c=comments[+btn.dataset.jumpComment]; board.active=c.panelIndex; setSingleSelection(c.obj.id); gid('moderationDialog').close(); render()}); let turnins=[]; const url=ui.scriptUrl.value.trim(); if(url){ try{const res=await fetch(url+'?action=turnInList'); const out=await res.json(); if(out.ok&&out.turnins) turnins=out.turnins}catch(err){} } gid('moderationTurnins').innerHTML=turnins.length?turnins.map(t=>`<div class="list-item"><h4>${esc(t.studentName||'Student')} — ${esc(t.title||'Untitled')}</h4><p>${esc(t.className||'No class')} · ${esc(t.updatedAt||'')}</p><button data-load-turnin="${esc(t.turninId)}">Load Turn-In</button></div>`).join(''):'<div class="list-item">No Google turn-ins found yet.</div>'; gid('moderationTurnins').querySelectorAll('[data-load-turnin]').forEach(btn=>btn.onclick=()=>loadTurnInById(btn.dataset.loadTurnin)); gid('moderationDialog').showModal()}
+async function loadTurnInById(turninId){const url=googleScriptUrl(); if(!url||!turninId) return; const load=await fetch(url+'?action=turnInLoad&turninId='+encodeURIComponent(turninId)); const loaded=await load.json(); if(loaded.ok&&loaded.turnin&&loaded.turnin.board){board=loaded.turnin.board; migrateBoard(board); clearSelection(); initHistory(); render(); persistLocal(); gid('moderationDialog').close(); setStatus('Loaded turn-in from '+(loaded.turnin.studentName||'student')+'.','success')}}
+async function openModerationDashboard(){const comments=[]; board.panels.forEach((p,pi)=>p.objects.filter(o=>o.type==='comment').forEach(o=>comments.push({panelIndex:pi,panelName:p.name,obj:o}))); const unresolved=comments.filter(c=>!c.obj.resolved).length, resolved=comments.length-unresolved; gid('moderationSummary').innerHTML=`<span class="pill warn">${esc(unresolved)} unresolved</span> <span class="pill ok">${esc(resolved)} resolved</span> <span class="pill">${esc(comments.length)} total comments</span>`; gid('moderationComments').innerHTML=comments.length?comments.map((c,i)=>`<div class="list-item"><h4>${esc(c.panelName)} — ${c.obj.resolved?'Resolved':'Open'}</h4><p>${esc(c.obj.text||htmlToPlainText(c.obj.html)||'No text')}</p><button data-jump-comment="${i}">Jump to Comment</button></div>`).join(''):'<div class="list-item">No comments on this board.</div>'; gid('moderationComments').querySelectorAll('[data-jump-comment]').forEach(btn=>btn.onclick=()=>{const c=comments[+btn.dataset.jumpComment]; board.active=c.panelIndex; setSingleSelection(c.obj.id); gid('moderationDialog').close(); render()}); let turnins=[]; const url=googleScriptUrl(); if(url){ try{const res=await fetch(url+'?action=turnInList'); const out=await res.json(); if(out.ok&&out.turnins) turnins=out.turnins}catch(err){} } gid('moderationTurnins').innerHTML=turnins.length?turnins.map(t=>`<div class="list-item"><h4>${esc(t.studentName||'Student')} — ${esc(t.title||'Untitled')}</h4><p>${esc(t.className||'No class')} · ${esc(t.updatedAt||'')}</p><button data-load-turnin="${esc(t.turninId)}">Load Turn-In</button></div>`).join(''):'<div class="list-item">No Google turn-ins found yet.</div>'; gid('moderationTurnins').querySelectorAll('[data-load-turnin]').forEach(btn=>btn.onclick=()=>loadTurnInById(btn.dataset.loadTurnin)); gid('moderationDialog').showModal()}
 function playCanvasDetonation(){
   const shell=document.querySelector('.canvas-shell');
   if(!shell) return;
@@ -1181,6 +1238,8 @@ function registerServiceWorker(){
 
 (async function init(){
   await loadAutosnapshot();
+  ensureCloudClassroomControls();
+  applyLaunchParams();
   ensureSimpleExtras();
   ensureAdvancedStickyPalette();
   ensureTopMenus();
@@ -1194,6 +1253,7 @@ function registerServiceWorker(){
   try{if(!localStorage.getItem('drawsplat.welcomed')){setTimeout(()=>{const w=gid('welcomeDialog'); if(w&&typeof w.showModal==='function') w.showModal()},700)}}catch(_){}
   render();
   registerServiceWorker();
+  if(shouldAutoCloudJoin()) setTimeout(()=>startCloudSync(),500);
   /* v2.5: replay-friendly version stamp the user can read in DevTools. */
   const verEl=document.getElementById('appVersion'); if(verEl) verEl.textContent='v'+VERSION;
   document.title=(document.title||'DrawSplat').replace(/^DrawSplat(\s+v[\d.]+)?/, 'DrawSplat v'+VERSION);
