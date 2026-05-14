@@ -139,7 +139,7 @@ function ensureTopMenus(){
     ['Edit',[['Undo','undoBtn'],['Redo','redoBtn'],['Duplicate','duplicateBtn'],['Delete Selected','deleteBtn'],['Group','groupBtn'],['Ungroup','ungroupBtn'],['Bring Front','frontBtn'],['Send Back','backBtn']]],
     ['Insert',[['Load Image','imageBtn'],['Mermaid Diagram','insertMermaidBtn'],['Word Cloud','insertWordCloudBtn'],['Sticker Library','openStickerLibraryBtn'],['Insert Sticker','insertStickerBtn'],['Custom Sticker','createCustomStickerBtn'],['Template: add to current frame','insertTemplateBtn','templateSubmenu'],['Template: new frame','newTemplatePanelBtn','templateSubmenu'],['Save Current Frame as Template','saveTemplateBtn'],['Load Saved Template Gallery','loadTemplateGalleryBtn']]],
     ['Tools',[['Set Background','loadBgImageBtn'],['Clear Background','clearBgImageBtn'],['Remove BG Color','removeBgColorBtn'],['Save Restore Point','saveRestorePointBtn'],['Restore Point','restorePointBtn'],['Keyboard Shortcuts','shortcutsBtn'],['TNT Reset','tntBtn']]],
-    ['Options',[['Switch Simple/Advanced','viewToggleBtn'],['Inspector','inspectorToggleBtn'],['Mode','optionsBtn'],['About','aboutBtn']]]
+    ['Options',[['View','viewToggleBtn','viewSubmenu'],['Inspector','inspectorToggleBtn'],['Mode','optionsBtn'],['About','aboutBtn']]]
   ];
   const nav=document.createElement('nav');
   nav.id='topMenuBar';
@@ -155,6 +155,32 @@ function ensureTopMenus(){
     const list=document.createElement('div');
     list.className='top-menu-list';
     items.forEach(([label,target,submenu])=>{
+      if(submenu==='viewSubmenu'){
+        const row=document.createElement('div');
+        row.className='top-menu-submenu';
+        const btn=document.createElement('button');
+        btn.type='button';
+        btn.textContent=label;
+        btn.dataset.menuTarget=target;
+        const panel=document.createElement('div');
+        panel.className='top-submenu-list';
+        [['Simple View','simple'],['Advanced View','advanced']].forEach(([choiceLabel,mode])=>{
+          const choice=document.createElement('button');
+          choice.type='button';
+          choice.textContent=choiceLabel;
+          choice.addEventListener('click',()=>{
+            if(ui.interfaceMode) ui.interfaceMode.value=mode;
+            applyInterfaceMode(mode);
+            refreshViewToggle?.();
+            nav.querySelectorAll('details[open]').forEach(d=>d.open=false);
+          });
+          panel.appendChild(choice);
+        });
+        row.appendChild(btn);
+        row.appendChild(panel);
+        list.appendChild(row);
+        return;
+      }
       if(submenu==='templateSubmenu'){
         const row=document.createElement('div');
         row.className='top-menu-submenu';

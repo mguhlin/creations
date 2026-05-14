@@ -218,6 +218,7 @@ v2.13 is an interface polish release focused on clearer controls and cleaner ins
 - Replaced the older emoji/glyph toolbar icons with a centralized inline SVG icon system in `app.js`.
 - Added traditional File, Edit, Insert, Tools, and Options dropdown menus to the top bar.
 - Moved bulky header action buttons such as Undo, Redo, Shortcuts, Options, About, Export, and TNT into those menus while preserving the existing button IDs and event handlers.
+- Streamlined the Options menu with a View submenu for switching between Simple View and Advanced View.
 - Moved built-in classroom templates into Insert menu submenus and hid the old Templates sidebar section.
 - Kept Google-backed template actions available from Insert as "Save Current Frame as Template" and "Load Saved Template Gallery".
 - Recreated `apps-script/Code.gs` for Google Drive/Sheets saves, templates, turn-ins, password-protected collaboration rooms, and student-safe room merging.
