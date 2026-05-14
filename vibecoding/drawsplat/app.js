@@ -13,6 +13,7 @@
 /* Google Apps Script Web App URL.
    Replace the placeholder below after deploying apps-script/Code.gs. */
 const DEFAULT_GOOGLE_SCRIPT_URL='PUT GOOGLE APPS SCRIPT WEB APP URL HERE';
+const GOOGLE_SCRIPT_URL_PLACEHOLDER='PUT GOOGLE APPS SCRIPT WEB APP URL HERE';
 const VERSION='2.13';
 const SCRIPT_URL_STORAGE_KEY='drawsplat.googleScriptUrl';
 const svg=document.getElementById('boardSvg'), NS='http://www.w3.org/2000/svg', XHTML='http://www.w3.org/1999/xhtml';
@@ -209,7 +210,7 @@ function hideSidebarTemplateSection(){
   const summary=[...document.querySelectorAll('.sidebar .section-collapsible>summary')].find(el=>el.textContent.trim()==='Templates');
   summary?.parentElement?.classList.add('templates-section-hidden');
 }
-function googleScriptUrl(){return (ui.scriptUrl?.value||DEFAULT_GOOGLE_SCRIPT_URL||'').trim()}
+function googleScriptUrl(){const url=(ui.scriptUrl?.value||DEFAULT_GOOGLE_SCRIPT_URL||'').trim(); return url===GOOGLE_SCRIPT_URL_PLACEHOLDER?'':url}
 function cloudPassword(){return (gid('cloudPassword')?.value||'').trim()}
 function enforceRoleLock(){
   if(roleLock!=='student') return;
