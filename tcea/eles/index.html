@@ -38,7 +38,6 @@ body {
   min-height: 100vh;
 }
 
-/* Header */
 .hero {
   background: var(--navy-dark);
   background-image: radial-gradient(circle at 20% 30%, rgba(252,176,64,0.18) 0%, transparent 50%),
@@ -55,10 +54,7 @@ body {
   line-height: 1.15;
 }
 
-.hero h1 em {
-  color: var(--gold);
-  font-style: italic;
-}
+.hero h1 em { color: var(--gold); font-style: italic; }
 
 .hero p {
   font-size: 18px;
@@ -80,7 +76,12 @@ body {
   margin-bottom: 18px;
 }
 
-/* Layout */
+.hero-meta {
+  margin-top: 14px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+}
+
 .container {
   max-width: 980px;
   margin: -36px auto 80px;
@@ -131,7 +132,6 @@ h3 {
   font-size: 15px;
 }
 
-/* Radio cards */
 .radio-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -139,16 +139,8 @@ h3 {
   margin-top: 16px;
 }
 
-.radio-card {
-  position: relative;
-  cursor: pointer;
-}
-
-.radio-card input {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-}
+.radio-card { position: relative; cursor: pointer; }
+.radio-card input { position: absolute; opacity: 0; pointer-events: none; }
 
 .radio-card-inner {
   border: 1.5px solid var(--border);
@@ -159,10 +151,7 @@ h3 {
   height: 100%;
 }
 
-.radio-card:hover .radio-card-inner {
-  border-color: var(--navy-mid);
-  background: var(--off-white);
-}
+.radio-card:hover .radio-card-inner { border-color: var(--navy-mid); background: var(--off-white); }
 
 .radio-card input:checked + .radio-card-inner {
   border-color: var(--navy);
@@ -180,25 +169,10 @@ h3 {
   font-size: 18px;
 }
 
-.radio-card-title {
-  font-weight: 600;
-  color: var(--navy);
-  font-size: 15px;
-  margin-bottom: 2px;
-}
+.radio-card-title { font-weight: 600; color: var(--navy); font-size: 15px; margin-bottom: 2px; }
+.radio-card-desc { font-size: 13px; color: var(--text-muted); }
 
-.radio-card-desc {
-  font-size: 13px;
-  color: var(--text-muted);
-}
-
-/* Toggle (Yes/No) */
-.toggle-row {
-  display: flex;
-  gap: 10px;
-  margin-top: 16px;
-  flex-wrap: wrap;
-}
+.toggle-row { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
 
 .toggle-btn {
   flex: 1;
@@ -215,9 +189,7 @@ h3 {
   transition: all 0.15s;
 }
 
-.toggle-btn:hover {
-  border-color: var(--navy-mid);
-}
+.toggle-btn:hover { border-color: var(--navy-mid); }
 
 .toggle-btn.active {
   background: var(--navy);
@@ -225,7 +197,6 @@ h3 {
   color: var(--white);
 }
 
-/* Form fields */
 label.field-label {
   display: block;
   font-weight: 600;
@@ -253,14 +224,13 @@ select:focus, textarea:focus {
 }
 
 textarea {
-  min-height: 200px;
+  min-height: 220px;
   resize: vertical;
   font-family: 'DM Sans', sans-serif;
 }
 
 .field-group { margin-bottom: 18px; }
 
-/* Primary button */
 .btn-primary {
   background: var(--gold);
   color: var(--navy-dark);
@@ -283,10 +253,7 @@ textarea {
   box-shadow: 0 4px 14px rgba(252,176,64,0.4);
 }
 
-.btn-primary:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .btn-secondary {
   background: var(--white);
@@ -301,9 +268,7 @@ textarea {
   transition: all 0.15s;
 }
 
-.btn-secondary:hover {
-  background: var(--pale-navy);
-}
+.btn-secondary:hover { background: var(--pale-navy); }
 
 .btn-row {
   display: flex;
@@ -313,38 +278,6 @@ textarea {
   margin-top: 8px;
 }
 
-/* Loading */
-.loading {
-  display: none;
-  text-align: center;
-  padding: 40px 20px;
-}
-
-.loading.active { display: block; }
-
-.spinner {
-  width: 48px;
-  height: 48px;
-  border: 4px solid var(--border);
-  border-top-color: var(--gold);
-  border-radius: 50%;
-  animation: spin 0.9s linear infinite;
-  margin: 0 auto 16px;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-.loading-text {
-  color: var(--text-muted);
-  font-size: 15px;
-}
-
-/* Results */
-.results { display: none; }
-.results.active { display: block; }
-
 .summary-box {
   background: linear-gradient(135deg, var(--pale-navy) 0%, var(--off-white) 100%);
   border-left: 4px solid var(--gold);
@@ -353,9 +286,7 @@ textarea {
   margin-bottom: 24px;
 }
 
-.summary-box h3 {
-  margin-bottom: 8px;
-}
+.summary-box h3 { margin-bottom: 8px; }
 
 .alignment-block {
   border: 1.5px solid var(--border);
@@ -387,11 +318,7 @@ textarea {
   margin-right: 8px;
 }
 
-.ele-area {
-  font-weight: 600;
-  color: var(--navy);
-  font-size: 15px;
-}
+.ele-area { font-weight: 600; color: var(--navy); font-size: 15px; }
 
 .indicator-text {
   margin-top: 6px;
@@ -411,24 +338,11 @@ textarea {
   white-space: nowrap;
 }
 
-.strength-strong {
-  background: rgba(29,122,77,0.12);
-  color: var(--success);
-}
+.strength-strong { background: rgba(29,122,77,0.12); color: var(--success); }
+.strength-moderate { background: rgba(184,101,26,0.12); color: var(--warn); }
+.strength-emerging { background: rgba(107,74,142,0.12); color: var(--emerge); }
 
-.strength-moderate {
-  background: rgba(184,101,26,0.12);
-  color: var(--warn);
-}
-
-.strength-emerging {
-  background: rgba(107,74,142,0.12);
-  color: var(--emerge);
-}
-
-.detail-row {
-  margin-bottom: 12px;
-}
+.detail-row { margin-bottom: 12px; }
 
 .detail-label {
   font-weight: 700;
@@ -439,16 +353,32 @@ textarea {
   margin-bottom: 4px;
 }
 
-.detail-content {
-  color: var(--text);
-  font-size: 15px;
-}
+.detail-content { color: var(--text); font-size: 15px; }
 
 .detail-content em {
   background: var(--gold-pale);
   font-style: normal;
   padding: 0 4px;
   border-radius: 3px;
+}
+
+.evidence-quote {
+  background: var(--off-white);
+  border-left: 3px solid var(--gold);
+  padding: 10px 14px;
+  border-radius: 4px;
+  font-style: italic;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.evidence-quote mark {
+  background: var(--gold-pale);
+  color: var(--text);
+  padding: 0 2px;
+  border-radius: 2px;
+  font-style: normal;
+  font-weight: 600;
 }
 
 .ai-section {
@@ -470,11 +400,7 @@ textarea {
   margin-bottom: 10px;
 }
 
-.next-steps-list {
-  list-style: none;
-  padding: 0;
-  margin: 12px 0 0;
-}
+.next-steps-list { list-style: none; padding: 0; margin: 12px 0 0; }
 
 .next-steps-list li {
   padding: 12px 16px 12px 44px;
@@ -496,7 +422,6 @@ textarea {
   font-size: 18px;
 }
 
-/* Error */
 .error-box {
   background: #fef2f2;
   border-left: 4px solid #dc2626;
@@ -509,7 +434,20 @@ textarea {
 
 .error-box.active { display: block; }
 
-/* Footer */
+.disclosure-note {
+  background: var(--pale-navy);
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  color: var(--navy);
+}
+
+.disclosure-note strong { color: var(--navy-dark); }
+
+.results { display: none; }
+.results.active { display: block; }
+
 .footer {
   text-align: center;
   color: var(--text-muted);
@@ -519,9 +457,6 @@ textarea {
   margin-top: 40px;
 }
 
-.footer a { color: var(--navy); text-decoration: none; }
-.footer a:hover { text-decoration: underline; }
-
 @media (max-width: 600px) {
   .card { padding: 22px 18px; }
   .hero { padding: 40px 18px 56px; }
@@ -530,8 +465,7 @@ textarea {
 
 @media print {
   .hero { background: var(--navy); color: white; }
-  .input-section { display: none; }
-  .btn-row { display: none; }
+  .input-section, .btn-row, .disclosure-note { display: none; }
 }
 </style>
 </head>
@@ -540,17 +474,21 @@ textarea {
 <header class="hero">
   <span class="hero-tag">TCEA · Essential Learning Expectations</span>
   <h1>ELEs Alignment <em>Assistant</em></h1>
-  <p>Submit a lesson plan, professional development activity, article, book chapter, or blog post. Receive a specific, actionable alignment to the TCEA Essential Learning Expectations.</p>
+  <p>Submit a lesson plan, professional development activity, article, book chapter, or blog post. Receive a specific alignment to the TCEA Essential Learning Expectations.</p>
+  <div class="hero-meta">Runs entirely in your browser. No accounts, no API keys, no data leaves your device.</div>
 </header>
 
 <main class="container">
 
-  <!-- Step 1: Target Group -->
+  <div class="disclosure-note">
+    <strong>How this works:</strong> This tool reads your material and matches it against the TCEA ELE indicators using concept and keyword analysis. It's a starting point, not a final judgment. Review the alignments and refine them with your professional knowledge.
+  </div>
+
   <section class="card input-section">
     <span class="step-label">Step 1</span>
     <h2>Which target group should this be aligned for?</h2>
     <p class="subtitle">Choose the role the material primarily addresses.</p>
-    <div class="radio-grid" id="target-group-grid">
+    <div class="radio-grid">
       <label class="radio-card">
         <input type="radio" name="target" value="teachers_and_teacher_librarians" checked>
         <div class="radio-card-inner">
@@ -582,18 +520,16 @@ textarea {
     </div>
   </section>
 
-  <!-- Step 2: AI Alignment Toggle -->
   <section class="card input-section">
     <span class="step-label">Step 2</span>
-    <h2>Would you also like a separate alignment to the ELEs for AI in Education?</h2>
-    <p class="subtitle">Optional. Adds AI Literacy, Ethical AI Use, AI-Enhanced Learning, AI and Critical Thinking, and AI Collaboration to the analysis.</p>
+    <h2>Include an AI in Education alignment?</h2>
+    <p class="subtitle">Adds a separate analysis against the AI in Education framework: AI Literacy, Ethical AI Use, AI-Enhanced Learning, AI and Critical Thinking, and AI Collaboration.</p>
     <div class="toggle-row">
       <button type="button" class="toggle-btn active" data-ai="yes">Yes, include AI alignment</button>
       <button type="button" class="toggle-btn" data-ai="no">No, skip AI alignment</button>
     </div>
   </section>
 
-  <!-- Step 3: Material -->
   <section class="card input-section">
     <span class="step-label">Step 3</span>
     <h2>Paste the material to align</h2>
@@ -627,179 +563,18 @@ textarea {
     </div>
   </section>
 
-  <!-- Loading -->
-  <div class="loading" id="loading">
-    <div class="spinner"></div>
-    <div class="loading-text" id="loading-text">Reviewing your material against the TCEA ELEs framework...</div>
-  </div>
-
-  <!-- Results -->
   <section class="results" id="results"></section>
 
 </main>
 
 <footer class="footer">
-  <p>Built around the <strong>TCEA Essential Learning Expectations</strong> framework. Alignments are generated by AI and should be reviewed by a knowledgeable educator before use.</p>
+  <p>Built around the <strong>TCEA Essential Learning Expectations</strong> framework. This tool uses local concept matching; results are a guide for your professional review.</p>
 </footer>
 
 <script>
 // ============================================================
-// TCEA ELE Framework (embedded from source JSON)
+// ELE Framework (from TCEA source)
 // ============================================================
-const ELE_FRAMEWORK = {
-  teachers_and_teacher_librarians: {
-    title: "Essential Learning Expectations for Teachers",
-    key_areas: [
-      { code: "1.0", name: "Technology Integration", indicators: [
-        { code: "1.1", indicator: "I know how to seamlessly integrate technology into my teaching practices." },
-        { code: "1.2", indicator: "I can use AI tools to enhance student learning experiences." },
-        { code: "1.3", indicator: "I am aware of emerging technologies and their potential applications in education." }
-      ]},
-      { code: "2.0", name: "Digital Literacy", indicators: [
-        { code: "2.1", indicator: "I can teach students to critically evaluate online information." },
-        { code: "2.2", indicator: "I know how to guide students in safe and responsible internet use." },
-        { code: "2.3", indicator: "I am aware of strategies to help students identify and combat misinformation." }
-      ]},
-      { code: "3.0", name: "Inclusive Teaching", indicators: [
-        { code: "3.1", indicator: "I know how to create a welcoming classroom environment for all students." },
-        { code: "3.2", indicator: "I can adapt my teaching methods to accommodate diverse learning needs." },
-        { code: "3.3", indicator: "I am aware of cultural differences and how they impact learning." }
-      ]},
-      { code: "4.0", name: "Relationship Building", indicators: [
-        { code: "4.1", indicator: "I know how to foster positive relationships with my students." },
-        { code: "4.2", indicator: "I can create opportunities for student collaboration and peer learning." },
-        { code: "4.3", indicator: "I am aware of the importance of emotional support in academic success." }
-      ]},
-      { code: "5.0", name: "Critical Thinking", indicators: [
-        { code: "5.1", indicator: "I know how to design lessons that promote higher-order thinking skills." },
-        { code: "5.2", indicator: "I can use questioning techniques to stimulate deep learning." },
-        { code: "5.3", indicator: "I am aware of strategies to develop students' problem-solving abilities." }
-      ]}
-    ]
-  },
-  students: {
-    title: "Essential Learning Expectations for Students",
-    key_areas: [
-      { code: "1.0", name: "Tech Savvy", indicators: [
-        { code: "1.1", indicator: "I know how to use technology to support my learning." },
-        { code: "1.2", indicator: "I can adapt to new digital tools and platforms." },
-        { code: "1.3", indicator: "I am aware of how AI can assist me in my studies." }
-      ]},
-      { code: "2.0", name: "Online Safety", indicators: [
-        { code: "2.1", indicator: "I know how to protect my personal information online." },
-        { code: "2.2", indicator: "I can identify trustworthy sources of information on the internet." },
-        { code: "2.3", indicator: "I am aware of the potential risks of sharing content online." }
-      ]},
-      { code: "3.0", name: "Collaborative Learner", indicators: [
-        { code: "3.1", indicator: "I know how to work effectively in a team." },
-        { code: "3.2", indicator: "I can communicate my ideas clearly to others." },
-        { code: "3.3", indicator: "I am aware of the value of diverse perspectives in group work." }
-      ]},
-      { code: "4.0", name: "Self-Directed Learner", indicators: [
-        { code: "4.1", indicator: "I know how to take responsibility for my own learning." },
-        { code: "4.2", indicator: "I can set achievable goals and monitor my progress." },
-        { code: "4.3", indicator: "I am aware of my learning strengths and areas for improvement." }
-      ]},
-      { code: "5.0", name: "Creative Problem Solver", indicators: [
-        { code: "5.1", indicator: "I know how to approach complex problems systematically." },
-        { code: "5.2", indicator: "I can use creativity and logic to find innovative solutions." },
-        { code: "5.3", indicator: "I am aware of how to apply computational thinking in various subjects." }
-      ]}
-    ]
-  },
-  instructional_coaches: {
-    title: "Essential Learning Expectations for Instructional Coaches",
-    key_areas: [
-      { code: "1.0", name: "Teacher Support", indicators: [
-        { code: "1.1", indicator: "I know how to mentor teachers in effective instructional practices." },
-        { code: "1.2", indicator: "I can provide constructive feedback to improve teaching strategies." },
-        { code: "1.3", indicator: "I am aware of the latest educational research and best practices." }
-      ]},
-      { code: "2.0", name: "Technology Integration", indicators: [
-        { code: "2.1", indicator: "I know how to guide teachers in meaningful technology integration." },
-        { code: "2.2", indicator: "I can evaluate the effectiveness of educational technology tools." },
-        { code: "2.3", indicator: "I am aware of emerging technologies and their potential in education." }
-      ]},
-      { code: "3.0", name: "Data-Driven Coaching", indicators: [
-        { code: "3.1", indicator: "I know how to use data to inform instructional decisions." },
-        { code: "3.2", indicator: "I can help teachers interpret and act on assessment results." },
-        { code: "3.3", indicator: "I am aware of various data collection and analysis tools." }
-      ]},
-      { code: "4.0", name: "Professional Development", indicators: [
-        { code: "4.1", indicator: "I know how to design and deliver effective professional development sessions." },
-        { code: "4.2", indicator: "I can identify and address teachers' individual learning needs." },
-        { code: "4.3", indicator: "I am aware of adult learning principles and how to apply them." }
-      ]},
-      { code: "5.0", name: "Collaborative Leadership", indicators: [
-        { code: "5.1", indicator: "I know how to foster a collaborative culture among educators." },
-        { code: "5.2", indicator: "I can facilitate productive discussions and problem-solving sessions." },
-        { code: "5.3", indicator: "I am aware of strategies to build trust and promote teamwork." }
-      ]}
-    ]
-  },
-  school_leaders_and_administrators: {
-    title: "Essential Learning Expectations for School Leaders and Administrators",
-    key_areas: [
-      { code: "1.0", name: "Visionary Technology Leadership", indicators: [
-        { code: "1.1", indicator: "I know how to create and communicate a compelling vision for technology integration in the school." },
-        { code: "1.2", indicator: "I can develop strategic technology plans that align with educational trends and community needs." },
-        { code: "1.3", indicator: "I am aware of emerging educational technologies and their potential impact on teaching and learning." }
-      ]},
-      { code: "2.0", name: "Technology-Enhanced Instructional Leadership", indicators: [
-        { code: "2.1", indicator: "I know how to support and evaluate effective technology integration practices." },
-        { code: "2.2", indicator: "I can guide the implementation of digital curriculum and instructional technology initiatives." },
-        { code: "2.3", indicator: "I am aware of research-based approaches to technology-enhanced pedagogy and their applications." }
-      ]},
-      { code: "3.0", name: "Data-Informed Decision Making with Digital Tools", indicators: [
-        { code: "3.1", indicator: "I know how to use digital data tools to drive school improvement efforts." },
-        { code: "3.2", indicator: "I can interpret complex digital data sets and communicate findings effectively using data visualization tools." },
-        { code: "3.3", indicator: "I am aware of various digital assessment tools and their appropriate uses in education." }
-      ]},
-      { code: "4.0", name: "Fostering a Digital Learning Culture", indicators: [
-        { code: "4.1", indicator: "I know how to create a positive and inclusive digital learning climate." },
-        { code: "4.2", indicator: "I can develop policies that support equitable access to technology and digital resources." },
-        { code: "4.3", indicator: "I am aware of strategies to address digital divides and promote responsible technology use." }
-      ]},
-      { code: "5.0", name: "Technology-Enabled Community Engagement", indicators: [
-        { code: "5.1", indicator: "I know how to build strong digital partnerships with families and community organizations." },
-        { code: "5.2", indicator: "I can effectively use digital communication tools to share school goals and achievements with stakeholders." },
-        { code: "5.3", indicator: "I am aware of strategies to leverage online community resources to support student learning." }
-      ]}
-    ]
-  }
-};
-
-const AI_FRAMEWORK = {
-  title: "Essential Learning Expectations for AI in Education",
-  key_areas: [
-    { code: "1.0", name: "AI Literacy", indicators: [
-      { code: "1.1", indicator: "I know how AI systems work and their capabilities in educational contexts." },
-      { code: "1.2", indicator: "I can explain AI concepts in simple terms to various stakeholders." },
-      { code: "1.3", indicator: "I am aware of the current limitations and potential biases in AI systems." }
-    ]},
-    { code: "2.0", name: "Ethical AI Use", indicators: [
-      { code: "2.1", indicator: "I know how to apply ethical principles when using or developing AI for education." },
-      { code: "2.2", indicator: "I can identify potential ethical issues in AI applications and propose solutions." },
-      { code: "2.3", indicator: "I am aware of the importance of transparency and accountability in AI systems." }
-    ]},
-    { code: "3.0", name: "AI-Enhanced Learning", indicators: [
-      { code: "3.1", indicator: "I know how to leverage AI tools to personalize and enhance learning experiences." },
-      { code: "3.2", indicator: "I can evaluate the effectiveness of AI-enhanced learning interventions." },
-      { code: "3.3", indicator: "I am aware of how AI can support diverse learning needs and styles." }
-    ]},
-    { code: "4.0", name: "AI and Critical Thinking", indicators: [
-      { code: "4.1", indicator: "I know how to promote critical thinking skills in relation to AI-generated information." },
-      { code: "4.2", indicator: "I can teach others to question and verify AI outputs." },
-      { code: "4.3", indicator: "I am aware of strategies to develop AI-related problem-solving skills." }
-    ]},
-    { code: "5.0", name: "AI Collaboration and Innovation", indicators: [
-      { code: "5.1", indicator: "I know how to foster collaboration between humans and AI systems." },
-      { code: "5.2", indicator: "I can use AI as a tool for innovation in educational projects and research." },
-      { code: "5.3", indicator: "I am aware of the potential of AI to augment human creativity and problem-solving." }
-    ]}
-  ]
-};
-
 const TARGET_LABELS = {
   teachers_and_teacher_librarians: "Teachers and teacher librarians",
   students: "Students",
@@ -808,13 +583,733 @@ const TARGET_LABELS = {
 };
 
 // ============================================================
-// State
+// Indicator Rules
+// Each rule defines keywords, a concept summary, and tiered recommendations.
+// Keywords use case-insensitive substring matching with word boundaries.
 // ============================================================
-let includeAi = true;
+
+function r(area_code, area_name, indicator_code, indicator, keywords, concept, recs) {
+  return { area_code, area_name, indicator_code, indicator, keywords, concept, recs };
+}
+
+const RULES = {
+  teachers_and_teacher_librarians: [
+    r("1.0", "Technology Integration", "1.1",
+      "I know how to seamlessly integrate technology into my teaching practices.",
+      ["technology", "digital tool", "digital", "online tool", "software", "application", "platform", "chromebook", "tablet", "device", "google doc", "nearpod", "padlet", "kahoot", "edtech", "screen", "laptop"],
+      "the seamless integration of technology into core instruction",
+      {
+        strong: "Document which content standards each technology touchpoint supports so the integration purpose is explicit, not assumed.",
+        moderate: "Specify which tools are used and at which point in the lesson, so the integration isn't generic.",
+        emerging: "Identify two or three specific digital tools that would extend this activity and write them into the lesson steps."
+      }),
+    r("1.0", "Technology Integration", "1.2",
+      "I can use AI tools to enhance student learning experiences.",
+      ["ai tool", "artificial intelligence", "chatbot", "chatgpt", "claude", "gemini", "perplexity", "copilot", "generative ai", "machine learning", "llm", "ai-powered", "ai assistant"],
+      "the use of AI tools to enhance student learning",
+      {
+        strong: "Add a brief reflection where students evaluate the AI output for accuracy and bias before using it in their final work.",
+        moderate: "Name the specific AI tool, the prompt students will use, and the human-review step that follows.",
+        emerging: "Consider adding an AI-assisted step where students use a chatbot to brainstorm, summarize, or get feedback, with clear teacher guardrails."
+      }),
+    r("1.0", "Technology Integration", "1.3",
+      "I am aware of emerging technologies and their potential applications in education.",
+      ["virtual reality", "augmented reality", "3d printing", "drone", "robotics", "emerging", "cutting-edge", "innovative technology", "wearable", "metaverse", "immersive", "simulation"],
+      "awareness and application of emerging classroom technologies",
+      {
+        strong: "Connect this emerging-tech experience to a specific learning objective so the novelty serves the content, not the other way around.",
+        moderate: "Add one or two specific emerging tools as optional extensions students can choose from.",
+        emerging: "Identify one emerging tool that could deepen this lesson in a future iteration, even if you don't have access to it yet."
+      }),
+
+    r("2.0", "Digital Literacy", "2.1",
+      "I can teach students to critically evaluate online information.",
+      ["fact-check", "fact check", "verify", "credible", "bias", "source", "evaluate source", "sift", "lateral reading", "citation", "credibility", "reliable", "trustworthy", "evidence", "claim"],
+      "critical evaluation of online information",
+      {
+        strong: "Have students compare two conflicting sources on the same topic and document their evaluation criteria in a shared rubric.",
+        moderate: "Provide a concrete checklist or framework like SIFT or CRAAP so students apply consistent criteria.",
+        emerging: "Add a source-evaluation step where students explain why they trust each source they cite."
+      }),
+    r("2.0", "Digital Literacy", "2.2",
+      "I know how to guide students in safe and responsible internet use.",
+      ["online safety", "digital citizenship", "responsible use", "privacy", "password", "personal information", "cyberbullying", "netiquette", "digital footprint", "ethical use", "parent permission"],
+      "safe and responsible internet behavior",
+      {
+        strong: "Connect this safety lesson to a specific scenario students are likely to encounter outside school so the practice transfers.",
+        moderate: "Add a brief discussion of what students would do if they saw a peer engaging in unsafe online behavior.",
+        emerging: "Build in a pause-and-check step before students post or share anything generated in this lesson."
+      }),
+    r("2.0", "Digital Literacy", "2.3",
+      "I am aware of strategies to help students identify and combat misinformation.",
+      ["misinformation", "disinformation", "fake news", "false claim", "propaganda", "hoax", "manipulation", "deepfake", "viral", "misleading", "verify claim"],
+      "identifying and combating misinformation",
+      {
+        strong: "Ask students to create a short message teaching peers how to recognize the specific misinformation pattern they investigated.",
+        moderate: "Add at least one example of real, recent misinformation rather than a fabricated example.",
+        emerging: "Include a brief segment on common misinformation tactics: emotional language, missing context, fake experts."
+      }),
+
+    r("3.0", "Inclusive Teaching", "3.1",
+      "I know how to create a welcoming classroom environment for all students.",
+      ["welcoming", "inclusive", "belonging", "classroom community", "respect", "diverse", "representation", "identity", "safe space", "norms", "agreements"],
+      "creating a welcoming and inclusive classroom environment",
+      {
+        strong: "Document specifically how each student's identity is reflected in the materials and texts students will see.",
+        moderate: "Add one explicit move that signals belonging, such as a name pronunciation check or identity-affirming visuals.",
+        emerging: "Identify one specific group in your classroom whose experience this lesson doesn't yet reflect, and adjust accordingly."
+      }),
+    r("3.0", "Inclusive Teaching", "3.2",
+      "I can adapt my teaching methods to accommodate diverse learning needs.",
+      ["differentiation", "differentiate", "accommodation", "modification", "scaffold", "udl", "universal design", "iep", "504", "english learner", "ell", "esl", "multilingual", "multiple means", "tiered", "sentence frame", "graphic organizer", "visual organizer"],
+      "adapting instruction for diverse learning needs",
+      {
+        strong: "Specify which adaptations are for which learner profiles so the differentiation is intentional rather than generic.",
+        moderate: "Add a third option for demonstrating mastery so students can choose written, oral, or visual products.",
+        emerging: "Identify at least one scaffold for English learners or struggling readers."
+      }),
+    r("3.0", "Inclusive Teaching", "3.3",
+      "I am aware of cultural differences and how they impact learning.",
+      ["culture", "cultural", "multicultural", "heritage", "language", "bilingual", "global", "background", "lived experience", "community knowledge", "funds of knowledge", "ancestry"],
+      "awareness of cultural differences and their impact on learning",
+      {
+        strong: "Invite students to share family or community knowledge that connects to the content, then weave their contributions into the lesson record.",
+        moderate: "Add a discussion question that asks students how this topic looks different in different cultural contexts.",
+        emerging: "Include one example, text, or resource from a culture other than the dominant one in your classroom."
+      }),
+
+    r("4.0", "Relationship Building", "4.1",
+      "I know how to foster positive relationships with my students.",
+      ["relationship", "rapport", "trust", "connection", "check-in", "greeting", "individual student", "advisory", "morning meeting", "circle"],
+      "fostering positive teacher-student relationships",
+      {
+        strong: "Note one specific moment in this lesson where you'll deliberately acknowledge or connect with each student individually.",
+        moderate: "Add a quick check-in routine such as a mood meter or two-minute share at the start of the lesson.",
+        emerging: "Build in a small moment where you ask students about something outside the lesson content."
+      }),
+    r("4.0", "Relationship Building", "4.2",
+      "I can create opportunities for student collaboration and peer learning.",
+      ["collaborate", "collaborat", "pair", "group", "team", "partner", "peer", "cooperative", "jigsaw", "small group", "discuss with", "share with", "turn and talk", "shared google", "shared doc"],
+      "structured opportunities for collaboration and peer learning",
+      {
+        strong: "Define explicit roles for each student in the group so the collaboration produces accountability rather than passive participation.",
+        moderate: "Add a brief peer feedback step where partners exchange work and respond to a specific prompt.",
+        emerging: "Identify at least one point in the lesson where students work with a partner rather than in isolation."
+      }),
+    r("4.0", "Relationship Building", "4.3",
+      "I am aware of the importance of emotional support in academic success.",
+      ["sel", "social emotional", "social-emotional", "emotion", "feelings", "well-being", "wellbeing", "mental health", "self-regulation", "mindful", "anxiety", "stress", "emotional state", "mood"],
+      "the role of emotional support in academic success",
+      {
+        strong: "Connect the emotional learning to the content goal so the SEL piece isn't separate from the academic work.",
+        moderate: "Add a brief reflection on how students felt during the challenging parts of the task.",
+        emerging: "Include one moment where you acknowledge that the work is challenging and invite students to name how they're managing."
+      }),
+
+    r("5.0", "Critical Thinking", "5.1",
+      "I know how to design lessons that promote higher-order thinking skills.",
+      ["analyze", "analyz", "evaluate", "synthesize", "higher-order", "critical thinking", "bloom", "depth of knowledge", "reasoning", "argument", "claim and evidence", "interpret", "compare", "contrast", "justify"],
+      "designing lessons that promote higher-order thinking",
+      {
+        strong: "Map each task in this lesson to a level of Bloom's taxonomy or DOK, then push at least one task one level higher.",
+        moderate: "Replace one recall question with a question that asks students to evaluate, justify, or critique.",
+        emerging: "Add at least one question that has more than one defensible answer so students have to reason rather than recall."
+      }),
+    r("5.0", "Critical Thinking", "5.2",
+      "I can use questioning techniques to stimulate deep learning.",
+      ["question", "inquiry", "socratic", "open-ended", "probing", "discussion", "dialogue", "wonder", "think aloud", "essential question", "driving question"],
+      "questioning techniques that stimulate deep learning",
+      {
+        strong: "Pre-write your highest-leverage open-ended questions and plan two probing follow-ups for each, so the inquiry doesn't stall at first responses.",
+        moderate: "Convert at least two yes/no or factual questions into open-ended questions with no single correct answer.",
+        emerging: "Add one essential question that frames the entire lesson and that students return to at the end."
+      }),
+    r("5.0", "Critical Thinking", "5.3",
+      "I am aware of strategies to develop students' problem-solving abilities.",
+      ["problem-solving", "problem solving", "project-based", "pbl", "design thinking", "real-world", "challenge", "innovate", "prototype", "iterate", "solution", "hypothesis", "test"],
+      "developing students' problem-solving abilities",
+      {
+        strong: "Make the problem authentic by connecting it to a real community issue or audience so the solution has stakes beyond a grade.",
+        moderate: "Add an iteration step where students refine their solution based on feedback before finalizing it.",
+        emerging: "Replace the worked example with an open-ended problem where students propose multiple possible approaches."
+      })
+  ],
+
+  students: [
+    r("1.0", "Tech Savvy", "1.1",
+      "I know how to use technology to support my learning.",
+      ["technology", "digital tool", "use a tool", "online tool", "platform", "device", "chromebook", "tablet", "laptop", "google doc", "shared doc", "use the app"],
+      "students using technology to support their own learning",
+      {
+        strong: "Add a moment where students explain why they chose a specific tool for the task at hand.",
+        moderate: "Give students a small choice in which tool they use for one step of the activity.",
+        emerging: "Identify the specific tools students will use and make sure they have time to learn the basics first."
+      }),
+    r("1.0", "Tech Savvy", "1.2",
+      "I can adapt to new digital tools and platforms.",
+      ["new tool", "new platform", "unfamiliar", "first time", "learn to use", "try a new", "explore the tool", "tutorial"],
+      "student adaptability with new digital tools and platforms",
+      {
+        strong: "Build in a short structured exploration of the new tool before students need to use it for content learning.",
+        moderate: "Provide a quick reference guide or short walkthrough for any new tool introduced.",
+        emerging: "Make the tool transition explicit: name what's new, what's similar to other tools, and what students should try first."
+      }),
+    r("1.0", "Tech Savvy", "1.3",
+      "I am aware of how AI can assist me in my studies.",
+      ["ai assist", "chatbot", "chatgpt", "claude", "gemini", "ai feedback", "ai-powered", "ai tutor", "use ai to", "ask the ai"],
+      "student awareness of how AI can assist their learning",
+      {
+        strong: "Ask students to compare an AI-generated answer with their own thinking and identify where each is stronger.",
+        moderate: "Be specific about which task the AI is helping with and what students must still do themselves.",
+        emerging: "Introduce one small AI-assisted moment, such as using a chatbot to summarize a difficult passage."
+      }),
+
+    r("2.0", "Online Safety", "2.1",
+      "I know how to protect my personal information online.",
+      ["personal information", "privacy", "password", "private", "share information", "data protection", "permission", "parent permission", "consent"],
+      "protecting personal information online",
+      {
+        strong: "Have students audit one of their own digital accounts and identify what's public, private, and what should change.",
+        moderate: "Discuss what counts as personal information and what students might unintentionally reveal.",
+        emerging: "Add a brief reminder about what students should not share when using digital tools in this lesson."
+      }),
+    r("2.0", "Online Safety", "2.2",
+      "I can identify trustworthy sources of information on the internet.",
+      ["trustworthy", "credible", "reliable", "source", "verify", "fact-check", "evaluate source", "citation", "evidence", "expert"],
+      "identifying trustworthy sources of information",
+      {
+        strong: "Ask students to articulate the criteria they used to judge a source's trustworthiness, in their own words.",
+        moderate: "Provide a checklist or framework students apply to every source before using it.",
+        emerging: "Require at least one source-evaluation step before students cite anything they find online."
+      }),
+    r("2.0", "Online Safety", "2.3",
+      "I am aware of the potential risks of sharing content online.",
+      ["share online", "post", "social media", "digital footprint", "consequence", "risk of sharing", "public post", "permanent", "screenshot"],
+      "awareness of the risks of sharing content online",
+      {
+        strong: "Have students discuss a real example where sharing something online had unexpected consequences, then connect it to their own choices.",
+        moderate: "Add a reflection on what students would and wouldn't be comfortable sharing publicly, and why.",
+        emerging: "Include a brief check-in about what students should consider before sharing anything they produce in this lesson."
+      }),
+
+    r("3.0", "Collaborative Learner", "3.1",
+      "I know how to work effectively in a team.",
+      ["team", "group work", "partner", "collaborate", "cooperative", "shared task", "role", "responsibility", "contribute", "team member"],
+      "working effectively in a team",
+      {
+        strong: "Define specific roles for each team member and a clear way to redistribute the work if someone is absent.",
+        moderate: "Establish team norms before the work starts: how decisions get made, how conflict is handled.",
+        emerging: "Make sure each group member has a specific deliverable, not a generic role like helper."
+      }),
+    r("3.0", "Collaborative Learner", "3.2",
+      "I can communicate my ideas clearly to others.",
+      ["communicate", "present", "share idea", "explain", "discuss", "articulate", "speak", "audience", "presentation", "share-out", "share out", "share work"],
+      "communicating ideas clearly to others",
+      {
+        strong: "Give students a specific audience and purpose for their communication, beyond the teacher and the grade.",
+        moderate: "Build in a rehearsal or peer feedback step before any final share-out or presentation.",
+        emerging: "Add one moment where students explain their thinking aloud rather than only in writing."
+      }),
+    r("3.0", "Collaborative Learner", "3.3",
+      "I am aware of the value of diverse perspectives in group work.",
+      ["diverse perspective", "different view", "multiple perspective", "disagree", "differing", "varied background", "different angle", "varying opinion", "respectful disagreement"],
+      "valuing diverse perspectives in group work",
+      {
+        strong: "Build in a structured protocol where students must identify at least two viewpoints on the topic before forming their own.",
+        moderate: "Add a discussion prompt about where group members disagreed and what they learned from it.",
+        emerging: "Pair students intentionally so groups include a mix of strengths, backgrounds, or perspectives."
+      }),
+
+    r("4.0", "Self-Directed Learner", "4.1",
+      "I know how to take responsibility for my own learning.",
+      ["independent", "self-directed", "ownership", "responsibility for learning", "own learning", "take charge", "self-paced", "agency"],
+      "taking responsibility for one's own learning",
+      {
+        strong: "Give students explicit choices in pacing, product, or topic, and document those choices alongside the work.",
+        moderate: "Add a planning step where students sketch out how they'll approach the work before starting.",
+        emerging: "Include at least one decision the student has to make on their own rather than following a fixed procedure."
+      }),
+    r("4.0", "Self-Directed Learner", "4.2",
+      "I can set achievable goals and monitor my progress.",
+      ["goal", "monitor progress", "track progress", "self-assess", "self assessment", "reflect on progress", "milestone", "checkpoint", "progress check"],
+      "setting goals and monitoring progress",
+      {
+        strong: "Have students set a measurable goal at the start, track their progress at one or more checkpoints, and reflect at the end.",
+        moderate: "Add a midpoint progress check where students compare where they are to where they planned to be.",
+        emerging: "Include a brief goal-setting step at the start of the activity, even if it's a one-sentence intention."
+      }),
+    r("4.0", "Self-Directed Learner", "4.3",
+      "I am aware of my learning strengths and areas for improvement.",
+      ["strength", "area for improvement", "self-assessment", "self-aware", "reflect on", "what I learned", "what I struggled", "growth", "weakness"],
+      "awareness of personal learning strengths and areas for growth",
+      {
+        strong: "Build a brief reflection on what worked, what didn't, and one specific thing the student will try differently next time.",
+        moderate: "Add a self-assessment using the same rubric the teacher uses, so students see themselves in the criteria.",
+        emerging: "Include a closing question that asks students to name one thing they did well and one they want to improve."
+      }),
+
+    r("5.0", "Creative Problem Solver", "5.1",
+      "I know how to approach complex problems systematically.",
+      ["systematic", "step-by-step", "step by step", "method", "process", "approach", "break down", "stages", "procedure", "framework"],
+      "approaching complex problems systematically",
+      {
+        strong: "Make the problem-solving framework visible: students name the framework, follow it, and reflect on where it helped or didn't.",
+        moderate: "Provide a structured worksheet or organizer that walks students through the stages of solving the problem.",
+        emerging: "Introduce a simple problem-solving framework and reference it explicitly during the activity."
+      }),
+    r("5.0", "Creative Problem Solver", "5.2",
+      "I can use creativity and logic to find innovative solutions.",
+      ["creative", "creativity", "innovative", "novel", "brainstorm", "original idea", "imagine", "inventive", "out of the box", "new approach"],
+      "using creativity and logic to find innovative solutions",
+      {
+        strong: "Push students to generate at least three distinct possible solutions before settling on one, and document why they chose what they did.",
+        moderate: "Add a brainstorming step where unusual ideas are welcomed before any are evaluated.",
+        emerging: "Include a moment where students propose at least one alternative to the obvious answer."
+      }),
+    r("5.0", "Creative Problem Solver", "5.3",
+      "I am aware of how to apply computational thinking in various subjects.",
+      ["computational thinking", "algorithm", "coding", "programming", "logic", "decompose", "pattern", "abstraction", "sequence", "loop", "conditional", "scratch", "python", "code"],
+      "applying computational thinking across subjects",
+      {
+        strong: "Make the computational thinking moves explicit: where students decomposed a problem, recognized a pattern, or designed an algorithm.",
+        moderate: "Identify which step of this activity could be expressed as an algorithm or a sequence of clear steps.",
+        emerging: "Add one connection between the content and a computational concept students already know."
+      })
+  ],
+
+  instructional_coaches: [
+    r("1.0", "Teacher Support", "1.1",
+      "I know how to mentor teachers in effective instructional practices.",
+      ["mentor", "coaching cycle", "instructional practice", "support teacher", "side-by-side", "model", "co-teach", "observation", "debrief"],
+      "mentoring teachers in effective instructional practices",
+      {
+        strong: "Document the coaching cycle: pre-conference, observation focus, evidence collected, debrief outcome.",
+        moderate: "Specify the instructional practice the coaching is targeting rather than coaching in general.",
+        emerging: "Identify one specific teaching move you'll model or co-plan with the teacher."
+      }),
+    r("1.0", "Teacher Support", "1.2",
+      "I can provide constructive feedback to improve teaching strategies.",
+      ["feedback", "constructive", "noticing", "wondering", "evidence-based", "next step", "observation note", "teacher reflection"],
+      "providing constructive feedback to teachers",
+      {
+        strong: "Pair every piece of feedback with specific classroom evidence and a teacher-chosen next step.",
+        moderate: "Use a noticing-and-wondering structure so feedback opens dialogue rather than closing it.",
+        emerging: "Add one piece of evidence-based feedback rather than a general impression."
+      }),
+    r("1.0", "Teacher Support", "1.3",
+      "I am aware of the latest educational research and best practices.",
+      ["research", "evidence-based", "best practice", "literature", "study", "hattie", "marzano", "visible learning", "effect size", "what works", "peer-reviewed"],
+      "awareness of current educational research and best practices",
+      {
+        strong: "Cite a specific study or framework when introducing a new practice so teachers see the research foundation.",
+        moderate: "Add one reference to a current research-based practice that supports the coaching focus.",
+        emerging: "Identify one piece of research or framework that would strengthen the credibility of this coaching work."
+      }),
+
+    r("2.0", "Technology Integration", "2.1",
+      "I know how to guide teachers in meaningful technology integration.",
+      ["technology integration", "edtech", "digital tool", "platform", "samr", "triple e", "meaningful use", "purposeful technology"],
+      "guiding teachers in meaningful technology integration",
+      {
+        strong: "Connect each technology suggestion to a specific instructional purpose using a framework like SAMR or Triple E.",
+        moderate: "Name the instructional problem before naming the tool that addresses it.",
+        emerging: "Add one specific technology integration example tied to a clear learning objective."
+      }),
+    r("2.0", "Technology Integration", "2.2",
+      "I can evaluate the effectiveness of educational technology tools.",
+      ["evaluate", "effectiveness", "edtech evaluation", "rubric", "criteria", "compare tools", "tool review", "data on tool", "pilot"],
+      "evaluating the effectiveness of educational technology tools",
+      {
+        strong: "Build a structured evaluation that captures both teacher feedback and student-learning evidence for any tool under review.",
+        moderate: "Identify the criteria you'll use to evaluate the tool before piloting it.",
+        emerging: "Add one specific measure of impact you'll collect when piloting a new tool."
+      }),
+    r("2.0", "Technology Integration", "2.3",
+      "I am aware of emerging technologies and their potential in education.",
+      ["emerging", "ai", "virtual reality", "augmented reality", "3d printing", "robotics", "drone", "metaverse", "wearable", "horizon report", "edtech trend"],
+      "awareness of emerging technologies in education",
+      {
+        strong: "Track emerging tools with a specific lens: which problems they could solve in your context, not just what they are.",
+        moderate: "Identify two emerging technologies relevant to your campus and what they would require to pilot.",
+        emerging: "Stay current on at least one emerging-technology source and share one finding with teachers each quarter."
+      }),
+
+    r("3.0", "Data-Driven Coaching", "3.1",
+      "I know how to use data to inform instructional decisions.",
+      ["data", "assessment data", "student data", "data-driven", "inform instruction", "analyze data", "data review", "performance data"],
+      "using data to inform instructional decisions",
+      {
+        strong: "Make the data-to-decision pathway explicit: from what data was reviewed, to what was noticed, to what changes follow.",
+        moderate: "Add a specific decision that follows directly from a data point, not from impressions.",
+        emerging: "Identify one data source you'll use to inform the next coaching conversation."
+      }),
+    r("3.0", "Data-Driven Coaching", "3.2",
+      "I can help teachers interpret and act on assessment results.",
+      ["assessment result", "interpret data", "data analysis", "act on data", "instructional response", "intervention", "reteach", "data conversation"],
+      "helping teachers interpret and act on assessment results",
+      {
+        strong: "Lead teachers through a structured data protocol that ends with a concrete instructional change for an identified student or group.",
+        moderate: "Add a question that pushes from what the data shows to what you will do about it.",
+        emerging: "Plan one data conversation that ends with a specific next step rather than general observations."
+      }),
+    r("3.0", "Data-Driven Coaching", "3.3",
+      "I am aware of various data collection and analysis tools.",
+      ["data tool", "spreadsheet", "dashboard", "data visualization", "looker", "tableau", "data platform", "data system", "student information"],
+      "awareness of data collection and analysis tools",
+      {
+        strong: "Match the data tool to the question being asked, so the analysis answers a real instructional need.",
+        moderate: "Identify one data tool you'll use consistently for a specific kind of analysis.",
+        emerging: "Explore one new data tool and identify what it does better than your current option."
+      }),
+
+    r("4.0", "Professional Development", "4.1",
+      "I know how to design and deliver effective professional development sessions.",
+      ["professional development", "pd session", "facilitate", "design pd", "workshop", "adult learning", "session design", "training", "deliver pd"],
+      "designing and delivering effective professional development",
+      {
+        strong: "Apply adult learning principles explicitly: relevance, voice and choice, time to practice, and a clear connection to classroom action.",
+        moderate: "Build in a practice or application moment, not just content delivery.",
+        emerging: "Add a clear takeaway teachers can use in their classroom within the next week."
+      }),
+    r("4.0", "Professional Development", "4.2",
+      "I can identify and address teachers' individual learning needs.",
+      ["individual need", "differentiated pd", "teacher need", "personalized", "learning need", "tailored", "teacher survey", "needs assessment"],
+      "identifying and addressing individual teacher learning needs",
+      {
+        strong: "Collect needs data from teachers directly and let it visibly shape the PD design.",
+        moderate: "Offer at least two pathways in the PD so teachers with different needs can engage productively.",
+        emerging: "Survey teachers briefly before the PD and adjust at least one element based on what you hear."
+      }),
+    r("4.0", "Professional Development", "4.3",
+      "I am aware of adult learning principles and how to apply them.",
+      ["adult learning", "andragogy", "knowles", "self-directed adult", "experiential", "problem-centered", "voice and choice", "relevance"],
+      "awareness and application of adult learning principles",
+      {
+        strong: "Cite the adult learning principle each PD design choice supports, so the design rationale is visible to facilitators.",
+        moderate: "Build in two adult learning principles, such as voice and choice or immediate relevance.",
+        emerging: "Identify one adult learning principle you want to apply more consistently in your PD."
+      }),
+
+    r("5.0", "Collaborative Leadership", "5.1",
+      "I know how to foster a collaborative culture among educators.",
+      ["collaborative culture", "plc", "professional learning community", "team culture", "shared practice", "collegial", "trust among", "norms"],
+      "fostering a collaborative culture among educators",
+      {
+        strong: "Make collaboration visible: shared artifacts, public norms, regular protocols for working together.",
+        moderate: "Establish a recurring time and structure for teacher collaboration rather than ad-hoc meetings.",
+        emerging: "Identify one team norm that would strengthen collaboration and bring it up at the next meeting."
+      }),
+    r("5.0", "Collaborative Leadership", "5.2",
+      "I can facilitate productive discussions and problem-solving sessions.",
+      ["facilitate", "protocol", "discussion", "problem-solving session", "consultancy", "tuning", "looking at student work", "structured conversation"],
+      "facilitating productive discussions and problem-solving sessions",
+      {
+        strong: "Use a named protocol (consultancy, tuning, atlas) so the structure does the heavy lifting of keeping the conversation productive.",
+        moderate: "Plan timing and questions in advance so the conversation stays on the work.",
+        emerging: "Add one specific structure to the next meeting, even if it's just timed shares."
+      }),
+    r("5.0", "Collaborative Leadership", "5.3",
+      "I am aware of strategies to build trust and promote teamwork.",
+      ["trust", "teamwork", "psychological safety", "rapport", "relational", "team-building", "shared commitment", "vulnerability"],
+      "building trust and promoting teamwork",
+      {
+        strong: "Treat trust as something to design for, not assume: build in low-stakes shared work before high-stakes shared decisions.",
+        moderate: "Add one explicit trust-building moment when a new team forms.",
+        emerging: "Identify one relationship on the team that needs strengthening and plan a small step toward that."
+      })
+  ],
+
+  school_leaders_and_administrators: [
+    r("1.0", "Visionary Technology Leadership", "1.1",
+      "I know how to create and communicate a compelling vision for technology integration in the school.",
+      ["vision", "technology vision", "compelling vision", "communicate vision", "strategic vision", "future-ready", "school direction"],
+      "creating and communicating a compelling technology vision",
+      {
+        strong: "Make the vision concrete: what it looks like in classrooms, on devices, and in student work, not abstract aspirations.",
+        moderate: "Communicate the vision to teachers, students, and families using different formats for each audience.",
+        emerging: "Draft a short vision statement that names what's specific about technology in your school."
+      }),
+    r("1.0", "Visionary Technology Leadership", "1.2",
+      "I can develop strategic technology plans that align with educational trends and community needs.",
+      ["strategic plan", "technology plan", "alignment", "community need", "trend", "long-range plan", "roadmap", "phased plan"],
+      "developing strategic technology plans aligned to needs and trends",
+      {
+        strong: "Build a multi-year roadmap with phased milestones, cost estimates, and clear ownership for each phase.",
+        moderate: "Connect each major plan element to a documented community or instructional need.",
+        emerging: "Identify two or three trends shaping your context and what they imply for your next plan."
+      }),
+    r("1.0", "Visionary Technology Leadership", "1.3",
+      "I am aware of emerging educational technologies and their potential impact on teaching and learning.",
+      ["emerging technology", "ai", "future of learning", "trend", "horizon report", "next generation", "innovation"],
+      "awareness of emerging technologies and their impact",
+      {
+        strong: "Translate emerging-tech awareness into specific guardrails and pilots for your school, not abstract enthusiasm.",
+        moderate: "Identify one emerging technology your school will pilot in the next year and what guardrails it needs.",
+        emerging: "Subscribe to one trusted source on emerging educational technology and share a finding monthly."
+      }),
+
+    r("2.0", "Technology-Enhanced Instructional Leadership", "2.1",
+      "I know how to support and evaluate effective technology integration practices.",
+      ["support integration", "evaluate integration", "instructional rounds", "walkthrough", "observation", "look-fors", "teacher growth"],
+      "supporting and evaluating technology integration",
+      {
+        strong: "Use a shared look-fors document during walkthroughs so feedback to teachers is consistent and growth-oriented.",
+        moderate: "Add a specific technology look-for to your regular observation cycle.",
+        emerging: "Identify what effective integration looks like in your context before evaluating it."
+      }),
+    r("2.0", "Technology-Enhanced Instructional Leadership", "2.2",
+      "I can guide the implementation of digital curriculum and instructional technology initiatives.",
+      ["implementation", "initiative", "rollout", "digital curriculum", "adoption", "change management", "phase implementation"],
+      "guiding implementation of digital curriculum and tech initiatives",
+      {
+        strong: "Plan the rollout in phases with feedback loops at each stage rather than a single launch.",
+        moderate: "Identify the change-management supports teachers will need during the rollout.",
+        emerging: "Sketch a timeline for the initiative that includes pilot, scale, and review phases."
+      }),
+    r("2.0", "Technology-Enhanced Instructional Leadership", "2.3",
+      "I am aware of research-based approaches to technology-enhanced pedagogy and their applications.",
+      ["research-based", "evidence-based pedagogy", "tpack", "samr", "triple e", "effect size", "what works", "research-supported"],
+      "awareness of research-based technology-enhanced pedagogy",
+      {
+        strong: "Reference a specific research framework when introducing new technology-enhanced practices.",
+        moderate: "Connect at least one major instructional initiative to a research-based framework.",
+        emerging: "Identify one research-based framework you want to use to evaluate practice."
+      }),
+
+    r("3.0", "Data-Informed Decision Making with Digital Tools", "3.1",
+      "I know how to use digital data tools to drive school improvement efforts.",
+      ["data tool", "school improvement", "improvement plan", "data-driven decision", "school data", "data-informed", "performance data"],
+      "using digital data tools to drive school improvement",
+      {
+        strong: "Tie each improvement decision to a specific data trend documented in your tools, so the connection is visible to staff.",
+        moderate: "Identify two or three core data dashboards that inform improvement decisions.",
+        emerging: "Choose one data tool you'll consistently use in improvement conversations."
+      }),
+    r("3.0", "Data-Informed Decision Making with Digital Tools", "3.2",
+      "I can interpret complex digital data sets and communicate findings effectively using data visualization tools.",
+      ["data visualization", "dashboard", "data communication", "chart", "graph", "interpret data", "tableau", "looker", "data report"],
+      "interpreting and communicating findings using data visualization",
+      {
+        strong: "Build dashboards for different audiences (board, teachers, families) that surface the right level of detail for each.",
+        moderate: "Add a clear takeaway to every data visualization you share, not just the data itself.",
+        emerging: "Identify one data visualization tool you'll use to communicate findings more clearly."
+      }),
+    r("3.0", "Data-Informed Decision Making with Digital Tools", "3.3",
+      "I am aware of various digital assessment tools and their appropriate uses in education.",
+      ["assessment tool", "formative assessment", "summative", "digital assessment", "screener", "diagnostic", "interim", "assessment platform"],
+      "awareness of digital assessment tools and their appropriate uses",
+      {
+        strong: "Match each assessment tool to a specific purpose (screening, diagnostic, formative, summative) so they don't duplicate or conflict.",
+        moderate: "Audit your assessment tools to identify overlap or gaps.",
+        emerging: "Identify the purposes you need an assessment tool for, then match tools to purposes."
+      }),
+
+    r("4.0", "Fostering a Digital Learning Culture", "4.1",
+      "I know how to create a positive and inclusive digital learning climate.",
+      ["learning climate", "culture", "inclusive culture", "positive climate", "digital culture", "school culture", "belonging"],
+      "creating a positive and inclusive digital learning climate",
+      {
+        strong: "Make the climate concrete: visible norms, student voice in tech decisions, and consistent responses to digital incidents.",
+        moderate: "Engage students and teachers in setting digital norms together.",
+        emerging: "Identify the specific elements of digital climate you want to strengthen this year."
+      }),
+    r("4.0", "Fostering a Digital Learning Culture", "4.2",
+      "I can develop policies that support equitable access to technology and digital resources.",
+      ["equity", "equitable access", "policy", "device policy", "access", "digital divide", "1:1", "byod", "internet access"],
+      "developing policies that support equitable access",
+      {
+        strong: "Document which students are not currently well-served by current policies and what specific changes will reach them.",
+        moderate: "Add an equity audit step to any new technology policy.",
+        emerging: "Identify one access barrier your current policies don't address."
+      }),
+    r("4.0", "Fostering a Digital Learning Culture", "4.3",
+      "I am aware of strategies to address digital divides and promote responsible technology use.",
+      ["digital divide", "responsible use", "device management", "filter", "monitor", "acceptable use", "aup", "screen time"],
+      "addressing digital divides and promoting responsible technology use",
+      {
+        strong: "Pair every restriction with a parallel investment in teaching responsible use, so the goal is capability, not just compliance.",
+        moderate: "Review your acceptable use policy for clarity and current relevance.",
+        emerging: "Identify one specific gap in current digital access or responsible-use guidance to address."
+      }),
+
+    r("5.0", "Technology-Enabled Community Engagement", "5.1",
+      "I know how to build strong digital partnerships with families and community organizations.",
+      ["family partnership", "community partnership", "family engagement", "community organization", "outreach", "stakeholder", "parent engagement"],
+      "building strong digital partnerships with families and community",
+      {
+        strong: "Make community partnerships specific: named organizations, defined collaborations, shared outcomes.",
+        moderate: "Identify two community organizations whose mission aligns with your school priorities and build from there.",
+        emerging: "List the community partners you currently work with and what each contributes."
+      }),
+    r("5.0", "Technology-Enabled Community Engagement", "5.2",
+      "I can effectively use digital communication tools to share school goals and achievements with stakeholders.",
+      ["digital communication", "newsletter", "social media", "school website", "stakeholder communication", "share achievement", "communicate goal", "broadcast"],
+      "using digital communication tools to share goals and achievements",
+      {
+        strong: "Match the message to the channel: brief and visual for social, detailed for newsletters, interactive for community meetings.",
+        moderate: "Build a regular communication cadence rather than ad-hoc updates.",
+        emerging: "Identify the two or three digital channels your community actually checks, and prioritize those."
+      }),
+    r("5.0", "Technology-Enabled Community Engagement", "5.3",
+      "I am aware of strategies to leverage online community resources to support student learning.",
+      ["online resource", "community resource", "external partner", "library partnership", "museum", "virtual field trip", "expert", "guest speaker"],
+      "leveraging online community resources to support student learning",
+      {
+        strong: "Curate a small set of trusted external resources teachers can pull from, rather than expecting each teacher to source their own.",
+        moderate: "Identify two online community resources that could enrich current curriculum.",
+        emerging: "Pilot one virtual guest, field trip, or external resource this semester."
+      })
+  ]
+};
+
+// AI in Education rules (apply when toggled on, regardless of target group)
+const AI_RULES = [
+  r("1.0", "AI Literacy", "1.1",
+    "I know how AI systems work and their capabilities in educational contexts.",
+    ["how ai works", "ai capability", "ai system", "training data", "model", "neural network", "machine learning", "ai concept", "tokens", "prompt"],
+    "understanding how AI systems work and what they can do",
+    {
+      strong: "Build a brief explanation of the AI's mechanism into the activity so users develop a working mental model, not just usage habits.",
+      moderate: "Add one moment where students or teachers articulate what the AI is doing under the hood.",
+      emerging: "Include a short explanation of what kind of AI is being used and how it generates its outputs."
+    }),
+  r("1.0", "AI Literacy", "1.2",
+    "I can explain AI concepts in simple terms to various stakeholders.",
+    ["explain ai", "ai for parent", "ai for student", "ai for staff", "ai concept", "simple terms", "demystify", "ai basics"],
+    "explaining AI concepts in accessible terms",
+    {
+      strong: "Develop separate explanations for students, families, and staff, each in language and examples that audience already uses.",
+      moderate: "Add an analogy or concrete example to any AI explanation included in the material.",
+      emerging: "Identify which stakeholders need to understand the AI piece and tailor at least one explanation for them."
+    }),
+  r("1.0", "AI Literacy", "1.3",
+    "I am aware of the current limitations and potential biases in AI systems.",
+    ["limitation", "ai bias", "ai error", "hallucination", "inaccurate", "stereotype", "training bias", "false output", "ai mistake", "fact-check ai"],
+    "awareness of AI limitations and biases",
+    {
+      strong: "Build a structured analysis where users probe the AI for known limitations and document what they find.",
+      moderate: "Add a verification step where students check AI output against a reliable source.",
+      emerging: "Note one specific limitation of AI relevant to this activity and how to compensate for it."
+    }),
+
+  r("2.0", "Ethical AI Use", "2.1",
+    "I know how to apply ethical principles when using or developing AI for education.",
+    ["ethics", "ethical use", "ethical principle", "responsible ai", "ai policy", "academic integrity", "consent", "ai guideline", "appropriate use"],
+    "applying ethical principles to AI use in education",
+    {
+      strong: "Connect AI use in the activity to a specific ethical framework or set of principles your school endorses.",
+      moderate: "Reference one school or district AI policy that this activity follows.",
+      emerging: "Add a brief statement of acceptable AI use for this specific activity."
+    }),
+  r("2.0", "Ethical AI Use", "2.2",
+    "I can identify potential ethical issues in AI applications and propose solutions.",
+    ["ethical issue", "ethical concern", "ai dilemma", "ai consequence", "unintended", "harm", "fairness", "academic dishonesty", "cheating"],
+    "identifying ethical issues in AI applications",
+    {
+      strong: "Build in a case-study analysis where users name the ethical issue, the affected stakeholders, and a concrete response.",
+      moderate: "Add an explicit discussion of one ethical concern relevant to this AI use.",
+      emerging: "Identify one likely ethical pitfall in this activity and how participants will navigate it."
+    }),
+  r("2.0", "Ethical AI Use", "2.3",
+    "I am aware of the importance of transparency and accountability in AI systems.",
+    ["transparency", "accountability", "disclose ai use", "ai disclosure", "attribution", "cite ai", "explain ai decision", "audit"],
+    "transparency and accountability in AI use",
+    {
+      strong: "Require users to document not just that they used AI but specifically how, what they kept, and what they changed.",
+      moderate: "Add an AI disclosure step to any work products that include AI assistance.",
+      emerging: "Decide and state how AI use will be acknowledged in this activity."
+    }),
+
+  r("3.0", "AI-Enhanced Learning", "3.1",
+    "I know how to leverage AI tools to personalize and enhance learning experiences.",
+    ["personalize", "personalization", "differentiate with ai", "adaptive", "individualized", "ai feedback", "ai tutor", "ai support", "chatbot", "ai tool", "use ai", "ai chatbot", "ai-powered", "ai assistant", "generative ai"],
+    "using AI tools to personalize and enhance learning",
+    {
+      strong: "Specify which dimension is being personalized (pace, content, scaffold, language) so the AI is solving a defined problem.",
+      moderate: "Add a personalization step where the AI adapts to the learner's level, not just the topic.",
+      emerging: "Identify one way AI could personalize a step in this activity that's currently uniform."
+    }),
+  r("3.0", "AI-Enhanced Learning", "3.2",
+    "I can evaluate the effectiveness of AI-enhanced learning interventions.",
+    ["evaluate ai", "effectiveness of ai", "ai impact", "measure ai", "ai outcome", "evidence of learning", "ai data"],
+    "evaluating the effectiveness of AI-enhanced learning",
+    {
+      strong: "Define the measure of effectiveness before introducing the AI tool, then collect that evidence and review it.",
+      moderate: "Add a specific way to capture whether the AI use improved the learning outcome.",
+      emerging: "Identify what evidence would show this AI use is or isn't working."
+    }),
+  r("3.0", "AI-Enhanced Learning", "3.3",
+    "I am aware of how AI can support diverse learning needs and styles.",
+    ["diverse need", "accessibility", "ai accommodation", "translation", "text-to-speech", "speech-to-text", "ell support", "ai for ell", "ai for special education", "assistive ai"],
+    "using AI to support diverse learning needs",
+    {
+      strong: "Make AI accommodations available proactively rather than only after a request, so access is normalized.",
+      moderate: "Identify which AI features support which learner profiles in this activity.",
+      emerging: "Add one AI-enabled accommodation as an option for any student who wants it."
+    }),
+
+  r("4.0", "AI and Critical Thinking", "4.1",
+    "I know how to promote critical thinking skills in relation to AI-generated information.",
+    ["critical thinking ai", "evaluate ai output", "verify ai", "question ai", "skeptical of ai", "trust ai", "ai accuracy"],
+    "promoting critical thinking about AI-generated information",
+    {
+      strong: "Treat AI outputs as drafts to interrogate, not answers to accept. Build in explicit interrogation steps.",
+      moderate: "Add a step where users question or challenge the AI's output before using it.",
+      emerging: "Include one moment where AI output is compared against another source."
+    }),
+  r("4.0", "AI and Critical Thinking", "4.2",
+    "I can teach others to question and verify AI outputs.",
+    ["question ai", "verify ai", "check ai", "ai accuracy", "ai claim", "ai source", "ai citation", "second source"],
+    "teaching others to question and verify AI outputs",
+    {
+      strong: "Provide a verification routine users follow every time they use an AI output, the way they would for any external source.",
+      moderate: "Demonstrate AI verification in this activity, not just describe it.",
+      emerging: "Add a step where users locate a non-AI source confirming or correcting the AI output."
+    }),
+  r("4.0", "AI and Critical Thinking", "4.3",
+    "I am aware of strategies to develop AI-related problem-solving skills.",
+    ["ai problem-solving", "prompt engineering", "iterative prompt", "ai workflow", "ai strategy", "ai approach", "refine prompt"],
+    "developing AI-related problem-solving skills",
+    {
+      strong: "Build in an iterative prompting loop where users refine their inputs based on what the AI returns.",
+      moderate: "Add a moment where users compare results from two different prompts on the same task.",
+      emerging: "Include one explicit prompt-revision step rather than treating the first AI response as final."
+    }),
+
+  r("5.0", "AI Collaboration and Innovation", "5.1",
+    "I know how to foster collaboration between humans and AI systems.",
+    ["human-ai collaboration", "ai partner", "ai assistant", "ai collaboration", "work with ai", "co-create with ai", "ai workflow"],
+    "fostering productive human-AI collaboration",
+    {
+      strong: "Define what the human owns and what the AI assists with, so the collaboration is clear rather than ambiguous.",
+      moderate: "Add a step where users articulate where the AI helped and where they did the thinking themselves.",
+      emerging: "Identify which part of the task is appropriate to share with AI and which should stay fully human."
+    }),
+  r("5.0", "AI Collaboration and Innovation", "5.2",
+    "I can use AI as a tool for innovation in educational projects and research.",
+    ["innovation", "ai innovation", "ai project", "ai research", "new approach with ai", "ai-enabled project", "ai pilot"],
+    "using AI as a tool for innovation in projects and research",
+    {
+      strong: "Position the AI as enabling something not previously possible in this activity, and name what that is.",
+      moderate: "Add an innovation step where AI is used to extend the work beyond the standard product.",
+      emerging: "Identify one part of this activity AI could open up in a way that wasn't possible before."
+    }),
+  r("5.0", "AI Collaboration and Innovation", "5.3",
+    "I am aware of the potential of AI to augment human creativity and problem-solving.",
+    ["augment", "amplify", "creativity with ai", "ai brainstorm", "ai ideation", "creative ai", "ai-enhanced creativity", "ai-assisted creativity"],
+    "AI augmenting human creativity and problem-solving",
+    {
+      strong: "Use AI to expand the space of possibilities at the start, then have humans choose, refine, and own the final product.",
+      moderate: "Add an ideation step where AI generates options users then evaluate and develop.",
+      emerging: "Include one moment where AI is used to brainstorm before humans select and refine."
+    })
+];
 
 // ============================================================
 // UI Wiring
 // ============================================================
+let includeAi = true;
+
 document.querySelectorAll('.toggle-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
@@ -847,9 +1342,186 @@ Differentiation: Sentence frames provided for English learners. Visual organizer
 document.getElementById('submit-btn').addEventListener('click', runAlignment);
 
 // ============================================================
-// Core: Run alignment
+// Engine: Local Heuristic Alignment
 // ============================================================
-async function runAlignment() {
+
+function escapeRegex(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function splitSentences(text) {
+  // Split on sentence-ending punctuation followed by whitespace, or newlines
+  return text
+    .split(/(?<=[.!?])\s+|\n+/)
+    .map(s => s.trim())
+    .filter(s => s.length > 0);
+}
+
+// Score a single rule against the content. Returns {score, matchedKeywords, evidenceSentence}
+function scoreRule(rule, content, sentences) {
+  const lower = content.toLowerCase();
+  const matched = [];
+  let score = 0;
+
+  for (const kw of rule.keywords) {
+    const kwLower = kw.toLowerCase();
+    // Use word boundary on edges that are word characters
+    const startBoundary = /^\w/.test(kwLower) ? '\\b' : '';
+    const endBoundary = /\w$/.test(kwLower) ? '\\b' : '';
+    const regex = new RegExp(startBoundary + escapeRegex(kwLower) + endBoundary, 'gi');
+    const m = content.match(regex);
+    if (m && m.length > 0) {
+      // Multi-word phrases (containing space or hyphen) score 2x
+      const weight = /[\s-]/.test(kw) ? 2 : 1;
+      score += m.length * weight;
+      matched.push(kw);
+    }
+  }
+
+  // Find best evidence sentence: the one with highest matched-keyword density
+  let bestSentence = null;
+  let bestSentenceScore = 0;
+  if (matched.length > 0) {
+    for (const sent of sentences) {
+      const sentLower = sent.toLowerCase();
+      let sentMatches = 0;
+      for (const kw of matched) {
+        if (sentLower.includes(kw.toLowerCase())) sentMatches++;
+      }
+      if (sentMatches > bestSentenceScore) {
+        bestSentenceScore = sentMatches;
+        bestSentence = sent;
+      }
+    }
+  }
+
+  return { score, matchedKeywords: matched, evidenceSentence: bestSentence };
+}
+
+function strengthFromScore(score) {
+  if (score >= 5) return "strong";
+  if (score >= 3) return "moderate";
+  return "emerging";
+}
+
+function buildRationale(rule, matched, evidenceSentence) {
+  // Use up to 3 most relevant matched keywords (prefer multi-word phrases)
+  const sorted = [...matched].sort((a, b) => {
+    const aPhrase = /[\s-]/.test(a) ? 1 : 0;
+    const bPhrase = /[\s-]/.test(b) ? 1 : 0;
+    return bPhrase - aPhrase;
+  });
+  const top = sorted.slice(0, 3);
+
+  let evidencePart;
+  if (top.length === 1) evidencePart = `the phrase "${top[0]}"`;
+  else if (top.length === 2) evidencePart = `phrases like "${top[0]}" and "${top[1]}"`;
+  else evidencePart = `phrases like "${top[0]}," "${top[1]}," and "${top[2]}"`;
+
+  return `The material surfaces ${evidencePart}, which directly supports ${rule.concept}.`;
+}
+
+function buildEvidence(matched, evidenceSentence) {
+  if (!evidenceSentence) {
+    return matched.length > 0
+      ? `Matched terms: ${matched.slice(0, 5).join(", ")}.`
+      : "No specific sentence found.";
+  }
+  // Truncate if very long
+  let sentence = evidenceSentence;
+  if (sentence.length > 280) {
+    sentence = sentence.slice(0, 277) + "...";
+  }
+  // Highlight matched keywords in the sentence (case-insensitive)
+  const lower = sentence.toLowerCase();
+  // Build highlight ranges
+  const ranges = [];
+  for (const kw of matched) {
+    const kwL = kw.toLowerCase();
+    let idx = lower.indexOf(kwL);
+    while (idx !== -1) {
+      ranges.push({ start: idx, end: idx + kwL.length });
+      idx = lower.indexOf(kwL, idx + 1);
+    }
+  }
+  // Merge overlapping ranges
+  ranges.sort((a, b) => a.start - b.start);
+  const merged = [];
+  for (const r of ranges) {
+    if (merged.length === 0 || r.start > merged[merged.length - 1].end) {
+      merged.push({ ...r });
+    } else {
+      merged[merged.length - 1].end = Math.max(merged[merged.length - 1].end, r.end);
+    }
+  }
+  // Apply marks
+  let result = '';
+  let cursor = 0;
+  for (const r of merged) {
+    result += escapeHtml(sentence.slice(cursor, r.start));
+    result += '<mark>' + escapeHtml(sentence.slice(r.start, r.end)) + '</mark>';
+    cursor = r.end;
+  }
+  result += escapeHtml(sentence.slice(cursor));
+  return result;
+}
+
+function buildSummary(materialType, targetGroup, topAlignments) {
+  if (topAlignments.length === 0) {
+    return `This ${materialType} did not produce clear matches against the ${TARGET_LABELS[targetGroup]} ELE indicators. Consider adding more specific instructional moves, tools, or activities to make alignment visible.`;
+  }
+  const areaNames = [...new Set(topAlignments.slice(0, 3).map(a => a.ele_area_name))];
+  const areaList = areaNames.length === 1
+    ? areaNames[0]
+    : areaNames.length === 2
+      ? `${areaNames[0]} and ${areaNames[1]}`
+      : `${areaNames.slice(0, -1).join(", ")}, and ${areaNames[areaNames.length - 1]}`;
+
+  const top = topAlignments[0];
+  return `This ${materialType} aligns most clearly with ${areaList} in the ${TARGET_LABELS[targetGroup]} ELE framework. The strongest match is ${top.indicator_code} (${top.ele_area_name}), with ${top.alignment_strength} evidence in the submitted text.`;
+}
+
+function buildNextSteps(topAlignments, allScored, ruleSet) {
+  const steps = [];
+
+  // 1-2 steps from moderate or emerging primary alignments (where there's room to strengthen)
+  const refinements = topAlignments.filter(a => a.alignment_strength !== "strong").slice(0, 2);
+  for (const a of refinements) {
+    steps.push(`Strengthen ${a.indicator_code} (${a.ele_area_name}): ${a.recommendation}`);
+  }
+
+  // 1-2 steps from high-value areas that scored zero or near-zero
+  // Dedupe by area_code so we don't suggest two indicators from the same unmatched area
+  const matchedAreas = new Set(topAlignments.map(a => a.ele_area_code));
+  const seenUnmatchedAreas = new Set();
+  const unmatched = [];
+  for (const x of allScored) {
+    if (x.score >= 2) continue;
+    if (matchedAreas.has(x.rule.area_code)) continue;
+    if (seenUnmatchedAreas.has(x.rule.area_code)) continue;
+    seenUnmatchedAreas.add(x.rule.area_code);
+    unmatched.push(x);
+    if (unmatched.length >= 2) break;
+  }
+
+  for (const u of unmatched) {
+    steps.push(`Consider adding ${u.rule.area_name}: ${u.rule.recs.emerging}`);
+  }
+
+  // If still empty (everything was strong), suggest extension
+  if (steps.length === 0 && topAlignments.length > 0) {
+    const top = topAlignments[0];
+    steps.push(`This material aligns strongly across multiple indicators. To deepen ${top.ele_area_name}, consider how students will reflect on or apply the learning beyond the immediate activity.`);
+  }
+
+  // Always end with a review step
+  steps.push("Review these alignments with a colleague or coach and refine any that don't match your professional read of the material.");
+
+  return steps.slice(0, 5);
+}
+
+// Main: run alignment locally
+function runAlignment() {
   const content = document.getElementById('content').value.trim();
   const materialType = document.getElementById('material-type').value;
   const targetGroup = document.querySelector('input[name="target"]:checked').value;
@@ -857,141 +1529,81 @@ async function runAlignment() {
   const errorBox = document.getElementById('error-box');
   errorBox.classList.remove('active');
 
-  if (content.length < 50) {
-    errorBox.textContent = "Please paste at least a few sentences of content to align.";
+  if (content.length < 80) {
+    errorBox.textContent = "Please paste at least a paragraph of content. Short submissions don't have enough context for meaningful alignment.";
     errorBox.classList.add('active');
     return;
   }
 
-  // Hide previous results, show loading
   document.getElementById('results').classList.remove('active');
-  document.getElementById('loading').classList.add('active');
   document.getElementById('submit-btn').disabled = true;
-  document.getElementById('loading-text').textContent = `Aligning to ${TARGET_LABELS[targetGroup]} ELEs...`;
 
-  try {
-    const framework = ELE_FRAMEWORK[targetGroup];
-    const prompt = buildPrompt(materialType, targetGroup, framework, includeAi, content);
-
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 4000,
-        messages: [{ role: "user", content: prompt }]
-      })
-    });
-
-    if (!response.ok) {
-      throw new Error(`API returned ${response.status}`);
-    }
-
-    const data = await response.json();
-    const raw = data.content
-      .filter(b => b.type === "text")
-      .map(b => b.text)
-      .join("\n")
-      .trim();
-
-    // Strip markdown fences if present
-    const cleaned = raw.replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/```\s*$/i, "").trim();
-
-    let parsed;
+  // Run synchronously; it's fast.
+  // Use a tiny setTimeout to let the UI update first.
+  setTimeout(() => {
     try {
-      parsed = JSON.parse(cleaned);
-    } catch (e) {
-      // Try to extract JSON object from the string
-      const match = cleaned.match(/\{[\s\S]*\}/);
-      if (match) {
-        parsed = JSON.parse(match[0]);
-      } else {
-        throw new Error("Could not parse AI response as JSON.");
+      const sentences = splitSentences(content);
+      const ruleSet = RULES[targetGroup];
+
+      // Score every rule
+      const scored = ruleSet.map(rule => ({
+        rule,
+        ...scoreRule(rule, content, sentences)
+      }));
+
+      // Filter to those with at least minimal evidence (score >= 1)
+      const matched = scored.filter(s => s.score >= 1);
+      // Sort by score descending
+      matched.sort((a, b) => b.score - a.score);
+
+      // Take top 3-5: minimum 3 if available, more if scores remain meaningful
+      const top = matched.slice(0, 5).filter((s, i) => i < 3 || s.score >= 2);
+
+      const primary_alignments = top.map(s => ({
+        ele_area_code: s.rule.area_code,
+        ele_area_name: s.rule.area_name,
+        indicator_code: s.rule.indicator_code,
+        indicator: s.rule.indicator,
+        alignment_strength: strengthFromScore(s.score),
+        rationale: buildRationale(s.rule, s.matchedKeywords, s.evidenceSentence),
+        evidence: buildEvidence(s.matchedKeywords, s.evidenceSentence),
+        recommendation: s.rule.recs[strengthFromScore(s.score)]
+      }));
+
+      let ai_alignments = [];
+      if (includeAi) {
+        const aiScored = AI_RULES.map(rule => ({
+          rule,
+          ...scoreRule(rule, content, sentences)
+        }));
+        const aiMatched = aiScored.filter(s => s.score >= 1);
+        aiMatched.sort((a, b) => b.score - a.score);
+        const aiTop = aiMatched.slice(0, 4).filter((s, i) => i < 2 || s.score >= 2);
+
+        ai_alignments = aiTop.map(s => ({
+          ele_area_code: s.rule.area_code,
+          ele_area_name: s.rule.area_name,
+          indicator_code: s.rule.indicator_code,
+          indicator: s.rule.indicator,
+          alignment_strength: strengthFromScore(s.score),
+          rationale: buildRationale(s.rule, s.matchedKeywords, s.evidenceSentence),
+          evidence: buildEvidence(s.matchedKeywords, s.evidenceSentence),
+          recommendation: s.rule.recs[strengthFromScore(s.score)]
+        }));
       }
+
+      const summary = buildSummary(materialType, targetGroup, primary_alignments);
+      const next_steps = buildNextSteps(primary_alignments, scored, ruleSet);
+
+      renderResults({ summary, primary_alignments, ai_alignments, next_steps }, targetGroup, includeAi);
+    } catch (err) {
+      errorBox.textContent = "Something went wrong while analyzing the material: " + err.message;
+      errorBox.classList.add('active');
+      console.error(err);
+    } finally {
+      document.getElementById('submit-btn').disabled = false;
     }
-
-    renderResults(parsed, targetGroup, includeAi);
-  } catch (err) {
-    errorBox.textContent = "Something went wrong: " + err.message + ". Please try again.";
-    errorBox.classList.add('active');
-    console.error(err);
-  } finally {
-    document.getElementById('loading').classList.remove('active');
-    document.getElementById('submit-btn').disabled = false;
-  }
-}
-
-// ============================================================
-// Prompt builder
-// ============================================================
-function buildPrompt(materialType, targetGroup, framework, includeAi, content) {
-  const frameworkText = framework.key_areas.map(area => {
-    const indicators = area.indicators.map(i => `    ${i.code} — ${i.indicator}`).join("\n");
-    return `  Area ${area.code} ${area.name}\n${indicators}`;
-  }).join("\n");
-
-  let aiText = "";
-  if (includeAi) {
-    aiText = "\n\nAI IN EDUCATION ELE FRAMEWORK:\n" + AI_FRAMEWORK.key_areas.map(area => {
-      const indicators = area.indicators.map(i => `    ${i.code} — ${i.indicator}`).join("\n");
-      return `  Area ${area.code} ${area.name}\n${indicators}`;
-    }).join("\n");
-  }
-
-  return `You are the TCEA ELEs Alignment Assistant. Your job is to align educational materials to the TCEA Essential Learning Expectations framework. Use a friendly, conversational, approachable, professional tone. Be specific and actionable. Use educator-friendly language. Avoid vague alignment claims. Explain why each ELE match was selected.
-
-TARGET GROUP: ${TARGET_LABELS[targetGroup]}
-MATERIAL TYPE: ${materialType}
-
-TCEA ELE FRAMEWORK FOR THIS TARGET GROUP (${framework.title}):
-${frameworkText}${aiText}
-
-MATERIAL TO ALIGN:
-"""
-${content}
-"""
-
-INSTRUCTIONS:
-1. Read the material carefully.
-2. Identify the 3 to 5 strongest ELE alignments from the framework above. Do not invent ELE codes; only use codes listed above.
-3. For each alignment, assess strength as "strong", "moderate", or "emerging" based on how directly the material supports the indicator.
-4. ${includeAi ? 'Also identify 2 to 4 alignments to the AI in Education framework if applicable.' : 'Do not include AI alignments.'}
-5. Provide a short summary (2 to 3 sentences) of the material and its primary focus.
-6. Suggest 3 to 5 concrete next steps the educator could take to strengthen alignment.
-
-Write rationale and evidence using active voice, Oxford comma, and the Oxford convention of spelling out numbers one through ten. Avoid the words: empower, journey, embark, delve, discover, unlock, elevate, master. Do not use em dashes.
-
-Quote brief phrases from the submitted material verbatim in the "evidence" field to anchor each alignment.
-
-Return ONLY valid JSON in this exact schema, with no preamble, no markdown fences, no commentary:
-
-{
-  "summary": "string (2 to 3 sentences describing the material)",
-  "primary_alignments": [
-    {
-      "ele_area_code": "string (e.g., '1.0')",
-      "ele_area_name": "string",
-      "indicator_code": "string (e.g., '1.2')",
-      "indicator": "string (the full indicator text)",
-      "alignment_strength": "strong | moderate | emerging",
-      "rationale": "string (2 to 3 sentences explaining why this is the best fit)",
-      "evidence": "string (specific phrases or details quoted from the material)",
-      "recommendation": "string (1 to 2 sentences with an actionable improvement or extension)"
-    }
-  ],${includeAi ? `
-  "ai_alignments": [
-    {
-      "ele_area_code": "string",
-      "ele_area_name": "string",
-      "indicator_code": "string",
-      "indicator": "string",
-      "alignment_strength": "strong | moderate | emerging",
-      "rationale": "string",
-      "recommendation": "string"
-    }
-  ],` : ''}
-  "next_steps": ["string", "string", "string"]
-}`;
+  }, 50);
 }
 
 // ============================================================
@@ -1010,13 +1622,16 @@ function renderResults(data, targetGroup, includeAi) {
         <h3>Summary</h3>
         <p>${escapeHtml(data.summary || '')}</p>
       </div>
-
-      <h3 style="margin-top: 28px; margin-bottom: 14px;">Primary ELE Alignments</h3>
   `;
 
-  (data.primary_alignments || []).forEach(a => {
-    html += renderAlignment(a, false);
-  });
+  if (data.primary_alignments && data.primary_alignments.length > 0) {
+    html += `<h3 style="margin-top: 28px; margin-bottom: 14px;">Primary ELE Alignments</h3>`;
+    data.primary_alignments.forEach(a => {
+      html += renderAlignment(a);
+    });
+  } else {
+    html += `<p style="color: var(--text-muted); font-style: italic;">No primary alignments could be identified. The material may be too short, or may not explicitly reference the practices listed in this target group's framework.</p>`;
+  }
 
   if (includeAi && data.ai_alignments && data.ai_alignments.length > 0) {
     html += `
@@ -1026,9 +1641,17 @@ function renderResults(data, targetGroup, includeAi) {
         <p class="subtitle">How this material connects to the TCEA AI in Education framework.</p>
     `;
     data.ai_alignments.forEach(a => {
-      html += renderAlignment(a, true);
+      html += renderAlignment(a);
     });
     html += `</div>`;
+  } else if (includeAi) {
+    html += `
+      <div class="ai-section">
+        <span class="ai-badge">AI in Education ELEs</span>
+        <h3>AI Alignment</h3>
+        <p style="color: var(--text-muted); font-style: italic;">No AI-specific alignments were identified in this material. If AI is part of the intended design, consider naming the AI tool and the specific way it supports learning.</p>
+      </div>
+    `;
   }
 
   if (data.next_steps && data.next_steps.length > 0) {
@@ -1053,7 +1676,7 @@ function renderResults(data, targetGroup, includeAi) {
   results.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-function renderAlignment(a, isAi) {
+function renderAlignment(a) {
   const strengthClass = `strength-${(a.alignment_strength || 'moderate').toLowerCase()}`;
   return `
     <div class="alignment-block">
@@ -1074,7 +1697,7 @@ function renderAlignment(a, isAi) {
       ${a.evidence ? `
       <div class="detail-row">
         <div class="detail-label">Evidence from material</div>
-        <div class="detail-content"><em>${escapeHtml(a.evidence)}</em></div>
+        <div class="evidence-quote">${a.evidence}</div>
       </div>` : ''}
 
       <div class="detail-row" style="margin-bottom: 0;">
