@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TCEA ELEs Alignment Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0A3476;
+  --navy-dark: #071f4a;
+  --navy-mid: #12428f;
+  --gold: #FCB040;
+  --gold-light: #fdd17a;
+  --gold-pale: #FEF0D0;
+  --pale-navy: #D0D8F0;
+  --white: #ffffff;
+  --off-white: #f7f8fc;
+  --text: #1a1a2e;
+  --text-muted: #5a6680;
+  --border: #e2e7f5;
+  --teal: #0e6b8a;
+  --success: #1d7a4d;
+  --warn: #b8651a;
+  --emerge: #6b4a8e;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--off-white);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* Header */
+.hero {
+  background: var(--navy-dark);
+  background-image: radial-gradient(circle at 20% 30%, rgba(252,176,64,0.18) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 70%, rgba(252,176,64,0.08) 0%, transparent 50%);
+  color: var(--white);
+  padding: 56px 24px 64px;
+  text-align: center;
+}
+
+.hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(32px, 5vw, 48px);
+  margin: 0 0 12px;
+  line-height: 1.15;
+}
+
+.hero h1 em {
+  color: var(--gold);
+  font-style: italic;
+}
+
+.hero p {
+  font-size: 18px;
+  max-width: 720px;
+  margin: 0 auto;
+  color: rgba(255,255,255,0.88);
+}
+
+.hero-tag {
+  display: inline-block;
+  background: rgba(252,176,64,0.18);
+  color: var(--gold);
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+
+/* Layout */
+.container {
+  max-width: 980px;
+  margin: -36px auto 80px;
+  padding: 0 20px;
+  position: relative;
+}
+
+.card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 32px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 20px rgba(10,52,118,0.06);
+}
+
+.step-label {
+  display: inline-block;
+  background: var(--pale-navy);
+  color: var(--navy);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.8px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+h2 {
+  font-family: 'DM Serif Display', serif;
+  color: var(--navy);
+  font-size: 26px;
+  margin: 0 0 8px;
+  line-height: 1.2;
+}
+
+h3 {
+  font-family: 'DM Serif Display', serif;
+  color: var(--navy);
+  font-size: 20px;
+  margin: 0 0 8px;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  margin: 0 0 20px;
+  font-size: 15px;
+}
+
+/* Radio cards */
+.radio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.radio-card {
+  position: relative;
+  cursor: pointer;
+}
+
+.radio-card input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.radio-card-inner {
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  background: var(--white);
+  transition: all 0.15s;
+  height: 100%;
+}
+
+.radio-card:hover .radio-card-inner {
+  border-color: var(--navy-mid);
+  background: var(--off-white);
+}
+
+.radio-card input:checked + .radio-card-inner {
+  border-color: var(--navy);
+  background: var(--pale-navy);
+  box-shadow: 0 0 0 3px rgba(10,52,118,0.1);
+}
+
+.radio-card input:checked + .radio-card-inner::before {
+  content: "✓";
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  color: var(--gold);
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.radio-card-title {
+  font-weight: 600;
+  color: var(--navy);
+  font-size: 15px;
+  margin-bottom: 2px;
+}
+
+.radio-card-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* Toggle (Yes/No) */
+.toggle-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.toggle-btn {
+  flex: 1;
+  min-width: 120px;
+  padding: 12px 20px;
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.toggle-btn:hover {
+  border-color: var(--navy-mid);
+}
+
+.toggle-btn.active {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: var(--white);
+}
+
+/* Form fields */
+label.field-label {
+  display: block;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 6px;
+  font-size: 15px;
+}
+
+select, textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: var(--text);
+  background: var(--white);
+  transition: border-color 0.15s;
+}
+
+select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(10,52,118,0.1);
+}
+
+textarea {
+  min-height: 200px;
+  resize: vertical;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.field-group { margin-bottom: 18px; }
+
+/* Primary button */
+.btn-primary {
+  background: var(--gold);
+  color: var(--navy-dark);
+  border: none;
+  border-radius: 10px;
+  padding: 14px 32px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--gold-light);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(252,176,64,0.4);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: var(--white);
+  color: var(--navy);
+  border: 1.5px solid var(--navy);
+  border-radius: 10px;
+  padding: 12px 24px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-secondary:hover {
+  background: var(--pale-navy);
+}
+
+.btn-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 8px;
+}
+
+/* Loading */
+.loading {
+  display: none;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.loading.active { display: block; }
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--border);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+  margin: 0 auto 16px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-text {
+  color: var(--text-muted);
+  font-size: 15px;
+}
+
+/* Results */
+.results { display: none; }
+.results.active { display: block; }
+
+.summary-box {
+  background: linear-gradient(135deg, var(--pale-navy) 0%, var(--off-white) 100%);
+  border-left: 4px solid var(--gold);
+  padding: 20px 24px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.summary-box h3 {
+  margin-bottom: 8px;
+}
+
+.alignment-block {
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 22px;
+  margin-bottom: 16px;
+  background: var(--white);
+}
+
+.alignment-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.ele-code {
+  display: inline-block;
+  background: var(--navy);
+  color: var(--white);
+  font-weight: 700;
+  font-size: 13px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-right: 8px;
+}
+
+.ele-area {
+  font-weight: 600;
+  color: var(--navy);
+  font-size: 15px;
+}
+
+.indicator-text {
+  margin-top: 6px;
+  font-style: italic;
+  color: var(--text);
+  font-size: 15px;
+}
+
+.strength-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.strength-strong {
+  background: rgba(29,122,77,0.12);
+  color: var(--success);
+}
+
+.strength-moderate {
+  background: rgba(184,101,26,0.12);
+  color: var(--warn);
+}
+
+.strength-emerging {
+  background: rgba(107,74,142,0.12);
+  color: var(--emerge);
+}
+
+.detail-row {
+  margin-bottom: 12px;
+}
+
+.detail-label {
+  font-weight: 700;
+  color: var(--navy);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 4px;
+}
+
+.detail-content {
+  color: var(--text);
+  font-size: 15px;
+}
+
+.detail-content em {
+  background: var(--gold-pale);
+  font-style: normal;
+  padding: 0 4px;
+  border-radius: 3px;
+}
+
+.ai-section {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 2px solid var(--border);
+}
+
+.ai-badge {
+  display: inline-block;
+  background: var(--gold-pale);
+  color: var(--warn);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.6px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.next-steps-list {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+}
+
+.next-steps-list li {
+  padding: 12px 16px 12px 44px;
+  background: var(--off-white);
+  border-left: 3px solid var(--gold);
+  border-radius: 6px;
+  margin-bottom: 8px;
+  position: relative;
+  font-size: 15px;
+}
+
+.next-steps-list li::before {
+  content: "→";
+  position: absolute;
+  left: 16px;
+  top: 12px;
+  color: var(--gold);
+  font-weight: 700;
+  font-size: 18px;
+}
+
+/* Error */
+.error-box {
+  background: #fef2f2;
+  border-left: 4px solid #dc2626;
+  padding: 16px 20px;
+  border-radius: 8px;
+  color: #7f1d1d;
+  margin-bottom: 20px;
+  display: none;
+}
+
+.error-box.active { display: block; }
+
+/* Footer */
+.footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+  padding: 24px;
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+}
+
+.footer a { color: var(--navy); text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+
+@media (max-width: 600px) {
+  .card { padding: 22px 18px; }
+  .hero { padding: 40px 18px 56px; }
+  .alignment-header { flex-direction: column; }
+}
+
+@media print {
+  .hero { background: var(--navy); color: white; }
+  .input-section { display: none; }
+  .btn-row { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <span class="hero-tag">TCEA · Essential Learning Expectations</span>
+  <h1>ELEs Alignment <em>Assistant</em></h1>
+  <p>Submit a lesson plan, professional development activity, article, book chapter, or blog post. Receive a specific, actionable alignment to the TCEA Essential Learning Expectations.</p>
+</header>
+
+<main class="container">
+
+  <!-- Step 1: Target Group -->
+  <section class="card input-section">
+    <span class="step-label">Step 1</span>
+    <h2>Which target group should this be aligned for?</h2>
+    <p class="subtitle">Choose the role the material primarily addresses.</p>
+    <div class="radio-grid" id="target-group-grid">
+      <label class="radio-card">
+        <input type="radio" name="target" value="teachers_and_teacher_librarians" checked>
+        <div class="radio-card-inner">
+          <div class="radio-card-title">Teachers and teacher librarians</div>
+          <div class="radio-card-desc">Technology integration, digital literacy, inclusive teaching, relationships, critical thinking</div>
+        </div>
+      </label>
+      <label class="radio-card">
+        <input type="radio" name="target" value="students">
+        <div class="radio-card-inner">
+          <div class="radio-card-title">Students</div>
+          <div class="radio-card-desc">Tech savvy, online safety, collaboration, self-direction, creative problem solving</div>
+        </div>
+      </label>
+      <label class="radio-card">
+        <input type="radio" name="target" value="instructional_coaches">
+        <div class="radio-card-inner">
+          <div class="radio-card-title">Instructional coaches</div>
+          <div class="radio-card-desc">Teacher support, technology integration, data-driven coaching, PD, collaborative leadership</div>
+        </div>
+      </label>
+      <label class="radio-card">
+        <input type="radio" name="target" value="school_leaders_and_administrators">
+        <div class="radio-card-inner">
+          <div class="radio-card-title">School leaders and administrators</div>
+          <div class="radio-card-desc">Visionary leadership, instructional leadership, data-informed decisions, culture, community</div>
+        </div>
+      </label>
+    </div>
+  </section>
+
+  <!-- Step 2: AI Alignment Toggle -->
+  <section class="card input-section">
+    <span class="step-label">Step 2</span>
+    <h2>Would you also like a separate alignment to the ELEs for AI in Education?</h2>
+    <p class="subtitle">Optional. Adds AI Literacy, Ethical AI Use, AI-Enhanced Learning, AI and Critical Thinking, and AI Collaboration to the analysis.</p>
+    <div class="toggle-row">
+      <button type="button" class="toggle-btn active" data-ai="yes">Yes, include AI alignment</button>
+      <button type="button" class="toggle-btn" data-ai="no">No, skip AI alignment</button>
+    </div>
+  </section>
+
+  <!-- Step 3: Material -->
+  <section class="card input-section">
+    <span class="step-label">Step 3</span>
+    <h2>Paste the material to align</h2>
+    <p class="subtitle">Works with lesson plans, PD activities, articles, book chapters, blog posts, and similar materials.</p>
+
+    <div class="field-group">
+      <label class="field-label" for="material-type">Material type</label>
+      <select id="material-type">
+        <option value="lesson plan">Lesson plan</option>
+        <option value="PD activity">Professional development activity</option>
+        <option value="article">Article</option>
+        <option value="book chapter">Book chapter</option>
+        <option value="blog post">Blog post</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label" for="content">Content</label>
+      <textarea id="content" placeholder="Paste your lesson plan, article, or other material here..."></textarea>
+    </div>
+
+    <div class="error-box" id="error-box"></div>
+
+    <div class="btn-row">
+      <button class="btn-primary" id="submit-btn">
+        <span>Align to TCEA ELEs</span>
+        <span>→</span>
+      </button>
+      <button class="btn-secondary" id="sample-btn">Load sample lesson</button>
+    </div>
+  </section>
+
+  <!-- Loading -->
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <div class="loading-text" id="loading-text">Reviewing your material against the TCEA ELEs framework...</div>
+  </div>
+
+  <!-- Results -->
+  <section class="results" id="results"></section>
+
+</main>
+
+<footer class="footer">
+  <p>Built around the <strong>TCEA Essential Learning Expectations</strong> framework. Alignments are generated by AI and should be reviewed by a knowledgeable educator before use.</p>
+</footer>
+
+<script>
+// ============================================================
+// TCEA ELE Framework (embedded from source JSON)
+// ============================================================
+const ELE_FRAMEWORK = {
+  teachers_and_teacher_librarians: {
+    title: "Essential Learning Expectations for Teachers",
+    key_areas: [
+      { code: "1.0", name: "Technology Integration", indicators: [
+        { code: "1.1", indicator: "I know how to seamlessly integrate technology into my teaching practices." },
+        { code: "1.2", indicator: "I can use AI tools to enhance student learning experiences." },
+        { code: "1.3", indicator: "I am aware of emerging technologies and their potential applications in education." }
+      ]},
+      { code: "2.0", name: "Digital Literacy", indicators: [
+        { code: "2.1", indicator: "I can teach students to critically evaluate online information." },
+        { code: "2.2", indicator: "I know how to guide students in safe and responsible internet use." },
+        { code: "2.3", indicator: "I am aware of strategies to help students identify and combat misinformation." }
+      ]},
+      { code: "3.0", name: "Inclusive Teaching", indicators: [
+        { code: "3.1", indicator: "I know how to create a welcoming classroom environment for all students." },
+        { code: "3.2", indicator: "I can adapt my teaching methods to accommodate diverse learning needs." },
+        { code: "3.3", indicator: "I am aware of cultural differences and how they impact learning." }
+      ]},
+      { code: "4.0", name: "Relationship Building", indicators: [
+        { code: "4.1", indicator: "I know how to foster positive relationships with my students." },
+        { code: "4.2", indicator: "I can create opportunities for student collaboration and peer learning." },
+        { code: "4.3", indicator: "I am aware of the importance of emotional support in academic success." }
+      ]},
+      { code: "5.0", name: "Critical Thinking", indicators: [
+        { code: "5.1", indicator: "I know how to design lessons that promote higher-order thinking skills." },
+        { code: "5.2", indicator: "I can use questioning techniques to stimulate deep learning." },
+        { code: "5.3", indicator: "I am aware of strategies to develop students' problem-solving abilities." }
+      ]}
+    ]
+  },
+  students: {
+    title: "Essential Learning Expectations for Students",
+    key_areas: [
+      { code: "1.0", name: "Tech Savvy", indicators: [
+        { code: "1.1", indicator: "I know how to use technology to support my learning." },
+        { code: "1.2", indicator: "I can adapt to new digital tools and platforms." },
+        { code: "1.3", indicator: "I am aware of how AI can assist me in my studies." }
+      ]},
+      { code: "2.0", name: "Online Safety", indicators: [
+        { code: "2.1", indicator: "I know how to protect my personal information online." },
+        { code: "2.2", indicator: "I can identify trustworthy sources of information on the internet." },
+        { code: "2.3", indicator: "I am aware of the potential risks of sharing content online." }
+      ]},
+      { code: "3.0", name: "Collaborative Learner", indicators: [
+        { code: "3.1", indicator: "I know how to work effectively in a team." },
+        { code: "3.2", indicator: "I can communicate my ideas clearly to others." },
+        { code: "3.3", indicator: "I am aware of the value of diverse perspectives in group work." }
+      ]},
+      { code: "4.0", name: "Self-Directed Learner", indicators: [
+        { code: "4.1", indicator: "I know how to take responsibility for my own learning." },
+        { code: "4.2", indicator: "I can set achievable goals and monitor my progress." },
+        { code: "4.3", indicator: "I am aware of my learning strengths and areas for improvement." }
+      ]},
+      { code: "5.0", name: "Creative Problem Solver", indicators: [
+        { code: "5.1", indicator: "I know how to approach complex problems systematically." },
+        { code: "5.2", indicator: "I can use creativity and logic to find innovative solutions." },
+        { code: "5.3", indicator: "I am aware of how to apply computational thinking in various subjects." }
+      ]}
+    ]
+  },
+  instructional_coaches: {
+    title: "Essential Learning Expectations for Instructional Coaches",
+    key_areas: [
+      { code: "1.0", name: "Teacher Support", indicators: [
+        { code: "1.1", indicator: "I know how to mentor teachers in effective instructional practices." },
+        { code: "1.2", indicator: "I can provide constructive feedback to improve teaching strategies." },
+        { code: "1.3", indicator: "I am aware of the latest educational research and best practices." }
+      ]},
+      { code: "2.0", name: "Technology Integration", indicators: [
+        { code: "2.1", indicator: "I know how to guide teachers in meaningful technology integration." },
+        { code: "2.2", indicator: "I can evaluate the effectiveness of educational technology tools." },
+        { code: "2.3", indicator: "I am aware of emerging technologies and their potential in education." }
+      ]},
+      { code: "3.0", name: "Data-Driven Coaching", indicators: [
+        { code: "3.1", indicator: "I know how to use data to inform instructional decisions." },
+        { code: "3.2", indicator: "I can help teachers interpret and act on assessment results." },
+        { code: "3.3", indicator: "I am aware of various data collection and analysis tools." }
+      ]},
+      { code: "4.0", name: "Professional Development", indicators: [
+        { code: "4.1", indicator: "I know how to design and deliver effective professional development sessions." },
+        { code: "4.2", indicator: "I can identify and address teachers' individual learning needs." },
+        { code: "4.3", indicator: "I am aware of adult learning principles and how to apply them." }
+      ]},
+      { code: "5.0", name: "Collaborative Leadership", indicators: [
+        { code: "5.1", indicator: "I know how to foster a collaborative culture among educators." },
+        { code: "5.2", indicator: "I can facilitate productive discussions and problem-solving sessions." },
+        { code: "5.3", indicator: "I am aware of strategies to build trust and promote teamwork." }
+      ]}
+    ]
+  },
+  school_leaders_and_administrators: {
+    title: "Essential Learning Expectations for School Leaders and Administrators",
+    key_areas: [
+      { code: "1.0", name: "Visionary Technology Leadership", indicators: [
+        { code: "1.1", indicator: "I know how to create and communicate a compelling vision for technology integration in the school." },
+        { code: "1.2", indicator: "I can develop strategic technology plans that align with educational trends and community needs." },
+        { code: "1.3", indicator: "I am aware of emerging educational technologies and their potential impact on teaching and learning." }
+      ]},
+      { code: "2.0", name: "Technology-Enhanced Instructional Leadership", indicators: [
+        { code: "2.1", indicator: "I know how to support and evaluate effective technology integration practices." },
+        { code: "2.2", indicator: "I can guide the implementation of digital curriculum and instructional technology initiatives." },
+        { code: "2.3", indicator: "I am aware of research-based approaches to technology-enhanced pedagogy and their applications." }
+      ]},
+      { code: "3.0", name: "Data-Informed Decision Making with Digital Tools", indicators: [
+        { code: "3.1", indicator: "I know how to use digital data tools to drive school improvement efforts." },
+        { code: "3.2", indicator: "I can interpret complex digital data sets and communicate findings effectively using data visualization tools." },
+        { code: "3.3", indicator: "I am aware of various digital assessment tools and their appropriate uses in education." }
+      ]},
+      { code: "4.0", name: "Fostering a Digital Learning Culture", indicators: [
+        { code: "4.1", indicator: "I know how to create a positive and inclusive digital learning climate." },
+        { code: "4.2", indicator: "I can develop policies that support equitable access to technology and digital resources." },
+        { code: "4.3", indicator: "I am aware of strategies to address digital divides and promote responsible technology use." }
+      ]},
+      { code: "5.0", name: "Technology-Enabled Community Engagement", indicators: [
+        { code: "5.1", indicator: "I know how to build strong digital partnerships with families and community organizations." },
+        { code: "5.2", indicator: "I can effectively use digital communication tools to share school goals and achievements with stakeholders." },
+        { code: "5.3", indicator: "I am aware of strategies to leverage online community resources to support student learning." }
+      ]}
+    ]
+  }
+};
+
+const AI_FRAMEWORK = {
+  title: "Essential Learning Expectations for AI in Education",
+  key_areas: [
+    { code: "1.0", name: "AI Literacy", indicators: [
+      { code: "1.1", indicator: "I know how AI systems work and their capabilities in educational contexts." },
+      { code: "1.2", indicator: "I can explain AI concepts in simple terms to various stakeholders." },
+      { code: "1.3", indicator: "I am aware of the current limitations and potential biases in AI systems." }
+    ]},
+    { code: "2.0", name: "Ethical AI Use", indicators: [
+      { code: "2.1", indicator: "I know how to apply ethical principles when using or developing AI for education." },
+      { code: "2.2", indicator: "I can identify potential ethical issues in AI applications and propose solutions." },
+      { code: "2.3", indicator: "I am aware of the importance of transparency and accountability in AI systems." }
+    ]},
+    { code: "3.0", name: "AI-Enhanced Learning", indicators: [
+      { code: "3.1", indicator: "I know how to leverage AI tools to personalize and enhance learning experiences." },
+      { code: "3.2", indicator: "I can evaluate the effectiveness of AI-enhanced learning interventions." },
+      { code: "3.3", indicator: "I am aware of how AI can support diverse learning needs and styles." }
+    ]},
+    { code: "4.0", name: "AI and Critical Thinking", indicators: [
+      { code: "4.1", indicator: "I know how to promote critical thinking skills in relation to AI-generated information." },
+      { code: "4.2", indicator: "I can teach others to question and verify AI outputs." },
+      { code: "4.3", indicator: "I am aware of strategies to develop AI-related problem-solving skills." }
+    ]},
+    { code: "5.0", name: "AI Collaboration and Innovation", indicators: [
+      { code: "5.1", indicator: "I know how to foster collaboration between humans and AI systems." },
+      { code: "5.2", indicator: "I can use AI as a tool for innovation in educational projects and research." },
+      { code: "5.3", indicator: "I am aware of the potential of AI to augment human creativity and problem-solving." }
+    ]}
+  ]
+};
+
+const TARGET_LABELS = {
+  teachers_and_teacher_librarians: "Teachers and teacher librarians",
+  students: "Students",
+  instructional_coaches: "Instructional coaches",
+  school_leaders_and_administrators: "School leaders and administrators"
+};
+
+// ============================================================
+// State
+// ============================================================
+let includeAi = true;
+
+// ============================================================
+// UI Wiring
+// ============================================================
+document.querySelectorAll('.toggle-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    includeAi = btn.dataset.ai === 'yes';
+  });
+});
+
+document.getElementById('sample-btn').addEventListener('click', () => {
+  document.getElementById('material-type').value = 'lesson plan';
+  document.getElementById('content').value = `Title: Spotting Misinformation in Social Media
+
+Grade Level: Grade 7 English Language Arts
+Duration: Two 45-minute class periods
+
+Objective: Students will analyze social media posts about a current event, identify markers of misinformation, and produce a short verification report.
+
+Activities:
+1. Warm-up (10 min): Students review three sample social media posts projected on the board. In pairs, they rank the posts from most to least trustworthy and explain their reasoning.
+2. Mini-lesson (15 min): Teacher introduces the SIFT method (Stop, Investigate the source, Find better coverage, Trace claims). Students take notes in their digital notebooks.
+3. Guided practice (30 min): Working in groups of three, students use a fact-checking website and an AI chatbot to verify claims in a teacher-selected post. Each group documents their process and findings in a shared Google Doc.
+4. Independent work (30 min, Day 2): Students choose one post from their own social feed (with parent permission) and produce a one-page verification report following SIFT.
+5. Share-out (10 min): Three volunteers present findings. Class discusses patterns they noticed.
+
+Assessment: Verification report scored on a rubric covering source evaluation, claim verification, and use of multiple tools.
+
+Differentiation: Sentence frames provided for English learners. Visual organizer for students who need scaffolding.`;
+});
+
+document.getElementById('submit-btn').addEventListener('click', runAlignment);
+
+// ============================================================
+// Core: Run alignment
+// ============================================================
+async function runAlignment() {
+  const content = document.getElementById('content').value.trim();
+  const materialType = document.getElementById('material-type').value;
+  const targetGroup = document.querySelector('input[name="target"]:checked').value;
+
+  const errorBox = document.getElementById('error-box');
+  errorBox.classList.remove('active');
+
+  if (content.length < 50) {
+    errorBox.textContent = "Please paste at least a few sentences of content to align.";
+    errorBox.classList.add('active');
+    return;
+  }
+
+  // Hide previous results, show loading
+  document.getElementById('results').classList.remove('active');
+  document.getElementById('loading').classList.add('active');
+  document.getElementById('submit-btn').disabled = true;
+  document.getElementById('loading-text').textContent = `Aligning to ${TARGET_LABELS[targetGroup]} ELEs...`;
+
+  try {
+    const framework = ELE_FRAMEWORK[targetGroup];
+    const prompt = buildPrompt(materialType, targetGroup, framework, includeAi, content);
+
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 4000,
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`API returned ${response.status}`);
+    }
+
+    const data = await response.json();
+    const raw = data.content
+      .filter(b => b.type === "text")
+      .map(b => b.text)
+      .join("\n")
+      .trim();
+
+    // Strip markdown fences if present
+    const cleaned = raw.replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/```\s*$/i, "").trim();
+
+    let parsed;
+    try {
+      parsed = JSON.parse(cleaned);
+    } catch (e) {
+      // Try to extract JSON object from the string
+      const match = cleaned.match(/\{[\s\S]*\}/);
+      if (match) {
+        parsed = JSON.parse(match[0]);
+      } else {
+        throw new Error("Could not parse AI response as JSON.");
+      }
+    }
+
+    renderResults(parsed, targetGroup, includeAi);
+  } catch (err) {
+    errorBox.textContent = "Something went wrong: " + err.message + ". Please try again.";
+    errorBox.classList.add('active');
+    console.error(err);
+  } finally {
+    document.getElementById('loading').classList.remove('active');
+    document.getElementById('submit-btn').disabled = false;
+  }
+}
+
+// ============================================================
+// Prompt builder
+// ============================================================
+function buildPrompt(materialType, targetGroup, framework, includeAi, content) {
+  const frameworkText = framework.key_areas.map(area => {
+    const indicators = area.indicators.map(i => `    ${i.code} — ${i.indicator}`).join("\n");
+    return `  Area ${area.code} ${area.name}\n${indicators}`;
+  }).join("\n");
+
+  let aiText = "";
+  if (includeAi) {
+    aiText = "\n\nAI IN EDUCATION ELE FRAMEWORK:\n" + AI_FRAMEWORK.key_areas.map(area => {
+      const indicators = area.indicators.map(i => `    ${i.code} — ${i.indicator}`).join("\n");
+      return `  Area ${area.code} ${area.name}\n${indicators}`;
+    }).join("\n");
+  }
+
+  return `You are the TCEA ELEs Alignment Assistant. Your job is to align educational materials to the TCEA Essential Learning Expectations framework. Use a friendly, conversational, approachable, professional tone. Be specific and actionable. Use educator-friendly language. Avoid vague alignment claims. Explain why each ELE match was selected.
+
+TARGET GROUP: ${TARGET_LABELS[targetGroup]}
+MATERIAL TYPE: ${materialType}
+
+TCEA ELE FRAMEWORK FOR THIS TARGET GROUP (${framework.title}):
+${frameworkText}${aiText}
+
+MATERIAL TO ALIGN:
+"""
+${content}
+"""
+
+INSTRUCTIONS:
+1. Read the material carefully.
+2. Identify the 3 to 5 strongest ELE alignments from the framework above. Do not invent ELE codes; only use codes listed above.
+3. For each alignment, assess strength as "strong", "moderate", or "emerging" based on how directly the material supports the indicator.
+4. ${includeAi ? 'Also identify 2 to 4 alignments to the AI in Education framework if applicable.' : 'Do not include AI alignments.'}
+5. Provide a short summary (2 to 3 sentences) of the material and its primary focus.
+6. Suggest 3 to 5 concrete next steps the educator could take to strengthen alignment.
+
+Write rationale and evidence using active voice, Oxford comma, and the Oxford convention of spelling out numbers one through ten. Avoid the words: empower, journey, embark, delve, discover, unlock, elevate, master. Do not use em dashes.
+
+Quote brief phrases from the submitted material verbatim in the "evidence" field to anchor each alignment.
+
+Return ONLY valid JSON in this exact schema, with no preamble, no markdown fences, no commentary:
+
+{
+  "summary": "string (2 to 3 sentences describing the material)",
+  "primary_alignments": [
+    {
+      "ele_area_code": "string (e.g., '1.0')",
+      "ele_area_name": "string",
+      "indicator_code": "string (e.g., '1.2')",
+      "indicator": "string (the full indicator text)",
+      "alignment_strength": "strong | moderate | emerging",
+      "rationale": "string (2 to 3 sentences explaining why this is the best fit)",
+      "evidence": "string (specific phrases or details quoted from the material)",
+      "recommendation": "string (1 to 2 sentences with an actionable improvement or extension)"
+    }
+  ],${includeAi ? `
+  "ai_alignments": [
+    {
+      "ele_area_code": "string",
+      "ele_area_name": "string",
+      "indicator_code": "string",
+      "indicator": "string",
+      "alignment_strength": "strong | moderate | emerging",
+      "rationale": "string",
+      "recommendation": "string"
+    }
+  ],` : ''}
+  "next_steps": ["string", "string", "string"]
+}`;
+}
+
+// ============================================================
+// Renderer
+// ============================================================
+function renderResults(data, targetGroup, includeAi) {
+  const results = document.getElementById('results');
+  const targetLabel = TARGET_LABELS[targetGroup];
+
+  let html = `
+    <div class="card">
+      <span class="step-label">Alignment Results</span>
+      <h2>Alignment for ${escapeHtml(targetLabel)}</h2>
+
+      <div class="summary-box">
+        <h3>Summary</h3>
+        <p>${escapeHtml(data.summary || '')}</p>
+      </div>
+
+      <h3 style="margin-top: 28px; margin-bottom: 14px;">Primary ELE Alignments</h3>
+  `;
+
+  (data.primary_alignments || []).forEach(a => {
+    html += renderAlignment(a, false);
+  });
+
+  if (includeAi && data.ai_alignments && data.ai_alignments.length > 0) {
+    html += `
+      <div class="ai-section">
+        <span class="ai-badge">AI in Education ELEs</span>
+        <h3>AI Alignment</h3>
+        <p class="subtitle">How this material connects to the TCEA AI in Education framework.</p>
+    `;
+    data.ai_alignments.forEach(a => {
+      html += renderAlignment(a, true);
+    });
+    html += `</div>`;
+  }
+
+  if (data.next_steps && data.next_steps.length > 0) {
+    html += `
+      <h3 style="margin-top: 28px;">Suggested Next Steps</h3>
+      <ul class="next-steps-list">
+        ${data.next_steps.map(s => `<li>${escapeHtml(s)}</li>`).join("")}
+      </ul>
+    `;
+  }
+
+  html += `
+      <div class="btn-row" style="margin-top: 28px;">
+        <button class="btn-secondary" onclick="window.print()">Print or save as PDF</button>
+        <button class="btn-secondary" onclick="document.getElementById('results').classList.remove('active'); window.scrollTo({top:0, behavior:'smooth'});">Run another alignment</button>
+      </div>
+    </div>
+  `;
+
+  results.innerHTML = html;
+  results.classList.add('active');
+  results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function renderAlignment(a, isAi) {
+  const strengthClass = `strength-${(a.alignment_strength || 'moderate').toLowerCase()}`;
+  return `
+    <div class="alignment-block">
+      <div class="alignment-header">
+        <div>
+          <span class="ele-code">${escapeHtml(a.indicator_code || '')}</span>
+          <span class="ele-area">${escapeHtml(a.ele_area_name || '')}</span>
+          <div class="indicator-text">"${escapeHtml(a.indicator || '')}"</div>
+        </div>
+        <span class="strength-badge ${strengthClass}">${escapeHtml(a.alignment_strength || '')}</span>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">Rationale</div>
+        <div class="detail-content">${escapeHtml(a.rationale || '')}</div>
+      </div>
+
+      ${a.evidence ? `
+      <div class="detail-row">
+        <div class="detail-label">Evidence from material</div>
+        <div class="detail-content"><em>${escapeHtml(a.evidence)}</em></div>
+      </div>` : ''}
+
+      <div class="detail-row" style="margin-bottom: 0;">
+        <div class="detail-label">Recommendation</div>
+        <div class="detail-content">${escapeHtml(a.recommendation || '')}</div>
+      </div>
+    </div>
+  `;
+}
+
+function escapeHtml(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+</script>
+
+</body>
+</html>
