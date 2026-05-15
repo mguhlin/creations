@@ -1,4 +1,4 @@
-/* DrawSplat v2.14 — single source of app behaviour.
+/* DrawSplat v2.16 — single source of app behaviour.
    v2.5 changes vs v2.4:
    - Object lookup is O(1) via a per-render Map.
    - render() is RAF-coalesced; pointermove no longer triggers a synchronous redraw per event.
@@ -14,7 +14,7 @@
    Replace the placeholder below after deploying apps-script/Code.gs. */
 const DEFAULT_GOOGLE_SCRIPT_URL='PUT GOOGLE APPS SCRIPT WEB APP URL HERE';
 const GOOGLE_SCRIPT_URL_PLACEHOLDER='PUT GOOGLE APPS SCRIPT WEB APP URL HERE';
-const VERSION='2.14';
+const VERSION='2.16';
 const SCRIPT_URL_STORAGE_KEY='drawsplat.googleScriptUrl';
 const svg=document.getElementById('boardSvg'), NS='http://www.w3.org/2000/svg', XHTML='http://www.w3.org/1999/xhtml';
 const TEXTABLE_TYPES=['text','sticky','comment','audio','rect','ellipse','diamond','triangle','callout','speech'], SHAPE_TEXT_TYPES=['rect','ellipse','diamond','triangle','callout','speech'];
@@ -48,6 +48,7 @@ const DOT_PICTURES=[
 let board={version:VERSION,title:'',className:'',studentName:'',mode:'teacher',assignmentMode:false,currentLayer:'shared',restorePoints:[],showAnswerKey:true,active:0,panels:[{id:id(),name:'Panel 1',bg:'grid',objects:[]}]};
 let tool='select', selectedIds=[], drawing=null, drag=null, zoom=1, fillEnabled=true, connectorPendingFrom=null, marquee=null, clipboard=null, dotPaintDrag=null;
 let dotPaintTargetId=null;
+let touchMultiSelect=false;
 let history=[], future=[], lastSnapshot=''; let localChannel=null, cloudTimer=null, collabRoom='', instanceId=id(), lastCloudTs='', roleLock=''; let liveCursors={}, mediaRecorder=null, recordChunks=[]; let inlineEditId=null, inlineEditOriginal=null;
 
 /* v2.5: O(1) object lookup. Rebuilt every render. */
@@ -220,6 +221,8 @@ function ensureSimpleExtras(){
   if(!grid||grid.dataset.extrasReady==='1') return;
   grid.dataset.extrasReady='1';
   const graph=document.createElement('button'); graph.id='simpleGraphBtn'; graph.type='button'; graph.textContent=gt('creator'); graph.addEventListener('click',()=>gid('openGraphDialogBtn')?.click());
+  const mosaic=document.createElement('button'); mosaic.id='simpleMosaicBtn'; mosaic.type='button'; mosaic.textContent='Mosaic'; mosaic.addEventListener('click',()=>gid('openMosaicDialogBtn')?.click());
+  const collage=document.createElement('button'); collage.id='simpleCollageBtn'; collage.type='button'; collage.textContent='Collage'; collage.addEventListener('click',()=>gid('openCollageDialogBtn')?.click());
   const mer=document.createElement('button'); mer.id='simpleMermaidBtn'; mer.type='button'; mer.textContent='Mermaid Diagram'; mer.addEventListener('click',()=>gid('insertMermaidBtn')?.click());
   const wc=document.createElement('button'); wc.id='simpleWordCloudBtn'; wc.type='button'; wc.textContent='Word Cloud'; wc.addEventListener('click',()=>gid('insertWordCloudBtn')?.click());
   const dots=document.createElement('button'); dots.id='simpleDotPicturesBtn'; dots.type='button'; dots.textContent='Dot Pictures'; dots.addEventListener('click',()=>gid('openDotPictureLibraryBtn')?.click());
@@ -231,6 +234,8 @@ function ensureSimpleExtras(){
   if(stickyTool&&stickyTool.parentNode) stickyTool.insertAdjacentElement('afterend',palette);
   const ref=gid('simpleDeleteBtn')||gid('simpleTntBtn');
   grid.insertBefore(graph,ref);
+  grid.insertBefore(mosaic,ref);
+  grid.insertBefore(collage,ref);
   grid.insertBefore(mer,ref);
   grid.insertBefore(wc,ref);
   grid.insertBefore(dots,ref);
@@ -254,7 +259,7 @@ function ensureTopMenus(){
   const menuDefs=[
     ['File',[['Save File','saveLocalBtn'],['Load File','loadLocalBtn'],['Import Panels...','importPanelsBtn'],['Export PNG','exportBtn'],['Export PDF','exportPdfBtn'],['Save to Google','saveDriveBtn'],['Load from Google','loadDriveBtn']]],
     ['Edit',[['Undo','undoBtn'],['Redo','redoBtn'],['Duplicate','duplicateBtn'],['Delete Selected','deleteBtn'],['Group','groupBtn'],['Ungroup','ungroupBtn'],['Bring Front','frontBtn'],['Send Back','backBtn']]],
-    ['Insert',[['Load Image','imageBtn'],[gt('creator'),'openGraphDialogBtn'],['Emoji Mixer','openEmojiDialogBtn'],['Mermaid Diagram','insertMermaidBtn'],['Word Cloud','insertWordCloudBtn'],['Dot Pictures','openDotPictureLibraryBtn','dotPictureSubmenu'],['Paint Dots','activateDotPaintBtn'],['Sticker Library','openStickerLibraryBtn'],['Insert Sticker','insertStickerBtn'],['Custom Sticker','createCustomStickerBtn'],['Template: add to current frame','insertTemplateBtn','templateSubmenu'],['Template: new frame','newTemplatePanelBtn','templateSubmenu'],['Save Current Frame as Template','saveTemplateBtn'],['Load Saved Template Gallery','loadTemplateGalleryBtn']]],
+    ['Insert',[['Load Image','imageBtn'],[gt('creator'),'openGraphDialogBtn'],['Mosaic Images','openMosaicDialogBtn'],['Collage','openCollageDialogBtn','collageSubmenu'],['Emoji Mixer','openEmojiDialogBtn'],['Mermaid Diagram','insertMermaidBtn'],['Word Cloud','insertWordCloudBtn'],['Dot Pictures','openDotPictureLibraryBtn','dotPictureSubmenu'],['Paint Dots','activateDotPaintBtn'],['Sticker Library','openStickerLibraryBtn'],['Insert Sticker','insertStickerBtn'],['Custom Sticker','createCustomStickerBtn'],['Template: add to current frame','insertTemplateBtn','templateSubmenu'],['Template: new frame','newTemplatePanelBtn','templateSubmenu'],['Save Current Frame as Template','saveTemplateBtn'],['Load Saved Template Gallery','loadTemplateGalleryBtn']]],
     ['Tools',[['Create GIF','openGifDialogBtn'],['Set Background','loadBgImageBtn'],['Clear Background','clearBgImageBtn'],['Remove BG Color','removeBgColorBtn'],['Save Restore Point','saveRestorePointBtn'],['Restore Point','restorePointBtn'],['Keyboard Shortcuts','shortcutsBtn'],['TNT Reset','tntBtn']]],
     ['Options',[['View','viewToggleBtn','viewSubmenu'],['Inspector','inspectorToggleBtn'],['Mode','optionsBtn'],['About','aboutBtn']]]
   ];
@@ -344,6 +349,32 @@ function ensureTopMenus(){
             if(sel) sel.value=tpl.id;
             nav.querySelectorAll('details[open]').forEach(d=>d.open=false);
             insertDotPicture(tpl.id);
+          });
+          panel.appendChild(choice);
+        });
+        row.appendChild(btn);
+        row.appendChild(panel);
+        list.appendChild(row);
+        return;
+      }
+      if(submenu==='collageSubmenu'){
+        const row=document.createElement('div');
+        row.className='top-menu-submenu';
+        const btn=document.createElement('button');
+        btn.type='button';
+        btn.textContent=label;
+        btn.dataset.menuTarget=target;
+        const panel=document.createElement('div');
+        panel.className='top-submenu-list';
+        [['Open Builder',''],['Two Column','two'],['Feature + Two','feature'],['Four Grid','grid4'],['Story Strip','strip']].forEach(([choiceLabel,layout])=>{
+          const choice=document.createElement('button');
+          choice.type='button';
+          choice.textContent=choiceLabel;
+          choice.addEventListener('click',()=>{
+            const sel=gid('collageLayout');
+            if(sel&&layout) sel.value=layout;
+            nav.querySelectorAll('details[open]').forEach(d=>d.open=false);
+            gid(target)?.click();
           });
           panel.appendChild(choice);
         });
@@ -555,12 +586,13 @@ function createAudioObject(o,b){const fo=document.createElementNS(NS,'foreignObj
 function svgEl(s){const t=document.createElementNS(NS,'g');t.innerHTML=s.trim();return t.firstChild}
 
 function selectionBounds(ids=selectedIds){const objs=ids.map(findObj).filter(Boolean);if(!objs.length)return null;const boxes=objs.map(normBox);const x=Math.min(...boxes.map(b=>b.x)),y=Math.min(...boxes.map(b=>b.y)),r=Math.max(...boxes.map(b=>b.x+b.w)),bt=Math.max(...boxes.map(b=>b.y+b.h));return{x,y,w:r-x,h:bt-y}}
-function drawSelection(){const g=svg.querySelector('#viewport');if(!selectedIds.length||!g)return;selectedIds.forEach(idv=>{const o=findObj(idv);if(!o)return;const b=normBox(o),pad=(o.type==='image'||o.type==='stamp')?1:4;g.appendChild(svgEl(`<rect class="selection" x="${b.x-pad}" y="${b.y-pad}" width="${b.w+pad*2}" height="${b.h+pad*2}"/>`))});if(selectedIds.length===1){const o=findObj(selectedIds[0]);if(o&&o.type!=='connector'){const b=normBox(o);const h=svgEl(`<rect class="handle" x="${b.x+b.w-6}" y="${b.y+b.h-6}" width="12" height="12" rx="2"/>`);h.addEventListener('pointerdown',resizeDown);g.appendChild(h)}}else{const b=selectionBounds(); if(b) g.appendChild(svgEl(`<rect class="selection" x="${b.x-8}" y="${b.y-8}" width="${b.w+16}" height="${b.h+16}"/>`))}}
+function drawSelection(){const g=svg.querySelector('#viewport');if(!selectedIds.length||!g)return;selectedIds.forEach(idv=>{const o=findObj(idv);if(!o)return;const b=normBox(o),pad=(o.type==='image'||o.type==='stamp')?1:4;g.appendChild(svgEl(`<rect class="selection" x="${b.x-pad}" y="${b.y-pad}" width="${b.w+pad*2}" height="${b.h+pad*2}"/>`))});if(selectedIds.length===1){const o=findObj(selectedIds[0]);if(o&&o.type!=='connector'){const b=normBox(o),sz=18;const h=svgEl(`<rect class="handle" x="${b.x+b.w-sz/2}" y="${b.y+b.h-sz/2}" width="${sz}" height="${sz}" rx="3"/>`);h.addEventListener('pointerdown',resizeDown);g.appendChild(h)}}else{const b=selectionBounds(); if(b) g.appendChild(svgEl(`<rect class="selection" x="${b.x-8}" y="${b.y-8}" width="${b.w+16}" height="${b.h+16}"/>`))}}
 function groupMembers(o){if(!o||!o.groupId)return[o?.id].filter(Boolean);return panel().objects.filter(x=>x.groupId===o.groupId).map(x=>x.id)}
 
 let _lastObjClick={id:null,t:0};
 function objectDown(e){if(tool==='eraser') return; e.stopPropagation();const o=findObj(e.currentTarget.dataset.id);if(!o)return; if(board.assignmentMode&&board.mode==='student'&&o.layer==='teacher'){setStatus('Teacher-layer items are protected in assignment mode.','danger'); return} if(tool==='dotpaint'){if(o.type!=='dot') return setStatus('Dot Paint colors dot-picture dots only.','danger'); if(!canEditObject(o)) return setStatus('That dot is locked.','danger'); const p=pt(e); dotPaintDrag={active:true,moved:false,startX:p.x,startY:p.y,color:paintColor(),painted:new Set,clickDotId:o.id}; selectedIds=[o.id]; render(); return} const _now=performance.now(); if(tool==='select'&&_lastObjClick.id===o.id&&(_now-_lastObjClick.t)<500){_lastObjClick={id:null,t:0}; if(TEXTABLE_TYPES.includes(o.type)){openInlineTextEditor(o.id); return} if(o.type==='image'&&o.mermaidSource){openMermaidDialog(o.id); return} if(o.type==='image'&&o.wordCloudSource){openWordCloudDialog(o.id); return}} _lastObjClick={id:o.id,t:_now}; if(tool==='connector'){if(o.type==='connector')return; if(!connectorPendingFrom){connectorPendingFrom=o.id; setSingleSelection(o.id); render(); setStatus('Connector: select the second shape.','success'); return}else if(connectorPendingFrom!==o.id){panel().objects.push(makeObj('connector',0,0,0,0,{fromId:connectorPendingFrom,toId:o.id,fill:'none'})); connectorPendingFrom=null; render(); saveState(); setStatus('Connector added.','success'); return}else{connectorPendingFrom=null; setStatus('Connector cancelled.'); return}}
-  const ids=e.shiftKey?(toggleSelection(o.id),selectedIds):((o.groupId&&!e.altKey)?groupMembers(o):[o.id]); if(!e.shiftKey) selectedIds=ids; if(o.locked||o.type==='connector'){render();return} const p=pt(e); drag={resize:false,ids:[...selectedIds],startX:p.x,startY:p.y,starts:selectedIds.map(idv=>{const s=findObj(idv);return{id:s.id,x:s.x,y:s.y,w:s.w,h:s.h,fontSize:s.fontSize||20}})}; if(['sticky','text','comment'].includes(o.type)&&canEditObject(o)&&!e.shiftKey) drag.candidateEdit=o.id; render()}
+  const multi=e.shiftKey||touchMultiSelect;
+  const ids=multi?(toggleSelection(o.id),selectedIds):((o.groupId&&!e.altKey)?groupMembers(o):[o.id]); if(!multi) selectedIds=ids; if(o.locked||o.type==='connector'||(touchMultiSelect&&e.pointerType==='touch')){render();return} const p=pt(e); drag={resize:false,ids:[...selectedIds],startX:p.x,startY:p.y,starts:selectedIds.map(idv=>{const s=findObj(idv);return{id:s.id,x:s.x,y:s.y,w:s.w,h:s.h,fontSize:s.fontSize||20}})}; if(['sticky','text','comment'].includes(o.type)&&canEditObject(o)&&!multi) drag.candidateEdit=o.id; render()}
 function resizeDown(e){e.stopPropagation();const o=currentObj();if(!o||o.locked||selectedIds.length!==1||o.type==='connector')return;const b=normBox(o),p=pt(e);drag={resize:true,ids:[o.id],sx:p.x,sy:p.y,ox:b.x,oy:b.y,ow:b.w,oh:b.h,ofontSize:o.fontSize||20}}
 
 svg.addEventListener('pointerdown',e=>{const p=pt(e); if(tool==='dotpaint'){if(e.target.closest('.object')) return; const o=dotAtPoint(p.x,p.y); if(o){dotPaintDrag={active:true,moved:false,startX:p.x,startY:p.y,color:paintColor(),painted:new Set}; paintDotAtPoint(p.x,p.y); return} setStatus('Dot Paint: drag across dots or click a dot to choose a color.','danger'); return} if(tool==='eraser'){const objEl=e.target.closest('.object'); if(objEl){const o=findObj(objEl.dataset.id); if(o&&canEditObject(o)&&!o.locked){cleanupConnectors([o.id]); panel().objects=panel().objects.filter(x=>x.id!==o.id); clearSelection(); render(); saveState(); setStatus('Erased.','success')} else if(o&&o.locked) setStatus('That item is locked.','danger')} else setStatus('Click an object to erase it.','danger'); return} if(tool==='laser'){drawing={id:'laser_'+id(),type:'laser',d:`M ${p.x} ${p.y}`,x:p.x,y:p.y,w:1,h:1}; const path=svgEl(`<path class="laser-trail" d="${drawing.d}" stroke="#ef4444" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.95"/>`); svg.appendChild(path); drawing._laserPath=path; return} if(tool==='select'){if(!e.target.closest('.object')){clearSelection(); connectorPendingFrom=null; marquee={active:true,x1:p.x,y1:p.y,x2:p.x,y2:p.y}; render()} return} if(['rect','ellipse','line','arrow','diamond','triangle','callout','speech'].includes(tool)){const extra=TEXTABLE_TYPES.includes(tool)?{html:'',text:'',textColor:ui.textColor.value,fontSize:+ui.fontSize.value||20,hAlign:'center',vAlign:'middle',textRotation:0,autoScaleText:true}:{}; drawing=makeObj(tool,p.x,p.y,1,1,extra); panel().objects.push(drawing); setSingleSelection(drawing.id); render(); return} if(tool==='pen'){drawing={id:id(),type:'path',d:`M ${p.x} ${p.y}`,x:p.x,y:p.y,w:1,h:1,locked:false,...style()}; panel().objects.push(drawing); setSingleSelection(drawing.id); return} if(tool==='text'){const obj=makeObj('text',p.x,p.y,240,80,{fill:'none',stroke:'none',html:'',text:'',fontSize:+ui.fontSize.value||24,textColor:ui.textColor.value,hAlign:'left',vAlign:'top',autoScaleText:true}); addObj(obj); openInlineTextEditor(obj.id); return} if(tool==='sticky'){const obj=makeObj('sticky',p.x,p.y,180,160,{fill:ui.stickyColor.value,stroke:'#111827',strokeWidth:1,html:'',text:'',fontSize:+ui.fontSize.value||16,textColor:ui.textColor.value,autoScaleText:true,imageSrc:''}); addObj(obj); openInlineTextEditor(obj.id); return} if(tool==='comment'){const obj=makeObj('comment',p.x,p.y,220,120,{fill:'#fff7e6',stroke:'#f59e0b',strokeWidth:2,html:'',text:'',fontSize:16,textColor:'#111827',resolved:false}); addObj(obj); openInlineTextEditor(obj.id); return} if(tool==='audio'){addObj(makeObj('audio',p.x,p.y,220,100,{fill:'#eff6ff',stroke:'#93c5fd',strokeWidth:2,html:'',text:'',fontSize:18,textColor:'#111827',audioSrc:'',audioName:''})); return} if(tool==='connector'){connectorPendingFrom=null; setStatus('Connector: click first shape, then second shape.'); return}});
@@ -578,6 +610,7 @@ function cleanupConnectors(ids){panel().objects=panel().objects.filter(o=>o.type
 function deleteSelected(){if(!selectedIds.length)return; const editable=selectedIds.filter(idv=>canEditObject(findObj(idv))); cleanupConnectors(editable); panel().objects=panel().objects.filter(o=>!editable.includes(o.id)); clearSelection(); render(); saveState()}
 function duplicateSelected(){if(!selectedIds.length)return; const copies=[], map={}; selectedIds.forEach(sel=>{const o=findObj(sel); if(!o||o.type==='connector'||!canEditObject(o))return; const c=JSON.parse(JSON.stringify(o)); c.id=id(); c.x+=24; c.y+=24; if(board.assignmentMode&&board.mode==='student') c.layer='student'; map[o.id]=c.id; copies.push(c)}); panel().objects.push(...copies); selectedIds=copies.map(c=>c.id); render(); saveState()}
 function copySelection(){if(!selectedIds.length)return; const list=panel().objects.filter(o=>selectedIds.includes(o.id) && o.type!=='connector').map(o=>JSON.parse(JSON.stringify(o))); const selSet=new Set(list.map(o=>o.id)); const connectors=panel().objects.filter(o=>o.type==='connector'&&selSet.has(o.fromId)&&selSet.has(o.toId)).map(o=>JSON.parse(JSON.stringify(o))); clipboard={objects:list,connectors}; setStatus('Selection copied.','success')}
+function selectAllObjects(){commitInlineTextEditor(); selectedIds=panel().objects.filter(o=>!(board.assignmentMode&&board.mode==='student'&&o.layer==='teacher')).map(o=>o.id); render(); setStatus(selectedIds.length?('Selected '+selectedIds.length+' item'+(selectedIds.length===1?'':'s')+'.'):'No items on this frame.','success')}
 function pasteClipboard(){if(!clipboard||!clipboard.objects?.length)return; const idMap={}, items=[]; clipboard.objects.forEach(o=>{const c=JSON.parse(JSON.stringify(o)); idMap[o.id]=id(); c.id=idMap[o.id]; c.x+=28; c.y+=28; if(board.assignmentMode&&board.mode==='student') c.layer='student'; items.push(c)}); clipboard.connectors?.forEach(o=>{const c=JSON.parse(JSON.stringify(o)); c.id=id(); c.fromId=idMap[o.fromId]; c.toId=idMap[o.toId]; if(c.fromId&&c.toId) items.push(c)}); panel().objects.push(...items); selectedIds=items.filter(o=>o.type!=='connector').map(o=>o.id); render(); saveState()}
 function pasteBlobAsImage(blob,label){return new Promise(async resolve=>{if(!blob||!(await validateImageDeep(blob))){resolve(false); return} const reader=new FileReader(); reader.onload=()=>{const dataUrl=reader.result; const probe=new Image(); probe.onload=()=>{let w=probe.width,h=probe.height; const maxDim=600; if(Math.max(w,h)>maxDim){const s=maxDim/Math.max(w,h); w=Math.round(w*s); h=Math.round(h*s)} addObj(makeObj('image',120,120,Math.max(40,w),Math.max(40,h),{src:dataUrl,fill:'none',stroke:'#000',strokeWidth:1})); setStatus(label||'Image pasted.','success'); resolve(true)}; probe.onerror=()=>resolve(false); probe.src=dataUrl}; reader.onerror=()=>resolve(false); reader.readAsDataURL(blob)})}
 async function smartPaste(){if(navigator.clipboard&&navigator.clipboard.read){try{const items=await navigator.clipboard.read(); for(const item of items){const imgType=item.types.find(t=>t.startsWith('image/')); if(imgType){const blob=await item.getType(imgType); if(await pasteBlobAsImage(blob,'Image pasted from clipboard.')) return}}}catch(_){}} pasteClipboard()}
@@ -594,6 +627,7 @@ document.addEventListener('keydown',e=>{const tag=(e.target&&e.target.tagName?e.
   if(e.key==='Escape'&&gid('dotPaintPalette')?.classList.contains('show')){e.preventDefault(); closeDotPaintPalette(); return}
   if(!meta&&!e.altKey&&selectedIds.length===1&&o&&TEXTABLE_TYPES.includes(o.type)&&canEditObject(o)){if(e.key==='Enter'){e.preventDefault(); openInlineTextEditor(o.id); return} if(e.key.length===1){e.preventDefault(); openInlineTextEditor(o.id,e.key); return}}
   if(e.key==='Delete'||e.key==='Backspace')deleteSelected();
+  if(meta&&e.key.toLowerCase()==='a'){e.preventDefault(); selectAllObjects()}
   if(meta&&e.key.toLowerCase()==='d'){e.preventDefault(); duplicateSelected()}
   if(meta&&e.key.toLowerCase()==='c'){e.preventDefault(); smartCopy()}
   if(meta&&e.key.toLowerCase()==='v'){e.preventDefault(); smartPaste()}
@@ -718,6 +752,91 @@ gid('insertEmojiMixBtn')?.addEventListener('click',()=>{insertEmojiMix(); gid('e
 gid('mixSelectedEmojiBtn')?.addEventListener('click',mixSelectedEmojis);
 gid('closeEmojiDialog')?.addEventListener('click',()=>gid('emojiDialog')?.close());
 buildEmojiUI();
+
+function imageObjectsForMosaic(){
+  return selectedIds.map(findObj).filter(o=>o&&o.type==='image'&&o.src&&canEditObject(o));
+}
+function loadImageElement(src){return new Promise((resolve,reject)=>{const img=new Image(); img.onload=()=>resolve(img); img.onerror=()=>reject(new Error('Could not read an image.')); img.src=src})}
+function imageCropRect(o,img){
+  return o.crop&&o.naturalW&&o.naturalH?{sx:o.crop.x*img.width,sy:o.crop.y*img.height,sw:o.crop.w*img.width,sh:o.crop.h*img.height}:{sx:0,sy:0,sw:img.width,sh:img.height};
+}
+function roundRectPath(ctx,x,y,w,h,r){
+  r=Math.max(0,Math.min(r,w/2,h/2));
+  ctx.beginPath(); ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r); ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h); ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r); ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath();
+}
+function drawImageCover(ctx,img,crop,x,y,w,h,rounded=0){
+  ctx.save();
+  if(rounded){roundRectPath(ctx,x,y,w,h,rounded); ctx.clip()}
+  const scale=Math.max(w/crop.sw,h/crop.sh), dw=crop.sw*scale, dh=crop.sh*scale;
+  ctx.drawImage(img,crop.sx,crop.sy,crop.sw,crop.sh,x+(w-dw)/2,y+(h-dh)/2,dw,dh);
+  ctx.restore();
+}
+async function loadSelectedImageFrames(){
+  const imgs=imageObjectsForMosaic();
+  const frames=[];
+  for(const o of imgs){
+    const img=await loadImageElement(o.src), crop=imageCropRect(o,img);
+    frames.push({o,img,crop,visibleW:crop.sw,visibleH:crop.sh});
+  }
+  return frames;
+}
+async function createMosaicFromSelection(){
+  const frames=await loadSelectedImageFrames();
+  if(frames.length<2) return setStatus('Select two or more images first.','danger');
+  const cols=Math.max(1,+gid('mosaicColumns')?.value||2), gap=Math.max(0,+gid('mosaicGap')?.value||12), rounded=Math.max(0,+gid('mosaicRounded')?.value||0), bg=gid('mosaicBg')?.value||'#ffffff';
+  let tileW=+gid('mosaicTileW')?.value||0, tileH=+gid('mosaicTileH')?.value||0;
+  if(!tileW) tileW=Math.min(2400,Math.max(...frames.map(f=>f.visibleW)));
+  if(!tileH) tileH=Math.min(1800,Math.max(...frames.map(f=>f.visibleH)));
+  const rows=Math.ceil(frames.length/cols), maxPixels=32000000;
+  let outW=cols*tileW+(cols+1)*gap, outH=rows*tileH+(rows+1)*gap;
+  if(outW*outH>maxPixels){const s=Math.sqrt(maxPixels/(outW*outH)); tileW=Math.floor(tileW*s); tileH=Math.floor(tileH*s); outW=cols*tileW+(cols+1)*gap; outH=rows*tileH+(rows+1)*gap}
+  const cv=document.createElement('canvas'); cv.width=outW; cv.height=outH;
+  const ctx=cv.getContext('2d'); ctx.fillStyle=bg; ctx.fillRect(0,0,cv.width,cv.height);
+  for(let i=0;i<frames.length;i++){
+    const f=frames[i], col=i%cols,row=Math.floor(i/cols), x=gap+col*(tileW+gap), y=gap+row*(tileH+gap);
+    drawImageCover(ctx,f.img,f.crop,x,y,tileW,tileH,rounded);
+  }
+  const src=cv.toDataURL('image/png'), maxW=560, dispW=Math.min(maxW,cv.width), dispH=Math.round(dispW*(cv.height/cv.width));
+  addObj(makeObj('image',120,120,dispW,dispH,{src,naturalW:cv.width,naturalH:cv.height,fill:'none',stroke:'none',strokeWidth:0,mosaicSourceIds:frames.map(f=>f.o.id)}));
+  gid('mosaicDialog')?.close();
+  setStatus('High-resolution mosaic inserted.','success');
+}
+gid('openMosaicDialogBtn')?.addEventListener('click',()=>gid('mosaicDialog')?.showModal());
+gid('mosaicCreateBtn')?.addEventListener('click',createMosaicFromSelection);
+gid('mosaicCancelBtn')?.addEventListener('click',()=>gid('mosaicDialog')?.close());
+
+function collageSlots(layout,w,h,margin,bannerH,gap){
+  const top=margin+bannerH+gap, bodyH=h-top-margin;
+  if(layout==='two') return [{x:margin,y:top,w:(w-margin*2-gap)/2,h:bodyH},{x:margin+(w-margin*2-gap)/2+gap,y:top,w:(w-margin*2-gap)/2,h:bodyH}];
+  if(layout==='feature') return [{x:margin,y:top,w:(w-margin*2-gap)*0.58,h:bodyH},{x:margin+(w-margin*2-gap)*0.58+gap,y:top,w:(w-margin*2-gap)*0.42,h:(bodyH-gap)/2},{x:margin+(w-margin*2-gap)*0.58+gap,y:top+(bodyH-gap)/2+gap,w:(w-margin*2-gap)*0.42,h:(bodyH-gap)/2}];
+  if(layout==='strip') return [0,1,2].map(i=>({x:margin+i*((w-margin*2-gap*2)/3+gap),y:top,w:(w-margin*2-gap*2)/3,h:bodyH}));
+  const cw=(w-margin*2-gap)/2, ch=(bodyH-gap)/2;
+  return [{x:margin,y:top,w:cw,h:ch},{x:margin+cw+gap,y:top,w:cw,h:ch},{x:margin,y:top+ch+gap,w:cw,h:ch},{x:margin+cw+gap,y:top+ch+gap,w:cw,h:ch}];
+}
+async function createCollageFromSelection(){
+  const frames=await loadSelectedImageFrames();
+  if(frames.length<2) return setStatus('Select two or more images first.','danger');
+  const layout=gid('collageLayout')?.value||'grid4', title=(gid('collageTitle')?.value||'').trim(), banner=(gid('collageBanner')?.value||'').trim(), bg=gid('collageBg')?.value||'#ffffff', accent=gid('collageAccent')?.value||'#123c69';
+  const w=2400,h=1600,margin=96,gap=44,bannerH=title||banner?220:92,slots=collageSlots(layout,w,h,margin,bannerH,gap);
+  const cv=document.createElement('canvas'); cv.width=w; cv.height=h;
+  const ctx=cv.getContext('2d'); ctx.fillStyle=bg; ctx.fillRect(0,0,w,h);
+  ctx.fillStyle=accent; roundRectPath(ctx,margin,margin,w-margin*2,bannerH-24,28); ctx.fill();
+  ctx.fillStyle='#ffffff'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  if(title){ctx.font='800 76px Arial, sans-serif'; ctx.fillText(title,w/2,margin+74)}
+  if(banner){ctx.font='500 42px Arial, sans-serif'; ctx.fillText(banner,w/2,margin+(title?152:94))}
+  slots.forEach(s=>{ctx.fillStyle='#f8fafc'; roundRectPath(ctx,s.x,s.y,s.w,s.h,24); ctx.fill()});
+  for(let i=0;i<slots.length;i++){
+    const f=frames[i%frames.length], s=slots[i];
+    drawImageCover(ctx,f.img,f.crop,s.x,s.y,s.w,s.h,24);
+  }
+  const src=cv.toDataURL('image/png'), dispW=560, dispH=Math.round(dispW*(h/w));
+  addObj(makeObj('image',120,120,dispW,dispH,{src,naturalW:w,naturalH:h,fill:'none',stroke:'none',strokeWidth:0,collageLayout:layout,collageSourceIds:frames.map(f=>f.o.id)}));
+  gid('collageDialog')?.close();
+  setStatus('Collage inserted.','success');
+}
+gid('openCollageDialogBtn')?.addEventListener('click',()=>gid('collageDialog')?.showModal());
+gid('collageCreateBtn')?.addEventListener('click',createCollageFromSelection);
+gid('collageCancelBtn')?.addEventListener('click',()=>gid('collageDialog')?.close());
 
 function dotPictureDots(tpl,x0=100,y0=100,step=26){
   const dots=[], rows=tpl.rows||[], maxCols=Math.max(...rows.map(r=>r.length));
@@ -1128,12 +1247,20 @@ function selectedGifFrameSets(){
   return sets;
 }
 async function blobToImage(blob){return new Promise((resolve,reject)=>{const img=new Image(); const url=URL.createObjectURL(blob); img.onload=()=>{URL.revokeObjectURL(url); resolve(img)}; img.onerror=()=>{URL.revokeObjectURL(url); reject(new Error('Could not render GIF frame'))}; img.src=url})}
+async function imageObjectToNaturalCanvas(o){
+  const img=await loadImageElement(o.src), crop=o.crop&&o.naturalW&&o.naturalH?{sx:o.crop.x*img.width,sy:o.crop.y*img.height,sw:o.crop.w*img.width,sh:o.crop.h*img.height}:{sx:0,sy:0,sw:img.width,sh:img.height};
+  const c=document.createElement('canvas'); c.width=Math.max(1,Math.round(crop.sw)); c.height=Math.max(1,Math.round(crop.sh));
+  const ctx=c.getContext('2d'); ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,c.width,c.height); ctx.drawImage(img,crop.sx,crop.sy,crop.sw,crop.sh,0,0,c.width,c.height);
+  return c;
+}
 async function selectedObjectsToGifCanvases(){
   const frameSets=selectedGifFrameSets();
   if(frameSets.length<2) throw new Error('Select at least two objects or grouped images for GIF frames.');
   const keep=[...selectedIds], hidden=new Map(), images=[];
   try{
     for(const ids of frameSets){
+      const only=ids.length===1?findObj(ids[0]):null;
+      if(only&&only.type==='image'&&only.src){images.push(await imageObjectToNaturalCanvas(only)); continue}
       hidden.clear();
       panel().objects.forEach(o=>{if(!ids.includes(o.id)){hidden.set(o.id,o.hiddenForGif); o.hiddenForGif=true}});
       selectedIds=[...ids];
@@ -1147,9 +1274,8 @@ async function selectedObjectsToGifCanvases(){
     render();
   }
   const maxW=Math.max(...images.map(i=>i.naturalWidth||i.width)), maxH=Math.max(...images.map(i=>i.naturalHeight||i.height));
-  const limit=+gid('gifSize')?.value||420, scale=Math.min(1,limit/Math.max(maxW,maxH));
-  const w=Math.max(40,Math.round(maxW*scale)), h=Math.max(40,Math.round(maxH*scale));
-  return images.map(img=>{const c=document.createElement('canvas'); c.width=w; c.height=h; const ctx=c.getContext('2d'); ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,w,h); const iw=(img.naturalWidth||img.width)*scale, ih=(img.naturalHeight||img.height)*scale; ctx.drawImage(img,(w-iw)/2,(h-ih)/2,iw,ih); return c});
+  const w=Math.max(40,Math.round(maxW)), h=Math.max(40,Math.round(maxH));
+  return images.map(img=>{const c=document.createElement('canvas'); c.width=w; c.height=h; const ctx=c.getContext('2d'); ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,w,h); const iw=img.naturalWidth||img.width, ih=img.naturalHeight||img.height; ctx.drawImage(img,(w-iw)/2,(h-ih)/2,iw,ih); return c});
 }
 function gifPalette(){const p=[]; for(let r=0;r<8;r++)for(let g=0;g<8;g++)for(let b=0;b<4;b++)p.push(Math.round(r*255/7),Math.round(g*255/7),Math.round(b*255/3)); return p}
 function canvasToGifIndices(c){const d=c.getContext('2d').getImageData(0,0,c.width,c.height).data, out=new Uint8Array(c.width*c.height); for(let i=0,j=0;i<d.length;i+=4,j++){const a=d[i+3]; if(a<80){out[j]=255; continue} const r=d[i]>>5,g=d[i+1]>>5,b=d[i+2]>>6; out[j]=(r<<5)|(g<<2)|b} return out}
@@ -1187,6 +1313,7 @@ gid('openGifDialogBtn')?.addEventListener('click',()=>gid('gifDialog')?.showModa
 gid('createGifBtn')?.addEventListener('click',createGifFromSelection);
 gid('downloadGifBtn')?.addEventListener('click',()=>{const url=gid('downloadGifBtn')?.dataset.gifUrl; if(url) download(url,(board.title||'drawsplat').replace(/\W+/g,'-')+'.gif',true)});
 gid('closeGifDialog')?.addEventListener('click',()=>gid('gifDialog')?.close());
+gid('touchMultiSelectBtn')?.addEventListener('click',()=>{touchMultiSelect=!touchMultiSelect; gid('touchMultiSelectBtn')?.classList.toggle('active',touchMultiSelect); setStatus(touchMultiSelect?'Multi-select on. Tap items to add/remove.':'Multi-select off.','success')});
 function download(data,name,isBlobUrl){const a=document.createElement('a'); a.href=data; a.download=name; document.body.appendChild(a); a.click(); a.remove(); if(isBlobUrl) setTimeout(()=>URL.revokeObjectURL(data),2000)}
 function canvasToPdfBlob(canvas){const jpegData=canvas.toDataURL('image/jpeg',0.92); const bin=atob(jpegData.split(',')[1]); const imgBytes=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) imgBytes[i]=bin.charCodeAt(i); const W=canvas.width, H=canvas.height; const pageW=612, pageH=Math.max(200,Math.round(pageW*(H/W))); const content=`q\n${pageW} 0 0 ${pageH} 0 0 cm\n/Im0 Do\nQ`; const enc=new TextEncoder(); const parts=[]; const add=s=>parts.push(enc.encode(s)); add('%PDF-1.4\n'); const offsets=[0]; let len=parts[0].length; function pushObj(str,binArr){offsets.push(len); const head=enc.encode(str); parts.push(head); len+=head.length; if(binArr){parts.push(binArr); len+=binArr.length; const tail=enc.encode('\nendstream\nendobj\n'); parts.push(tail); len+=tail.length}} add('1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n'); add('2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n'); add(`3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pageW} ${pageH}] /Resources << /XObject << /Im0 4 0 R >> /ProcSet [/PDF /ImageC] >> /Contents 5 0 R >>\nendobj\n`); offsets.push(len); const o4h=enc.encode(`4 0 obj\n<< /Type /XObject /Subtype /Image /Width ${W} /Height ${H} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${imgBytes.length} >>\nstream\n`); parts.push(o4h); len+=o4h.length; parts.push(imgBytes); len+=imgBytes.length; const o4t=enc.encode('\nendstream\nendobj\n'); parts.push(o4t); len+=o4t.length; offsets.push(len); const contBytes=enc.encode(content); const o5h=enc.encode(`5 0 obj\n<< /Length ${contBytes.length} >>\nstream\n`); parts.push(o5h); len+=o5h.length; parts.push(contBytes); len+=contBytes.length; const o5t=enc.encode('\nendstream\nendobj\n'); parts.push(o5t); len+=o5t.length; const xrefStart=len; const count=6; let xref='xref\n0 '+count+'\n0000000000 65535 f \n'; for(let i=1;i<count;i++) xref+=String(offsets[i]).padStart(10,'0')+' 00000 n \n'; xref+=`trailer\n<< /Size ${count} /Root 1 0 R >>\nstartxref\n${xrefStart}\n%%EOF`; parts.push(enc.encode(xref)); return new Blob(parts,{type:'application/pdf'}) }
 
@@ -1637,6 +1764,7 @@ function openShortcutsDialog(){
     dlg.innerHTML=`<div class="modal-head"><h2>Keyboard Shortcuts</h2><button class="close" id="closeShortcutsDialog" aria-label="Close">×</button></div><dl class="shortcuts-list">
       <dt><span class="kbd">Shift</span> + click</dt><dd>Multi-select</dd>
       <dt>Drag empty canvas</dt><dd>Marquee select</dd>
+      <dt><span class="kbd">Ctrl/Cmd</span> + A</dt><dd>Select all items on the current frame</dd>
       <dt><span class="kbd">Ctrl/Cmd</span> + C</dt><dd>Copy selection</dd>
       <dt><span class="kbd">Ctrl/Cmd</span> + V</dt><dd>Paste selection</dd>
       <dt><span class="kbd">Ctrl/Cmd</span> + D</dt><dd>Duplicate selection</dd>
@@ -1800,7 +1928,7 @@ function registerServiceWorker(){
   const toolIcons={select:['select','Select'],pen:['pen','Pen'],dotpaint:['dotpaint','Dot Paint'],eraser:['eraser','Eraser'],laser:['laser','Laser Pointer'],line:['line','Line'],arrow:['arrow','Arrow'],rect:['rect','Rectangle'],ellipse:['ellipse','Ellipse'],text:['text','Text'],sticky:['sticky','Sticky Note'],connector:['connector','Connector'],diamond:['diamond','Diamond'],triangle:['triangle','Triangle'],callout:['callout','Callout'],speech:['speech','Speech'],comment:['comment','Comment'],audio:['audio','Audio']};
   const buttonIcons={
     undoBtn:['undo','Undo'],redoBtn:['redo','Redo'],saveDriveBtn:['cloudUp','Save to Google'],exportBtn:['image','Export PNG'],exportPdfBtn:['pdf','Export PDF'],tntBtn:['tnt','TNT Reset'],
-    imageBtn:['image','Load Image'],openGraphDialogBtn:['chart','Graph Creator'],openEmojiDialogBtn:['star','Emoji Mixer'],openGifDialogBtn:['play','Create GIF'],duplicateBtn:['duplicate','Duplicate'],frontBtn:['front','Bring Front'],backBtn:['back','Send Back'],groupBtn:['group','Group'],ungroupBtn:['ungroup','Ungroup'],
+    imageBtn:['image','Load Image'],openGraphDialogBtn:['chart','Graph Creator'],openMosaicDialogBtn:['grid','Mosaic Images'],openCollageDialogBtn:['grid','Collage'],openEmojiDialogBtn:['star','Emoji Mixer'],openGifDialogBtn:['play','Create GIF'],duplicateBtn:['duplicate','Duplicate'],frontBtn:['front','Bring Front'],backBtn:['back','Send Back'],groupBtn:['group','Group'],ungroupBtn:['ungroup','Ungroup'],
     dotPictureToolBtn:['dotpaint','Dot Pictures'],openDotPictureLibraryBtn:['dotpaint','Open Dot Picture Library'],insertDotPictureBtn:['plus','Insert Dot Picture'],activateDotPaintBtn:['dotpaint','Paint Dots'],resetDotPictureBtn:['reset','Reset Dot Picture Colors'],simpleDotPicturesBtn:['dotpaint','Dot Pictures'],
     openStickerLibraryBtn:['star','Open Sticker Library'],insertStickerBtn:['plus','Insert Sticker'],createCustomStickerBtn:['image','Create Custom Sticker'],
     insertTemplateBtn:['template','Insert Template'],newTemplatePanelBtn:['panel','New Template Panel'],saveTemplateBtn:['save','Save as Template'],loadTemplateGalleryBtn:['library','Load Gallery'],
@@ -1814,20 +1942,20 @@ function registerServiceWorker(){
     zoomOutBtn:['zoomOut','Zoom Out'],zoomResetBtn:['zoomIn','Reset Zoom'],zoomInBtn:['zoomIn','Zoom In'],shortcutsBtn:['keyboard','Keyboard Shortcuts'],optionsBtn:['settings','Options'],aboutBtn:['info','About'],
     viewToggleBtn:['switch','Switch View'],loadBgImageBtn:['bg','Set Background'],clearBgImageBtn:['clearBg','Clear Background'],frameNavPrev:['prev','Previous Frame'],frameNavNext:['next','Next Frame'],
     frameNavAdd:['plus','Add Frame'],clearFrameBtn:['clear','Clear Frame'],moreOptionsBtn:['more','More Options'],inspectorToggleBtn:['inspector','Toggle Inspector'],
-    simpleImageBtn:['image','Add Image'],simpleGraphBtn:['chart','Graph Creator'],simpleMermaidBtn:['chart','Mermaid Diagram'],simpleWordCloudBtn:['wordcloud','Word Cloud'],simpleEmojiBtn:['star','Emoji Mixer'],simpleGifBtn:['play','Create GIF'],simpleTntBtn:['tnt','TNT Reset'],simpleBgImageBtn:['bg','Set Background'],simpleClearBgBtn:['clearBg','Clear Background'],simpleRemoveBgColorBtn:['magic','Remove BG Color'],
+    simpleImageBtn:['image','Add Image'],simpleGraphBtn:['chart','Graph Creator'],simpleMosaicBtn:['grid','Mosaic Images'],simpleMermaidBtn:['chart','Mermaid Diagram'],simpleWordCloudBtn:['wordcloud','Word Cloud'],simpleEmojiBtn:['star','Emoji Mixer'],simpleGifBtn:['play','Create GIF'],simpleTntBtn:['tnt','TNT Reset'],simpleBgImageBtn:['bg','Set Background'],simpleClearBgBtn:['clearBg','Clear Background'],simpleRemoveBgColorBtn:['magic','Remove BG Color'],
     removeBgColorBtn:['magic','Remove BG Color'],simpleDeleteBtn:['trash','Delete Selected'],floatDeleteBtn:['trash','Delete'],floatDuplicateBtn:['duplicate','Duplicate'],floatEditBtn:['edit','Edit Text'],floatCropBtn:['crop','Crop Image'],
     insertMermaidBtn:['chart','Mermaid Diagram'],insertWordCloudBtn:['wordcloud','Word Cloud'],resetBoardBtn:['reset','Reset Board'],
     closeSetup:['close','Close'],closeEmojiDialog:['close','Close'],closeGifDialog:['close','Close'],closeDotPictureDialog:['close','Close'],closeStickerDialog:['close','Close'],closeModerationDialog:['close','Close'],inlineTextCancelBtn:['close','Cancel'],inlineTextSaveBtn:['check','Done'],
     closeOptions:['close','Close'],closeAbout:['close','Close'],closeMoreOptions:['close','Close'],closeMermaid:['close','Close'],closeWordCloud:['close','Close'],
     more_saveLocalBtn:['save','Save File'],more_loadLocalBtn:['folder','Load File'],more_importPanelsBtn:['import','Import Panels'],more_exportBtn:['image','Export PNG'],more_exportPdfBtn:['pdf','Export PDF'],
     more_saveDriveBtn:['cloudUp','Save to Google'],more_loadDriveBtn:['cloudDown','Load from Google'],more_deletePanelBtn:['trash','Delete Frame'],more_tntBtn:['tnt','TNT Reset'],
-    graphInsertBtn:['plus','Insert Graph'],graphCancelBtn:['close','Close'],insertEmojiMixBtn:['plus','Insert Mix'],mixSelectedEmojiBtn:['magic','Mix Selected Emojis'],createGifBtn:['play','Create GIF'],downloadGifBtn:['download','Download GIF'],
+    graphInsertBtn:['plus','Insert Graph'],graphCancelBtn:['close','Close'],mosaicCreateBtn:['plus','Create Mosaic'],mosaicCancelBtn:['close','Cancel'],collageCreateBtn:['plus','Create Collage'],collageCancelBtn:['close','Cancel'],touchMultiSelectBtn:['check','Multi-Select'],insertEmojiMixBtn:['plus','Insert Mix'],mixSelectedEmojiBtn:['magic','Mix Selected Emojis'],createGifBtn:['play','Create GIF'],downloadGifBtn:['download','Download GIF'],
     wcGenerate:['wordcloud','Generate'],wcCopyPng:['image','Copy PNG'],wcCancel:['close','Cancel'],wcInsert:['check','Insert'],mermaidCopyPng:['image','Copy PNG'],mermaidCancel:['close','Cancel'],mermaidInsert:['check','Insert'],
     cropReset:['reset','Reset'],cropCancel:['close','Cancel'],cropApply:['crop','Apply'],bgRemoveCancel:['close','Cancel'],bgRemoveApply:['magic','Apply'],confirmDialogCancel:['close','Cancel'],confirmDialogOk:['check','OK'],welcomeDismiss:['check','Got it']
   };
   const keepTextIds=new Set(['saveDriveBtn','exportBtn','exportPdfBtn','tntBtn','submitTurnInBtn','reviewTurnInsBtn','openModerationBtn','refreshModerationBtn','settingsBtn','loadDriveBtn','saveLocalBtn','loadLocalBtn','importPanelsBtn','inlineTextSaveBtn','inlineTextCancelBtn','optionsBtn','aboutBtn','viewToggleBtn','zoomResetBtn','confirmDialogOk','confirmDialogCancel','welcomeDismiss']);
   function currentLabel(el,fallback){const text=(el.textContent||'').trim();return el.getAttribute('aria-label')||el.getAttribute('title')||text||fallback}
-  function iconize(el,iconKey,label,withText=false){if(!el||el.dataset.iconized==='1') return;const finalLabel=currentLabel(el,label);el.dataset.iconized='1';el.classList.add('icon-btn');if(withText) el.classList.add('icon-with-text');el.setAttribute('aria-label',finalLabel);el.setAttribute('title',finalLabel);el.setAttribute('data-tooltip',finalLabel);el.innerHTML=`<span class="icon-symbol" aria-hidden="true">${icons[iconKey]||iconKey}</span><span class="icon-label">${esc(finalLabel)}</span>`}
+  function iconize(el,iconKey,label,withText=false){if(!el||el.dataset.iconized==='1') return;const finalLabel=currentLabel(el,label);el.dataset.iconized='1';el.classList.add('icon-btn');if(withText) el.classList.add('icon-with-text');el.setAttribute('aria-label',finalLabel);el.removeAttribute('title');el.setAttribute('data-tooltip',finalLabel);el.innerHTML=`<span class="icon-symbol" aria-hidden="true">${icons[iconKey]||iconKey}</span><span class="icon-label">${esc(finalLabel)}</span>`}
   function applyIcons(){
     ensureSimpleExtras?.();
     ensureAdvancedStickyPalette?.();

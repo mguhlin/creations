@@ -209,7 +209,27 @@ Related behavior:
 
 ## Version
 
-Current build: **DrawSplat v2.14 — Classroom Creation Tools**
+Current build: **DrawSplat v2.16 — High-Resolution Mosaic and Collage Tools**
+
+## Version 2.16 changes
+
+v2.16 improves image output quality and adds collage creation.
+
+- Updated Mosaic Images to use automatic high-resolution tile sizes by default instead of shrinking images into 320 x 220 tiles.
+- Added manual Mosaic tile size overrides; leaving Tile W and Tile H at `0` keeps auto high-resolution sizing.
+- Added a new Collage tool with preset layouts: Two Column, Feature + Two, Four Grid, and Story Strip.
+- Added Collage to the Insert menu, Insert submenu choices, and simple toolbar.
+- Service-worker cache key bumped to `drawsplat-v2.16.0`.
+
+## Version 2.15 changes
+
+v2.15 improves tablet use and image workflows.
+
+- Added touch-friendly multi-select from the floating selection toolbar.
+- Increased touch target sizes, resize handles, and canvas/touch gesture handling for iPad and Android browser use.
+- Added Mosaic Images to combine selected images into a single collage/mosaic image.
+- Updated multi-image GIF creation to preserve original image resolution instead of shrinking frames through the former size slider.
+- Service-worker cache key bumped to `drawsplat-v2.15.0`.
 
 ## Version 2.14 changes
 
@@ -567,7 +587,7 @@ Updated panel behavior:
 - Panel tabs support both `data-panel-id` and a fallback `data-panel-index`.
 - Clicking Panel 1 after creating or switching to another panel should now work reliably.
 
-Current build: **DrawSplat v2.14 — Classroom Creation Tools**
+Current build: **DrawSplat v2.16 — High-Resolution Mosaic and Collage Tools**
 
 ## Version 2.3 productivity workspace update
 
@@ -585,7 +605,7 @@ The Workspace setting is separate from the existing **Simple / Advanced** interf
 - Education Tools + Simple
 - Education Tools + Advanced
 
-Current build: **DrawSplat v2.14 — Classroom Creation Tools**
+Current build: **DrawSplat v2.16 — High-Resolution Mosaic and Collage Tools**
 
 
 ## Security and Internet-Facing Deployment Warning
