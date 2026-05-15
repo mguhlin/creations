@@ -69,6 +69,8 @@ body[data-tool="line"] #boardSvg,body[data-tool="arrow"] #boardSvg,body[data-too
 .rich-editor[data-empty="true"]::before{content:attr(data-placeholder);color:var(--muted);pointer-events:none;position:absolute;top:10px;left:10px;right:10px}
 .about-dialog p{margin:8px 0;line-height:1.5}
 .about-dialog a{color:var(--navy);text-decoration:underline;font-weight:600}
+.about-version{display:inline-flex;align-items:center;gap:6px;margin:2px 0 8px;padding:4px 10px;border:1px solid var(--line);border-radius:999px;background:#fafbff;color:var(--muted);font-size:12px;font-weight:700}
+.donate-link{display:inline-flex;align-items:center;justify-content:center;margin-top:8px;padding:9px 14px;border-radius:10px;background:var(--gold);border:1px solid #df8c00;color:#111827!important;text-decoration:none!important;font-weight:800}
 .align-btns{display:flex;gap:6px;flex:1}
 .align-btns button{flex:1}
 .checkrow{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}

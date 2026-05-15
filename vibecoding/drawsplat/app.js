@@ -1283,6 +1283,7 @@ function registerServiceWorker(){
   if(shouldAutoCloudJoin()) setTimeout(()=>startCloudSync(),500);
   /* v2.5: replay-friendly version stamp the user can read in DevTools. */
   const verEl=document.getElementById('appVersion'); if(verEl) verEl.textContent='v'+VERSION;
+  const aboutVerEl=document.getElementById('aboutVersion'); if(aboutVerEl) aboutVerEl.textContent='v'+VERSION;
   document.title=(document.title||'DrawSplat').replace(/^DrawSplat(\s+v[\d.]+)?/, 'DrawSplat v'+VERSION);
   console.info('[DrawSplat] v'+VERSION+' ready');
 })();
