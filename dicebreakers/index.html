@@ -186,6 +186,16 @@
     </div>
 
     <div class="actions">
+      <h3>For students</h3>
+      <button class="btn primary" id="open-play">Open student view</button>
+      <button class="btn" id="copy-link">Copy share link</button>
+    </div>
+    <div class="inline-help">
+      The student view (<code>play.html</code>) shows a 3D die students click to roll &mdash; the chosen prompt appears below.
+      The share link encodes your dicebreaker in the URL, so no server is needed.
+    </div>
+
+    <div class="actions">
       <h3>Save to cloud</h3>
       <button class="btn" id="save-gdrive">Google Drive</button>
       <button class="btn" id="save-onedrive">OneDrive</button>
@@ -603,6 +613,28 @@ async function exportJSON() {
   return { blob, filename: safeFilename() + '.json', mime: 'application/json' };
 }
 
+// URL-safe base64 encoder for unicode strings (matches play.html decoder).
+function b64urlEncode(str) {
+  const bytes = new TextEncoder().encode(str);
+  let bin = '';
+  for (const b of bytes) bin += String.fromCharCode(b);
+  return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+function buildShareUrl() {
+  const payload = JSON.stringify({
+    t: state.title,
+    s: state.subtitle,
+    p: state.prompts,
+    c: state.accent,
+    l: state.layout
+  });
+  const encoded = b64urlEncode(payload);
+  const playUrl = new URL('play.html', window.location.href);
+  playUrl.hash = 'd=' + encoded;
+  return playUrl.toString();
+}
+
 async function exportPDF() {
   await loadScript('https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js');
   const { jsPDF } = window.jspdf;
@@ -981,6 +1013,21 @@ function init() {
       toast(label + ' save failed: ' + err.message, 5000);
     }
   };
+  // Student view
+  $('#open-play').addEventListener('click', () => {
+    window.open(buildShareUrl(), '_blank', 'noopener');
+  });
+  $('#copy-link').addEventListener('click', async () => {
+    const url = buildShareUrl();
+    try {
+      await navigator.clipboard.writeText(url);
+      toast('Share link copied');
+    } catch {
+      // Fallback for non-secure contexts (file://) — show a prompt.
+      window.prompt('Copy this link and share it with students:', url);
+    }
+  });
+
   $('#save-gdrive').addEventListener('click', () => cloudSave('Google Drive', uploadGoogleDrive));
   $('#save-onedrive').addEventListener('click', () => cloudSave('OneDrive', uploadOneDrive));
   $('#save-dropbox').addEventListener('click', () => cloudSave('Dropbox', uploadDropbox));
