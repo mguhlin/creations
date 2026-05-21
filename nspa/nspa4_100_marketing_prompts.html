@@ -148,7 +148,7 @@ footer strong{color:rgba(255,255,255,.9)}
 </style>
 </head>
 <body>
-<!-- MG-BACK-NAV -->
+<!-- MG-BACK-NAV v2 -->
 <style id="mg-back-nav-style">
   .mg-back-bar {
     position: fixed;
@@ -186,8 +186,39 @@ footer strong{color:rgba(255,255,255,.9)}
 <div class="mg-back-bar" role="navigation" aria-label="Back to Creations index">
   <a href="../index.html"><span class="mg-back-arrow">←</span> MGuhlin.org <span class="mg-back-sep">/</span> <span class="mg-back-label">Creations</span></a>
 </div>
-
-
+<script id="mg-back-nav-script">
+(function() {
+  var BAR_H = 32;
+  var done = false;
+  function offsetFixedHeaders() {
+    if (done) return;
+    done = true;
+    var nodes = document.querySelectorAll(
+      'header, nav, .topnav, .top-nav, .topbar, .navbar, .site-nav, .site-header, ' +
+      '[class*="topnav"], [class*="topbar"], [class*="navbar"]'
+    );
+    nodes.forEach(function(el) {
+      if (el.classList.contains('mg-back-bar')) return;
+      var cs = window.getComputedStyle(el);
+      var pos = cs.position;
+      if (pos !== 'fixed' && pos !== 'sticky') return;
+      var topVal = parseFloat(cs.top);
+      if (isNaN(topVal) || topVal >= BAR_H) return;
+      // Only shift wide, top-pinned bars (avoid moving inline-fixed widgets)
+      var rect = el.getBoundingClientRect();
+      if (rect.width < window.innerWidth * 0.4) return;
+      el.style.setProperty('top', (topVal + BAR_H) + 'px', 'important');
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', offsetFixedHeaders);
+  } else {
+    offsetFixedHeaders();
+  }
+  // Re-run once on full load in case scripts inject nav after DOMContentLoaded
+  window.addEventListener('load', function() { done = false; offsetFixedHeaders(); });
+})();
+</script>
 <!-- HEADER -->
 <header class="site-header" id="top">
   <div class="header-inner">
