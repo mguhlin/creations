@@ -654,6 +654,132 @@ footer {
   .nav-sub { display: none; }
   .index-strip { padding: 12px 16px; }
 }
+
+
+/* ═══ WHITE-PAGE OVERRIDE ═════════════════════════════════════════════ */
+/* High-contrast white surfaces with dark-green accents.                  */
+:root {
+  --charcoal:      #FFFFFF;
+  --charcoal-mid:  #F7F9F7;
+  --charcoal-soft: #ECF1EE;
+  --charcoal-dim:  #5C6B62;
+  --charcoal-mute: #8A958E;
+  --cream:         #1B2D24;
+  --border-dark:   rgba(27,67,50,0.18);
+  --border-mid:    rgba(27,67,50,0.10);
+}
+
+body { background: #FFFFFF !important; color: #1B2D24 !important; }
+body::before { opacity: 0.25; }
+
+/* Top nav: dark-green sticky bar */
+.topnav { background: #0F2E22 !important; border-bottom: 1px solid rgba(116,198,157,0.25) !important; }
+.nav-brand { color: #D8F3DC !important; }
+.nav-brand span { color: #74C69D !important; }
+.nav-badge { color: #74C69D !important; }
+.nav-sub { color: rgba(183,228,199,0.55) !important; }
+
+/* Sidebar stays dark-green rail (already --forest-deep) */
+.sidebar { background: #0F2E22 !important; border-right-color: rgba(116,198,157,0.18) !important; }
+.sidebar a { color: rgba(213,232,220,0.72) !important; }
+.sidebar a:hover { color: #FFFFFF !important; background: rgba(116,198,157,0.15) !important; border-left-color: #74C69D !important; }
+.sidebar a.active { color: #FFFFFF !important; background: rgba(116,198,157,0.2) !important; border-left-color: #74C69D !important; }
+.sidebar-section-label { color: rgba(116,198,157,0.6) !important; }
+
+/* Hero: light surface with green accent */
+.hero { background: #F7F9F7 !important; border-bottom: 1px solid #ECF1EE !important; }
+.hero::after { display: none !important; }
+.hero-title { color: #1B2D24 !important; }
+.hero-title em { color: #1B4332 !important; }
+.hero-desc { color: #5C6B62 !important; }
+.hero-eyebrow { background: #D8F3DC !important; border-color: #B7E4C7 !important; color: #1B4332 !important; }
+
+/* Feature chips */
+.feat-chip { background: #D8F3DC !important; border-color: #B7E4C7 !important; color: #1B4332 !important; }
+
+/* Section index strip */
+.index-strip { background: #0F2E22 !important; }
+.index-pill { color: #D8F3DC !important; border-color: rgba(116,198,157,0.3) !important; }
+.index-pill:hover { background: rgba(116,198,157,0.25) !important; color: #FFFFFF !important; }
+.pnum { color: #74C69D !important; }
+
+/* Section titles */
+.section-title { color: #1B4332 !important; }
+.section-desc { color: #5C6B62 !important; }
+.section-number { background: #2D6A4F !important; color: #FFFFFF !important; border: 1px solid #40916C !important; }
+
+/* Section dividers */
+.sec-divider-line { background: #D5DED9 !important; }
+.sec-divider-lbl { color: #5C6B62 !important; }
+
+/* Instruction cards */
+.instruction-card { background: #FFFFFF !important; border: 1px solid #D5DED9 !important; border-left: 3px solid #2D6A4F !important; box-shadow: 0 1px 3px rgba(27,67,50,0.05) !important; }
+.instruction-card:hover { border-color: #74C69D !important; box-shadow: 0 6px 22px rgba(27,67,50,0.10) !important; }
+.card-header { background: linear-gradient(160deg, #2D6A4F 0%, #40916C 100%) !important; }
+.card-title { color: #FFFFFF !important; }
+.instruction-card.gold-border .card-header { background: linear-gradient(160deg, #5A4A14 0%, #8A7220 100%) !important; }
+
+.card-description { background: #F7F9F7 !important; color: #2E4034 !important; border-bottom-color: #ECF1EE !important; }
+.card-description strong { color: #1B4332 !important; }
+
+/* Code blocks (kept dark for legibility) */
+.code-label { background: #0F2E22 !important; color: rgba(212,228,199,0.7) !important; border-bottom-color: rgba(116,198,157,0.25) !important; }
+.copy-btn { background: #2D6A4F !important; color: #FFFFFF !important; border-color: rgba(116,198,157,0.4) !important; }
+.copy-btn.copied { background: #2d7a2d !important; color: #D8F3DC !important; }
+pre { background: #0F2E22 !important; color: #D8F3DC !important; }
+
+/* Use case cards */
+.use-case-card { background: #FFFFFF !important; border-color: #D5DED9 !important; box-shadow: 0 1px 3px rgba(27,67,50,0.04) !important; }
+.use-case-card:hover { border-color: #74C69D !important; }
+.use-case-card h4 { color: #1B4332 !important; }
+.use-case-card p { color: #5C6B62 !important; }
+
+/* Promo box (gold accent) */
+.promo-box { background: #FFF8E7 !important; border-color: rgba(212,172,13,0.4) !important; }
+.promo-box h3 { color: #8B6B0E !important; }
+.promo-box p { color: #5C6B62 !important; }
+.promo-box a { color: #1B4332 !important; }
+.promo-box code { background: rgba(212,172,13,0.18) !important; color: #8B6B0E !important; }
+
+/* Platform pills */
+.platform-pill { background: #F7F9F7 !important; border-color: #D5DED9 !important; color: #1B4332 !important; }
+.platform-pill::before { color: #40916C !important; }
+
+/* Tags */
+.tag-blue { background: #D8F3DC !important; color: #1B4332 !important; border-color: #B7E4C7 !important; }
+.tag-gold { background: #FFF8E7 !important; color: #8B6B0E !important; border-color: rgba(212,172,13,0.35) !important; }
+.tag-green { background: #B7E4C7 !important; color: #1B4332 !important; border-color: #74C69D !important; }
+.toggle-icon { color: #5C6B62 !important; }
+
+/* Tables */
+th { background: #1B4332 !important; color: #FFFFFF !important; }
+td { color: #2E4034 !important; border-bottom-color: #ECF1EE !important; }
+tr:hover td { background: #F7F9F7 !important; }
+td strong { color: #1B4332 !important; }
+
+/* Prose */
+.main p, .section-page p, p { color: #2E4034 !important; font-weight: 400 !important; }
+a { color: #1B4332 !important; }
+a:hover { color: #2D6A4F !important; }
+strong { color: #1B4332 !important; }
+.main ol, .main ul, .section-page ol, .section-page ul { color: #2E4034 !important; }
+
+/* Back-to-top link */
+a.back-top { color: #5C6B62 !important; }
+a.back-top:hover { color: #2D6A4F !important; }
+
+/* Floating back-to-top button */
+#back-to-top { background: #2D6A4F !important; color: #FFFFFF !important; box-shadow: 0 4px 16px rgba(27,67,50,0.25) !important; border-color: rgba(116,198,157,0.4) !important; }
+#back-to-top:hover { background: #40916C !important; }
+
+/* Footer kept dark green (already --forest-deep) */
+footer { background: #0F2E22 !important; }
+.footer-brand { color: #D8F3DC !important; }
+.footer-brand span { color: #74C69D !important; }
+.footer-links a { color: rgba(183,228,199,0.6) !important; }
+.footer-links a:hover { color: #D8F3DC !important; }
+.footer-copy { color: rgba(116,198,157,0.45) !important; }
+
 </style>
 </head>
 <body>

@@ -6,7 +6,7 @@
     "description": "A curated portfolio of AI-powered tools, reference guides, coaching frameworks, and interactive resources built for educators, administrators, and knowledge workers.",
     "tallies": [
       {
-        "num": "27",
+        "num": "28",
         "label": "Projects"
       },
       {
@@ -1044,6 +1044,41 @@
         {
           "label": "Open Manager →",
           "href": "workmanager/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "28",
+      "id": "tcea-tools10",
+      "section": "Interactive &amp; Classroom Tools",
+      "category": "Classroom Tool Suite · TCEA",
+      "title": "TCEA Tools10",
+      "subtitle": "Ten ready-to-run classroom tools — dice, spinners, wordsearch, and more",
+      "stat": "10",
+      "statLabel": "Tools · Drag-and-Drop",
+      "panelGradient": "linear-gradient(160deg, #0A1E3A 0%, #1E398D 100%)",
+      "catStyle": "background:rgba(252,176,64,0.18);color:#FAA634;",
+      "statColor": "#FDCC80",
+      "btnBg": "#1E398D",
+      "btnColor": "#FAA634",
+      "btnHoverBg": "#2A4FB8",
+      "btnHoverColor": "#fff",
+      "description": "A TCEA-branded menu of ten lightweight classroom tools — coin flipping, dice, dicebreakers, draw-sketch, fortune teller, meme puzzle, shape spinner, story wheel, wheel spinner, and word search. Each tool lives in its own folder with a consistent navy/gold visual style, and several include separate teacher and student views. Drop-in classroom utilities for PD, icebreakers, and warm-ups.",
+      "features": [
+        "Coin Flipping",
+        "Dice &amp; Dicebreakers",
+        "Draw-Sketch",
+        "Fortune Teller",
+        "Meme Puzzle",
+        "Shape &amp; Wheel Spinners",
+        "Story Wheel",
+        "Word Search"
+      ],
+      "links": [
+        {
+          "label": "Open Tool Menu →",
+          "href": "tcea/tools10/index.html",
           "primary": true
         }
       ]
