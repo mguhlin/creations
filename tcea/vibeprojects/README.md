@@ -81,7 +81,7 @@ python3 -m http.server 8000
 
 ## About
 
-This resource was created by **Miguel Guhlin**, Director of Professional Development at [TCEA](https://blog.tcea.org), with 32 years of EdTech experience. Miguel is a Google Certified Innovator, ISTE Certified Educator, Microsoft Certified Master Trainer, and member of the Texas AI in Education Task Force (ALIGN project).
+This resource was created by **Miguel Guhlin**, Director of Professional Development at [TCEA](https://blog.tcea.org), with 32 years of EdTech experience. Miguel is a Google Certified Innovator, ISTE Certified Educator, Microsoft Certified Master Trainer, and member of Texas All About AI-EDU (ALIGN project).
 
 This page was **vibe-coded** — meaning AI tools were used to generate the initial draft, which was then evaluated, revised, and shaped by a human expert. That's the whole point.
 

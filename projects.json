@@ -5,20 +5,39 @@
     "byline": "Miguel Guhlin",
     "description": "A curated portfolio of AI-powered tools, reference guides, coaching frameworks, and interactive resources built for educators, administrators, and knowledge workers.",
     "tallies": [
-      { "num": "28",  "label": "Projects"      },
-      { "num": "35+", "label": "AI Bots"       },
-      { "num": "7",   "label": "Skills"        },
-      { "num": "CC0", "label": "Open License"  }
+      {
+        "num": "27",
+        "label": "Projects"
+      },
+      {
+        "num": "35+",
+        "label": "AI Bots"
+      },
+      {
+        "num": "7",
+        "label": "Skills"
+      },
+      {
+        "num": "CC0",
+        "label": "Open License"
+      }
     ],
     "footerLinks": [
-      { "label": "MGuhlin.org",    "href": "https://mguhlin.org"   },
-      { "label": "TCEA TechNotes", "href": "https://blog.tcea.org" },
-      { "label": "TCEA.org",       "href": "https://tcea.org"      }
+      {
+        "label": "MGuhlin.org",
+        "href": "https://mguhlin.org"
+      },
+      {
+        "label": "TCEA TechNotes",
+        "href": "https://blog.tcea.org"
+      },
+      {
+        "label": "TCEA.org",
+        "href": "https://tcea.org"
+      }
     ]
   },
-
   "projects": [
-
     {
       "num": "01",
       "id": "acl",
@@ -44,10 +63,13 @@
         "Scholarship Workflow Context"
       ],
       "links": [
-        { "label": "Open Assessment →", "href": "acl/index.html", "primary": true }
+        {
+          "label": "Open Assessment →",
+          "href": "acl/index.html",
+          "primary": true
+        }
       ]
     },
-
     {
       "num": "02",
       "id": "aici",
@@ -76,11 +98,19 @@
         "Rubric Builder"
       ],
       "links": [
-        { "label": "Browse Library →", "href": "aici/index.html",                          "primary": true  },
-        { "label": "Live Site ↗",      "href": "https://mguhlin.github.io/aici/index.html", "primary": false, "external": true }
+        {
+          "label": "Browse Library →",
+          "href": "aici/index.html",
+          "primary": true
+        },
+        {
+          "label": "Live Site ↗",
+          "href": "https://mguhlin.github.io/aici/index.html",
+          "primary": false,
+          "external": true
+        }
       ]
     },
-
     {
       "num": "03",
       "id": "architect",
@@ -107,10 +137,13 @@
         "Copy-to-Clipboard"
       ],
       "links": [
-        { "label": "Open Tool →", "href": "architect/index.html", "primary": true }
+        {
+          "label": "Open Tool →",
+          "href": "architect/index.html",
+          "primary": true
+        }
       ]
     },
-
     {
       "num": "04",
       "id": "claude-suite",
@@ -138,11 +171,18 @@
         "Training Architect"
       ],
       "links": [
-        { "label": "View Skills →",       "href": "claude/index.html",       "primary": true  },
-        { "label": "Copywriting Visual ↗", "href": "claude/copywriting.html", "primary": false }
+        {
+          "label": "View Skills →",
+          "href": "claude/index.html",
+          "primary": true
+        },
+        {
+          "label": "Copywriting Visual ↗",
+          "href": "claude/copywriting.html",
+          "primary": false
+        }
       ]
     },
-
     {
       "num": "05",
       "id": "cudl",
@@ -169,12 +209,23 @@
         "TCEA26 Session Tool"
       ],
       "links": [
-        { "label": "ARC Protocol →",     "href": "cudl/index.html", "primary": true  },
-        { "label": "Notice-Wonder-Next", "href": "cudl/nwn.html",   "primary": false },
-        { "label": "VIVA",               "href": "cudl/viva.html",  "primary": false }
+        {
+          "label": "ARC Protocol →",
+          "href": "cudl/index.html",
+          "primary": true
+        },
+        {
+          "label": "Notice-Wonder-Next",
+          "href": "cudl/nwn.html",
+          "primary": false
+        },
+        {
+          "label": "VIVA",
+          "href": "cudl/viva.html",
+          "primary": false
+        }
       ]
     },
-
     {
       "num": "06",
       "id": "eog",
@@ -202,12 +253,23 @@
         "TCEA Example"
       ],
       "links": [
-        { "label": "System Prompt &amp; Docs →", "href": "eog/index.html",    "primary": true  },
-        { "label": "TCEA Example",               "href": "eog/tcea.html",     "primary": false },
-        { "label": "Mac Haik Example",           "href": "eog/example1.html", "primary": false }
+        {
+          "label": "System Prompt &amp; Docs →",
+          "href": "eog/index.html",
+          "primary": true
+        },
+        {
+          "label": "TCEA Example",
+          "href": "eog/tcea.html",
+          "primary": false
+        },
+        {
+          "label": "Mac Haik Example",
+          "href": "eog/example1.html",
+          "primary": false
+        }
       ]
     },
-
     {
       "num": "07",
       "id": "vcnotes",
@@ -235,10 +297,13 @@
         "Collapsible Sidebar"
       ],
       "links": [
-        { "label": "Open Workspace →", "href": "vcnotes/index.html", "primary": true }
+        {
+          "label": "Open Workspace →",
+          "href": "vcnotes/index.html",
+          "primary": true
+        }
       ]
     },
-
     {
       "num": "08",
       "id": "twc",
@@ -265,10 +330,13 @@
         "2.0 CPE Credits"
       ],
       "links": [
-        { "label": "Open Orientation →", "href": "twc/index.html", "primary": true }
+        {
+          "label": "Open Orientation →",
+          "href": "twc/index.html",
+          "primary": true
+        }
       ]
     },
-
     {
       "num": "09",
       "id": "txca",
@@ -295,10 +363,13 @@
         "Advocacy &amp; Grants"
       ],
       "links": [
-        { "label": "Open Guide →", "href": "txca/index.html", "primary": true }
+        {
+          "label": "Open Guide →",
+          "href": "txca/index.html",
+          "primary": true
+        }
       ]
     },
-
     {
       "num": "10",
       "id": "nspa",
@@ -325,13 +396,28 @@
         "Marketing Scenarios"
       ],
       "links": [
-        { "label": "Open Resource Index →",      "href": "nspa/index.html",                        "primary": true  },
-        { "label": "AI Fluency Levels",           "href": "nspa/ai_fluency_levels.html",            "primary": false },
-        { "label": "NSPA3 222 Framework",         "href": "nspa/nspa3_222_framework.html",          "primary": false },
-        { "label": "100 Marketing Prompts",       "href": "nspa/nspa4_100_marketing_prompts.html",  "primary": false }
+        {
+          "label": "Open Resource Index →",
+          "href": "nspa/index.html",
+          "primary": true
+        },
+        {
+          "label": "AI Fluency Levels",
+          "href": "nspa/ai_fluency_levels.html",
+          "primary": false
+        },
+        {
+          "label": "NSPA3 222 Framework",
+          "href": "nspa/nspa3_222_framework.html",
+          "primary": false
+        },
+        {
+          "label": "100 Marketing Prompts",
+          "href": "nspa/nspa4_100_marketing_prompts.html",
+          "primary": false
+        }
       ]
     },
-
     {
       "num": "11",
       "id": "ltt",
@@ -358,10 +444,13 @@
         "Nonprofit Context"
       ],
       "links": [
-        { "label": "Open Toolkit →", "href": "ltt/index.html", "primary": true }
+        {
+          "label": "Open Toolkit →",
+          "href": "ltt/index.html",
+          "primary": true
+        }
       ]
     },
-
     {
       "num": "12",
       "id": "roadmap",
@@ -388,10 +477,13 @@
         "Common Failure Modes"
       ],
       "links": [
-        { "label": "Open Roadmap →", "href": "roadmap/index.html", "primary": true }
+        {
+          "label": "Open Roadmap →",
+          "href": "roadmap/index.html",
+          "primary": true
+        }
       ]
     },
-
     {
       "num": "13",
       "id": "visuals",
@@ -418,10 +510,13 @@
         "Nav Dot System"
       ],
       "links": [
-        { "label": "View Visualization →", "href": "visuals/career.html", "primary": true }
+        {
+          "label": "View Visualization →",
+          "href": "visuals/career.html",
+          "primary": true
+        }
       ]
     },
-
     {
       "num": "14",
       "id": "vlet",
@@ -449,11 +544,19 @@
         "BoodleBox Strategy Partner"
       ],
       "links": [
-        { "label": "Open Reference →", "href": "vlet/index.html",                 "primary": true  },
-        { "label": "Live Site ↗",      "href": "https://mglearn.github.io/vlet/", "primary": false, "external": true }
+        {
+          "label": "Open Reference →",
+          "href": "vlet/index.html",
+          "primary": true
+        },
+        {
+          "label": "Live Site ↗",
+          "href": "https://mglearn.github.io/vlet/",
+          "primary": false,
+          "external": true
+        }
       ]
     },
-
     {
       "num": "15",
       "id": "funquiz",
@@ -481,13 +584,28 @@
         "PD Icebreaker Ready"
       ],
       "links": [
-        { "label": "Winnie the Pooh →", "href": "funquiz/index.html",  "primary": true  },
-        { "label": "The Smurfs",        "href": "funquiz/smurfs.html", "primary": false },
-        { "label": "Seven Dwarfs",      "href": "funquiz/dwarfs.html", "primary": false },
-        { "label": "Looney Tunes",      "href": "funquiz/looney.html", "primary": false }
+        {
+          "label": "Winnie the Pooh →",
+          "href": "funquiz/index.html",
+          "primary": true
+        },
+        {
+          "label": "The Smurfs",
+          "href": "funquiz/smurfs.html",
+          "primary": false
+        },
+        {
+          "label": "Seven Dwarfs",
+          "href": "funquiz/dwarfs.html",
+          "primary": false
+        },
+        {
+          "label": "Looney Tunes",
+          "href": "funquiz/looney.html",
+          "primary": false
+        }
       ]
     },
-
     {
       "num": "16",
       "id": "tcea-hub",
@@ -514,13 +632,28 @@
         "TCEA Branding"
       ],
       "links": [
-        { "label": "TCEA Instructions Library →",  "href": "tcea/index.html",                           "primary": true  },
-        { "label": "KPI Dashboard",                "href": "tcea/dashboard.html",                       "primary": false },
-        { "label": "Surface-Deep-Transfer",        "href": "tcea/surface_deep_transfer_learning.html",  "primary": false },
-        { "label": "Top Strategies",               "href": "tcea/topstrategies.html",                   "primary": false }
+        {
+          "label": "TCEA Instructions Library →",
+          "href": "tcea/index.html",
+          "primary": true
+        },
+        {
+          "label": "KPI Dashboard",
+          "href": "tcea/dashboard.html",
+          "primary": false
+        },
+        {
+          "label": "Surface-Deep-Transfer",
+          "href": "tcea/surface_deep_transfer_learning.html",
+          "primary": false
+        },
+        {
+          "label": "Top Strategies",
+          "href": "tcea/topstrategies.html",
+          "primary": false
+        }
       ]
     },
-
     {
       "num": "17",
       "id": "media-tools-win",
@@ -549,10 +682,13 @@
         "FFmpeg · ImageMagick · Pandoc"
       ],
       "links": [
-        { "label": "Read Readme →", "href": "MediaTools/readme.md", "primary": true }
+        {
+          "label": "Read Readme →",
+          "href": "MediaTools/readme.md",
+          "primary": true
+        }
       ]
     },
-
     {
       "num": "18",
       "id": "media-tools-linux",
@@ -579,16 +715,19 @@
         "Pop!_OS / Ubuntu Tested"
       ],
       "links": [
-        { "label": "Read Readme →", "href": "LinuxMediaTools/readme.md", "primary": true }
+        {
+          "label": "Read Readme →",
+          "href": "LinuxMediaTools/readme.md",
+          "primary": true
+        }
       ]
     },
-
     {
       "num": "19",
       "id": "aitf",
       "section": "Policy &amp; Field Guides",
       "category": "Field Guide · K-12 Policy",
-      "title": "Texas AI in Education Task Force",
+      "title": "Texas All About AI-EDU",
       "subtitle": "Field guide for ethical, classroom-ready AI implementation in K–12",
       "stat": "12",
       "statLabel": "Modules &amp; Sections",
@@ -599,7 +738,7 @@
       "btnColor": "#FFFFFF",
       "btnHoverBg": "#4F6298",
       "btnHoverColor": "#fff",
-      "description": "A structured field guide developed for the Texas AI in Education Task Force. Covers policy development, classroom use cases, and ethical decision-making for K–12 administrators, teachers, and curriculum leaders preparing schoolwide AI literacy. Modular sections, scenario-based learning, and a professional development framework wrapped in a navy/gold dark-mode design.",
+      "description": "A structured Texas All About AI-EDU field guide covering policy development, classroom use cases, and ethical decision-making for K–12 administrators, teachers, and curriculum leaders preparing schoolwide AI literacy. Modular sections, scenario-based learning, and a professional development framework wrapped in a navy/gold dark-mode design.",
       "features": [
         "Scenario-Based Learning",
         "Policy Development",
@@ -609,10 +748,13 @@
         "Print-Friendly"
       ],
       "links": [
-        { "label": "Open Field Guide →", "href": "aitf/index.html", "primary": true }
+        {
+          "label": "Open Field Guide →",
+          "href": "aitf/index.html",
+          "primary": true
+        }
       ]
     },
-
     {
       "num": "20",
       "id": "dicebreakers",
@@ -639,44 +781,20 @@
         "Share via URL"
       ],
       "links": [
-        { "label": "Open Creator →", "href": "dicebreakers/index.html", "primary": true },
-        { "label": "Student Play View", "href": "dicebreakers/play.html", "primary": false }
+        {
+          "label": "Open Creator →",
+          "href": "dicebreakers/index.html",
+          "primary": true
+        },
+        {
+          "label": "Student Play View",
+          "href": "dicebreakers/play.html",
+          "primary": false
+        }
       ]
     },
-
     {
       "num": "21",
-      "id": "ds",
-      "section": "Interactive &amp; Classroom Tools",
-      "category": "Collaborative Whiteboard · K-16",
-      "title": "DrawSplat",
-      "subtitle": "Free K–16 interactive whiteboard for learning, design, and planning",
-      "stat": "v2.13",
-      "statLabel": "15+ Tools · 7 Templates",
-      "panelGradient": "linear-gradient(160deg, #122220 0%, #1E3530 100%)",
-      "catStyle": "background:rgba(110,221,216,0.18);color:#6EDDD8;",
-      "statColor": "#A0E8E4",
-      "btnBg": "#2A4A44",
-      "btnColor": "#B0E8E4",
-      "btnHoverBg": "#3A5E58",
-      "btnHoverColor": "#fff",
-      "description": "A full-featured digital whiteboard for K–16 teaching and collaboration. Pan, annotate, drop sticky notes, record audio comments, place shapes, text, and images, and insert Mermaid diagrams or word clouds. Includes templates (Frayer, KWL, T-Chart, Venn, storyboard), Teacher/Student modes, an Assignment mode with layered access and turn-in workflow, Google Drive sync, multiple panels and frames, and six+ languages.",
-      "features": [
-        "Multi-Panel &amp; Frames",
-        "Sticky Notes &amp; Audio",
-        "Mermaid &amp; Word Clouds",
-        "PDF / PPTX Import",
-        "Teacher &amp; Student Modes",
-        "Assignment + Turn-In",
-        "Google Drive Sync"
-      ],
-      "links": [
-        { "label": "Open DrawSplat →", "href": "ds/index.html", "primary": true }
-      ]
-    },
-
-    {
-      "num": "22",
       "id": "libcon",
       "section": "Coaching &amp; Professional Development",
       "category": "Scenario Library · School Librarians",
@@ -702,13 +820,20 @@
         "Print-Friendly"
       ],
       "links": [
-        { "label": "Open Scenarios →", "href": "libcon/index.html", "primary": true },
-        { "label": "Scenarios v2", "href": "libcon/scenarios2.html", "primary": false }
+        {
+          "label": "Open Scenarios →",
+          "href": "libcon/index.html",
+          "primary": true
+        },
+        {
+          "label": "Scenarios v2",
+          "href": "libcon/scenarios2.html",
+          "primary": false
+        }
       ]
     },
-
     {
-      "num": "23",
+      "num": "22",
       "id": "markdown",
       "section": "Onboarding &amp; Productivity Tools",
       "category": "Writing &amp; Productivity Tool",
@@ -734,13 +859,20 @@
         "Save .md"
       ],
       "links": [
-        { "label": "Open Studio →", "href": "markdown/index.html", "primary": true },
-        { "label": "Studio v2", "href": "markdown/index_v2.html", "primary": false }
+        {
+          "label": "Open Studio →",
+          "href": "markdown/index.html",
+          "primary": true
+        },
+        {
+          "label": "Studio v2",
+          "href": "markdown/index_v2.html",
+          "primary": false
+        }
       ]
     },
-
     {
-      "num": "24",
+      "num": "23",
       "id": "mermaid",
       "section": "Interactive &amp; Classroom Tools",
       "category": "Tutorial · Educator Reference",
@@ -765,12 +897,15 @@
         "Printable Quick-Reference"
       ],
       "links": [
-        { "label": "Open Tutorial →", "href": "mermaid/index.html", "primary": true }
+        {
+          "label": "Open Tutorial →",
+          "href": "mermaid/index.html",
+          "primary": true
+        }
       ]
     },
-
     {
-      "num": "25",
+      "num": "24",
       "id": "search",
       "section": "Onboarding &amp; Productivity Tools",
       "category": "Search · Content Portal",
@@ -795,12 +930,15 @@
         "RSS for Results"
       ],
       "links": [
-        { "label": "Open Search →", "href": "search/index.html", "primary": true }
+        {
+          "label": "Open Search →",
+          "href": "search/index.html",
+          "primary": true
+        }
       ]
     },
-
     {
-      "num": "26",
+      "num": "25",
       "id": "slidemaker",
       "section": "Prompt Engineering",
       "category": "Prompt Library · Presentations",
@@ -825,12 +963,15 @@
         "Prompt-Chaining Guide"
       ],
       "links": [
-        { "label": "Open System →", "href": "slidemaker/index.html", "primary": true }
+        {
+          "label": "Open System →",
+          "href": "slidemaker/index.html",
+          "primary": true
+        }
       ]
     },
-
     {
-      "num": "27",
+      "num": "26",
       "id": "sched",
       "section": "Utilities &amp; Scripts",
       "category": "Schedule Tool · Demo",
@@ -856,14 +997,25 @@
         "3 Layout Variants"
       ],
       "links": [
-        { "label": "Open Schedule →", "href": "sched/index.html", "primary": true },
-        { "label": "Version B", "href": "sched/versionb.html", "primary": false },
-        { "label": "Version C", "href": "sched/versionc.html", "primary": false }
+        {
+          "label": "Open Schedule →",
+          "href": "sched/index.html",
+          "primary": true
+        },
+        {
+          "label": "Version B",
+          "href": "sched/versionb.html",
+          "primary": false
+        },
+        {
+          "label": "Version C",
+          "href": "sched/versionc.html",
+          "primary": false
+        }
       ]
     },
-
     {
-      "num": "28",
+      "num": "27",
       "id": "workmanager",
       "section": "Utilities &amp; Scripts",
       "category": "Work Order App · Demo",
@@ -889,9 +1041,12 @@
         "Team Setup Notes"
       ],
       "links": [
-        { "label": "Open Manager →", "href": "workmanager/index.html", "primary": true }
+        {
+          "label": "Open Manager →",
+          "href": "workmanager/index.html",
+          "primary": true
+        }
       ]
     }
-
   ]
 }
