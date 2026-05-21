@@ -5,7 +5,7 @@
     "byline": "Miguel Guhlin",
     "description": "A curated portfolio of AI-powered tools, reference guides, coaching frameworks, and interactive resources built for educators, administrators, and knowledge workers.",
     "tallies": [
-      { "num": "18",  "label": "Projects"      },
+      { "num": "28",  "label": "Projects"      },
       { "num": "35+", "label": "AI Bots"       },
       { "num": "7",   "label": "Skills"        },
       { "num": "CC0", "label": "Open License"  }
@@ -580,6 +580,316 @@
       ],
       "links": [
         { "label": "Read Readme →", "href": "LinuxMediaTools/readme.md", "primary": true }
+      ]
+    },
+
+    {
+      "num": "19",
+      "id": "aitf",
+      "section": "Policy &amp; Field Guides",
+      "category": "Field Guide · K-12 Policy",
+      "title": "Texas AI in Education Task Force",
+      "subtitle": "Field guide for ethical, classroom-ready AI implementation in K–12",
+      "stat": "12",
+      "statLabel": "Modules &amp; Sections",
+      "panelGradient": "linear-gradient(160deg, #1A2030 0%, #243048 100%)",
+      "catStyle": "background:rgba(212,172,13,0.18);color:#E8C547;",
+      "statColor": "#F2D880",
+      "btnBg": "#3A4A78",
+      "btnColor": "#FFFFFF",
+      "btnHoverBg": "#4F6298",
+      "btnHoverColor": "#fff",
+      "description": "A structured field guide developed for the Texas AI in Education Task Force. Covers policy development, classroom use cases, and ethical decision-making for K–12 administrators, teachers, and curriculum leaders preparing schoolwide AI literacy. Modular sections, scenario-based learning, and a professional development framework wrapped in a navy/gold dark-mode design.",
+      "features": [
+        "Scenario-Based Learning",
+        "Policy Development",
+        "Classroom Use Cases",
+        "PD Framework",
+        "Sticky Navigation",
+        "Print-Friendly"
+      ],
+      "links": [
+        { "label": "Open Field Guide →", "href": "aitf/index.html", "primary": true }
+      ]
+    },
+
+    {
+      "num": "20",
+      "id": "dicebreakers",
+      "section": "Interactive &amp; Classroom Tools",
+      "category": "Classroom Tool · Generator",
+      "title": "Dicebreaker Creator",
+      "subtitle": "Roll a die, answer a prompt — design custom reflection &amp; debrief dice",
+      "stat": "6",
+      "statLabel": "Faces · 4 Presets",
+      "panelGradient": "linear-gradient(160deg, #1F1A24 0%, #2E2438 100%)",
+      "catStyle": "background:rgba(180,140,220,0.18);color:#C4A8F0;",
+      "statColor": "#D0C0F8",
+      "btnBg": "#4A3A70",
+      "btnColor": "#E8DCFA",
+      "btnHoverBg": "#5C4A88",
+      "btnHoverColor": "#fff",
+      "description": "A web app for teachers to design custom six-sided dice with discussion prompts, debrief questions, or icebreakers. Live canvas preview, cloud save to Google Drive/OneDrive/Dropbox, and export as PNG, PDF, PPTX, or JSON. Includes a student-facing play view with a 3D interactive die, plus presets for debrief, entry tickets, story starters, and ice-breakers.",
+      "features": [
+        "Live Canvas Preview",
+        "PNG / PDF / PPTX / JSON Export",
+        "4 Preset Templates",
+        "Cloud OAuth Sync",
+        "3D Student Play Mode",
+        "Share via URL"
+      ],
+      "links": [
+        { "label": "Open Creator →", "href": "dicebreakers/index.html", "primary": true },
+        { "label": "Student Play View", "href": "dicebreakers/play.html", "primary": false }
+      ]
+    },
+
+    {
+      "num": "21",
+      "id": "ds",
+      "section": "Interactive &amp; Classroom Tools",
+      "category": "Collaborative Whiteboard · K-16",
+      "title": "DrawSplat",
+      "subtitle": "Free K–16 interactive whiteboard for learning, design, and planning",
+      "stat": "v2.13",
+      "statLabel": "15+ Tools · 7 Templates",
+      "panelGradient": "linear-gradient(160deg, #122220 0%, #1E3530 100%)",
+      "catStyle": "background:rgba(110,221,216,0.18);color:#6EDDD8;",
+      "statColor": "#A0E8E4",
+      "btnBg": "#2A4A44",
+      "btnColor": "#B0E8E4",
+      "btnHoverBg": "#3A5E58",
+      "btnHoverColor": "#fff",
+      "description": "A full-featured digital whiteboard for K–16 teaching and collaboration. Pan, annotate, drop sticky notes, record audio comments, place shapes, text, and images, and insert Mermaid diagrams or word clouds. Includes templates (Frayer, KWL, T-Chart, Venn, storyboard), Teacher/Student modes, an Assignment mode with layered access and turn-in workflow, Google Drive sync, multiple panels and frames, and six+ languages.",
+      "features": [
+        "Multi-Panel &amp; Frames",
+        "Sticky Notes &amp; Audio",
+        "Mermaid &amp; Word Clouds",
+        "PDF / PPTX Import",
+        "Teacher &amp; Student Modes",
+        "Assignment + Turn-In",
+        "Google Drive Sync"
+      ],
+      "links": [
+        { "label": "Open DrawSplat →", "href": "ds/index.html", "primary": true }
+      ]
+    },
+
+    {
+      "num": "22",
+      "id": "libcon",
+      "section": "Coaching &amp; Professional Development",
+      "category": "Scenario Library · School Librarians",
+      "title": "What Would You Do? AI Ethics Scenarios",
+      "subtitle": "School-librarian judgment practice using the C.A.R.E. and VIVA frameworks",
+      "stat": "12",
+      "statLabel": "Scenarios · 2 Frameworks",
+      "panelGradient": "linear-gradient(160deg, #1F1E18 0%, #2E2A20 100%)",
+      "catStyle": "background:rgba(232,196,71,0.18);color:#E8C547;",
+      "statColor": "#F2D880",
+      "btnBg": "#4A3F1E",
+      "btnColor": "#F2D880",
+      "btnHoverBg": "#5E5026",
+      "btnHoverColor": "#fff",
+      "description": "Twelve realistic scenarios that put school librarians in tough AI-adjacent situations — privacy, bias, transparency, and academic integrity. Each scenario routes through the C.A.R.E. Framework (Critical Awareness, Applied Purpose, Responsible Practice, Evaluative Outcome) and the VIVA discussion method (Verify, Illustrate, Validate, Apply). Includes a random-draw generator, framework filter, and a closing reflection with guardrail commitments.",
+      "features": [
+        "12 Realistic Scenarios",
+        "C.A.R.E. Framework",
+        "VIVA Discussion Method",
+        "Random Draw Generator",
+        "Filter by Principle",
+        "Guardrail Commitments",
+        "Print-Friendly"
+      ],
+      "links": [
+        { "label": "Open Scenarios →", "href": "libcon/index.html", "primary": true },
+        { "label": "Scenarios v2", "href": "libcon/scenarios2.html", "primary": false }
+      ]
+    },
+
+    {
+      "num": "23",
+      "id": "markdown",
+      "section": "Onboarding &amp; Productivity Tools",
+      "category": "Writing &amp; Productivity Tool",
+      "title": "Markdown Studio",
+      "subtitle": "Clean, preview, and convert Markdown to HTML or WordPress blocks",
+      "stat": "3",
+      "statLabel": "Export Formats",
+      "panelGradient": "linear-gradient(160deg, #1A1F24 0%, #262E36 100%)",
+      "catStyle": "background:rgba(116,198,157,0.12);color:#74C69D;",
+      "statColor": "#B7E4C7",
+      "btnBg": "#2D6A4F",
+      "btnColor": "#fff",
+      "btnHoverBg": "#40916C",
+      "btnHoverColor": "#fff",
+      "description": "A Markdown editor for educators creating blog posts, documentation, or LMS content. Live preview, find/replace, syntax highlighting, and keyboard shortcuts. Cleans formatting artifacts and AI-writing tells, then exports to .md, .html, or WordPress block code. A v2 variant is included.",
+      "features": [
+        "Live Preview",
+        "Find / Replace",
+        "HTML Export",
+        "WordPress Block Export",
+        "AI-Tell Stripper",
+        "Keyboard Shortcuts",
+        "Save .md"
+      ],
+      "links": [
+        { "label": "Open Studio →", "href": "markdown/index.html", "primary": true },
+        { "label": "Studio v2", "href": "markdown/index_v2.html", "primary": false }
+      ]
+    },
+
+    {
+      "num": "24",
+      "id": "mermaid",
+      "section": "Interactive &amp; Classroom Tools",
+      "category": "Tutorial · Educator Reference",
+      "title": "Mermaid Syntax Basics",
+      "subtitle": "Classroom-friendly tutorial for diagrams, timelines, and concept maps",
+      "stat": "8",
+      "statLabel": "Diagram Types",
+      "panelGradient": "linear-gradient(160deg, #1E2418 0%, #2C3622 100%)",
+      "catStyle": "background:rgba(116,198,157,0.14);color:#74C69D;",
+      "statColor": "#B7E4C7",
+      "btnBg": "#2D6A4F",
+      "btnColor": "#fff",
+      "btnHoverBg": "#40916C",
+      "btnHoverColor": "#fff",
+      "description": "A tutorial that teaches K–12 educators how to write Mermaid diagram syntax — flowcharts, decision trees, sequence diagrams, state diagrams, timelines, Gantts, ER diagrams, and pie charts. Eight worked examples with copy-ready code and rendered outputs, a try-it editor, a troubleshooting table, classroom uses by subject, and a printable quick-reference card.",
+      "features": [
+        "8 Diagram Types",
+        "Live Try-It Editor",
+        "Copy-Ready Code",
+        "Troubleshooting Table",
+        "Classroom Uses by Subject",
+        "Printable Quick-Reference"
+      ],
+      "links": [
+        { "label": "Open Tutorial →", "href": "mermaid/index.html", "primary": true }
+      ]
+    },
+
+    {
+      "num": "25",
+      "id": "search",
+      "section": "Onboarding &amp; Productivity Tools",
+      "category": "Search · Content Portal",
+      "title": "Miguel's Writings Search",
+      "subtitle": "Full-text search across mguhlin.org, TCEA TechNotes, and Blogger archives",
+      "stat": "3",
+      "statLabel": "Sources · 14 Topics",
+      "panelGradient": "linear-gradient(160deg, #18242C 0%, #243846 100%)",
+      "catStyle": "background:rgba(138,180,248,0.18);color:#8AB4F8;",
+      "statColor": "#A8C4F8",
+      "btnBg": "#2D4A6A",
+      "btnColor": "#D0DCFA",
+      "btnHoverBg": "#3D6090",
+      "btnHoverColor": "#fff",
+      "description": "A search portal that indexes Miguel's public writing across three sources: mguhlin.org, TCEA TechNotes, and the long-running mguhlin.blogspot.com archive. Filter by source and content type, sort by relevance/date/title, and use quick-search buttons for common topics like AI, ChatGPT, Leadership, and Coding. Pagination and an RSS feed for any search are included.",
+      "features": [
+        "Multi-Source Indexing",
+        "Source &amp; Type Filters",
+        "14 Quick-Search Topics",
+        "Relevance / Date / Title Sort",
+        "Pagination",
+        "RSS for Results"
+      ],
+      "links": [
+        { "label": "Open Search →", "href": "search/index.html", "primary": true }
+      ]
+    },
+
+    {
+      "num": "26",
+      "id": "slidemaker",
+      "section": "Prompt Engineering",
+      "category": "Prompt Library · Presentations",
+      "title": "Presentation Blueprint System",
+      "subtitle": "Seven prompts for consulting-grade decks with reasoning models",
+      "stat": "7",
+      "statLabel": "Prompts · 5 Sample Slides",
+      "panelGradient": "linear-gradient(160deg, #1A1E1A 0%, #2A302A 100%)",
+      "catStyle": "background:rgba(116,198,157,0.12);color:#74C69D;",
+      "statColor": "#B7E4C7",
+      "btnBg": "#2D6A4F",
+      "btnColor": "#fff",
+      "btnHoverBg": "#40916C",
+      "btnHoverColor": "#fff",
+      "description": "A framework and prompt library for using reasoning AI (Claude, GPT-4o, Gemini) to produce data-driven, McKinsey-style presentations. Seven chained prompts — Architect, Narrative Spine Builder, Deep Content Synthesizer, Arc Weaver, Visual Intelligence Director, Clarity Distiller, and Resonance Refiner. Includes a sample 5-slide deck on instructional coaching and a downloadable .pptx template.",
+      "features": [
+        "7 Chained Prompts",
+        "Sample 5-Slide Deck",
+        "Downloadable .pptx",
+        "Reasoning-Model Guidance",
+        "McKinsey Aesthetic",
+        "Prompt-Chaining Guide"
+      ],
+      "links": [
+        { "label": "Open System →", "href": "slidemaker/index.html", "primary": true }
+      ]
+    },
+
+    {
+      "num": "27",
+      "id": "sched",
+      "section": "Utilities &amp; Scripts",
+      "category": "Schedule Tool · Demo",
+      "title": "Dealership Rotation Schedule",
+      "subtitle": "Three-team, two-building monthly rotation with leads and recovery days",
+      "stat": "3",
+      "statLabel": "Teams · 30 Days",
+      "panelGradient": "linear-gradient(160deg, #1A1E22 0%, #262C32 100%)",
+      "catStyle": "background:rgba(180,180,180,0.15);color:#C0C0C0;",
+      "statColor": "#D0D0D0",
+      "btnBg": "#383838",
+      "btnColor": "#D0D0D0",
+      "btnHoverBg": "#484848",
+      "btnHoverColor": "#fff",
+      "description": "A visual month-view schedule built as a demo for dealership operations across two buildings (Used Cars and New Cars). Three teams rotate through staggered shifts (8:30 AM, 9 AM, 11 AM) and recovery days that pair with staff-development tasks. Lead availability, team rosters, and the rotation rules are documented inline. Two alternate layout versions included.",
+      "features": [
+        "3-Team Color Coding",
+        "Shift-Time Tracking",
+        "Recovery Day Tasks",
+        "Lead Indicators",
+        "Team Roster",
+        "Print-Friendly",
+        "3 Layout Variants"
+      ],
+      "links": [
+        { "label": "Open Schedule →", "href": "sched/index.html", "primary": true },
+        { "label": "Version B", "href": "sched/versionb.html", "primary": false },
+        { "label": "Version C", "href": "sched/versionc.html", "primary": false }
+      ]
+    },
+
+    {
+      "num": "28",
+      "id": "workmanager",
+      "section": "Utilities &amp; Scripts",
+      "category": "Work Order App · Demo",
+      "title": "Water Company Work Manager",
+      "subtitle": "Track service requests, assign crews, log work status and completion",
+      "stat": "7",
+      "statLabel": "Work Types · 5 Statuses",
+      "panelGradient": "linear-gradient(160deg, #16202A 0%, #1F2E3C 100%)",
+      "catStyle": "background:rgba(138,180,248,0.16);color:#8AB4F8;",
+      "statColor": "#A8C4F8",
+      "btnBg": "#2D4A6A",
+      "btnColor": "#D0DCFA",
+      "btnHoverBg": "#3D6090",
+      "btnHoverColor": "#fff",
+      "description": "A single-page work order manager built as a demo for a small water utility. Create, edit, and delete service requests with customer info, address, work type (leak, meter, turn on/off, quality, billing, maintenance), priority, and status. Includes search, dual filters (status + priority), a summary strip with open/urgent/completed counts, and CSV/JSON export for backups. Team-setup notes describe a shared Google Drive workflow.",
+      "features": [
+        "Form-Based Entry",
+        "Edit / Delete Orders",
+        "Search + Dual Filters",
+        "Status &amp; Priority Pills",
+        "Summary Metrics",
+        "CSV / JSON Export",
+        "Team Setup Notes"
+      ],
+      "links": [
+        { "label": "Open Manager →", "href": "workmanager/index.html", "primary": true }
       ]
     }
 

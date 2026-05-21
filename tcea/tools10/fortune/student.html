@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Classroom Fortune Wheel Student</title>
+  <style>
+    :root {
+      --navy: #1E398D;
+      --gold: #FAA634;
+      --black: #000000;
+      --white: #FFFFFF;
+      --red: #D1282F;
+      --blue: #0070B9;
+      --yellow: #FDDC3F;
+      --orange: #f58231;
+      --green: #3cb44b;
+      --gray-90: #404041;
+      --gray-50: #939597;
+      --gray-10: #E6E7E8;
+      --border: #E6E7E8;
+      --radius: 8px;
+      --shadow: 0 12px 24px rgba(64, 64, 65, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; font-family: Arial, Helvetica, sans-serif; color: var(--gray-90); background: var(--white); }
+    button { font: inherit; cursor: pointer; }
+    .top-bar {
+      height: 12px;
+      background: linear-gradient(90deg, var(--navy) 0 32%, var(--gold) 32% 52%, var(--orange) 52% 64%, var(--red) 64% 76%, var(--blue) 76% 88%, var(--green) 88% 96%, var(--yellow) 96% 100%);
+    }
+    .page { width: min(1120px, calc(100% - 28px)); margin: 0 auto; padding: 22px 0 38px; }
+    header { display: grid; gap: 8px; padding-bottom: 18px; border-bottom: 2px solid var(--gray-10); }
+    .eyebrow { margin: 0; color: var(--gold); font-size: .78rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    h1 { margin: 0; color: var(--navy); font-size: clamp(2rem, 5vw, 4.2rem); line-height: .95; }
+    .subtitle { margin: 0; color: var(--gray-90); font-size: 1rem; line-height: 1.45; }
+    main { display: grid; grid-template-columns: minmax(320px, 520px) 1fr; gap: 18px; align-items: start; padding-top: 20px; }
+    .panel, .stage { border: 2px solid var(--border); border-radius: var(--radius); background: var(--white); box-shadow: var(--shadow); padding: 18px; }
+    .wheel-wrap { position: relative; width: min(100%, 500px); aspect-ratio: 1 / 1; margin: 0 auto; display: grid; place-items: center; }
+    canvas { width: 100%; height: 100%; border-radius: 50%; filter: drop-shadow(0 16px 22px rgba(31, 41, 55, .22)); }
+    .pointer { position: absolute; right: -4px; top: 50%; transform: translateY(-50%); width: 0; height: 0; border-top: 22px solid transparent; border-bottom: 22px solid transparent; border-right: 42px solid var(--gray-10); filter: drop-shadow(0 4px 5px rgba(31, 41, 55, .24)); z-index: 2; }
+    .center-dot { position: absolute; width: 24%; height: 24%; display: grid; place-items: center; color: var(--white); background: var(--navy); border: 8px solid var(--white); border-radius: 50%; box-shadow: 0 8px 18px rgba(31, 41, 55, .18); font-weight: 900; text-align: center; z-index: 3; }
+    .btn { min-height: 46px; border: 2px solid rgba(30, 57, 141, .22); border-radius: var(--radius); padding: 9px 12px; color: var(--navy); background: var(--white); font-weight: 800; box-shadow: 0 8px 18px rgba(64, 64, 65, .08); }
+    .btn.gold { width: 100%; margin-top: 14px; color: var(--black); background: var(--gold); border-color: var(--gold); }
+    .puzzle-card { margin-top: 14px; border: 2px solid var(--border); border-radius: var(--radius); padding: 18px; background: #fbfcff; }
+    .category { color: var(--gray-50); font-size: .78rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .puzzle { display: flex; flex-wrap: wrap; gap: 10px 16px; margin-top: 16px; align-items: center; }
+    .word { display: inline-flex; gap: 5px; }
+    .tile { width: clamp(30px, 4vw, 48px); height: clamp(38px, 5vw, 58px); display: grid; place-items: center; border: 2px solid var(--navy); border-radius: 6px; background: var(--white); color: var(--navy); font-size: clamp(1.1rem, 3vw, 2rem); font-weight: 900; text-transform: uppercase; }
+    .tile.blank { border-color: transparent; background: transparent; width: 18px; }
+    .letter-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+    .letter { min-height: 36px; border: 1px solid var(--border); border-radius: 6px; background: var(--white); color: var(--navy); font-weight: 900; }
+    .letter.used { opacity: .42; text-decoration: line-through; cursor: not-allowed; }
+    .message { min-height: 1.5em; margin-top: 12px; color: var(--navy); font-weight: 800; line-height: 1.4; }
+    .empty { color: var(--gray-50); line-height: 1.45; }
+    @media (max-width: 940px) { main { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { .page { width: min(100% - 18px, 1120px); padding-top: 18px; } .letter-grid { grid-template-columns: repeat(5, 1fr); } }
+  </style>
+</head>
+<body>
+<!-- MG-BACK-NAV -->
+<style id="mg-back-nav-style">
+  .mg-back-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 32px;
+    z-index: 999999;
+    background: rgba(15, 46, 34, 0.94);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(116, 198, 157, 0.25);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+    font-size: 12.5px;
+    line-height: 1;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+  }
+  .mg-back-bar a {
+    color: #B7E4C7;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    transition: color 0.15s;
+  }
+  .mg-back-bar a:hover { color: #fff; }
+  .mg-back-bar .mg-back-arrow { color: #74C69D; }
+  .mg-back-bar .mg-back-sep { color: rgba(183,228,199,0.4); margin: 0 4px; }
+  .mg-back-bar .mg-back-label { color: rgba(183,228,199,0.65); font-weight: 400; }
+  @media print { .mg-back-bar { display: none !important; } }
+</style>
+<div class="mg-back-bar" role="navigation" aria-label="Back to Creations index">
+  <a href="../../../index.html"><span class="mg-back-arrow">←</span> MGuhlin.org <span class="mg-back-sep">/</span> <span class="mg-back-label">Creations</span></a>
+</div>
+
+  <div class="top-bar" aria-hidden="true"></div>
+  <div class="page">
+    <header>
+      <p class="eyebrow">TCEA Tools</p>
+      <h1 id="titleText">Classroom Fortune Wheel</h1>
+      <p class="subtitle">Spin for points, choose letters, and solve the classroom puzzle.</p>
+    </header>
+    <main id="app">
+      <section class="stage">
+        <div class="wheel-wrap">
+          <canvas id="wheelCanvas" width="900" height="900" aria-label="Fortune wheel"></canvas>
+          <div class="pointer" aria-hidden="true"></div>
+          <div class="center-dot" aria-hidden="true">SPIN</div>
+        </div>
+        <button class="btn gold" id="spinBtn">Spin the Wheel</button>
+        <div class="puzzle-card">
+          <div class="category" id="categoryText">Category</div>
+          <div class="puzzle" id="puzzleBoard" aria-label="Puzzle board"></div>
+        </div>
+        <div class="message" id="message" role="status" aria-live="polite">Spin to begin.</div>
+      </section>
+      <aside class="panel">
+        <h2 style="margin:0 0 14px;color:var(--black);font-size:1.2rem;">Letters</h2>
+        <div class="letter-grid" id="letterGrid"></div>
+      </aside>
+    </main>
+  </div>
+  <script>
+    const $ = (sel) => document.querySelector(sel);
+    const $$ = (sel) => [...document.querySelectorAll(sel)];
+    const defaultConfig = {
+      title: "Classroom Fortune Wheel",
+      category: "K-2 Science",
+      phrases: ["weather pattern", "plant needs water", "animal habitat", "day and night", "soil and rocks"],
+      startMode: "random"
+    };
+    const wheel = [
+      { label: "100", value: 100, color: "#FAA634" },
+      { label: "200", value: 200, color: "#1E398D" },
+      { label: "300", value: 300, color: "#0070B9" },
+      { label: "Lose Turn", value: "lose", color: "#BBBDC0" },
+      { label: "400", value: 400, color: "#3cb44b" },
+      { label: "500", value: 500, color: "#D1282F" },
+      { label: "Free Letter", value: "free", color: "#FDDC3F" },
+      { label: "600", value: 600, color: "#f58231" },
+      { label: "Bankrupt", value: "bankrupt", color: "#404041" },
+      { label: "700", value: 700, color: "#1E398D" },
+      { label: "300", value: 300, color: "#0070B9" },
+      { label: "Bonus", value: 1000, color: "#FAA634" }
+    ];
+    const canvas = $("#wheelCanvas");
+    const ctx = canvas.getContext("2d");
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+    const vowels = new Set(["A", "E", "I", "O", "U"]);
+    const state = { cfg: defaultConfig, rotation: 0, spinning: false, currentPrize: null, puzzle: "", revealed: new Set(), used: new Set() };
+
+    function b64urlDecode(s) {
+      const pad = s.length % 4 === 0 ? "" : "=".repeat(4 - (s.length % 4));
+      const norm = s.replace(/-/g, "+").replace(/_/g, "/") + pad;
+      const bin = atob(norm);
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      return new TextDecoder().decode(bytes);
+    }
+    function loadConfig() {
+      const hash = window.location.hash || "";
+      if (!hash.startsWith("#f=")) return;
+      try {
+        const cfg = JSON.parse(b64urlDecode(hash.slice(3)));
+        if (cfg && Array.isArray(cfg.phrases) && cfg.phrases.length) state.cfg = { ...defaultConfig, ...cfg };
+      } catch {}
+    }
+    function readableText(hex) {
+      const c = hex.replace("#", "");
+      const r = parseInt(c.slice(0, 2), 16);
+      const g = parseInt(c.slice(2, 4), 16);
+      const b = parseInt(c.slice(4, 6), 16);
+      return (r * 299 + g * 587 + b * 114) / 1000 > 150 ? "#000000" : "#FFFFFF";
+    }
+    function drawWheel() {
+      const W = canvas.width, H = canvas.height, cx = W / 2, cy = H / 2, r = Math.min(W, H) * .46;
+      const slice = Math.PI * 2 / wheel.length;
+      ctx.clearRect(0, 0, W, H);
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(state.rotation);
+      ctx.translate(-cx, -cy);
+      wheel.forEach((item, i) => {
+        const start = i * slice, end = start + slice;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, r, start, end);
+        ctx.closePath();
+        ctx.fillStyle = item.color;
+        ctx.fill();
+        ctx.strokeStyle = "#FFFFFF";
+        ctx.lineWidth = 5;
+        ctx.stroke();
+        ctx.save();
+        ctx.translate(cx + Math.cos(start + slice / 2) * r * .68, cy + Math.sin(start + slice / 2) * r * .68);
+        ctx.rotate(start + slice / 2);
+        ctx.fillStyle = readableText(item.color);
+        ctx.font = "900 28px Arial, Helvetica, sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(item.label, 0, 0);
+        ctx.restore();
+      });
+      ctx.restore();
+    }
+    function spin() {
+      if (state.spinning) return;
+      state.spinning = true;
+      $("#spinBtn").disabled = true;
+      const slice = Math.PI * 2 / wheel.length;
+      const index = Math.floor(Math.random() * wheel.length);
+      const targetMid = index * slice + slice / 2;
+      const start = state.rotation;
+      const end = start + (5 + Math.random() * 3) * Math.PI * 2 - targetMid;
+      const duration = 3200;
+      const t0 = performance.now();
+      function frame(now) {
+        const p = Math.min(1, (now - t0) / duration);
+        state.rotation = start + (end - start) * (1 - Math.pow(1 - p, 4));
+        drawWheel();
+        if (p < 1) requestAnimationFrame(frame);
+        else {
+          state.spinning = false;
+          $("#spinBtn").disabled = false;
+          state.currentPrize = wheel[index];
+          message(state.currentPrize.value === "free" ? "Free Letter. Choose any letter." : state.currentPrize.label + ". Choose a consonant.");
+        }
+      }
+      requestAnimationFrame(frame);
+    }
+    function normalize(text) {
+      return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+    }
+    function choosePuzzle() {
+      const phrases = state.cfg.phrases;
+      const phrase = state.cfg.startMode === "first" ? phrases[0] : phrases[Math.floor(Math.random() * phrases.length)];
+      state.puzzle = normalize(phrase);
+      state.revealed = new Set();
+      state.used = new Set();
+      state.currentPrize = null;
+      renderPuzzle();
+      renderLetters();
+      message("Spin to begin.");
+    }
+    function chooseLetter(letter) {
+      if (state.used.has(letter)) return;
+      if (!state.currentPrize) return message("Spin first, then choose a letter.");
+      if (vowels.has(letter) && state.currentPrize.value !== "free") return message("Use Free Letter for vowels.");
+      state.used.add(letter);
+      const count = [...state.puzzle].filter(ch => ch === letter).length;
+      if (count > 0) {
+        state.revealed.add(letter);
+        message(letter + " appears " + count + " time" + (count === 1 ? "" : "s") + ".");
+      } else {
+        message("No " + letter + ". Spin again.");
+      }
+      state.currentPrize = null;
+      renderPuzzle();
+      renderLetters();
+      if ([...state.puzzle].every(ch => !/[A-Z]/.test(ch) || state.revealed.has(ch))) message("Puzzle solved.");
+    }
+    function renderPuzzle() {
+      $("#categoryText").textContent = state.cfg.category || "Shared Puzzle";
+      $("#puzzleBoard").innerHTML = state.puzzle.split(" ").map(word => {
+        const tiles = [...word].map(ch => /[A-Z]/.test(ch) ? `<span class="tile">${state.revealed.has(ch) ? ch : ""}</span>` : `<span class="tile blank"></span>`).join("");
+        return `<span class="word">${tiles}</span>`;
+      }).join("");
+    }
+    function renderLetters() {
+      $("#letterGrid").innerHTML = letters.map(letter => `<button class="letter${state.used.has(letter) ? " used" : ""}" data-letter="${letter}" ${state.used.has(letter) ? "disabled" : ""}>${letter}</button>`).join("");
+      $$(".letter").forEach(btn => btn.addEventListener("click", () => chooseLetter(btn.dataset.letter)));
+    }
+    function message(text) { $("#message").textContent = text; }
+    function init() {
+      loadConfig();
+      $("#titleText").textContent = state.cfg.title || "Classroom Fortune Wheel";
+      $("#spinBtn").addEventListener("click", spin);
+      drawWheel();
+      choosePuzzle();
+    }
+    init();
+  </script>
+</body>
+</html>

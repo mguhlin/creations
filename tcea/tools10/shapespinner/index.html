@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Classroom Shape Spinner</title>
+  <style>
+    :root {
+      --navy: #1E398D;
+      --gold: #FAA634;
+      --black: #000000;
+      --white: #FFFFFF;
+      --red: #D1282F;
+      --blue: #0070B9;
+      --yellow: #FDDC3F;
+      --orange: #f58231;
+      --green: #3cb44b;
+      --gray-90: #404041;
+      --gray-50: #939597;
+      --gray-30: #BBBDC0;
+      --gray-10: #E6E7E8;
+      --bg: #FFFFFF;
+      --surface: #FFFFFF;
+      --text: #404041;
+      --border: #E6E7E8;
+      --radius: 8px;
+      --shadow: 0 12px 24px rgba(64, 64, 65, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    button, textarea, select, input { font: inherit; }
+    button { cursor: pointer; }
+
+    .top-bar {
+      height: 12px;
+      background: linear-gradient(
+        90deg,
+        var(--navy) 0 32%,
+        var(--gold) 32% 52%,
+        var(--orange) 52% 64%,
+        var(--red) 64% 76%,
+        var(--blue) 76% 88%,
+        var(--green) 88% 96%,
+        var(--yellow) 96% 100%
+      );
+    }
+
+    .page {
+      width: min(1280px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 22px 0 38px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding-bottom: 18px;
+      border-bottom: 2px solid var(--gray-10);
+    }
+
+    .title-block { display: grid; gap: 8px; }
+
+    .eyebrow {
+      margin: 0;
+      color: var(--gold);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--navy);
+      font-size: clamp(2rem, 5vw, 4.2rem);
+      line-height: .95;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 0;
+      max-width: 780px;
+      color: var(--gray-90);
+      font-size: 1rem;
+      line-height: 1.45;
+    }
+
+    .home-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      color: var(--white);
+      background: var(--navy);
+      border-radius: var(--radius);
+      font-weight: 800;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: minmax(300px, 390px) 1fr minmax(260px, 330px);
+      gap: 18px;
+      align-items: start;
+      padding-top: 20px;
+    }
+
+    .panel, .stage {
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .panel { padding: 18px; }
+
+    .panel h2 {
+      margin: 0 0 14px;
+      color: var(--black);
+      font-size: 1.2rem;
+      letter-spacing: 0;
+    }
+
+    .field { display: grid; gap: 7px; margin-bottom: 14px; }
+    label, .field-title { color: var(--gray-90); font-size: .86rem; font-weight: 800; }
+
+    textarea, select, input[type="text"], input[type="number"] {
+      width: 100%;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      color: var(--text);
+      background: var(--white);
+      outline: none;
+    }
+
+    textarea { min-height: 180px; resize: vertical; line-height: 1.45; }
+
+    textarea:focus, select:focus, input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(0, 112, 185, .18);
+    }
+
+    .help { margin: 0; color: var(--gray-50); font-size: .85rem; line-height: 1.4; }
+
+    .button-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .button-grid .wide { grid-column: span 2; }
+
+    .btn {
+      min-height: 42px;
+      border: 2px solid transparent;
+      border-radius: var(--radius);
+      padding: 9px 12px;
+      color: var(--navy);
+      background: var(--white);
+      font-weight: 800;
+      box-shadow: 0 8px 18px rgba(64, 64, 65, .08);
+      transition: transform 140ms ease, opacity 140ms ease, box-shadow 140ms ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+    .btn:active { transform: translateY(1px); }
+    .btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+    .btn.primary { color: var(--white); background: var(--navy); }
+    .btn.gold { color: var(--black); background: var(--gold); }
+    .btn.outline { border-color: rgba(30, 57, 141, .24); }
+    .btn.danger { color: #991b1b; background: #fee2e2; border-color: #fecaca; }
+
+    .stage {
+      padding: 20px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .wheel-wrap {
+      position: relative;
+      width: min(100%, 620px);
+      aspect-ratio: 1 / 1;
+      margin: 0 auto;
+      display: grid;
+      place-items: center;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      filter: drop-shadow(0 16px 22px rgba(31, 41, 55, .22));
+    }
+
+    .pointer {
+      position: absolute;
+      right: -4px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-top: 24px solid transparent;
+      border-bottom: 24px solid transparent;
+      border-right: 44px solid var(--gray-10);
+      filter: drop-shadow(0 4px 5px rgba(31, 41, 55, .24));
+      z-index: 2;
+    }
+
+    .center-dot {
+      position: absolute;
+      width: 22%;
+      height: 22%;
+      display: grid;
+      place-items: center;
+      color: var(--white);
+      background: var(--navy);
+      border: 8px solid var(--white);
+      border-radius: 50%;
+      box-shadow: 0 8px 18px rgba(31, 41, 55, .18);
+      font-weight: 900;
+      text-align: center;
+      z-index: 3;
+    }
+
+    .stage-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .result-box {
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      background: linear-gradient(135deg, rgba(30, 57, 141, .08), rgba(250, 166, 52, .14));
+    }
+
+    .small-label {
+      color: var(--gray-50);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .winner {
+      margin-top: 8px;
+      color: var(--navy);
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 900;
+      line-height: 1.1;
+      word-break: break-word;
+    }
+
+    .activity {
+      margin-top: 10px;
+      color: var(--gray-90);
+      line-height: 1.4;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .stat {
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px;
+      background: var(--white);
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 4px;
+      color: var(--navy);
+      font-size: 1.6rem;
+    }
+
+    .history-list, .race-list {
+      display: grid;
+      gap: 8px;
+      min-height: 42px;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 8px 10px;
+      background: #fbfcff;
+      font-weight: 700;
+    }
+
+    .race-row {
+      display: grid;
+      grid-template-columns: 86px 1fr 28px;
+      gap: 8px;
+      align-items: center;
+      font-size: .9rem;
+    }
+
+    .bar {
+      height: 12px;
+      border-radius: 999px;
+      background: var(--gray-10);
+      overflow: hidden;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: var(--gold);
+    }
+
+    .template-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill {
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 7px 10px;
+      background: var(--white);
+      color: var(--navy);
+      font-size: .84rem;
+      font-weight: 800;
+    }
+
+    .empty { color: var(--gray-50); font-size: .92rem; }
+
+    @media (max-width: 1040px) {
+      .app-grid { grid-template-columns: 1fr; }
+      .stage { order: -1; }
+    }
+
+    @media (max-width: 640px) {
+      .page { width: min(100% - 18px, 1280px); padding-top: 18px; }
+      header { align-items: flex-start; flex-direction: column; }
+      .stage-actions, .button-grid { grid-template-columns: 1fr; }
+      .button-grid .wide { grid-column: auto; }
+      .pointer {
+        right: -2px;
+        border-top-width: 18px;
+        border-bottom-width: 18px;
+        border-right-width: 34px;
+      }
+    }
+  </style>
+</head>
+<body>
+<!-- MG-BACK-NAV -->
+<style id="mg-back-nav-style">
+  .mg-back-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 32px;
+    z-index: 999999;
+    background: rgba(15, 46, 34, 0.94);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(116, 198, 157, 0.25);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+    font-size: 12.5px;
+    line-height: 1;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+  }
+  .mg-back-bar a {
+    color: #B7E4C7;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    transition: color 0.15s;
+  }
+  .mg-back-bar a:hover { color: #fff; }
+  .mg-back-bar .mg-back-arrow { color: #74C69D; }
+  .mg-back-bar .mg-back-sep { color: rgba(183,228,199,0.4); margin: 0 4px; }
+  .mg-back-bar .mg-back-label { color: rgba(183,228,199,0.65); font-weight: 400; }
+  @media print { .mg-back-bar { display: none !important; } }
+</style>
+<div class="mg-back-bar" role="navigation" aria-label="Back to Creations index">
+  <a href="../../../index.html"><span class="mg-back-arrow">←</span> MGuhlin.org <span class="mg-back-sep">/</span> <span class="mg-back-label">Creations</span></a>
+</div>
+
+  <div class="top-bar" aria-hidden="true"></div>
+  <div class="page">
+    <header>
+      <div class="title-block">
+        <p class="eyebrow">TCEA Tools</p>
+        <h1>Shape Spinner</h1>
+        <p class="subtitle">Spin pictures, shapes, labels, and hidden prompts for identification, poetry, graph races, and trace-and-describe activities.</p>
+      </div>
+      <a class="home-link" href="../index.html">Tool Menu</a>
+    </header>
+
+    <main class="app-grid">
+      <section class="panel" aria-label="Spinner setup">
+        <h2>Setup</h2>
+
+        <div class="field">
+          <label for="templateSelect">Quick Starts</label>
+          <div class="template-row">
+            <button class="pill" data-template="shapes">Shapes</button>
+            <button class="pill" data-template="poetry">Poetry</button>
+            <button class="pill" data-template="countries">Countries</button>
+            <button class="pill" data-template="blank">Clear</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="itemsInput">Wheel Entries</label>
+          <textarea id="itemsInput" spellcheck="true"></textarea>
+          <p class="help">One entry per line: <strong>label | shape | activity</strong>. Shapes: circle, square, rectangle, triangle, hexagon, star, heart, diamond, oval. Use <strong>image:https://...</strong> or upload an image for picture entries.</p>
+        </div>
+
+        <div class="field">
+          <label for="imageUpload">Add Image Entries</label>
+          <input id="imageUpload" type="file" accept="image/*" multiple>
+          <p class="help">Uploaded images stay in this browser session and can be included in copied share links.</p>
+        </div>
+
+        <div class="field">
+          <label for="modeSelect">Classroom Mode</label>
+          <select id="modeSelect">
+            <option value="identify">Identify or Describe</option>
+            <option value="poetry">Poetry Prompt</option>
+            <option value="trace">Spin, Read, and Trace</option>
+            <option value="graph">Graph Race</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="spinStyle">Spin Style</label>
+          <select id="spinStyle">
+            <option value="standard">Standard Spin</option>
+            <option value="power">Power Spin</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="raceTarget">Graph Race Target</label>
+          <input id="raceTarget" type="number" min="2" max="20" value="5">
+        </div>
+
+        <div class="button-grid">
+          <button class="btn primary wide" id="applyBtn">Build Spinner</button>
+          <button class="btn outline" id="copyLinkBtn">Copy Share Link</button>
+          <button class="btn outline" id="copyEmbedBtn">Copy Embed Code</button>
+          <button class="btn outline" id="saveBtn">Download JSON</button>
+          <button class="btn outline" id="loadBtn">Load JSON</button>
+          <button class="btn danger wide" id="clearBtn">Reset Counts</button>
+          <input id="loadInput" type="file" accept="application/json,.json" hidden>
+        </div>
+      </section>
+
+      <section class="stage" aria-label="Shape spinner">
+        <div class="wheel-wrap">
+          <canvas id="wheelCanvas" width="900" height="900" aria-label="Shape spinner wheel"></canvas>
+          <div class="pointer" aria-hidden="true"></div>
+          <div class="center-dot" aria-hidden="true">SPIN</div>
+        </div>
+
+        <div class="stage-actions">
+          <button class="btn gold" id="spinBtn">Spin</button>
+          <button class="btn outline" id="speakBtn">Speak Result</button>
+        </div>
+      </section>
+
+      <aside class="panel" aria-label="Spinner results">
+        <h2>Results</h2>
+
+        <div class="result-box">
+          <div class="small-label">Selected</div>
+          <div class="winner" id="winnerText">Ready to spin?</div>
+          <div class="activity" id="activityText">Build the spinner, then press Spin.</div>
+        </div>
+
+        <div class="stats" style="margin-top:14px;">
+          <div class="stat">
+            <span class="small-label">Entries</span>
+            <strong id="entryCount">0</strong>
+          </div>
+          <div class="stat">
+            <span class="small-label">Spins</span>
+            <strong id="spinCount">0</strong>
+          </div>
+        </div>
+
+        <h2 style="margin-top:18px;">Graph Race</h2>
+        <div class="race-list" id="raceList"></div>
+
+        <h2 style="margin-top:18px;">History</h2>
+        <div class="history-list" id="historyList"></div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    const $ = (sel) => document.querySelector(sel);
+    const $$ = (sel) => [...document.querySelectorAll(sel)];
+
+    const palettes = ["#FAA634", "#1E398D", "#D1282F", "#0070B9", "#3cb44b", "#FDDC3F", "#f58231", "#BBBDC0"];
+    const templates = {
+      shapes: [
+        "Circle | circle | I have 0 sides.",
+        "Triangle | triangle | I have 3 sides.",
+        "Square | square | I have 4 equal sides.",
+        "Rectangle | rectangle | I have 2 long sides.",
+        "Hexagon | hexagon | I have 6 sides.",
+        "Star | star | Describe my points and lines."
+      ],
+      poetry: [
+        "Rain | image:rain | Write a line that uses sound.",
+        "Mountain | triangle | Write a line about something tall.",
+        "Sun | circle | Write a line that uses warmth.",
+        "Window | rectangle | Write a line about looking out.",
+        "Heart | heart | Write a line about a feeling.",
+        "Spark | star | Write a line with a surprise."
+      ],
+      countries: [
+        "Canada | rectangle | Identify the country and name one fact.",
+        "Mexico | diamond | Identify the country and name one landmark.",
+        "Japan | circle | Identify the country and name one tradition.",
+        "Brazil | oval | Identify the country and name one natural feature.",
+        "Egypt | triangle | Identify the country and name one ancient site.",
+        "India | hexagon | Identify the country and name one food."
+      ],
+      blank: [""]
+    };
+
+    const state = {
+      entries: [],
+      history: [],
+      counts: {},
+      rotation: 0,
+      isSpinning: false,
+      mode: "identify",
+      spinStyle: "standard",
+      raceTarget: 5
+    };
+
+    const imageCache = new Map();
+    const canvas = $("#wheelCanvas");
+    const ctx = canvas.getContext("2d");
+
+    function b64urlEncode(str) {
+      const bytes = new TextEncoder().encode(str);
+      let bin = "";
+      for (const b of bytes) bin += String.fromCharCode(b);
+      return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+    }
+
+    function b64urlDecode(s) {
+      const pad = s.length % 4 === 0 ? "" : "=".repeat(4 - (s.length % 4));
+      const norm = s.replace(/-/g, "+").replace(/_/g, "/") + pad;
+      const bin = atob(norm);
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      return new TextDecoder().decode(bytes);
+    }
+
+    function parseEntries(text) {
+      return text.split(/\n+/)
+        .map(line => line.trim())
+        .filter(Boolean)
+        .map((line, i) => {
+          const parts = line.split("|").map(p => p.trim());
+          const label = parts[0] || "Entry " + (i + 1);
+          const visual = (parts[1] || inferVisual(label)).toLowerCase();
+          const activity = parts[2] || defaultActivity(label);
+          const id = window.crypto && crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random() + i);
+          return { id, label, visual, activity, color: palettes[i % palettes.length] };
+        });
+    }
+
+    function inferVisual(label) {
+      const v = label.toLowerCase();
+      for (const key of ["circle", "square", "rectangle", "triangle", "hexagon", "star", "heart", "diamond", "oval"]) {
+        if (v.includes(key)) return key;
+      }
+      return "circle";
+    }
+
+    function defaultActivity(label) {
+      if (state.mode === "poetry") return "Write two sensory details about " + label + ".";
+      if (state.mode === "trace") return "Trace or sketch it, then describe its attributes.";
+      if (state.mode === "graph") return "Add one mark to the graph for " + label + ".";
+      return "Identify it, describe it, or tell one thing you notice.";
+    }
+
+    function serialize() {
+      return {
+        entries: $("#itemsInput").value,
+        mode: state.mode,
+        spinStyle: state.spinStyle,
+        raceTarget: state.raceTarget
+      };
+    }
+
+    function applySerialized(data) {
+      $("#itemsInput").value = data.entries || templates.shapes.join("\n");
+      $("#modeSelect").value = data.mode || "identify";
+      $("#spinStyle").value = data.spinStyle || "standard";
+      $("#raceTarget").value = data.raceTarget || 5;
+      build();
+    }
+
+    function build() {
+      state.mode = $("#modeSelect").value;
+      state.spinStyle = $("#spinStyle").value;
+      state.raceTarget = Math.max(2, Math.min(20, parseInt($("#raceTarget").value || "5", 10)));
+      state.entries = parseEntries($("#itemsInput").value);
+      for (const e of state.entries) {
+        if (!(e.label in state.counts)) state.counts[e.label] = 0;
+      }
+      drawWheel();
+      renderMeta();
+    }
+
+    function drawWheel() {
+      const W = canvas.width;
+      const H = canvas.height;
+      const cx = W / 2;
+      const cy = H / 2;
+      const r = Math.min(W, H) * .46;
+      ctx.clearRect(0, 0, W, H);
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(state.rotation);
+      ctx.translate(-cx, -cy);
+
+      if (!state.entries.length) {
+        ctx.fillStyle = "#E6E7E8";
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+        return;
+      }
+
+      const slice = Math.PI * 2 / state.entries.length;
+      state.entries.forEach((entry, i) => {
+        const start = i * slice;
+        const end = start + slice;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, r, start, end);
+        ctx.closePath();
+        ctx.fillStyle = entry.color;
+        ctx.fill();
+        ctx.strokeStyle = "#FFFFFF";
+        ctx.lineWidth = 5;
+        ctx.stroke();
+
+        const mid = start + slice / 2;
+        const iconX = cx + Math.cos(mid) * r * .56;
+        const iconY = cy + Math.sin(mid) * r * .56;
+        drawVisual(ctx, entry, iconX, iconY, Math.max(46, r * .18));
+
+        ctx.save();
+        ctx.translate(cx + Math.cos(mid) * r * .78, cy + Math.sin(mid) * r * .78);
+        ctx.rotate(mid);
+        ctx.fillStyle = readableText(entry.color);
+        ctx.font = "800 25px Arial, Helvetica, sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        wrapCanvasText(ctx, entry.label, 0, 0, r * .28, 25);
+        ctx.restore();
+      });
+
+      ctx.restore();
+    }
+
+    function readableText(hex) {
+      const c = hex.replace("#", "");
+      const r = parseInt(c.slice(0, 2), 16);
+      const g = parseInt(c.slice(2, 4), 16);
+      const b = parseInt(c.slice(4, 6), 16);
+      return (r * 299 + g * 587 + b * 114) / 1000 > 150 ? "#000000" : "#FFFFFF";
+    }
+
+    function wrapCanvasText(context, text, x, y, maxWidth, lineHeight) {
+      const words = text.split(/\s+/);
+      const lines = [];
+      let line = "";
+      for (const word of words) {
+        const test = line ? line + " " + word : word;
+        if (context.measureText(test).width > maxWidth && line) {
+          lines.push(line);
+          line = word;
+        } else {
+          line = test;
+        }
+      }
+      if (line) lines.push(line);
+      const start = y - ((lines.length - 1) * lineHeight) / 2;
+      lines.slice(0, 3).forEach((ln, idx) => context.fillText(ln, x, start + idx * lineHeight));
+    }
+
+    function drawVisual(context, entry, x, y, size) {
+      const visual = entry.visual || "circle";
+      if (visual.startsWith("image:")) {
+        const src = visual.slice(6);
+        const img = getImage(src);
+        if (img && img.complete && img.naturalWidth) {
+          context.save();
+          context.beginPath();
+          context.arc(x, y, size * .62, 0, Math.PI * 2);
+          context.clip();
+          context.drawImage(img, x - size * .65, y - size * .65, size * 1.3, size * 1.3);
+          context.restore();
+          return;
+        }
+      }
+
+      context.save();
+      context.translate(x, y);
+      context.fillStyle = "#FFFFFF";
+      context.strokeStyle = "#404041";
+      context.lineWidth = Math.max(3, size * .06);
+      const s = size * .72;
+      if (visual === "square") context.rect(-s / 2, -s / 2, s, s);
+      else if (visual === "rectangle") context.rect(-s * .65, -s * .38, s * 1.3, s * .76);
+      else if (visual === "triangle") polygon(context, 3, s * .62, -Math.PI / 2);
+      else if (visual === "hexagon") polygon(context, 6, s * .58, Math.PI / 6);
+      else if (visual === "star") star(context, s * .62, s * .28);
+      else if (visual === "heart") heart(context, s);
+      else if (visual === "diamond") polygon(context, 4, s * .62, Math.PI / 4);
+      else if (visual === "oval") context.ellipse(0, 0, s * .58, s * .38, 0, 0, Math.PI * 2);
+      else context.arc(0, 0, s * .48, 0, Math.PI * 2);
+      context.fill();
+      context.stroke();
+      context.restore();
+    }
+
+    function polygon(context, sides, radius, rotation) {
+      context.beginPath();
+      for (let i = 0; i < sides; i++) {
+        const a = rotation + i * Math.PI * 2 / sides;
+        const x = Math.cos(a) * radius;
+        const y = Math.sin(a) * radius;
+        if (i === 0) context.moveTo(x, y);
+        else context.lineTo(x, y);
+      }
+      context.closePath();
+    }
+
+    function star(context, outer, inner) {
+      context.beginPath();
+      for (let i = 0; i < 10; i++) {
+        const r = i % 2 ? inner : outer;
+        const a = -Math.PI / 2 + i * Math.PI / 5;
+        const x = Math.cos(a) * r;
+        const y = Math.sin(a) * r;
+        if (i === 0) context.moveTo(x, y);
+        else context.lineTo(x, y);
+      }
+      context.closePath();
+    }
+
+    function heart(context, size) {
+      context.beginPath();
+      context.moveTo(0, size * .34);
+      context.bezierCurveTo(-size, -size * .25, -size * .35, -size * .7, 0, -size * .28);
+      context.bezierCurveTo(size * .35, -size * .7, size, -size * .25, 0, size * .34);
+      context.closePath();
+    }
+
+    function getImage(src) {
+      if (src === "rain") return null;
+      if (imageCache.has(src)) return imageCache.get(src);
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = drawWheel;
+      img.src = src;
+      imageCache.set(src, img);
+      return img;
+    }
+
+    function spin() {
+      if (state.isSpinning || !state.entries.length) return;
+      state.isSpinning = true;
+      $("#spinBtn").disabled = true;
+      const slice = Math.PI * 2 / state.entries.length;
+      const targetIndex = Math.floor(Math.random() * state.entries.length);
+      const pointerAngle = 0;
+      const targetMid = targetIndex * slice + slice / 2;
+      const turns = state.spinStyle === "power" ? 8 + Math.random() * 3 : 4 + Math.random() * 2;
+      const targetRotation = turns * Math.PI * 2 + pointerAngle - targetMid;
+      const start = state.rotation;
+      const end = start + targetRotation;
+      const duration = state.spinStyle === "power" ? 3800 : 2400;
+      const t0 = performance.now();
+
+      function frame(now) {
+        const p = Math.min(1, (now - t0) / duration);
+        const eased = 1 - Math.pow(1 - p, 4);
+        state.rotation = start + (end - start) * eased;
+        drawWheel();
+        if (p < 1) {
+          requestAnimationFrame(frame);
+        } else {
+          state.rotation = ((state.rotation % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+          finishSpin(targetIndex);
+        }
+      }
+      requestAnimationFrame(frame);
+    }
+
+    function finishSpin(index) {
+      const entry = state.entries[index];
+      state.history.unshift(entry.label);
+      state.history = state.history.slice(0, 12);
+      state.counts[entry.label] = (state.counts[entry.label] || 0) + 1;
+      $("#winnerText").textContent = entry.label;
+      $("#activityText").textContent = activityFor(entry);
+      state.isSpinning = false;
+      $("#spinBtn").disabled = false;
+      renderMeta();
+      if (state.mode === "graph" && state.counts[entry.label] >= state.raceTarget) {
+        $("#activityText").textContent = entry.label + " reached the graph race target. Reset counts to play again.";
+      }
+    }
+
+    function activityFor(entry) {
+      if (entry.activity) return entry.activity;
+      return defaultActivity(entry.label);
+    }
+
+    function renderMeta() {
+      $("#entryCount").textContent = state.entries.length;
+      $("#spinCount").textContent = Object.values(state.counts).reduce((sum, n) => sum + n, 0);
+      $("#historyList").innerHTML = state.history.length
+        ? state.history.map((h, i) => `<div class="history-item"><span>${escapeHTML(h)}</span><span>#${state.history.length - i}</span></div>`).join("")
+        : '<div class="empty">No spins yet.</div>';
+      $("#raceList").innerHTML = state.entries.length
+        ? state.entries.map(e => {
+            const count = state.counts[e.label] || 0;
+            const pct = Math.min(100, count / state.raceTarget * 100);
+            return `<div class="race-row"><span>${escapeHTML(e.label)}</span><div class="bar"><span style="width:${pct}%"></span></div><strong>${count}</strong></div>`;
+          }).join("")
+        : '<div class="empty">Build the spinner to start a graph race.</div>';
+    }
+
+    function escapeHTML(str) {
+      return String(str).replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+    }
+
+    function copyText(text, label) {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => showStatus(label));
+      } else {
+        window.prompt(label, text);
+      }
+    }
+
+    function shareUrl() {
+      const url = new URL(window.location.href);
+      url.hash = "s=" + b64urlEncode(JSON.stringify(serialize()));
+      return url.toString();
+    }
+
+    function showStatus(text) {
+      $("#activityText").textContent = text;
+    }
+
+    function downloadJSON() {
+      const blob = new Blob([JSON.stringify(serialize(), null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "shape-spinner.json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    function loadFromHash() {
+      const hash = window.location.hash || "";
+      if (!hash.startsWith("#s=")) return false;
+      try {
+        applySerialized(JSON.parse(b64urlDecode(hash.slice(3))));
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
+    function init() {
+      $("#itemsInput").value = templates.shapes.join("\n");
+      if (!loadFromHash()) build();
+
+      $("#applyBtn").addEventListener("click", build);
+      $("#spinBtn").addEventListener("click", spin);
+      $("#speakBtn").addEventListener("click", () => {
+        const text = $("#winnerText").textContent + ". " + $("#activityText").textContent;
+        if ("speechSynthesis" in window) speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+      });
+      $("#modeSelect").addEventListener("change", build);
+      $("#spinStyle").addEventListener("change", build);
+      $("#raceTarget").addEventListener("change", build);
+      $("#clearBtn").addEventListener("click", () => {
+        state.counts = {};
+        state.history = [];
+        build();
+        $("#winnerText").textContent = "Ready to spin?";
+        $("#activityText").textContent = "Counts are reset.";
+      });
+      $("#copyLinkBtn").addEventListener("click", () => copyText(shareUrl(), "Share link copied."));
+      $("#copyEmbedBtn").addEventListener("click", () => {
+        copyText(`<iframe src="${shareUrl()}" width="900" height="760" style="border:0;" title="Shape Spinner"></iframe>`, "Embed code copied.");
+      });
+      $("#saveBtn").addEventListener("click", downloadJSON);
+      $("#loadBtn").addEventListener("click", () => $("#loadInput").click());
+      $("#loadInput").addEventListener("change", async (event) => {
+        const file = event.target.files && event.target.files[0];
+        if (!file) return;
+        applySerialized(JSON.parse(await file.text()));
+        event.target.value = "";
+      });
+      $("#imageUpload").addEventListener("change", (event) => {
+        const files = [...(event.target.files || [])];
+        if (!files.length) return;
+        Promise.all(files.map(file => new Promise(resolve => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(`${file.name.replace(/\.[^.]+$/, "")} | image:${reader.result} | Identify or describe this picture.`);
+          reader.readAsDataURL(file);
+        }))).then(lines => {
+          $("#itemsInput").value = ($("#itemsInput").value.trim() + "\n" + lines.join("\n")).trim();
+          build();
+          event.target.value = "";
+        });
+      });
+      $$(".pill[data-template]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          $("#itemsInput").value = templates[btn.dataset.template].join("\n");
+          state.counts = {};
+          state.history = [];
+          build();
+        });
+      });
+    }
+
+    init();
+  </script>
+</body>
+</html>

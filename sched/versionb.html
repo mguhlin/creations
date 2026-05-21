@@ -71,6 +71,45 @@ header p { color: #94a3b8; font-size: 0.78rem; margin-top: 4px; letter-spacing: 
 </style>
 </head>
 <body>
+<!-- MG-BACK-NAV -->
+<style id="mg-back-nav-style">
+  .mg-back-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 32px;
+    z-index: 999999;
+    background: rgba(15, 46, 34, 0.94);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(116, 198, 157, 0.25);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+    font-size: 12.5px;
+    line-height: 1;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+  }
+  .mg-back-bar a {
+    color: #B7E4C7;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    transition: color 0.15s;
+  }
+  .mg-back-bar a:hover { color: #fff; }
+  .mg-back-bar .mg-back-arrow { color: #74C69D; }
+  .mg-back-bar .mg-back-sep { color: rgba(183,228,199,0.4); margin: 0 4px; }
+  .mg-back-bar .mg-back-label { color: rgba(183,228,199,0.65); font-weight: 400; }
+  @media print { .mg-back-bar { display: none !important; } }
+</style>
+<div class="mg-back-bar" role="navigation" aria-label="Back to Creations index">
+  <a href="../index.html"><span class="mg-back-arrow">←</span> MGuhlin.org <span class="mg-back-sep">/</span> <span class="mg-back-label">Creations</span></a>
+</div>
+
 <div class="container">
 
   <header>

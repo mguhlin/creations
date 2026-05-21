@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TCEA Tools Menu</title>
+  <style>
+    :root {
+      --navy: #1E398D;
+      --gold: #FAA634;
+      --black: #000000;
+      --white: #FFFFFF;
+      --red: #D1282F;
+      --blue: #0070B9;
+      --yellow: #FDDC3F;
+      --orange: #f58231;
+      --green: #3cb44b;
+      --gray-90: #404041;
+      --gray-50: #939597;
+      --gray-30: #BBBDC0;
+      --gray-10: #E6E7E8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--gray-90);
+      background: var(--white);
+    }
+
+    .top-bar {
+      height: 12px;
+      background: linear-gradient(
+        90deg,
+        var(--navy) 0 32%,
+        var(--gold) 32% 52%,
+        var(--orange) 52% 64%,
+        var(--red) 64% 76%,
+        var(--blue) 76% 88%,
+        var(--green) 88% 96%,
+        var(--yellow) 96% 100%
+      );
+    }
+
+    .page {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 36px 0 48px;
+    }
+
+    header {
+      display: grid;
+      gap: 12px;
+      padding-bottom: 28px;
+      border-bottom: 2px solid var(--gray-10);
+    }
+
+    .eyebrow {
+      margin: 0;
+      color: var(--gold);
+      font-size: 0.86rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--navy);
+      font-size: clamp(2.2rem, 7vw, 4.8rem);
+      line-height: 0.95;
+      letter-spacing: 0;
+    }
+
+    .intro {
+      max-width: 720px;
+      margin: 0;
+      color: var(--gray-90);
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      line-height: 1.55;
+    }
+
+    main {
+      padding-top: 30px;
+    }
+
+    .menu-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--black);
+      font-size: clamp(1.35rem, 3vw, 2rem);
+      letter-spacing: 0;
+    }
+
+    .tool-count {
+      flex: 0 0 auto;
+      color: var(--white);
+      background: var(--navy);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+    }
+
+    .tool-card {
+      position: relative;
+      display: grid;
+      gap: 18px;
+      min-height: 220px;
+      padding: 22px;
+      color: var(--gray-90);
+      text-decoration: none;
+      border: 2px solid var(--gray-10);
+      border-radius: 8px;
+      background: var(--white);
+      box-shadow: 0 12px 24px rgba(64, 64, 65, 0.08);
+      transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    .tool-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 8px;
+      border-radius: 6px 0 0 6px;
+      background: var(--gold);
+    }
+
+    .tool-card:hover,
+    .tool-card:focus-visible {
+      border-color: var(--navy);
+      box-shadow: 0 18px 32px rgba(30, 57, 141, 0.16);
+      outline: none;
+      transform: translateY(-3px);
+    }
+
+    .tool-card:focus-visible {
+      box-shadow: 0 0 0 4px rgba(0, 112, 185, 0.22), 0 18px 32px rgba(30, 57, 141, 0.16);
+    }
+
+    .tool-name {
+      margin: 0;
+      color: var(--navy);
+      font-size: 1.45rem;
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .tool-description {
+      margin: 0;
+      color: var(--gray-90);
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .tool-action {
+      align-self: end;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--black);
+      font-weight: 800;
+    }
+
+    .arrow {
+      display: inline-grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      color: var(--white);
+      background: var(--blue);
+      border-radius: 50%;
+      line-height: 1;
+    }
+
+    .placeholder {
+      border-style: dashed;
+      background: var(--gray-10);
+      box-shadow: none;
+      pointer-events: none;
+    }
+
+    .placeholder::before {
+      background: var(--gray-30);
+    }
+
+    .placeholder .tool-name,
+    .placeholder .tool-description,
+    .placeholder .tool-action {
+      color: var(--gray-50);
+    }
+
+    footer {
+      margin-top: 36px;
+      padding-top: 18px;
+      color: var(--gray-50);
+      border-top: 1px solid var(--gray-10);
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        width: min(100% - 24px, 1120px);
+        padding-top: 28px;
+      }
+
+      .menu-heading {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .tool-card {
+        min-height: 190px;
+      }
+    }
+  </style>
+</head>
+<body>
+<!-- MG-BACK-NAV -->
+<style id="mg-back-nav-style">
+  .mg-back-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 32px;
+    z-index: 999999;
+    background: rgba(15, 46, 34, 0.94);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(116, 198, 157, 0.25);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+    font-size: 12.5px;
+    line-height: 1;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+  }
+  .mg-back-bar a {
+    color: #B7E4C7;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    transition: color 0.15s;
+  }
+  .mg-back-bar a:hover { color: #fff; }
+  .mg-back-bar .mg-back-arrow { color: #74C69D; }
+  .mg-back-bar .mg-back-sep { color: rgba(183,228,199,0.4); margin: 0 4px; }
+  .mg-back-bar .mg-back-label { color: rgba(183,228,199,0.65); font-weight: 400; }
+  @media print { .mg-back-bar { display: none !important; } }
+</style>
+<div class="mg-back-bar" role="navigation" aria-label="Back to Creations index">
+  <a href="../../index.html"><span class="mg-back-arrow">←</span> MGuhlin.org <span class="mg-back-sep">/</span> <span class="mg-back-label">Creations</span></a>
+</div>
+
+  <div class="top-bar" aria-hidden="true"></div>
+  <div class="page">
+    <header>
+      <p class="eyebrow">TCEA Tools</p>
+      <h1>Tool Menu: 10 Tools</h1>
+      <p class="intro">A central launch page for classroom-ready tools, activities, and resources.</p>
+    </header>
+
+    <main>
+      <div class="menu-heading">
+        <h2>Available Tools</h2>
+        <span class="tool-count">10 tools</span>
+      </div>
+
+      <section class="tool-grid" aria-label="Tool menu">
+        <a class="tool-card" href="coinflipping/index.html">
+          <div>
+            <h3 class="tool-name">Coin Flipper</h3>
+            <p class="tool-description">Flip coins, track probability, customize labels and colors, save setups, and run classroom activity modes.</p>
+          </div>
+          <span class="tool-action">Open Tool <span class="arrow" aria-hidden="true">&gt;</span></span>
+        </a>
+
+        <a class="tool-card" href="dice/index.html">
+          <div>
+            <h3 class="tool-name">Dice Roller</h3>
+            <p class="tool-description">Roll simple classroom dice by default, or switch on advanced dice types, modifiers, totals, products, sound, and history.</p>
+          </div>
+          <span class="tool-action">Open Tool <span class="arrow" aria-hidden="true">&gt;</span></span>
+        </a>
+
+        <a class="tool-card" href="dicebreakers/index.html">
+          <div>
+            <h3 class="tool-name">Dicebreaker Creator</h3>
+            <p class="tool-description">Create roll-a-die prompt templates, export classroom files, and open a student roll view.</p>
+          </div>
+          <span class="tool-action">Open Tool <span class="arrow" aria-hidden="true">&gt;</span></span>
+        </a>
+
+        <a class="tool-card" href="drawsketch/index.html">
+          <div>
+            <h3 class="tool-name">Draw and Sketch</h3>
+            <p class="tool-description">Draw with blue and gold knobs: horizontal, vertical, and curved lines on a classroom sketch screen.</p>
+          </div>
+          <span class="tool-action">Open Tool <span class="arrow" aria-hidden="true">&gt;</span></span>
+        </a>
+
+        <a class="tool-card" href="fortune/index.html">
+          <div>
+            <h3 class="tool-name">Fortune Wheel</h3>
+            <p class="tool-description">Create a student link for spinning points, revealing letters, and solving K-12 education vocabulary puzzles.</p>
+          </div>
+          <span class="tool-action">Open Tool <span class="arrow" aria-hidden="true">&gt;</span></span>
+        </a>
+
+        <a class="tool-card" href="memepuzzle/index.html">
+          <div>
+            <h3 class="tool-name">Meme Puzzle Maker</h3>
+            <p class="tool-description">Create a quiz puzzle where correct answers remove tiles and reveal a hidden meme image.</p>
+          </div>
+          <span class="tool-action">Open Tool <span class="arrow" aria-hidden="true">&gt;</span></span>
+        </a>
+
+        <a class="tool-card" href="shapespinner/index.html">
+          <div>
+            <h3 class="tool-name">Shape Spinner</h3>
+            <p class="tool-description">Spin shapes, pictures, prompts, and graph-race results for visual classroom activities.</p>
+          </div>
+          <span class="tool-action">Open Tool <span class="arrow" aria-hidden="true">&gt;</span></span>
+        </a>
+
+        <a class="tool-card" href="storywheel/index.html">
+          <div>
+            <h3 class="tool-name">Story Wheel Maker</h3>
+            <p class="tool-description">Build a 3, 5, or 7-event story wheel for sequencing, summarizing, illustrating, and sharing story structure.</p>
+          </div>
+          <span class="tool-action">Open Tool <span class="arrow" aria-hidden="true">&gt;</span></span>
+        </a>
+
+        <a class="tool-card" href="wheelspinner/index.html">
+          <div>
+            <h3 class="tool-name">Wheel Spinner</h3>
+            <p class="tool-description">Build a custom wheel, spin for a result, and reset when everyone is back in play.</p>
+          </div>
+          <span class="tool-action">Open Tool <span class="arrow" aria-hidden="true">&gt;</span></span>
+        </a>
+
+        <a class="tool-card" href="wordsearch/index.html">
+          <div>
+            <h3 class="tool-name">Word Search Maker</h3>
+            <p class="tool-description">Create printable word searches from TEKS-inspired vocabulary banks or paste your own classroom terms.</p>
+          </div>
+          <span class="tool-action">Open Tool <span class="arrow" aria-hidden="true">&gt;</span></span>
+        </a>
+
+        <article class="tool-card placeholder" aria-label="Future tool placeholder">
+          <div>
+            <h3 class="tool-name">Next Tool</h3>
+            <p class="tool-description">This menu is ready for the next project when you are.</p>
+          </div>
+          <span class="tool-action">Coming Soon</span>
+        </article>
+      </section>
+    </main>
+
+    <footer>
+      Add each new tool to this page as the collection grows.
+    </footer>
+  </div>
+
+
+</body></html>
