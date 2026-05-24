@@ -9,6 +9,7 @@
     --green-dark: #1f4d3a;
     --green: #2f7d5a;
     --green-soft: #e8f3ee;
+    --green-pale: #f4faf7;
     --gray-dark: #3d4543;
     --gray: #7b8582;
     --gray-light: #eef1f0;
@@ -27,6 +28,17 @@
     background: linear-gradient(180deg, var(--white), var(--gray-light));
     color: var(--gray-dark);
     line-height: 1.55;
+  }
+
+  a {
+    color: var(--green-dark);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  a:hover {
+    color: var(--green);
   }
 
   .page {
@@ -61,7 +73,7 @@
   }
 
   .subtitle {
-    max-width: 850px;
+    max-width: 880px;
     margin: 0;
     font-size: 1.12rem;
     color: #eaf5ef;
@@ -101,6 +113,19 @@
     color: var(--green-dark);
     display: block;
     margin-bottom: 6px;
+  }
+
+  .framework-links {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 22px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.05);
+    margin-top: 20px;
+  }
+
+  .framework-links ul {
+    margin-top: 8px;
   }
 
   .roles {
@@ -196,6 +221,31 @@
     border-left: 5px solid var(--green);
   }
 
+  .scenario {
+    grid-column: 1 / -1;
+    background: var(--green-pale);
+    border: 1px solid var(--border);
+    border-left: 6px solid var(--green-dark);
+    border-radius: 18px;
+    padding: 18px;
+  }
+
+  .scenario h4 {
+    margin: 0 0 8px;
+    color: var(--green-dark);
+    font-size: 1.05rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .scenario p {
+    margin: 8px 0;
+  }
+
+  .scenario strong {
+    color: var(--green-dark);
+  }
+
   .flow {
     background: var(--white);
     border: 1px solid var(--border);
@@ -239,6 +289,11 @@
 
   .implementation h2 {
     margin-top: 0;
+  }
+
+  .implementation a {
+    color: var(--white);
+    text-decoration-color: #bde5d1;
   }
 
   .implementation ol {
@@ -302,7 +357,8 @@
     .hero,
     .role-card,
     .flow,
-    .implementation {
+    .implementation,
+    .framework-links {
       box-shadow: none;
       break-inside: avoid;
     }
@@ -312,6 +368,7 @@
 
 <body>
   <main class="page">
+
     <section class="hero">
       <div class="adapted">Adapted from Paul Roetzer’s version for business</div>
       <h1>The Augmented K–16 AI Learning Framework</h1>
@@ -335,12 +392,39 @@
         </div>
         <div class="mini-card">
           <strong>Pedagogy-first</strong>
-          AI use should be tied to clear instructional strategies such as SOLO, UDL, scaffolding, inquiry, and reflection.
+          AI use should be tied to clear instructional strategies such as SOLO, ACE, scaffolding, inquiry, and reflection.
         </div>
         <div class="mini-card">
           <strong>Screen-time aware</strong>
           AI should often launch offline thinking, peer collaboration, hands-on work, and analog learning experiences.
         </div>
+      </div>
+
+      <div class="framework-links">
+        <h2 class="section-title" style="margin-top:0;">Instructional Framework Links</h2>
+        <p>
+          The framework is designed to connect AI use with learning science and practical classroom moves, not tool use for its own sake.
+        </p>
+        <ul>
+          <li>
+            <a href="https://pamhook.com/solo-taxonomy/" target="_blank" rel="noopener">
+              SOLO Taxonomy
+            </a>
+            — a model for describing levels of learner understanding from surface to deeper, more conceptual understanding.
+          </li>
+          <li>
+            <a href="https://mguhlin.org/2026/05/13/kpft-radio-guest-ai-and-learning/" target="_blank" rel="noopener">
+              ACE: Articulate, Connect, Extend
+            </a>
+            — a simple reflection structure students can use to explain learning, connect it to prior knowledge, and extend it to new situations.
+          </li>
+          <li>
+            <a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">
+              Visible Learning / High-Effect Size Instructional Strategies
+            </a>
+            — a research-informed resource for exploring instructional influences and effect sizes.
+          </li>
+        </ul>
       </div>
     </section>
 
@@ -357,11 +441,13 @@
               <p>The visionary and policy maker who builds capacity, guardrails, and infrastructure.</p>
             </div>
           </div>
+
           <div class="role-body">
             <div class="info-box">
               <h4>Core Objective</h4>
               <p>Build systemic capacity and infrastructure for human-centric, AI-assisted learning environments.</p>
             </div>
+
             <div class="info-box">
               <h4>Example Tools</h4>
               <div class="pill-row">
@@ -370,10 +456,15 @@
                 <span class="pill">BoodleBox</span>
               </div>
             </div>
+
             <div class="info-box">
               <h4>Instructional Strategy</h4>
-              <p>Systemic change management and learning loop architecture: short, continuous improvement cycles instead of one-time workshops.</p>
+              <p>
+                Systemic change management and learning loop architecture: short, continuous improvement cycles
+                instead of one-time workshops.
+              </p>
             </div>
+
             <div class="info-box">
               <h4>Tactical Tasks</h4>
               <ul>
@@ -382,6 +473,7 @@
                 <li>Coordinate cross-department AI workflows for Curriculum, HR, IT, and administration.</li>
               </ul>
             </div>
+
             <div class="skepticism">
               <div class="info-box argument">
                 <h4>The Concern</h4>
@@ -389,8 +481,28 @@
               </div>
               <div class="info-box counter">
                 <h4>The Response</h4>
-                <p>Frame AI as an active conversational workspace that helps students move faster from screen-based preparation to real-world creation, critique, and collaboration.</p>
+                <p>
+                  Frame AI as an active conversational workspace that helps students move faster from screen-based
+                  preparation to real-world creation, critique, and collaboration.
+                </p>
               </div>
+            </div>
+
+            <div class="scenario">
+              <h4>Scenario: District AI Launch</h4>
+              <p>
+                A superintendent wants to allow AI use but is facing questions from parents, teachers, IT, and legal counsel.
+                The Leader creates a phased AI implementation plan with approved tools, data privacy boundaries,
+                staff training expectations, and classroom-use guardrails.
+              </p>
+              <p>
+                <strong>AI use:</strong> The Leader uses an enterprise AI workspace to draft policy language, compare privacy risks,
+                and create role-specific guidance for teachers, librarians, counselors, and administrators.
+              </p>
+              <p>
+                <strong>Human-centered outcome:</strong> The launch begins with staff workload relief and voluntary sandbox sessions,
+                not a mandate that every teacher immediately use AI with students.
+              </p>
             </div>
           </div>
         </article>
@@ -403,11 +515,13 @@
               <p>The instructional designer and curriculum specialist who protects rigor.</p>
             </div>
           </div>
+
           <div class="role-body">
             <div class="info-box">
               <h4>Core Objective</h4>
               <p>Integrate rigorous pedagogy into human-machine workflows while avoiding the offloading paradox.</p>
             </div>
+
             <div class="info-box">
               <h4>Example Tools</h4>
               <div class="pill-row">
@@ -415,10 +529,16 @@
                 <span class="pill">Gemini 3.5 Pro</span>
               </div>
             </div>
+
             <div class="info-box">
               <h4>Instructional Strategy</h4>
-              <p>SOLO Taxonomy and Universal Design for Learning help ensure AI acts as a scaffold, not a shortcut.</p>
+              <p>
+                <a href="https://pamhook.com/solo-taxonomy/" target="_blank" rel="noopener">SOLO Taxonomy</a>,
+                Universal Design for Learning, and process-based assessment help ensure AI acts as a scaffold,
+                not a shortcut.
+              </p>
             </div>
+
             <div class="info-box">
               <h4>Tactical Tasks</h4>
               <ul>
@@ -427,6 +547,7 @@
                 <li>Create rubrics that assess process, critique, revision, and AI interaction.</li>
               </ul>
             </div>
+
             <div class="skepticism">
               <div class="info-box argument">
                 <h4>The Concern</h4>
@@ -434,8 +555,28 @@
               </div>
               <div class="info-box counter">
                 <h4>The Response</h4>
-                <p>Design hybrid workflows: brief AI-assisted analysis followed by Socratic seminar, handwritten synthesis, oral defense, or peer critique.</p>
+                <p>
+                  Design hybrid workflows: brief AI-assisted analysis followed by Socratic seminar,
+                  handwritten synthesis, oral defense, or peer critique.
+                </p>
               </div>
+            </div>
+
+            <div class="scenario">
+              <h4>Scenario: Redesigning the Research Essay</h4>
+              <p>
+                A college English department is worried that take-home essays are becoming impossible to authenticate.
+                The Architect redesigns the assignment so students submit a learning trail: initial question, source notes,
+                AI critique, revised thesis, peer feedback, oral defense, and final reflection.
+              </p>
+              <p>
+                <strong>AI use:</strong> Students use AI for perspective generation and counterargument testing, but they must document
+                what they accepted, rejected, revised, and verified.
+              </p>
+              <p>
+                <strong>Instructional move:</strong> The rubric uses SOLO-style progression to assess whether students move from listing
+                ideas to connecting, evaluating, and transferring understanding.
+              </p>
             </div>
           </div>
         </article>
@@ -448,11 +589,13 @@
               <p>The AI-empowered educator who creates classroom scaffolds and custom assistants.</p>
             </div>
           </div>
+
           <div class="role-body">
             <div class="info-box">
               <h4>Core Objective</h4>
               <p>Create useful AI assistants, prompt templates, and classroom supports without needing a coding background.</p>
             </div>
+
             <div class="info-box">
               <h4>Example Tools</h4>
               <div class="pill-row">
@@ -461,10 +604,18 @@
                 <span class="pill">Images 2.0</span>
               </div>
             </div>
+
             <div class="info-box">
               <h4>Instructional Strategy</h4>
-              <p>Scaffolding and differentiated instruction, with intentionally limited AI roles that guide rather than replace thinking.</p>
+              <p>
+                Scaffolding, differentiated instruction, and
+                <a href="https://mguhlin.org/2026/05/13/kpft-radio-guest-ai-and-learning/" target="_blank" rel="noopener">
+                  ACE: Articulate, Connect, Extend
+                </a>
+                help students explain, connect, and transfer their learning.
+              </p>
             </div>
+
             <div class="info-box">
               <h4>Tactical Tasks</h4>
               <ul>
@@ -473,6 +624,7 @@
                 <li>Build lesson-tuning agents aligned to local demographics, curriculum, and student needs.</li>
               </ul>
             </div>
+
             <div class="skepticism">
               <div class="info-box argument">
                 <h4>The Concern</h4>
@@ -480,8 +632,28 @@
               </div>
               <div class="info-box counter">
                 <h4>The Response</h4>
-                <p>Build AI tools that launch analog work: role plays, experiments, classroom measurements, discussion prompts, and hands-on tasks.</p>
+                <p>
+                  Build AI tools that launch analog work: role plays, experiments, classroom measurements,
+                  discussion prompts, and hands-on tasks.
+                </p>
               </div>
+            </div>
+
+            <div class="scenario">
+              <h4>Scenario: Building a Source-Grounded Unit Helper</h4>
+              <p>
+                A high school biology teacher is preparing a unit on ecosystems. Instead of sending students to the open web,
+                the Builder creates a source-grounded study space using the textbook chapter, local watershed data,
+                two short articles, and lab instructions.
+              </p>
+              <p>
+                <strong>AI use:</strong> The tool answers only from the uploaded sources, creates vocabulary practice,
+                generates lab-role cards, and produces differentiated reading supports.
+              </p>
+              <p>
+                <strong>Offline outcome:</strong> Students use the AI for 8 minutes to prepare, then conduct a classroom investigation,
+                collect observations, and use ACE prompts to articulate, connect, and extend what they learned.
+              </p>
             </div>
           </div>
         </article>
@@ -494,11 +666,13 @@
               <p>The facilitator who manages active learning environments.</p>
             </div>
           </div>
+
           <div class="role-body">
             <div class="info-box">
               <h4>Core Objective</h4>
               <p>Guide students toward verification, critique, collaboration, and visible thinking instead of simple AI answers.</p>
             </div>
+
             <div class="info-box">
               <h4>Example Tools</h4>
               <div class="pill-row">
@@ -506,10 +680,18 @@
                 <span class="pill">Gemini 3.5</span>
               </div>
             </div>
+
             <div class="info-box">
               <h4>Instructional Strategy</h4>
-              <p>Inquiry-based learning and visible learning make student reasoning observable, discussable, and improvable.</p>
+              <p>
+                Inquiry-based learning, visible learning, feedback, questioning, and other
+                <a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">
+                  high-effect size instructional strategies
+                </a>
+                make student reasoning observable and improvable.
+              </p>
             </div>
+
             <div class="info-box">
               <h4>Tactical Tasks</h4>
               <ul>
@@ -518,6 +700,7 @@
                 <li>Facilitate peer dialogue around ethical, civic, and real-world implications.</li>
               </ul>
             </div>
+
             <div class="skepticism">
               <div class="info-box argument">
                 <h4>The Concern</h4>
@@ -525,8 +708,28 @@
               </div>
               <div class="info-box counter">
                 <h4>The Response</h4>
-                <p>Use AI as a “third thinker” that gives students something to challenge, revise, debate, and improve together.</p>
+                <p>
+                  Use AI as a “third thinker” that gives students something to challenge, revise, debate,
+                  and improve together.
+                </p>
               </div>
+            </div>
+
+            <div class="scenario">
+              <h4>Scenario: The AI as Third Thinker</h4>
+              <p>
+                In a government class, students are studying whether a city should ban cars from a downtown corridor.
+                The Orchestrator asks AI to produce a short argument in favor of the policy. Student pairs then annotate
+                the response for assumptions, missing stakeholders, weak evidence, and possible bias.
+              </p>
+              <p>
+                <strong>AI use:</strong> AI creates the first draft of an argument, but students must challenge it with evidence
+                and revise it through peer discussion.
+              </p>
+              <p>
+                <strong>Human-centered outcome:</strong> The screen becomes a shared object of critique, not a private replacement
+                for discussion.
+              </p>
             </div>
           </div>
         </article>
@@ -539,11 +742,13 @@
               <p>The novice educator or pre-service teacher developing clinical judgment.</p>
             </div>
           </div>
+
           <div class="role-body">
             <div class="info-box">
               <h4>Core Objective</h4>
               <p>Develop expert judgment, situational awareness, and relational empathy while using AI to reduce tactical workload.</p>
             </div>
+
             <div class="info-box">
               <h4>Example Tools</h4>
               <div class="pill-row">
@@ -551,10 +756,15 @@
                 <span class="pill">Claude Opus 4.7</span>
               </div>
             </div>
+
             <div class="info-box">
               <h4>Instructional Strategy</h4>
-              <p>Cognitive apprenticeship and reflective practice shift attention from paperwork mechanics to adaptive classroom decision-making.</p>
+              <p>
+                Cognitive apprenticeship, reflective practice, teacher clarity, feedback, and questioning help novice educators
+                move from lesson-plan production to adaptive classroom decision-making.
+              </p>
             </div>
+
             <div class="info-box">
               <h4>Tactical Tasks</h4>
               <ul>
@@ -563,6 +773,7 @@
                 <li>Analyze practice-teaching transcripts to improve questioning and feedback.</li>
               </ul>
             </div>
+
             <div class="skepticism">
               <div class="info-box argument">
                 <h4>The Concern</h4>
@@ -570,8 +781,26 @@
               </div>
               <div class="info-box counter">
                 <h4>The Response</h4>
-                <p>Use AI to reduce nighttime administrative screen time so novice teachers can focus more on students, relationships, and live instruction.</p>
+                <p>
+                  Use AI to reduce nighttime administrative screen time so novice teachers can focus more on students,
+                  relationships, and live instruction.
+                </p>
               </div>
+            </div>
+
+            <div class="scenario">
+              <h4>Scenario: Practicing Before the Parent Conference</h4>
+              <p>
+                A pre-service teacher is nervous about a difficult parent conference involving missing assignments and classroom behavior.
+                The Apprentice uses AI to simulate three versions of the conversation: supportive parent, defensive parent, and angry parent.
+              </p>
+              <p>
+                <strong>AI use:</strong> The Apprentice rehearses language, receives feedback on tone, and revises the conference plan.
+              </p>
+              <p>
+                <strong>Professional growth outcome:</strong> The AI does not replace the relationship. It gives the novice teacher
+                low-stakes practice before a high-stakes human interaction.
+              </p>
             </div>
           </div>
         </article>
@@ -584,11 +813,13 @@
               <p>The digital scaffolds that work behind the scenes.</p>
             </div>
           </div>
+
           <div class="role-body">
             <div class="info-box">
               <h4>Core Objective</h4>
               <p>Execute real-time differentiation, formative analysis, administrative support, and targeted tactical tasks.</p>
             </div>
+
             <div class="info-box">
               <h4>Example Tools</h4>
               <div class="pill-row">
@@ -597,10 +828,15 @@
                 <span class="pill">Multi-agent Workflows</span>
               </div>
             </div>
+
             <div class="info-box">
               <h4>Instructional Strategy</h4>
-              <p>Formative assessment delivery and adaptive learning pathways help teachers respond to needs without isolating students.</p>
+              <p>
+                Formative assessment delivery, adaptive learning pathways, feedback loops, and targeted intervention
+                help teachers respond to needs without isolating students.
+              </p>
             </div>
+
             <div class="info-box">
               <h4>Tactical Tasks</h4>
               <ul>
@@ -609,6 +845,7 @@
                 <li>Draft standards-aligned family updates and multilingual communications.</li>
               </ul>
             </div>
+
             <div class="skepticism">
               <div class="info-box argument">
                 <h4>The Concern</h4>
@@ -616,8 +853,28 @@
               </div>
               <div class="info-box counter">
                 <h4>The Response</h4>
-                <p>Use agents in the background to create physical collaboration groups, targeted teacher conferences, and offline intervention pathways.</p>
+                <p>
+                  Use agents in the background to create physical collaboration groups, targeted teacher conferences,
+                  and offline intervention pathways.
+                </p>
               </div>
+            </div>
+
+            <div class="scenario">
+              <h4>Scenario: Background Grouping for Human Intervention</h4>
+              <p>
+                After a math exit ticket, students submit short explanations of how they solved a proportional reasoning problem.
+                Background agents sort responses into misconception groups: incorrect ratio setup, computation error,
+                weak explanation, and ready for extension.
+              </p>
+              <p>
+                <strong>AI use:</strong> Agents summarize patterns and recommend small-group tasks, but the teacher reviews the groupings
+                before acting.
+              </p>
+              <p>
+                <strong>Offline outcome:</strong> Students move into physical groups for teacher-led mini-lessons, peer explanation,
+                and hands-on problem solving.
+              </p>
             </div>
           </div>
         </article>
@@ -660,7 +917,20 @@
       <ol>
         <li><strong>Start with policy:</strong> Define approved tools, privacy expectations, data-use limits, and academic integrity guidance.</li>
         <li><strong>Start with workload relief:</strong> Let skeptical educators first use AI for administrative burdens before classroom implementation.</li>
-        <li><strong>Design for process:</strong> Assess prompts, revisions, critique, reflection, oral defense, and evidence of thinking.</li>
+        <li>
+          <strong>Design for process:</strong> Assess prompts, revisions, critique, reflection, oral defense, and evidence of thinking using
+          <a href="https://pamhook.com/solo-taxonomy/" target="_blank" rel="noopener">SOLO-style progression</a>.
+        </li>
+        <li>
+          <strong>Use ACE reflection:</strong> Ask learners to
+          <a href="https://mguhlin.org/2026/05/13/kpft-radio-guest-ai-and-learning/" target="_blank" rel="noopener">articulate, connect, and extend</a>
+          what they learned after AI-supported activities.
+        </li>
+        <li>
+          <strong>Use high-impact strategies:</strong> Prioritize teacher clarity, feedback, formative assessment, visible thinking,
+          and other
+          <a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">high-effect size instructional strategies</a>.
+        </li>
         <li><strong>Compress screen time:</strong> Use brief AI interactions to prepare students for discussion, writing, building, testing, and collaboration.</li>
         <li><strong>Make limitations visible:</strong> Teach students to identify hallucinations, bias, weak evidence, missing context, and flawed reasoning.</li>
         <li><strong>Keep humans in charge:</strong> AI can assist, sort, draft, and scaffold, but educators remain responsible for judgment, care, context, and final decisions.</li>
@@ -668,8 +938,9 @@
     </section>
 
     <p class="footer">
-      The Augmented K–16 AI Learning Framework | Green, Grey, and White Edition
+      The Augmented K–16 AI Learning Framework | Adapted from <b><a href="https://www.linkedin.com/in/paulroetzer/" target="_blank">Paul Roetzer</a></b> via <a href="https://www.linkedin.com/posts/paulroetzer_i-spend-a-lot-of-time-thinking-about-the-share-7464282930035601408-3aMh/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAz3Gl0BHNiB7SO9JwAKhZypvyJFYVyGEus" target="_blank"><b>LinkedIn</b></a>(SmarterX) by Miguel Guhlin (mguhlin.org)
     </p>
+
   </main>
 </body>
 </html>
