@@ -1,40 +1,127 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Ecosystem Unit Helper Builder</title><style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ecosystem Unit Helper Builder</title>
+<style>
 :root{--green-dark:#1f4d3a;--green:#2f7d5a;--green-soft:#e8f3ee;--green-pale:#f4faf7;--gray-dark:#3d4543;--gray:#7b8582;--gray-light:#eef1f0;--white:#fff;--border:#d7dedb;--shadow:0 8px 24px rgba(31,77,58,.12)}
-*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,var(--white),var(--gray-light));color:var(--gray-dark);line-height:1.55}a{color:var(--green-dark);font-weight:700;text-decoration:underline;text-underline-offset:3px}.page{max-width:1180px;margin:0 auto;padding:24px}.hero{background:var(--green-dark);color:#fff;border-radius:24px;padding:36px;box-shadow:var(--shadow)}.adapted,.tag{display:inline-block;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);color:#fff;padding:8px 12px;border-radius:999px;font-size:.9rem;margin-bottom:18px}h1{margin:0 0 12px;font-size:clamp(2rem,4vw,3.5rem);line-height:1.05}h2,h3,h4{line-height:1.2}.subtitle{max-width:900px;margin:0;font-size:1.12rem;color:#eaf5ef}.note{margin-top:18px;background:rgba(255,255,255,.12);border-left:5px solid #bde5d1;padding:14px 16px;border-radius:12px;font-size:.95rem}.section-title{margin:36px 0 14px;color:var(--green-dark);font-size:1.7rem}.overview,.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}.mini-card,.framework-links,.adoption-card,.role-card,.flow,.implementation,.tool-card{background:#fff;border:1px solid var(--border);border-radius:22px;box-shadow:0 4px 18px rgba(0,0,0,.05)}.mini-card,.tool-card{border-radius:18px;padding:18px}.mini-card strong,.tool-card strong{color:var(--green-dark);display:block;margin-bottom:6px}.framework-links,.adoption-card,.flow{padding:22px;margin-top:20px}.adoption-grid,.adoption-domains{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:18px}.phase{background:var(--green-pale);border:1px solid var(--border);border-radius:16px;padding:14px}.phase-number{width:38px;height:38px;border-radius:50%;background:var(--green-dark);color:#fff;display:grid;place-items:center;font-weight:700;margin-bottom:10px}.phase h3{margin:0 0 8px;color:var(--green-dark);font-size:1rem}.phase p{margin:0;font-size:.92rem}.domain{border-left:5px solid var(--green);background:#fafcfa;border-radius:14px;padding:14px;border-top:1px solid var(--border);border-right:1px solid var(--border);border-bottom:1px solid var(--border)}.domain strong{color:var(--green-dark);display:block;margin-bottom:5px}.roles{display:grid;grid-template-columns:1fr;gap:18px}.role-card{overflow:hidden}.role-header{display:flex;gap:16px;align-items:flex-start;background:var(--green-soft);padding:20px;border-bottom:1px solid var(--border)}.badge{flex:0 0 auto;width:46px;height:46px;border-radius:14px;background:var(--green-dark);color:#fff;display:grid;place-items:center;font-weight:700;font-size:1.1rem}.role-header h3{margin:0;color:var(--green-dark);font-size:1.35rem}.role-header p{margin:4px 0 0;color:var(--gray-dark)}.role-body{padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:18px}.info-box{background:#fafcfa;border:1px solid var(--border);border-radius:16px;padding:16px}.info-box h4{margin:0 0 8px;color:var(--green);font-size:1rem;text-transform:uppercase;letter-spacing:.04em}ul{margin:8px 0 0 20px;padding:0}li{margin-bottom:8px}.skepticism{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:18px}.argument{border-left:5px solid var(--gray)}.counter{border-left:5px solid var(--green)}.scenario{grid-column:1/-1;background:var(--green-pale);border:1px solid var(--border);border-left:6px solid var(--green-dark);border-radius:18px;padding:18px}.scenario h4{margin:0 0 8px;color:var(--green-dark);font-size:1.05rem;text-transform:uppercase;letter-spacing:.04em}.scenario p{margin:8px 0}.scenario strong{color:var(--green-dark)}.flow-grid{display:grid;gap:12px}.flow-step{display:grid;grid-template-columns:160px 1fr;gap:16px;align-items:center;padding:16px;border-radius:16px;background:var(--gray-light);border:1px solid var(--border)}.flow-role{color:#fff;background:var(--green-dark);padding:10px 12px;border-radius:12px;font-weight:700;text-align:center}.implementation{background:var(--green-dark);color:#fff;padding:26px;margin:28px 0}.implementation h2{margin-top:0}.implementation a{color:#fff;text-decoration-color:#bde5d1}.footer{color:var(--gray);font-size:.9rem;margin:24px 0 8px;text-align:center}.pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.pill{background:var(--green-soft);color:var(--green-dark);border:1px solid var(--border);border-radius:999px;padding:6px 10px;font-size:.88rem;font-weight:600}.btn{display:inline-block;background:var(--green-dark);color:#fff!important;text-decoration:none;border:0;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer}.btn.secondary{background:var(--green)}label{display:block;font-weight:700;color:var(--green-dark);margin-top:12px}input,select,textarea{width:100%;padding:10px;border:1px solid var(--border);border-radius:10px;font:inherit;background:#fff}textarea{min-height:92px}pre.output{white-space:pre-wrap;background:#f7faf8;border:1px solid var(--border);border-radius:16px;padding:16px;min-height:120px}.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}.nav{margin-top:18px}.nav a{color:#fff;margin-right:14px}.toplink{margin-bottom:16px}@media(max-width:980px){.adoption-grid,.adoption-domains,.cards{grid-template-columns:1fr 1fr}}@media(max-width:860px){.overview,.role-body,.skepticism,.two{grid-template-columns:1fr}.flow-step{grid-template-columns:1fr}.hero{padding:26px}}@media(max-width:620px){.adoption-grid,.adoption-domains,.cards{grid-template-columns:1fr}.page{padding:16px}}@media print{body{background:#fff}.page{max-width:none;padding:.5in}.hero,.role-card,.flow,.implementation,.framework-links,.adoption-card,.tool-card{box-shadow:none;break-inside:avoid}a{color:var(--green-dark)}}
-</style></head><body><main class="page"><p class="toplink"><a href="index.html">← Back to main framework</a></p>
-<section class="hero"><div class="tag">Builder Tool</div><h1>Source-Grounded Ecosystem Unit Helper</h1><p class="subtitle">Design a NotebookLM- or AI-project style unit helper that uses only teacher-approved sources and launches students into hands-on ecosystem investigation.</p></section>
-<section class="tool-card"><h2 class="section-title" style="margin-top:0">Build the Unit Helper</h2><div class="two"><div><label>Unit topic</label><input id="topic" placeholder="Example: Local watershed ecosystems"><label>Approved sources</label><textarea id="sources" placeholder="Textbook chapter, local watershed report, primary-source article, lab directions"></textarea><label>Grade band</label><select id="grade"><option>Grade 8 Science</option><option>Biology</option><option>Environmental Systems</option><option>Middle School Integrated Science</option></select></div><div><label>Offline investigation</label><textarea id="offline" placeholder="Example: Students observe schoolyard biodiversity and collect evidence in field notes."></textarea><label>Differentiation needs</label><textarea id="diff" placeholder="Example: vocabulary support, reading levels, EL sentence stems, extension tasks"></textarea><label>ACE reflection prompt focus</label><input id="ace" placeholder="Example: How human activity affects biodiversity"></div></div><p><button class="btn" onclick="buildEco()">Generate Unit Helper Plan</button> <button class="btn secondary" onclick="copyOut('out')">Copy</button></p><pre class="output" id="out"></pre></section>
-<section class="framework-links"><h2 class="section-title" style="margin-top:0">Standards Connections</h2><ul><li><a href="https://tea.texas.gov/academics/subject-areas/science" target="_blank" rel="noopener">Texas Science TEKS</a>: Connect to ecosystems, biodiversity, human impacts, and scientific investigation.</li><li><a href="https://teksguide.org/teks/s812b" target="_blank" rel="noopener">Science 8.12.B</a>: Ecological succession and ecosystem disruption.</li><li><a href="https://www.nextgenscience.org/dci-arrangement/ms-ls2-ecosystems-interactions-energy-and-dynamics" target="_blank" rel="noopener">NGSS MS-LS2</a>: Ecosystem interactions, energy, and dynamics.</li><li><a href="https://www.nextgenscience.org/pe/hs-ls2-7-ecosystems-interactions-energy-and-dynamics" target="_blank" rel="noopener">NGSS HS-LS2-7</a>: Design, evaluate, and refine solutions to reduce human impacts on biodiversity.</li></ul></section>
-</main><script>function val(id){return document.getElementById(id).value.trim()}function buildEco(){let out=`# Source-Grounded Ecosystem Unit Helper
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,var(--white),var(--gray-light));color:var(--gray-dark);line-height:1.55}
+a{color:var(--green-dark);font-weight:700;text-decoration:underline;text-underline-offset:3px}.page{max-width:1180px;margin:0 auto;padding:24px}
+.hero{background:var(--green-dark);color:var(--white);border-radius:24px;padding:34px;box-shadow:var(--shadow)}.hero a{color:#fff}
+.kicker{display:inline-block;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);padding:8px 12px;border-radius:999px;font-size:.9rem;margin-bottom:16px}
+h1{margin:0 0 12px;font-size:clamp(2rem,4vw,3.4rem);line-height:1.05}h2{color:var(--green-dark);font-size:1.65rem;margin:32px 0 14px}h3{color:var(--green-dark);margin:0 0 8px}.subtitle{max-width:900px;margin:0;font-size:1.08rem;color:#eaf5ef}.note{margin-top:16px;background:rgba(255,255,255,.12);border-left:5px solid #bde5d1;padding:14px 16px;border-radius:12px}
+.card,.panel,.output{background:var(--white);border:1px solid var(--border);border-radius:20px;box-shadow:0 4px 18px rgba(0,0,0,.05);padding:20px;margin-top:18px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.full{grid-column:1/-1}
+label{display:block;font-weight:700;color:var(--green-dark);margin-bottom:6px}select,input,textarea{width:100%;border:1px solid var(--border);border-radius:12px;padding:12px;font:inherit;background:#fff;color:var(--gray-dark)}textarea{min-height:100px;resize:vertical}
+fieldset{border:1px solid var(--border);border-radius:16px;margin:0;padding:14px;background:#fafcfa}legend{font-weight:700;color:var(--green-dark);padding:0 8px}.check{display:flex;align-items:flex-start;gap:8px;margin:8px 0;font-weight:400;color:var(--gray-dark)}.check input{width:auto;margin-top:4px}
+.btnrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.btn{border:0;border-radius:999px;padding:11px 16px;font-weight:700;cursor:pointer;background:var(--green-dark);color:#fff}.btn.secondary{background:var(--gray-dark)}.btn.light{background:var(--green-soft);color:var(--green-dark);border:1px solid var(--border)}
+.output{background:#fff}.print-title{border-bottom:3px solid var(--green);padding-bottom:8px}.section{border-left:5px solid var(--green);background:var(--green-pale);border-radius:14px;padding:14px;margin:12px 0}ul,ol{margin-top:8px}.tag{display:inline-block;background:var(--green-soft);color:var(--green-dark);border:1px solid var(--border);border-radius:999px;padding:5px 10px;font-size:.85rem;font-weight:700;margin:3px}.footer{color:var(--gray);font-size:.9rem;text-align:center;margin:24px 0 8px}.small{font-size:.92rem;color:var(--gray)}.nav{margin-top:18px}.nav a{display:inline-block;margin:4px 8px 4px 0}
+@media(max-width:860px){.grid,.grid3{grid-template-columns:1fr}.hero{padding:26px}.page{padding:16px}}
+@media print{body{background:#fff}.page{max-width:none;padding:.35in}.hero,.card,.panel{display:none}.output{box-shadow:none;border:0;padding:0}.btnrow,.nav,.footer{display:none}a{color:var(--gray-dark);text-decoration:none}.section{break-inside:avoid}}
+</style>
+</head>
+<body>
+<main class="page">
+<section class="hero">
+  <div class="kicker">Builder Scenario Tool</div>
+  <h1>Ecosystem Unit Helper Builder</h1>
+  <p class="subtitle">A print-ready tool for Builders who need classroom products: station cards, differentiation supports, ACE reflections, and source-grounded AI hub guidance.</p>
+  <div class="note">Choose canned issues, standards, and product options. Then generate a printable result that can be copied, printed, or saved as a PDF from the browser.</div>
+  <div class="nav"><a href="index.html">← Back to Main Framework</a></div>
+</section>
 
-**Topic:** ${val('topic')||'Ecosystem topic'}
-**Grade band:** ${val('grade')}
+<section class="card"><h2 style="margin-top:0">Build the Unit Helper</h2>
+<div class="grid">
+<div><label for="grade">Grade / Course</label><select id="grade"><option>Grade 5 Science</option><option>Grade 6 Science</option><option>Grade 7 Science</option><option>Grade 8 Science</option><option>Biology</option><option>Environmental Science</option></select></div>
+<div><label for="focus">Ecosystem Focus</label><select id="focus"><option>Local watershed ecosystem</option><option>Food webs and energy flow</option><option>Population changes</option><option>Human impact on ecosystems</option><option>Biodiversity and stability</option></select></div>
+<div><label for="standards">Standards</label><select id="standards"><option>TEKS Science + NGSS LS2 Ecosystems</option><option>TEKS Science only</option><option>NGSS MS-LS2 Ecosystems</option><option>NGSS HS-LS2 Ecosystems</option></select></div>
+<div><label for="time">Class Time</label><select id="time"><option>45 minutes</option><option>60 minutes</option><option>90 minutes</option><option>Two class periods</option><option>One week mini-unit</option></select></div>
+<fieldset class="full"><legend>Common Classroom Problems</legend>
+<label class="check"><input type="checkbox" name="issues" value="reading" checked> Reading levels vary widely</label>
+<label class="check"><input type="checkbox" name="issues" value="vocab"> Students struggle with ecosystem vocabulary</label>
+<label class="check"><input type="checkbox" name="issues" value="misconception"> Students confuse food chains, food webs, and energy flow</label>
+<label class="check"><input type="checkbox" name="issues" value="screen"> Too much screen time; need hands-on work</label>
+<label class="check"><input type="checkbox" name="issues" value="evidence"> Students make claims without evidence</label>
+</fieldset>
+<fieldset class="full"><legend>Printable Products</legend>
+<label class="check"><input type="checkbox" name="products" value="unit" checked> Unit helper plan</label>
+<label class="check"><input type="checkbox" name="products" value="stations" checked> Station cards</label>
+<label class="check"><input type="checkbox" name="products" value="supports" checked> Differentiation supports</label>
+<label class="check"><input type="checkbox" name="products" value="ace" checked> ACE reflection sheet</label>
+<label class="check"><input type="checkbox" name="products" value="aihub"> Source-grounded AI hub instructions</label>
+</fieldset>
+<div class="full"><label for="sources">Approved Sources / Materials</label><textarea id="sources" placeholder="Example: textbook chapter, local watershed article, lab handout, map, data table"></textarea></div>
+</div><div class="btnrow"><button class="btn" onclick="generate()">Generate Unit Helper</button><button class="btn secondary" onclick="copyOutput()">Copy Product</button><button class="btn light" onclick="printOutput()">Print / Save PDF</button></div></section>
+<section id="output" class="output"><h2 class="print-title">Ecosystem Unit Helper Builder</h2><p class="small">Complete the form and click Generate Unit Helper.</p></section>
 
-## Approved Sources
-${val('sources')||'List only teacher-approved sources.'}
+<script>
+const CANNED = {
+  "reading": [
+    "Provide three teacher-reviewed reading versions: core, supported, and extension.",
+    "Pair text with diagrams and vocabulary previews.",
+    "Use AI to generate summaries only from approved sources, then teacher reviews before use."
+  ],
+  "vocab": [
+    "Create a word-sort with producer, consumer, decomposer, predator, prey, population, community, ecosystem.",
+    "Use picture cards and student-generated examples.",
+    "Require students to use vocabulary in a claim-evidence-reasoning explanation."
+  ],
+  "misconception": [
+    "Use a card sort comparing food chain, food web, and energy pyramid.",
+    "Ask students to trace matter and energy separately.",
+    "Use a misconception check before the exit ticket."
+  ],
+  "screen": [
+    "Use AI for preparation only, then shift to classroom observation, measurement, card sorts, and group modeling.",
+    "Limit device use to an 8-minute launch or source check.",
+    "Print station cards and data tables."
+  ],
+  "evidence": [
+    "Require CER: claim, evidence, reasoning.",
+    "Provide sentence stems tied to observations or data.",
+    "Add an evidence quality checklist."
+  ]
+};
 
-## AI Helper Rules
-- Answer only from approved sources.
-- Cite the source title or note when evidence is missing.
-- Ask students questions before giving explanations.
-- Generate supports, not final answers.
+function checkedValues(name){
+  return Array.from(document.querySelectorAll('input[name="'+name+'"]:checked')).map(x=>x.value);
+}
+function val(id){ return document.getElementById(id).value.trim(); }
+function list(items){ return "<ul>" + items.map(x=>"<li>"+x+"</li>").join("") + "</ul>"; }
+function tags(items){ return items.map(x=>"<span class='tag'>"+x+"</span>").join(" "); }
+function copyOutput(){
+  const text = document.getElementById('output').innerText;
+  navigator.clipboard.writeText(text).then(()=>alert('Printable product copied.'));
+}
+function printOutput(){ window.print(); }
 
-## Student Supports
-- Vocabulary preview
-- Reading guide
-- Lab role cards
-- Misconception checks
-- Extension question set
-- EL sentence stems
+function generate(){
+ const grade=val('grade'), focus=val('focus'), standards=val('standards'), time=val('time'), sources=val('sources')||"Teacher-approved readings, textbook pages, maps, data tables, and lab materials.";
+ const issues=checkedValues('issues'), products=checkedValues('products');
+ let out=`<h2 class="print-title">${grade}: Ecosystem Unit Helper</h2><p>${tags([focus, standards, time, "TEKS", standards.includes("NGSS")?"NGSS":"Local alignment"])}</p>
+ <div class="section"><h3>Standards Alignment Snapshot</h3><p><strong>TEKS:</strong> Align to the appropriate Texas science standards for ecosystems, organisms and environments, evidence-based explanations, and scientific practices.</p><p><strong>NGSS when appropriate:</strong> MS-LS2 / HS-LS2 ecosystem interactions, energy flow, matter cycling, biodiversity, and human impacts.</p></div>`;
+ if(products.includes('unit')){
+ out += `<div class="section"><h3>Unit Helper Plan</h3>${list(["Launch with a short AI-assisted source preview using approved materials only.","Move students into hands-on ecosystem modeling or local data analysis.","Require group explanation using claim-evidence-reasoning.","Close with ACE reflection: Articulate, Connect, Extend."])}</div>`;
+ }
+ out += `<div class="section"><h3>Problem Alternatives / Solutions</h3>${issues.map(k=>`<p><strong>Problem:</strong> ${document.querySelector('input[value="'+k+'"]').parentElement.textContent.trim()}</p>${list(CANNED[k])}`).join("")}</div>`;
+ if(products.includes('stations')){
+ out += `<div class="section"><h3>Printable Station Cards</h3><ol><li><strong>Vocabulary Sort:</strong> Match ecosystem terms to examples and non-examples.</li><li><strong>Food Web Build:</strong> Arrange organism cards and draw energy arrows.</li><li><strong>Evidence Table:</strong> Use local data to explain a population change.</li><li><strong>Human Impact Decision:</strong> Recommend an action and justify it with evidence.</li></ol></div>`;
+ }
+ if(products.includes('supports')){
+ out += `<div class="section"><h3>Differentiation Supports</h3>${list(["Core vocabulary bank","Sentence stems for CER","Challenge prompt: predict long-term system effects","Peer role cards: reader, evidence finder, model builder, skeptic","Teacher small-group reteach cue card"])}</div>`;
+ }
+ if(products.includes('ace')){
+ out += `<div class="section"><h3>ACE Reflection Sheet</h3>${list(["Articulate: What ecosystem relationship did you explain today?","Connect: How does this connect to a local ecosystem or prior science idea?","Extend: What would happen if one organism or condition changed?"])}</div>`;
+ }
+ if(products.includes('aihub')){
+ out += `<div class="section"><h3>Source-Grounded AI Hub Instructions</h3><p>Upload only approved sources: ${sources}</p>${list(["Tell the AI to answer only from uploaded sources.","Require citations or source labels in every answer.","Use the hub for vocabulary, review questions, and misconception checks, not final answers.","Teacher reviews outputs before student use."])}</div>`;
+ }
+ document.getElementById('output').innerHTML=out;
+}
 
-## Offline Investigation
-${val('offline')||'Define a hands-on investigation that happens away from the screen.'}
+</script>
 
-## Differentiation
-${val('diff')||'Identify needed supports.'}
-
-## ACE Reflection
-Articulate: What did you observe or learn?
-Connect: How does it connect to ${val('ace')||'the unit concept'}?
-Extend: What new question or action should come next?
-`;document.getElementById('out').textContent=out}function copyOut(id){navigator.clipboard.writeText(document.getElementById(id).textContent)}</script></body></html>
+<p class="footer">The Augmented K–16 AI Learning Framework | Product-Oriented Scenario Tools</p>
+</main>
+</body>
+</html>

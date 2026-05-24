@@ -1,14 +1,26 @@
-# Augmented K–16 AI Learning Framework Scenario Tools
+# K–16 AI Framework Product-Oriented Scenario Tools
 
-Open `index.html` first. Each role includes a linked scenario tool page.
+Open `index.html` first.
 
-Pages included:
-- index.html
-- ai-adoption-roadmap-builder.html
-- research-essay-redesign-tool.html
-- ecosystem-unit-helper-builder.html
-- third-thinker-debate-tool.html
-- parent-conference-simulator.html
-- misconception-grouping-tool.html
+This package includes six linked, self-contained HTML tools:
 
-All pages are self-contained HTML/CSS/JS files using green, grey, and white styling.
+1. `ai-adoption-roadmap-builder.html` — Leader
+2. `research-essay-redesign-tool.html` — Architect
+3. `ecosystem-unit-helper-builder.html` — Builder
+4. `third-thinker-debate-tool.html` — Orchestrator
+5. `parent-conference-simulator.html` — Apprentice
+6. `misconception-grouping-tool.html` — Agents
+
+Each tool now emphasizes printable, product-oriented outputs:
+- roadmaps
+- risk registers
+- assignment redesign plans
+- rubrics
+- station cards
+- evidence audits
+- meeting briefs
+- intervention group maps
+- exit tickets
+- family updates
+
+The pages are self-contained and use green, grey, and white styling.

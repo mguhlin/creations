@@ -1,31 +1,163 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>AI Adoption Roadmap Builder</title><style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Adoption Roadmap Builder</title>
+<style>
 :root{--green-dark:#1f4d3a;--green:#2f7d5a;--green-soft:#e8f3ee;--green-pale:#f4faf7;--gray-dark:#3d4543;--gray:#7b8582;--gray-light:#eef1f0;--white:#fff;--border:#d7dedb;--shadow:0 8px 24px rgba(31,77,58,.12)}
-*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,var(--white),var(--gray-light));color:var(--gray-dark);line-height:1.55}a{color:var(--green-dark);font-weight:700;text-decoration:underline;text-underline-offset:3px}.page{max-width:1180px;margin:0 auto;padding:24px}.hero{background:var(--green-dark);color:#fff;border-radius:24px;padding:36px;box-shadow:var(--shadow)}.adapted,.tag{display:inline-block;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);color:#fff;padding:8px 12px;border-radius:999px;font-size:.9rem;margin-bottom:18px}h1{margin:0 0 12px;font-size:clamp(2rem,4vw,3.5rem);line-height:1.05}h2,h3,h4{line-height:1.2}.subtitle{max-width:900px;margin:0;font-size:1.12rem;color:#eaf5ef}.note{margin-top:18px;background:rgba(255,255,255,.12);border-left:5px solid #bde5d1;padding:14px 16px;border-radius:12px;font-size:.95rem}.section-title{margin:36px 0 14px;color:var(--green-dark);font-size:1.7rem}.overview,.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}.mini-card,.framework-links,.adoption-card,.role-card,.flow,.implementation,.tool-card{background:#fff;border:1px solid var(--border);border-radius:22px;box-shadow:0 4px 18px rgba(0,0,0,.05)}.mini-card,.tool-card{border-radius:18px;padding:18px}.mini-card strong,.tool-card strong{color:var(--green-dark);display:block;margin-bottom:6px}.framework-links,.adoption-card,.flow{padding:22px;margin-top:20px}.adoption-grid,.adoption-domains{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:18px}.phase{background:var(--green-pale);border:1px solid var(--border);border-radius:16px;padding:14px}.phase-number{width:38px;height:38px;border-radius:50%;background:var(--green-dark);color:#fff;display:grid;place-items:center;font-weight:700;margin-bottom:10px}.phase h3{margin:0 0 8px;color:var(--green-dark);font-size:1rem}.phase p{margin:0;font-size:.92rem}.domain{border-left:5px solid var(--green);background:#fafcfa;border-radius:14px;padding:14px;border-top:1px solid var(--border);border-right:1px solid var(--border);border-bottom:1px solid var(--border)}.domain strong{color:var(--green-dark);display:block;margin-bottom:5px}.roles{display:grid;grid-template-columns:1fr;gap:18px}.role-card{overflow:hidden}.role-header{display:flex;gap:16px;align-items:flex-start;background:var(--green-soft);padding:20px;border-bottom:1px solid var(--border)}.badge{flex:0 0 auto;width:46px;height:46px;border-radius:14px;background:var(--green-dark);color:#fff;display:grid;place-items:center;font-weight:700;font-size:1.1rem}.role-header h3{margin:0;color:var(--green-dark);font-size:1.35rem}.role-header p{margin:4px 0 0;color:var(--gray-dark)}.role-body{padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:18px}.info-box{background:#fafcfa;border:1px solid var(--border);border-radius:16px;padding:16px}.info-box h4{margin:0 0 8px;color:var(--green);font-size:1rem;text-transform:uppercase;letter-spacing:.04em}ul{margin:8px 0 0 20px;padding:0}li{margin-bottom:8px}.skepticism{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:18px}.argument{border-left:5px solid var(--gray)}.counter{border-left:5px solid var(--green)}.scenario{grid-column:1/-1;background:var(--green-pale);border:1px solid var(--border);border-left:6px solid var(--green-dark);border-radius:18px;padding:18px}.scenario h4{margin:0 0 8px;color:var(--green-dark);font-size:1.05rem;text-transform:uppercase;letter-spacing:.04em}.scenario p{margin:8px 0}.scenario strong{color:var(--green-dark)}.flow-grid{display:grid;gap:12px}.flow-step{display:grid;grid-template-columns:160px 1fr;gap:16px;align-items:center;padding:16px;border-radius:16px;background:var(--gray-light);border:1px solid var(--border)}.flow-role{color:#fff;background:var(--green-dark);padding:10px 12px;border-radius:12px;font-weight:700;text-align:center}.implementation{background:var(--green-dark);color:#fff;padding:26px;margin:28px 0}.implementation h2{margin-top:0}.implementation a{color:#fff;text-decoration-color:#bde5d1}.footer{color:var(--gray);font-size:.9rem;margin:24px 0 8px;text-align:center}.pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.pill{background:var(--green-soft);color:var(--green-dark);border:1px solid var(--border);border-radius:999px;padding:6px 10px;font-size:.88rem;font-weight:600}.btn{display:inline-block;background:var(--green-dark);color:#fff!important;text-decoration:none;border:0;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer}.btn.secondary{background:var(--green)}label{display:block;font-weight:700;color:var(--green-dark);margin-top:12px}input,select,textarea{width:100%;padding:10px;border:1px solid var(--border);border-radius:10px;font:inherit;background:#fff}textarea{min-height:92px}pre.output{white-space:pre-wrap;background:#f7faf8;border:1px solid var(--border);border-radius:16px;padding:16px;min-height:120px}.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}.nav{margin-top:18px}.nav a{color:#fff;margin-right:14px}.toplink{margin-bottom:16px}@media(max-width:980px){.adoption-grid,.adoption-domains,.cards{grid-template-columns:1fr 1fr}}@media(max-width:860px){.overview,.role-body,.skepticism,.two{grid-template-columns:1fr}.flow-step{grid-template-columns:1fr}.hero{padding:26px}}@media(max-width:620px){.adoption-grid,.adoption-domains,.cards{grid-template-columns:1fr}.page{padding:16px}}@media print{body{background:#fff}.page{max-width:none;padding:.5in}.hero,.role-card,.flow,.implementation,.framework-links,.adoption-card,.tool-card{box-shadow:none;break-inside:avoid}a{color:var(--green-dark)}}
-</style></head><body><main class="page"><p class="toplink"><a href="index.html">← Back to main framework</a></p>
-<section class="hero"><div class="tag">Leader Tool</div><h1>AI Adoption Roadmap Builder</h1><p class="subtitle">Create a practical district or campus AI launch plan connected to the Five Phases of School AI Adoption, TCEA PROTECT, and SHINE.</p><div class="note">Use this with district teams, campus leaders, librarians, instructional coaches, and technology staff.</div></section>
-<section class="tool-card"><h2 class="section-title" style="margin-top:0">Build the Roadmap</h2><div class="two"><div><label>Organization / campus</label><input id="org" placeholder="Example: Green Valley ISD"><label>Current adoption phase</label><select id="phase"><option>1. AI Secured</option><option>2. AI Exploration</option><option>3. AI Pilot Programs</option><option>4. AI Unification</option><option>5. AI Everywhere</option></select><label>Primary audience</label><select id="audience"><option>District leadership</option><option>Campus administrators</option><option>Teachers</option><option>Librarians</option><option>Technology staff</option><option>Parents and community</option></select><label>Main concern</label><textarea id="concern" placeholder="Example: Staff want to use AI, but we do not have clear privacy guardrails."></textarea></div><div><label>Approved or proposed tools</label><textarea id="tools" placeholder="Example: ChatGPT Enterprise, Gemini for Education, NotebookLM, BoodleBox"></textarea><label>Privacy notes</label><textarea id="privacy" placeholder="Example: No student PII in non-approved tools; use district-managed accounts only."></textarea><label>First 30-day action</label><textarea id="action" placeholder="Example: Run optional sandbox sessions focused on administrative workload relief."></textarea></div></div><p><button class="btn" onclick="buildRoadmap()">Generate Roadmap</button> <button class="btn secondary" onclick="copyOut('out')">Copy</button></p><pre class="output" id="out"></pre></section>
-<section class="framework-links"><h2 class="section-title" style="margin-top:0">Standards and Framework Connections</h2><ul><li><a href="https://tea.texas.gov/academics/curriculum-standards/teks-review/texas-essential-knowledge-and-skills" target="_blank" rel="noopener">TEKS</a>: Use as the local alignment anchor for district-approved instructional use.</li><li><a href="https://blog.tcea.org/student-privacy-shield-tcea-protect/" target="_blank" rel="noopener">TCEA PROTECT Rubric</a>: Review privacy, safety, transparency, access, and risk.</li><li><a href="https://blog.tcea.org/shine-lighting-the-way-to-responsible-ai-adoption/" target="_blank" rel="noopener">SHINE Framework</a>: Keep adoption safe, human-centered, instructionally grounded, and ethical.</li><li><a href="https://blog.tcea.org/responsible-ai-adoption/" target="_blank" rel="noopener">Five Phases of School AI Adoption</a>: Use to diagnose current readiness and next steps.</li></ul></section>
-</main><script>function val(id){return document.getElementById(id).value.trim()}function buildRoadmap(){let org=val('org')||'Our organization';let out=`# AI Adoption Roadmap: ${org}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,var(--white),var(--gray-light));color:var(--gray-dark);line-height:1.55}
+a{color:var(--green-dark);font-weight:700;text-decoration:underline;text-underline-offset:3px}.page{max-width:1180px;margin:0 auto;padding:24px}
+.hero{background:var(--green-dark);color:var(--white);border-radius:24px;padding:34px;box-shadow:var(--shadow)}.hero a{color:#fff}
+.kicker{display:inline-block;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);padding:8px 12px;border-radius:999px;font-size:.9rem;margin-bottom:16px}
+h1{margin:0 0 12px;font-size:clamp(2rem,4vw,3.4rem);line-height:1.05}h2{color:var(--green-dark);font-size:1.65rem;margin:32px 0 14px}h3{color:var(--green-dark);margin:0 0 8px}.subtitle{max-width:900px;margin:0;font-size:1.08rem;color:#eaf5ef}.note{margin-top:16px;background:rgba(255,255,255,.12);border-left:5px solid #bde5d1;padding:14px 16px;border-radius:12px}
+.card,.panel,.output{background:var(--white);border:1px solid var(--border);border-radius:20px;box-shadow:0 4px 18px rgba(0,0,0,.05);padding:20px;margin-top:18px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.full{grid-column:1/-1}
+label{display:block;font-weight:700;color:var(--green-dark);margin-bottom:6px}select,input,textarea{width:100%;border:1px solid var(--border);border-radius:12px;padding:12px;font:inherit;background:#fff;color:var(--gray-dark)}textarea{min-height:100px;resize:vertical}
+fieldset{border:1px solid var(--border);border-radius:16px;margin:0;padding:14px;background:#fafcfa}legend{font-weight:700;color:var(--green-dark);padding:0 8px}.check{display:flex;align-items:flex-start;gap:8px;margin:8px 0;font-weight:400;color:var(--gray-dark)}.check input{width:auto;margin-top:4px}
+.btnrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.btn{border:0;border-radius:999px;padding:11px 16px;font-weight:700;cursor:pointer;background:var(--green-dark);color:#fff}.btn.secondary{background:var(--gray-dark)}.btn.light{background:var(--green-soft);color:var(--green-dark);border:1px solid var(--border)}
+.output{background:#fff}.print-title{border-bottom:3px solid var(--green);padding-bottom:8px}.section{border-left:5px solid var(--green);background:var(--green-pale);border-radius:14px;padding:14px;margin:12px 0}ul,ol{margin-top:8px}.tag{display:inline-block;background:var(--green-soft);color:var(--green-dark);border:1px solid var(--border);border-radius:999px;padding:5px 10px;font-size:.85rem;font-weight:700;margin:3px}.footer{color:var(--gray);font-size:.9rem;text-align:center;margin:24px 0 8px}.small{font-size:.92rem;color:var(--gray)}.nav{margin-top:18px}.nav a{display:inline-block;margin:4px 8px 4px 0}
+@media(max-width:860px){.grid,.grid3{grid-template-columns:1fr}.hero{padding:26px}.page{padding:16px}}
+@media print{body{background:#fff}.page{max-width:none;padding:.35in}.hero,.card,.panel{display:none}.output{box-shadow:none;border:0;padding:0}.btnrow,.nav,.footer{display:none}a{color:var(--gray-dark);text-decoration:none}.section{break-inside:avoid}}
+</style>
+</head>
+<body>
+<main class="page">
+<section class="hero">
+  <div class="kicker">Leader Scenario Tool</div>
+  <h1>AI Adoption Roadmap Builder</h1>
+  <p class="subtitle">A print-ready planning tool for Leaders who need alternatives to common AI adoption problems, not just policy language.</p>
+  <div class="note">Choose canned issues, standards, and product options. Then generate a printable result that can be copied, printed, or saved as a PDF from the browser.</div>
+  <div class="nav"><a href="index.html">← Back to Main Framework</a></div>
+</section>
 
-**Current phase:** ${val('phase')}
-**Primary audience:** ${val('audience')}
+<section class="card">
+<h2 style="margin-top:0">Build the Roadmap</h2>
+<div class="grid">
+ <div><label for="district">District / Organization</label><input id="district" placeholder="Example: Sample ISD"></div>
+ <div><label for="phase">Current Adoption Phase</label><select id="phase">
+  <option>AI Secured</option><option>AI Exploration</option><option>AI Pilot Programs</option><option>AI Unification</option><option>AI Everywhere</option>
+ </select></div>
+ <div><label for="audience">Primary Audience</label><select id="audience"><option>Cabinet / Senior Leadership</option><option>Campus Administrators</option><option>Teachers and Librarians</option><option>Parents and Community</option><option>Board of Trustees</option></select></div>
+ <div><label for="timeline">Planning Window</label><select id="timeline"><option>30 days</option><option>60 days</option><option>90 days</option><option>Semester</option><option>School Year</option></select></div>
+ <fieldset class="full"><legend>Common Issues to Address</legend>
+  <label class="check"><input type="checkbox" name="issues" value="privacy" checked> Student privacy and data handling uncertainty</label>
+  <label class="check"><input type="checkbox" name="issues" value="policy"> No clear staff/student AI policy</label>
+  <label class="check"><input type="checkbox" name="issues" value="accounts"> Personal accounts used instead of managed accounts</label>
+  <label class="check"><input type="checkbox" name="issues" value="skepticism"> Staff concern about screen time or academic dishonesty</label>
+  <label class="check"><input type="checkbox" name="issues" value="community"> Parent/community questions about AI use</label>
+ </fieldset>
+ <fieldset class="full"><legend>Products to Include</legend>
+  <label class="check"><input type="checkbox" name="products" value="roadmap" checked> 30/60/90 roadmap</label>
+  <label class="check"><input type="checkbox" name="products" value="risk" checked> Risk register with alternatives</label>
+  <label class="check"><input type="checkbox" name="products" value="comm" checked> Stakeholder communication checklist</label>
+  <label class="check"><input type="checkbox" name="products" value="pilot"> Pilot selection criteria</label>
+  <label class="check"><input type="checkbox" name="products" value="training"> Staff sandbox training menu</label>
+ </fieldset>
+ <div class="full"><label for="notes">Local Notes</label><textarea id="notes" placeholder="Add local tools, policies, contacts, or constraints."></textarea></div>
+</div>
+<div class="btnrow"><button class="btn" onclick="generate()">Generate Printable Roadmap</button><button class="btn secondary" onclick="copyOutput()">Copy Product</button><button class="btn light" onclick="printOutput()">Print / Save PDF</button></div>
+</section>
+<section id="output" class="output">
+<h2 class="print-title">AI Adoption Roadmap Builder</h2>
+<p class="small">Complete the form and click Generate Printable Roadmap.</p>
+</section>
 
-## Current Concern
-${val('concern')||'Clarify the main concern before launch.'}
+<script>
+const CANNED = {
+  "privacy": {
+    "issue": "Student privacy and data handling uncertainty",
+    "alternative": "Use only approved enterprise tools for sensitive data; keep student PII out of public/free tools; require data processing agreement review before adoption.",
+    "actions": [
+      "Review tools with the TCEA PROTECT Rubric.",
+      "Publish a staff-facing list of approved, limited-use, and prohibited AI uses.",
+      "Create a one-page parent explanation of what data is and is not entered into AI tools."
+    ]
+  },
+  "policy": {
+    "issue": "No clear staff/student AI policy",
+    "alternative": "Start with guidance rather than a punitive ban; clarify acceptable use, prohibited data, citation expectations, and teacher discretion.",
+    "actions": [
+      "Draft an AI use matrix for staff, students, and administrators.",
+      "Add academic integrity examples by grade band.",
+      "Create a review cadence for policy updates."
+    ]
+  },
+  "accounts": {
+    "issue": "Personal accounts used instead of managed accounts",
+    "alternative": "Move high-use staff to managed accounts with privacy controls and disable classroom use of unmanaged tools when sensitive data is involved.",
+    "actions": [
+      "Inventory current AI account use.",
+      "Identify departments needing enterprise access.",
+      "Create sign-on and account lifecycle procedures."
+    ]
+  },
+  "skepticism": {
+    "issue": "Staff concern about screen time or academic dishonesty",
+    "alternative": "Begin with workload relief and analog-first classroom examples instead of requiring student-facing AI use.",
+    "actions": [
+      "Offer optional sandbox sessions.",
+      "Model AI as a launchpad for discussion, writing, and hands-on work.",
+      "Share examples of process-based assessment."
+    ]
+  },
+  "community": {
+    "issue": "Parent/community questions about AI use",
+    "alternative": "Communicate early, plainly, and repeatedly; distinguish staff productivity use from student-facing use.",
+    "actions": [
+      "Publish a family FAQ.",
+      "Host a short community information session.",
+      "Share opt-in pilot details before expansion."
+    ]
+  }
+};
 
-## Proposed Tools
-${val('tools')||'List only locally approved or pilot-approved tools.'}
+function checkedValues(name){
+  return Array.from(document.querySelectorAll('input[name="'+name+'"]:checked')).map(x=>x.value);
+}
+function val(id){ return document.getElementById(id).value.trim(); }
+function list(items){ return "<ul>" + items.map(x=>"<li>"+x+"</li>").join("") + "</ul>"; }
+function tags(items){ return items.map(x=>"<span class='tag'>"+x+"</span>").join(" "); }
+function copyOutput(){
+  const text = document.getElementById('output').innerText;
+  navigator.clipboard.writeText(text).then(()=>alert('Printable product copied.'));
+}
+function printOutput(){ window.print(); }
 
-## Privacy and Safety Guardrails
-${val('privacy')||'Review tools with TCEA PROTECT and local student data privacy requirements.'}
+function generate(){
+ const org = val('district') || "District / Organization";
+ const phase = val('phase'), audience=val('audience'), timeline=val('timeline');
+ const issues = checkedValues('issues'), products=checkedValues('products'), notes=val('notes');
+ let selected = issues.map(k=>CANNED[k]);
+ let out = `<h2 class="print-title">${org}: AI Adoption Roadmap</h2>
+ <p>${tags([phase,audience,timeline,"TCEA PROTECT","SHINE","Five Phases"])}</p>
+ <div class="section"><h3>Decision Summary</h3><p><strong>Current phase:</strong> ${phase}. <strong>Primary audience:</strong> ${audience}. <strong>Planning window:</strong> ${timeline}.</p>
+ <p>This roadmap emphasizes privacy, managed implementation, staff trust, and human-centered adoption.</p></div>`;
+ if(products.includes('roadmap')){
+ out += `<div class="section"><h3>Roadmap</h3><ol>
+ <li><strong>First 30 days:</strong> Inventory AI tools, identify sensitive data risks, name accountable owners, and publish temporary guardrails.</li>
+ <li><strong>Next 30 days:</strong> Select pilots, provide sandbox training, define parent communication, and align classroom use to policy.</li>
+ <li><strong>Next 30 days:</strong> Review evidence, update guidance, scale approved practices, and retire unsafe or redundant uses.</li>
+ </ol></div>`;
+ }
+ if(products.includes('risk')){
+ out += `<div class="section"><h3>Risk Register and Alternatives</h3>${selected.map(x=>`<p><strong>Issue:</strong> ${x.issue}<br><strong>Alternative / Solution:</strong> ${x.alternative}</p>${list(x.actions)}`).join("")}</div>`;
+ }
+ if(products.includes('comm')){
+ out += `<div class="section"><h3>Stakeholder Communication Checklist</h3>${list(["What AI tools are approved?","What student data is protected?","How will teachers disclose AI-supported activities?","How can families ask questions?","When will the district review results?"])}</div>`;
+ }
+ if(products.includes('pilot')){
+ out += `<div class="section"><h3>Pilot Selection Criteria</h3>${list(["Clear instructional or operational problem","Approved privacy posture","Human review before decisions","Evidence of reduced workload or improved learning process","Plan for parent/staff communication"])}</div>`;
+ }
+ if(products.includes('training')){
+ out += `<div class="section"><h3>Staff Sandbox Training Menu</h3>${list(["Email and communication drafting","Lesson differentiation without student PII","Assessment redesign for process evidence","AI limitations: bias, hallucination, weak evidence","Analog-first AI lesson design"])}</div>`;
+ }
+ out += `<div class="section"><h3>Local Notes</h3><p>${notes || "Add district contacts, approved tools, review dates, and local constraints."}</p></div>`;
+ document.getElementById('output').innerHTML = out;
+}
 
-## First 30 Days
-${val('action')||'Launch a low-stakes sandbox focused on staff workload relief.'}
+</script>
 
-## Next Steps
-1. Confirm phase using the Five Phases of School AI Adoption.
-2. Review tools with the TCEA PROTECT Rubric.
-3. Frame the rollout with SHINE.
-4. Publish role-specific guidance for staff.
-5. Share a parent/community FAQ.
-`;document.getElementById('out').textContent=out}function copyOut(id){navigator.clipboard.writeText(document.getElementById(id).textContent)}</script></body></html>
+<p class="footer">The Augmented K–16 AI Learning Framework | Product-Oriented Scenario Tools</p>
+</main>
+</body>
+</html>
