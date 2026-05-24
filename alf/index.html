@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Augmented K–16 AI Learning Framework</title>
+<style>
+  :root {
+    --green-dark: #1f4d3a;
+    --green: #2f7d5a;
+    --green-soft: #e8f3ee;
+    --gray-dark: #3d4543;
+    --gray: #7b8582;
+    --gray-light: #eef1f0;
+    --white: #ffffff;
+    --border: #d7dedb;
+    --shadow: 0 8px 24px rgba(31, 77, 58, 0.12);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(180deg, var(--white), var(--gray-light));
+    color: var(--gray-dark);
+    line-height: 1.55;
+  }
+
+  .page {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+
+  .hero {
+    background: var(--green-dark);
+    color: var(--white);
+    border-radius: 24px;
+    padding: 36px;
+    box-shadow: var(--shadow);
+  }
+
+  .adapted {
+    display: inline-block;
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.28);
+    color: var(--white);
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    margin-bottom: 18px;
+  }
+
+  h1 {
+    margin: 0 0 12px;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    line-height: 1.05;
+  }
+
+  .subtitle {
+    max-width: 850px;
+    margin: 0;
+    font-size: 1.12rem;
+    color: #eaf5ef;
+  }
+
+  .note {
+    margin-top: 18px;
+    background: rgba(255,255,255,0.12);
+    border-left: 5px solid #bde5d1;
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+  }
+
+  .section-title {
+    margin: 36px 0 14px;
+    color: var(--green-dark);
+    font-size: 1.7rem;
+  }
+
+  .overview {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 22px;
+  }
+
+  .mini-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 18px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+  }
+
+  .mini-card strong {
+    color: var(--green-dark);
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .roles {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .role-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.05);
+  }
+
+  .role-header {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    background: var(--green-soft);
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .badge {
+    flex: 0 0 auto;
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: var(--green-dark);
+    color: var(--white);
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+
+  .role-header h3 {
+    margin: 0;
+    color: var(--green-dark);
+    font-size: 1.35rem;
+  }
+
+  .role-header p {
+    margin: 4px 0 0;
+    color: var(--gray-dark);
+  }
+
+  .role-body {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
+  .info-box {
+    background: #fafcfa;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px;
+  }
+
+  .info-box h4 {
+    margin: 0 0 8px;
+    color: var(--green);
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  ul {
+    margin: 8px 0 0 20px;
+    padding: 0;
+  }
+
+  li {
+    margin-bottom: 8px;
+  }
+
+  .skepticism {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
+  .argument {
+    border-left: 5px solid var(--gray);
+  }
+
+  .counter {
+    border-left: 5px solid var(--green);
+  }
+
+  .flow {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+  }
+
+  .flow-grid {
+    display: grid;
+    gap: 12px;
+  }
+
+  .flow-step {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 16px;
+    align-items: center;
+    padding: 16px;
+    border-radius: 16px;
+    background: var(--gray-light);
+    border: 1px solid var(--border);
+  }
+
+  .flow-role {
+    color: var(--white);
+    background: var(--green-dark);
+    padding: 10px 12px;
+    border-radius: 12px;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .implementation {
+    background: var(--green-dark);
+    color: var(--white);
+    border-radius: 24px;
+    padding: 26px;
+    margin: 28px 0;
+  }
+
+  .implementation h2 {
+    margin-top: 0;
+  }
+
+  .implementation ol {
+    margin-bottom: 0;
+  }
+
+  .implementation li {
+    margin-bottom: 12px;
+  }
+
+  .footer {
+    color: var(--gray);
+    font-size: 0.9rem;
+    margin: 24px 0 8px;
+    text-align: center;
+  }
+
+  .pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .pill {
+    background: var(--green-soft);
+    color: var(--green-dark);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.88rem;
+    font-weight: 600;
+  }
+
+  @media (max-width: 860px) {
+    .overview,
+    .role-body,
+    .skepticism {
+      grid-template-columns: 1fr;
+    }
+
+    .flow-step {
+      grid-template-columns: 1fr;
+    }
+
+    .hero {
+      padding: 26px;
+    }
+  }
+
+  @media print {
+    body {
+      background: var(--white);
+    }
+
+    .page {
+      max-width: none;
+      padding: 0.5in;
+    }
+
+    .hero,
+    .role-card,
+    .flow,
+    .implementation {
+      box-shadow: none;
+      break-inside: avoid;
+    }
+  }
+</style>
+</head>
+
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="adapted">Adapted from Paul Roetzer’s version for business</div>
+      <h1>The Augmented K–16 AI Learning Framework</h1>
+      <p class="subtitle">
+        A practical framework for helping K–16 leaders, instructional designers, educators, facilitators,
+        novice teachers, and AI agents use artificial intelligence to strengthen learning while protecting
+        human judgment, collaboration, privacy, and instructional purpose.
+      </p>
+      <div class="note">
+        Tool names are included as examples of current frontier AI ecosystems. Schools and universities should
+        always substitute locally approved tools based on privacy agreements, licensing, accessibility, and policy.
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Framework at a Glance</h2>
+      <div class="overview">
+        <div class="mini-card">
+          <strong>Human-centered</strong>
+          AI should reduce routine workload and increase time for feedback, relationships, discussion, and creation.
+        </div>
+        <div class="mini-card">
+          <strong>Pedagogy-first</strong>
+          AI use should be tied to clear instructional strategies such as SOLO, UDL, scaffolding, inquiry, and reflection.
+        </div>
+        <div class="mini-card">
+          <strong>Screen-time aware</strong>
+          AI should often launch offline thinking, peer collaboration, hands-on work, and analog learning experiences.
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">The Six Roles</h2>
+
+      <div class="roles">
+
+        <article class="role-card">
+          <div class="role-header">
+            <div class="badge">1</div>
+            <div>
+              <h3>The Leader</h3>
+              <p>The visionary and policy maker who builds capacity, guardrails, and infrastructure.</p>
+            </div>
+          </div>
+          <div class="role-body">
+            <div class="info-box">
+              <h4>Core Objective</h4>
+              <p>Build systemic capacity and infrastructure for human-centric, AI-assisted learning environments.</p>
+            </div>
+            <div class="info-box">
+              <h4>Example Tools</h4>
+              <div class="pill-row">
+                <span class="pill">ChatGPT 5.5 Enterprise</span>
+                <span class="pill">Claude Enterprise</span>
+                <span class="pill">BoodleBox</span>
+              </div>
+            </div>
+            <div class="info-box">
+              <h4>Instructional Strategy</h4>
+              <p>Systemic change management and learning loop architecture: short, continuous improvement cycles instead of one-time workshops.</p>
+            </div>
+            <div class="info-box">
+              <h4>Tactical Tasks</h4>
+              <ul>
+                <li>Draft AI safety, data privacy, and academic integrity guardrails.</li>
+                <li>Audit data infrastructure for student privacy compliance.</li>
+                <li>Coordinate cross-department AI workflows for Curriculum, HR, IT, and administration.</li>
+              </ul>
+            </div>
+            <div class="skepticism">
+              <div class="info-box argument">
+                <h4>The Concern</h4>
+                <p>“This is just another ed-tech fad that adds more screen time and isolates students.”</p>
+              </div>
+              <div class="info-box counter">
+                <h4>The Response</h4>
+                <p>Frame AI as an active conversational workspace that helps students move faster from screen-based preparation to real-world creation, critique, and collaboration.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="role-card">
+          <div class="role-header">
+            <div class="badge">2</div>
+            <div>
+              <h3>The Architect</h3>
+              <p>The instructional designer and curriculum specialist who protects rigor.</p>
+            </div>
+          </div>
+          <div class="role-body">
+            <div class="info-box">
+              <h4>Core Objective</h4>
+              <p>Integrate rigorous pedagogy into human-machine workflows while avoiding the offloading paradox.</p>
+            </div>
+            <div class="info-box">
+              <h4>Example Tools</h4>
+              <div class="pill-row">
+                <span class="pill">Claude Opus 4.7</span>
+                <span class="pill">Gemini 3.5 Pro</span>
+              </div>
+            </div>
+            <div class="info-box">
+              <h4>Instructional Strategy</h4>
+              <p>SOLO Taxonomy and Universal Design for Learning help ensure AI acts as a scaffold, not a shortcut.</p>
+            </div>
+            <div class="info-box">
+              <h4>Tactical Tasks</h4>
+              <ul>
+                <li>Map standards, curriculum, and assessments into coherent AI-supported learning pathways.</li>
+                <li>Build multimodal lesson options using audio, visual, and text-based supports.</li>
+                <li>Create rubrics that assess process, critique, revision, and AI interaction.</li>
+              </ul>
+            </div>
+            <div class="skepticism">
+              <div class="info-box argument">
+                <h4>The Concern</h4>
+                <p>“AI is destroying student writing and critical thinking.”</p>
+              </div>
+              <div class="info-box counter">
+                <h4>The Response</h4>
+                <p>Design hybrid workflows: brief AI-assisted analysis followed by Socratic seminar, handwritten synthesis, oral defense, or peer critique.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="role-card">
+          <div class="role-header">
+            <div class="badge">3</div>
+            <div>
+              <h3>The Builder</h3>
+              <p>The AI-empowered educator who creates classroom scaffolds and custom assistants.</p>
+            </div>
+          </div>
+          <div class="role-body">
+            <div class="info-box">
+              <h4>Core Objective</h4>
+              <p>Create useful AI assistants, prompt templates, and classroom supports without needing a coding background.</p>
+            </div>
+            <div class="info-box">
+              <h4>Example Tools</h4>
+              <div class="pill-row">
+                <span class="pill">NotebookLM</span>
+                <span class="pill">Claude Projects</span>
+                <span class="pill">Images 2.0</span>
+              </div>
+            </div>
+            <div class="info-box">
+              <h4>Instructional Strategy</h4>
+              <p>Scaffolding and differentiated instruction, with intentionally limited AI roles that guide rather than replace thinking.</p>
+            </div>
+            <div class="info-box">
+              <h4>Tactical Tasks</h4>
+              <ul>
+                <li>Create source-grounded study hubs from approved readings and primary sources.</li>
+                <li>Generate classroom-ready visuals, diagrams, and infographics.</li>
+                <li>Build lesson-tuning agents aligned to local demographics, curriculum, and student needs.</li>
+              </ul>
+            </div>
+            <div class="skepticism">
+              <div class="info-box argument">
+                <h4>The Concern</h4>
+                <p>“Students are already glued to devices.”</p>
+              </div>
+              <div class="info-box counter">
+                <h4>The Response</h4>
+                <p>Build AI tools that launch analog work: role plays, experiments, classroom measurements, discussion prompts, and hands-on tasks.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="role-card">
+          <div class="role-header">
+            <div class="badge">4</div>
+            <div>
+              <h3>The Orchestrator</h3>
+              <p>The facilitator who manages active learning environments.</p>
+            </div>
+          </div>
+          <div class="role-body">
+            <div class="info-box">
+              <h4>Core Objective</h4>
+              <p>Guide students toward verification, critique, collaboration, and visible thinking instead of simple AI answers.</p>
+            </div>
+            <div class="info-box">
+              <h4>Example Tools</h4>
+              <div class="pill-row">
+                <span class="pill">ChatGPT 5.5 Instant</span>
+                <span class="pill">Gemini 3.5</span>
+              </div>
+            </div>
+            <div class="info-box">
+              <h4>Instructional Strategy</h4>
+              <p>Inquiry-based learning and visible learning make student reasoning observable, discussable, and improvable.</p>
+            </div>
+            <div class="info-box">
+              <h4>Tactical Tasks</h4>
+              <ul>
+                <li>Have students critique AI-generated arguments for bias, gaps, and missing evidence.</li>
+                <li>Use formative data to adjust instruction during a lesson.</li>
+                <li>Facilitate peer dialogue around ethical, civic, and real-world implications.</li>
+              </ul>
+            </div>
+            <div class="skepticism">
+              <div class="info-box argument">
+                <h4>The Concern</h4>
+                <p>“Technology reduces meaningful human interaction.”</p>
+              </div>
+              <div class="info-box counter">
+                <h4>The Response</h4>
+                <p>Use AI as a “third thinker” that gives students something to challenge, revise, debate, and improve together.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="role-card">
+          <div class="role-header">
+            <div class="badge">5</div>
+            <div>
+              <h3>The Apprentice</h3>
+              <p>The novice educator or pre-service teacher developing clinical judgment.</p>
+            </div>
+          </div>
+          <div class="role-body">
+            <div class="info-box">
+              <h4>Core Objective</h4>
+              <p>Develop expert judgment, situational awareness, and relational empathy while using AI to reduce tactical workload.</p>
+            </div>
+            <div class="info-box">
+              <h4>Example Tools</h4>
+              <div class="pill-row">
+                <span class="pill">ChatGPT 5.5</span>
+                <span class="pill">Claude Opus 4.7</span>
+              </div>
+            </div>
+            <div class="info-box">
+              <h4>Instructional Strategy</h4>
+              <p>Cognitive apprenticeship and reflective practice shift attention from paperwork mechanics to adaptive classroom decision-making.</p>
+            </div>
+            <div class="info-box">
+              <h4>Tactical Tasks</h4>
+              <ul>
+                <li>Compare multiple AI-generated lesson variations and defend the strongest choice.</li>
+                <li>Roleplay parent conferences, student behavior scenarios, and de-escalation conversations.</li>
+                <li>Analyze practice-teaching transcripts to improve questioning and feedback.</li>
+              </ul>
+            </div>
+            <div class="skepticism">
+              <div class="info-box argument">
+                <h4>The Concern</h4>
+                <p>“New teachers rely too much on technology and do not know how to command a room.”</p>
+              </div>
+              <div class="info-box counter">
+                <h4>The Response</h4>
+                <p>Use AI to reduce nighttime administrative screen time so novice teachers can focus more on students, relationships, and live instruction.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="role-card">
+          <div class="role-header">
+            <div class="badge">6</div>
+            <div>
+              <h3>The Agents</h3>
+              <p>The digital scaffolds that work behind the scenes.</p>
+            </div>
+          </div>
+          <div class="role-body">
+            <div class="info-box">
+              <h4>Core Objective</h4>
+              <p>Execute real-time differentiation, formative analysis, administrative support, and targeted tactical tasks.</p>
+            </div>
+            <div class="info-box">
+              <h4>Example Tools</h4>
+              <div class="pill-row">
+                <span class="pill">Claude Opus 4.7</span>
+                <span class="pill">BoodleBox</span>
+                <span class="pill">Multi-agent Workflows</span>
+              </div>
+            </div>
+            <div class="info-box">
+              <h4>Instructional Strategy</h4>
+              <p>Formative assessment delivery and adaptive learning pathways help teachers respond to needs without isolating students.</p>
+            </div>
+            <div class="info-box">
+              <h4>Tactical Tasks</h4>
+              <ul>
+                <li>Rewrite complex texts at multiple reading levels.</li>
+                <li>Group open-ended quiz responses by misconception.</li>
+                <li>Draft standards-aligned family updates and multilingual communications.</li>
+              </ul>
+            </div>
+            <div class="skepticism">
+              <div class="info-box argument">
+                <h4>The Concern</h4>
+                <p>“Adaptive software traps students in individualized digital silos.”</p>
+              </div>
+              <div class="info-box counter">
+                <h4>The Response</h4>
+                <p>Use agents in the background to create physical collaboration groups, targeted teacher conferences, and offline intervention pathways.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section class="flow">
+      <h2 class="section-title" style="margin-top:0;">Implementation Flow</h2>
+      <div class="flow-grid">
+        <div class="flow-step">
+          <div class="flow-role">Leader</div>
+          <div>Sets secure infrastructure and frames AI as an active workspace, not passive ed-tech.</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-role">Architect</div>
+          <div>Builds SOLO, UDL, and process-based assessment into AI-supported learning workflows.</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-role">Builder</div>
+          <div>Creates guardrailed bots, source-grounded hubs, visual supports, and differentiated materials.</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-role">Orchestrator</div>
+          <div>Uses AI as a catalyst for critique, peer dialogue, verification, and visible thinking.</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-role">Apprentice</div>
+          <div>Uses AI to practice clinical judgment while reducing low-value administrative workload.</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-role">Agents</div>
+          <div>Handle background differentiation, grouping, summarization, and communication support.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="implementation">
+      <h2>Actionable Starting Points</h2>
+      <ol>
+        <li><strong>Start with policy:</strong> Define approved tools, privacy expectations, data-use limits, and academic integrity guidance.</li>
+        <li><strong>Start with workload relief:</strong> Let skeptical educators first use AI for administrative burdens before classroom implementation.</li>
+        <li><strong>Design for process:</strong> Assess prompts, revisions, critique, reflection, oral defense, and evidence of thinking.</li>
+        <li><strong>Compress screen time:</strong> Use brief AI interactions to prepare students for discussion, writing, building, testing, and collaboration.</li>
+        <li><strong>Make limitations visible:</strong> Teach students to identify hallucinations, bias, weak evidence, missing context, and flawed reasoning.</li>
+        <li><strong>Keep humans in charge:</strong> AI can assist, sort, draft, and scaffold, but educators remain responsible for judgment, care, context, and final decisions.</li>
+      </ol>
+    </section>
+
+    <p class="footer">
+      The Augmented K–16 AI Learning Framework | Green, Grey, and White Edition
+    </p>
+  </main>
+</body>
+</html>
