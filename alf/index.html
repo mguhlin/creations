@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>The Augmented K–16 AI Learning Framework</title>
+
 <style>
   :root {
     --green-dark: #1f4d3a;
@@ -72,8 +73,14 @@
     line-height: 1.05;
   }
 
+  h2,
+  h3,
+  h4 {
+    line-height: 1.2;
+  }
+
   .subtitle {
-    max-width: 880px;
+    max-width: 900px;
     margin: 0;
     font-size: 1.12rem;
     color: #eaf5ef;
@@ -101,12 +108,21 @@
     margin-top: 22px;
   }
 
-  .mini-card {
+  .mini-card,
+  .framework-links,
+  .adoption-card,
+  .role-card,
+  .flow,
+  .implementation {
     background: var(--white);
     border: 1px solid var(--border);
+    border-radius: 22px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.05);
+  }
+
+  .mini-card {
     border-radius: 18px;
     padding: 18px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
   }
 
   .mini-card strong {
@@ -116,16 +132,77 @@
   }
 
   .framework-links {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 22px;
     padding: 22px;
-    box-shadow: 0 4px 18px rgba(0,0,0,0.05);
     margin-top: 20px;
   }
 
   .framework-links ul {
     margin-top: 8px;
+  }
+
+  .adoption-card {
+    padding: 22px;
+    margin-top: 20px;
+  }
+
+  .adoption-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .phase {
+    background: var(--green-pale);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 14px;
+  }
+
+  .phase-number {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--green-dark);
+    color: var(--white);
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .phase h3 {
+    margin: 0 0 8px;
+    color: var(--green-dark);
+    font-size: 1rem;
+  }
+
+  .phase p {
+    margin: 0;
+    font-size: 0.92rem;
+  }
+
+  .adoption-domains {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .domain {
+    border-left: 5px solid var(--green);
+    background: #fafcfa;
+    border-radius: 14px;
+    padding: 14px;
+    border-top: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .domain strong {
+    color: var(--green-dark);
+    display: block;
+    margin-bottom: 5px;
   }
 
   .roles {
@@ -135,11 +212,7 @@
   }
 
   .role-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 22px;
     overflow: hidden;
-    box-shadow: 0 4px 18px rgba(0,0,0,0.05);
   }
 
   .role-header {
@@ -247,11 +320,8 @@
   }
 
   .flow {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 24px;
     padding: 24px;
-    box-shadow: var(--shadow);
+    margin-top: 24px;
   }
 
   .flow-grid {
@@ -282,7 +352,6 @@
   .implementation {
     background: var(--green-dark);
     color: var(--white);
-    border-radius: 24px;
     padding: 26px;
     margin: 28px 0;
   }
@@ -328,6 +397,13 @@
     font-weight: 600;
   }
 
+  @media (max-width: 980px) {
+    .adoption-grid,
+    .adoption-domains {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
   @media (max-width: 860px) {
     .overview,
     .role-body,
@@ -341,6 +417,17 @@
 
     .hero {
       padding: 26px;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .adoption-grid,
+    .adoption-domains {
+      grid-template-columns: 1fr;
+    }
+
+    .page {
+      padding: 16px;
     }
   }
 
@@ -358,9 +445,14 @@
     .role-card,
     .flow,
     .implementation,
-    .framework-links {
+    .framework-links,
+    .adoption-card {
       box-shadow: none;
       break-inside: avoid;
+    }
+
+    a {
+      color: var(--green-dark);
     }
   }
 </style>
@@ -401,9 +493,10 @@
       </div>
 
       <div class="framework-links">
-        <h2 class="section-title" style="margin-top:0;">Instructional Framework Links</h2>
+        <h2 class="section-title" style="margin-top:0;">Instructional, Privacy, and AI Adoption Links</h2>
         <p>
-          The framework is designed to connect AI use with learning science and practical classroom moves, not tool use for its own sake.
+          This framework connects AI use with learning science, privacy protection, responsible adoption,
+          and practical classroom implementation.
         </p>
         <ul>
           <li>
@@ -424,7 +517,89 @@
             </a>
             — a research-informed resource for exploring instructional influences and effect sizes.
           </li>
+          <li>
+            <a href="https://blog.tcea.org/student-privacy-shield-tcea-protect/" target="_blank" rel="noopener">
+              TCEA PROTECT Rubric
+            </a>
+            — a student privacy and AI safety lens for evaluating tools, practices, and implementation risks.
+          </li>
+          <li>
+            <a href="https://blog.tcea.org/shine-lighting-the-way-to-responsible-ai-adoption/" target="_blank" rel="noopener">
+              SHINE Framework
+            </a>
+            — a responsible AI adoption framework for helping educators focus on safety, human judgment, instructional purpose, and ethical use.
+          </li>
+          <li>
+            <a href="https://blog.tcea.org/responsible-ai-adoption/" target="_blank" rel="noopener">
+              Five Phases of School AI Adoption
+            </a>
+            — a district-level adoption model moving from AI restriction to thoughtful integration across policy, accounts, guidance, curriculum, and community outreach.
+          </li>
         </ul>
+      </div>
+    </section>
+
+    <section class="adoption-card">
+      <h2 class="section-title" style="margin-top:0;">Five Phases of School District AI Adoption</h2>
+      <p>
+        AI adoption is not a single decision. Schools and universities move through phases as they clarify policy,
+        manage accounts, publish guidance, integrate curriculum, and communicate with the community.
+      </p>
+
+      <div class="adoption-grid">
+        <div class="phase">
+          <div class="phase-number">1</div>
+          <h3>AI Secured</h3>
+          <p>AI tools are restricted or blocked while basic safety, policy, and communication questions are addressed.</p>
+        </div>
+
+        <div class="phase">
+          <div class="phase-number">2</div>
+          <h3>AI Exploration</h3>
+          <p>Teachers and staff begin limited exploration with guardrails, informal pilots, and early parent communication.</p>
+        </div>
+
+        <div class="phase">
+          <div class="phase-number">3</div>
+          <h3>AI Pilot Programs</h3>
+          <p>Selected classrooms or programs test approved AI uses with clearer guidance, accounts, and learning goals.</p>
+        </div>
+
+        <div class="phase">
+          <div class="phase-number">4</div>
+          <h3>AI Unification</h3>
+          <p>District-wide policies, account management, curriculum use, and guidance become coordinated and consistent.</p>
+        </div>
+
+        <div class="phase">
+          <div class="phase-number">5</div>
+          <h3>AI Everywhere</h3>
+          <p>AI is integrated into policies, procedures, curriculum, teaching, learning, and community education.</p>
+        </div>
+      </div>
+
+      <h3 class="section-title" style="font-size:1.3rem;">Adoption Domains to Monitor</h3>
+      <div class="adoption-domains">
+        <div class="domain">
+          <strong>District Policy</strong>
+          From prohibition to integrated policies and procedures.
+        </div>
+        <div class="domain">
+          <strong>Account Management</strong>
+          From no accounts to secure, district-managed AI access.
+        </div>
+        <div class="domain">
+          <strong>District Guidance</strong>
+          From enforcement-only guidance to role-specific support for all stakeholders.
+        </div>
+        <div class="domain">
+          <strong>Curriculum Integration</strong>
+          From no curriculum use to appropriate, standards-aligned AI learning workflows.
+        </div>
+        <div class="domain">
+          <strong>Community Outreach</strong>
+          From basic notification to ongoing parent and community education.
+        </div>
       </div>
     </section>
 
@@ -492,12 +667,27 @@
               <h4>Scenario: District AI Launch</h4>
               <p>
                 A superintendent wants to allow AI use but is facing questions from parents, teachers, IT, and legal counsel.
-                The Leader creates a phased AI implementation plan with approved tools, data privacy boundaries,
-                staff training expectations, and classroom-use guardrails.
+                The Leader uses the
+                <a href="https://blog.tcea.org/responsible-ai-adoption/" target="_blank" rel="noopener">
+                  Five Phases of School AI Adoption
+                </a>
+                to determine whether the district is in AI Secured, AI Exploration, AI Pilot Programs,
+                AI Unification, or AI Everywhere.
               </p>
               <p>
                 <strong>AI use:</strong> The Leader uses an enterprise AI workspace to draft policy language, compare privacy risks,
                 and create role-specific guidance for teachers, librarians, counselors, and administrators.
+              </p>
+              <p>
+                <strong>Privacy and safety check:</strong> The district reviews tools and workflows using the
+                <a href="https://blog.tcea.org/student-privacy-shield-tcea-protect/" target="_blank" rel="noopener">
+                  TCEA PROTECT Rubric
+                </a>
+                and frames implementation through the
+                <a href="https://blog.tcea.org/shine-lighting-the-way-to-responsible-ai-adoption/" target="_blank" rel="noopener">
+                  SHINE Framework
+                </a>
+                so AI adoption remains safe, purposeful, transparent, and human-centered.
               </p>
               <p>
                 <strong>Human-centered outcome:</strong> The launch begins with staff workload relief and voluntary sandbox sessions,
@@ -887,7 +1077,7 @@
       <div class="flow-grid">
         <div class="flow-step">
           <div class="flow-role">Leader</div>
-          <div>Sets secure infrastructure and frames AI as an active workspace, not passive ed-tech.</div>
+          <div>Sets secure infrastructure, uses PROTECT and SHINE, and frames AI as an active workspace, not passive ed-tech.</div>
         </div>
         <div class="flow-step">
           <div class="flow-role">Architect</div>
@@ -915,30 +1105,74 @@
     <section class="implementation">
       <h2>Actionable Starting Points</h2>
       <ol>
-        <li><strong>Start with policy:</strong> Define approved tools, privacy expectations, data-use limits, and academic integrity guidance.</li>
-        <li><strong>Start with workload relief:</strong> Let skeptical educators first use AI for administrative burdens before classroom implementation.</li>
         <li>
-          <strong>Design for process:</strong> Assess prompts, revisions, critique, reflection, oral defense, and evidence of thinking using
-          <a href="https://pamhook.com/solo-taxonomy/" target="_blank" rel="noopener">SOLO-style progression</a>.
+          <strong>Identify your adoption phase:</strong> Use the
+          <a href="https://blog.tcea.org/responsible-ai-adoption/" target="_blank" rel="noopener">
+            Five Phases of School AI Adoption
+          </a>
+          to determine whether your organization is in AI Secured, AI Exploration, AI Pilot Programs,
+          AI Unification, or AI Everywhere.
+        </li>
+        <li>
+          <strong>Start with policy and privacy:</strong> Define approved tools, privacy expectations,
+          data-use limits, and academic integrity guidance using the
+          <a href="https://blog.tcea.org/student-privacy-shield-tcea-protect/" target="_blank" rel="noopener">
+            TCEA PROTECT Rubric
+          </a>
+          as a review lens.
+        </li>
+        <li>
+          <strong>Use a responsible adoption frame:</strong> Apply the
+          <a href="https://blog.tcea.org/shine-lighting-the-way-to-responsible-ai-adoption/" target="_blank" rel="noopener">
+            SHINE Framework
+          </a>
+          to keep AI use safe, human-centered, instructionally meaningful, and ethically grounded.
+        </li>
+        <li>
+          <strong>Start with workload relief:</strong> Let skeptical educators first use AI for administrative burdens
+          before classroom implementation.
+        </li>
+        <li>
+          <strong>Design for process:</strong> Assess prompts, revisions, critique, reflection, oral defense,
+          and evidence of thinking using
+          <a href="https://pamhook.com/solo-taxonomy/" target="_blank" rel="noopener">
+            SOLO-style progression
+          </a>.
         </li>
         <li>
           <strong>Use ACE reflection:</strong> Ask learners to
-          <a href="https://mguhlin.org/2026/05/13/kpft-radio-guest-ai-and-learning/" target="_blank" rel="noopener">articulate, connect, and extend</a>
+          <a href="https://mguhlin.org/2026/05/13/kpft-radio-guest-ai-and-learning/" target="_blank" rel="noopener">
+            articulate, connect, and extend
+          </a>
           what they learned after AI-supported activities.
         </li>
         <li>
-          <strong>Use high-impact strategies:</strong> Prioritize teacher clarity, feedback, formative assessment, visible thinking,
-          and other
-          <a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">high-effect size instructional strategies</a>.
+          <strong>Use high-impact strategies:</strong> Prioritize teacher clarity, feedback, formative assessment,
+          visible thinking, and other
+          <a href="https://www.visiblelearningmetax.com/Influences" target="_blank" rel="noopener">
+            high-effect size instructional strategies
+          </a>.
         </li>
-        <li><strong>Compress screen time:</strong> Use brief AI interactions to prepare students for discussion, writing, building, testing, and collaboration.</li>
-        <li><strong>Make limitations visible:</strong> Teach students to identify hallucinations, bias, weak evidence, missing context, and flawed reasoning.</li>
-        <li><strong>Keep humans in charge:</strong> AI can assist, sort, draft, and scaffold, but educators remain responsible for judgment, care, context, and final decisions.</li>
+        <li>
+          <strong>Compress screen time:</strong> Use brief AI interactions to prepare students for discussion,
+          writing, building, testing, and collaboration.
+        </li>
+        <li>
+          <strong>Make limitations visible:</strong> Teach students to identify hallucinations, bias, weak evidence,
+          missing context, and flawed reasoning.
+        </li>
+        <li>
+          <strong>Keep humans in charge:</strong> AI can assist, sort, draft, and scaffold, but educators remain
+          responsible for judgment, care, context, and final decisions.
+        </li>
       </ol>
     </section>
 
     <p class="footer">
-      The Augmented K–16 AI Learning Framework | Adapted from <b><a href="https://www.linkedin.com/in/paulroetzer/" target="_blank">Paul Roetzer</a></b> via <a href="https://www.linkedin.com/posts/paulroetzer_i-spend-a-lot-of-time-thinking-about-the-share-7464282930035601408-3aMh/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAz3Gl0BHNiB7SO9JwAKhZypvyJFYVyGEus" target="_blank"><b>LinkedIn</b></a>(SmarterX) by Miguel Guhlin (mguhlin.org)
+      The Augmented K–16 AI Learning Framework | Includes links to SOLO, ACE, Visible Learning,
+      TCEA PROTECT, SHINE, and the Five Phases of School AI Adoption | Adapted from
+      <b><a href="https://www.linkedin.com/in/paulroetzer/" target="_blank" rel="noopener">Paul Roetzer</a></b>
+      for K–16 education by Miguel Guhlin (mguhlin.org)
     </p>
 
   </main>
