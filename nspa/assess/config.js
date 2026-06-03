@@ -11,7 +11,7 @@
 
 const NSPA_CONFIG = {
   // Example: "https://script.google.com/macros/s/AKfy.....abc/exec"
-  SHEET_ENDPOINT: "",
+  SHEET_ENDPOINT: "https://script.google.com/macros/s/AKfycbw8-CD98Yxa6w1X0H-ZUQZrzR8x1nG7LjTWOhP8Be25NntR7v5VYOiwb4t9BHlxd3Q4/exec",
 
   // Cosmetic only: how many simulated peers to show if there is
   // no saved data yet (or while running in demo mode).
