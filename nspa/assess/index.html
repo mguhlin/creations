@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI for Marketing &amp; Engagement — Self-Assessment</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --forest:        #2D6A4F;
+  --forest-deep:   #1B4332;
+  --forest-mid:    #40916C;
+  --forest-light:  #74C69D;
+  --forest-pale:   #B7E4C7;
+  --forest-faint:  #D8F3DC;
+  --charcoal:      #232526;
+  --charcoal-mid:  #2F3133;
+  --charcoal-soft: #414447;
+  --charcoal-dim:  #5A5F64;
+  --charcoal-mute: #8A9099;
+  --cream:         #F2EFE9;
+  --white:         #FFFFFF;
+  --gold:          #D4AC0D;
+  --gold-light:    #F1C40F;
+  --border-dark:   rgba(116,198,157,0.15);
+  --border-mid:    rgba(116,198,157,0.08);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--charcoal);
+  color: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+/* ---------- TOP NAV ---------- */
+.topnav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  height: 56px;
+  background: rgba(27,67,50,0.96);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border-dark);
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+  gap: 16px;
+}
+.topnav .brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--forest-pale);
+  text-decoration: none;
+}
+.topnav .brand span { color: var(--forest-light); }
+.topnav .nav-meta {
+  margin-left: auto;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--charcoal-mute);
+}
+
+/* ---------- STAGE SYSTEM ---------- */
+main {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  padding: 56px 0 0;
+}
+.stage { display: none; }
+.stage.active { display: block; animation: fadeUp 0.5s ease both; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.wrap {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+
+/* ---------- INTRO HERO ---------- */
+.hero {
+  min-height: calc(100vh - 56px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  padding: 40px 24px;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 40%, rgba(45,106,79,0.28) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 40% at 15% 75%, rgba(27,67,50,0.45) 0%, transparent 55%),
+    radial-gradient(ellipse 30% 35% at 85% 20%, rgba(64,145,108,0.15) 0%, transparent 50%);
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(116,198,157,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(116,198,157,0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+  pointer-events: none;
+}
+.hero-inner { position: relative; z-index: 1; max-width: 760px; }
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(45,106,79,0.2);
+  border: 1px solid rgba(116,198,157,0.3);
+  border-radius: 100px;
+  padding: 6px 18px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--forest-light);
+  margin-bottom: 28px;
+}
+.eyebrow::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--forest-light);
+  animation: pulse 2.5s ease infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.4; transform: scale(0.7); }
+}
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.4rem, 6vw, 4.4rem);
+  font-weight: 900;
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  color: var(--cream);
+  margin-bottom: 22px;
+}
+.hero-title em { color: var(--forest-light); font-style: italic; }
+.hero-desc {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: rgba(212,228,199,0.75);
+  max-width: 580px;
+  margin: 0 auto 14px;
+}
+.hero-fine {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  color: var(--charcoal-mute);
+  max-width: 540px;
+  margin: 0 auto 36px;
+  line-height: 1.7;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--forest);
+  color: var(--cream);
+  border: 1px solid rgba(116,198,157,0.3);
+  border-radius: 10px;
+  padding: 14px 32px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.15s;
+}
+.btn:hover { background: var(--forest-mid); transform: translateY(-2px); }
+.btn:active { transform: translateY(0); }
+.btn.ghost {
+  background: transparent;
+  color: var(--forest-pale);
+}
+.btn.ghost:hover { background: rgba(116,198,157,0.1); }
+.btn[disabled] { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+.hero-tally {
+  display: flex;
+  justify-content: center;
+  gap: 36px;
+  flex-wrap: wrap;
+  margin-top: 44px;
+}
+.tally-item { text-align: center; }
+.tally-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--forest-light);
+  line-height: 1;
+  display: block;
+}
+.tally-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--charcoal-mute);
+  margin-top: 6px;
+}
+
+/* ---------- QUIZ ---------- */
+.q-progress {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 36px;
+}
+.q-progress .seg {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--charcoal-soft);
+  transition: background 0.3s;
+}
+.q-progress .seg.done { background: var(--forest-light); }
+.q-progress .seg.current { background: var(--forest-mid); }
+
+.q-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--forest-light);
+  margin-bottom: 14px;
+}
+.q-text {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.5rem, 3.6vw, 2.1rem);
+  font-weight: 700;
+  line-height: 1.18;
+  color: var(--cream);
+  margin-bottom: 8px;
+}
+.q-sub {
+  font-size: 0.9rem;
+  color: rgba(212,228,199,0.6);
+  margin-bottom: 30px;
+}
+.opts { display: flex; flex-direction: column; gap: 12px; }
+.opt {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: var(--charcoal-mid);
+  border: 1px solid var(--border-dark);
+  border-radius: 12px;
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.1s;
+}
+.opt:hover { border-color: rgba(116,198,157,0.4); background: #34373a; }
+.opt.selected {
+  border-color: var(--forest-light);
+  background: rgba(45,106,79,0.22);
+}
+.opt .marker {
+  flex-shrink: 0;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--charcoal-mute);
+  margin-top: 2px;
+  transition: border-color 0.2s, background 0.2s;
+  position: relative;
+}
+.opt.selected .marker {
+  border-color: var(--forest-light);
+  background: var(--forest-light);
+}
+.opt.selected .marker::after {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  background: var(--charcoal);
+}
+.opt .opt-text {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--cream);
+}
+.q-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 36px;
+  gap: 16px;
+}
+
+/* ---------- LOADING ---------- */
+.loading-box {
+  text-align: center;
+  padding: 80px 20px;
+}
+.spinner {
+  width: 48px; height: 48px;
+  border: 3px solid rgba(116,198,157,0.18);
+  border-top-color: var(--forest-light);
+  border-radius: 50%;
+  margin: 0 auto 24px;
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-msg {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  color: var(--forest-pale);
+}
+
+/* ---------- RESULTS ---------- */
+.result-head { text-align: center; margin-bottom: 12px; }
+.result-id {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  color: var(--charcoal-mute);
+  text-transform: uppercase;
+}
+.result-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 900;
+  color: var(--cream);
+  margin: 10px 0 6px;
+}
+.result-arch {
+  font-size: 1.05rem;
+  color: var(--forest-light);
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.sec-divider {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin: 48px 0 28px;
+}
+.sec-divider-line { flex: 1; height: 1px; background: rgba(116,198,157,0.12); }
+.sec-divider-lbl {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(116,198,157,0.5);
+}
+
+/* chart */
+.chart-card {
+  background: var(--charcoal-mid);
+  border: 1px solid var(--border-dark);
+  border-radius: 16px;
+  padding: 28px 24px 20px;
+}
+.chart-axis-note {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  color: var(--charcoal-mute);
+  text-align: center;
+  margin-top: 6px;
+}
+svg.scatter { width: 100%; height: auto; display: block; }
+.legend {
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 18px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.04em;
+  color: rgba(212,228,199,0.7);
+}
+.legend .li { display: flex; align-items: center; gap: 8px; }
+.legend .dot { width: 12px; height: 12px; border-radius: 50%; }
+.legend .dot.you {
+  width: 14px; height: 14px;
+  background: var(--gold);
+  box-shadow: 0 0 0 3px rgba(212,172,13,0.3);
+}
+.legend .dot.other { background: var(--forest-light); opacity: 0.7; }
+
+/* insight + growth cards */
+.card {
+  background: var(--charcoal-mid);
+  border: 1px solid var(--border-dark);
+  border-radius: 14px;
+  padding: 26px 26px;
+  margin-bottom: 16px;
+}
+.card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--forest-pale);
+  margin-bottom: 12px;
+}
+.card p { font-size: 0.95rem; line-height: 1.7; color: rgba(212,228,199,0.82); margin-bottom: 10px; }
+.card p:last-child { margin-bottom: 0; }
+
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.score-box {
+  background: var(--charcoal-mid);
+  border: 1px solid var(--border-dark);
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+.score-box .lbl {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--charcoal-mute);
+  margin-bottom: 8px;
+}
+.score-box .val {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--forest-light);
+  line-height: 1;
+}
+.score-box .val small { font-size: 0.8rem; color: var(--charcoal-mute); font-family: 'DM Mono', monospace; }
+.score-bar {
+  height: 6px;
+  background: var(--charcoal-soft);
+  border-radius: 3px;
+  margin-top: 12px;
+  overflow: hidden;
+}
+.score-bar span { display: block; height: 100%; background: var(--forest-mid); border-radius: 3px; }
+
+.grow-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+.grow-list li {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(212,228,199,0.85);
+}
+.grow-list .step-num {
+  flex-shrink: 0;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--forest-deep);
+  border: 1px solid rgba(116,198,157,0.3);
+  color: var(--forest-light);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 1px;
+}
+
+.banner {
+  border-radius: 12px;
+  padding: 16px 20px;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+.banner.warn {
+  background: rgba(212,172,13,0.1);
+  border: 1px solid rgba(212,172,13,0.35);
+  color: var(--gold-light);
+}
+.banner code {
+  font-family: 'DM Mono', monospace;
+  background: rgba(0,0,0,0.25);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 0.78rem;
+}
+.result-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+/* ---------- FOOTER ---------- */
+footer {
+  position: relative;
+  z-index: 1;
+  background: var(--forest-deep);
+  border-top: 1px solid rgba(116,198,157,0.12);
+  padding: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.footer-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
+  color: var(--forest-pale);
+}
+.footer-copy {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  color: rgba(116,198,157,0.4);
+}
+
+@media (max-width: 860px) {
+  .topnav { padding: 0 18px; }
+  .wrap { padding: 32px 18px 64px; }
+  .score-grid { grid-template-columns: 1fr; }
+  footer { flex-direction: column; align-items: flex-start; gap: 12px; padding: 24px 20px; }
+  .q-nav { flex-direction: column-reverse; }
+  .q-nav .btn { width: 100%; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="#" class="brand" onclick="goStage('intro');return false;">NSPA<span> · AI Pulse</span></a>
+  <span class="nav-meta" id="navMeta">Anonymous Self-Assessment</span>
+</nav>
+
+<main>
+
+  <!-- ===== INTRO ===== -->
+  <section class="stage active" id="stage-intro">
+    <div class="hero">
+      <div class="hero-inner">
+        <div class="eyebrow">AI for Marketing &amp; Engagement</div>
+        <h1 class="hero-title">Where do you stand on <em>Gen AI</em>?</h1>
+        <p class="hero-desc">Five quick questions. See where you land among other scholarship providers on a live map of how the field is using generative AI for marketing and engagement, then get a profile and concrete next steps.</p>
+        <p class="hero-fine">Fully anonymous. No name, no email. You are assigned a random ID, and only your answers and scores are stored. Takes about two minutes.</p>
+        <button class="btn" onclick="startQuiz()">Start the assessment →</button>
+        <div class="hero-tally">
+          <div class="tally-item"><span class="tally-num">5</span><div class="tally-label">Questions</div></div>
+          <div class="tally-item"><span class="tally-num" id="tallyCount">—</span><div class="tally-label">Responses so far</div></div>
+          <div class="tally-item"><span class="tally-num">2</span><div class="tally-label">Minutes</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== QUIZ ===== -->
+  <section class="stage" id="stage-quiz">
+    <div class="wrap">
+      <div class="q-progress" id="qProgress"></div>
+      <div id="qContainer"></div>
+      <div class="q-nav">
+        <button class="btn ghost" id="backBtn" onclick="prevQ()">← Back</button>
+        <button class="btn" id="nextBtn" onclick="nextQ()" disabled>Next →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== LOADING ===== -->
+  <section class="stage" id="stage-loading">
+    <div class="wrap">
+      <div class="loading-box">
+        <div class="spinner"></div>
+        <div class="loading-msg" id="loadingMsg">Saving your anonymous response…</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== RESULTS ===== -->
+  <section class="stage" id="stage-results">
+    <div class="wrap">
+      <div class="result-head">
+        <div class="result-id">Your anonymous ID · <span id="resId">—</span></div>
+        <div class="result-title">Your AI &amp; Engagement Profile</div>
+        <div class="result-arch" id="resArch">—</div>
+      </div>
+
+      <div id="offlineBanner"></div>
+
+      <div class="sec-divider"><div class="sec-divider-line"></div><span class="sec-divider-lbl">The Field Map</span><div class="sec-divider-line"></div></div>
+      <div class="chart-card">
+        <div id="chartHolder"></div>
+        <div class="legend">
+          <div class="li"><span class="dot you"></span> You</div>
+          <div class="li"><span class="dot other"></span> Other providers (anonymous)</div>
+        </div>
+        <div class="chart-axis-note">Horizontal: how much you use Gen AI today &nbsp;·&nbsp; Vertical: how confident and responsible your practice is</div>
+      </div>
+
+      <div class="sec-divider"><div class="sec-divider-line"></div><span class="sec-divider-lbl">Your Scores</span><div class="sec-divider-line"></div></div>
+      <div class="score-grid" id="scoreGrid"></div>
+
+      <div class="sec-divider"><div class="sec-divider-line"></div><span class="sec-divider-lbl">Profile Insight</span><div class="sec-divider-line"></div></div>
+      <div class="card" id="insightCard"></div>
+
+      <div class="sec-divider"><div class="sec-divider-line"></div><span class="sec-divider-lbl">Ways to Grow</span><div class="sec-divider-line"></div></div>
+      <div class="card">
+        <h3>Your next steps with Gen AI</h3>
+        <ul class="grow-list" id="growList"></ul>
+      </div>
+
+      <div class="result-actions">
+        <button class="btn ghost" onclick="restart()">↺ Retake</button>
+        <button class="btn" onclick="window.print()">⇩ Save / print results</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-brand">NSPA · AI Pulse</div>
+  <div class="footer-copy">Anonymous · No PII collected · Built for scholarship providers</div>
+</footer>
+
+<script src="config.js"></script>
+<script src="assessment.js"></script>
+</body>
+</html>
