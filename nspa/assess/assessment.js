@@ -283,34 +283,34 @@ function drawScatter(peers, me) {
   const py = v => (H - pad) - (v / 100) * (H - pad * 2);
 
   const grid = [25, 50, 75].map(g => `
-    <line x1="${px(g)}" y1="${pad}" x2="${px(g)}" y2="${H-pad}" stroke="rgba(116,198,157,0.08)" />
-    <line x1="${pad}" y1="${py(g)}" x2="${W-pad}" y2="${py(g)}" stroke="rgba(116,198,157,0.08)" />
+    <line x1="${px(g)}" y1="${pad}" x2="${px(g)}" y2="${H-pad}" stroke="rgba(26,43,94,0.07)" />
+    <line x1="${pad}" y1="${py(g)}" x2="${W-pad}" y2="${py(g)}" stroke="rgba(26,43,94,0.07)" />
   `).join('');
 
   // midpoint quadrant lines
   const mid = `
-    <line x1="${px(50)}" y1="${pad}" x2="${px(50)}" y2="${H-pad}" stroke="rgba(116,198,157,0.22)" stroke-dasharray="4 5"/>
-    <line x1="${pad}" y1="${py(50)}" x2="${W-pad}" y2="${py(50)}" stroke="rgba(116,198,157,0.22)" stroke-dasharray="4 5"/>`;
+    <line x1="${px(50)}" y1="${pad}" x2="${px(50)}" y2="${H-pad}" stroke="rgba(26,43,94,0.2)" stroke-dasharray="4 5"/>
+    <line x1="${pad}" y1="${py(50)}" x2="${W-pad}" y2="${py(50)}" stroke="rgba(26,43,94,0.2)" stroke-dasharray="4 5"/>`;
 
   const quadLabels = `
-    <text x="${px(73)}" y="${py(94)}" fill="rgba(116,198,157,0.35)" font-family="DM Mono, monospace" font-size="11" text-anchor="middle">TRUSTED STEWARD</text>
-    <text x="${px(27)}" y="${py(94)}" fill="rgba(116,198,157,0.35)" font-family="DM Mono, monospace" font-size="11" text-anchor="middle">CAREFUL BUILDER</text>
-    <text x="${px(73)}" y="${py(7)}" fill="rgba(116,198,157,0.35)" font-family="DM Mono, monospace" font-size="11" text-anchor="middle">FAST MOVER</text>
-    <text x="${px(27)}" y="${py(7)}" fill="rgba(116,198,157,0.35)" font-family="DM Mono, monospace" font-size="11" text-anchor="middle">CURIOUS NEWCOMER</text>`;
+    <text x="${px(73)}" y="${py(94)}" fill="rgba(71,85,105,0.55)" font-family="DM Mono, monospace" font-size="11" text-anchor="middle">TRUSTED STEWARD</text>
+    <text x="${px(27)}" y="${py(94)}" fill="rgba(71,85,105,0.55)" font-family="DM Mono, monospace" font-size="11" text-anchor="middle">CAREFUL BUILDER</text>
+    <text x="${px(73)}" y="${py(7)}" fill="rgba(71,85,105,0.55)" font-family="DM Mono, monospace" font-size="11" text-anchor="middle">FAST MOVER</text>
+    <text x="${px(27)}" y="${py(7)}" fill="rgba(71,85,105,0.55)" font-family="DM Mono, monospace" font-size="11" text-anchor="middle">CURIOUS NEWCOMER</text>`;
 
   const dots = peers.map(p =>
-    `<circle cx="${px(p.x)}" cy="${py(p.y)}" r="6" fill="#74C69D" opacity="0.42"/>`
+    `<circle cx="${px(p.x)}" cy="${py(p.y)}" r="6" fill="#0D9488" opacity="0.45"/>`
   ).join('');
 
   const youDot = `
-    <circle cx="${px(me.x)}" cy="${py(me.y)}" r="14" fill="rgba(212,172,13,0.25)"/>
-    <circle cx="${px(me.x)}" cy="${py(me.y)}" r="8" fill="#D4AC0D" stroke="#232526" stroke-width="2"/>
-    <text x="${px(me.x)}" y="${py(me.y) - 18}" fill="#F1C40F" font-family="DM Mono, monospace" font-size="13" font-weight="500" text-anchor="middle">YOU</text>`;
+    <circle cx="${px(me.x)}" cy="${py(me.y)}" r="15" fill="rgba(240,165,0,0.22)"/>
+    <circle cx="${px(me.x)}" cy="${py(me.y)}" r="8" fill="#F0A500" stroke="#FFFFFF" stroke-width="2.5"/>
+    <text x="${px(me.x)}" y="${py(me.y) - 19}" fill="#1A2B5E" font-family="DM Mono, monospace" font-size="13" font-weight="500" text-anchor="middle">YOU</text>`;
 
   // axes labels
   const axes = `
-    <text x="${W/2}" y="${H-8}" fill="#8A9099" font-family="DM Mono, monospace" font-size="11" text-anchor="middle">ADOPTION  ·  how much you use Gen AI →</text>
-    <text x="14" y="${H/2}" fill="#8A9099" font-family="DM Mono, monospace" font-size="11" text-anchor="middle" transform="rotate(-90 14 ${H/2})">CONFIDENCE &amp; RESPONSIBLE PRACTICE →</text>`;
+    <text x="${W/2}" y="${H-8}" fill="#64748B" font-family="DM Mono, monospace" font-size="11" text-anchor="middle">ADOPTION  ·  how much you use Gen AI →</text>
+    <text x="14" y="${H/2}" fill="#64748B" font-family="DM Mono, monospace" font-size="11" text-anchor="middle" transform="rotate(-90 14 ${H/2})">CONFIDENCE &amp; RESPONSIBLE PRACTICE →</text>`;
 
   document.getElementById('chartHolder').innerHTML =
     `<svg class="scatter" viewBox="0 0 ${W} ${H}" role="img" aria-label="Scatter plot of providers">
