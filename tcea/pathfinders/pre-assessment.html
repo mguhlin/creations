@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pre-Assessment &middot; SPR Pathfinders</title>
+<meta name="description" content="Complete the short pre-assessment and review the Pathfinder Capacity Matrix before the session.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>:root{
+  --navy:#0A3476;
+  --navy-dark:#071f4a;
+  --navy-mid:#12428f;
+  --gold:#FCB040;
+  --gold-light:#fdd17a;
+  --gold-pale:#FEF0D0;
+  --pale-navy:#D0D8F0;
+  --white:#ffffff;
+  --off-white:#f7f8fc;
+  --text:#1a1a2e;
+  --text-muted:#5a6680;
+  --border:#e2e7f5;
+  --teal:#0e6b8a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;color:var(--text);background:var(--off-white);line-height:1.65;font-size:18px;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'DM Serif Display',serif;color:var(--navy);line-height:1.18;font-weight:400}
+a{color:var(--navy-mid);text-decoration:none;border-bottom:1px solid var(--pale-navy);transition:.15s}
+a:hover{color:var(--gold);border-color:var(--gold)}
+
+.topbar{position:sticky;top:0;z-index:50;background:var(--navy-dark);box-shadow:0 2px 14px rgba(7,31,74,.28)}
+.topbar-inner{max-width:1120px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 20px;min-height:62px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:11px;color:var(--white);font-family:'DM Serif Display',serif;font-size:1.32rem;border:none;padding:11px 0}
+.brand:hover{color:var(--gold)}
+.brand .mark{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:8px;background:var(--gold);color:var(--navy-dark);font-family:'DM Serif Display',serif;font-size:1.05rem;letter-spacing:-1px}
+.navlinks{display:flex;gap:4px;flex-wrap:wrap}
+.navlinks a{color:#cdd7ef;border:none;font-size:.93rem;font-weight:500;padding:9px 13px;border-radius:7px}
+.navlinks a:hover{color:var(--white);background:var(--navy-mid)}
+.navlinks a.active{color:var(--navy-dark);background:var(--gold);font-weight:700}
+.navtoggle{display:none}
+
+.hero{background:radial-gradient(1100px 380px at 78% -8%,rgba(252,176,64,.16),transparent 60%),linear-gradient(160deg,var(--navy-dark),var(--navy) 75%);color:var(--white);padding:58px 20px 64px}
+.hero-inner{max-width:1000px;margin:0 auto}
+.eyebrow{display:inline-block;font-size:.78rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--navy-dark);background:var(--gold);padding:5px 13px;border-radius:100px;margin-bottom:18px}
+.hero h1{color:var(--white);font-size:clamp(2.1rem,5vw,3.3rem);max-width:18ch}
+.hero h1 em{color:var(--gold);font-style:italic}
+.hero .lede{color:#dfe6f7;font-size:1.18rem;margin-top:18px;max-width:60ch}
+.hero .quote{margin-top:26px;border-left:3px solid var(--gold);padding:4px 0 4px 18px;color:#eef2fc;font-style:italic;max-width:62ch}
+.hero .quote span{display:block;font-style:normal;color:var(--gold-light);font-weight:600;margin-top:6px;font-size:.95rem}
+
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+main{padding:46px 0 20px}
+section{margin-bottom:44px}
+.section-title{display:flex;align-items:baseline;gap:14px;margin-bottom:18px;border-bottom:2px solid var(--border);padding-bottom:10px}
+.section-title .num{font-family:'DM Serif Display',serif;color:var(--gold);font-size:1.6rem;line-height:1}
+.section-title h2{font-size:1.85rem}
+h3{font-size:1.28rem;margin:26px 0 8px;color:var(--navy)}
+p{margin:0 0 14px}
+ul,ol{margin:0 0 16px 1.25em}
+li{margin-bottom:8px}
+.muted{color:var(--text-muted)}
+.lead{font-size:1.12rem}
+
+figure{margin:22px 0}
+figure img,figure svg{width:100%;height:auto;border-radius:12px;border:1.5px solid var(--border);display:block;box-shadow:0 8px 26px rgba(10,52,118,.10);background:var(--white)}
+figcaption{font-size:.85rem;color:var(--text-muted);margin-top:8px;text-align:center}
+
+.card{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:22px 24px;margin-bottom:18px}
+.card h3{margin-top:0;display:flex;align-items:center;gap:10px}
+.card h3 .pill{font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:700;background:var(--gold);color:var(--navy-dark);border-radius:5px;padding:3px 9px;letter-spacing:.04em;text-transform:uppercase}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.grid .card{margin-bottom:0;height:100%}
+.tile{background:var(--white);border:1.5px solid var(--border);border-left:5px solid var(--gold);border-radius:10px;padding:20px 22px;transition:.18s;display:block;color:var(--text)}
+a.tile:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(10,52,118,.13);border-color:var(--border);border-left-color:var(--gold)}
+.tile h3{margin:0 0 6px;color:var(--navy)}
+.tile p{margin:0;color:var(--text-muted);font-size:.96rem}
+
+.callout{background:var(--gold-pale);border:1.5px solid var(--gold-light);border-radius:12px;padding:20px 24px;margin:22px 0}
+.callout strong{color:var(--navy)}
+.note{background:var(--white);border:1.5px solid var(--border);border-left:5px solid var(--teal);border-radius:10px;padding:18px 22px;margin:20px 0}
+
+blockquote{background:var(--white);border:1.5px solid var(--border);border-left:5px solid var(--navy);border-radius:10px;padding:18px 24px;margin:22px 0;font-style:italic;color:var(--text)}
+blockquote cite{display:block;font-style:normal;font-weight:600;color:var(--navy);margin-top:10px;font-size:.92rem}
+
+.timeline{position:relative;margin:18px 0 0;padding-left:30px;border-left:3px solid var(--pale-navy)}
+.tl-item{position:relative;margin-bottom:24px}
+.tl-item::before{content:"";position:absolute;left:-39px;top:5px;width:15px;height:15px;border-radius:50%;background:var(--gold);border:3px solid var(--white);box-shadow:0 0 0 2px var(--navy)}
+.tl-item .yr{font-family:'DM Serif Display',serif;color:var(--navy);font-size:1.15rem}
+.tl-item .yr b{color:var(--gold);font-style:normal}
+.tl-item p{margin:5px 0 0;color:var(--text);font-size:.98rem}
+
+.btnrow{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}
+.btn{display:inline-block;border-radius:8px;padding:11px 20px;font-weight:600;font-size:.96rem;border:1.5px solid transparent}
+.btn-gold{background:var(--gold);color:var(--navy-dark)}
+.btn-gold:hover{background:var(--gold-light);color:var(--navy-dark);border-color:var(--gold)}
+.btn-outline{border-color:var(--navy);color:var(--navy);background:var(--white)}
+.btn-outline:hover{background:var(--navy);color:var(--white);border-color:var(--navy)}
+
+footer{background:var(--navy-dark);color:#cdd7ef;margin-top:40px;padding:34px 20px 40px}
+footer .wrap{max-width:1000px}
+footer .footnav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+footer .footnav a{color:#cdd7ef;border:none;font-size:.92rem;font-weight:500;padding:6px 11px;border-radius:6px;background:rgba(255,255,255,.06)}
+footer .footnav a:hover{color:var(--navy-dark);background:var(--gold)}
+footer p{font-size:.86rem;color:#9fb0d6;margin:6px 0}
+footer a.inl{color:var(--gold-light);border:none}
+footer a.inl:hover{color:var(--gold)}
+
+@media(max-width:760px){
+  body{font-size:17px}
+  .navtoggle{display:inline-flex;align-items:center;gap:7px;background:var(--navy-mid);color:#fff;border:none;border-radius:7px;padding:8px 13px;font-family:inherit;font-size:.9rem;font-weight:600;cursor:pointer}
+  .navlinks{display:none;width:100%;flex-direction:column;padding-bottom:10px}
+  .navlinks.open{display:flex}
+  .navlinks a{width:100%}
+  .topbar-inner{min-height:56px}
+}</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner"><a class="brand" href="index.html"><span class="mark">SPR</span> SPR Pathfinders</a><button class="navtoggle" onclick="document.getElementById('nav').classList.toggle('open')">&#9776; Menu</button><nav class="navlinks" id="nav"><a href="index.html">Home</a><a href="about.html">About</a><a href="agenda.html">Agenda</a><a href="get-handouts.html">Get Handouts</a><a href="pre-assessment.html" class="active">Pre-Assessment</a><a href="four-corners.html">Four Corners</a><a href="data-collection.html">Data Collection</a><a href="data-analysis.html">Data Analysis</a><a href="implementation.html">Implementation</a></nav></div></header>
+<main class="wrap"><section class="hero"><div class="hero-inner"><span class="eyebrow">Before We Begin</span><h1>Pre-Assessment</h1><p class="lede">Wait, wait! Before we get started, could you complete this short assessment?</p></div></section><section><div class="section-title"><span class="num">&#9656;</span><h2>Complete the Assessment</h2></div><div class="callout">It should only take a few moments. <div class="btnrow"><a class="btn btn-gold" href="https://docs.google.com/forms/d/e/1FAIpQLSdBQONc3lC_pK0ZHvvqEvQtSmfD0YSLv-JDvx9rHZeUyDpB3w/viewform?usp=sf_link">Complete the assessment</a></div></div></section><section><div class="section-title"><span class="num">&#9656;</span><h2>Pathfinder&rsquo;s Capacity Matrix</h2></div><p>Below is a digital, printable Capacity Matrix you can use to gauge your own awareness and competence on key indicators for CTOs, technology coordinators and directors, and leaders in this area.</p><div class="card"><h3>Get the matrix</h3><div class="btnrow"><a class="btn btn-gold" href="https://www.canva.com/design/DAF9Vdup02M/89Ek1gNrmscqSLnTZc4vFA/view?utm_content=DAF9Vdup02M&utm_campaign=designshare&utm_medium=link&utm_source=editor">View matrix in Canva</a><a class="btn btn-outline" href="https://drive.google.com/file/d/12pxOoWk8ukDCoONjI9u4e24NtC6Wqhp8/view?usp=sharing">Get the PDF</a><a class="btn btn-outline" href="https://www.canva.com/design/DAF9Vdup02M/6Tju-4y_HZO8XkzYGTqJ5g/view?utm_content=DAF9Vdup02M&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink&mode=preview">Get an editable copy</a></div><p class="muted" style="font-size:.9rem;margin-top:6px">The editable copy requires Canva, which is free for educators and non-profits.</p></div></section><section><div class="section-title"><span class="num">&#9656;</span><h2>A Guiding Thought</h2></div><blockquote>First say to yourself what you would be; and then do what you have to do.<cite>&mdash; Epictetus</cite></blockquote></section></main><footer><div class="wrap"><div class="footnav"><a href="index.html">Home</a><a href="about.html">About</a><a href="agenda.html">Agenda</a><a href="get-handouts.html">Get Handouts</a><a href="pre-assessment.html">Pre-Assessment</a><a href="four-corners.html">Four Corners</a><a href="data-collection.html">Data Collection</a><a href="data-analysis.html">Data Analysis</a><a href="implementation.html">Implementation</a></div><p>Data, Analytics, Mapping the Plan &mdash; a session for school public relations professionals.</p><p>Materials by <a class="inl" href="https://mguhlin.org">Miguel Guhlin</a>, Director of Professional Development, <a class="inl" href="https://www.tcea.org">TCEA</a>. Shared under CC-BY-SA.</p></div><script>document.querySelectorAll('#nav a').forEach(function(a){a.addEventListener('click',function(){document.getElementById('nav').classList.remove('open');});});</script></footer>
+</body>
+</html>
