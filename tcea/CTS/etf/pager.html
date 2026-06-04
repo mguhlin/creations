@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PAGER Model &middot; Exploring EdTech Frameworks</title>
+<meta name="description" content="The PAGER model by Tony Tipton and Daniel Rich, a teacher-friendly technology implementation framework.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0A3476; --navy-dark:#071f4a; --navy-mid:#12428f;
+  --gold:#FCB040; --gold-light:#fdd17a; --gold-pale:#FEF0D0;
+  --pale-navy:#D0D8F0; --white:#ffffff; --off-white:#f7f8fc;
+  --text:#1a1a2e; --text-muted:#5a6680; --border:#e2e7f5; --teal:#0e6b8a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;color:var(--text);background:var(--off-white);line-height:1.65;font-size:18px;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'DM Serif Display',serif;color:var(--navy);line-height:1.18;font-weight:400}
+a{color:var(--navy-mid);text-decoration:none;border-bottom:1px solid var(--pale-navy);transition:.15s}
+a:hover{color:var(--gold);border-color:var(--gold)}
+
+/* ---- Top nav ---- */
+.topbar{position:sticky;top:0;z-index:50;background:var(--navy-dark);box-shadow:0 2px 14px rgba(7,31,74,.28)}
+.topbar-inner{max-width:1120px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 20px;min-height:62px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:11px;color:var(--white);font-family:'DM Serif Display',serif;font-size:1.32rem;border:none;padding:11px 0}
+.brand:hover{color:var(--gold)}
+.brand .mark{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:8px;background:var(--gold);color:var(--navy-dark);font-family:'DM Serif Display',serif;font-size:1.05rem;letter-spacing:-1px}
+.navlinks{display:flex;gap:4px;flex-wrap:wrap}
+.navlinks a{color:#cdd7ef;border:none;font-size:.93rem;font-weight:500;padding:9px 13px;border-radius:7px}
+.navlinks a:hover{color:var(--white);background:var(--navy-mid)}
+.navlinks a.active{color:var(--navy-dark);background:var(--gold);font-weight:700}
+.navtoggle{display:none}
+
+/* ---- Hero ---- */
+.hero{background:radial-gradient(1100px 380px at 78% -8%,rgba(252,176,64,.16),transparent 60%),linear-gradient(160deg,var(--navy-dark),var(--navy) 75%);color:var(--white);padding:58px 20px 64px}
+.hero-inner{max-width:1000px;margin:0 auto}
+.eyebrow{display:inline-block;font-size:.78rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--navy-dark);background:var(--gold);padding:5px 13px;border-radius:100px;margin-bottom:18px}
+.hero h1{color:var(--white);font-size:clamp(2.1rem,5vw,3.3rem);max-width:18ch}
+.hero h1 em{color:var(--gold);font-style:italic}
+.hero .lede{color:#dfe6f7;font-size:1.18rem;margin-top:18px;max-width:60ch}
+.hero .quote{margin-top:26px;border-left:3px solid var(--gold);padding:4px 0 4px 18px;color:#eef2fc;font-style:italic;max-width:62ch}
+.hero .quote span{display:block;font-style:normal;color:var(--gold-light);font-weight:600;margin-top:6px;font-size:.95rem}
+
+/* ---- Layout ---- */
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+main{padding:46px 0 20px}
+section{margin-bottom:44px}
+.section-title{display:flex;align-items:baseline;gap:14px;margin-bottom:18px;border-bottom:2px solid var(--border);padding-bottom:10px}
+.section-title .num{font-family:'DM Serif Display',serif;color:var(--gold);font-size:1.6rem;line-height:1}
+.section-title h2{font-size:1.85rem}
+h3{font-size:1.28rem;margin:26px 0 8px;color:var(--navy)}
+p{margin:0 0 14px}
+ul,ol{margin:0 0 16px 1.25em}
+li{margin-bottom:8px}
+.muted{color:var(--text-muted)}
+.lead{font-size:1.12rem}
+
+figure{margin:22px 0}
+figure img{width:100%;height:auto;border-radius:12px;border:1.5px solid var(--border);display:block;box-shadow:0 8px 26px rgba(10,52,118,.10)}
+figcaption{font-size:.85rem;color:var(--text-muted);margin-top:8px;text-align:center}
+
+/* ---- Cards ---- */
+.card{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:22px 24px;margin-bottom:18px}
+.card h3{margin-top:0;display:flex;align-items:center;gap:10px}
+.card h3 .pill{font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:700;background:var(--gold);color:var(--navy-dark);border-radius:5px;padding:3px 9px;letter-spacing:.04em;text-transform:uppercase}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.grid .card{margin-bottom:0;height:100%}
+.tile{background:var(--white);border:1.5px solid var(--border);border-left:5px solid var(--gold);border-radius:10px;padding:20px 22px;transition:.18s;display:block;color:var(--text)}
+a.tile:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(10,52,118,.13);border-color:var(--border);border-left-color:var(--gold)}
+.tile h3{margin:0 0 6px;color:var(--navy)}
+.tile p{margin:0;color:var(--text-muted);font-size:.96rem}
+
+.callout{background:var(--gold-pale);border:1.5px solid var(--gold-light);border-radius:12px;padding:20px 24px;margin:22px 0}
+.callout strong{color:var(--navy)}
+.note{background:var(--white);border:1.5px solid var(--border);border-left:5px solid var(--teal);border-radius:10px;padding:18px 22px;margin:20px 0}
+.note .src{font-size:.84rem;color:var(--text-muted);margin-top:8px}
+
+blockquote{background:var(--white);border:1.5px solid var(--border);border-left:5px solid var(--navy);border-radius:10px;padding:18px 24px;margin:22px 0;font-style:italic;color:var(--text)}
+blockquote cite{display:block;font-style:normal;font-weight:600;color:var(--navy);margin-top:10px;font-size:.92rem}
+
+.timeline{position:relative;margin:18px 0 0;padding-left:30px;border-left:3px solid var(--pale-navy)}
+.tl-item{position:relative;margin-bottom:24px}
+.tl-item::before{content:"";position:absolute;left:-39px;top:5px;width:15px;height:15px;border-radius:50%;background:var(--gold);border:3px solid var(--white);box-shadow:0 0 0 2px var(--navy)}
+.tl-item .yr{font-family:'DM Serif Display',serif;color:var(--navy);font-size:1.15rem}
+.tl-item .yr b{color:var(--gold);font-style:normal}
+.tl-item p{margin:5px 0 0;color:var(--text);font-size:.98rem}
+
+.btnrow{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}
+.btn{display:inline-block;border-radius:8px;padding:11px 20px;font-weight:600;font-size:.96rem;border:1.5px solid transparent}
+.btn-gold{background:var(--gold);color:var(--navy-dark)}
+.btn-gold:hover{background:var(--gold-light);color:var(--navy-dark);border-color:var(--gold)}
+.btn-outline{border-color:var(--navy);color:var(--navy);background:var(--white)}
+.btn-outline:hover{background:var(--navy);color:var(--white);border-color:var(--navy)}
+
+.stat{font-family:'DM Serif Display',serif;color:var(--gold);font-size:1.05rem}
+.statlist li{margin-bottom:12px}
+.statlist li b{color:var(--navy)}
+
+/* ---- Footer ---- */
+footer{background:var(--navy-dark);color:#cdd7ef;margin-top:40px;padding:34px 20px 40px}
+footer .wrap{max-width:1000px}
+footer .footnav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+footer .footnav a{color:#cdd7ef;border:none;font-size:.92rem;font-weight:500;padding:6px 11px;border-radius:6px;background:rgba(255,255,255,.06)}
+footer .footnav a:hover{color:var(--navy-dark);background:var(--gold)}
+footer p{font-size:.86rem;color:#9fb0d6;margin:6px 0}
+footer a.inl{color:var(--gold-light);border:none}
+footer a.inl:hover{color:var(--gold)}
+
+@media(max-width:760px){
+  body{font-size:17px}
+  .navtoggle{display:inline-flex;align-items:center;gap:7px;background:var(--navy-mid);color:#fff;border:none;border-radius:7px;padding:8px 13px;font-family:inherit;font-size:.9rem;font-weight:600;cursor:pointer}
+  .navlinks{display:none;width:100%;flex-direction:column;padding-bottom:10px}
+  .navlinks.open{display:flex}
+  .navlinks a{width:100%}
+  .topbar-inner{min-height:56px}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html"><span class="mark">ETF</span> Exploring EdTech Frameworks</a>
+    <button class="navtoggle" onclick="document.getElementById('nav').classList.toggle('open')">&#9776; Menu</button>
+    <nav class="navlinks" id="nav"><a href="index.html">Overview</a><a href="t3.html">T3</a><a href="tim.html">TIM</a><a href="triple-e.html">Triple E</a><a href="loti.html">LoTi</a><a href="heat.html">HEAT</a><a href="pager.html" class="active">PAGER</a><a href="tpack.html">TPACK</a><a href="samr.html">SAMR</a><a href="rat.html">RAT</a></nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <span class="eyebrow">Theoretical Framework</span>
+    <h1>PAGER Model</h1>
+    <div class="quote">A teacher-friendly model for implementing classroom technology.</div>
+  </div>
+</section>
+
+<main class="wrap">
+  <section>
+    <p class="lead">The PAGER model, developed by Dr. Tony Tipton and Daniel Rich, offers a teacher-friendly path for implementing technology in the classroom. It has been used to structure professional learning and digital-badging programs that keep the focus on student learning.</p>
+    <figure><svg viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg" role="img" style="width:100%;height:auto;display:block"><rect x="0" y="0" width="760" height="300" fill="#ffffff"/><rect x="40" y="110" width="120" height="80" rx="12" fill="#0A3476"/><text x="100" y="150" font-family="DM Serif Display, Georgia, serif" font-size="30" fill="#ffffff" text-anchor="middle">P</text><text x="100" y="172" font-family="DM Sans, sans-serif" font-size="12" fill="#ffffff" text-anchor="middle">Preparation</text><polygon points="164,140 182,150 164,160" fill="#FCB040"/><rect x="188" y="110" width="120" height="80" rx="12" fill="#12428f"/><text x="248" y="150" font-family="DM Serif Display, Georgia, serif" font-size="30" fill="#ffffff" text-anchor="middle">A</text><text x="248" y="172" font-family="DM Sans, sans-serif" font-size="12" fill="#ffffff" text-anchor="middle">Application</text><polygon points="312,140 330,150 312,160" fill="#FCB040"/><rect x="336" y="110" width="120" height="80" rx="12" fill="#0e6b8a"/><text x="396" y="150" font-family="DM Serif Display, Georgia, serif" font-size="30" fill="#ffffff" text-anchor="middle">G</text><text x="396" y="172" font-family="DM Sans, sans-serif" font-size="12" fill="#ffffff" text-anchor="middle">Growth</text><polygon points="460,140 478,150 460,160" fill="#FCB040"/><rect x="484" y="110" width="120" height="80" rx="12" fill="#FCB040"/><text x="544" y="150" font-family="DM Serif Display, Georgia, serif" font-size="30" fill="#071f4a" text-anchor="middle">E</text><text x="544" y="172" font-family="DM Sans, sans-serif" font-size="12" fill="#071f4a" text-anchor="middle">Evaluation</text><polygon points="608,140 626,150 608,160" fill="#FCB040"/><rect x="632" y="110" width="120" height="80" rx="12" fill="#0A3476"/><text x="692" y="150" font-family="DM Serif Display, Georgia, serif" font-size="30" fill="#ffffff" text-anchor="middle">R</text><text x="692" y="172" font-family="DM Sans, sans-serif" font-size="12" fill="#ffffff" text-anchor="middle">Refinement</text></svg><figcaption>The PAGER model as a five-stage flow.</figcaption></figure>
+  </section>
+  <section>
+    <div class="section-title"><span class="num">&#9656;</span><h2>In Practice</h2></div>
+    <p>One well-known application is district digital badging. In a "Bold School Badging" program, the model focuses teachers' attention on impacting student learning: educators earn badges as they complete professional development and apply student-centered practices, with incentives along the way.</p>
+  </section>
+  <section>
+    <div class="section-title"><span class="num">&#9656;</span><h2>Learn More</h2></div>
+    <ul>
+      <li><a href="https://www.academia.edu/15550230/Toward_a_Teacher_Friendly_Classroom_Technology_Implementation_Model">Toward a Teacher-Friendly Classroom Technology Implementation Model</a> (the original paper)</li>
+      <li><a href="https://sites.google.com/sabineisd.org/pager/home">The PAGER project site</a></li>
+    </ul>
+    <p class="muted" style="font-size:.92rem">Note: PAGER's lettering is used here as a five-stage flow for illustration; consult the source paper for the model's exact stage names and definitions.</p>
+  </section>
+</main><footer>
+  <div class="wrap">
+    <div class="footnav"><a href="index.html">Overview</a><a href="t3.html">T3</a><a href="tim.html">TIM</a><a href="triple-e.html">Triple E</a><a href="loti.html">LoTi</a><a href="heat.html">HEAT</a><a href="pager.html">PAGER</a><a href="tpack.html">TPACK</a><a href="samr.html">SAMR</a><a href="rat.html">RAT</a></div>
+    <p>Exploring Educational Technology Frameworks &middot; A professional learning resource by <a class="inl" href="https://mguhlin.org">Miguel Guhlin</a> for <a class="inl" href="https://tcea.org">TCEA</a>.</p>
+    <p>Companion site: <a class="inl" href="../pati/index.html">PATI &mdash; Planning &amp; Assessing Technology Integration</a> &middot; Blog: <a class="inl" href="https://blog.tcea.org">blog.tcea.org</a></p>
+  </div>
+  <script>
+    document.querySelectorAll('#nav a').forEach(function(a){a.addEventListener('click',function(){document.getElementById('nav').classList.remove('open');});});
+  </script>
+</body>
+</html>

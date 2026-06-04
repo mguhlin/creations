@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2 - The Classroom &middot; Planning and Assessing Technology Integration</title>
+<meta name="description" content="Models that shape technology integration in the classroom: project-based learning, constructivism, one-to-one, STEM, the digital campus, blended, and flipped learning.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0A3476; --navy-dark:#071f4a; --navy-mid:#12428f;
+  --gold:#FCB040; --gold-light:#fdd17a; --gold-pale:#FEF0D0;
+  --pale-navy:#D0D8F0; --white:#ffffff; --off-white:#f7f8fc;
+  --text:#1a1a2e; --text-muted:#5a6680; --border:#e2e7f5; --teal:#0e6b8a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;color:var(--text);background:var(--off-white);line-height:1.65;font-size:18px;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'DM Serif Display',serif;color:var(--navy);line-height:1.18;font-weight:400}
+a{color:var(--navy-mid);text-decoration:none;border-bottom:1px solid var(--pale-navy);transition:.15s}
+a:hover{color:var(--gold);border-color:var(--gold)}
+
+/* ---- Top nav ---- */
+.topbar{position:sticky;top:0;z-index:50;background:var(--navy-dark);box-shadow:0 2px 14px rgba(7,31,74,.28)}
+.topbar-inner{max-width:1120px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 20px;min-height:62px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:11px;color:var(--white);font-family:'DM Serif Display',serif;font-size:1.32rem;border:none;padding:11px 0}
+.brand:hover{color:var(--gold)}
+.brand .mark{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:8px;background:var(--gold);color:var(--navy-dark);font-family:'DM Serif Display',serif;font-size:1.05rem;letter-spacing:-1px}
+.navlinks{display:flex;gap:4px;flex-wrap:wrap}
+.navlinks a{color:#cdd7ef;border:none;font-size:.93rem;font-weight:500;padding:9px 13px;border-radius:7px}
+.navlinks a:hover{color:var(--white);background:var(--navy-mid)}
+.navlinks a.active{color:var(--navy-dark);background:var(--gold);font-weight:700}
+.navtoggle{display:none}
+
+/* ---- Hero ---- */
+.hero{background:radial-gradient(1100px 380px at 78% -8%,rgba(252,176,64,.16),transparent 60%),linear-gradient(160deg,var(--navy-dark),var(--navy) 75%);color:var(--white);padding:58px 20px 64px}
+.hero-inner{max-width:1000px;margin:0 auto}
+.eyebrow{display:inline-block;font-size:.78rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--navy-dark);background:var(--gold);padding:5px 13px;border-radius:100px;margin-bottom:18px}
+.hero h1{color:var(--white);font-size:clamp(2.1rem,5vw,3.3rem);max-width:18ch}
+.hero h1 em{color:var(--gold);font-style:italic}
+.hero .lede{color:#dfe6f7;font-size:1.18rem;margin-top:18px;max-width:60ch}
+.hero .quote{margin-top:26px;border-left:3px solid var(--gold);padding:4px 0 4px 18px;color:#eef2fc;font-style:italic;max-width:62ch}
+.hero .quote span{display:block;font-style:normal;color:var(--gold-light);font-weight:600;margin-top:6px;font-size:.95rem}
+
+/* ---- Layout ---- */
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+main{padding:46px 0 20px}
+section{margin-bottom:44px}
+.section-title{display:flex;align-items:baseline;gap:14px;margin-bottom:18px;border-bottom:2px solid var(--border);padding-bottom:10px}
+.section-title .num{font-family:'DM Serif Display',serif;color:var(--gold);font-size:1.6rem;line-height:1}
+.section-title h2{font-size:1.85rem}
+h3{font-size:1.28rem;margin:26px 0 8px;color:var(--navy)}
+p{margin:0 0 14px}
+ul,ol{margin:0 0 16px 1.25em}
+li{margin-bottom:8px}
+.muted{color:var(--text-muted)}
+.lead{font-size:1.12rem}
+
+figure{margin:22px 0}
+figure img{width:100%;height:auto;border-radius:12px;border:1.5px solid var(--border);display:block;box-shadow:0 8px 26px rgba(10,52,118,.10)}
+figcaption{font-size:.85rem;color:var(--text-muted);margin-top:8px;text-align:center}
+
+/* ---- Cards ---- */
+.card{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:22px 24px;margin-bottom:18px}
+.card h3{margin-top:0;display:flex;align-items:center;gap:10px}
+.card h3 .pill{font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:700;background:var(--gold);color:var(--navy-dark);border-radius:5px;padding:3px 9px;letter-spacing:.04em;text-transform:uppercase}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.grid .card{margin-bottom:0;height:100%}
+.tile{background:var(--white);border:1.5px solid var(--border);border-left:5px solid var(--gold);border-radius:10px;padding:20px 22px;transition:.18s;display:block;color:var(--text)}
+a.tile:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(10,52,118,.13);border-color:var(--border);border-left-color:var(--gold)}
+.tile h3{margin:0 0 6px;color:var(--navy)}
+.tile p{margin:0;color:var(--text-muted);font-size:.96rem}
+
+.callout{background:var(--gold-pale);border:1.5px solid var(--gold-light);border-radius:12px;padding:20px 24px;margin:22px 0}
+.callout strong{color:var(--navy)}
+.note{background:var(--white);border:1.5px solid var(--border);border-left:5px solid var(--teal);border-radius:10px;padding:18px 22px;margin:20px 0}
+.note .src{font-size:.84rem;color:var(--text-muted);margin-top:8px}
+
+blockquote{background:var(--white);border:1.5px solid var(--border);border-left:5px solid var(--navy);border-radius:10px;padding:18px 24px;margin:22px 0;font-style:italic;color:var(--text)}
+blockquote cite{display:block;font-style:normal;font-weight:600;color:var(--navy);margin-top:10px;font-size:.92rem}
+
+.timeline{position:relative;margin:18px 0 0;padding-left:30px;border-left:3px solid var(--pale-navy)}
+.tl-item{position:relative;margin-bottom:24px}
+.tl-item::before{content:"";position:absolute;left:-39px;top:5px;width:15px;height:15px;border-radius:50%;background:var(--gold);border:3px solid var(--white);box-shadow:0 0 0 2px var(--navy)}
+.tl-item .yr{font-family:'DM Serif Display',serif;color:var(--navy);font-size:1.15rem}
+.tl-item .yr b{color:var(--gold);font-style:normal}
+.tl-item p{margin:5px 0 0;color:var(--text);font-size:.98rem}
+
+.btnrow{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}
+.btn{display:inline-block;border-radius:8px;padding:11px 20px;font-weight:600;font-size:.96rem;border:1.5px solid transparent}
+.btn-gold{background:var(--gold);color:var(--navy-dark)}
+.btn-gold:hover{background:var(--gold-light);color:var(--navy-dark);border-color:var(--gold)}
+.btn-outline{border-color:var(--navy);color:var(--navy);background:var(--white)}
+.btn-outline:hover{background:var(--navy);color:var(--white);border-color:var(--navy)}
+
+.stat{font-family:'DM Serif Display',serif;color:var(--gold);font-size:1.05rem}
+.statlist li{margin-bottom:12px}
+.statlist li b{color:var(--navy)}
+
+/* ---- Footer ---- */
+footer{background:var(--navy-dark);color:#cdd7ef;margin-top:40px;padding:34px 20px 40px}
+footer .wrap{max-width:1000px}
+footer .footnav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+footer .footnav a{color:#cdd7ef;border:none;font-size:.92rem;font-weight:500;padding:6px 11px;border-radius:6px;background:rgba(255,255,255,.06)}
+footer .footnav a:hover{color:var(--navy-dark);background:var(--gold)}
+footer p{font-size:.86rem;color:#9fb0d6;margin:6px 0}
+footer a.inl{color:var(--gold-light);border:none}
+footer a.inl:hover{color:var(--gold)}
+
+@media(max-width:760px){
+  body{font-size:17px}
+  .navtoggle{display:inline-flex;align-items:center;gap:7px;background:var(--navy-mid);color:#fff;border:none;border-radius:7px;padding:8px 13px;font-family:inherit;font-size:.9rem;font-weight:600;cursor:pointer}
+  .navlinks{display:none;width:100%;flex-direction:column;padding-bottom:10px}
+  .navlinks.open{display:flex}
+  .navlinks a{width:100%}
+  .topbar-inner{min-height:56px}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html"><span class="mark">PATI</span> Planning &amp; Assessing Tech Integration</a>
+    <button class="navtoggle" onclick="document.getElementById('nav').classList.toggle('open')">&#9776; Menu</button>
+    <nav class="navlinks" id="nav"><a href="index.html">Home</a><a href="1-the-past.html">1 &middot; The Past</a><a href="2-the-classroom.html" class="active">2 &middot; The Classroom</a><a href="3-research.html">3 &middot; Research</a><a href="4-perspectives.html">4 &middot; Perspectives</a><a href="5-tips.html">5 &middot; Tips</a></nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <span class="eyebrow">Part 2</span>
+    <h1>The Classroom: <em>Achieving the Ideal</em></h1>
+    <div class="quote">"The technology we introduce must serve a purpose, and that purpose must be to enhance learning through improving pedagogy."
+      <span>&mdash; Dr. Michael Cowling</span>
+    </div>
+  </div>
+</section>
+
+<main class="wrap">
+  <section>
+    <p class="lead">What should technology integration look like in the classroom? Several models can shape how a classroom works. Here are the ones you are most likely to encounter, each with a brief description and a place to learn more.</p>
+  </section>
+
+  <section>
+    <div class="card">
+      <h3><span class="pill">Model 1</span> Project-Based Learning</h3>
+      <p>Project-based learning remains one of the most popular ways to blend technology into the curriculum. Related approaches, including problem-based learning and inquiry-based learning, have also found their way into schools.</p>
+      <p>There are many free resources available. A good starting point is <a href="https://www.pblworks.org/">PBLWorks</a>, which offers a research-backed project design framework and a library of classroom-ready projects.</p>
+    </div>
+
+    <div class="card">
+      <h3><span class="pill">Model 2</span> Constructivist Approach</h3>
+      <p>Constructivism treats learning as an active, constructive process. The learner builds knowledge, connecting new information to prior knowledge so that mental representations are personal and subjective.</p>
+      <p>WebQuests were one popular constructivist approach, and with a little extra work they doubled as project-based learning. A durable organizing idea for them is the cycle of <strong>inputs, transformations, and outputs</strong>: students gather sources, do something with them, and produce something new.</p>
+      <p class="muted" style="font-size:.95rem">Background: <a href="https://www.learningtheories.com/constructivism.html">Constructivism (Learning Theories)</a>.</p>
+    </div>
+
+    <div class="card">
+      <h3><span class="pill">Model 3</span> One-to-One Devices</h3>
+      <p>With Chromebooks, iPads, and Windows tablets widely available, one-to-one programs are common. A Texas study of one-to-one laptops found that students with greater access and use, especially for learning outside school, scored significantly higher in reading and mathematics. Home learning was the strongest single predictor.</p>
+      <p>The same research is a caution as much as an endorsement. Access alone is not the lever; how, and how often, students use the device for real learning is what moved scores. One-to-one programs have also produced expensive, well-documented failures when planning and purpose were thin.</p>
+    </div>
+
+    <div class="card">
+      <h3><span class="pill">Model 4</span> STEM, STEAM, and Robotics</h3>
+      <p>STEM education, science, technology, engineering, and mathematics, draws steady attention. Jobs in these fields are plentiful, yet student interest has not kept pace with demand, and the gap is widest for women and students of color.</p>
+      <div class="btnrow">
+        <a class="btn btn-outline" href="https://blog.tcea.org/category/robotics/">TCEA Robotics resources</a>
+        <a class="btn btn-outline" href="https://blog.tcea.org/?s=STEM">Read the TCEA blog on STEM</a>
+      </div>
+      <p class="muted" style="font-size:.9rem;margin:0">Note: the statewide TCEA robotics contest has been retired, but TCEA continues to publish problem sets and resources that any classroom, campus, or district can use to run its own contest.</p>
+    </div>
+
+    <div class="card">
+      <h3><span class="pill">Model 5</span> The Digital Campus</h3>
+      <p>A digital campus describes the conditions that let integration happen. A sample profile includes:</p>
+      <ul>
+        <li><strong>Classroom access.</strong> Each teacher has a personal computing device; students and staff have managed accounts; classrooms have a display, audio, and access to web-based and online materials.</li>
+        <li><strong>Network connectivity.</strong> High-speed wired drops in each room, wireless access points sized for the devices in use, and guest access for visitors and bring-your-own-technology.</li>
+        <li><strong>Campus access.</strong> Shared device carts sized to campus needs, plus the ability to run announcements and broadcasts over the network.</li>
+        <li><strong>Professional learning.</strong> Campus improvement plans reflect ongoing learning in blended and flipped approaches, with accountability for taking part.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3><span class="pill">Model 6</span> Blended Learning</h3>
+      <p>Blended learning combines face-to-face instruction with online work, giving students some control over pace, path, or place. It is less a single method than a family of models, from station rotation to flex.</p>
+      <p>Explore TCEA's collected resources on <a href="https://blog.tcea.org/?s=blended+learning">blended learning</a>.</p>
+    </div>
+
+    <div class="card">
+      <h3><span class="pill">Model 7</span> Flipped Learning</h3>
+      <p>Flipped learning moves direct instruction out of the group space and into individual space, usually through short videos, so class time can be spent on application, discussion, and feedback. It pairs naturally with blended models.</p>
+      <p>See TCEA's resources on <a href="https://blog.tcea.org/?s=flipped+learning">flipped learning</a>.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title"><span class="num">&#9656;</span><h2>Reflection: What Resonates?</h2></div>
+    <div class="callout">
+      <ol style="margin:0 0 0 1.2em">
+        <li>How does this information connect to your own experience?</li>
+        <li>What questions do you still have?</li>
+        <li>What interested you the most?</li>
+      </ol>
+    </div>
+  </section>
+</main>
+<footer>
+  <div class="wrap">
+    <div class="footnav">
+      <a href="index.html">Home</a><a href="1-the-past.html">1 &middot; The Past</a><a href="2-the-classroom.html">2 &middot; The Classroom</a><a href="3-research.html">3 &middot; Research</a><a href="4-perspectives.html">4 &middot; Perspectives</a><a href="5-tips.html">5 &middot; Tips</a>
+    </div>
+    <p>Planning and Assessing Technology Integration &middot; A professional learning resource by <a class="inl" href="https://mguhlin.org">Miguel Guhlin</a> for <a class="inl" href="https://tcea.org">TCEA</a>.</p>
+    <p>Session hub: <a class="inl" href="https://sites.google.com/view/mgpd/pati-planning-and-assessing-technology-integration">go.mgpd.org/pati</a> &middot; Blog: <a class="inl" href="https://blog.tcea.org">blog.tcea.org</a></p>
+  </div>
+  <script>
+    document.querySelectorAll('#nav a').forEach(function(a){a.addEventListener('click',function(){document.getElementById('nav').classList.remove('open');});});
+  </script>
+</footer>
+</body>
+</html>
