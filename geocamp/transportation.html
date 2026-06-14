@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transportation Planner</title>
+<style>
+  :root{--ink:#1d1a14;--paper:#f5edda;--paper2:#ece0c4;--accent:#5d7a5a;
+    --line:rgba(0,0,0,.14);--shadow:0 16px 36px -18px rgba(0,0,0,.5)}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    color:var(--ink);background:var(--paper);
+    background-image:radial-gradient(circle at 8% 0%,rgba(93,122,90,.13),transparent 40%)}
+  .topnav{position:sticky;top:0;z-index:30;background:#1d1a14;color:#f5edda;display:flex;
+    align-items:center;gap:4px;flex-wrap:wrap;padding:8px 14px;box-shadow:0 4px 14px rgba(0,0,0,.3)}
+  .topnav a{color:#e7dcc2;text-decoration:none;font-size:13px;padding:6px 11px;border-radius:8px}
+  .topnav a:hover{background:rgba(255,255,255,.1)}
+  .topnav a.home{font-weight:700;color:#fff}.topnav a.active{background:var(--accent);color:#fff}
+  .wrap{max-width:1140px;margin:0 auto;padding:26px 20px 70px}
+  .kicker{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  h1{font-family:Georgia,serif;font-size:clamp(28px,5vw,42px);margin:.12em 0 .2em}
+  .lead{max-width:760px;color:#5a5142;line-height:1.6;font-size:15.5px;margin-bottom:16px}
+  .game{display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:start}
+  @media(max-width:900px){.game{grid-template-columns:1fr}}
+  .mapbox{background:#fffdf7;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:14px}
+  svg{width:100%;height:auto;display:block;border-radius:10px;background:#dfeef0;touch-action:manipulation}
+  .side{display:flex;flex-direction:column;gap:16px}
+  .box{background:#fffdf7;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:15px 16px}
+  .box h3{margin:0 0 8px;font-size:14px;text-transform:uppercase;letter-spacing:.07em;color:#6a5f48}
+  .scenario{font-size:15px;line-height:1.5}
+  .scenario .goal{font-weight:700;color:var(--accent);display:block;margin-top:4px}
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+  .stat{background:var(--paper2);border-radius:10px;padding:9px 10px}
+  .stat b{display:block;font-size:22px;font-family:Georgia,serif}
+  .stat small{color:#6a5f48;font-size:11.5px}
+  .budgetbar{height:14px;border-radius:8px;background:#e2dcc9;overflow:hidden;margin-top:6px}
+  .budgetbar i{display:block;height:100%;background:linear-gradient(90deg,#5d7a5a,#86a06f);transition:.3s}
+  .budgetbar.over i{background:linear-gradient(90deg,#c0392b,#e06a4d)}
+  .mode{display:flex;gap:8px}
+  .mode button{flex:1;border:1px solid var(--line);background:var(--paper);border-radius:10px;padding:9px;
+    font-size:13px;cursor:pointer;font-weight:600}
+  .mode button.sel{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .btn{border:1px solid var(--line);background:var(--paper);border-radius:9px;padding:9px 12px;
+    font-size:13.5px;cursor:pointer;font-weight:600;width:100%;margin-top:8px}
+  .btn.go{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .btn.warn{color:#b23a2e}
+  .msg{margin-top:10px;font-weight:700;font-size:14px;text-align:center;min-height:20px}
+  .scn-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+  .scn-tabs button{border:1px solid var(--line);background:var(--paper);border-radius:18px;padding:5px 11px;font-size:12.5px;cursor:pointer}
+  .scn-tabs button.sel{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .legend{font-size:12.5px;color:#5a5142;line-height:1.7;margin-top:6px}
+  .legend i{display:inline-block;width:22px;height:0;border-top:4px solid;vertical-align:middle;margin-right:5px}
+  .help{font-size:12.5px;color:#7a7060;margin-top:6px}
+  text{font-family:-apple-system,sans-serif}
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <a class="home" href="index.html">🧭 Activity Lab</a>
+  <a href="lava.html">🌋 Lava</a>
+  <a href="cartography.html">🗺️ Cartography</a>
+  <a href="place.html">📖 Place</a>
+  <a class="active" href="transportation.html">🚂 Transport</a>
+  <a href="mapquest.html">🧭 Map Quest</a>
+</nav>
+
+<div class="wrap">
+  <div class="kicker">Infrastructure · System Design · Spatial Scale</div>
+  <h1>Transportation Planner</h1>
+  <p class="lead">Cities grow when people and goods can move between them. You're the state transportation planner for <b>Missouri</b>. Connect cities with <b>rail</b> and <b>highways</b> to meet each scenario — but watch your budget. The original activity uses a floor map and wooden train tracks; this is the same idea on screen.</p>
+
+  <div class="game">
+    <div class="mapbox">
+      <svg id="map" viewBox="0 0 560 540">
+        <!-- Missouri outline -->
+        <polygon points="110,80 450,80 450,150 472,182 442,232 462,282 412,332 400,362 360,362 360,452 318,452 318,362 110,362"
+          fill="#e9e0c4" stroke="#9a8a63" stroke-width="3"/>
+        <text x="120" y="110" fill="#b5a884" font-size="22" font-style="italic" font-family="Georgia">Missouri</text>
+        <!-- rivers (decorative) -->
+        <path d="M110,150 Q260,170 360,120 T455,100" fill="none" stroke="#7fb0d6" stroke-width="3" opacity=".6"/>
+        <path d="M300,250 Q330,300 360,362 L340,452" fill="none" stroke="#7fb0d6" stroke-width="3" opacity=".6"/>
+        <g id="links"></g>
+        <g id="cities"></g>
+      </svg>
+      <div class="help" id="hint">👉 Click a city, then click another city to build a connection. Click a line to remove it.</div>
+    </div>
+
+    <div class="side">
+      <div class="box">
+        <h3>🎯 Scenario</h3>
+        <div class="scn-tabs" id="scnTabs"></div>
+        <div class="scenario" id="scnText"></div>
+      </div>
+
+      <div class="box">
+        <h3>🛠️ Build mode</h3>
+        <div class="mode" id="mode">
+          <button data-m="rail" class="sel">🚂 Rail<br><small>$3 / unit</small></button>
+          <button data-m="road">🛣️ Highway<br><small>$2 / unit</small></button>
+        </div>
+        <div class="legend">
+          <div><i style="border-color:#3a3a3a"></i> Rail line</div>
+          <div><i style="border-color:#c98a2e;border-top-style:dashed"></i> Highway</div>
+        </div>
+      </div>
+
+      <div class="box">
+        <h3>📊 Network</h3>
+        <div class="stats">
+          <div class="stat"><b id="sConn">0</b><small>cities connected</small></div>
+          <div class="stat"><b id="sLinks">0</b><small>links built</small></div>
+        </div>
+        <div style="margin-top:10px;font-size:13px;display:flex;justify-content:space-between">
+          <span>Budget used</span><span><b id="sCost">$0M</b> / <span id="sBud">$120M</span></span>
+        </div>
+        <div class="budgetbar" id="bbar"><i style="width:0%"></i></div>
+        <button class="btn go" id="check">✓ Check scenario</button>
+        <button class="btn warn" id="reset">↺ Clear network</button>
+        <div class="msg" id="msg"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const CITIES=[
+  {id:"sj", name:"St. Joseph", x:150,y:150, pop:1},
+  {id:"kc", name:"Kansas City", x:142,y:240, pop:3},
+  {id:"col",name:"Columbia",   x:292,y:212, pop:2},
+  {id:"jc", name:"Jefferson City ★", x:300,y:255, pop:1, cap:true},
+  {id:"han",name:"Hannibal",   x:378,y:150, pop:1},
+  {id:"stl",name:"St. Louis",  x:420,y:205, pop:3},
+  {id:"spr",name:"Springfield",x:232,y:312, pop:2},
+  {id:"jop",name:"Joplin",     x:145,y:330, pop:1},
+  {id:"cg", name:"Cape Girardeau", x:382,y:330, pop:1},
+  {id:"pb", name:"Poplar Bluff",x:340,y:420, pop:1},
+];
+const SCN=[
+  {name:"Link the giants", text:"Connect the two largest cities, <b>Kansas City</b> and <b>St. Louis</b>, so trade can flow across the state.",
+   goal:"Goal: KC and St. Louis in the same network.", check:c=>same(c,"kc","stl"), bud:120},
+  {name:"Big three", text:"The three biggest population centers — <b>Kansas City, St. Louis, and Springfield</b> — must all be reachable from one another.",
+   goal:"Goal: connect all 3 largest cities.", check:c=>same(c,"kc","stl")&&same(c,"kc","spr"), bud:160},
+  {name:"Capital reach", text:"Every Missourian should be able to reach the capital. Connect <b>every city</b> to <b>Jefferson City ★</b>.",
+   goal:"Goal: all 10 cities connected to the capital.", check:c=>CITIES.every(ci=>same(c,ci.id,"jc")), bud:260},
+  {name:"Bootheel relief", text:"A flood hit the southeast. Get aid trains from <b>Kansas City</b> all the way to <b>Poplar Bluff</b> in the bootheel.",
+   goal:"Goal: connect KC → Poplar Bluff.", check:c=>same(c,"kc","pb"), bud:200},
+];
+
+const map=document.getElementById("map");
+const gLinks=document.getElementById("links"), gCities=document.getElementById("cities");
+const SVGNS="http://www.w3.org/2000/svg";
+let mode="rail", selected=null, links=[], scnIdx=0;
+
+// draw cities
+const popR={1:7,2:10,3:14};
+CITIES.forEach(c=>{
+  const g=document.createElementNS(SVGNS,"g");g.style.cursor="pointer";
+  const circ=document.createElementNS(SVGNS,"circle");
+  circ.setAttribute("cx",c.x);circ.setAttribute("cy",c.y);circ.setAttribute("r",popR[c.pop]);
+  circ.setAttribute("fill",c.cap?"#c0392b":"#5d7a5a");circ.setAttribute("stroke","#fff");circ.setAttribute("stroke-width","2.5");
+  const t=document.createElementNS(SVGNS,"text");
+  t.setAttribute("x",c.x+ (c.x>300?-10:12));t.setAttribute("y",c.y-12);
+  t.setAttribute("font-size","13");t.setAttribute("font-weight","600");t.setAttribute("fill","#2b2720");
+  t.setAttribute("text-anchor",c.x>300?"end":"start");t.textContent=c.name;
+  g.appendChild(circ);g.appendChild(t);g.dataset.id=c.id;
+  g.addEventListener("click",()=>clickCity(c,circ));
+  gCities.appendChild(g);c._circ=circ;
+});
+
+function clickCity(c,circ){
+  if(!selected){selected=c;circ.setAttribute("stroke","#d8993f");circ.setAttribute("stroke-width","4");return;}
+  if(selected.id===c.id){selected._circ.setAttribute("stroke","#fff");selected._circ.setAttribute("stroke-width","2.5");selected=null;return;}
+  // build link
+  addLink(selected,c);
+  selected._circ.setAttribute("stroke","#fff");selected._circ.setAttribute("stroke-width","2.5");
+  selected=null;
+}
+function dist(a,b){return Math.hypot(a.x-b.x,a.y-b.y);}
+function cost(a,b){return Math.round(dist(a,b)/10*(mode==="rail"?3:2));}
+function addLink(a,b){
+  if(links.some(l=>(l.a===a.id&&l.b===b.id)||(l.a===b.id&&l.b===a.id))){flash("Those cities are already linked.");return;}
+  const line=document.createElementNS(SVGNS,"line");
+  line.setAttribute("x1",a.x);line.setAttribute("y1",a.y);line.setAttribute("x2",b.x);line.setAttribute("y2",b.y);
+  line.setAttribute("stroke",mode==="rail"?"#3a3a3a":"#c98a2e");line.setAttribute("stroke-width","5");
+  line.setAttribute("stroke-linecap","round");
+  if(mode==="road")line.setAttribute("stroke-dasharray","10 7");
+  line.style.cursor="pointer";
+  const l={a:a.id,b:b.id,mode,cost:cost(a,b),el:line};
+  line.addEventListener("click",e=>{e.stopPropagation();links=links.filter(x=>x!==l);line.remove();update();});
+  gLinks.appendChild(line);links.push(l);update();
+}
+
+// union-find connectivity
+function same(_,id1,id2){
+  const parent={};CITIES.forEach(c=>parent[c.id]=c.id);
+  function find(x){return parent[x]===x?x:(parent[x]=find(parent[x]));}
+  links.forEach(l=>{parent[find(l.a)]=find(l.b);});
+  return find(id1)===find(id2);
+}
+function connectedCount(){
+  // largest connected component size among cities that have any link
+  const parent={};CITIES.forEach(c=>parent[c.id]=c.id);
+  function find(x){return parent[x]===x?x:(parent[x]=find(parent[x]));}
+  links.forEach(l=>{parent[find(l.a)]=find(l.b);});
+  const used=new Set();links.forEach(l=>{used.add(l.a);used.add(l.b);});
+  const sizes={};used.forEach(id=>{const r=find(id);sizes[r]=(sizes[r]||0)+1;});
+  let max=0;for(const k in sizes)max=Math.max(max,sizes[k]);
+  return max;
+}
+function update(){
+  const total=links.reduce((s,l)=>s+l.cost,0);
+  const bud=SCN[scnIdx].bud;
+  document.getElementById("sCost").textContent="$"+total+"M";
+  document.getElementById("sBud").textContent="$"+bud+"M";
+  document.getElementById("sLinks").textContent=links.length;
+  document.getElementById("sConn").textContent=connectedCount();
+  const bar=document.getElementById("bbar");
+  bar.firstElementChild.style.width=Math.min(100,total/bud*100)+"%";
+  bar.classList.toggle("over",total>bud);
+}
+function flash(m,color){const el=document.getElementById("msg");el.textContent=m;el.style.color=color||"#7a6f5a";}
+
+document.getElementById("mode").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
+  [...e.currentTarget.children].forEach(x=>x.classList.remove("sel"));b.classList.add("sel");mode=b.dataset.m;});
+
+// scenario tabs
+const tabs=document.getElementById("scnTabs");
+SCN.forEach((s,i)=>{const b=document.createElement("button");b.textContent=(i+1)+". "+s.name;
+  if(i===0)b.classList.add("sel");b.onclick=()=>{scnIdx=i;
+    [...tabs.children].forEach(x=>x.classList.remove("sel"));b.classList.add("sel");showScn();};tabs.appendChild(b);});
+function showScn(){const s=SCN[scnIdx];
+  document.getElementById("scnText").innerHTML=s.text+'<span class="goal">'+s.goal+'</span>';
+  flash("");update();}
+showScn();
+
+document.getElementById("check").onclick=()=>{
+  const s=SCN[scnIdx];const total=links.reduce((a,l)=>a+l.cost,0);
+  if(!s.check(links)){flash("❌ Not connected yet — keep building.","#c0392b");return;}
+  if(total>s.bud){flash("⚠️ Connected, but $"+(total-s.bud)+"M over budget! Try cheaper routes.","#c98a2e");return;}
+  flash("✅ Scenario complete — and under budget! 🎉","#2e7d32");
+};
+document.getElementById("reset").onclick=()=>{links.forEach(l=>l.el.remove());links=[];
+  if(selected){selected._circ.setAttribute("stroke","#fff");selected=null;}update();flash("");};
+update();
+</script>
+</body>
+</html>

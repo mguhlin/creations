@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lava &amp; Viscosity Lab</title>
+<style>
+  :root{--ink:#1d1a14;--paper:#f5edda;--paper2:#ece0c4;--accent:#bb5e36;--amber:#d8993f;
+    --line:rgba(0,0,0,.14);--shadow:0 16px 36px -18px rgba(0,0,0,.5)}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    color:var(--ink);background:var(--paper);
+    background-image:radial-gradient(circle at 90% 0%,rgba(187,94,54,.12),transparent 40%)}
+  /* shared nav */
+  .topnav{position:sticky;top:0;z-index:20;background:#1d1a14;color:#f5edda;display:flex;
+    align-items:center;gap:4px;flex-wrap:wrap;padding:8px 14px;box-shadow:0 4px 14px rgba(0,0,0,.3)}
+  .topnav a{color:#e7dcc2;text-decoration:none;font-size:13px;padding:6px 11px;border-radius:8px}
+  .topnav a:hover{background:rgba(255,255,255,.1)}
+  .topnav a.home{font-weight:700;color:#fff}
+  .topnav a.active{background:var(--accent);color:#fff}
+  .topnav .spacer{flex:1}
+  .wrap{max-width:1080px;margin:0 auto;padding:30px 22px 70px}
+  .head{margin-bottom:18px}
+  .kicker{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  h1{font-family:Georgia,serif;font-size:clamp(28px,5vw,44px);margin:.15em 0 .25em}
+  .lead{max-width:720px;color:#5a5142;line-height:1.6;font-size:16px}
+  .panel{background:#fffdf7;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);
+    padding:20px 22px;margin-top:20px}
+  .panel h2{font-family:Georgia,serif;margin:0 0 12px;font-size:21px;display:flex;align-items:center;gap:9px}
+  .num{background:var(--accent);color:#fff;width:28px;height:28px;border-radius:50%;display:grid;
+    place-items:center;font-size:15px;flex:none}
+  .lab-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:760px){.lab-grid{grid-template-columns:1fr}}
+  fieldset{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:0}
+  fieldset legend{font-weight:700;padding:0 8px;font-size:14px}
+  .flowA legend{color:#bb5e36}.flowB legend{color:#3b6e73}
+  .opt{display:flex;flex-direction:column;gap:7px;margin-top:6px}
+  .opt label{font-size:13px;font-weight:600;color:#4a4332;margin-top:6px}
+  .chips{display:flex;gap:6px;flex-wrap:wrap}
+  .chips button{border:1px solid var(--line);background:var(--paper);border-radius:20px;padding:6px 12px;
+    font-size:13px;cursor:pointer;transition:.15s}
+  .chips button.sel{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .slope{display:flex;align-items:center;gap:10px;margin-top:8px}
+  input[type=range]{flex:1;accent-color:var(--accent)}
+  canvas{width:100%;display:block;border-radius:12px;background:#15120d}
+  .runbtn{margin-top:14px;background:var(--accent);color:#fff;border:none;border-radius:11px;
+    padding:13px 22px;font-size:16px;font-weight:700;cursor:pointer;width:100%}
+  .runbtn:disabled{opacity:.5;cursor:not-allowed}
+  .result{display:flex;gap:14px;margin-top:14px;flex-wrap:wrap}
+  .rcard{flex:1;min-width:150px;border-radius:12px;padding:12px 14px;border:1px solid var(--line)}
+  .rcard.a{background:#fbe9df}.rcard.b{background:#e1eeef}
+  .rcard .big{font-size:30px;font-weight:800;font-family:Georgia,serif}
+  .verdict{margin-top:12px;font-weight:700;font-size:16px;text-align:center;min-height:22px}
+  textarea,input[type=text]{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;
+    font-family:inherit;font-size:14px;background:#fff;resize:vertical}
+  table{width:100%;border-collapse:collapse;margin-top:8px;font-size:13.5px}
+  th,td{border:1px solid var(--line);padding:7px 9px;text-align:left}
+  th{background:var(--paper2)}
+  .muted{color:#7a7060;font-size:13px}
+  details summary{cursor:pointer;font-weight:700;color:var(--accent)}
+  .vbar{height:10px;border-radius:6px;background:#ddd;overflow:hidden;margin-top:5px}
+  .vbar i{display:block;height:100%;background:linear-gradient(90deg,#d8993f,#bb5e36)}
+  .pillrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+  .pill{background:var(--paper2);border-radius:18px;padding:4px 11px;font-size:12.5px}
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <a class="home" href="index.html">🧭 Activity Lab</a>
+  <a class="active" href="lava.html">🌋 Lava</a>
+  <a href="cartography.html">🗺️ Cartography</a>
+  <a href="place.html">📖 Place</a>
+  <a href="transportation.html">🚂 Transport</a>
+  <a href="mapquest.html">🧭 Map Quest</a>
+</nav>
+
+<div class="wrap">
+  <div class="head">
+    <div class="kicker">Earth Science · Scientific Method</div>
+    <h1>Lava &amp; Viscosity Lab</h1>
+    <p class="lead"><b>Viscosity</b> is a material's resistance to flow. High-viscosity magmas flow slowly and can erupt explosively; low-viscosity lavas run fast and far. In the real classroom we pour <b>corn syrup</b> as a stand-in for lava. Here you'll change the variables, race two flows, and find out which is fastest.</p>
+  </div>
+
+  <!-- 1. Hypothesis -->
+  <div class="panel">
+    <h2><span class="num">1</span>Form a hypothesis</h2>
+    <p class="muted">Before you test anything, predict. Which variables do you think change how fast "lava" flows?</p>
+    <div class="pillrow" id="varPills"></div>
+    <label class="opt" style="margin-top:14px"><b>My hypothesis:</b> I think the lava will flow fastest when…</label>
+    <textarea id="hypo" rows="2" placeholder="e.g. it is warm and has water added, because…"></textarea>
+  </div>
+
+  <!-- 2. Set up the race -->
+  <div class="panel">
+    <h2><span class="num">2</span>Set up the race</h2>
+    <div class="lab-grid">
+      <fieldset class="flowA">
+        <legend>🟧 Flow A</legend>
+        <div class="opt">
+          <label>Temperature</label>
+          <div class="chips" data-group="tempA">
+            <button data-v="cold">❄️ Cold</button>
+            <button data-v="room" class="sel">🌡️ Room</button>
+            <button data-v="warm">🔥 Warm</button>
+          </div>
+          <label>Additive mixed in</label>
+          <div class="chips" data-group="addA">
+            <button data-v="none" class="sel">Plain syrup</button>
+            <button data-v="water">💧 Water</button>
+            <button data-v="quinoa">🟤 Quinoa</button>
+          </div>
+        </div>
+        <p class="muted" style="margin:10px 0 0">Viscosity</p>
+        <div class="vbar"><i id="vbarA"></i></div>
+      </fieldset>
+
+      <fieldset class="flowB">
+        <legend>🟦 Flow B</legend>
+        <div class="opt">
+          <label>Temperature</label>
+          <div class="chips" data-group="tempB">
+            <button data-v="cold" class="sel">❄️ Cold</button>
+            <button data-v="room">🌡️ Room</button>
+            <button data-v="warm">🔥 Warm</button>
+          </div>
+          <label>Additive mixed in</label>
+          <div class="chips" data-group="addB">
+            <button data-v="none" class="sel">Plain syrup</button>
+            <button data-v="water">💧 Water</button>
+            <button data-v="quinoa">🟤 Quinoa</button>
+          </div>
+        </div>
+        <p class="muted" style="margin:10px 0 0">Viscosity</p>
+        <div class="vbar"><i id="vbarB"></i></div>
+      </fieldset>
+    </div>
+
+    <div class="slope">
+      <span style="font-size:13px;font-weight:600">Slide angle</span>
+      <input type="range" id="slope" min="10" max="45" value="28">
+      <span id="slopeVal" style="font-weight:700;width:42px">28°</span>
+    </div>
+
+    <button class="runbtn" id="run">▶ Start the race</button>
+  </div>
+
+  <!-- 3. Watch -->
+  <div class="panel">
+    <h2><span class="num">3</span>Watch the flow</h2>
+    <canvas id="cv" width="900" height="430"></canvas>
+    <div class="result">
+      <div class="rcard a"><div class="muted">🟧 Flow A time</div><div class="big" id="timeA">—</div></div>
+      <div class="rcard b"><div class="muted">🟦 Flow B time</div><div class="big" id="timeB">—</div></div>
+    </div>
+    <div class="verdict" id="verdict"></div>
+  </div>
+
+  <!-- 4. Data -->
+  <div class="panel">
+    <h2><span class="num">4</span>Record your data</h2>
+    <p class="muted">Every race is saved here. Look for patterns: which variable made the biggest difference?</p>
+    <table id="log"><thead><tr><th>#</th><th>Flow</th><th>Temp</th><th>Additive</th><th>Slope</th><th>Time (s)</th></tr></thead>
+      <tbody><tr><td colspan="6" class="muted" style="text-align:center">No runs yet — start a race above.</td></tr></tbody></table>
+  </div>
+
+  <!-- 5. Reflect -->
+  <div class="panel">
+    <h2><span class="num">5</span>Conclude</h2>
+    <label class="opt"><b>Was your hypothesis correct?</b> What did you learn about viscosity?</label>
+    <textarea id="concl" rows="3" placeholder="The fastest flow was… because lower viscosity means…"></textarea>
+    <details style="margin-top:14px"><summary>💡 Teacher / science notes</summary>
+      <p class="muted">Warming a fluid lowers its viscosity (it flows faster). Adding water thins corn syrup (lower viscosity, faster). Adding solids like quinoa raises viscosity and adds friction (slower, and may flow unevenly — like a blocky lava). Steeper slopes increase the gravity pulling the flow downhill. Real basaltic lava is low-viscosity and fast; silica-rich rhyolite is high-viscosity and erupts explosively.</p>
+    </details>
+  </div>
+</div>
+
+<script>
+const VARS=["Temperature","Amount of water added","Solid bits (quinoa) added","Slope steepness","Color of the cup ❌"];
+const vp=document.getElementById("varPills");
+VARS.forEach(v=>{const s=document.createElement("span");s.className="pill";s.textContent=v;
+  s.style.cursor="pointer";
+  s.onclick=()=>{const on=s.dataset.on==="1";s.dataset.on=on?"0":"1";
+    s.style.background=on?"":"#bb5e36";s.style.color=on?"":"#fff";};
+  vp.appendChild(s);});
+
+const state={tempA:"room",addA:"none",tempB:"cold",addB:"none"};
+document.querySelectorAll(".chips").forEach(g=>{
+  g.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
+    [...g.children].forEach(x=>x.classList.remove("sel"));b.classList.add("sel");
+    state[g.dataset.group]=b.dataset.v;updateBars();});
+});
+const slope=document.getElementById("slope");
+slope.oninput=()=>document.getElementById("slopeVal").textContent=slope.value+"°";
+
+// viscosity model: lower number = thinner/faster
+function viscosity(temp,add){
+  let v=5.0; // plain room syrup baseline
+  if(temp==="cold")v*=1.9; if(temp==="warm")v*=0.45;
+  if(add==="water")v*=0.5; if(add==="quinoa")v*=1.6;
+  return v;
+}
+function updateBars(){
+  const va=viscosity(state.tempA,state.addA), vb=viscosity(state.tempB,state.addB);
+  const max=18;
+  document.getElementById("vbarA").style.width=Math.min(100,va/max*100)+"%";
+  document.getElementById("vbarB").style.width=Math.min(100,vb/max*100)+"%";
+}
+updateBars();
+
+const cv=document.getElementById("cv"),ctx=cv.getContext("2d");
+function drawScene(angleDeg,aY,bY,aDone,bDone){
+  const W=cv.width,H=cv.height;ctx.clearRect(0,0,W,H);
+  // background
+  ctx.fillStyle="#15120d";ctx.fillRect(0,0,W,H);
+  const ang=angleDeg*Math.PI/180;
+  // draw two inclined channels (slides)
+  const lanes=[{x:W*0.28,col:"#d8742c",glow:"#ffae5e"},{x:W*0.72,col:"#3b8e95",glow:"#74d4dc"}];
+  const topY=40, runLen=H-110;
+  ctx.lineWidth=3;
+  function lane(cx,prog,col,glow,done){
+    const x0=cx-110, x1=cx+110;
+    const yTop=topY, yBot=topY+runLen;
+    // foil channel
+    ctx.fillStyle="#3a352b";
+    ctx.beginPath();ctx.moveTo(cx-46,yTop);ctx.lineTo(cx+46,yTop);
+    ctx.lineTo(cx+46,yBot);ctx.lineTo(cx-46,yBot);ctx.closePath();ctx.fill();
+    ctx.strokeStyle="#7d7560";ctx.lineWidth=2;ctx.stroke();
+    // shimmer lines
+    ctx.strokeStyle="rgba(255,255,255,.12)";ctx.lineWidth=1;
+    for(let k=-30;k<=30;k+=20){ctx.beginPath();ctx.moveTo(cx+k,yTop);ctx.lineTo(cx+k,yBot);ctx.stroke();}
+    // flow blob
+    const fy=yTop+prog*(runLen-26);
+    const grad=ctx.createRadialGradient(cx,fy,2,cx,fy,34);
+    grad.addColorStop(0,glow);grad.addColorStop(1,col);
+    ctx.fillStyle=grad;
+    ctx.beginPath();ctx.ellipse(cx,fy+10,34,18,0,0,7);ctx.fill();
+    // trail
+    ctx.fillStyle=col+"";ctx.globalAlpha=.35;
+    ctx.fillRect(cx-26,yTop,52,fy-yTop+10);ctx.globalAlpha=1;
+    // finish line
+    ctx.strokeStyle=done?"#7CFC00":"#fff";ctx.setLineDash([6,5]);
+    ctx.beginPath();ctx.moveTo(cx-50,yBot);ctx.lineTo(cx+50,yBot);ctx.stroke();ctx.setLineDash([]);
+  }
+  lane(lanes[0].x,aY,lanes[0].col,lanes[0].glow,aDone);
+  lane(lanes[1].x,bY,lanes[1].col,lanes[1].glow,bDone);
+  // labels
+  ctx.fillStyle="#f5edda";ctx.font="bold 16px Georgia";ctx.textAlign="center";
+  ctx.fillText("🟧 Flow A",lanes[0].x,28);ctx.fillText("🟦 Flow B",lanes[1].x,28);
+  ctx.fillStyle="#bbb";ctx.font="12px sans-serif";
+  ctx.fillText("slope "+angleDeg+"°",W/2,H-18);
+}
+drawScene(28,0,0,false,false);
+
+let running=false, runCount=0;
+const runBtn=document.getElementById("run");
+runBtn.onclick=()=>{
+  if(running)return; running=true; runBtn.disabled=true;
+  document.getElementById("verdict").textContent="";
+  document.getElementById("timeA").textContent="…";document.getElementById("timeB").textContent="…";
+  const ang=+slope.value;
+  const va=viscosity(state.tempA,state.addA), vb=viscosity(state.tempB,state.addB);
+  const grav=Math.sin(ang*Math.PI/180);
+  // speed per frame proportional to gravity / viscosity
+  const spdA=0.010*grav/va*9 , spdB=0.010*grav/vb*9;
+  let aY=0,bY=0,t=0,aT=null,bT=null;
+  const start=performance.now();
+  function frame(now){
+    t=(now-start)/1000;
+    if(aY<1){aY=Math.min(1,aY+spdA);} else if(aT===null){aT=t;}
+    if(bY<1){bY=Math.min(1,bY+spdB);} else if(bT===null){bT=t;}
+    drawScene(ang,aY,bY,aY>=1,bY>=1);
+    if(aT!==null)document.getElementById("timeA").textContent=aT.toFixed(2)+"s";
+    if(bT!==null)document.getElementById("timeB").textContent=bT.toFixed(2)+"s";
+    if(aT===null||bT===null){requestAnimationFrame(frame);}
+    else finish(aT,bT,ang);
+  }
+  requestAnimationFrame(frame);
+};
+function finish(aT,bT,ang){
+  running=false;runBtn.disabled=false;
+  const v=document.getElementById("verdict");
+  if(Math.abs(aT-bT)<0.05){v.textContent="🤝 It's a tie!";v.style.color="#7a6f5a";}
+  else if(aT<bT){v.textContent="🟧 Flow A wins — it had the lower viscosity!";v.style.color="#bb5e36";}
+  else{v.textContent="🟦 Flow B wins — it flowed with less resistance!";v.style.color="#3b6e73";}
+  addRow("A",state.tempA,state.addA,ang,aT);
+  addRow("B",state.tempB,state.addB,ang,bT);
+}
+function addRow(flow,temp,add,ang,time){
+  runCount++;
+  const tb=document.querySelector("#log tbody");
+  if(tb.children.length===1&&tb.children[0].children.length===1)tb.innerHTML="";
+  const tr=document.createElement("tr");
+  const addName={none:"plain",water:"water",quinoa:"quinoa"}[add];
+  tr.innerHTML=`<td>${runCount}</td><td>${flow}</td><td>${temp}</td><td>${addName}</td><td>${ang}°</td><td>${time.toFixed(2)}</td>`;
+  tb.appendChild(tr);
+}
+</script>
+</body>
+</html>

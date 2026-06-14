@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Field Studies Lab — Activity Menu</title>
+<style>
+  :root{
+    --ink:#1d1a14; --ink2:#2b2720; --paper:#f5edda; --paper2:#ece0c4;
+    --terra:#bb5e36; --amber:#d8993f; --sage:#5d7a5a; --teal:#3b6e73;
+    --line:rgba(0,0,0,.14); --shadow:0 18px 40px -18px rgba(0,0,0,.55);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink); background:var(--paper);
+    background-image:
+      radial-gradient(circle at 18% 12%, rgba(216,153,63,.10), transparent 45%),
+      radial-gradient(circle at 85% 88%, rgba(59,110,115,.10), transparent 45%),
+      repeating-radial-gradient(circle at 30% 40%, transparent 0 38px, rgba(120,90,40,.045) 38px 39px);
+    min-height:100vh;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:48px 24px 80px}
+  header.hero{text-align:center;margin-bottom:14px}
+  .kicker{font-size:13px;letter-spacing:.32em;text-transform:uppercase;color:var(--terra);font-weight:700}
+  h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(34px,6vw,60px);margin:.18em 0 .1em;line-height:1.02}
+  .sub{max-width:640px;margin:0 auto;color:#5a5142;font-size:17px;line-height:1.55}
+  .compass{width:70px;height:70px;margin:0 auto 6px;display:block;opacity:.9}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:22px;margin-top:46px}
+  a.card{
+    text-decoration:none;color:inherit;background:#fffdf7;border:1px solid var(--line);
+    border-radius:18px;padding:26px 24px 24px;box-shadow:var(--shadow);position:relative;overflow:hidden;
+    display:flex;flex-direction:column;gap:10px;transition:transform .18s ease, box-shadow .18s ease;
+  }
+  a.card:hover{transform:translateY(-5px);box-shadow:0 26px 50px -20px rgba(0,0,0,.6)}
+  a.card .tag{position:absolute;top:0;right:0;background:var(--accent);color:#fff;font-size:11px;
+    font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:6px 14px;border-bottom-left-radius:14px}
+  .ico{width:52px;height:52px;border-radius:13px;display:grid;place-items:center;font-size:26px;
+    background:color-mix(in srgb, var(--accent) 18%, #fff);border:1px solid color-mix(in srgb,var(--accent) 35%,#fff)}
+  a.card h2{font-family:Georgia,serif;font-size:22px;margin:6px 0 0}
+  a.card p{margin:0;color:#5a5142;font-size:14.5px;line-height:1.5}
+  a.card .skills{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  a.card .skills span{font-size:11.5px;background:var(--paper2);border-radius:20px;padding:3px 10px;color:#4a4332}
+  .go{margin-top:auto;font-weight:700;color:var(--accent);font-size:14px;display:flex;align-items:center;gap:6px}
+  footer{margin-top:54px;text-align:center;color:#8a7f6a;font-size:13px;line-height:1.6}
+  .ribbon{height:6px;border-radius:6px;margin:0 auto 30px;max-width:200px;
+    background:linear-gradient(90deg,var(--terra),var(--amber),var(--sage),var(--teal))}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <svg class="compass" viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="50" cy="50" r="46" fill="none" stroke="#bb5e36" stroke-width="3"/>
+      <circle cx="50" cy="50" r="38" fill="none" stroke="#5d7a5a" stroke-width="1.5" stroke-dasharray="2 5"/>
+      <polygon points="50,12 58,50 50,42 42,50" fill="#bb5e36"/>
+      <polygon points="50,88 42,50 50,58 58,50" fill="#2b2720"/>
+      <circle cx="50" cy="50" r="4" fill="#d8993f"/>
+    </svg>
+    <div class="kicker">Geography &amp; Earth Science</div>
+    <h1>Field Studies Activity Lab</h1>
+    <div class="ribbon"></div>
+    <p class="sub">Five hands-on classroom activities, rebuilt as virtual interactive labs. Pick a station to explore viscosity, mapmaking, place, infrastructure, and navigation — no supplies required.</p>
+  </header>
+
+  <main class="grid">
+    <a class="card" href="lava.html" style="--accent:#bb5e36">
+      <span class="tag">Earth Science</span>
+      <div class="ico">🌋</div>
+      <h2>Lava &amp; Viscosity Lab</h2>
+      <p>Change the variables, race two "lava" flows down the slope, time them, and test your hypothesis about viscosity.</p>
+      <div class="skills"><span>Scientific method</span><span>Hypothesis</span><span>Viscosity</span></div>
+      <div class="go">Enter station →</div>
+    </a>
+
+    <a class="card" href="cartography.html" style="--accent:#3b6e73">
+      <span class="tag">GIS &amp; Maps</span>
+      <div class="ico">🗺️</div>
+      <h2>Cartography &amp; GIS Studio</h2>
+      <p>Build a map in transparent layers — draw an island, add a disaster, then design a way to avoid it. Toggle the data layers like a real GIS.</p>
+      <div class="skills"><span>Spatial thinking</span><span>Layers</span><span>Map elements</span></div>
+      <div class="go">Enter station →</div>
+    </a>
+
+    <a class="card" href="place.html" style="--accent:#9a6a2f">
+      <span class="tag">Literacy</span>
+      <div class="ico">📖</div>
+      <h2>Place Builder</h2>
+      <p>Read a short story, hunt for the words that describe its "place," then assemble a model map from what the text tells you.</p>
+      <div class="skills"><span>Descriptor words</span><span>Inferencing</span><span>Place</span></div>
+      <div class="go">Enter station →</div>
+    </a>
+
+    <a class="card" href="transportation.html" style="--accent:#5d7a5a">
+      <span class="tag">Infrastructure</span>
+      <div class="ico">🚂</div>
+      <h2>Transportation Planner</h2>
+      <p>Lay rail and roads across a map of Missouri to connect cities, solve real scenarios, and balance cost against coverage.</p>
+      <div class="skills"><span>System design</span><span>Spatial scale</span><span>Problem solving</span></div>
+      <div class="go">Enter station →</div>
+    </a>
+
+    <a class="card" href="mapquest.html" style="--accent:#8a4a73">
+      <span class="tag">Navigation</span>
+      <div class="ico">🧭</div>
+      <h2>Mizzou Map Quest</h2>
+      <p>The Lost Tiger Trail: a campus scavenger hunt. Solve map-reading challenges to collect torn map pieces and reveal the final destination.</p>
+      <div class="skills"><span>Cardinal directions</span><span>Map scale</span><span>Wayfinding</span></div>
+      <div class="go">Enter station →</div>
+    </a>
+
+    <div class="card" style="--accent:#7a6f5a;cursor:default;box-shadow:none;background:#faf4e6;border-style:dashed">
+      <div class="ico">🎒</div>
+      <h2>For the teacher</h2>
+      <p>Each station is a single self-contained HTML file — no internet or install needed. Open one on a projector for the whole class, or hand them out on Chromebooks.</p>
+      <div class="go" style="color:#7a6f5a">5 stations · works offline</div>
+    </div>
+  </main>
+
+  <footer>
+    Built from the original hands-on activity plans · Lava · Cartography · Place · Transportation · Map Quest<br>
+    Tip: the physical versions use corn syrup, transparency sheets, floor maps &amp; campus walks — these virtual labs mirror each one.
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Place Builder</title>
+<style>
+  :root{--ink:#1d1a14;--paper:#f5edda;--paper2:#ece0c4;--accent:#9a6a2f;
+    --line:rgba(0,0,0,.14);--shadow:0 16px 36px -18px rgba(0,0,0,.5)}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    color:var(--ink);background:var(--paper);
+    background-image:radial-gradient(circle at 90% 0%,rgba(154,106,47,.12),transparent 40%)}
+  .topnav{position:sticky;top:0;z-index:30;background:#1d1a14;color:#f5edda;display:flex;
+    align-items:center;gap:4px;flex-wrap:wrap;padding:8px 14px;box-shadow:0 4px 14px rgba(0,0,0,.3)}
+  .topnav a{color:#e7dcc2;text-decoration:none;font-size:13px;padding:6px 11px;border-radius:8px}
+  .topnav a:hover{background:rgba(255,255,255,.1)}
+  .topnav a.home{font-weight:700;color:#fff}.topnav a.active{background:var(--accent);color:#fff}
+  .wrap{max-width:1080px;margin:0 auto;padding:26px 22px 70px}
+  .kicker{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  h1{font-family:Georgia,serif;font-size:clamp(28px,5vw,42px);margin:.12em 0 .2em}
+  .lead{max-width:740px;color:#5a5142;line-height:1.6;font-size:15.5px}
+  .panel{background:#fffdf7;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);
+    padding:20px 22px;margin-top:20px}
+  .panel h2{font-family:Georgia,serif;margin:0 0 4px;font-size:21px;display:flex;align-items:center;gap:9px}
+  .num{background:var(--accent);color:#fff;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:15px;flex:none}
+  .muted{color:#7a7060;font-size:13.5px}
+  .meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
+  .meta input{border:1px solid var(--line);border-radius:9px;padding:9px;font-family:inherit;font-size:14px;flex:1;min-width:200px}
+  .story{font-family:Georgia,serif;font-size:18px;line-height:1.95;margin-top:8px;background:#fffaf0;
+    border:1px solid var(--line);border-radius:12px;padding:18px 22px}
+  .story w{cursor:pointer;border-radius:4px;padding:0 2px;transition:.12s;border-bottom:2px dotted #c7a86a}
+  .story w:hover{background:#f2e3c0}
+  .story w.tagged{border-bottom:none;color:#fff;font-weight:600}
+  .c-name{background:#3b6e73!important}.c-feat{background:#5d7a5a!important}
+  .c-env{background:#3b6e73}.c-uniq{background:#8a4a73!important}
+  .c-feature{background:#5d7a5a!important}.c-environment{background:#3b6e73!important}.c-unique{background:#8a4a73!important}
+  .bins{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}
+  @media(max-width:760px){.bins{grid-template-columns:1fr 1fr}}
+  .bin{border:1px solid var(--line);border-radius:12px;padding:12px;min-height:96px}
+  .bin h4{margin:0 0 8px;font-size:13.5px;display:flex;align-items:center;gap:6px}
+  .bin .swatch{width:14px;height:14px;border-radius:4px;display:inline-block}
+  .bin ul{margin:0;padding-left:0;list-style:none;display:flex;flex-wrap:wrap;gap:5px}
+  .bin li{background:var(--paper2);border-radius:14px;padding:3px 9px;font-size:13px}
+  .picker{position:fixed;z-index:50;background:#fff;border:1px solid var(--line);border-radius:12px;
+    box-shadow:0 12px 30px rgba(0,0,0,.3);padding:8px;display:none;gap:6px;flex-direction:column;min-width:170px}
+  .picker button{border:none;border-radius:8px;padding:8px 10px;text-align:left;cursor:pointer;font-size:13.5px;color:#fff;font-weight:600}
+  .picker .clr{background:#eee!important;color:#444!important}
+  .progress{font-size:13px;color:#6a5f48;margin-top:8px}
+  /* model map */
+  .builder{display:grid;grid-template-columns:200px 1fr;gap:16px;margin-top:10px}
+  @media(max-width:760px){.builder{grid-template-columns:1fr}}
+  .palette{border:1px solid var(--line);border-radius:12px;padding:10px;background:#faf4e6}
+  .palette h4{margin:2px 0 8px;font-size:12.5px;text-transform:uppercase;letter-spacing:.06em;color:#6a5f48}
+  .palette .item{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:9px;cursor:grab;
+    border:1px solid transparent;font-size:14px}
+  .palette .item:hover{background:#fff;border-color:var(--line)}
+  .palette .item .e{font-size:22px}
+  .stage{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;min-height:360px;
+    background:linear-gradient(#bfe0ec 0 52%,#e8d6a8 52% 100%);touch-action:none}
+  .stage .placed{position:absolute;font-size:38px;cursor:grab;user-select:none;transform:translate(-50%,-50%)}
+  .stage .hint{position:absolute;inset:0;display:grid;place-items:center;color:#5a6b6f;font-size:15px;text-align:center;pointer-events:none}
+  .btn{border:1px solid var(--line);background:var(--paper);border-radius:9px;padding:9px 14px;font-size:13.5px;cursor:pointer;font-weight:600;margin-top:10px}
+  textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;font-family:inherit;font-size:14px;resize:vertical;margin-top:8px}
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <a class="home" href="index.html">🧭 Activity Lab</a>
+  <a href="lava.html">🌋 Lava</a>
+  <a href="cartography.html">🗺️ Cartography</a>
+  <a class="active" href="place.html">📖 Place</a>
+  <a href="transportation.html">🚂 Transport</a>
+  <a href="mapquest.html">🧭 Map Quest</a>
+</nav>
+
+<div class="wrap">
+  <div class="kicker">Literacy · Geography of Place</div>
+  <h1>Place Builder</h1>
+  <p class="lead"><b>"Place"</b> is how we describe what makes a location special — its <b>name</b>, its <b>features</b> (landforms, water, plants &amp; animals), its <b>environment</b> (like weather), and its <b>unique qualities</b>. Read the story, hunt for the words that describe its place, then build a model map of what you pictured.</p>
+
+  <div class="panel">
+    <h2><span class="num">1</span>The story</h2>
+    <div class="meta">
+      <input id="title" placeholder="Title of the story" value="The Last House on Calle Verde">
+      <input id="author" placeholder="Author" value="(read with your class)">
+    </div>
+    <p class="muted" style="margin-top:12px"><b>Click any underlined word</b> and file it under the kind of place-detail it gives you.</p>
+    <div class="story" id="story">
+      Abuela's <w>adobe house</w> sat at the end of a <w>dusty</w> road in <w>Mesa Verde</w>, where the
+      <w>mesas</w> rose flat and red against a <w>bright</w> afternoon sky. The <w>warm</w> wind carried the smell
+      of <w>cedar</w> and far-off rain. A crooked <w>screen door</w> banged in the breeze, and on the
+      <w>cool</w> back <w>porch</w> a <w>roof</w> of tin kept off the <w>setting sun</w>. Beyond the yard, a
+      thin <w>creek</w> wound between <w>cottonwood</w> trees where <w>jackrabbits</w> darted through the
+      <w>dry</w> brush. By night the desert turned <w>cold</w>, and coyotes called from the <w>canyon</w>.
+      It was an <w>old</w> place, a <w>cozy</w> place — the only place that ever felt like home.
+    </div>
+    <div class="progress" id="prog">0 words sorted</div>
+  </div>
+
+  <div class="panel">
+    <h2><span class="num">2</span>Sort the descriptor words</h2>
+    <div class="bins">
+      <div class="bin"><h4><span class="swatch" style="background:#3b6e73"></span>📛 Name of place</h4><ul data-bin="name"></ul></div>
+      <div class="bin"><h4><span class="swatch" style="background:#5d7a5a"></span>⛰️ Features</h4><ul data-bin="feature"></ul></div>
+      <div class="bin"><h4><span class="swatch" style="background:#3b6e73"></span>🌤️ Environment</h4><ul data-bin="environment"></ul></div>
+      <div class="bin"><h4><span class="swatch" style="background:#8a4a73"></span>✨ Unique qualities</h4><ul data-bin="unique"></ul></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2><span class="num">3</span>Build the model map</h2>
+    <p class="muted">Drag elements onto the scene to recreate the place you imagined. Drag a placed item again to move it; double-click to remove.</p>
+    <div class="builder">
+      <div class="palette">
+        <h4>Drag onto map</h4>
+        <div class="item" draggable="true" data-e="🏜️"><span class="e">🏜️</span>mesa / desert</div>
+        <div class="item" draggable="true" data-e="🏠"><span class="e">🏠</span>adobe house</div>
+        <div class="item" draggable="true" data-e="🌵"><span class="e">🌵</span>cactus</div>
+        <div class="item" draggable="true" data-e="🌳"><span class="e">🌳</span>cottonwood</div>
+        <div class="item" draggable="true" data-e="🏞️"><span class="e">🏞️</span>creek</div>
+        <div class="item" draggable="true" data-e="🐇"><span class="e">🐇</span>jackrabbit</div>
+        <div class="item" draggable="true" data-e="🌄"><span class="e">🌄</span>setting sun</div>
+        <div class="item" draggable="true" data-e="🐺"><span class="e">🐺</span>coyote</div>
+        <div class="item" draggable="true" data-e="🛣️"><span class="e">🛣️</span>dusty road</div>
+        <div class="item" draggable="true" data-e="🏔️"><span class="e">🏔️</span>canyon</div>
+      </div>
+      <div class="stage" id="stage">
+        <div class="hint">🗺️ Drag pieces here to build your model map of the place</div>
+      </div>
+    </div>
+    <button class="btn" id="clearStage">Clear map</button>
+  </div>
+
+  <div class="panel">
+    <h2><span class="num">4</span>Describe your place</h2>
+    <p class="muted">In your own words: what kind of place is this, and how do you know from the text?</p>
+    <textarea rows="3" placeholder="This place is… I can tell because the story said…"></textarea>
+  </div>
+</div>
+
+<div class="picker" id="picker">
+  <button class="set" data-c="name" style="background:#3b6e73">📛 Name of place</button>
+  <button class="set" data-c="feature" style="background:#5d7a5a">⛰️ Feature</button>
+  <button class="set" data-c="environment" style="background:#3b6e73">🌤️ Environment</button>
+  <button class="set" data-c="unique" style="background:#8a4a73">✨ Unique quality</button>
+  <button class="clr" data-c="">↺ Remove</button>
+</div>
+
+<script>
+const picker=document.getElementById("picker");
+let activeWord=null;
+document.querySelectorAll("#story w").forEach((w,i)=>{w.dataset.id=i;
+  w.addEventListener("click",e=>{activeWord=w;
+    const r=w.getBoundingClientRect();
+    picker.style.display="flex";
+    let x=r.left, y=r.bottom+6;
+    if(x+180>innerWidth)x=innerWidth-185;
+    picker.style.left=x+"px";picker.style.top=y+"px";
+    e.stopPropagation();});
+});
+document.addEventListener("click",e=>{if(!picker.contains(e.target)&&e.target.tagName!=="W")picker.style.display="none";});
+
+picker.querySelectorAll("button").forEach(b=>{
+  b.onclick=()=>{const c=b.dataset.c;if(!activeWord)return;
+    // remove old
+    if(activeWord.dataset.cat){
+      const ul=document.querySelector(`ul[data-bin="${activeWord.dataset.cat}"]`);
+      [...ul.children].forEach(li=>{if(li.dataset.id===activeWord.dataset.id)li.remove();});
+    }
+    activeWord.className="";delete activeWord.dataset.cat;
+    if(c){activeWord.classList.add("tagged","c-"+c);activeWord.dataset.cat=c;
+      const li=document.createElement("li");li.textContent=activeWord.textContent;li.dataset.id=activeWord.dataset.id;
+      document.querySelector(`ul[data-bin="${c}"]`).appendChild(li);}
+    picker.style.display="none";updateProg();};
+});
+function updateProg(){const n=document.querySelectorAll("#story w.tagged").length,
+  tot=document.querySelectorAll("#story w").length;
+  document.getElementById("prog").textContent=`${n} of ${tot} words sorted`;}
+
+// drag & drop model map
+const stage=document.getElementById("stage");
+let dragE=null;
+document.querySelectorAll(".palette .item").forEach(it=>{
+  it.addEventListener("dragstart",e=>{dragE=it.dataset.e;});
+});
+stage.addEventListener("dragover",e=>e.preventDefault());
+stage.addEventListener("drop",e=>{e.preventDefault();if(!dragE)return;
+  const r=stage.getBoundingClientRect();place(dragE,e.clientX-r.left,e.clientY-r.top);dragE=null;});
+function place(emoji,x,y){
+  const h=stage.querySelector(".hint");if(h)h.remove();
+  const el=document.createElement("div");el.className="placed";el.textContent=emoji;
+  el.style.left=x+"px";el.style.top=y+"px";
+  el.addEventListener("dblclick",()=>el.remove());
+  makeMovable(el);stage.appendChild(el);
+}
+function makeMovable(el){
+  el.addEventListener("pointerdown",e=>{e.preventDefault();el.setPointerCapture(e.pointerId);
+    const r=stage.getBoundingClientRect();
+    const move=ev=>{el.style.left=(ev.clientX-r.left)+"px";el.style.top=(ev.clientY-r.top)+"px";};
+    const up=()=>{el.removeEventListener("pointermove",move);el.removeEventListener("pointerup",up);};
+    el.addEventListener("pointermove",move);el.addEventListener("pointerup",up);});
+}
+// tap-to-add for touch devices
+document.querySelectorAll(".palette .item").forEach(it=>{
+  it.addEventListener("click",()=>{place(it.dataset.e,60+Math.round(Math.abs(Math.sin(Date.now()))*180),120);});
+});
+document.getElementById("clearStage").onclick=()=>{
+  stage.querySelectorAll(".placed").forEach(p=>p.remove());
+  if(!stage.querySelector(".hint")){const d=document.createElement("div");d.className="hint";
+    d.textContent="🗺️ Drag pieces here to build your model map of the place";stage.appendChild(d);}
+};
+</script>
+</body>
+</html>

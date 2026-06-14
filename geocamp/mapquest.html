@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mizzou Map Quest — The Lost Tiger Trail</title>
+<style>
+  :root{--ink:#1d1a14;--paper:#f5edda;--paper2:#ece0c4;--accent:#8a4a73;--gold:#d8993f;
+    --line:rgba(0,0,0,.14);--shadow:0 16px 36px -18px rgba(0,0,0,.5)}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    color:var(--ink);background:var(--paper);
+    background-image:radial-gradient(circle at 90% 0%,rgba(138,74,115,.13),transparent 40%)}
+  .topnav{position:sticky;top:0;z-index:30;background:#1d1a14;color:#f5edda;display:flex;
+    align-items:center;gap:4px;flex-wrap:wrap;padding:8px 14px;box-shadow:0 4px 14px rgba(0,0,0,.3)}
+  .topnav a{color:#e7dcc2;text-decoration:none;font-size:13px;padding:6px 11px;border-radius:8px}
+  .topnav a:hover{background:rgba(255,255,255,.1)}
+  .topnav a.home{font-weight:700;color:#fff}.topnav a.active{background:var(--accent);color:#fff}
+  .wrap{max-width:1140px;margin:0 auto;padding:26px 20px 70px}
+  .kicker{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  h1{font-family:Georgia,serif;font-size:clamp(27px,5vw,42px);margin:.12em 0 .15em}
+  .lead{max-width:760px;color:#5a5142;line-height:1.6;font-size:15.5px;margin-bottom:16px}
+  .game{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start}
+  @media(max-width:920px){.game{grid-template-columns:1fr}}
+  .mapbox{background:#fffdf7;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:14px}
+  svg{width:100%;height:auto;display:block;border-radius:10px;background:#eef3e6}
+  .side{display:flex;flex-direction:column;gap:16px}
+  .box{background:#fffdf7;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:16px 17px}
+  .box h3{margin:0 0 8px;font-size:14px;text-transform:uppercase;letter-spacing:.07em;color:#6a5f48}
+  .card .q{font-size:16px;line-height:1.5;margin:6px 0 12px}
+  .card .station{font-size:12.5px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+  .answers{display:flex;flex-direction:column;gap:8px}
+  .answers button{border:1px solid var(--line);background:var(--paper);border-radius:10px;padding:11px 13px;
+    font-size:14.5px;cursor:pointer;text-align:left;transition:.12s}
+  .answers button:hover{background:#fff;border-color:var(--accent)}
+  .answers button.right{background:#dff0d8;border-color:#2e7d32;color:#1d4d20}
+  .answers button.wrong{background:#f7d9d4;border-color:#c0392b;color:#7a241b}
+  /* compass answer */
+  .compass-ans{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:180px;margin:4px auto}
+  .compass-ans button{aspect-ratio:1;border:1px solid var(--line);background:var(--paper);border-radius:9px;
+    font-weight:700;cursor:pointer;font-size:14px}
+  .compass-ans button.mid{background:#1d1a14;color:#fff;cursor:default;font-size:18px}
+  .compass-ans button.right{background:#dff0d8;border-color:#2e7d32}
+  .compass-ans button.wrong{background:#f7d9d4;border-color:#c0392b}
+  .fb{margin-top:10px;font-weight:700;font-size:14px;min-height:20px}
+  .pieces{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+  .pc{aspect-ratio:4/3;border-radius:8px;border:2px dashed #c6bca2;display:grid;place-items:center;
+    font-size:11px;color:#a99c7e;background:#f3ead3;text-align:center;padding:4px}
+  .pc.got{border-style:solid;border-color:var(--gold);background:linear-gradient(135deg,#f6e3b8,#e9c97f);
+    color:#5a431a;font-weight:700;font-size:20px}
+  .bar{height:12px;border-radius:7px;background:#e2dcc9;overflow:hidden;margin-top:8px}
+  .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#8a4a73,#c07aa8);transition:.4s}
+  .final{background:linear-gradient(135deg,#2b1c27,#4a2b41);color:#f3e3ec;border-radius:14px;padding:22px;text-align:center;display:none}
+  .final h2{font-family:Georgia,serif;margin:.2em 0;font-size:24px}
+  .final .tiger{font-size:60px}
+  .legend{font-size:12.5px;color:#5a5142;line-height:1.9}
+  .scalebar{display:flex;align-items:center;gap:8px;font-size:12px;margin-top:6px;color:#5a5142}
+  .scalebar .sb{width:60px;height:8px;background:repeating-linear-gradient(90deg,#1d1a14 0 15px,#fff 15px 30px);border:1px solid #1d1a14}
+  text{font-family:-apple-system,sans-serif}
+  .restart{border:1px solid var(--line);background:var(--paper);border-radius:9px;padding:8px 12px;font-size:13px;cursor:pointer;margin-top:10px}
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <a class="home" href="index.html">🧭 Activity Lab</a>
+  <a href="lava.html">🌋 Lava</a>
+  <a href="cartography.html">🗺️ Cartography</a>
+  <a href="place.html">📖 Place</a>
+  <a href="transportation.html">🚂 Transport</a>
+  <a class="active" href="mapquest.html">🧭 Map Quest</a>
+</nav>
+
+<div class="wrap">
+  <div class="kicker">Navigation · Cardinal Directions · Map Scale</div>
+  <h1>Mizzou Map Quest: The Lost Tiger Trail</h1>
+  <p class="lead">An explorer left behind a map of the University of Missouri campus — but it was <b>torn into pieces</b> and scattered. Solve a map-reading challenge at each station to recover a piece. Collect all six, and you'll uncover the final destination!</p>
+
+  <div class="game">
+    <div class="mapbox">
+      <svg id="map" viewBox="0 0 600 480"></svg>
+      <div class="scalebar"><span>Scale:</span><span class="sb"></span><span>= 200 m &nbsp;·&nbsp; 1 grid square ≈ 200 m</span></div>
+      <div class="legend" style="margin-top:6px">📚 Library &nbsp; 🏛️ Historic landmark &nbsp; 🍔 Dining &nbsp; 🏋️ Recreation &nbsp; 🐯 Statue/start</div>
+    </div>
+
+    <div class="side">
+      <div class="box card">
+        <div class="station" id="station">Challenge 1 of 6</div>
+        <h3 style="margin-top:4px">🃏 Challenge Card</h3>
+        <div class="q" id="qtext"></div>
+        <div id="ansArea"></div>
+        <div class="fb" id="fb"></div>
+      </div>
+
+      <div class="box">
+        <h3>🧩 Map pieces recovered</h3>
+        <div class="pieces" id="pieces"></div>
+        <div class="bar"><i id="bar"></i></div>
+        <button class="restart" id="restart">↺ Start over</button>
+      </div>
+
+      <div class="final box" id="final">
+        <div class="tiger">🐯</div>
+        <h2>Trail complete!</h2>
+        <p>All six pieces assemble into the full campus map. The final mystery points back to where every Mizzou journey begins…</p>
+        <p style="font-size:20px;font-weight:700;color:#f0c25a">📍 The Columns</p>
+        <p style="font-size:13px;opacity:.85">Return there to assemble your completed map. Great wayfinding, explorer!</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SVGNS="http://www.w3.org/2000/svg";
+const map=document.getElementById("map");
+const GS=120; // grid size px -> 4 cols (A-D) x 4 rows (1-4)
+const L={
+  columns:{name:"The Columns",x:300,y:250,ico:"🐯",grid:true},
+  jesse:{name:"Jesse Hall",x:300,y:340,ico:"🏛️"},
+  union:{name:"Memorial Union",x:150,y:170,ico:"🍔"},
+  ellis:{name:"Ellis Library",x:400,y:200,ico:"📚"},
+  student:{name:"Student Center",x:190,y:330,ico:"🍔"},
+  rec:{name:"MizzouRec",x:480,y:120,ico:"🏋️"},
+  quad:{name:"Quad Fountain",x:300,y:170,ico:"⛲"},
+  speakers:{name:"Speakers Circle",x:110,y:260,ico:"🏛️"},
+};
+function gridOf(p){const c="ABCD"[Math.min(3,Math.floor(p.x/ (600/4)))];
+  const r=Math.min(4,Math.floor(p.y/(480/4))+1);return c+r;}
+function dirOf(a,b){ // direction of b from a
+  const dx=b.x-a.x, dy=-(b.y-a.y); // invert y so up=north
+  let ang=Math.atan2(dy,dx)*180/Math.PI; if(ang<0)ang+=360;
+  const dirs=["E","NE","N","NW","W","SW","S","SE"];
+  return dirs[Math.round(ang/45)%8];
+}
+
+// ---- draw map ----
+function drawMap(){
+  map.innerHTML="";
+  // grid
+  for(let i=0;i<=4;i++){
+    const gx=i*150, gy=i*120;
+    line(gx,0,gx,480,"#cdd6c0",1); line(0,gy,600,gy,"#cdd6c0",1);
+  }
+  for(let c=0;c<4;c++)label("ABCD"[c],c*150+75,16,"#9aa78a",13);
+  for(let r=0;r<4;r++)label((r+1),12,r*120+66,"#9aa78a",13);
+  // paths between landmarks (decor)
+  pathLine([L.columns,L.quad],"#d8c79a");pathLine([L.columns,L.jesse],"#d8c79a");
+  pathLine([L.quad,L.ellis],"#d8c79a");pathLine([L.quad,L.union],"#d8c79a");
+  pathLine([L.union,L.student],"#d8c79a");pathLine([L.ellis,L.rec],"#d8c79a");
+  pathLine([L.student,L.speakers],"#d8c79a");
+  // landmarks
+  for(const k in L){const p=L[k];
+    const g=document.createElementNS(SVGNS,"g");g.dataset.k=k;
+    const c=circle(p.x,p.y,16,"#fff","#8a4a73",2.5);g.appendChild(c);
+    const t=document.createElementNS(SVGNS,"text");t.setAttribute("x",p.x);t.setAttribute("y",p.y+6);
+    t.setAttribute("text-anchor","middle");t.setAttribute("font-size","17");t.textContent=p.ico;g.appendChild(t);
+    const nm=document.createElementNS(SVGNS,"text");nm.setAttribute("x",p.x);nm.setAttribute("y",p.y+33);
+    nm.setAttribute("text-anchor","middle");nm.setAttribute("font-size","11.5");nm.setAttribute("font-weight","600");
+    nm.setAttribute("fill","#2b2720");nm.textContent=p.name;g.appendChild(nm);
+    p._g=g;p._c=c;map.appendChild(g);
+  }
+  // compass rose
+  const cx=552,cy=440;
+  circle(cx,cy,22,"rgba(255,255,255,.85)","#1d1a14",2);
+  const np=document.createElementNS(SVGNS,"polygon");np.setAttribute("points",`${cx},${cy-18} ${cx+5},${cy} ${cx-5},${cy}`);
+  np.setAttribute("fill","#c0392b");map.appendChild(np);
+  label("N",cx,cy-24,"#1d1a14",12,true);
+}
+function line(x1,y1,x2,y2,col,w){const l=document.createElementNS(SVGNS,"line");
+  l.setAttribute("x1",x1);l.setAttribute("y1",y1);l.setAttribute("x2",x2);l.setAttribute("y2",y2);
+  l.setAttribute("stroke",col);l.setAttribute("stroke-width",w);map.appendChild(l);return l;}
+function pathLine(arr,col){for(let i=0;i<arr.length-1;i++){const l=line(arr[i].x,arr[i].y,arr[i+1].x,arr[i+1].y,col,6);
+  l.setAttribute("stroke-linecap","round");}}
+function circle(x,y,r,fill,stroke,sw){const c=document.createElementNS(SVGNS,"circle");
+  c.setAttribute("cx",x);c.setAttribute("cy",y);c.setAttribute("r",r);c.setAttribute("fill",fill);
+  if(stroke){c.setAttribute("stroke",stroke);c.setAttribute("stroke-width",sw);}map.appendChild(c);return c;}
+function label(txt,x,y,fill,size,bold){const t=document.createElementNS(SVGNS,"text");
+  t.setAttribute("x",x);t.setAttribute("y",y);t.setAttribute("fill",fill);t.setAttribute("font-size",size);
+  t.setAttribute("text-anchor","middle");if(bold)t.setAttribute("font-weight","700");t.textContent=txt;map.appendChild(t);return t;}
+drawMap();
+
+function highlight(keys){for(const k in L){L[k]._c.setAttribute("stroke","#8a4a73");L[k]._c.setAttribute("stroke-width","2.5");}
+  keys.forEach(k=>{L[k]._c.setAttribute("stroke","#d8993f");L[k]._c.setAttribute("stroke-width","5");});}
+
+// ---- challenges ----
+const CH=[
+  {hl:["columns","ellis"],type:"dir",a:"columns",b:"ellis",
+   q:()=>`Stand at <b>The Columns</b> 🐯. In which <b>cardinal direction</b> is <b>Ellis Library</b> 📚?`},
+  {hl:["union","ellis"],type:"mc",
+   q:()=>`Using the scale (1 grid square ≈ 200 m), about how far is it from <b>Memorial Union</b> to <b>Ellis Library</b>?`,
+   opts:["About 100 m","About 350 m","About 1 km","About 3 km"],correct:1},
+  {hl:[],type:"mc",
+   q:()=>`On the map legend, which symbol marks a <b>library</b>?`,
+   opts:["🍔","🏋️","📚","🏛️"],correct:2},
+  {hl:["quad","speakers"],type:"dir",a:"quad",b:"speakers",
+   q:()=>`From the <b>Quad Fountain</b> ⛲, in which direction is <b>Speakers Circle</b> 🏛️?`},
+  {hl:["rec"],type:"mc",
+   q:()=>`Which <b>grid square</b> is <b>MizzouRec</b> 🏋️ located in?`,
+   opts:()=>{const correct=gridOf(L.rec);const set=new Set([correct,"A1","B3","C4"]);
+     return shuffleKeep([...set],correct);},correctVal:()=>gridOf(L.rec)},
+  {hl:["student","quad","ellis"],type:"mc",
+   q:()=>`Start at the <b>Student Center</b>. Walk <b>north</b> to the fountain, then turn and walk <b>east</b>. What's the first landmark you reach?`,
+   opts:["MizzouRec","Ellis Library","Jesse Hall","Memorial Union"],correct:1},
+];
+const PIECES=["NW corner","N edge","NE corner","SW corner","S edge","SE corner"];
+let idx=0, earned=0;
+
+const piecesEl=document.getElementById("pieces");
+function drawPieces(){piecesEl.innerHTML="";PIECES.forEach((p,i)=>{const d=document.createElement("div");
+  d.className="pc"+(i<earned?" got":"");d.textContent=i<earned?"🧩":p;piecesEl.appendChild(d);});
+  document.getElementById("bar").style.width=(earned/6*100)+"%";}
+drawPieces();
+
+function render(){
+  if(idx>=CH.length){win();return;}
+  const ch=CH[idx];highlight(ch.hl);
+  document.getElementById("station").textContent=`Challenge ${idx+1} of 6`;
+  document.getElementById("qtext").innerHTML=ch.q();
+  document.getElementById("fb").textContent="";
+  const area=document.getElementById("ansArea");area.innerHTML="";
+  if(ch.type==="dir"){
+    const grid=document.createElement("div");grid.className="compass-ans";
+    const layout=["NW","N","NE","W","🧭","E","SW","S","SE"];
+    const correct=dirOf(L[ch.a],L[ch.b]);
+    layout.forEach(d=>{const b=document.createElement("button");
+      if(d==="🧭"){b.className="mid";b.textContent="🧭";}
+      else{b.textContent=d;b.onclick=()=>answerDir(b,d,correct);}
+      grid.appendChild(b);});
+    area.appendChild(grid);
+  }else{
+    const wrap=document.createElement("div");wrap.className="answers";
+    let opts=typeof ch.opts==="function"?ch.opts():ch.opts;
+    let correctVal=ch.correctVal?ch.correctVal():opts[ch.correct];
+    opts.forEach(o=>{const b=document.createElement("button");b.textContent=o;
+      b.onclick=()=>answerMC(b,o===correctVal,wrap);wrap.appendChild(b);});
+    area.appendChild(wrap);
+  }
+}
+function answerDir(btn,picked,correct){
+  if(picked===correct){btn.classList.add("right");good();}
+  else{btn.classList.add("wrong");bad("That's "+picked+". Look at the compass — north is up. Try again!");}
+}
+function answerMC(btn,isRight,wrap){
+  if(isRight){btn.classList.add("right");good();}
+  else{btn.classList.add("wrong");btn.disabled=true;bad("Not quite — re-check the map and try another.");}
+}
+function good(){document.getElementById("fb").style.color="#2e7d32";
+  document.getElementById("fb").textContent="✅ Correct! Map piece recovered.";
+  earned++;drawPieces();
+  setTimeout(()=>{idx++;render();},900);}
+function bad(m){document.getElementById("fb").style.color="#c0392b";document.getElementById("fb").textContent="❌ "+m;}
+
+function win(){highlight([]);document.querySelector(".card").style.display="none";
+  document.getElementById("final").style.display="block";
+  L.columns._c.setAttribute("stroke","#d8993f");L.columns._c.setAttribute("stroke-width","6");}
+
+function shuffleKeep(arr,keep){ // deterministic-ish shuffle without Math.random dependency issues
+  const a=[...arr];for(let i=a.length-1;i>0;i--){const j=(i*7+3)%(i+1);[a[i],a[j]]=[a[j],a[i]];}
+  if(!a.includes(keep))a[0]=keep;return a;}
+
+document.getElementById("restart").onclick=()=>{idx=0;earned=0;drawPieces();
+  document.querySelector(".card").style.display="block";document.getElementById("final").style.display="none";render();};
+render();
+</script>
+</body>
+</html>
