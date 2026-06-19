@@ -1,0 +1,994 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Squirrel Chase Learning Trail</title>
+  <style>
+    :root {
+      --forest: #12372A;
+      --forest-2: #1f513f;
+      --leaf: #4F772D;
+      --leaf-soft: #E7F1DC;
+      --acorn: #C8791A;
+      --acorn-soft: #FFF2D8;
+      --sky: #DFF4F3;
+      --mist: #F7F7F1;
+      --cream: #FFFDF6;
+      --ink: #1F2933;
+      --muted: #64748B;
+      --line: #D6DED4;
+      --white: #FFFFFF;
+      --danger: #B42318;
+      --success: #247A3B;
+      --shadow: 0 18px 45px rgba(18, 55, 42, 0.15);
+      --shadow-soft: 0 10px 25px rgba(18, 55, 42, 0.09);
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --radius-sm: 12px;
+      --focus: 0 0 0 4px rgba(200, 121, 26, 0.28);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(223, 244, 243, 0.9), transparent 34rem),
+        linear-gradient(135deg, #fdf7e8 0%, #f7f7f1 45%, #e9f3e4 100%);
+      line-height: 1.5;
+    }
+
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    a { color: var(--forest-2); }
+    .app-shell { max-width: 1180px; margin: 0 auto; padding: 24px; }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--forest), var(--forest-2));
+      color: var(--cream);
+      border-radius: 32px;
+      box-shadow: var(--shadow);
+      padding: clamp(24px, 5vw, 46px);
+    }
+    .hero::before, .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      opacity: 0.22;
+      pointer-events: none;
+    }
+    .hero::before { width: 240px; height: 240px; background: var(--acorn); right: -70px; top: -90px; }
+    .hero::after { width: 180px; height: 180px; background: var(--sky); left: 52%; bottom: -110px; }
+    .hero-inner { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.65fr); gap: 28px; align-items: center; }
+    .brand-row { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+    .brand-mark {
+      width: 56px; height: 56px; border-radius: 18px;
+      display: grid; place-items: center;
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.22);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+      font-size: 32px;
+    }
+    .kicker { margin: 0; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #FFDDAA; font-size: 0.78rem; }
+    h1 { margin: 0; font-size: clamp(2.1rem, 6vw, 4.6rem); line-height: 0.94; letter-spacing: -0.055em; }
+    .hero-lead { margin: 16px 0 0; max-width: 68ch; font-size: clamp(1rem, 1.45vw, 1.2rem); color: rgba(255,253,246,0.91); }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+
+    .squirrel-card {
+      background: rgba(255, 253, 246, 0.12);
+      border: 1px solid rgba(255, 253, 246, 0.2);
+      border-radius: 26px;
+      padding: 20px;
+      color: var(--cream);
+    }
+    .squirrel-scene { width: 100%; max-width: 360px; margin: 0 auto; display: block; }
+    .tiny-note { font-size: 0.82rem; color: rgba(255,253,246,0.74); margin: 10px 0 0; }
+
+    .btn {
+      border: 0;
+      border-radius: 999px;
+      padding: 0.82rem 1.1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-weight: 800;
+      text-decoration: none;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease, border-color 0.16s ease;
+      min-height: 44px;
+    }
+    .btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-soft); }
+    .btn:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, .tab:focus-visible { outline: none; box-shadow: var(--focus); }
+    .btn-primary { background: var(--acorn); color: #fff; }
+    .btn-secondary { background: rgba(255,255,255,0.13); color: var(--cream); border: 1px solid rgba(255,255,255,0.28); }
+    .btn-ghost { background: var(--cream); color: var(--forest); border: 1px solid var(--line); }
+    .btn-light { background: var(--leaf-soft); color: var(--forest); }
+    .btn-danger { background: #FEE4E2; color: var(--danger); }
+    .btn-small { padding: 0.55rem 0.85rem; min-height: 38px; font-size: 0.9rem; }
+
+    .dashboard {
+      margin-top: 22px;
+      display: grid;
+      grid-template-columns: minmax(280px, 0.86fr) minmax(0, 1.44fr);
+      gap: 22px;
+      align-items: start;
+    }
+    .panel {
+      background: rgba(255, 253, 246, 0.88);
+      border: 1px solid rgba(18, 55, 42, 0.11);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 20px;
+    }
+    .panel h2, .panel h3 { margin: 0 0 10px; color: var(--forest); letter-spacing: -0.025em; }
+    .panel p { margin-top: 0; color: var(--muted); }
+
+    .profile-grid { display: grid; gap: 12px; }
+    label { display: grid; gap: 6px; color: var(--forest); font-weight: 800; font-size: 0.9rem; }
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 0.78rem 0.88rem;
+      background: var(--white);
+      color: var(--ink);
+    }
+    textarea { min-height: 126px; resize: vertical; }
+    .help-text { font-size: 0.84rem; color: var(--muted); }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 16px; }
+    .stat {
+      border-radius: 18px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      padding: 12px;
+      text-align: center;
+    }
+    .stat strong { display: block; color: var(--forest); font-size: 1.6rem; line-height: 1; }
+    .stat span { color: var(--muted); font-weight: 700; font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.06em; }
+
+    .trail-wrap { display: grid; gap: 18px; }
+    .trail-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tab {
+      border: 1px solid var(--line);
+      background: var(--white);
+      color: var(--forest);
+      border-radius: 999px;
+      padding: 0.58rem 0.85rem;
+      font-weight: 800;
+    }
+    .tab[aria-selected="true"] { background: var(--forest); color: var(--cream); border-color: var(--forest); }
+
+    .trail-map {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(90deg, rgba(231,241,220,0.92), rgba(255,242,216,0.92));
+      border: 1px solid rgba(18,55,42,0.13);
+      border-radius: var(--radius-lg);
+      padding: 24px 18px 22px;
+    }
+    .trail-path {
+      position: absolute;
+      left: 34px; right: 34px; top: 58px;
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(18,55,42,0.12);
+    }
+    .trail-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--leaf), var(--acorn));
+      transition: width 0.4s ease;
+    }
+    .trail-squirrel {
+      position: absolute;
+      top: 29px;
+      left: 24px;
+      transform: translateX(0);
+      transition: left 0.4s ease;
+      font-size: 2rem;
+      filter: drop-shadow(0 4px 5px rgba(18,55,42,0.18));
+    }
+    .station-row { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; padding-top: 58px; }
+    .station { text-align: center; display: grid; gap: 6px; justify-items: center; color: var(--forest); font-weight: 800; font-size: 0.78rem; }
+    .station-dot {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      display: grid; place-items: center;
+      background: var(--white);
+      border: 2px solid var(--line);
+      box-shadow: 0 4px 12px rgba(18,55,42,0.12);
+    }
+    .station.done .station-dot { background: var(--forest); border-color: var(--forest); color: var(--cream); }
+    .station.current .station-dot { background: var(--acorn); border-color: var(--acorn); color: #fff; }
+
+    .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .activity-card {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      box-shadow: 0 8px 22px rgba(18,55,42,0.06);
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+    .activity-card.done { border-color: rgba(36, 122, 59, 0.35); background: linear-gradient(180deg, #fff, #F1FAF1); }
+    .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+    .badge-row { display: flex; flex-wrap: wrap; gap: 6px; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      border-radius: 999px;
+      padding: 0.25rem 0.55rem;
+      font-size: 0.74rem;
+      font-weight: 900;
+      background: var(--leaf-soft);
+      color: var(--forest);
+      border: 1px solid rgba(18,55,42,0.08);
+    }
+    .badge.gold { background: var(--acorn-soft); color: #7A3D00; }
+    .badge.blue { background: var(--sky); color: #0E5660; }
+    .activity-title { margin: 0; font-size: 1.12rem; color: var(--forest); line-height: 1.15; }
+    .activity-text { margin: 0; color: var(--muted); font-size: 0.95rem; }
+    .card-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 2px; }
+
+    .journal-list { display: grid; gap: 12px; }
+    .journal-entry {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: var(--white);
+      padding: 16px;
+    }
+    .journal-entry h4 { margin: 0 0 6px; color: var(--forest); }
+    .journal-meta { color: var(--muted); font-size: 0.82rem; font-weight: 700; margin-bottom: 8px; }
+    .empty-state { padding: 38px 20px; text-align: center; color: var(--muted); border: 1px dashed var(--line); border-radius: var(--radius-lg); background: rgba(255,255,255,0.62); }
+    .empty-state .big { font-size: 3rem; display: block; }
+
+    .teacher-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .teacher-card { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 16px; }
+    .teacher-card h4 { margin: 0 0 6px; color: var(--forest); }
+    .teacher-card p { margin: 0; color: var(--muted); font-size: 0.92rem; }
+    .copy-box {
+      background: #11231d;
+      color: #F7F7F1;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.86rem;
+      white-space: pre-wrap;
+      margin-top: 12px;
+    }
+
+    .modal-backdrop {
+      position: fixed; inset: 0; z-index: 30;
+      display: none;
+      align-items: center; justify-content: center;
+      padding: 18px;
+      background: rgba(15, 23, 42, 0.58);
+      backdrop-filter: blur(7px);
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      width: min(760px, 100%);
+      max-height: min(90vh, 860px);
+      overflow: auto;
+      background: var(--cream);
+      border-radius: 28px;
+      border: 1px solid rgba(255,255,255,0.55);
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+    .modal-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-bottom: 8px; }
+    .modal-title { margin: 0; color: var(--forest); font-size: clamp(1.45rem, 3vw, 2rem); line-height: 1.05; }
+    .close-btn {
+      flex: 0 0 auto;
+      width: 42px; height: 42px; border-radius: 999px;
+      border: 1px solid var(--line); background: var(--white); color: var(--forest); font-weight: 900;
+    }
+    .prompt-card {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin: 14px 0;
+    }
+    .prompt-card strong { color: var(--forest); }
+    .timer-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
+    .timer-pill {
+      background: var(--forest);
+      color: var(--cream);
+      border-radius: 999px;
+      padding: 0.62rem 0.9rem;
+      font-weight: 900;
+      min-width: 92px;
+      text-align: center;
+    }
+
+    .toast {
+      position: fixed;
+      z-index: 40;
+      left: 50%; bottom: 22px;
+      transform: translate(-50%, 18px);
+      opacity: 0;
+      pointer-events: none;
+      background: var(--forest);
+      color: var(--cream);
+      border-radius: 999px;
+      padding: 0.82rem 1rem;
+      box-shadow: var(--shadow);
+      font-weight: 800;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      max-width: calc(100vw - 28px);
+      text-align: center;
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    .hidden { display: none !important; }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+
+    @media (max-width: 980px) {
+      .hero-inner, .dashboard { grid-template-columns: 1fr; }
+      .squirrel-card { max-width: 520px; }
+      .cards { grid-template-columns: 1fr; }
+      .teacher-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 680px) {
+      .app-shell { padding: 14px; }
+      .hero { border-radius: 24px; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .trail-path, .trail-squirrel { display: none; }
+      .station-row { grid-template-columns: 1fr; padding-top: 0; }
+      .station { grid-template-columns: 42px 1fr; text-align: left; align-items: center; justify-items: start; }
+      .trail-header { align-items: stretch; }
+      .tabs, .hero-actions, .card-actions, .modal .timer-row { flex-direction: column; align-items: stretch; }
+      .btn, .tab { width: 100%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="hero">
+      <div class="hero-inner">
+        <div>
+          <div class="brand-row">
+            <div class="brand-mark" aria-hidden="true">🐿️</div>
+            <div>
+              <p class="kicker">Classroom-ready learning game</p>
+              <h1>Squirrel Chase Learning Trail</h1>
+            </div>
+          </div>
+          <p class="hero-lead">Students complete short learning missions, collect acorns, and leave evidence of thinking. Use it as a bell ringer, station rotation, workshop reflection, exit ticket path, or review game.</p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" data-scroll="trailPanel">Start the chase</button>
+            <button class="btn btn-secondary" data-tab="journal">Open journal</button>
+            <button class="btn btn-secondary" data-tab="teacher">Teacher guide</button>
+          </div>
+        </div>
+        <div class="squirrel-card" aria-label="Squirrel trail illustration">
+          <svg class="squirrel-scene" viewBox="0 0 420 270" role="img" aria-labelledby="svgTitle svgDesc">
+            <title id="svgTitle">Squirrel collecting acorns on a learning trail</title>
+            <desc id="svgDesc">A simple classroom-friendly illustration of a squirrel on a path with acorns and trees.</desc>
+            <rect width="420" height="270" rx="28" fill="#FFFDF6" opacity="0.14"></rect>
+            <path d="M35 210 C95 165, 135 235, 205 194 S310 152, 382 195" fill="none" stroke="#FFDDAA" stroke-width="16" stroke-linecap="round" opacity="0.95"></path>
+            <g transform="translate(66,52)">
+              <rect x="22" y="70" width="20" height="92" rx="9" fill="#8B5E34"></rect>
+              <circle cx="32" cy="54" r="44" fill="#74A34E"></circle>
+              <circle cx="5" cy="74" r="28" fill="#4F772D"></circle>
+              <circle cx="60" cy="78" r="30" fill="#5B8C37"></circle>
+            </g>
+            <g transform="translate(273,38)">
+              <rect x="26" y="86" width="20" height="100" rx="9" fill="#8B5E34"></rect>
+              <circle cx="36" cy="66" r="50" fill="#74A34E"></circle>
+              <circle cx="4" cy="90" r="30" fill="#4F772D"></circle>
+              <circle cx="72" cy="92" r="32" fill="#5B8C37"></circle>
+            </g>
+            <g transform="translate(167,95)">
+              <path d="M71 85c-27 12-64-2-66-32C3 22 34-4 65 10c-15 17-8 39 7 47 14 8 27 2 32-6 8 14-4 28-33 34z" fill="#B86E22"></path>
+              <circle cx="62" cy="65" r="35" fill="#C8791A"></circle>
+              <circle cx="43" cy="38" r="26" fill="#D58A35"></circle>
+              <circle cx="32" cy="28" r="9" fill="#C8791A"></circle>
+              <circle cx="51" cy="32" r="4" fill="#1F2933"></circle>
+              <path d="M23 48c11 7 24 8 38 2" fill="none" stroke="#7A3D00" stroke-width="4" stroke-linecap="round"></path>
+              <ellipse cx="82" cy="95" rx="28" ry="13" fill="#7A3D00" opacity="0.22"></ellipse>
+            </g>
+            <g fill="#C8791A">
+              <path d="M96 220c8-12 23-12 31 0-2 18-29 18-31 0z"></path><rect x="105" y="206" width="13" height="8" rx="3" fill="#7A3D00"></rect>
+              <path d="M325 215c8-12 23-12 31 0-2 18-29 18-31 0z"></path><rect x="334" y="201" width="13" height="8" rx="3" fill="#7A3D00"></rect>
+              <path d="M238 231c8-12 23-12 31 0-2 18-29 18-31 0z"></path><rect x="247" y="217" width="13" height="8" rx="3" fill="#7A3D00"></rect>
+            </g>
+          </svg>
+          <p class="tiny-note">Edit the activity list in the JavaScript array at the bottom of the file to match any grade level or subject.</p>
+        </div>
+      </div>
+    </header>
+
+    <main class="dashboard">
+      <aside class="panel" aria-label="Student profile and progress">
+        <h2>Set up the chase</h2>
+        <p>Keep it simple: name, class, and topic. The topic is inserted into generic missions.</p>
+        <div class="profile-grid">
+          <label>Student or team name
+            <input id="studentName" autocomplete="name" placeholder="Example: Table 4 or Sofia">
+          </label>
+          <label>Class or group
+            <input id="className" placeholder="Example: 5th Science">
+          </label>
+          <label>Learning topic
+            <input id="topicName" placeholder="Example: water cycle, theme, fractions">
+          </label>
+          <label>Trail mode
+            <select id="trailMode">
+              <option value="solo">Solo reflection</option>
+              <option value="partner">Partner talk</option>
+              <option value="team">Team station rotation</option>
+            </select>
+          </label>
+          <button class="btn btn-primary" id="saveProfileBtn">Save setup</button>
+          <p class="help-text" id="profileStatus">Progress saves in this browser when allowed. No student data is sent anywhere.</p>
+        </div>
+        <div class="stats-grid" aria-label="Progress summary">
+          <div class="stat"><strong id="acornCount">0</strong><span>Acorns</span></div>
+          <div class="stat"><strong id="missionCount">0</strong><span>Done</span></div>
+          <div class="stat"><strong id="journalCount">0</strong><span>Notes</span></div>
+        </div>
+        <div style="display:grid; gap:10px; margin-top:16px;">
+          <button class="btn btn-ghost" id="copyJournalBtn">Copy journal as Markdown</button>
+          <button class="btn btn-ghost" id="downloadJournalBtn">Download journal</button>
+          <button class="btn btn-danger" id="resetBtn">Reset this trail</button>
+        </div>
+      </aside>
+
+      <section class="trail-wrap" id="trailPanel">
+        <div class="panel">
+          <div class="trail-header">
+            <div>
+              <h2>Learning trail</h2>
+              <p id="trailSubhead">Complete missions in any order. Each completed mission moves the squirrel forward.</p>
+            </div>
+            <div class="tabs" role="tablist" aria-label="App sections">
+              <button class="tab" role="tab" aria-selected="true" data-view="trail">Trail</button>
+              <button class="tab" role="tab" aria-selected="false" data-view="journal">Journal</button>
+              <button class="tab" role="tab" aria-selected="false" data-view="teacher">Teacher</button>
+            </div>
+          </div>
+
+          <div id="trailView">
+            <div class="trail-map" aria-label="Trail progress map">
+              <div class="trail-path"><div class="trail-fill" id="trailFill"></div></div>
+              <div class="trail-squirrel" id="trailSquirrel" aria-hidden="true">🐿️</div>
+              <div class="station-row" id="stationRow"></div>
+            </div>
+            <div class="cards" id="activityCards" style="margin-top:16px;"></div>
+          </div>
+
+          <div id="journalView" class="hidden">
+            <div class="trail-header" style="margin:4px 0 14px;">
+              <div>
+                <h3>Student journal</h3>
+                <p>Reflections are collected here after each mission.</p>
+              </div>
+              <button class="btn btn-light btn-small" id="printBtn">Print</button>
+            </div>
+            <div id="journalList" class="journal-list"></div>
+          </div>
+
+          <div id="teacherView" class="hidden">
+            <h3>Teacher guide</h3>
+            <p>This version changes the branding and turns the activity-card structure into a reusable classroom chase. It is self-contained: no Google Sheet, no external icon library, and no server required.</p>
+            <div class="teacher-grid">
+              <div class="teacher-card"><h4>Best use</h4><p>Run as a station rotation, choice board, review trail, or exit-ticket sequence.</p></div>
+              <div class="teacher-card"><h4>Evidence</h4><p>Each mission asks students to write a quick note, example, explanation, or transfer idea.</p></div>
+              <div class="teacher-card"><h4>Customize</h4><p>Edit the ACTIVITIES array to swap prompts, points, categories, or time limits.</p></div>
+            </div>
+            <div class="copy-box" id="teacherPrompt"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop" role="presentation">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header">
+        <div>
+          <div class="badge-row" id="modalBadges"></div>
+          <h2 class="modal-title" id="modalTitle">Mission title</h2>
+        </div>
+        <button class="close-btn" id="closeModalBtn" aria-label="Close activity">×</button>
+      </div>
+      <p id="modalDescription" class="activity-text"></p>
+      <div class="prompt-card">
+        <strong>Mission directions</strong>
+        <p id="modalDirections" style="margin:8px 0 0;"></p>
+      </div>
+      <div class="prompt-card">
+        <strong>Evidence prompt</strong>
+        <p id="modalPrompt" style="margin:8px 0 10px;"></p>
+        <label for="reflectionText">Your response
+          <textarea id="reflectionText" placeholder="Write one or two useful sentences. Keep it clear enough that your teacher can see your thinking."></textarea>
+        </label>
+      </div>
+      <div class="timer-row">
+        <span class="timer-pill" id="timerDisplay">00:00</span>
+        <button class="btn btn-light btn-small" id="startTimerBtn">Start timer</button>
+        <button class="btn btn-ghost btn-small" id="resetTimerBtn">Reset timer</button>
+      </div>
+      <div class="card-actions">
+        <button class="btn btn-primary" id="completeMissionBtn">Complete mission and collect acorn</button>
+        <button class="btn btn-ghost" id="skipReflectionBtn">Save as done without journal note</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">Saved</div>
+
+  <script>
+    // Edit this list to match your lesson. Keep each id unique.
+    const ACTIVITIES = [
+      {
+        id: "cache-01",
+        title: "Quick Cache",
+        category: "Recall",
+        phase: "Surface",
+        minutes: 3,
+        points: 1,
+        description: "Grab the first acorn: name one important idea from today’s topic.",
+        directions: "Write the topic in your own words. Do not copy a definition. Use classroom language.",
+        prompt: "What is one key idea about {topic}, stated in your own words?"
+      },
+      {
+        id: "cache-02",
+        title: "Tree-to-Tree Talk",
+        category: "Explain",
+        phase: "Surface",
+        minutes: 4,
+        points: 1,
+        description: "Explain the idea to a partner, then capture the cleanest version.",
+        directions: "Tell a partner your explanation. Ask them what part was clearest. Revise your wording before you save it.",
+        prompt: "What explanation would make sense to a classmate who missed the first five minutes?"
+      },
+      {
+        id: "cache-03",
+        title: "Acorn Sort",
+        category: "Classify",
+        phase: "Deep",
+        minutes: 5,
+        points: 2,
+        description: "Sort examples and non-examples so the difference is visible.",
+        directions: "List two examples and one non-example. Then explain why the non-example does not belong.",
+        prompt: "Give two examples of {topic} and one non-example. What rule separates them?"
+      },
+      {
+        id: "cache-04",
+        title: "Nest Builder",
+        category: "Connect",
+        phase: "Deep",
+        minutes: 6,
+        points: 2,
+        description: "Build a small connection between the topic and something you already know.",
+        directions: "Make one connection to another lesson, a book, a real-world event, a personal experience, or a visual model.",
+        prompt: "How does {topic} connect to something you already know? Explain the connection, not just the match."
+      },
+      {
+        id: "cache-05",
+        title: "Predator Proof",
+        category: "Misconception",
+        phase: "Deep",
+        minutes: 5,
+        points: 2,
+        description: "Protect the learning from a common mistake.",
+        directions: "Name one mistake someone might make with this idea. Correct it in plain language.",
+        prompt: "What is one misunderstanding about {topic}, and how would you fix it?"
+      },
+      {
+        id: "cache-06",
+        title: "Forest Transfer",
+        category: "Apply",
+        phase: "Transfer",
+        minutes: 7,
+        points: 3,
+        description: "Use the idea somewhere new, away from the original example.",
+        directions: "Pick a new situation. Apply the idea. Explain what changes and what stays the same.",
+        prompt: "Where else could you use {topic}? Give a new situation and explain how it would work there."
+      },
+      {
+        id: "cache-07",
+        title: "Exit Burrow",
+        category: "Reflect",
+        phase: "Transfer",
+        minutes: 4,
+        points: 2,
+        description: "Close the trail with one clear learning move.",
+        directions: "Look back at your trail. Name what got stronger and what still needs work.",
+        prompt: "What do you understand better about {topic} now, and what question do you still have?"
+      }
+    ];
+
+    const STORAGE_KEY = "squirrel_chase_learning_trail_v1";
+    let state = loadState();
+    let currentActivity = null;
+    let timer = null;
+    let timerRemaining = 0;
+
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+
+    const els = {
+      studentName: $("#studentName"),
+      className: $("#className"),
+      topicName: $("#topicName"),
+      trailMode: $("#trailMode"),
+      profileStatus: $("#profileStatus"),
+      acornCount: $("#acornCount"),
+      missionCount: $("#missionCount"),
+      journalCount: $("#journalCount"),
+      trailFill: $("#trailFill"),
+      trailSquirrel: $("#trailSquirrel"),
+      stationRow: $("#stationRow"),
+      activityCards: $("#activityCards"),
+      trailSubhead: $("#trailSubhead"),
+      modalBackdrop: $("#modalBackdrop"),
+      modalBadges: $("#modalBadges"),
+      modalTitle: $("#modalTitle"),
+      modalDescription: $("#modalDescription"),
+      modalDirections: $("#modalDirections"),
+      modalPrompt: $("#modalPrompt"),
+      reflectionText: $("#reflectionText"),
+      timerDisplay: $("#timerDisplay"),
+      toast: $("#toast"),
+      journalList: $("#journalList"),
+      teacherPrompt: $("#teacherPrompt")
+    };
+
+    function defaultState() {
+      return {
+        profile: { student: "", className: "", topic: "", mode: "solo" },
+        completed: {},
+        journal: []
+      };
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? { ...defaultState(), ...JSON.parse(raw) } : defaultState();
+      } catch (error) {
+        return defaultState();
+      }
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (error) {
+        console.warn("Progress could not be saved in this browser.", error);
+      }
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#039;"
+      }[char]));
+    }
+
+    function topic() {
+      return (state.profile.topic || "today’s topic").trim();
+    }
+
+    function fillTemplate(text) {
+      return String(text || "").replaceAll("{topic}", topic());
+    }
+
+    function totalPoints() {
+      return ACTIVITIES.reduce((sum, a) => sum + Number(a.points || 1), 0);
+    }
+
+    function earnedPoints() {
+      return ACTIVITIES.reduce((sum, a) => sum + (state.completed[a.id] ? Number(a.points || 1) : 0), 0);
+    }
+
+    function completedCount() {
+      return ACTIVITIES.filter((a) => state.completed[a.id]).length;
+    }
+
+    function updateProfileFromState() {
+      els.studentName.value = state.profile.student || "";
+      els.className.value = state.profile.className || "";
+      els.topicName.value = state.profile.topic || "";
+      els.trailMode.value = state.profile.mode || "solo";
+    }
+
+    function saveProfile() {
+      state.profile = {
+        student: els.studentName.value.trim(),
+        className: els.className.value.trim(),
+        topic: els.topicName.value.trim(),
+        mode: els.trailMode.value
+      };
+      saveState();
+      render();
+      showToast("Setup saved");
+    }
+
+    function render() {
+      renderStats();
+      renderTrailMap();
+      renderCards();
+      renderJournal();
+      renderTeacherGuide();
+      els.trailSubhead.textContent = `Topic: ${topic()}. Complete missions in any order. Each acorn moves the squirrel forward.`;
+    }
+
+    function renderStats() {
+      els.acornCount.textContent = earnedPoints();
+      els.missionCount.textContent = completedCount();
+      els.journalCount.textContent = state.journal.length;
+    }
+
+    function renderTrailMap() {
+      const count = completedCount();
+      const percent = ACTIVITIES.length <= 1 ? 100 : (count / ACTIVITIES.length) * 100;
+      els.trailFill.style.width = `${Math.min(100, Math.max(0, percent))}%`;
+      els.trailSquirrel.style.left = `calc(${Math.min(92, Math.max(0, percent))}% - 8px)`;
+      const firstIncompleteIndex = ACTIVITIES.findIndex((a) => !state.completed[a.id]);
+      const currentIndex = firstIncompleteIndex === -1 ? ACTIVITIES.length - 1 : firstIncompleteIndex;
+      els.stationRow.innerHTML = ACTIVITIES.map((activity, index) => {
+        const done = !!state.completed[activity.id];
+        const current = index === currentIndex && !done;
+        const label = escapeHtml(activity.title);
+        return `<button class="station ${done ? "done" : ""} ${current ? "current" : ""}" type="button" data-open="${activity.id}" aria-label="Open ${label}">
+          <span class="station-dot">${done ? "✓" : index + 1}</span>
+          <span>${label}</span>
+        </button>`;
+      }).join("");
+    }
+
+    function renderCards() {
+      els.activityCards.innerHTML = ACTIVITIES.map((activity) => {
+        const done = !!state.completed[activity.id];
+        const points = Number(activity.points || 1);
+        return `<article class="activity-card ${done ? "done" : ""}">
+          <div class="card-top">
+            <div>
+              <div class="badge-row">
+                <span class="badge">${escapeHtml(activity.phase)}</span>
+                <span class="badge blue">${escapeHtml(activity.category)}</span>
+                <span class="badge gold">${points} ${points === 1 ? "acorn" : "acorns"}</span>
+              </div>
+              <h3 class="activity-title">${escapeHtml(activity.title)}</h3>
+            </div>
+            <span aria-hidden="true" style="font-size:1.6rem;">${done ? "🌰" : "🍂"}</span>
+          </div>
+          <p class="activity-text">${escapeHtml(fillTemplate(activity.description))}</p>
+          <div class="card-actions">
+            <button class="btn btn-primary btn-small" data-open="${activity.id}">${done ? "Do again" : "Open mission"}</button>
+            ${done ? `<span class="badge">Done</span>` : ""}
+          </div>
+        </article>`;
+      }).join("");
+    }
+
+    function renderJournal() {
+      if (!state.journal.length) {
+        els.journalList.innerHTML = `<div class="empty-state"><span class="big">📝</span><strong>No journal entries yet.</strong><br>Complete a mission and save a response to build a learning record.</div>`;
+        return;
+      }
+      els.journalList.innerHTML = state.journal.map((entry) => `<article class="journal-entry">
+        <h4>${escapeHtml(entry.title)}</h4>
+        <div class="journal-meta">${escapeHtml(entry.category)} • ${escapeHtml(entry.phase)} • ${escapeHtml(entry.timestamp)}</div>
+        <p><strong>Prompt:</strong> ${escapeHtml(entry.prompt)}</p>
+        <p>${escapeHtml(entry.response)}</p>
+      </article>`).join("");
+    }
+
+    function renderTeacherGuide() {
+      els.teacherPrompt.textContent = `Teacher setup notes\n\n1. Pick a lesson topic. Current topic: ${topic()}\n2. Ask students to complete three to seven missions.\n3. Require one useful sentence per mission.\n4. Use Copy journal as Markdown for quick submission.\n5. Edit ACTIVITIES in this HTML file for your exact lesson.\n\nSuggested scoring:\nSurface missions: completion\nDeep missions: connection plus explanation\nTransfer missions: new context plus reasoning`;
+    }
+
+    function openActivity(id) {
+      const activity = ACTIVITIES.find((item) => item.id === id);
+      if (!activity) return;
+      currentActivity = activity;
+      stopTimer();
+      timerRemaining = Number(activity.minutes || 3) * 60;
+      updateTimerDisplay();
+      els.modalBadges.innerHTML = `<span class="badge">${escapeHtml(activity.phase)}</span><span class="badge blue">${escapeHtml(activity.category)}</span><span class="badge gold">${activity.points} acorn${activity.points === 1 ? "" : "s"}</span>`;
+      els.modalTitle.textContent = activity.title;
+      els.modalDescription.textContent = fillTemplate(activity.description);
+      els.modalDirections.textContent = fillTemplate(activity.directions);
+      els.modalPrompt.textContent = fillTemplate(activity.prompt);
+      els.reflectionText.value = "";
+      els.modalBackdrop.classList.add("open");
+      setTimeout(() => els.reflectionText.focus(), 50);
+    }
+
+    function closeModal() {
+      stopTimer();
+      els.modalBackdrop.classList.remove("open");
+      currentActivity = null;
+    }
+
+    function completeMission(saveReflection = true) {
+      if (!currentActivity) return;
+      const response = els.reflectionText.value.trim();
+      state.completed[currentActivity.id] = { ts: Date.now() };
+      if (saveReflection && response) {
+        state.journal.unshift({
+          id: currentActivity.id,
+          title: currentActivity.title,
+          category: currentActivity.category,
+          phase: currentActivity.phase,
+          prompt: fillTemplate(currentActivity.prompt),
+          response,
+          timestamp: new Date().toLocaleString()
+        });
+      }
+      saveState();
+      render();
+      showToast(response ? "Acorn collected and journal saved" : "Acorn collected");
+      closeModal();
+    }
+
+    function startTimer() {
+      if (!currentActivity) return;
+      if (timer) return;
+      if (timerRemaining <= 0) timerRemaining = Number(currentActivity.minutes || 3) * 60;
+      timer = setInterval(() => {
+        timerRemaining -= 1;
+        updateTimerDisplay();
+        if (timerRemaining <= 0) {
+          stopTimer();
+          showToast("Time is up. Save your best thinking.");
+        }
+      }, 1000);
+    }
+
+    function stopTimer() {
+      if (timer) clearInterval(timer);
+      timer = null;
+    }
+
+    function resetTimer() {
+      stopTimer();
+      if (currentActivity) timerRemaining = Number(currentActivity.minutes || 3) * 60;
+      updateTimerDisplay();
+    }
+
+    function updateTimerDisplay() {
+      const safe = Math.max(0, timerRemaining);
+      const mins = Math.floor(safe / 60);
+      const secs = safe % 60;
+      els.timerDisplay.textContent = `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+    }
+
+    function showView(view) {
+      $("#trailView").classList.toggle("hidden", view !== "trail");
+      $("#journalView").classList.toggle("hidden", view !== "journal");
+      $("#teacherView").classList.toggle("hidden", view !== "teacher");
+      $$(".tab").forEach((tab) => tab.setAttribute("aria-selected", tab.dataset.view === view ? "true" : "false"));
+      if (view === "journal") renderJournal();
+      if (view === "teacher") renderTeacherGuide();
+      $("#trailPanel").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function journalMarkdown() {
+      const profile = state.profile;
+      const lines = [
+        `# Squirrel Chase Learning Trail Journal`,
+        ``,
+        `- Student or team: ${profile.student || ""}`,
+        `- Class: ${profile.className || ""}`,
+        `- Topic: ${topic()}`,
+        `- Missions complete: ${completedCount()} of ${ACTIVITIES.length}`,
+        `- Acorns collected: ${earnedPoints()} of ${totalPoints()}`,
+        ``
+      ];
+      if (!state.journal.length) {
+        lines.push(`No journal entries yet.`);
+      } else {
+        state.journal.slice().reverse().forEach((entry, index) => {
+          lines.push(`## ${index + 1}. ${entry.title}`);
+          lines.push(``);
+          lines.push(`**Category:** ${entry.category}  `);
+          lines.push(`**Phase:** ${entry.phase}  `);
+          lines.push(`**Saved:** ${entry.timestamp}`);
+          lines.push(``);
+          lines.push(`**Prompt:** ${entry.prompt}`);
+          lines.push(``);
+          lines.push(entry.response);
+          lines.push(``);
+        });
+      }
+      return lines.join("\n");
+    }
+
+    async function copyJournal() {
+      const text = journalMarkdown();
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast("Journal copied as Markdown");
+      } catch (error) {
+        const area = document.createElement("textarea");
+        area.value = text;
+        document.body.appendChild(area);
+        area.select();
+        document.execCommand("copy");
+        document.body.removeChild(area);
+        showToast("Journal copied as Markdown");
+      }
+    }
+
+    function downloadJournal() {
+      const blob = new Blob([journalMarkdown()], { type: "text/markdown;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      const safeTopic = topic().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "learning-trail";
+      a.href = url;
+      a.download = `${safeTopic}-squirrel-chase-journal.md`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function resetTrail() {
+      const ok = confirm("Reset progress, acorns, and journal entries for this browser?");
+      if (!ok) return;
+      state = defaultState();
+      saveState();
+      updateProfileFromState();
+      render();
+      showToast("Trail reset");
+    }
+
+    function showToast(message) {
+      els.toast.textContent = message;
+      els.toast.classList.add("show");
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => els.toast.classList.remove("show"), 2300);
+    }
+
+    document.addEventListener("click", (event) => {
+      const openBtn = event.target.closest("[data-open]");
+      if (openBtn) openActivity(openBtn.dataset.open);
+      const tabBtn = event.target.closest("[data-view]");
+      if (tabBtn) showView(tabBtn.dataset.view);
+      const heroTab = event.target.closest("[data-tab]");
+      if (heroTab) showView(heroTab.dataset.tab);
+      const scrollBtn = event.target.closest("[data-scroll]");
+      if (scrollBtn) document.getElementById(scrollBtn.dataset.scroll)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    $("#saveProfileBtn").addEventListener("click", saveProfile);
+    $("#copyJournalBtn").addEventListener("click", copyJournal);
+    $("#downloadJournalBtn").addEventListener("click", downloadJournal);
+    $("#resetBtn").addEventListener("click", resetTrail);
+    $("#closeModalBtn").addEventListener("click", closeModal);
+    $("#completeMissionBtn").addEventListener("click", () => completeMission(true));
+    $("#skipReflectionBtn").addEventListener("click", () => completeMission(false));
+    $("#startTimerBtn").addEventListener("click", startTimer);
+    $("#resetTimerBtn").addEventListener("click", resetTimer);
+    $("#printBtn").addEventListener("click", () => window.print());
+    els.modalBackdrop.addEventListener("click", (event) => { if (event.target === els.modalBackdrop) closeModal(); });
+    document.addEventListener("keydown", (event) => { if (event.key === "Escape" && els.modalBackdrop.classList.contains("open")) closeModal(); });
+
+    updateProfileFromState();
+    render();
+  </script>
+</body>
+</html>
