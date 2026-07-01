@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MGuhlin.org — Creations</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
   --forest:        #2D6A4F;
@@ -740,6 +739,397 @@ footer {
   .hero-tally { gap: 18px; }
   .cards { grid-template-columns: 1fr; }
 }
+
+/* Minimal black-and-white index theme */
+:root {
+  --forest: #111;
+  --forest-deep: #000;
+  --forest-darker: #000;
+  --forest-mid: #333;
+  --forest-light: #666;
+  --forest-pale: #ddd;
+  --forest-faint: #f5f5f5;
+  --ink: #000;
+  --ink-soft: #222;
+  --ink-mute: #555;
+  --ink-faint: #777;
+  --page: #fff;
+  --page-soft: #f7f7f7;
+  --page-edge: #eee;
+  --border: #d8d8d8;
+  --border-soft: #e8e8e8;
+  --gold: #000;
+  --sidebar-w: 270px;
+}
+
+body {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.5;
+}
+
+.sidebar {
+  background: #fff;
+  border-right: 1px solid var(--border);
+  scrollbar-color: #bbb transparent;
+}
+
+.sidebar-brand,
+.sidebar-brand span,
+.sidebar-section-label,
+.sidebar-section-toggle,
+.sidebar-section-toggle .count,
+.sidebar-footer a {
+  color: #000;
+  font-family: inherit;
+  font-style: normal;
+  letter-spacing: 0;
+}
+
+.sidebar-brand {
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.sidebar-section-label {
+  color: #777;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+}
+
+.sidebar-section-toggle {
+  color: #111;
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+  padding-top: 12px;
+}
+
+.sidebar-group a {
+  color: #222;
+  border-radius: 4px;
+  font-size: 0.82rem;
+}
+
+.sidebar-group a:hover {
+  background: #f1f1f1;
+  color: #000;
+}
+
+.sidebar-group a .pnum {
+  color: #777;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.sidebar-footer {
+  border-top: 1px solid var(--border);
+}
+
+.menu-toggle {
+  background: #fff;
+  border: 1px solid #000;
+  border-radius: 4px;
+}
+
+.menu-toggle span {
+  background: #000;
+}
+
+.sidebar-overlay {
+  background: rgba(0,0,0,0.45);
+}
+
+.hero {
+  padding: 34px 40px 28px;
+  border-bottom: 1px solid var(--border);
+}
+
+.hero-inner,
+.toolbar-inner,
+.grid-wrap {
+  max-width: 1180px;
+}
+
+.hero-eyebrow {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  margin-bottom: 10px;
+  color: #555;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+}
+
+.hero-eyebrow::before {
+  display: none;
+}
+
+.hero-title,
+.hero-title em,
+.hero-byline,
+.tally-num,
+.section-title,
+.card-title,
+.empty-state h3,
+.footer-brand,
+.footer-brand span {
+  color: #000;
+  font-family: inherit;
+  font-style: normal;
+  letter-spacing: 0;
+}
+
+.hero-title {
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 1.05;
+  margin-bottom: 8px;
+}
+
+.hero-byline {
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+
+.hero-desc {
+  max-width: 760px;
+  margin-bottom: 18px;
+  color: #444;
+}
+
+.hero-row {
+  gap: 20px;
+}
+
+.hero-link a,
+.btn-primary,
+.btn-secondary {
+  background: #000;
+  border: 1px solid #000;
+  border-radius: 4px;
+  color: #fff;
+  font-family: inherit;
+  text-decoration: none;
+  transform: none;
+}
+
+.hero-link a:hover,
+.btn-primary:hover,
+.btn-secondary:hover {
+  background: #333;
+  border-color: #333;
+  color: #fff;
+  transform: none;
+}
+
+.hero-tally {
+  gap: 18px;
+}
+
+.tally-num {
+  font-size: 1.35rem;
+}
+
+.tally-label,
+.result-count,
+.section-count,
+.card-num,
+.card-cat,
+.card-stat-lbl,
+.loading-lbl {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.toolbar {
+  background: rgba(255,255,255,0.97);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 40px;
+}
+
+.toolbar-inner {
+  gap: 10px;
+}
+
+.search-wrap {
+  max-width: 560px;
+}
+
+.search-wrap::before {
+  color: #555;
+}
+
+#search-input {
+  border-color: #bbb;
+  border-radius: 4px;
+  font-family: inherit;
+}
+
+#search-input:focus {
+  border-color: #000;
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.08);
+}
+
+.filter-chip {
+  border-radius: 4px;
+  background: #fff;
+  color: #222;
+  font-family: inherit;
+}
+
+.filter-chip:hover,
+.filter-chip.active {
+  background: #000;
+  border-color: #000;
+  color: #fff;
+}
+
+.grid-wrap {
+  padding-top: 20px;
+}
+
+.section-block {
+  margin-bottom: 28px;
+  scroll-margin-top: 120px;
+}
+
+.section-header {
+  margin-bottom: 10px;
+  border-color: #dcdcdc;
+}
+
+.section-title {
+  font-size: 1rem;
+}
+
+.cards {
+  grid-template-columns: repeat(auto-fill, minmax(245px, 1fr));
+  gap: 10px;
+}
+
+.card {
+  border-radius: 4px;
+  border-color: #d6d6d6;
+  box-shadow: none;
+  scroll-margin-top: 120px;
+}
+
+.card:hover {
+  border-color: #000;
+  box-shadow: none;
+  transform: none;
+}
+
+.card-accent {
+  display: none;
+}
+
+.card-body {
+  padding: 13px;
+}
+
+.card-head {
+  margin-bottom: 6px;
+}
+
+.card-num {
+  color: #777;
+}
+
+.card-cat {
+  background: #f3f3f3;
+  border-color: #ddd;
+  color: #333;
+}
+
+.card-title {
+  font-size: 1rem;
+}
+
+.card-sub,
+.card-desc {
+  color: #555;
+  font-size: 0.82rem;
+}
+
+.card-stat {
+  background: #f8f8f8;
+  border-left: 0;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  padding: 7px 9px;
+}
+
+.card-stat-num {
+  color: #000;
+  font-family: inherit;
+  font-size: 1.15rem;
+}
+
+.feat-chip {
+  background: #fff;
+  border-radius: 4px;
+  color: #444;
+}
+
+.card-actions {
+  gap: 5px;
+}
+
+.btn-secondary {
+  background: #fff;
+  color: #000;
+}
+
+.btn-secondary:hover {
+  background: #eee;
+  border-color: #000;
+  color: #000;
+}
+
+#back-to-top {
+  background: #000;
+  border-radius: 4px;
+  box-shadow: none;
+}
+
+footer {
+  background: #fff;
+  border-top: 1px solid var(--border);
+}
+
+.footer-links a,
+.footer-copy {
+  color: #555;
+}
+
+.footer-links a:hover {
+  color: #000;
+}
+
+.loading-dot {
+  background: #000;
+}
+
+@media (max-width: 860px) {
+  .hero {
+    padding-top: 70px;
+  }
+
+  .search-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .search-wrap {
+    max-width: none;
+    width: 100%;
+  }
+
+  .result-count {
+    margin-left: 0;
+  }
+}
 </style>
 </head>
 <body>
@@ -961,7 +1351,7 @@ function buildCard(p) {
     const ext = l.external ? 'target="_blank" rel="noopener"' : '';
     const cls = l.primary ? 'btn-primary' : 'btn-secondary';
     return `<a href="${l.href}" class="${cls}" ${ext}>${l.label}</a>`;
-  }).join('');
+  }).join('') + `<a href="#${p.id}" class="btn-secondary" aria-label="Permalink to ${escapeAttr(stripTags(p.title))}">#</a>`;
 
   card.innerHTML = `
     <div class="card-accent" style="background:${p.panelGradient}"></div>
