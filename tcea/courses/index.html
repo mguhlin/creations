@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TCEA Professional Learning Catalog</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  :root {
+    --navy: #0A3476;
+    --navy-dark: #071f4a;
+    --navy-mid: #12428f;
+    --gold: #FCB040;
+    --gold-light: #fdd17a;
+    --gold-pale: #FEF0D0;
+    --pale-navy: #D0D8F0;
+    --white: #ffffff;
+    --off-white: #f7f8fc;
+    --text: #1a1a2e;
+    --text-muted: #5a6680;
+    --border: #e2e7f5;
+    --teal: #0e6b8a;
+  }
+  body { font-family: "DM Sans", sans-serif; background: var(--off-white); color: var(--text); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+
+  /* HERO — tightened */
+  .tcea-hero { background: var(--navy-dark); background-image: radial-gradient(ellipse 80% 60% at 80% 50%, rgba(252,176,64,0.12) 0%, transparent 60%), radial-gradient(ellipse 60% 80% at 10% 100%, rgba(18,66,143,0.6) 0%, transparent 60%); padding: 36px 40px 32px; text-align: center; position: relative; overflow: hidden; }
+  .tcea-hero::before { content: ""; position: absolute; bottom: -2px; left: 0; right: 0; height: 36px; background: var(--off-white); clip-path: ellipse(55% 100% at 50% 100%); }
+  .tcea-hero-logo { display: block; margin: 0 auto 14px; height: 50px; width: auto; }
+  .tcea-hero-badge { display: inline-block; background: var(--gold); color: var(--navy-dark); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 4px 14px; border-radius: 100px; margin-bottom: 12px; }
+  .tcea-hero h1 { font-family: "DM Serif Display", serif; font-size: clamp(1.9rem, 4.3vw, 2.7rem); color: var(--white); line-height: 1.1; margin-bottom: 10px; max-width: 700px; margin-left: auto; margin-right: auto; }
+  .tcea-hero h1 em { font-style: italic; color: var(--gold); }
+  .tcea-hero p { color: rgba(255,255,255,0.72); font-size: 0.95rem; max-width: 540px; margin: 0 auto 6px; }
+  .tcea-hero-updated { font-size: 0.74rem; color: rgba(255,255,255,0.5) !important; margin: 0 auto 16px !important; }
+  .tcea-hero-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+  /* BUTTONS */
+  .btn-primary { background: var(--gold); color: var(--navy-dark); font-weight: 700; font-size: 0.88rem; padding: 11px 24px; border-radius: 8px; text-decoration: none; transition: background 0.2s, transform 0.15s; display: inline-block; }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .btn-outline { border: 1.5px solid rgba(255,255,255,0.35); color: var(--white); font-weight: 600; font-size: 0.88rem; padding: 11px 24px; border-radius: 8px; text-decoration: none; transition: border-color 0.2s, background 0.2s; display: inline-block; }
+  .btn-outline:hover { border-color: var(--gold); background: rgba(252,176,64,0.08); }
+
+  /* STATS — tightened */
+  .tcea-stats { display: flex; justify-content: center; background: var(--white); border-bottom: 2px solid var(--border); flex-wrap: wrap; }
+  .tcea-stat { padding: 16px 32px; text-align: center; border-right: 1px solid var(--border); flex: 1; min-width: 130px; }
+  .tcea-stat:last-child { border-right: none; }
+  .tcea-stat-num { font-family: "DM Serif Display", serif; font-size: 1.7rem; color: var(--navy); display: block; line-height: 1; }
+  .tcea-stat-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-top: 3px; display: block; }
+
+  /* NAV */
+  .tcea-nav { position: sticky; top: 0; z-index: 100; background: var(--white); border-bottom: 2px solid var(--border); box-shadow: 0 2px 12px rgba(10,52,118,0.07); }
+  .tcea-nav-inner { display: flex; overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+  .tcea-nav-inner::-webkit-scrollbar { display: none; }
+  .tcea-nav-tab { padding: 13px 20px; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); text-decoration: none; white-space: nowrap; border-bottom: 3px solid transparent; transition: color 0.2s, border-color 0.2s; display: flex; align-items: center; gap: 6px; cursor: pointer; }
+  .tcea-nav-tab:hover, .tcea-nav-tab.active { color: var(--navy); border-color: var(--gold); }
+
+  /* SUBNAV */
+  .tcea-subnav { position: sticky; top: 47px; z-index: 99; background: var(--off-white); border-bottom: 1px solid var(--border); }
+  .tcea-subnav-tab { padding: 9px 14px; font-size: 0.72rem; font-weight: 500; color: var(--text-muted); text-decoration: none; white-space: nowrap; border-bottom: 2px solid transparent; transition: color 0.2s, border-color 0.2s; display: flex; align-items: center; gap: 5px; cursor: pointer; }
+  .tcea-subnav-tab:hover, .tcea-subnav-tab.active { color: var(--navy); border-color: var(--gold); }
+
+  /* MAIN — tightened */
+  .tcea-main { max-width: 1100px; margin: 0 auto; padding: 32px 24px 60px; }
+
+  /* SECTION — tightened */
+  .tcea-section { margin-bottom: 44px; scroll-margin-top: 100px; }
+  .tcea-section + .tcea-section { border-top: 2px solid var(--border); padding-top: 36px; position: relative; }
+  .tcea-section + .tcea-section::before { content: ""; position: absolute; top: -2px; left: 0; width: 64px; height: 2px; background: var(--gold); }
+  .tcea-section-header { display: flex; align-items: flex-end; gap: 16px; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 2px solid var(--border); flex-wrap: wrap; }
+  .tcea-section-icon { font-size: 1.6rem; line-height: 1; }
+  .tcea-section-meta { flex: 1; }
+  .tcea-section-meta h2 { font-family: "DM Serif Display", serif; font-size: 1.5rem; color: var(--navy); line-height: 1.2; }
+  .tcea-section-meta p { color: var(--text-muted); font-size: 0.86rem; margin-top: 2px; }
+  .tcea-price-badge { background: var(--navy); color: var(--white); font-size: 0.82rem; font-weight: 700; padding: 7px 16px; border-radius: 8px; white-space: nowrap; }
+  .tcea-price-badge.gold { background: var(--gold); color: var(--navy-dark); }
+  .tcea-price-badge.teal { background: var(--teal); color: var(--white); }
+
+  /* COURSE LIST — list-style rows */
+  .tcea-course-grid { display: flex; flex-direction: column; background: var(--white); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .tcea-course-card { display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 16px; text-decoration: none; color: inherit; border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  .tcea-course-card:last-child { border-bottom: none; }
+  .tcea-course-card:hover { background: #f0f4ff; }
+  .tcea-course-title { font-weight: 500; font-size: 0.88rem; color: var(--navy); line-height: 1.3; }
+  .tcea-course-meta { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; flex-shrink: 0; margin-top: 0; }
+  .tcea-chip { font-size: 0.68rem; font-weight: 700; padding: 3px 7px; border-radius: 4px; letter-spacing: 0.3px; }
+  .tcea-chip-cpe { background: var(--pale-navy); color: var(--navy); }
+  .tcea-chip-badge { background: var(--gold-pale); color: #7a5200; }
+  .tcea-chip-gt { background: #e8f5e9; color: #2e7d32; }
+  .tcea-chip-price { background: #f3e8ff; color: #6b21a8; }
+
+  /* CATEGORY LABEL — tightened */
+  .tcea-cat-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); margin: 20px 0 9px; scroll-margin-top: 100px; }
+
+  /* BOOSTER GRID — tightened */
+  .tcea-booster-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; }
+  .tcea-booster-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 10px; padding: 15px; text-decoration: none; color: inherit; transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s; display: flex; flex-direction: column; gap: 8px; }
+  .tcea-booster-card:hover { border-color: var(--gold); box-shadow: 0 4px 16px rgba(10,52,118,0.1); transform: translateY(-2px); }
+  .tcea-booster-icon { font-size: 1.4rem; line-height: 1; }
+  .tcea-booster-title { font-weight: 600; font-size: 0.85rem; color: var(--navy); line-height: 1.35; }
+  .tcea-booster-price { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); margin-top: auto; }
+
+  /* CERT CARDS — tightened */
+  .tcea-cert-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 12px; }
+  .tcea-cert-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 12px; padding: 20px; text-decoration: none; color: inherit; transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s; position: relative; overflow: hidden; }
+  .tcea-cert-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--navy); }
+  .tcea-cert-card.cert-gold::before { background: var(--gold); }
+  .tcea-cert-card:hover { border-color: var(--navy); box-shadow: 0 6px 20px rgba(10,52,118,0.12); transform: translateY(-2px); }
+  .tcea-cert-card h4 { font-family: "DM Serif Display", serif; font-size: 1.05rem; color: var(--navy); margin-bottom: 6px; line-height: 1.3; }
+  .tcea-cert-card p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px; }
+  .tcea-cert-footer { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  /* FREE BANNER — tightened */
+  .tcea-free-banner { background: linear-gradient(135deg, #f0f4ff 0%, var(--gold-pale) 100%); border: 1.5px solid var(--pale-navy); border-radius: 12px; padding: 16px 22px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 32px; }
+  .tcea-free-icon { font-size: 2.1rem; flex-shrink: 0; }
+  .tcea-free-content { flex: 1; min-width: 200px; }
+  .tcea-free-content h3 { font-weight: 700; color: var(--navy); font-size: 0.96rem; margin-bottom: 3px; }
+  .tcea-free-content p { font-size: 0.82rem; color: var(--text-muted); }
+  .tcea-free-badge { background: #2e7d32; color: var(--white); font-weight: 800; font-size: 0.82rem; padding: 7px 16px; border-radius: 8px; white-space: nowrap; }
+
+  /* CONTACT — tightened */
+  .tcea-contact { background: var(--navy); border-radius: 14px; padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-top: 44px; }
+  .tcea-contact h3 { font-family: "DM Serif Display", serif; font-size: 1.3rem; color: var(--white); margin-bottom: 5px; }
+  .tcea-contact p { font-size: 0.86rem; color: rgba(255,255,255,0.78); }
+  .tcea-contact p a { color: var(--gold-light); text-decoration: none; font-weight: 600; }
+  .tcea-contact p a:hover { text-decoration: underline; }
+  .tcea-contact-links { display: flex; gap: 10px; flex-wrap: wrap; }
+  .tcea-contact-links a { background: var(--gold); color: var(--navy-dark); font-weight: 700; font-size: 0.84rem; padding: 10px 18px; border-radius: 8px; text-decoration: none; transition: background 0.2s; }
+  .tcea-contact-links a:hover { background: var(--gold-light); }
+  .tcea-contact-links a.outline-link { background: transparent; border: 1.5px solid rgba(255,255,255,0.3); color: var(--white); }
+  .tcea-contact-links a.outline-link:hover { background: rgba(255,255,255,0.08); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  .tcea-hero > * { animation: fadeUp 0.5s ease both; }
+  .tcea-hero > *:nth-child(2) { animation-delay: 0.07s; }
+  .tcea-hero > *:nth-child(3) { animation-delay: 0.14s; }
+  .tcea-hero > *:nth-child(4) { animation-delay: 0.21s; }
+  .tcea-hero > *:nth-child(5) { animation-delay: 0.26s; }
+  .tcea-hero > *:nth-child(6) { animation-delay: 0.3s; }
+
+  @media (max-width: 640px) {
+    .tcea-hero { padding: 36px 20px 36px; }
+    .tcea-contact { padding: 20px; }
+    .tcea-main { padding: 24px 16px 48px; }
+    .tcea-stat { padding: 13px 18px; }
+  }
+
+  /* ===== NAVIGATOR ===== */
+  .tcea-navigator { max-width: 1100px; margin: 24px auto 0; padding: 0 24px; }
+  .nav-intro { text-align: center; margin-bottom: 18px; }
+  .nav-intro h2 { font-family: "DM Serif Display", serif; font-size: 1.5rem; color: var(--navy); }
+  .nav-intro p { font-size: 0.9rem; color: var(--text-muted); margin-top: 2px; }
+  .nav-step { display: none; background: var(--white); border: 1.5px solid var(--border); border-radius: 14px; padding: 26px; box-shadow: 0 2px 14px rgba(10,52,118,0.06); }
+  .nav-step.active { display: block; }
+  .nav-q { font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-bottom: 18px; }
+  .nav-opts { display: flex; flex-direction: column; gap: 10px; }
+  .nav-opts.nav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+  .nav-opt { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; padding: 14px 16px; font-size: 0.92rem; font-weight: 600; border: 1.5px solid var(--border); border-radius: 10px; background: var(--white); color: var(--navy); cursor: pointer; transition: border-color 0.15s, background 0.15s; font-family: "DM Sans", sans-serif; }
+  .nav-opt:hover { border-color: var(--gold); background: var(--gold-pale); }
+  .nav-opt-ic { font-size: 1.4rem; flex-shrink: 0; }
+  .nav-opt strong { display: block; }
+  .nav-opt small { display: block; font-size: 0.78rem; font-weight: 400; color: var(--text-muted); margin-top: 2px; }
+  .nav-back { margin-top: 16px; background: none; border: none; color: var(--text-muted); font-size: 0.84rem; cursor: pointer; padding: 4px 0; font-family: "DM Sans", sans-serif; }
+  .nav-back:hover { color: var(--navy); }
+  .nav-result-head { margin-bottom: 14px; }
+  .nav-result-head h3 { font-family: "DM Serif Display", serif; font-size: 1.25rem; color: var(--navy); }
+  .nav-result-head p { font-size: 0.84rem; color: var(--text-muted); margin-top: 2px; }
+  .nav-rlist { display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .nav-ritem { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 16px; text-decoration: none; color: inherit; border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  .nav-ritem:last-child { border-bottom: none; }
+  .nav-ritem:hover { background: #f0f4ff; }
+  .nav-ritem-t { font-weight: 500; font-size: 0.9rem; color: var(--navy); }
+  .nav-ritem-meta { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
+  /* Browse-all collapsible */
+  .tcea-browse { max-width: 1100px; margin: 22px auto 0; padding: 0 24px; }
+  .tcea-browse > summary { list-style: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.9rem; color: var(--navy); padding: 11px 20px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--white); transition: border-color 0.15s; }
+  .tcea-browse > summary:hover { border-color: var(--gold); }
+  .tcea-browse > summary::-webkit-details-marker { display: none; }
+  .tcea-browse > summary::after { content: "▾"; transition: transform 0.2s; }
+  .tcea-browse[open] > summary::after { transform: rotate(180deg); }
+
+  /* ===================== PRINT STYLESHEET ===================== */
+  @media print {
+    @page { margin: 0.5in; }
+    body { background: #fff; color: #000; font-size: 10pt; line-height: 1.35; }
+
+    /* Hide interactive chrome that has no value on paper */
+    .tcea-nav, .tcea-subnav, .tcea-hero-actions, .tcea-contact-links, .tcea-navigator { display: none !important; }
+    .tcea-browse > summary { display: none !important; }
+    .tcea-browse[open], .tcea-browse { display: block !important; }
+
+    /* Flatten hero to a simple printed masthead */
+    .tcea-hero { background: #fff !important; padding: 0 0 12pt; text-align: left; border-bottom: 2pt solid #0A3476; margin-bottom: 14pt; }
+    .tcea-hero::before { display: none; }
+    .tcea-hero-logo { margin: 0 0 8pt; height: 42px; }
+    .tcea-hero-badge { background: none; color: #0A3476; padding: 0; letter-spacing: 1px; margin-bottom: 4pt; }
+    .tcea-hero h1 { color: #0A3476; font-size: 20pt; }
+    .tcea-hero h1 em { color: #0A3476; }
+    .tcea-hero p { color: #333; font-size: 9.5pt; margin: 4pt 0 0; max-width: none; }
+    .tcea-hero-updated { color: #777 !important; font-size: 8pt; margin: 2pt 0 0 !important; }
+
+    .tcea-stats { border: none; justify-content: flex-start; gap: 18pt; margin-bottom: 14pt; }
+    .tcea-stat { border: none; padding: 0; text-align: left; min-width: 0; flex: 0 0 auto; }
+    .tcea-stat-num { color: #0A3476; font-size: 14pt; }
+
+    .tcea-main { padding: 0; max-width: none; }
+
+    /* Keep groups from splitting awkwardly across pages */
+    .tcea-section { margin-bottom: 16pt; page-break-inside: avoid; }
+    .tcea-section + .tcea-section { border-top: 0.75pt solid #ccc; padding-top: 10pt; }
+    .tcea-section + .tcea-section::before { display: none; }
+    .tcea-section-header { border-bottom: 1pt solid #999; margin-bottom: 8pt; padding-bottom: 5pt; }
+    .tcea-section-meta h2 { color: #0A3476; font-size: 13pt; }
+    .tcea-section-meta p { color: #333; font-size: 8.5pt; }
+    .tcea-price-badge, .tcea-price-badge.gold, .tcea-price-badge.teal { background: none !important; color: #0A3476 !important; border: 1pt solid #0A3476; padding: 2pt 7pt; font-size: 8.5pt; }
+    .tcea-cat-label { color: #0A3476; margin: 9pt 0 5pt; page-break-after: avoid; }
+
+    .tcea-booster-grid, .tcea-cert-grid { gap: 5pt; display: grid; }
+    .tcea-booster-grid { grid-template-columns: repeat(3, 1fr); }
+    .tcea-cert-grid { grid-template-columns: repeat(2, 1fr); }
+
+    /* Course list prints as compact two-column rows */
+    .tcea-course-grid { display: grid; grid-template-columns: 1fr 1fr; border: 0.75pt solid #bbb !important; border-radius: 4pt; overflow: hidden; }
+    .tcea-course-card { display: flex; flex-direction: row; justify-content: space-between; gap: 6pt; padding: 3pt 6pt; border-bottom: 0.5pt solid #ddd !important; background: none !important; page-break-inside: avoid; }
+    .tcea-course-card:hover { background: none !important; }
+
+    .tcea-booster-card, .tcea-cert-card {
+      border: 0.75pt solid #bbb !important; border-radius: 4pt; padding: 6pt 8pt;
+      box-shadow: none !important; transform: none !important; page-break-inside: avoid;
+    }
+    .tcea-booster-card:hover, .tcea-cert-card:hover { transform: none !important; box-shadow: none !important; }
+    .tcea-cert-card::before { display: none; }
+    .tcea-course-title, .tcea-booster-title, .tcea-cert-card h4 { color: #0A3476; font-size: 8.5pt; }
+    .tcea-cert-card p { font-size: 7.5pt; }
+    .tcea-booster-icon, .tcea-section-icon, .tcea-free-icon { display: none; }
+    .tcea-booster-price { font-size: 7.5pt; }
+
+    .tcea-chip { border: 0.5pt solid #999; background: none !important; color: #333 !important; font-size: 6.5pt; padding: 1pt 4pt; }
+
+    .tcea-free-banner { background: none !important; border: 1pt solid #0A3476; padding: 7pt 10pt; margin-bottom: 12pt; page-break-inside: avoid; }
+    .tcea-free-content h3 { color: #0A3476; font-size: 9pt; }
+    .tcea-free-content p { font-size: 8pt; }
+    .tcea-free-badge { background: none !important; color: #0A3476 !important; border: 1pt solid #0A3476; padding: 2pt 7pt; }
+
+    .tcea-contact { background: none !important; border: 1pt solid #0A3476; padding: 10pt; margin-top: 14pt; page-break-inside: avoid; }
+    .tcea-contact h3 { color: #0A3476; font-size: 11pt; }
+    .tcea-contact p { color: #000; }
+    .tcea-contact p a { color: #0A3476; }
+
+    a { text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="tcea-hero">
+  <img class="tcea-hero-logo" src="data:image/png;base64,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" alt="TCEA">
+  <div class="tcea-hero-badge">45+ Years Supporting Educators</div>
+  <h1>Professional Learning<br><em>Built for Educators</em></h1>
+  <p>Self-paced, credit-bearing courses, certifications, and knowledge boosters — designed by educators, for educators. Flexible online access, 24/7.</p>
+  <p class="tcea-hero-updated"><em>Last Updated: June 29, 2026 at 7:17 PM CDT</em></p>
+  <div class="tcea-hero-actions">
+    <a href="https://tcea.org/pd" class="btn-primary">Browse Full Catalog</a>
+    <a href="https://tinyurl.com/tceahelp" class="btn-outline">Get a Quote</a>
+  </div>
+</div>
+
+<div class="tcea-stats">
+  <div class="tcea-stat"><span class="tcea-stat-num">50+</span><span class="tcea-stat-label">Learning Options</span></div>
+  <div class="tcea-stat"><span class="tcea-stat-num">10–49</span><span class="tcea-stat-label">CPE Hours Per Option</span></div>
+  <div class="tcea-stat"><span class="tcea-stat-num">$49</span><span class="tcea-stat-label">Membership Included Free</span></div>
+  <div class="tcea-stat"><span class="tcea-stat-num">24/7</span><span class="tcea-stat-label">Online Access</span></div>
+</div>
+
+
+<div class="tcea-navigator" id="navigator">
+  <div class="nav-intro">
+    <h2>Find Your Path</h2>
+    <p>Two quick steps and we'll point you to the right TCEA learning.</p>
+  </div>
+
+  <div class="nav-step active" id="ns_goal">
+    <div class="nav-q">What are you looking to do?</div>
+    <div class="nav-opts">
+      <button class="nav-opt" onclick="navGo('learn')"><span class="nav-opt-ic">📚</span><span><strong>Learn a tool or skill</strong><small>Browse courses by subject area</small></span></button>
+      <button class="nav-opt" onclick="navGo('cert')"><span class="nav-opt-ic">🏅</span><span><strong>Earn a certification</strong><small>Certifications and the Accelerator</small></span></button>
+      <button class="nav-opt" onclick="navGo('challenge')"><span class="nav-opt-ic">🎯</span><span><strong>Solve a classroom challenge</strong><small>Get targeted recommendations</small></span></button>
+    </div>
+  </div>
+
+  <div class="nav-step" id="ns_learn">
+    <div class="nav-q">Which area interests you?</div>
+    <div class="nav-opts nav-grid">
+      <button class="nav-opt" onclick="navResult('ai')">🤖 AI-Focused</button>
+      <button class="nav-opt" onclick="navResult('google')">🔵 Google</button>
+      <button class="nav-opt" onclick="navResult('apple')">🍎 Apple</button>
+      <button class="nav-opt" onclick="navResult('coding')">⚙️ Coding, STEAM &amp; Robotics</button>
+      <button class="nav-opt" onclick="navResult('curriculum')">📚 Curriculum &amp; Instruction</button>
+      <button class="nav-opt" onclick="navResult('digital')">🛠️ Digital Tools</button>
+      <button class="nav-opt" onclick="navResult('lms')">📋 Learning Management</button>
+      <button class="nav-opt" onclick="navResult('teks')">🖥️ TA:TEKS</button>
+    </div>
+    <button class="nav-back" onclick="navHome()">← Back</button>
+  </div>
+
+  <div class="nav-step" id="ns_cert">
+    <div class="nav-q">Certifications and Accelerator</div>
+    <div class="nav-opts">
+      <button class="nav-opt" onclick="navResult('certs')"><span class="nav-opt-ic">🏅</span><span><strong>See all certifications</strong><small>Accelerator $149 · Certifications $349–$449</small></span></button>
+    </div>
+    <button class="nav-back" onclick="navHome()">← Back</button>
+  </div>
+
+  <div class="nav-step" id="ns_challenge">
+    <div class="nav-q">What is your biggest challenge?</div>
+    <div class="nav-opts nav-grid">
+      <button class="nav-opt" onclick="navResult('engagement')">Student Engagement</button>
+      <button class="nav-opt" onclick="navResult('diverse')">Supporting Diverse Learners</button>
+      <button class="nav-opt" onclick="navResult('aitech')">Integrating AI</button>
+      <button class="nav-opt" onclick="navResult('design')">Lesson Planning &amp; Design</button>
+      <button class="nav-opt" onclick="navResult('literacy')">Reading &amp; Writing</button>
+      <button class="nav-opt" onclick="navResult('math')">Math Instruction</button>
+    </div>
+    <button class="nav-back" onclick="navHome()">← Back</button>
+  </div>
+
+  <div class="nav-step" id="ns_results">
+    <div class="nav-result-head">
+      <h3 id="nav-rtitle"></h3>
+      <p id="nav-rsub"></p>
+    </div>
+    <div id="nav-rlist" class="nav-rlist"></div>
+    <button class="nav-back" onclick="navRestart()">↩ Start over</button>
+  </div>
+</div>
+
+<details class="tcea-browse">
+  <summary>Browse the full catalog</summary>
+<nav class="tcea-nav">
+  <div class="tcea-nav-inner">
+    <a href="#certs" class="tcea-nav-tab">🏅 Certifications</a>
+    <a href="#courses" class="tcea-nav-tab">✅ Courses</a>
+    <a href="#boosters" class="tcea-nav-tab">💡 Knowledge Boosters</a>
+    <a href="#parents" class="tcea-nav-tab">👨‍👩‍👧 Parent Boosters</a>
+  </div>
+</nav>
+
+<nav class="tcea-subnav" aria-label="Course categories">
+  <div class="tcea-nav-inner">
+    <a href="#cat-ai" class="tcea-subnav-tab">🤖 AI-Focused</a>
+    <a href="#cat-google" class="tcea-subnav-tab">🔵 Google</a>
+    <a href="#cat-apple" class="tcea-subnav-tab">🍎 Apple</a>
+    <a href="#cat-coding" class="tcea-subnav-tab">🤖 Coding &amp; STEAM</a>
+    <a href="#cat-curriculum" class="tcea-subnav-tab">📚 Curriculum</a>
+    <a href="#cat-digital" class="tcea-subnav-tab">🛠️ Digital Tools</a>
+    <a href="#cat-lms" class="tcea-subnav-tab">📋 LMS</a>
+    <a href="#cat-teks" class="tcea-subnav-tab">🖥️ TA:TEKS</a>
+  </div>
+</nav>
+
+<main class="tcea-main">
+
+  <div class="tcea-free-banner">
+    <div class="tcea-free-icon">🎁</div>
+    <div class="tcea-free-content">
+      <h3>Free with Every Enrollment: TCEA Online Learning Orientation Course</h3>
+      <p>2 CPE hours · Self-paced · Strategies for long-term information retention · Available to ALL participants</p>
+    </div>
+    <div class="tcea-free-badge">FREE · 2 CPE hrs</div>
+  </div>
+
+  <section class="tcea-section" id="certs">
+    <div class="tcea-section-header">
+      <div class="tcea-section-icon">🏅</div>
+      <div class="tcea-section-meta">
+        <h2>Certifications and Accelerator</h2>
+        <p>Comprehensive, guided pathways with expert instruction, applied projects, and classroom-ready resources · Digital Badge and Certificate</p>
+      </div>
+      <div class="tcea-price-badge">$149 – $449</div>
+    </div>
+    <div class="tcea-cert-grid">
+      <a href="https://tcea.org/accelerators/ai-amplified-educator/" class="tcea-cert-card cert-gold">
+        <h4>TCEA AI-Amplified Educator Accelerator</h4>
+        <p>A deep, hands-on pathway that moves educators from AI awareness to confident classroom integration across multiple modules and stages, with applied practice and supporting resources throughout.</p>
+        <div class="tcea-cert-footer"><span class="tcea-chip tcea-chip-cpe">22 CPE hrs</span><span class="tcea-chip tcea-chip-badge">Badge + Cert</span><span class="tcea-chip tcea-chip-price">$149</span></div>
+      </a>
+      <a href="https://tcea.org/courses/instructional-coach-certification/" class="tcea-cert-card">
+        <h4>Instructional Coach Certification</h4>
+        <p>Develop practical leadership and instructional coaching skills aligned to real-world educational needs. Culminates in a portfolio project demonstrating mastery.</p>
+        <div class="tcea-cert-footer"><span class="tcea-chip tcea-chip-cpe">33 CPE hrs</span><span class="tcea-chip tcea-chip-badge">Badge + Cert</span><span class="tcea-chip tcea-chip-price">$349</span></div>
+      </a>
+      <a href="https://tcea.org/courses/cts/" class="tcea-cert-card">
+        <h4>Campus Technology Specialist (CTS)</h4>
+        <p>Comprehensive preparation for campus technology leadership. Build expertise in planning, implementation, and professional learning facilitation.</p>
+        <div class="tcea-cert-footer"><span class="tcea-chip tcea-chip-cpe">33 CPE hrs</span><span class="tcea-chip tcea-chip-badge">Badge + Cert</span><span class="tcea-chip tcea-chip-price">$349</span></div>
+      </a>
+      <a href="https://tcea.org/courses/it/" class="tcea-cert-card cert-gold">
+        <h4>IT/Tech Director Certification</h4>
+        <p>Advanced certification for technology directors covering leadership, infrastructure planning, security, and district-wide technology strategy.</p>
+        <div class="tcea-cert-footer"><span class="tcea-chip tcea-chip-cpe">49 CPE hrs</span><span class="tcea-chip tcea-chip-badge">Badge + Print Cert</span><span class="tcea-chip tcea-chip-price">$449</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="tcea-section" id="courses">
+    <div class="tcea-section-header">
+      <div class="tcea-section-icon">✅</div>
+      <div class="tcea-section-meta">
+        <h2>Online Self-Paced Courses</h2>
+        <p>$49 each ($34 for groups of 10+) · 12–16 CPE hours · Digital Badge and Certificate</p>
+      </div>
+      <div class="tcea-price-badge">$49 · $34 bulk</div>
+    </div>
+
+    <p class="tcea-cat-label" id="cat-ai">🤖 AI-Focused Courses</p>
+    <div class="tcea-course-grid">
+      <a href="https://tcea.org/courses/ai-essentials-for-educators/" class="tcea-course-card"><div class="tcea-course-title">AI Essentials for Educators</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">17 CPE</span><span class="tcea-chip tcea-chip-badge">Badge + Cert</span></div></a>
+      <a href="https://tcea.org/courses/artificial-intelligence-educator/" class="tcea-course-card"><div class="tcea-course-title">Artificial Intelligence Educator</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span><span class="tcea-chip tcea-chip-badge">Badge + Cert</span></div></a>
+      <a href="https://tcea.org/courses/ai-tools-for-educators" class="tcea-course-card"><div class="tcea-course-title">AI Tools for Educators</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span><span class="tcea-chip tcea-chip-badge">Badge + Cert</span></div></a>
+      <a href="https://tcea.org/courses/canva-specialist/" class="tcea-course-card"><div class="tcea-course-title">Canva Specialist <small style="font-weight:400;color:var(--text-muted)">(Includes Canva Magic Studio and AI Apps)</small></div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span><span class="tcea-chip tcea-chip-badge">Badge + Cert</span></div></a>
+      <a href="https://tcea.org/courses/chatgpt-for-educators/" class="tcea-course-card"><div class="tcea-course-title">ChatGPT for Educators</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span><span class="tcea-chip tcea-chip-badge">Badge + Cert</span></div></a>
+    </div>
+
+    <p class="tcea-cat-label" id="cat-google">🔵 Google Courses</p>
+    <div class="tcea-course-grid">
+      <a href="https://tcea.org/courses/google-lv1" class="tcea-course-card"><div class="tcea-course-title">Google Certified Educator Level 1</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/google-classroom/" class="tcea-course-card"><div class="tcea-course-title">Google Classroom</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/google-sheets/" class="tcea-course-card"><div class="tcea-course-title">Google Sheets</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/google-sites" class="tcea-course-card"><div class="tcea-course-title">Google Sites</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/google-slides/" class="tcea-course-card"><div class="tcea-course-title">Google Slides</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+    </div>
+
+    <p class="tcea-cat-label" id="cat-apple">🍎 Apple Courses</p>
+    <div class="tcea-course-grid">
+      <a href="https://tcea.org/courses/ipad-educator/" class="tcea-course-card"><div class="tcea-course-title">iPad Educator v.2</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/swift-programming/" class="tcea-course-card"><div class="tcea-course-title">TCEA Swift Programming</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+    </div>
+
+    <p class="tcea-cat-label" id="cat-coding">🤖 Coding, STEAM and Robotics</p>
+    <div class="tcea-course-grid">
+      <a href="https://tcea.org/courses/coding-elementary/" class="tcea-course-card"><div class="tcea-course-title">Coding in the Elementary Grades</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/elementary-technology/" class="tcea-course-card"><div class="tcea-course-title">Elementary Technology</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/jigsawing_the_microbit/" class="tcea-course-card"><div class="tcea-course-title">Jigsaw Your Micro:bit</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/python-educator/" class="tcea-course-card"><div class="tcea-course-title">Python Educator</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/scratch/" class="tcea-course-card"><div class="tcea-course-title">Scratch Computational Thinking</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/spike-essential/" class="tcea-course-card"><div class="tcea-course-title">SPIKE Essential Robotics</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/spike-prime/" class="tcea-course-card"><div class="tcea-course-title">SPIKE Prime Robotics</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/steam-educator/" class="tcea-course-card"><div class="tcea-course-title">STEAM Educator</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/virtual_world_builder/" class="tcea-course-card"><div class="tcea-course-title">Virtual World Builder</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+    </div>
+
+    <p class="tcea-cat-label" id="cat-curriculum">📚 Curriculum and Instruction</p>
+    <div class="tcea-course-grid">
+      <a href="https://tcea.org/courses/assessment-based/" class="tcea-course-card"><div class="tcea-course-title">Assessment-Based Feedback</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/brain-based-learning/" class="tcea-course-card"><div class="tcea-course-title">Brain-Based Learning</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/choice-boards/" class="tcea-course-card"><div class="tcea-course-title">Choice Boards for Educators</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/creative-response-to-literature/" class="tcea-course-card"><div class="tcea-course-title">Creative Response to Literature</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/cultivating-calm/" class="tcea-course-card"><div class="tcea-course-title">Cultivating Calm</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/dynamic-instruction-with-project-based-learning-pbl/" class="tcea-course-card"><div class="tcea-course-title">Dynamic Instruction with Project-Based Learning (PBL)</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/self-reported/" class="tcea-course-card"><div class="tcea-course-title">Effective Engagement with Self-Reported Grades</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://courses.tcea.org/#12hours" class="tcea-course-card"><div class="tcea-course-title">Effective Math <small style="font-weight:400;color:var(--text-muted)">(K–2, 3–5, 6–8, 9–12)</small></div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/jigsaw-method/" class="tcea-course-card"><div class="tcea-course-title">Jigsaw Method</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/kernel-essays/" class="tcea-course-card"><div class="tcea-course-title">Kernel Essays for Writing and Reading</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/sel/" class="tcea-course-card"><div class="tcea-course-title">Social and Emotional Learning</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/special-needs/" class="tcea-course-card"><div class="tcea-course-title">Special Needs Educator</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/teacher-library/" class="tcea-course-card"><div class="tcea-course-title">Teacher-Library Collaboration</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/the-three-dimensions-of-science-teks" class="tcea-course-card"><div class="tcea-course-title">The Three Dimensions of the Science TEKS</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/understanding-teaching-gifted-learners/" class="tcea-course-card"><div class="tcea-course-title">Understanding and Teaching Gifted Learners</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span><span class="tcea-chip tcea-chip-gt">GT Credit</span></div></a>
+      <a href="https://tcea.org/courses/remote-learning" class="tcea-course-card"><div class="tcea-course-title">Remote Learning Educator</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span><span class="tcea-chip tcea-chip-gt">GT Credit</span></div></a>
+      <a href="https://tcea.org/courses/visible-learning-edtech/" class="tcea-course-card"><div class="tcea-course-title">Visible Learning with Ed Tech</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/instructional-strategies-spotlight/" class="tcea-course-card"><div class="tcea-course-title">Instructional Strategies Spotlight</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+    </div>
+
+    <p class="tcea-cat-label" id="cat-digital">🛠️ Digital Tools</p>
+    <div class="tcea-course-grid">
+      <a href="https://tcea.org/courses/photoshop/" class="tcea-course-card"><div class="tcea-course-title">Adobe Photoshop</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/advanced-streaming/" class="tcea-course-card"><div class="tcea-course-title">Advanced Streaming through OBS</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/canva-educator/" class="tcea-course-card"><div class="tcea-course-title">Canva Educator</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/data-guardian/" class="tcea-course-card"><div class="tcea-course-title">Cybersecurity for Educators</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/network-security/" class="tcea-course-card"><div class="tcea-course-title">Network Security</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+    </div>
+
+    <p class="tcea-cat-label" id="cat-lms">📋 Learning Management Systems (LMS)</p>
+    <div class="tcea-course-grid">
+      <a href="https://tcea.org/courses/canvas" class="tcea-course-card"><div class="tcea-course-title">Canvas Educator</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/schoology" class="tcea-course-card"><div class="tcea-course-title">Schoology Educator v3</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+    </div>
+
+    <p class="tcea-cat-label" id="cat-teks">🖥️ Technology Applications: TEKS (TA:TEKS)</p>
+    <div class="tcea-course-grid">
+      <a href="https://tcea.org/courses/technology-applications-teks-for-grades-k-2/" class="tcea-course-card"><div class="tcea-course-title">Technology Applications: TEKS for Grades K–2</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/technology-applications-teks-for-grades-3-5/" class="tcea-course-card"><div class="tcea-course-title">Technology Applications: TEKS for Grades 3–5</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+      <a href="https://tcea.org/courses/technology-applications-teks-for-grades-6-8/" class="tcea-course-card"><div class="tcea-course-title">Technology Applications: TEKS for Grades 6–8</div><div class="tcea-course-meta"><span class="tcea-chip tcea-chip-cpe">12 CPE</span></div></a>
+    </div>
+  </section>
+
+  <section class="tcea-section" id="boosters">
+    <div class="tcea-section-header">
+      <div class="tcea-section-icon">💡</div>
+      <div class="tcea-section-meta">
+        <h2>Knowledge Boosters</h2>
+        <p>Short, self-paced learning experiences that fit your schedule · Digital Certificate included</p>
+      </div>
+      <div class="tcea-price-badge gold">$29 each</div>
+    </div>
+    <p class="tcea-cat-label">General Knowledge Boosters</p>
+    <div class="tcea-booster-grid">
+      <a href="https://tcea.org/knowledge-boosters/gifted-talented-ai-implementation-ebook-practical-strategies-for-educators/" class="tcea-booster-card"><div class="tcea-booster-icon">🌟</div><div class="tcea-booster-title">Gifted &amp; Talented AI Implementation Ebook: Practical Strategies for Educators</div><div class="tcea-booster-price">$29 · Digital Certificate</div></a>
+      <a href="https://tcea.org/knowledge-boosters/the-power-of-prior-knowledge-2/" class="tcea-booster-card"><div class="tcea-booster-icon">🧩</div><div class="tcea-booster-title">The Power of Prior Knowledge</div><div class="tcea-booster-price">$29 · Digital Certificate</div></a>
+    </div>
+  </section>
+
+  <section class="tcea-section" id="parents">
+    <div class="tcea-section-header">
+      <div class="tcea-section-icon">👨‍👩‍👧</div>
+      <div class="tcea-section-meta">
+        <h2>Parent Knowledge Boosters</h2>
+        <p>Designed for parent engagement initiatives — six titles covering AI, Google tools, online safety, and more</p>
+      </div>
+      <div class="tcea-price-badge teal">$19.99 each</div>
+    </div>
+    <div class="tcea-booster-grid">
+      <a href="https://tcea.org/knowledge-boosters/pkb-college-and-career-readiness/" class="tcea-booster-card"><div class="tcea-booster-icon">🎓</div><div class="tcea-booster-title">PKB: College and Career Readiness</div><div class="tcea-booster-price">$19.99 · Digital Certificate</div></a>
+      <a href="https://tcea.org/knowledge-boosters/pkb-google-tools/" class="tcea-booster-card"><div class="tcea-booster-icon">🔵</div><div class="tcea-booster-title">PKB: Introduction to Google Tools</div><div class="tcea-booster-price">$19.99 · Digital Certificate</div></a>
+      <a href="https://tcea.org/knowledge-boosters/pkb-notebooklm-for-home-learning-success/" class="tcea-booster-card"><div class="tcea-booster-icon">📓</div><div class="tcea-booster-title">PKB: Google NotebookLM for Home Learning Success</div><div class="tcea-booster-price">$19.99 · Digital Certificate</div></a>
+      <a href="https://tcea.org/knowledge-boosters/pkb-online-safety-made-simple/" class="tcea-booster-card"><div class="tcea-booster-icon">🔒</div><div class="tcea-booster-title">PKB: Online Safety Made Simple</div><div class="tcea-booster-price">$19.99 · Digital Certificate</div></a>
+      <a href="https://tcea.org/knowledge-boosters/pkb-simple-ways-to-build-your-childs-vocabulary-at-home/" class="tcea-booster-card"><div class="tcea-booster-icon">📖</div><div class="tcea-booster-title">PKB: Simple Ways to Build Your Child's Vocabulary at Home</div><div class="tcea-booster-price">$19.99 · Digital Certificate</div></a>
+      <a href="https://tcea.org/knowledge-boosters/pkb-what-parents-need-to-know-about-ai-in-school/" class="tcea-booster-card"><div class="tcea-booster-icon">🤖</div><div class="tcea-booster-title">PKB: What Parents Need to Know About AI in School</div><div class="tcea-booster-price">$19.99 · Digital Certificate</div></a>
+    </div>
+  </section>
+
+  <div class="tcea-contact">
+    <div>
+      <h3>Ready to Get Started?</h3>
+      <p>📧 <a href="mailto:registration@tcea.org">registration@tcea.org</a> &nbsp;·&nbsp; 📞 512-475-8500 &nbsp;·&nbsp; 🌐 <a href="https://tcea.org/pd">tcea.org/pd</a></p>
+    </div>
+    <div class="tcea-contact-links">
+      <a href="https://tinyurl.com/tceahelp">Get a Quote</a>
+      <a href="https://courses.tcea.org/get-help/" class="outline-link">Get Help</a>
+    </div>
+  </div>
+
+</main>
+</details>
+
+<script>
+  const sections = document.querySelectorAll(".tcea-section");
+  const tabs = document.querySelectorAll(".tcea-nav-tab");
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        tabs.forEach(tab => {
+          tab.classList.toggle("active", tab.getAttribute("href") === "#" + id);
+        });
+      }
+    });
+  }, { rootMargin: "-110px 0px -60% 0px" });
+  sections.forEach(s => sectionObserver.observe(s));
+
+  const catLabels = document.querySelectorAll(".tcea-cat-label[id]");
+  const subTabs = document.querySelectorAll(".tcea-subnav-tab");
+  const catObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        subTabs.forEach(tab => {
+          tab.classList.toggle("active", tab.getAttribute("href") === "#" + id);
+        });
+      }
+    });
+  }, { rootMargin: "-110px 0px -70% 0px" });
+  catLabels.forEach(c => catObserver.observe(c));
+
+// ===== NAVIGATOR =====
+const NAV_RESULTS = {"ai": {"title": "AI-Focused Courses", "price": "$49", "items": [{"t": "AI Essentials for Educators", "href": "https://tcea.org/courses/ai-essentials-for-educators/", "cpe": "17 CPE", "gt": false}, {"t": "Artificial Intelligence Educator", "href": "https://tcea.org/courses/artificial-intelligence-educator/", "cpe": "12 CPE", "gt": false}, {"t": "AI Tools for Educators", "href": "https://tcea.org/courses/ai-tools-for-educators", "cpe": "12 CPE", "gt": false}, {"t": "Canva Specialist (Includes Canva Magic Studio and AI Apps)", "href": "https://tcea.org/courses/canva-specialist/", "cpe": "12 CPE", "gt": false}, {"t": "ChatGPT for Educators", "href": "https://tcea.org/courses/chatgpt-for-educators/", "cpe": "12 CPE", "gt": false}]}, "google": {"title": "Google Courses", "price": "$49", "items": [{"t": "Google Certified Educator Level 1", "href": "https://tcea.org/courses/google-lv1", "cpe": "12 CPE", "gt": false}, {"t": "Google Classroom", "href": "https://tcea.org/courses/google-classroom/", "cpe": "12 CPE", "gt": false}, {"t": "Google Sheets", "href": "https://tcea.org/courses/google-sheets/", "cpe": "12 CPE", "gt": false}, {"t": "Google Sites", "href": "https://tcea.org/courses/google-sites", "cpe": "12 CPE", "gt": false}, {"t": "Google Slides", "href": "https://tcea.org/courses/google-slides/", "cpe": "12 CPE", "gt": false}]}, "apple": {"title": "Apple Courses", "price": "$49", "items": [{"t": "iPad Educator v.2", "href": "https://tcea.org/courses/ipad-educator/", "cpe": "12 CPE", "gt": false}, {"t": "TCEA Swift Programming", "href": "https://tcea.org/courses/swift-programming/", "cpe": "12 CPE", "gt": false}]}, "coding": {"title": "Coding, STEAM and Robotics", "price": "$49", "items": [{"t": "Coding in the Elementary Grades", "href": "https://tcea.org/courses/coding-elementary/", "cpe": "12 CPE", "gt": false}, {"t": "Elementary Technology", "href": "https://tcea.org/courses/elementary-technology/", "cpe": "12 CPE", "gt": false}, {"t": "Jigsaw Your Micro:bit", "href": "https://tcea.org/courses/jigsawing_the_microbit/", "cpe": "12 CPE", "gt": false}, {"t": "Python Educator", "href": "https://tcea.org/courses/python-educator/", "cpe": "12 CPE", "gt": false}, {"t": "Scratch Computational Thinking", "href": "https://tcea.org/courses/scratch/", "cpe": "12 CPE", "gt": false}, {"t": "SPIKE Essential Robotics", "href": "https://tcea.org/courses/spike-essential/", "cpe": "12 CPE", "gt": false}, {"t": "SPIKE Prime Robotics", "href": "https://tcea.org/courses/spike-prime/", "cpe": "12 CPE", "gt": false}, {"t": "STEAM Educator", "href": "https://tcea.org/courses/steam-educator/", "cpe": "12 CPE", "gt": false}, {"t": "Virtual World Builder", "href": "https://tcea.org/courses/virtual_world_builder/", "cpe": "12 CPE", "gt": false}]}, "curriculum": {"title": "Curriculum and Instruction", "price": "$49", "items": [{"t": "Assessment-Based Feedback", "href": "https://tcea.org/courses/assessment-based/", "cpe": "12 CPE", "gt": false}, {"t": "Brain-Based Learning", "href": "https://tcea.org/courses/brain-based-learning/", "cpe": "12 CPE", "gt": false}, {"t": "Choice Boards for Educators", "href": "https://tcea.org/courses/choice-boards/", "cpe": "12 CPE", "gt": false}, {"t": "Creative Response to Literature", "href": "https://tcea.org/courses/creative-response-to-literature/", "cpe": "12 CPE", "gt": false}, {"t": "Cultivating Calm", "href": "https://tcea.org/courses/cultivating-calm/", "cpe": "12 CPE", "gt": false}, {"t": "Dynamic Instruction with Project-Based Learning (PBL)", "href": "https://tcea.org/courses/dynamic-instruction-with-project-based-learning-pbl/", "cpe": "12 CPE", "gt": false}, {"t": "Effective Engagement with Self-Reported Grades", "href": "https://tcea.org/courses/self-reported/", "cpe": "12 CPE", "gt": false}, {"t": "Effective Math (K–2, 3–5, 6–8, 9–12)", "href": "https://courses.tcea.org/#12hours", "cpe": "12 CPE", "gt": false}, {"t": "Jigsaw Method", "href": "https://tcea.org/courses/jigsaw-method/", "cpe": "12 CPE", "gt": false}, {"t": "Kernel Essays for Writing and Reading", "href": "https://tcea.org/courses/kernel-essays/", "cpe": "12 CPE", "gt": false}, {"t": "Social and Emotional Learning", "href": "https://tcea.org/courses/sel/", "cpe": "12 CPE", "gt": false}, {"t": "Special Needs Educator", "href": "https://tcea.org/courses/special-needs/", "cpe": "12 CPE", "gt": false}, {"t": "Teacher-Library Collaboration", "href": "https://tcea.org/courses/teacher-library/", "cpe": "12 CPE", "gt": false}, {"t": "The Three Dimensions of the Science TEKS", "href": "https://tcea.org/courses/the-three-dimensions-of-science-teks", "cpe": "12 CPE", "gt": false}, {"t": "Understanding and Teaching Gifted Learners", "href": "https://tcea.org/courses/understanding-teaching-gifted-learners/", "cpe": "12 CPE", "gt": true}, {"t": "Remote Learning Educator", "href": "https://tcea.org/courses/remote-learning", "cpe": "12 CPE", "gt": true}, {"t": "Visible Learning with Ed Tech", "href": "https://tcea.org/courses/visible-learning-edtech/", "cpe": "12 CPE", "gt": false}, {"t": "Instructional Strategies Spotlight", "href": "https://tcea.org/courses/instructional-strategies-spotlight/", "cpe": "12 CPE", "gt": false}]}, "digital": {"title": "Digital Tools", "price": "$49", "items": [{"t": "Adobe Photoshop", "href": "https://tcea.org/courses/photoshop/", "cpe": "12 CPE", "gt": false}, {"t": "Advanced Streaming through OBS", "href": "https://tcea.org/courses/advanced-streaming/", "cpe": "12 CPE", "gt": false}, {"t": "Canva Educator", "href": "https://tcea.org/courses/canva-educator/", "cpe": "12 CPE", "gt": false}, {"t": "Cybersecurity for Educators", "href": "https://tcea.org/courses/data-guardian/", "cpe": "12 CPE", "gt": false}, {"t": "Network Security", "href": "https://tcea.org/courses/network-security/", "cpe": "12 CPE", "gt": false}]}, "lms": {"title": "Learning Management Systems", "price": "$49", "items": [{"t": "Canvas Educator", "href": "https://tcea.org/courses/canvas", "cpe": "12 CPE", "gt": false}, {"t": "Schoology Educator v3", "href": "https://tcea.org/courses/schoology", "cpe": "12 CPE", "gt": false}]}, "teks": {"title": "Technology Applications: TEKS", "price": "$49", "items": [{"t": "Technology Applications: TEKS for Grades K–2", "href": "https://tcea.org/courses/technology-applications-teks-for-grades-k-2/", "cpe": "12 CPE", "gt": false}, {"t": "Technology Applications: TEKS for Grades 3–5", "href": "https://tcea.org/courses/technology-applications-teks-for-grades-3-5/", "cpe": "12 CPE", "gt": false}, {"t": "Technology Applications: TEKS for Grades 6–8", "href": "https://tcea.org/courses/technology-applications-teks-for-grades-6-8/", "cpe": "12 CPE", "gt": false}]}, "engagement": {"title": "Recommended Courses", "price": "$49", "items": [{"t": "Choice Boards for Educators", "href": "https://tcea.org/courses/choice-boards/", "cpe": "12 CPE", "gt": false}, {"t": "Dynamic Instruction with Project-Based Learning (PBL)", "href": "https://tcea.org/courses/dynamic-instruction-with-project-based-learning-pbl/", "cpe": "12 CPE", "gt": false}, {"t": "Effective Engagement with Self-Reported Grades", "href": "https://tcea.org/courses/self-reported/", "cpe": "12 CPE", "gt": false}, {"t": "Jigsaw Method", "href": "https://tcea.org/courses/jigsaw-method/", "cpe": "12 CPE", "gt": false}, {"t": "Instructional Strategies Spotlight", "href": "https://tcea.org/courses/instructional-strategies-spotlight/", "cpe": "12 CPE", "gt": false}]}, "diverse": {"title": "Recommended Courses", "price": "$49", "items": [{"t": "Choice Boards for Educators", "href": "https://tcea.org/courses/choice-boards/", "cpe": "12 CPE", "gt": false}, {"t": "Social and Emotional Learning", "href": "https://tcea.org/courses/sel/", "cpe": "12 CPE", "gt": false}, {"t": "Special Needs Educator", "href": "https://tcea.org/courses/special-needs/", "cpe": "12 CPE", "gt": false}, {"t": "Understanding and Teaching Gifted Learners", "href": "https://tcea.org/courses/understanding-teaching-gifted-learners/", "cpe": "12 CPE", "gt": true}]}, "aitech": {"title": "Recommended Courses", "price": "$49", "items": [{"t": "AI Essentials for Educators", "href": "https://tcea.org/courses/ai-essentials-for-educators/", "cpe": "17 CPE", "gt": false}, {"t": "Artificial Intelligence Educator", "href": "https://tcea.org/courses/artificial-intelligence-educator/", "cpe": "12 CPE", "gt": false}, {"t": "AI Tools for Educators", "href": "https://tcea.org/courses/ai-tools-for-educators", "cpe": "12 CPE", "gt": false}, {"t": "ChatGPT for Educators", "href": "https://tcea.org/courses/chatgpt-for-educators/", "cpe": "12 CPE", "gt": false}]}, "design": {"title": "Recommended Courses", "price": "$49", "items": [{"t": "Choice Boards for Educators", "href": "https://tcea.org/courses/choice-boards/", "cpe": "12 CPE", "gt": false}, {"t": "Dynamic Instruction with Project-Based Learning (PBL)", "href": "https://tcea.org/courses/dynamic-instruction-with-project-based-learning-pbl/", "cpe": "12 CPE", "gt": false}, {"t": "Visible Learning with Ed Tech", "href": "https://tcea.org/courses/visible-learning-edtech/", "cpe": "12 CPE", "gt": false}, {"t": "Canva Educator", "href": "https://tcea.org/courses/canva-educator/", "cpe": "12 CPE", "gt": false}]}, "literacy": {"title": "Recommended Courses", "price": "$49", "items": [{"t": "Creative Response to Literature", "href": "https://tcea.org/courses/creative-response-to-literature/", "cpe": "12 CPE", "gt": false}, {"t": "Kernel Essays for Writing and Reading", "href": "https://tcea.org/courses/kernel-essays/", "cpe": "12 CPE", "gt": false}, {"t": "Teacher-Library Collaboration", "href": "https://tcea.org/courses/teacher-library/", "cpe": "12 CPE", "gt": false}]}, "math": {"title": "Recommended Courses", "price": "$49", "items": [{"t": "Effective Math (K–2, 3–5, 6–8, 9–12)", "href": "https://courses.tcea.org/#12hours", "cpe": "12 CPE", "gt": false}]}, "certs": {"title": "Certifications and Accelerator", "price": "", "items": [{"t": "TCEA AI-Amplified Educator Accelerator", "href": "https://tcea.org/accelerators/ai-amplified-educator/", "cpe": "22 CPE", "price": "$149"}, {"t": "Instructional Coach Certification", "href": "https://tcea.org/courses/instructional-coach-certification/", "cpe": "33 CPE", "price": "$349"}, {"t": "Campus Technology Specialist (CTS)", "href": "https://tcea.org/courses/cts/", "cpe": "33 CPE", "price": "$349"}, {"t": "IT/Tech Director Certification", "href": "https://tcea.org/courses/it/", "cpe": "49 CPE", "price": "$449"}], "cert": true}};
+function navShow(id){
+  document.querySelectorAll('.nav-step').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById('navigator').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function navGo(path){ navShow('ns_'+path); }
+function navHome(){ navShow('ns_goal'); }
+function navRestart(){ navShow('ns_goal'); }
+function navResult(key){
+  const r = NAV_RESULTS[key]; if(!r) return;
+  document.getElementById('nav-rtitle').textContent = r.title;
+  document.getElementById('nav-rsub').textContent = r.cert
+    ? 'Each includes CPE credit, a digital badge, and a certificate.'
+    : r.items.length + ' option' + (r.items.length!==1?'s':'') + ' · $49 each ($34 for groups of 10+)';
+  const list = document.getElementById('nav-rlist');
+  list.innerHTML = r.items.map(c=>{
+    const price = c.price ? c.price : (r.price||'');
+    const gt = c.gt ? '<span class="tcea-chip tcea-chip-gt">GT Credit</span>' : '';
+    const priceChip = price ? '<span class="tcea-chip tcea-chip-price">'+price+'</span>' : '';
+    return '<a href="'+c.href+'" target="_blank" rel="noopener" class="nav-ritem">'
+      + '<span class="nav-ritem-t">'+c.t+'</span>'
+      + '<span class="nav-ritem-meta"><span class="tcea-chip tcea-chip-cpe">'+c.cpe+'</span>'+gt+priceChip+'</span></a>';
+  }).join('');
+  navShow('ns_results');
+}
+
+// Force the full catalog open when printing
+window.addEventListener('beforeprint', () => {
+  const d = document.querySelector('.tcea-browse');
+  if (d) { d.dataset.wasOpen = d.open ? '1' : '0'; d.open = true; }
+});
+window.addEventListener('afterprint', () => {
+  const d = document.querySelector('.tcea-browse');
+  if (d && d.dataset.wasOpen === '0') d.open = false;
+});
+</script>
+</body>
+</html>

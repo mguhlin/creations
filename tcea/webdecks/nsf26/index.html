@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NSF TechAccess: AI-Ready America — TCEA Briefing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0A3476; --navy-dark:#071f4a; --navy-mid:#12428f;
+  --gold:#FCB040; --gold-light:#fdd17a; --gold-pale:#FEF0D0;
+  --pale-navy:#D0D8F0; --white:#ffffff; --off-white:#f7f8fc;
+  --text:#1a1a2e; --text-muted:#5a6680; --border:#e2e7f5; --teal:#0e6b8a;
+  --bar-h:64px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{
+  font-family:'DM Sans',sans-serif;color:var(--text);background:var(--navy-dark);
+  -webkit-font-smoothing:antialiased;
+}
+#deck{position:fixed;inset:0}
+.slide{
+  position:absolute;inset:0;opacity:0;visibility:hidden;z-index:1;
+  transition:opacity .5s ease;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:clamp(2rem,6vw,6rem);
+  padding-bottom:calc(var(--bar-h) + 3.5rem);
+  overflow-y:auto;
+}
+.slide.active{opacity:1;visibility:visible;z-index:2}
+@media (prefers-reduced-motion:reduce){.slide{transition:none}}
+
+/* backgrounds */
+.slide.light{background:var(--off-white)}
+.slide.dark{background:var(--navy-dark);color:var(--white)}
+.slide.navy{background:var(--navy);color:var(--white)}
+.slide.imgslide{background:var(--navy-dark);padding:0;justify-content:center;align-items:center}
+.slide.imgslide img{width:100%;height:calc(100% - var(--bar-h));object-fit:contain}
+
+/* typography */
+h1{font-family:'DM Serif Display',serif;font-weight:400;line-height:1.05;
+   font-size:clamp(2.6rem,6.5vw,5rem);letter-spacing:-.01em}
+h2{font-family:'DM Serif Display',serif;font-weight:400;line-height:1.12;
+   font-size:clamp(2.1rem,4.6vw,3.4rem);margin-bottom:1.2rem;color:var(--navy)}
+.dark h2,.navy h2{color:var(--white)}
+.lead{font-size:clamp(1.25rem,2.1vw,1.65rem);line-height:1.5;color:var(--text-muted);max-width:46ch}
+.dark .lead,.navy .lead{color:var(--pale-navy)}
+.em{font-style:italic;color:var(--gold)}
+.rule{width:64px;height:4px;background:var(--gold);border-radius:2px;margin:1.5rem 0}
+.kicker{font-size:1.125rem;letter-spacing:.18em;text-transform:uppercase;
+   color:var(--gold);font-weight:600;margin-bottom:1.2rem}
+.dark .kicker,.navy .kicker{color:var(--gold)}
+p.body{font-size:clamp(1.125rem,1.8vw,1.38rem);line-height:1.6;max-width:54ch;margin-top:.4rem}
+
+/* corner motif */
+.motif{position:absolute;top:clamp(1.5rem,4vw,3rem);right:clamp(1.5rem,4vw,3rem);
+  width:clamp(40px,7vw,72px);height:clamp(40px,7vw,72px);opacity:.9}
+.motif.hide-phone{}
+
+/* card grids */
+.grid{display:grid;gap:1.1rem;margin-top:.5rem;width:100%;max-width:1000px}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g2{grid-template-columns:repeat(2,1fr)}
+.card{background:var(--white);border:1.5px solid var(--border);border-radius:12px;
+  padding:1.4rem 1.3rem;border-top:4px solid var(--gold)}
+.dark .card,.navy .card{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.15);
+  border-top-color:var(--gold);color:var(--white)}
+.card .num{font-family:'DM Serif Display',serif;font-size:2rem;color:var(--gold);line-height:1}
+.card h3{font-size:1.35rem;font-weight:600;color:var(--navy);margin:.5rem 0 .4rem}
+.dark .card h3,.navy .card h3{color:var(--white)}
+.card p{font-size:1.125rem;line-height:1.45;color:var(--text-muted)}
+.dark .card p,.navy .card p{color:var(--pale-navy)}
+
+/* stat split */
+.split{display:grid;grid-template-columns:1.3fr 1fr;gap:2.5rem;align-items:center;width:100%;max-width:1000px}
+.statcard{background:var(--navy);border-radius:16px;padding:2.2rem;text-align:center;color:var(--white)}
+.statcard .big{font-family:'DM Serif Display',serif;font-size:clamp(2.8rem,7vw,4.5rem);
+  color:var(--gold);line-height:1}
+.statcard .cap{font-size:1.125rem;color:var(--pale-navy);margin-top:.5rem}
+
+/* players list */
+.players{display:flex;flex-direction:column;gap:.7rem;margin-top:.4rem;width:100%;max-width:760px}
+.player{display:flex;gap:1rem;align-items:baseline;padding:.85rem 1.1rem;
+  background:var(--white);border:1.5px solid var(--border);border-radius:10px;border-left:4px solid var(--gold)}
+.dark .player,.navy .player{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.15);border-left-color:var(--gold)}
+.player .who{font-weight:600;color:var(--navy);min-width:160px;font-size:1.2rem}
+.dark .player .who,.navy .player .who{color:var(--gold-light)}
+.player .role{color:var(--text-muted);font-size:1.125rem;line-height:1.45}
+.dark .player .role,.navy .player .role{color:var(--pale-navy)}
+
+/* timeline */
+.timeline{display:flex;gap:0;width:100%;max-width:920px;margin-top:1rem}
+.tstep{flex:1;text-align:center;position:relative;padding:0 .5rem}
+.tstep-dot{width:16px;height:16px;border-radius:50%;background:var(--gold);margin:0 auto .8rem}
+.tstep-line{position:absolute;top:7px;left:50%;width:100%;height:2px;background:var(--border)}
+.dark .tstep-line,.navy .tstep-line{background:rgba(255,255,255,.2)}
+.tstep .when{font-family:'DM Serif Display',serif;font-size:1.7rem;color:var(--navy)}
+.dark .tstep .when,.navy .tstep .when{color:var(--white)}
+.tstep .what{font-size:1.125rem;color:var(--text-muted);margin-top:.3rem;line-height:1.4}
+.dark .tstep .what,.navy .tstep .what{color:var(--pale-navy)}
+
+/* pro/con */
+.pclist{margin-top:.6rem}
+.pcrow{display:flex;gap:.6rem;align-items:baseline;margin-bottom:.7rem;font-size:1.2rem;line-height:1.45;max-width:50ch}
+.pcrow .mk{color:var(--gold);font-weight:700;font-size:1.1rem;line-height:1}
+
+ul.clean{list-style:none;margin-top:.6rem;max-width:52ch}
+ul.clean li{position:relative;padding-left:1.5rem;margin-bottom:.75rem;
+  font-size:clamp(1.125rem,1.7vw,1.28rem);line-height:1.5}
+ul.clean li::before{content:'';position:absolute;left:0;top:.55em;width:8px;height:8px;
+  background:var(--gold);border-radius:2px}
+
+
+
+/* generated visual panels */
+.with-art{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(320px,.88fr);gap:2.2rem;align-items:center;width:100%;max-width:1120px}
+.with-art.wide{grid-template-columns:minmax(0,1fr) minmax(360px,1fr);max-width:1180px}
+.art-card{background:var(--white);border:1.5px solid var(--border);border-radius:22px;padding:1rem;box-shadow:0 18px 45px rgba(7,31,74,.12);min-height:280px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.dark .art-card,.navy .art-card{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18);box-shadow:0 18px 45px rgba(0,0,0,.25)}
+.art-card svg{display:block;width:100%;height:auto;max-height:420px}
+.art-caption{font-size:1.125rem;line-height:1.35;color:var(--text-muted);margin-top:.8rem;max-width:36ch}
+.dark .art-caption,.navy .art-caption{color:var(--pale-navy)}
+.iconrow{display:flex;gap:.9rem;align-items:center;margin-top:1.1rem;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:.45rem;font-size:1.125rem;font-weight:700;background:var(--white);border:1.5px solid var(--border);border-radius:999px;padding:.55rem .85rem;color:var(--navy)}
+.dark .chip,.navy .chip{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18);color:var(--white)}
+.chip .mini{width:14px;height:14px;border-radius:50%;background:var(--gold);display:inline-block}
+@media(max-width:1024px){.with-art,.with-art.wide{grid-template-columns:1fr}.art-card{min-height:220px}}
+@media(max-width:560px){.art-card{min-height:180px;padding:.6rem}.art-caption{font-size:1.05rem}.chip{font-size:1.05rem}}
+
+/* progress */
+#progress{position:fixed;top:0;left:0;height:3px;background:var(--gold);z-index:60;
+  transition:width .35s ease;width:0}
+
+/* floating bar */
+#bar{
+  position:fixed;left:50%;transform:translateX(-50%);bottom:14px;z-index:50;
+  display:flex;align-items:center;gap:.65rem;
+  max-width:min(94vw,860px);
+  padding:.5rem .85rem;height:var(--bar-h);
+  background:rgba(7,31,74,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border:1px solid rgba(252,176,64,.4);border-radius:999px;
+  box-shadow:0 8px 30px rgba(0,0,0,.35);
+}
+#bar .title{color:var(--white);font-weight:600;font-size:.9rem;white-space:nowrap;
+  max-width:230px;overflow:hidden;text-overflow:ellipsis;padding:0 .3rem}
+#dots{display:flex;gap:6px;align-items:center;flex-wrap:nowrap}
+.dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.32);
+  cursor:pointer;border:none;padding:0;transition:all .25s;flex:0 0 auto}
+.dot:hover{background:rgba(255,255,255,.6)}
+.dot.on{width:24px;border-radius:5px;background:var(--gold)}
+#bar .btn{background:transparent;border:none;color:var(--white);cursor:pointer;
+  width:32px;height:32px;border-radius:50%;font-size:1rem;display:flex;align-items:center;
+  justify-content:center;transition:background .2s}
+#bar .btn:hover{background:rgba(255,255,255,.15)}
+#counter{color:var(--pale-navy);font-size:.82rem;white-space:nowrap;font-variant-numeric:tabular-nums;padding:0 .2rem}
+.sep{width:1px;height:22px;background:rgba(255,255,255,.2);flex:0 0 auto}
+
+/* notes panel */
+#notes{
+  position:fixed;left:50%;transform:translateX(-50%) translateY(220%);
+  bottom:calc(var(--bar-h) + 26px);z-index:45;
+  width:min(92vw,720px);max-height:42vh;overflow-y:auto;
+  background:var(--white);border:1px solid var(--border);border-top:4px solid var(--gold);
+  border-radius:14px;padding:1.4rem 1.6rem;box-shadow:0 12px 40px rgba(0,0,0,.3);
+  pointer-events:none;transition:transform .4s ease;
+}
+#notes.open{transform:translateX(-50%) translateY(0);pointer-events:auto}
+@media (prefers-reduced-motion:reduce){#notes{transition:none}}
+#notes h4{font-family:'DM Serif Display',serif;color:var(--navy);font-size:1.4rem;margin-bottom:.5rem}
+#notes p{font-size:1.125rem;line-height:1.6;color:var(--text)}
+
+/* help overlay */
+#help{
+  position:fixed;inset:0;z-index:70;background:rgba(7,31,74,.92);
+  display:none;flex-direction:column;align-items:center;justify-content:center;gap:.3rem;
+  color:var(--white);padding:2rem;
+}
+#help.open{display:flex}
+#help h3{font-family:'DM Serif Display',serif;font-size:1.8rem;color:var(--gold);margin-bottom:1rem}
+#help .row{display:flex;gap:1rem;align-items:center;font-size:1rem;margin:.25rem 0}
+#help kbd{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);
+  border-radius:6px;padding:.2rem .6rem;font-family:'DM Mono',monospace;font-size:.85rem;min-width:80px;text-align:center}
+#help .hint{margin-top:1.4rem;color:var(--pale-navy);font-size:.9rem}
+
+/* edge cursors */
+.edge-l,.edge-r{position:fixed;top:0;bottom:var(--bar-h);width:12%;z-index:10}
+.edge-l{left:0;cursor:w-resize}
+.edge-r{right:0;cursor:e-resize}
+
+/* responsive */
+@media(max-width:1024px){.split{grid-template-columns:1fr;gap:1.5rem}}
+@media(max-width:768px){
+  .g3{grid-template-columns:1fr 1fr}
+  .timeline{flex-direction:column;gap:1.1rem;max-width:420px}
+  .tstep-line{display:none}
+  .tstep{text-align:left;display:flex;gap:.9rem;align-items:baseline;padding:0}
+  .tstep-dot{margin:0;flex:0 0 auto;position:relative;top:5px}
+}
+@media(max-width:560px){
+  .g3,.g2{grid-template-columns:1fr}
+  #bar .title{display:none}
+  .motif.hide-phone{display:none}
+  .player{flex-direction:column;gap:.2rem}
+  .player .who{min-width:0}
+}
+@media(max-width:380px){
+  #counter{display:none}
+  .dot{width:7px;height:7px}
+  .dot.on{width:18px}
+}
+@media (hover:none){
+  .dot{padding:7px;background-clip:content-box}
+  #bar .btn{width:38px;height:38px}
+}
+@media (max-height:480px) and (orientation:landscape){
+  .slide{justify-content:flex-start;padding-top:1.5rem}
+}
+/* password gate */
+#gate{position:fixed;inset:0;z-index:100;background:var(--navy-dark);
+  display:flex;align-items:center;justify-content:center;padding:1.5rem}
+#gate.hidden{display:none}
+.gate-card{width:min(92vw,400px);background:rgba(255,255,255,.05);
+  border:1px solid rgba(252,176,64,.4);border-radius:16px;
+  padding:2.4rem 2rem;text-align:center}
+.gate-motif{display:block;width:48px;height:48px;margin:0 auto 1.2rem;
+  background:
+    linear-gradient(var(--gold),var(--gold)) 0 100%/9px 16px no-repeat,
+    linear-gradient(var(--gold),var(--gold)) 19px 100%/9px 28px no-repeat,
+    linear-gradient(var(--gold),var(--gold)) 38px 100%/9px 40px no-repeat;
+  opacity:.9}
+.gate-sub{color:var(--pale-navy);font-size:.95rem;line-height:1.5;margin-bottom:1.4rem}
+#gatePw{width:100%;padding:.8rem 1rem;font-size:1rem;font-family:'DM Sans',sans-serif;
+  border:1px solid rgba(255,255,255,.25);border-radius:8px;
+  background:rgba(255,255,255,.08);color:#fff;outline:none;margin-bottom:.8rem}
+#gatePw:focus{border-color:var(--gold)}
+#gatePw::placeholder{color:rgba(255,255,255,.45)}
+#gateBtn{width:100%;padding:.8rem 1rem;font-size:1rem;font-weight:600;cursor:pointer;
+  font-family:'DM Sans',sans-serif;border:none;border-radius:8px;
+  background:var(--gold);color:var(--navy-dark);transition:filter .2s}
+#gateBtn:hover{filter:brightness(1.06)}
+#gateErr{display:none;color:var(--gold-light);font-size:.88rem;margin-top:.9rem}
+#gateErr.show{display:block}
+</style>
+</head>
+<body>
+<div id="gate">
+  <div class="gate-card">
+    <span class="gate-motif" aria-hidden="true"></span>
+    <div class="kicker" style="color:var(--gold)">NSF 26-508 &bull; TCEA</div>
+    <h2 style="color:#fff;margin:.2rem 0 .3rem">Protected briefing</h2>
+    <p class="gate-sub">Enter the password to view this presentation.</p>
+    <input type="password" id="gatePw" placeholder="Password" autocomplete="off"
+      aria-label="Password" autofocus>
+    <button id="gateBtn">Unlock</button>
+    <div id="gateErr" role="alert">Incorrect password. Try again.</div>
+  </div>
+</div>
+<div id="progress"></div>
+<div id="deck"></div>
+<div class="edge-l" id="edgeL"></div>
+<div class="edge-r" id="edgeR"></div>
+
+<div id="notes" aria-live="polite">
+  <h4 id="notesTitle">Speaker notes</h4>
+  <p id="notesBody"></p>
+</div>
+
+<div id="bar">
+  <span class="title" id="barTitle">AI-Ready America</span>
+  <span class="sep"></span>
+  <div id="dots"></div>
+  <span class="sep"></span>
+  <span id="counter">1 / 1</span>
+  <button class="btn" id="bNotes" title="Speaker notes (N)" aria-label="Speaker notes">&#9776;</button>
+  <button class="btn" id="bPres" title="Presenter view (P)" aria-label="Presenter view">&#9707;</button>
+  <button class="btn" id="bFull" title="Fullscreen (F)" aria-label="Fullscreen">&#9974;</button>
+  <button class="btn" id="bHelp" title="Help (?)" aria-label="Help">?</button>
+</div>
+
+<div id="help">
+  <h3>Keyboard shortcuts</h3>
+  <div class="row"><kbd>&rarr; Space</kbd><span>Next slide</span></div>
+  <div class="row"><kbd>&larr;</kbd><span>Previous slide</span></div>
+  <div class="row"><kbd>Home / End</kbd><span>First / last slide</span></div>
+  <div class="row"><kbd>N</kbd><span>Toggle speaker notes</span></div>
+  <div class="row"><kbd>P</kbd><span>Presenter view (dual screen)</span></div>
+  <div class="row"><kbd>F</kbd><span>Fullscreen</span></div>
+  <div class="row"><kbd>?</kbd><span>This help</span></div>
+  <div class="hint">Click left/right thirds to navigate &bull; swipe on touch &bull; press Esc to close</div>
+</div>
+
+<script>
+/* ============ PASSWORD GATE ============ */
+/* Note: client-side only. The password is recoverable from source.
+   This deters casual access; it is not real security. */
+(function(){
+  const PW = atob('UmVhZHkxIQ==');   // "Ready1!"
+  const gate = document.getElementById('gate');
+  const pw = document.getElementById('gatePw');
+  const btn = document.getElementById('gateBtn');
+  const err = document.getElementById('gateErr');
+  function attempt(){
+    if(pw.value === PW){
+      gate.classList.add('hidden');
+      // hand focus to the deck for keyboard nav
+      document.body.focus();
+    } else {
+      err.classList.add('show');
+      pw.value = '';
+      pw.focus();
+    }
+  }
+  btn.addEventListener('click', attempt);
+  pw.addEventListener('keydown', e=>{
+    err.classList.remove('show');
+    if(e.key === 'Enter'){ e.preventDefault(); attempt(); }
+  });
+})();
+
+/* ============ SLIDE DATA (content only) ============ */
+const SLIDES = [
+  {
+    bg:'dark',
+    title:'Title',
+    html:`<span class="motif hide-phone" aria-hidden="true">${motif()}</span>
+      <div class="with-art wide">
+        <div>
+          <div class="kicker">NSF 26-508 &bull; Leadership Briefing</div>
+          <h1>TechAccess:<br><span class="em">AI-Ready America</span></h1>
+          <div class="rule"></div>
+          <p class="lead">What this federal program is, who is behind it, and the partnership decision in front of TCEA.</p>
+        </div>
+        <div>
+          <div class="art-card">${artHero()}</div>
+          <p class="art-caption">A state hub connects educators, workforce groups, rural networks, small business partners, and public agencies.</p>
+        </div>
+      </div>`,
+    notes:`I want to walk us through a federal opportunity that TCEA has been invited into. It is a new National Science Foundation program called TechAccess: AI-Ready America. My goal in the next few minutes is simple. I want you to leave knowing what the program is, who the major players are, what is being asked of TCEA specifically, and the one decision we need to make before the middle of June. I will keep this high level and flag the few places where we actually have to choose something. None of this commits us to anything yet, so treat this as orientation before a decision rather than the decision itself.`
+  },
+  {
+    bg:'light',
+    title:'What it is',
+    html:`<div class="with-art">
+      <div>
+        <div class="kicker">The big picture</div>
+        <h2>A national push to make America <span class="em">AI-ready</span></h2>
+        <p class="body">NSF is funding a coordinated, state-by-state effort to accelerate AI readiness and adoption, reaching beyond K-16 education into businesses, public organizations, and individuals.</p>
+        <ul class="clean">
+          <li>Goal: every community and business can participate in an AI-driven economy.</li>
+          <li>Approach: connect existing efforts, fill gaps, and scale what already works.</li>
+          <li>One coordinating Hub funded in every state, DC, and territory.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="art-card">${artMap()}</div>
+        <p class="art-caption">The program is framed around state-level coordination, not one-off training.</p>
+      </div>
+    </div>`,
+    notes:`Here is the core idea. The federal government wants the country to be ready for AI, and rather than build something brand new from scratch, NSF is funding coordination. The program reaches further than schools. It deliberately includes small businesses, local governments, and everyday individuals alongside education and workforce systems. The mechanism is one coordinating hub in every state and territory whose job is to connect the people already doing this work, find the gaps, and help the good efforts grow. The word I would underline is coordination. This is about being a connector and a backbone, not about delivering every training session yourself.`
+  },
+  {
+    bg:'light',
+    title:'Three components',
+    html:`<div class="kicker">How the program is built</div>
+      <h2>Three moving parts</h2>
+      <div class="grid g3">
+        <div class="card"><div class="num">1</div><h3>State Coordination Hubs</h3><p>One per state or territory. Connects partners and scales AI readiness locally. This is the part Texas applies for.</p></div>
+        <div class="card"><div class="num">2</div><h3>National Coordination Lead</h3><p>Ties the hubs together, shares best practices, and informs national AI strategy. Funded separately.</p></div>
+        <div class="card"><div class="num">3</div><h3>Catalyst Award Competitions</h3><p>Topic-driven competitions that pilot and scale promising approaches over time.</p></div>
+      </div>
+      <div class="iconrow">
+        <span class="chip"><span class="mini"></span>Local hub</span>
+        <span class="chip"><span class="mini"></span>National lead</span>
+        <span class="chip"><span class="mini"></span>Catalyst awards</span>
+      </div>`,
+    notes:`The program has three parts, and it helps to keep them separate in your head. The first is the State Coordination Hubs. That is the piece Texas would compete for, and the piece this whole conversation is about. The second is a single National Coordination Lead that sits above all the state hubs, helps them share what works, and feeds insights up into national strategy. That one is funded through a separate process. The third is a rolling series of Catalyst Award competitions that fund specific pilot projects over the life of the program. For our purposes today, only the first part matters. The other two are context.`
+  },
+  {
+    bg:'navy',
+    title:'The money',
+    html:`<div class="split">
+      <div>
+        <div class="kicker">Award at a glance</div>
+        <h2>Real money, on a clock</h2>
+        <p class="body">Each State Hub is funded as a single award to a lead organization with statewide convening power, supported by a team of partners.</p>
+        <div class="art-card" style="margin-top:1.2rem;max-width:500px">${artFunding()}</div>
+      </div>
+      <div class="statcard">
+        <div class="big">$1M</div>
+        <div class="cap">per year, for three years</div>
+        <div style="height:1px;background:rgba(255,255,255,.18);margin:1.3rem 0"></div>
+        <div class="big" style="font-size:clamp(2.2rem,5vw,3.2rem)">Up to 56</div>
+        <div class="cap">hubs nationwide &bull; one per state and territory</div>
+      </div>
+    </div>`,
+    notes:`Let me put numbers to it. Each state hub receives one million dollars a year for three years, with a possible fourth year if the hub can show a real need as it transitions to other funding. Up to fifty six hubs will be funded across the country, one for each state, the District of Columbia, and the territories. The award goes to a single lead organization, not to a loose coalition, and that lead is expected to have genuine statewide reach plus the operational muscle to manage a multi-partner effort. I share the dollar figure not because TCEA is chasing the money, but because it tells you how serious and how large this effort is.`
+  },
+  {
+    bg:'light',
+    title:'Who is behind it',
+    html:`<div class="with-art wide">
+      <div>
+        <div class="kicker">The players &bull; federal</div>
+        <h2>Four federal agencies, one program</h2>
+        <div class="players">
+          <div class="player"><span class="who">NSF</span><span class="role">Lead agency. Runs the program through its Technology, STEM Education, and Computing directorates.</span></div>
+          <div class="player"><span class="who">Dept. of Labor</span><span class="role">Connects hubs to the workforce system, job centers, and apprenticeships.</span></div>
+          <div class="player"><span class="who">USDA / NIFA</span><span class="role">Extends reach into agricultural and rural communities via Cooperative Extension.</span></div>
+          <div class="player"><span class="who">Small Business Admin.</span><span class="role">Links hubs to capital and counseling networks for small businesses.</span></div>
+        </div>
+      </div>
+      <div class="art-card">${artAgencies()}</div>
+    </div>`,
+    notes:`On the federal side, this is not just NSF acting alone. NSF is the lead and runs the competition, drawing on three of its directorates. But three other agencies are formally attached. The Department of Labor brings the workforce system, including American Job Centers and registered apprenticeships. The Department of Agriculture, through its food and agriculture institute, extends the reach into rural and agricultural communities using the Cooperative Extension network that land grant universities run. And the Small Business Administration connects the hubs to small business support. The takeaway is that this program intends to touch the whole economy, not only classrooms, and it has the federal partners to back that ambition.`
+  },
+  {
+    bg:'light',
+    title:'The Texas players',
+    html:`<div class="with-art wide">
+      <div>
+        <div class="kicker">The players &bull; Texas</div>
+        <h2>The Texas Coordination Hub coalition</h2>
+        <div class="players">
+          <div class="player"><span class="who">Dr. Elabd</span><span class="role">Lead Principal Investigator for the proposed Texas hub.</span></div>
+          <div class="player"><span class="who">Dr. Bienvenue</span><span class="role">Co-lead on the proposal.</span></div>
+          <div class="player"><span class="who">Sharmila</span><span class="role">Coordinating partner outreach and recruitment for the coalition.</span></div>
+          <div class="player"><span class="who">TCEA</span><span class="role">Invited as a named Participating Organization: the statewide educator voice.</span></div>
+        </div>
+        <p class="body" style="margin-top:1.2rem">A broad coalition is forming now, ahead of the round-one deadline.</p>
+      </div>
+      <div>
+        <div class="art-card">${artTexas()}</div>
+        <p class="art-caption">The visual emphasis is on a Texas hub with TCEA connected to statewide educator reach.</p>
+      </div>
+    </div>`,
+    notes:`Closer to home, a Texas coalition is taking shape to apply for our state's hub. The lead investigator is Dr. Elabd, with Dr. Bienvenue as co-lead. Sharmila has been the one reaching out to build the partner network, and she is the person who contacted us. They have invited TCEA to join as a named participating organization, which means we would be listed in the proposal as the statewide educator voice in the coalition. This is the relationship we are deciding about. The coalition is still forming, which is normal at this stage, and they are moving quickly because the first deadline is close.`
+  },
+  {
+    bg:'light',
+    title:'What TCEA brings',
+    html:`<div class="kicker">Why TCEA</div>
+      <h2>Where TCEA fits</h2>
+      <div class="grid g2">
+        <div class="card"><h3>Statewide reach</h3><p>Our educator network across Texas directly strengthens the hub's convening capacity, a criterion NSF actually scores.</p></div>
+        <div class="card"><h3>Mission alignment</h3><p>Connecting and aligning AI education efforts statewide is core TCEA work, amplified rather than expanded.</p></div>
+        <div class="card"><h3>Coordinator, not deliverer</h3><p>The hub acts as a backbone that scales existing programs. It does not deliver every training itself.</p></div>
+        <div class="card"><h3>No cost to start</h3><p>At this stage: no funding, no sub-award, and no committed staff time requested.</p></div>
+      </div>`,
+    notes:`Why would they want us, and why might we say yes. Four reasons. First, our reach. TCEA's statewide educator network is exactly the kind of convening capacity NSF rewards in scoring, so we are a genuine asset, not a logo on a page. Second, mission fit. Connecting and aligning AI education work across Texas is already what we do, so this amplifies our existing mission rather than adding new scope. Third, the role suits us. The hub is meant to be a backbone that helps existing programs scale, not an organization that personally delivers every workshop. And fourth, at this stage there is no funding, no sub-award, and no committed staff time being requested. The entry cost is low.`
+  },
+  {
+    bg:'navy',
+    title:'Timeline',
+    html:`<div class="kicker">Round one deadlines</div>
+      <h2>What happens when</h2>
+      <div class="timeline">
+        <div class="tstep"><div class="tstep-line"></div><div class="tstep-dot"></div><div class="when">June 16</div><div class="what">Letter of Intent due. Partners named. No signed letter needed yet.</div></div>
+        <div class="tstep"><div class="tstep-line"></div><div class="tstep-dot"></div><div class="when">July 16</div><div class="what">Full proposal due. Letters of collaboration required from named partners.</div></div>
+        <div class="tstep"><div class="tstep-dot"></div><div class="when">Later</div><div class="what">10 hubs funded in round one; 20 in round two; the rest in round three.</div></div>
+      </div>
+      <div class="art-card" style="margin-top:1.3rem;max-width:760px">${artTimeline()}</div>
+      <p class="body" style="margin-top:1.5rem">The Letter of Intent is required: miss it and the proposal cannot be submitted.</p>`,
+    notes:`Here is the calendar that matters. The Letter of Intent is due June sixteenth. That is where partners get named, and importantly it does not require a signed commitment letter from us yet. The full proposal is due July sixteenth, and that is when a standard letter of collaboration would be requested from every named partner, including us. One detail worth stressing. The Letter of Intent is required, not optional. If the coalition misses it, they cannot submit a proposal at all. And funding comes in three waves, with only ten hubs in the first round, so the round we target is itself a strategic choice.`
+  },
+  {
+    bg:'light',
+    title:'Decision',
+    html:`<div class="with-art">
+      <div>
+        <div class="kicker">The decision in front of us</div>
+        <h2>What we need to settle</h2>
+        <div class="grid g2" style="max-width:880px">
+          <div class="card"><h3>The ask</h3><p>Confirm TCEA is willing to be listed as a participating organization, and provide a short description of our role before June 16.</p></div>
+          <div class="card"><h3>The commitment</h3><p>A standard NSF letter of collaboration would follow in July. That signature commits TCEA institutionally.</p></div>
+        </div>
+        <div class="pclist" style="margin-top:1.5rem">
+          <div class="pcrow"><span class="mk">&#9656;</span><span>Two checks before we say yes: leadership is comfortable committing TCEA's name, and the July letter creates no conflict with our other obligations.</span></div>
+        </div>
+      </div>
+      <div class="art-card">${artDecision()}</div>
+    </div>`,
+    notes:`So what do we actually need to decide. The immediate ask is small. The coalition wants two things before June sixteenth. A confirmation that TCEA is willing to be listed as a participating organization, and a short description of TCEA and the role we would play. Neither requires a signed letter yet. The real commitment arrives in July, when a standard letter of collaboration would put TCEA's name formally behind the proposal. Before we agree, I want two checks satisfied. First, that leadership is genuinely comfortable committing the organization's name to someone else's proposal. Second, that signing in July creates no conflict with our other obligations. If both hold, this is a low risk yes.`
+  },
+  {
+    bg:'navy',
+    title:'The case against',
+    html:`<div class="kicker">Devil&rsquo;s advocate</div>
+      <h2>Why this could be the <span class="em">wrong</span> call</h2>
+      <div class="grid g2" style="max-width:980px">
+        <div class="card"><h3>Our name, their proposal</h3><p>TCEA&rsquo;s reputation rides on a document we do not write or control. If the coalition is weak, that reflects on us.</p></div>
+        <div class="card"><h3>No staff time rarely holds</h3><p>Coordination generates meetings, reviews, and asks. The real cost tends to arrive after the letter is signed.</p></div>
+        <div class="card"><h3>We may be the convener, not a guest</h3><p>If TCEA wants to lead a statewide AI effort later, this could box us into a supporting role.</p></div>
+        <div class="card"><h3>Likely no payoff for the effort</h3><p>Only 10 hubs are funded in round one. If Texas is not selected, the tangible return may be zero.</p></div>
+      </div>`,
+    notes:`Before I give my recommendation, let me argue the other side honestly, because this is not a free decision. Here is the case for saying no. First, we would be lending TCEA's name to a proposal we neither write nor control. If the coalition turns out to be thin, or the proposal underwhelms reviewers, that reflects on us, and we have no hand on the steering wheel. Second, I am skeptical of the phrase no staff time. Coordination work has a way of multiplying into meetings and requests once you are formally in. Third, and this is the one I weigh most, being a named partner in someone else's hub could quietly foreclose TCEA ever leading its own statewide AI effort. And fourth, only ten hubs are funded in the first round, so there is a real chance we spend reputation and goodwill for a proposal that simply does not get picked. None of these are disqualifying, but they are the honest reasons a thoughtful no would be defensible.`
+  },
+  {
+    bg:'dark',
+    title:'Recommendation',
+    html:`<span class="motif hide-phone" aria-hidden="true">${motif()}</span>
+      <div class="with-art wide">
+        <div>
+          <div class="kicker">Bottom line</div>
+          <h1 style="font-size:clamp(2.3rem,5vw,3.8rem)">A low-risk <span class="em">yes</span>,<br>made deliberately.</h1>
+          <div class="rule"></div>
+          <p class="lead">Real visibility and mission-aligned positioning at no near-term cost. The one risk worth weighing: a binding July commitment should be a deliberate choice now, not a surprise later.</p>
+        </div>
+        <div>
+          <div class="art-card">${artClose()}</div>
+          <p class="art-caption">The recommendation is yes, with a clear check before the July letter.</p>
+        </div>
+      </div>`,
+    notes:`Here is my recommendation. On balance this is a low risk yes. We gain visibility on a major federal effort and we position TCEA as a recognized statewide leader in AI readiness, all at no near-term cost. The risks are manageable, but they are real, so I do not want us to drift into this casually. The single thing I would protect against is signing a binding letter in July that no one fully decided to sign. So let us make the choice deliberately now, with eyes open, rather than discover the commitment after the fact. If leadership is comfortable, I will confirm our interest and prepare the short description they need. That is the decision I am bringing to you.`
+  }
+];
+
+
+/* ============ GENERATED ILLUSTRATIONS ============ */
+function artHero(){return `<svg viewBox="0 0 640 420" role="img" aria-label="State hub network illustration" xmlns="http://www.w3.org/2000/svg">
+  <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0A3476"/><stop offset="1" stop-color="#0e6b8a"/></linearGradient><filter id="sh" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#071f4a" flood-opacity=".22"/></filter></defs>
+  <rect width="640" height="420" rx="28" fill="url(#g1)"/><circle cx="320" cy="210" r="76" fill="#FCB040" filter="url(#sh)"/><circle cx="320" cy="210" r="45" fill="#fff" opacity=".95"/>
+  ${hubNodes([[145,96],[496,98],[110,296],[518,302],[320,64],[320,356]], ['#fff','#FEF0D0','#D0D8F0','#fff','#FEF0D0','#D0D8F0'])}
+  <g stroke="#FEF0D0" stroke-width="6" stroke-linecap="round" opacity=".9"><path d="M187 113L270 176"/><path d="M453 115L370 176"/><path d="M160 277L270 235"/><path d="M480 281L370 235"/><path d="M320 108L320 164"/><path d="M320 312L320 256"/></g>
+  <g fill="#071f4a" opacity=".9"><path d="M306 191h28v12h-28zM301 207h38v12h-38zM312 223h16v20h-16z"/></g>
+  <g fill="#fff" opacity=".92"><rect x="109" y="80" width="72" height="32" rx="10"/><rect x="460" y="82" width="72" height="32" rx="10"/><rect x="74" y="280" width="72" height="32" rx="10"/><rect x="482" y="286" width="72" height="32" rx="10"/></g>
+</svg>`}
+function hubNodes(points,colors){return points.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="34" fill="${colors[i]}" filter="url(#sh)"/><circle cx="${p[0]}" cy="${p[1]}" r="14" fill="#0A3476" opacity=".9"/>`).join('')}
+function artMap(){return `<svg viewBox="0 0 640 420" role="img" aria-label="State by state coordination map" xmlns="http://www.w3.org/2000/svg"><rect width="640" height="420" rx="28" fill="#FEF0D0"/><g fill="#D0D8F0" stroke="#0A3476" stroke-width="3" opacity=".96">${Array.from({length:7},(_,r)=>Array.from({length:9},(_,c)=>`<rect x="${70+c*56+(r%2)*12}" y="${64+r*40}" width="40" height="28" rx="6"/>`).join('')).join('')}</g><circle cx="320" cy="206" r="64" fill="#0A3476"/><circle cx="320" cy="206" r="32" fill="#FCB040"/><g stroke="#0e6b8a" stroke-width="5" stroke-linecap="round"><path d="M320 142V88"/><path d="M320 270v56"/><path d="M256 206H151"/><path d="M384 206h108"/><path d="M276 162l-80-56"/><path d="M364 162l80-56"/><path d="M276 250l-80 56"/><path d="M364 250l80 56"/></g></svg>`}
+function artFunding(){return `<svg viewBox="0 0 640 280" role="img" aria-label="Funding scale illustration" xmlns="http://www.w3.org/2000/svg"><rect width="640" height="280" rx="24" fill="#071f4a"/><g transform="translate(78 42)"><rect x="0" y="126" width="84" height="76" rx="12" fill="#D0D8F0"/><rect x="122" y="86" width="84" height="116" rx="12" fill="#FCB040"/><rect x="244" y="44" width="84" height="158" rx="12" fill="#0e6b8a"/><rect x="366" y="16" width="84" height="186" rx="12" fill="#ffffff" opacity=".95"/><path d="M0 218h484" stroke="#FCB040" stroke-width="8" stroke-linecap="round"/></g><circle cx="524" cy="86" r="42" fill="#FCB040"/><path d="M505 88l14 14 31-36" stroke="#071f4a" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`}
+function artAgencies(){return `<svg viewBox="0 0 640 420" role="img" aria-label="Four federal partners around one program" xmlns="http://www.w3.org/2000/svg"><rect width="640" height="420" rx="28" fill="#fff"/><circle cx="320" cy="210" r="78" fill="#0A3476"/><circle cx="320" cy="210" r="38" fill="#FCB040"/><g stroke="#0e6b8a" stroke-width="6" stroke-linecap="round"><path d="M320 132V76"/><path d="M320 288v56"/><path d="M242 210H144"/><path d="M398 210h98"/></g><g fill="#FEF0D0" stroke="#0A3476" stroke-width="4"><circle cx="320" cy="68" r="46"/><circle cx="320" cy="352" r="46"/><circle cx="112" cy="210" r="46"/><circle cx="528" cy="210" r="46"/></g><g fill="#0A3476"><path d="M299 60h42v18h-42zM304 78h32v24h-32z"/><path d="M302 334h36v44h-36zM294 378h52v8h-52z"/><path d="M93 194h38v18H93zM100 212h24v30h-24z"/><path d="M512 194h32v50h-32zM503 238h50v8h-50z"/></g></svg>`}
+function artTexas(){return `<svg viewBox="0 0 640 420" role="img" aria-label="Texas hub coalition illustration" xmlns="http://www.w3.org/2000/svg"><rect width="640" height="420" rx="28" fill="#FEF0D0"/><path d="M252 76l74 12 28 50 66 22-10 58 54 55-46 28 10 54-82-8-42 36-42-60-60-6-18-66-50-48 70-40z" fill="#D0D8F0" stroke="#0A3476" stroke-width="7" stroke-linejoin="round"/><circle cx="316" cy="220" r="58" fill="#FCB040"/><circle cx="316" cy="220" r="28" fill="#0A3476"/><g stroke="#0e6b8a" stroke-width="6" stroke-linecap="round"><path d="M316 162L238 120"/><path d="M366 210l98-20"/><path d="M306 278l-42 70"/><path d="M260 238l-104 44"/></g><g fill="#fff" stroke="#0A3476" stroke-width="4"><circle cx="224" cy="112" r="30"/><circle cx="488" cy="186" r="30"/><circle cx="252" cy="370" r="30"/><circle cx="132" cy="292" r="30"/></g></svg>`}
+function artTimeline(){return `<svg viewBox="0 0 760 210" role="img" aria-label="Proposal deadline pathway" xmlns="http://www.w3.org/2000/svg"><rect width="760" height="210" rx="24" fill="#071f4a"/><path d="M90 106h580" stroke="#D0D8F0" stroke-width="8" stroke-linecap="round"/><g fill="#FCB040"><circle cx="160" cy="106" r="34"/><circle cx="380" cy="106" r="34"/><circle cx="600" cy="106" r="34"/></g><g fill="#fff"><rect x="126" y="42" width="68" height="34" rx="8"/><rect x="346" y="42" width="68" height="34" rx="8"/><rect x="566" y="42" width="68" height="34" rx="8"/></g><g stroke="#0A3476" stroke-width="5" stroke-linecap="round"><path d="M146 108l11 11 22-27"/><path d="M366 108l11 11 22-27"/><path d="M586 108l11 11 22-27"/></g><g fill="#D0D8F0" opacity=".9"><rect x="103" y="154" width="114" height="14" rx="7"/><rect x="323" y="154" width="114" height="14" rx="7"/><rect x="543" y="154" width="114" height="14" rx="7"/></g></svg>`}
+function artDecision(){return `<svg viewBox="0 0 640 420" role="img" aria-label="Decision checklist illustration" xmlns="http://www.w3.org/2000/svg"><rect width="640" height="420" rx="28" fill="#fff"/><rect x="160" y="72" width="320" height="276" rx="24" fill="#D0D8F0" stroke="#0A3476" stroke-width="6"/><rect x="224" y="48" width="192" height="58" rx="18" fill="#FCB040"/><g stroke="#0A3476" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><path d="M214 162l22 22 44-52"/><path d="M214 236l22 22 44-52"/><path d="M214 310l22 22 44-52"/></g><g fill="#0e6b8a"><rect x="306" y="148" width="112" height="18" rx="9"/><rect x="306" y="222" width="112" height="18" rx="9"/><rect x="306" y="296" width="112" height="18" rx="9"/></g></svg>`}
+function artClose(){return `<svg viewBox="0 0 640 420" role="img" aria-label="Deliberate yes pathway" xmlns="http://www.w3.org/2000/svg"><rect width="640" height="420" rx="28" fill="#071f4a"/><path d="M104 288c88-116 182-150 310-86" stroke="#D0D8F0" stroke-width="16" fill="none" stroke-linecap="round"/><path d="M398 188l96 42-94 44" stroke="#FCB040" stroke-width="16" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="126" cy="286" r="34" fill="#FCB040"/><circle cx="316" cy="198" r="54" fill="#0e6b8a"/><circle cx="498" cy="232" r="44" fill="#fff"/><path d="M480 232l14 14 30-38" stroke="#0A3476" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><g fill="#FEF0D0" opacity=".8"><circle cx="86" cy="86" r="7"/><circle cx="178" cy="58" r="5"/><circle cx="554" cy="92" r="7"/><circle cx="568" cy="338" r="5"/></g></svg>`}
+
+/* TCEA gold-on-navy corner motif: three ascending bars */
+function motif(){
+  return `<svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+    <rect x="6" y="42" width="14" height="24" rx="2" fill="#FCB040"/>
+    <rect x="29" y="26" width="14" height="40" rx="2" fill="#FCB040" opacity="0.75"/>
+    <rect x="52" y="10" width="14" height="56" rx="2" fill="#FCB040" opacity="0.5"/>
+  </svg>`;
+}
+
+/* ============ ENGINE (generic, no slide content) ============ */
+const deck = document.getElementById('deck');
+const dotsWrap = document.getElementById('dots');
+const counter = document.getElementById('counter');
+const notesEl = document.getElementById('notes');
+const notesTitle = document.getElementById('notesTitle');
+const notesBody = document.getElementById('notesBody');
+const progress = document.getElementById('progress');
+const helpEl = document.getElementById('help');
+let cur = 0;
+let presenterWin = null;
+let channel = null;
+
+/* build slides + dots */
+SLIDES.forEach((s,i)=>{
+  const el = document.createElement('section');
+  el.className = 'slide '+(s.bg||'light');
+  el.innerHTML = s.html;
+  deck.appendChild(el);
+  const d = document.createElement('button');
+  d.className='dot';d.setAttribute('aria-label','Go to slide '+(i+1));
+  d.addEventListener('click',()=>go(i));
+  dotsWrap.appendChild(d);
+});
+const slideEls = [...document.querySelectorAll('.slide')];
+const dotEls = [...document.querySelectorAll('.dot')];
+
+function render(){
+  slideEls.forEach((el,i)=>el.classList.toggle('active',i===cur));
+  dotEls.forEach((d,i)=>d.classList.toggle('on',i===cur));
+  counter.textContent = (cur+1)+' / '+SLIDES.length;
+  progress.style.width = ((cur+1)/SLIDES.length*100)+'%';
+  notesTitle.textContent = SLIDES[cur].title || 'Speaker notes';
+  notesBody.textContent = SLIDES[cur].notes || '';
+  if(channel) channel.postMessage({type:'sync',idx:cur});
+}
+function go(i){
+  cur = Math.max(0,Math.min(SLIDES.length-1,i));
+  if(location.hash !== '#'+(cur+1)) history.replaceState(null,'','#'+(cur+1));
+  render();
+}
+function next(){go(cur+1)}
+function prev(){go(cur-1)}
+
+/* keyboard */
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='ArrowDown'){e.preventDefault();next()}
+  else if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();prev()}
+  else if(e.key==='Home'){e.preventDefault();go(0)}
+  else if(e.key==='End'){e.preventDefault();go(SLIDES.length-1)}
+  else if(e.key==='n'||e.key==='N'){toggleNotes()}
+  else if(e.key==='p'||e.key==='P'){openPresenter()}
+  else if(e.key==='f'||e.key==='F'){toggleFull()}
+  else if(e.key==='?'){toggleHelp()}
+  else if(e.key==='Escape'){notesEl.classList.remove('open');helpEl.classList.remove('open')}
+});
+
+/* notes */
+function toggleNotes(){notesEl.classList.toggle('open')}
+document.getElementById('bNotes').addEventListener('click',toggleNotes);
+
+/* help */
+function toggleHelp(){helpEl.classList.toggle('open')}
+document.getElementById('bHelp').addEventListener('click',toggleHelp);
+helpEl.addEventListener('click',()=>helpEl.classList.remove('open'));
+
+/* fullscreen */
+function toggleFull(){
+  if(!document.fullscreenElement){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen()}
+  else{document.exitFullscreen&&document.exitFullscreen()}
+}
+document.getElementById('bFull').addEventListener('click',toggleFull);
+
+/* presenter view */
+function openPresenter(){
+  channel = channel || new BroadcastChannel('tcea_webdeck');
+  presenterWin = window.open('','tceaPresenter','width=900,height=650');
+  if(!presenterWin){alert('Please allow pop-ups to use presenter view.');return}
+  const doc = presenterWin.document;
+  doc.title = 'Presenter Console';
+  doc.body.style.cssText='margin:0;font-family:DM Sans,sans-serif;background:#071f4a;color:#fff;padding:24px';
+  doc.body.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;height:calc(100vh - 48px)">
+      <div>
+        <div style="font:600 12px/1 DM Sans;letter-spacing:.2em;color:#FCB040;text-transform:uppercase">Current</div>
+        <div id="pCur" style="font:400 26px/1.2 'DM Serif Display',serif;margin:.5rem 0 1rem"></div>
+        <div style="font:600 12px/1 DM Sans;letter-spacing:.2em;color:#FCB040;text-transform:uppercase">Speaker notes</div>
+        <div id="pNotes" style="font:400 15px/1.6 DM Sans;color:#D0D8F0;margin-top:.6rem"></div>
+      </div>
+      <div style="border-left:1px solid rgba(255,255,255,.15);padding-left:20px;display:flex;flex-direction:column">
+        <div style="font:600 12px/1 DM Sans;letter-spacing:.2em;color:#FCB040;text-transform:uppercase">Up next</div>
+        <div id="pNext" style="font:400 19px/1.3 'DM Serif Display',serif;color:#fff;margin:.5rem 0 1.5rem"></div>
+        <div style="font:600 12px/1 DM Sans;letter-spacing:.2em;color:#FCB040;text-transform:uppercase">Elapsed</div>
+        <div id="pTimer" style="font:500 40px/1 DM Mono,monospace;margin-top:.5rem">00:00</div>
+        <div style="margin-top:auto;color:#5a6680;font-size:12px">Audience window is open. Navigate from either window.</div>
+      </div>
+    </div>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet">`;
+  // audience window
+  const aud = window.open(location.href.split('#')[0]+'#'+(cur+1),'tceaAudience','width=1280,height=720');
+  const t0 = Date.now();
+  const tick = setInterval(()=>{
+    if(presenterWin.closed){clearInterval(tick);return}
+    const s = Math.floor((Date.now()-t0)/1000);
+    const mm = String(Math.floor(s/60)).padStart(2,'0');
+    const ss = String(s%60).padStart(2,'0');
+    presenterWin.document.getElementById('pTimer').textContent = mm+':'+ss;
+  },1000);
+  const upd = ()=>{
+    if(presenterWin.closed) return;
+    const d = presenterWin.document;
+    d.getElementById('pCur').textContent = SLIDES[cur].title;
+    d.getElementById('pNotes').textContent = SLIDES[cur].notes;
+    d.getElementById('pNext').textContent = cur<SLIDES.length-1 ? SLIDES[cur+1].title : '— end —';
+  };
+  channel.onmessage = (e)=>{ if(e.data&&e.data.type==='sync'){cur=e.data.idx;render();upd()} };
+  presenterWin._upd = upd;
+  setTimeout(upd,300);
+  const origRender = render;
+}
+document.getElementById('bPres').addEventListener('click',openPresenter);
+// keep presenter console in sync on every render
+const _render = render;
+render = function(){ _render(); if(presenterWin && !presenterWin.closed && presenterWin._upd) presenterWin._upd(); };
+
+/* click-to-navigate (guarded) */
+document.addEventListener('click',e=>{
+  if(notesEl.classList.contains('open')||helpEl.classList.contains('open')) return;
+  if(e.target.closest('#bar,#notes,#help,a,button')) return;
+  if(window.getSelection && String(window.getSelection())!=='') return;
+  const x = e.clientX, w = window.innerWidth;
+  if(x < w*0.33) prev();
+  else if(x > w*0.66) next();
+});
+document.getElementById('edgeL').addEventListener('click',e=>{e.stopPropagation();prev()});
+document.getElementById('edgeR').addEventListener('click',e=>{e.stopPropagation();next()});
+
+/* touch swipe */
+let tsX=0,tsY=0;
+document.addEventListener('touchstart',e=>{tsX=e.changedTouches[0].clientX;tsY=e.changedTouches[0].clientY},{passive:true});
+document.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tsX, dy=e.changedTouches[0].clientY-tsY;
+  if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)){ dx<0?next():prev(); }
+},{passive:true});
+
+/* deep linking */
+function fromHash(){
+  const n = parseInt((location.hash||'').replace('#',''),10);
+  if(!isNaN(n)&&n>=1&&n<=SLIDES.length) cur=n-1;
+}
+window.addEventListener('hashchange',()=>{fromHash();render()});
+
+/* init */
+fromHash();
+render();
+</script>
+</body>
+</html>

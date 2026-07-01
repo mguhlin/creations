@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Classroom Wheel Spinner</title>
+  <style>
+    :root {
+      --navy: #1E398D;
+      --gold: #FAA634;
+      --black: #000000;
+      --white: #FFFFFF;
+      --red: #D1282F;
+      --blue: #0070B9;
+      --yellow: #FDDC3F;
+      --orange: #f58231;
+      --green: #3cb44b;
+      --gray-90: #404041;
+      --gray-50: #939597;
+      --gray-30: #BBBDC0;
+      --gray-10: #E6E7E8;
+      --bg: #FFFFFF;
+      --card: #FFFFFF;
+      --text: #404041;
+      --muted: #939597;
+      --border: #E6E7E8;
+      --shadow: 0 12px 24px rgba(64, 64, 65, 0.08);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      min-height: 100vh;
+    }
+
+    .top-bar {
+      height: 12px;
+      background: linear-gradient(
+        90deg,
+        var(--navy) 0 32%,
+        var(--gold) 32% 52%,
+        var(--orange) 52% 64%,
+        var(--red) 64% 76%,
+        var(--blue) 76% 88%,
+        var(--green) 88% 96%,
+        var(--yellow) 96% 100%
+      );
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 22px 0 36px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding-bottom: 18px;
+      border-bottom: 2px solid var(--gray-10);
+      margin-bottom: 20px;
+    }
+
+    .title-block {
+      display: grid;
+      gap: 8px;
+    }
+
+    .eyebrow {
+      margin: 0;
+      color: var(--gold);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .home-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      color: white;
+      background: var(--navy);
+      border-radius: var(--radius);
+      font-weight: 800;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 4.2rem);
+      color: var(--navy);
+      line-height: .95;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 0;
+      max-width: 720px;
+      color: var(--gray-90);
+      font-size: 1rem;
+      line-height: 1.45;
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .controls {
+      padding: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: 750;
+      margin-bottom: 8px;
+      color: #263247;
+    }
+
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      background: white;
+      color: var(--text);
+      font: inherit;
+      outline: none;
+      transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    textarea:focus,
+    select:focus {
+      border-color: var(--navy);
+      box-shadow: 0 0 0 4px rgba(30, 57, 141, 0.14);
+    }
+
+    textarea {
+      min-height: 180px;
+      resize: vertical;
+      line-height: 1.45;
+    }
+
+    .tip {
+      margin: 8px 0 16px;
+      color: var(--muted);
+      font-size: 0.93rem;
+    }
+
+    .field {
+      margin-bottom: 15px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: #fbfcff;
+      margin-bottom: 16px;
+    }
+
+    .toggle-row span {
+      font-weight: 750;
+    }
+
+    input[type="checkbox"] {
+      width: 21px;
+      height: 21px;
+      accent-color: var(--navy);
+    }
+
+    .button-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 14px;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
+      box-shadow: 0 8px 18px rgba(31, 41, 55, 0.12);
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .primary {
+      background: var(--navy);
+      color: white;
+    }
+
+    .spin-btn {
+      background: var(--gold);
+      color: #222;
+      grid-column: span 2;
+      font-size: 1.12rem;
+      padding: 15px 16px;
+    }
+
+    .secondary {
+      background: white;
+      color: var(--navy);
+      border: 1px solid rgba(30, 57, 141, 0.28);
+    }
+
+    .danger {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    .message {
+      min-height: 26px;
+      margin-top: 14px;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.4;
+    }
+
+    .wheel-card {
+      padding: 22px;
+      display: grid;
+      grid-template-columns: minmax(310px, 590px) minmax(230px, 1fr);
+      gap: 22px;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .wheel-stage {
+      position: relative;
+      width: min(100%, 590px);
+      aspect-ratio: 1 / 1;
+      margin: 0 auto;
+      display: grid;
+      place-items: center;
+    }
+
+    canvas#wheelCanvas {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      filter: drop-shadow(0 16px 22px rgba(31, 41, 55, 0.24));
+    }
+
+    .pointer {
+      position: absolute;
+      right: -4px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-top: 24px solid transparent;
+      border-bottom: 24px solid transparent;
+      border-right: 44px solid #eef2f7;
+      filter: drop-shadow(0 4px 5px rgba(31, 41, 55, 0.25));
+      z-index: 3;
+    }
+
+    .center-dot {
+      position: absolute;
+      width: 21%;
+      height: 21%;
+      background: white;
+      border: 7px solid rgba(31, 41, 55, 0.14);
+      border-radius: 50%;
+      box-shadow: inset 0 0 0 1px rgba(31, 41, 55, 0.08), 0 6px 16px rgba(31, 41, 55, 0.12);
+      z-index: 2;
+    }
+
+    .result-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .result-box {
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(30, 57, 141, 0.10), rgba(250, 166, 52, 0.14));
+      border: 1px solid rgba(30, 57, 141, 0.12);
+      padding: 18px;
+    }
+
+    .small-label {
+      color: var(--muted);
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+    }
+
+    .winner {
+      margin-top: 8px;
+      font-size: clamp(1.5rem, 4vw, 2.4rem);
+      font-weight: 900;
+      color: var(--navy);
+      line-height: 1.1;
+      word-break: break-word;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .stat {
+      background: #fbfcff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.5rem;
+      color: var(--navy);
+    }
+
+    .history-card {
+      margin-top: 22px;
+      padding: 20px;
+    }
+
+    .history-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .history-head h2 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 1.35rem;
+    }
+
+    .history-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      min-height: 42px;
+    }
+
+    .pill {
+      border-radius: 999px;
+      background: #eef2ff;
+      color: #1e3a8a;
+      border: 1px solid #dbe4ff;
+      padding: 8px 12px;
+      font-weight: 750;
+    }
+
+    .empty-history {
+      color: var(--muted);
+      padding: 10px 0;
+    }
+
+    .confetti {
+      position: fixed;
+      top: -14px;
+      width: 9px;
+      height: 14px;
+      pointer-events: none;
+      z-index: 999;
+      animation: fall linear forwards;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(720deg);
+        opacity: 0.95;
+      }
+    }
+
+    @media (max-width: 920px) {
+      .app-grid,
+      .wheel-card {
+        grid-template-columns: 1fr;
+      }
+
+      .controls {
+        order: 1;
+      }
+
+      .pointer {
+        right: -2px;
+        border-top-width: 18px;
+        border-bottom-width: 18px;
+        border-right-width: 34px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .page {
+        width: min(100% - 18px, 1180px);
+        padding-top: 18px;
+      }
+
+      .home-link {
+        margin-bottom: 12px;
+      }
+
+      header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .controls,
+      .wheel-card,
+      .history-card {
+        padding: 15px;
+      }
+
+      .button-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .spin-btn {
+        grid-column: auto;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      textarea {
+        min-height: 140px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="top-bar" aria-hidden="true"></div>
+  <div class="page">
+    <header>
+      <div class="title-block">
+        <p class="eyebrow">TCEA Tools</p>
+        <h1>Wheel Spinner</h1>
+        <p class="subtitle">Paste names or classroom choices, pick a theme, and spin. Keep every item on the wheel or remove each selected item as you go.</p>
+      </div>
+      <a class="home-link" href="../index.html">Tool Menu</a>
+    </header>
+
+    <main class="app-grid">
+      <section class="card controls" aria-label="Spinner controls">
+        <div class="field">
+          <label for="itemsInput">Names or Items</label>
+          <textarea id="itemsInput" placeholder="Ava&#10;Ben&#10;Carlos&#10;Diana&#10;or: Ava, Ben, Carlos, Diana"></textarea>
+          <p class="tip">Tip: Enter one item per line or separate items with commas.</p>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label for="themeSelect">Color Theme</label>
+            <select id="themeSelect">
+              <option value="rainbow">Rainbow</option>
+              <option value="pastel">Pastel</option>
+              <option value="primary">Red, Green, Blue, and Yellow</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="removeMode">After a Spin</label>
+            <select id="removeMode">
+              <option value="keep">Keep selected item on the wheel</option>
+              <option value="remove">Remove selected item from the wheel</option>
+            </select>
+          </div>
+        </div>
+
+        <label class="toggle-row" for="soundToggle">
+          <span>Celebration Sound</span>
+          <input id="soundToggle" type="checkbox" checked />
+        </label>
+
+        <div class="button-grid">
+          <button class="primary" id="buildBtn">Build Wheel</button>
+          <button class="spin-btn" id="spinBtn">Spin</button>
+          <button class="secondary" id="resetBtn">Reset Wheel</button>
+          <button class="danger" id="clearBtn">Clear All</button>
+        </div>
+
+        <div class="message" id="message" role="status" aria-live="polite"></div>
+      </section>
+
+      <section class="card wheel-card" aria-label="Spinner wheel">
+        <div class="wheel-stage">
+          <canvas id="wheelCanvas" width="900" height="900" aria-label="Wheel spinner"></canvas>
+          <div class="pointer" aria-hidden="true"></div>
+          <div class="center-dot" aria-hidden="true"></div>
+        </div>
+
+        <aside class="result-panel">
+          <div class="result-box">
+            <div class="small-label">Selected</div>
+            <div class="winner" id="winnerText">Ready to spin?</div>
+          </div>
+
+          <div class="stats">
+            <div class="stat">
+              <span class="small-label">On Wheel</span>
+              <strong id="remainingCount">0</strong>
+            </div>
+            <div class="stat">
+              <span class="small-label">Picked</span>
+              <strong id="pickedCount">0</strong>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <section class="card history-card" aria-label="Picked history">
+      <div class="history-head">
+        <h2>Picked So Far</h2>
+        <button class="secondary" id="clearHistoryBtn">Clear History</button>
+      </div>
+      <div class="history-list" id="historyList">
+        <div class="empty-history">Nothing picked yet.</div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Main app state
+    let originalItems = [];
+    let activeItems = [];
+    let pickedHistory = [];
+    let rotation = 0;
+    let isSpinning = false;
+
+    // Theme palettes
+    const themes = {
+      rainbow: ["#e6194B", "#f58231", "#ffe119", "#3cb44b", "#4363d8", "#911eb4", "#46f0f0", "#f032e6"],
+      pastel: ["#ffd6e0", "#c8f7dc", "#d6e4ff", "#fff1b8", "#e8d7ff", "#c9f0ff", "#ffd9b3", "#daf7a6"],
+      primary: ["#e6194B", "#0aa344", "#1976d2", "#ffbe2e"]
+    };
+
+    const canvas = document.getElementById("wheelCanvas");
+    const ctx = canvas.getContext("2d");
+    const itemsInput = document.getElementById("itemsInput");
+    const themeSelect = document.getElementById("themeSelect");
+    const removeMode = document.getElementById("removeMode");
+    const soundToggle = document.getElementById("soundToggle");
+    const buildBtn = document.getElementById("buildBtn");
+    const spinBtn = document.getElementById("spinBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const clearHistoryBtn = document.getElementById("clearHistoryBtn");
+    const message = document.getElementById("message");
+    const winnerText = document.getElementById("winnerText");
+    const remainingCount = document.getElementById("remainingCount");
+    const pickedCount = document.getElementById("pickedCount");
+    const historyList = document.getElementById("historyList");
+
+    // Use a starter list so the page feels alive when opened.
+    itemsInput.value = "Innovate\nTeaching\nLearning\nWith\nTCEA";
+
+    function parseItems(text) {
+      const parts = text
+        .split(/[\n,]+/)
+        .map(item => item.trim())
+        .filter(Boolean);
+
+      const seen = new Set();
+      const unique = [];
+      let duplicatesRemoved = false;
+
+      for (const item of parts) {
+        const key = item.toLowerCase();
+        if (seen.has(key)) {
+          duplicatesRemoved = true;
+        } else {
+          seen.add(key);
+          unique.push(item);
+        }
+      }
+
+      return { unique, duplicatesRemoved };
+    }
+
+    function setMessage(text) {
+      message.textContent = text || "";
+    }
+
+    function updateStats() {
+      remainingCount.textContent = activeItems.length;
+      pickedCount.textContent = pickedHistory.length;
+    }
+
+    function updateHistory() {
+      historyList.innerHTML = "";
+      if (pickedHistory.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "empty-history";
+        empty.textContent = "Nothing picked yet.";
+        historyList.appendChild(empty);
+        return;
+      }
+
+      pickedHistory.forEach((item, index) => {
+        const pill = document.createElement("div");
+        pill.className = "pill";
+        pill.textContent = `${index + 1}. ${item}`;
+        historyList.appendChild(pill);
+      });
+    }
+
+    function drawWheel() {
+      const size = canvas.width;
+      const center = size / 2;
+      const radius = size * 0.46;
+      ctx.clearRect(0, 0, size, size);
+
+      if (activeItems.length === 0) {
+        ctx.save();
+        ctx.translate(center, center);
+        ctx.beginPath();
+        ctx.arc(0, 0, radius, 0, Math.PI * 2);
+        ctx.fillStyle = "#e8edf7";
+        ctx.fill();
+        ctx.strokeStyle = "#cbd5e1";
+        ctx.lineWidth = 5;
+        ctx.stroke();
+
+        ctx.fillStyle = "#1E398D";
+        ctx.font = "bold 42px system-ui, sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("Add items", 0, -10);
+
+        ctx.fillStyle = "#64748b";
+        ctx.font = "28px system-ui, sans-serif";
+        ctx.fillText("then build the wheel", 0, 36);
+        ctx.restore();
+        updateStats();
+        return;
+      }
+
+      const segmentAngle = (Math.PI * 2) / activeItems.length;
+      const colors = themes[themeSelect.value] || themes.rainbow;
+
+      ctx.save();
+      ctx.translate(center, center);
+      ctx.rotate(rotation);
+
+      activeItems.forEach((item, index) => {
+        const start = index * segmentAngle;
+        const end = start + segmentAngle;
+
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.arc(0, 0, radius, start, end);
+        ctx.closePath();
+        ctx.fillStyle = colors[index % colors.length];
+        ctx.fill();
+
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.9)";
+        ctx.lineWidth = 4;
+        ctx.stroke();
+
+        // Draw text inside each segment.
+        ctx.save();
+        ctx.rotate(start + segmentAngle / 2);
+        ctx.textAlign = "right";
+        ctx.textBaseline = "middle";
+
+        const fill = getTextColor(colors[index % colors.length]);
+        ctx.fillStyle = fill;
+        const fontSize = Math.max(22, Math.min(42, 320 / Math.max(item.length, 5)));
+        ctx.font = `700 ${fontSize}px system-ui, sans-serif`;
+
+        const textRadius = radius * 0.84;
+        const maxWidth = radius * 0.55;
+        ctx.fillText(trimToFit(item, maxWidth, ctx), textRadius, 0, maxWidth);
+        ctx.restore();
+      });
+
+      // Outer ring
+      ctx.beginPath();
+      ctx.arc(0, 0, radius, 0, Math.PI * 2);
+      ctx.strokeStyle = "rgba(31, 41, 55, 0.32)";
+      ctx.lineWidth = 6;
+      ctx.stroke();
+
+      ctx.restore();
+      updateStats();
+    }
+
+    function trimToFit(text, maxWidth, context) {
+      if (context.measureText(text).width <= maxWidth) return text;
+      let trimmed = text;
+      while (trimmed.length > 2 && context.measureText(trimmed + "…").width > maxWidth) {
+        trimmed = trimmed.slice(0, -1);
+      }
+      return trimmed + "…";
+    }
+
+    function getTextColor(hex) {
+      const clean = hex.replace("#", "");
+      const r = parseInt(clean.substring(0, 2), 16);
+      const g = parseInt(clean.substring(2, 4), 16);
+      const b = parseInt(clean.substring(4, 6), 16);
+      const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+      return brightness > 165 ? "#1f2937" : "#ffffff";
+    }
+
+    function buildWheel() {
+      const { unique, duplicatesRemoved } = parseItems(itemsInput.value);
+
+      if (unique.length === 0) {
+        originalItems = [];
+        activeItems = [];
+        winnerText.textContent = "Add items first.";
+        setMessage("Add at least two items to make the wheel more fun.");
+        drawWheel();
+        return;
+      }
+
+      originalItems = [...unique];
+      activeItems = [...unique];
+      rotation = 0;
+      winnerText.textContent = "Ready to spin?";
+      setMessage(duplicatesRemoved ? "Duplicate items were removed." : "Wheel built. Ready to spin!");
+      drawWheel();
+    }
+
+    function spinWheel() {
+      if (isSpinning) return;
+
+      if (activeItems.length === 0) {
+        setMessage(originalItems.length ? "The wheel is empty. Reset to bring everyone back." : "Add items first, then build the wheel.");
+        winnerText.textContent = "No items on the wheel.";
+        return;
+      }
+
+      if (activeItems.length < 2) {
+        setMessage("Add at least two items to make the wheel more fun.");
+      } else {
+        setMessage("Spinning...");
+      }
+
+      isSpinning = true;
+      spinBtn.disabled = true;
+      buildBtn.disabled = true;
+
+      const segmentAngle = (Math.PI * 2) / activeItems.length;
+
+      // Random winner and random spin amount every time.
+      const winnerIndex = Math.floor(Math.random() * activeItems.length);
+      const randomFullRotations = randomInt(5, 11);
+      const randomExtraOffset = (Math.random() - 0.5) * segmentAngle * 0.45;
+      const pointerAngle = 0; // Pointer is at 3 o'clock on the right side.
+      const segmentCenter = winnerIndex * segmentAngle + segmentAngle / 2;
+
+      // Target rotation aligns the chosen segment center with the pointer.
+      const normalizedRotation = normalizeAngle(rotation);
+      const desiredRotation = pointerAngle - segmentCenter + randomExtraOffset;
+      const deltaToDesired = normalizeAngle(desiredRotation - normalizedRotation);
+      const totalSpin = randomFullRotations * Math.PI * 2 + deltaToDesired;
+
+      const startRotation = rotation;
+      const endRotation = rotation + totalSpin;
+      const duration = randomInt(3600, 5600);
+      const startTime = performance.now();
+
+      function animate(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = easeOutCubic(progress);
+
+        rotation = startRotation + (endRotation - startRotation) * eased;
+        drawWheel();
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          rotation = normalizeAngle(endRotation);
+          drawWheel();
+          finishSpin(winnerIndex);
+        }
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    function finishSpin(winnerIndex) {
+      const selected = activeItems[winnerIndex];
+      winnerText.textContent = selected;
+      pickedHistory.push(selected);
+      updateHistory();
+
+      if (soundToggle.checked) {
+        playCelebrationSound();
+      }
+
+      launchConfetti();
+
+      if (removeMode.value === "remove") {
+        activeItems.splice(winnerIndex, 1);
+        setMessage(`${selected} was selected and removed from the wheel.`);
+      } else {
+        setMessage(`${selected} was selected and kept on the wheel.`);
+      }
+
+      isSpinning = false;
+      spinBtn.disabled = false;
+      buildBtn.disabled = false;
+      drawWheel();
+
+      if (activeItems.length === 0) {
+        setMessage("The wheel is empty. Reset to bring everyone back.");
+      }
+    }
+
+    function resetWheel() {
+      if (originalItems.length === 0) {
+        const { unique } = parseItems(itemsInput.value);
+        originalItems = [...unique];
+      }
+
+      activeItems = [...originalItems];
+      rotation = 0;
+      winnerText.textContent = activeItems.length ? "Ready to spin again?" : "Add items first.";
+      setMessage(activeItems.length ? "Wheel reset. Everyone is back!" : "Add items first, then build the wheel.");
+      drawWheel();
+    }
+
+    function clearAll() {
+      originalItems = [];
+      activeItems = [];
+      pickedHistory = [];
+      rotation = 0;
+      itemsInput.value = "";
+      winnerText.textContent = "Ready to spin?";
+      setMessage("Cleared. Add a new list when you are ready.");
+      updateHistory();
+      drawWheel();
+    }
+
+    function clearHistory() {
+      pickedHistory = [];
+      updateHistory();
+      updateStats();
+      setMessage("History cleared.");
+    }
+
+    function normalizeAngle(angle) {
+      const twoPi = Math.PI * 2;
+      return ((angle % twoPi) + twoPi) % twoPi;
+    }
+
+    function randomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function easeOutCubic(t) {
+      return 1 - Math.pow(1 - t, 3);
+    }
+
+    function playCelebrationSound() {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const audioCtx = new AudioContext();
+        const notes = [523.25, 659.25, 783.99];
+
+        notes.forEach((freq, index) => {
+          const oscillator = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+
+          oscillator.frequency.value = freq;
+          oscillator.type = "sine";
+          gain.gain.setValueAtTime(0.0001, audioCtx.currentTime + index * 0.11);
+          gain.gain.exponentialRampToValueAtTime(0.14, audioCtx.currentTime + index * 0.11 + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + index * 0.11 + 0.22);
+
+          oscillator.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          oscillator.start(audioCtx.currentTime + index * 0.11);
+          oscillator.stop(audioCtx.currentTime + index * 0.11 + 0.24);
+        });
+      } catch (error) {
+        // Audio may be blocked in some browsers. The spinner still works.
+      }
+    }
+
+    function launchConfetti() {
+      const colors = ["#e6194B", "#f58231", "#ffe119", "#3cb44b", "#4363d8", "#911eb4", "#FAA634", "#1E398D"];
+      const amount = window.innerWidth < 560 ? 55 : 95;
+
+      for (let i = 0; i < amount; i++) {
+        const piece = document.createElement("div");
+        piece.className = "confetti";
+        piece.style.left = Math.random() * 100 + "vw";
+        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.animationDuration = (1.8 + Math.random() * 1.7) + "s";
+        piece.style.animationDelay = Math.random() * 0.22 + "s";
+        piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+        document.body.appendChild(piece);
+
+        setTimeout(() => piece.remove(), 3800);
+      }
+    }
+
+    buildBtn.addEventListener("click", buildWheel);
+    spinBtn.addEventListener("click", spinWheel);
+    resetBtn.addEventListener("click", resetWheel);
+    clearBtn.addEventListener("click", clearAll);
+    clearHistoryBtn.addEventListener("click", clearHistory);
+    themeSelect.addEventListener("change", drawWheel);
+
+    // Initial render
+    buildWheel();
+  </script>
+<nav class="mg-bottom-nav" aria-label="Back navigation" style="text-align:center;padding:1.25rem 1.5rem;background:#071F4A;border-top:3px solid #FCB040;font-family:system-ui,-apple-system,sans-serif;">
+  <a href="../../index.html" style="color:#FDD17A;text-decoration:none;font-weight:700;font-size:0.85rem;margin:0 0.7rem;">← TCEA</a>
+</nav>
+</body>
+</html>

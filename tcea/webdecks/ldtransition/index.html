@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LearnDash Risk Assessment and Transition Path</title>
+<style>
+:root{
+  --navy:#0A3476;
+  --navy-2:#071f4a;
+  --gold:#FCB040;
+  --gold-2:#ffd98e;
+  --teal:#0e6b8a;
+  --pale:#D0D8F0;
+  --paper:#f7f9fc;
+  --white:#ffffff;
+  --ink:#172033;
+  --muted:#60708f;
+  --danger:#b42318;
+  --ok:#0b6b3a;
+  --line:rgba(10,52,118,.18);
+  --line-dark:rgba(255,255,255,.16);
+  --shadow:0 18px 52px rgba(7,31,74,.20);
+  --shadow-soft:0 10px 28px rgba(7,31,74,.12);
+  --radius:28px;
+  --bar-h:72px;
+  --pad-x:clamp(1rem,5vw,5.5rem);
+  --pad-y:clamp(1.2rem,4vw,4.5rem);
+  --font-body:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  --font-mono:"JetBrains Mono","SFMono-Regular",Consolas,"Liberation Mono",monospace;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-body);overflow:hidden}
+body{min-height:100vh;min-height:100dvh}
+button,a{font:inherit}
+a{color:inherit}
+button{-webkit-tap-highlight-color:transparent}
+.webdeck{position:relative;height:100vh;height:100dvh;overflow:hidden;background:var(--paper)}
+.progress{position:fixed;top:0;left:0;height:5px;background:linear-gradient(90deg,var(--gold),var(--gold-2));width:0;z-index:70;transition:width .25s ease}
+.slide{position:absolute;inset:0;padding:var(--pad-y) var(--pad-x) calc(var(--bar-h) + 2rem);display:flex;align-items:center;justify-content:center;overflow-y:auto;opacity:0;transform:translateX(24px);pointer-events:none;transition:opacity .28s ease,transform .28s ease;background:radial-gradient(circle at 88% 10%,rgba(252,176,64,.20),transparent 26%),var(--paper);color:var(--ink)}
+.slide.active{opacity:1;transform:translateX(0);pointer-events:auto}
+.slide.dark,.slide.navy,.slide.section{background:radial-gradient(circle at 84% 18%,rgba(252,176,64,.18),transparent 22%),linear-gradient(135deg,var(--navy-2),var(--navy));color:var(--white)}
+.slide.accent{background:radial-gradient(circle at 86% 12%,rgba(10,52,118,.16),transparent 26%),linear-gradient(135deg,#fff7e5,#ffffff);color:var(--ink)}
+.stage{width:min(1180px,100%);margin:auto;position:relative}
+.kicker{font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-size:clamp(.72rem,1.1vw,.95rem);margin-bottom:.65rem}
+h1{font-size:clamp(2.6rem,7.3vw,6.8rem);line-height:.9;margin:0 0 1rem;font-weight:900;letter-spacing:-.08em}
+h2{font-size:clamp(1.9rem,4.5vw,4.4rem);line-height:1;margin:0 0 1.1rem;font-weight:900;letter-spacing:-.055em;color:var(--navy)}
+.dark h2,.navy h2,.section h2{color:var(--white)}
+h3{font-size:clamp(1.1rem,1.8vw,1.55rem);margin:.2rem 0 .45rem;color:var(--navy)}
+.dark h3,.navy h3,.section h3,.dark .muted,.navy .muted,.section .muted{color:rgba(255,255,255,.88)}
+p,.lead,li{font-size:clamp(1rem,1.65vw,1.32rem);line-height:1.45;margin:.45rem 0}
+.lead{font-size:clamp(1.25rem,2.6vw,2rem);max-width:920px;color:var(--muted);font-weight:600}
+.dark .lead,.navy .lead,.section .lead{color:rgba(255,255,255,.86)}
+.muted{color:var(--muted)}
+.grid{display:grid;gap:clamp(.85rem,1.8vw,1.25rem)}
+.cols2{grid-template-columns:1.1fr .9fr}
+.cols3{grid-template-columns:repeat(3,1fr)}
+.cols4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:clamp(1rem,2.1vw,1.55rem);box-shadow:var(--shadow)}
+.card.darkcard{background:linear-gradient(135deg,var(--navy-2),var(--navy));color:var(--white);border-color:var(--line-dark)}
+.card.darkcard *{color:inherit}
+.stat{font-size:clamp(3.2rem,8vw,7.2rem);line-height:.84;font-weight:900;letter-spacing:-.08em;color:var(--gold)}
+.badge{display:inline-flex;align-items:center;gap:.45rem;border-radius:999px;padding:.42rem .75rem;background:rgba(252,176,64,.18);color:var(--navy);font-weight:800;font-size:clamp(.82rem,1.2vw,1rem)}
+.dark .badge,.navy .badge,.section .badge{background:rgba(252,176,64,.22);color:var(--white)}
+.rule{height:5px;width:100px;background:var(--gold);border-radius:10px;margin:1.3rem 0}
+.list{list-style:none;padding:0;margin:0;display:grid;gap:.7rem}
+.list li{display:grid;grid-template-columns:2.2rem 1fr;gap:.6rem;align-items:start;margin:0}
+.dot{width:2.1rem;height:2.1rem;border-radius:50%;background:var(--gold);color:var(--navy-2);display:inline-grid;place-items:center;font-weight:900}
+.tablewrap{overflow-x:auto;border-radius:22px;border:1px solid var(--line);background:var(--white);box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse;min-width:760px}
+th,td{padding:1rem 1.1rem;text-align:left;vertical-align:top;border-bottom:1px solid var(--line);font-size:clamp(.88rem,1.25vw,1.03rem);line-height:1.35}
+th{background:#edf2fb;color:var(--navy);font-weight:900}
+tr:last-child td{border-bottom:0}
+.pillrow{display:flex;gap:.55rem;flex-wrap:wrap;margin-top:1rem}
+.pill{border-radius:999px;padding:.45rem .75rem;background:#edf2fb;color:var(--navy);font-weight:800;font-size:clamp(.82rem,1.1vw,.98rem)}
+.timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:.75rem;margin-top:1.2rem}
+.step{position:relative;background:var(--white);border:1px solid var(--line);border-radius:24px;padding:1rem;box-shadow:var(--shadow-soft)}
+.step .num{font-family:var(--font-mono);color:var(--gold);font-weight:900;font-size:1.4rem}
+.step h3{font-size:1.05rem;margin:.35rem 0}
+.step p{font-size:.95rem}
+.quote{border-left:7px solid var(--gold);padding-left:1.1rem;font-size:clamp(1.35rem,3vw,2.4rem);line-height:1.2;font-weight:800;color:var(--navy)}
+/* Readability safeguards for dark slides */
+.slide.dark .card:not(.darkcard),.slide.navy .card:not(.darkcard),.slide.section .card:not(.darkcard),
+.slide.dark .tablewrap,.slide.navy .tablewrap,.slide.section .tablewrap,
+.slide.dark .step,.slide.navy .step,.slide.section .step,
+.slide.dark .pill,.slide.navy .pill,.slide.section .pill,
+.slide.dark .badge:not(.on-dark),.slide.navy .badge:not(.on-dark),.slide.section .badge:not(.on-dark){color:var(--ink)}
+.slide.dark .card:not(.darkcard) *,.slide.navy .card:not(.darkcard) *,.slide.section .card:not(.darkcard) *,
+.slide.dark .tablewrap *,.slide.navy .tablewrap *,.slide.section .tablewrap *,
+.slide.dark .step *,.slide.navy .step *,.slide.section .step *{color:inherit}
+.slide.dark .card:not(.darkcard) h3,.slide.navy .card:not(.darkcard) h3,.slide.section .card:not(.darkcard) h3,
+.slide.dark .step h3,.slide.navy .step h3,.slide.section .step h3,
+.slide.dark .tablewrap th,.slide.navy .tablewrap th,.slide.section .tablewrap th{color:var(--navy)}
+.slide.dark .card:not(.darkcard) .muted,.slide.navy .card:not(.darkcard) .muted,.slide.section .card:not(.darkcard) .muted,
+.slide.dark .step p,.slide.navy .step p,.slide.section .step p,
+.slide.dark .tablewrap td,.slide.navy .tablewrap td,.slide.section .tablewrap td{color:var(--ink)}
+.slide.dark .pill,.slide.navy .pill,.slide.section .pill{background:#edf2fb;color:var(--navy)}
+.slide.dark .card:not(.darkcard),.slide.navy .card:not(.darkcard),.slide.section .card:not(.darkcard),
+.slide.dark .step,.slide.navy .step,.slide.section .step,
+.slide.dark .tablewrap,.slide.navy .tablewrap,.slide.section .tablewrap{background:rgba(255,255,255,.98)}
+.slide.dark .quote,.slide.navy .quote,.slide.section .quote{color:var(--white)}
+/* controls */
+.controlbar{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);height:var(--bar-h);max-width:min(1080px,calc(100% - 24px));width:max-content;display:flex;align-items:center;gap:.7rem;padding:.55rem .8rem;border-radius:999px;background:rgba(255,255,255,.86);backdrop-filter:blur(14px);border:1px solid rgba(10,52,118,.22);box-shadow:0 14px 38px rgba(7,31,74,.24);z-index:90;color:var(--ink)}
+.decktitle{font-size:.9rem;font-weight:900;color:var(--navy);max-width:230px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn{border:0;border-radius:999px;background:var(--navy);color:#fff;height:2.6rem;min-width:2.6rem;padding:0 .85rem;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:.3rem}
+.btn.secondary{background:#edf2fb;color:var(--navy)}
+.btn.ghost{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.22)}
+.btn:focus-visible,.dotbtn:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.dots{display:flex;align-items:center;gap:.28rem;max-width:390px;overflow:hidden}
+.dotbtn{width:1.05rem;height:1.05rem;border-radius:999px;border:0;background:#b9c6e3;cursor:pointer;padding:0;min-width:1.05rem}
+.dotbtn.active{width:2.1rem;background:var(--gold)}
+.counter{font-weight:900;color:var(--navy);font-size:.92rem;white-space:nowrap}
+.overlay{position:fixed;left:50%;transform:translateX(-50%) translateY(120%);bottom:calc(var(--bar-h) + 28px);width:min(920px,calc(100% - 28px));max-height:min(64vh,620px);overflow:auto;background:rgba(7,31,74,.96);color:#fff;border:1px solid var(--line-dark);border-radius:28px;padding:1.4rem;z-index:80;box-shadow:0 20px 60px rgba(0,0,0,.35);pointer-events:none;transition:transform .28s ease}
+.overlay.open{transform:translateX(-50%) translateY(0);pointer-events:auto}
+.overlay h2,.overlay h3{color:#fff;margin-top:0}
+.overlay p,.overlay li,.overlay a{color:rgba(255,255,255,.9);font-size:1.05rem;line-height:1.5}
+.shortcutGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem}
+.shortcutGrid p{margin:.15rem 0;padding:.55rem .65rem;background:rgba(255,255,255,.08);border-radius:12px}
+.status{position:fixed;left:50%;top:18px;transform:translateX(-50%) translateY(-160%);max-width:min(700px,calc(100% - 32px));background:rgba(7,31,74,.96);color:#fff;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:.75rem 1rem;z-index:120;box-shadow:0 12px 36px rgba(0,0,0,.25);font-weight:800;transition:transform .25s ease}
+.status.show{transform:translateX(-50%) translateY(0)}
+/* Presenter console */
+.presenterConsole{display:none;height:100vh;height:100dvh;padding:1rem;background:#0f172a;color:#fff;overflow:auto}
+.presenterGrid{display:grid;grid-template-columns:minmax(320px,1fr) minmax(320px,1fr);gap:1rem;min-height:calc(100vh - 2rem);min-height:calc(100dvh - 2rem)}
+.mini{background:#fff;border-radius:20px;overflow:hidden;min-height:390px;position:relative;box-shadow:0 18px 52px rgba(0,0,0,.28)}
+.mini .slide{position:absolute;inset:0;padding:1.25rem;transform:none;opacity:1;pointer-events:none;overflow:hidden;display:flex}
+.mini .stage{width:100%;transform:scale(.62);transform-origin:center center}
+.mini h1{font-size:4rem}
+.mini h2{font-size:2.8rem}
+.mini p,.mini li{font-size:1rem}
+.pPanel{background:#111827;border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:1rem;box-shadow:0 10px 30px rgba(0,0,0,.22)}
+.pPanel h2{color:#fff;font-size:clamp(1.6rem,3vw,2.35rem);line-height:1.05;margin:.2rem 0 1rem}
+.pPanel p{color:rgba(255,255,255,.86);font-size:1.08rem}
+.pNotes{white-space:pre-wrap;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:1rem;line-height:1.55}
+.timer{font-family:var(--font-mono);color:var(--gold);font-size:2rem;font-weight:900;margin:.8rem 0}
+.presenterBtns{display:flex;gap:.5rem;flex-wrap:wrap;margin:.75rem 0}
+body.presenter-mode .webdeck,body.presenter-mode .controlbar,body.presenter-mode .progress,body.presenter-mode .overlay{display:none}
+body.presenter-mode .presenterConsole{display:block}
+/* Separate notes window */
+.notesOnly{display:none;min-height:100vh;min-height:100dvh;background:#0f172a;color:#fff;padding:1rem;overflow:auto}
+.notesShell{max-width:820px;margin:0 auto;background:#111827;border:1px solid rgba(255,255,255,.14);border-radius:24px;padding:1.2rem;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.notesTop{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;margin-bottom:1rem}
+.notesOnly h1{font-size:clamp(1.6rem,5vw,2.6rem);line-height:1.05;margin:.1rem 0;color:#fff}
+.notesOnly .kicker{margin:0 0 .3rem}
+.notesOnly p{font-size:1.12rem;color:rgba(255,255,255,.9);line-height:1.55}
+.notesOnly .noteText{white-space:pre-wrap;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:1rem;margin:1rem 0}
+.notesNav{display:flex;gap:.5rem;flex-wrap:wrap}
+.notesMeta{font-family:var(--font-mono);color:var(--gold);font-size:1rem;font-weight:900}
+body.notes-only{overflow:auto;background:#0f172a}
+body.notes-only .webdeck,body.notes-only .controlbar,body.notes-only .progress,body.notes-only .overlay,body.notes-only .presenterConsole{display:none!important}
+body.notes-only .notesOnly{display:block}
+body.audience .controlbar{opacity:.23;transition:opacity .2s ease}
+body.audience .controlbar:hover,body.audience .controlbar:focus-within{opacity:1}
+body.audience #notesBtn,body.audience #notesWindowBtn,body.audience #presentBtn{display:none}
+@media(max-width:1100px){.controlbar{gap:.42rem}.decktitle{max-width:170px}.btn{padding:0 .7rem}.dots{max-width:280px}}
+@media(max-width:1024px){.cols4{grid-template-columns:repeat(2,1fr)}.timeline{grid-template-columns:repeat(2,1fr)}.presenterGrid{grid-template-columns:1fr}}
+@media(max-width:768px){.slide{align-items:flex-start}.cols2,.cols3{grid-template-columns:1fr}.decktitle{display:none}.controlbar{gap:.35rem}.dots{max-width:220px}.timeline{grid-template-columns:1fr}.shortcutGrid{grid-template-columns:1fr}.mini{min-height:300px}}
+@media(max-width:650px){.notesWindowBtn{display:none}}
+@media(max-width:560px){:root{--bar-h:64px}.slide{padding:1rem 1rem calc(var(--bar-h) + 1.25rem)}.cols4{grid-template-columns:1fr}.counter{display:none}.dots{max-width:150px}.btn{height:2.35rem;min-width:2.35rem;padding:0 .6rem}.card{border-radius:20px}.controlbar{max-width:calc(100% - 16px);bottom:8px;padding:.45rem .55rem}.overlay{bottom:calc(var(--bar-h) + 18px);border-radius:20px}}
+@media(max-width:420px){.dots{display:none}.btn{font-size:.9rem}}
+@media(max-width:380px){.btn.secondary:not(#notesBtn):not(#helpBtn){display:none}}
+@media(hover:none),(pointer:coarse){.btn{min-width:2.75rem;height:2.75rem}.dotbtn{width:1.35rem;height:1.35rem;min-width:1.35rem}.dotbtn.active{width:2.4rem}}
+@media(max-height:520px) and (orientation:landscape){:root{--bar-h:58px}.slide{align-items:flex-start;padding-top:.8rem}.lead{font-size:1.15rem}.controlbar{height:58px}.mini{min-height:260px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main id="deck" class="webdeck" aria-live="polite"></main>
+<div id="progress" class="progress" aria-hidden="true"></div>
+<nav id="controls" class="controlbar" aria-label="Slide controls">
+  <span class="decktitle" id="deckLabel">LearnDash Risk Assessment</span>
+  <button class="btn secondary" id="prevBtn" type="button" aria-label="Previous slide">‹</button>
+  <div class="dots" id="dots" aria-label="Slide dots"></div>
+  <button class="btn" id="nextBtn" type="button" aria-label="Next slide">›</button>
+  <span class="counter" id="counter" aria-live="polite"></span>
+  <button class="btn secondary" id="notesBtn" type="button" aria-controls="notesPanel" aria-expanded="false">Notes</button>
+  <button class="btn secondary notesWindowBtn" id="notesWindowBtn" type="button">Notes ↗</button>
+  <button class="btn secondary" id="helpBtn" type="button" aria-controls="helpOverlay" aria-expanded="false">?</button>
+  <button class="btn secondary" id="fullBtn" type="button">Full</button>
+  <button class="btn secondary" id="presentBtn" type="button" aria-pressed="false">Present</button>
+</nav>
+<aside id="notesPanel" class="overlay" aria-label="Speaker notes" aria-hidden="true"><h2>Speaker Notes</h2><div id="notesText"></div></aside>
+<section id="helpOverlay" class="overlay" aria-label="Keyboard shortcuts" aria-hidden="true">
+  <h2>Shortcuts</h2>
+  <div class="shortcutGrid">
+    <p><strong>Next:</strong> Right Arrow, Down Arrow, Page Down, or Space</p>
+    <p><strong>Previous:</strong> Left Arrow, Up Arrow, or Page Up</p>
+    <p><strong>Jump:</strong> Home, End, or a slide hash such as #5</p>
+    <p><strong>Notes:</strong> N toggles the slide-up notes panel</p>
+    <p><strong>Notes Window:</strong> W opens a movable speaker-notes window</p>
+    <p><strong>Presenter:</strong> P opens audience view and presenter tools</p>
+    <p><strong>Fullscreen:</strong> F toggles fullscreen when allowed</p>
+    <p><strong>Help:</strong> ? or H opens this panel. Escape closes panels.</p>
+  </div>
+</section>
+<section id="presenterConsole" class="presenterConsole" aria-label="Presenter console">
+  <div class="presenterGrid">
+    <div>
+      <div class="mini" id="miniSlide" aria-label="Current slide preview"></div>
+      <p class="timer" id="timer">00:00</p>
+      <div class="presenterBtns">
+        <button class="btn ghost" id="pPrevBtn" type="button">Previous</button>
+        <button class="btn ghost" id="pNextBtn" type="button">Next</button>
+        <button class="btn ghost" id="pNotesWindowBtn" type="button">Open notes window</button>
+        <button class="btn ghost" id="pExitBtn" type="button">Exit presenter</button>
+      </div>
+    </div>
+    <div class="pPanel">
+      <div class="kicker" id="pCounter"></div>
+      <h2 id="pTitle"></h2>
+      <div class="pNotes" id="pNotes"></div>
+      <hr style="border-color:rgba(255,255,255,.12);margin:1rem 0">
+      <p><strong>Next:</strong> <span id="pNext"></span></p>
+      <p>Use arrow keys, Space, N for notes, W for a separate notes window, F for fullscreen, H for help, and Escape to leave presenter view.</p>
+    </div>
+  </div>
+</section>
+<section id="notesOnly" class="notesOnly" aria-label="Separate speaker notes window">
+  <div class="notesShell">
+    <div class="notesTop">
+      <div>
+        <div class="kicker" id="nwCounter"></div>
+        <h1 id="nwTitle"></h1>
+        <div class="notesMeta" id="nwNext"></div>
+      </div>
+      <div class="notesNav">
+        <button class="btn ghost" id="nwPrevBtn" type="button">‹</button>
+        <button class="btn ghost" id="nwNextBtn" type="button">›</button>
+      </div>
+    </div>
+    <div class="noteText" id="nwNotes"></div>
+    <p>Keep this window beside the presentation. It syncs with the active slide when presenter mode or the main deck advances.</p>
+  </div>
+</section>
+<div id="status" class="status" role="status" aria-live="polite"></div>
+<script>
+const DECK = { title: 'LearnDash Risk Assessment and Transition Path', subtitle: 'Risk Assessment and Transition Path', author: 'TCEA' };
+const SLIDES = [
+{bg:'navy',title:'Title',html:`<div class="stage"><div class="kicker">Executive Brief • June 2026</div><h1>LearnDash Risk Assessment</h1><div class="rule"></div><p class="lead">A practical transition path for TCEA after Liquid Web by Nexcess consolidated StellarWP and reshaped the LearnDash product family.</p><div class="pillrow"><span class="pill">No forced move</span><span class="pill">Vendor risk changed</span><span class="pill">Exit path needed</span></div></div>`,notes:`This deck turns the executive brief into a decision path. I am not treating this as a panic situation. LearnDash still works, and existing deployments do not need to move tomorrow. The point is different: the vendor picture around LearnDash changed enough that TCEA should stop assuming the platform will stay predictable forever. I will move through the situation, the risks that matter most, the realistic alternatives, and the transition path that keeps TCEA stable while giving us a clean exit if renewal, support, or product direction becomes a problem.`},
+{bg:'light',title:'Situation',html:`<div class="stage grid cols2"><div><div class="kicker">Situation</div><h2>StellarWP disappeared into a tighter Liquid Web software portfolio.</h2><p class="lead">LearnDash survived as one of four flagship products, but the rollout introduced login, licensing, pricing, and confidence problems.</p></div><div class="card darkcard"><div class="stat">4</div><h3>Surviving product lines</h3><p>Kadence, LearnDash, The Events Calendar, and Give now sit under the Liquid Web by Nexcess software portal.</p><div class="pillrow"><span class="pill">software.liquidweb.com</span></div></div></div>`,notes:`The first thing to notice is that LearnDash did not vanish. It is still one of the four surviving flagship products. That matters because this is not a service shutdown. The concern is the operating context. Liquid Web dissolved the StellarWP umbrella and pushed several brands into a smaller portfolio. Product sites redirected, users reported confusion around accounts and licenses, and the public response was not warm. For TCEA, the question is not whether LearnDash functions today. It does. The question is whether the platform is still a safe multi-year bet without a backup plan.`},
+{bg:'light',title:'Why This Matters',html:`<div class="stage"><div class="kicker">TCEA lens</div><h2>This is a platform-risk problem, not a plugin problem.</h2><div class="grid cols3"><div class="card"><span class="badge">01</span><h3>Vendor stability</h3><p>Private-equity ownership, consolidation, layoffs, and founder exits point to a thinner and less predictable roadmap.</p></div><div class="card"><span class="badge">02</span><h3>Pricing and packaging</h3><p>Older per-site licensing has shifted toward Essentials, Pro, and Elite bundles. Needed features may sit behind higher tiers.</p></div><div class="card"><span class="badge">03</span><h3>Procurement friction</h3><p>Bundled tools make renewal, budgeting, and clean district-facing explanations harder than before.</p></div></div></div>`,notes:`This slide names the core issue. LearnDash is still a WordPress LMS plugin, and the plugin is not the immediate failure point. The risk sits around the vendor. Consolidation can be reasonable from a business perspective, but it also changes the support model, product roadmap, and renewal conversation. For TCEA, that matters because the platform is tied to paid courses, district sales, subscriptions, and learner access windows. A small pricing change or support slowdown is not just annoying. It affects planning, budgeting, and the learner experience.`},
+{bg:'navy',title:'Bottom Line',html:`<div class="stage"><div class="kicker">Assessment</div><p class="quote" style="color:#fff">No forced move, no immediate failure. Treat this as the trigger to validate the platform and secure a documented exit path before renewal.</p></div>`,notes:`This is the bottom line of the brief. I would not recommend an emergency migration simply because the vendor changed its packaging. Emergency migrations usually create their own problems. At the same time, I would not keep renewing LearnDash without a written exit option. The product is self-hosted, which gives TCEA breathing room. Courses will not suddenly disappear because a portal changed. That breathing room should be used to document what TCEA has, test a serious replacement, and decide before the renewal clock creates pressure.`},
+{bg:'light',title:'Risk Map',html:`<div class="stage"><div class="kicker">Risk map</div><h2>Five issues deserve tracking before renewal.</h2><div class="grid cols4"><div class="card"><h3>Stability</h3><p>Smaller team, uncertain roadmap, and reduced continuity after founder exits.</p></div><div class="card"><h3>Cost</h3><p>New bundles may require higher tiers to restore lost or absorbed features.</p></div><div class="card"><h3>Lock-in</h3><p>Discontinued standalone tools now live inside larger Kadence or LearnDash plans.</p></div><div class="card"><h3>Operations</h3><p>Portal migration may create short-term login, password reset, license, and billing issues.</p></div></div><div class="card" style="margin-top:1rem"><h3>Legacy deadline</h3><p>Retired legacy tools receive security patches only through April 2027, so dependencies need to be identified now.</p></div></div>`,notes:`The risk map gives TCEA a checklist rather than a vague worry. Vendor stability is the largest concern because it affects every other category. Pricing and packaging come next because TCEA needs specific commerce features, not just course pages. Lock-in matters because absorbed tools can quietly turn into higher-tier requirements. Operations matter because license and billing confusion can interrupt normal maintenance. The April 2027 security-patch date is also important. Any dependency on retired tools should be found early, while there is still time to replace or budget for it.`},
+{bg:'light',title:'Alternatives',html:`<div class="stage"><div class="kicker">Alternatives</div><h2>MemberPress is the closest match, but it is not the only exit.</h2><div class="tablewrap"><table><thead><tr><th>Option</th><th>Best fit</th><th>Migration weight</th></tr></thead><tbody><tr><td>MemberPress</td><td>LMS, membership, content gating, and district-style bulk accounts in one WordPress plugin.</td><td>Easiest: built-in Courses Migrator.</td></tr><tr><td>WP Courseware</td><td>Simple course delivery, lower cost, and independent vendor ownership.</td><td>Moderate: different structure, paid migration service.</td></tr><tr><td>TutorLMS or LifterLMS</td><td>WordPress-native course delivery with lower cost.</td><td>Moderate: export, import, and third-party tools.</td></tr><tr><td>Thinkific</td><td>Fully hosted course selling outside the WordPress and Nexcess stack.</td><td>Heavy: largely a rebuild.</td></tr><tr><td>Canvas, Google Classroom, or Moodle</td><td>K-12-proven platforms when WordPress commerce is not the core requirement.</td><td>Heavy: rebuild and different admin model.</td></tr></tbody></table></div></div>`,notes:`The alternatives split into two groups. The first group keeps TCEA in WordPress. MemberPress, WP Courseware, TutorLMS, and LifterLMS all keep the site model familiar, but they differ on commerce, memberships, and migration effort. The second group exits WordPress entirely. Thinkific, Canvas, Google Classroom, and Moodle reduce plugin risk, but they also force a heavier rebuild and a different operating model. For TCEA’s current model, MemberPress is the closest functional match because the need is not just courses. It is courses plus sales, subscriptions, and group access.`},
+{bg:'light',title:'Migration Realities',html:`<div class="stage grid cols2"><div><div class="kicker">Migration</div><h2>Course content moves more easily than learner history.</h2><p class="lead">The consistent gotcha is not pages, lessons, or media. It is user accounts, enrollments, progress, and proof that the transfer worked.</p></div><div class="card"><ul class="list"><li><span class="dot">1</span><span>Use LearnDash import/export for basic content snapshots.</span></li><li><span class="dot">2</span><span>Test MemberPress Courses Migrator on real TCEA courses.</span></li><li><span class="dot">3</span><span>Budget separately for learner records and progress verification.</span></li><li><span class="dot">4</span><span>Treat hosted SaaS moves as rebuilds, not exports.</span></li></ul></div></div>`,notes:`This is the migration reality that should stay visible. Course content is usually the easier part. Lessons, topics, quizzes, and media can often be exported or rebuilt with reasonable effort. Learner history is harder. TCEA has more than content to protect. It has learner accounts, enrollments, completions, progress, and access rules. Any pilot should include real courses and real-looking records, not a clean demo course with three sample users. The project plan should budget time to verify learner data, because that is where migrations often look fine until someone tries to prove completion.`},
+{bg:'light',title:'TCEA Requirements',html:`<div class="stage"><div class="kicker">Fit analysis</div><h2>TCEA needs commerce, group access, and rolling expiration.</h2><div class="grid cols4"><div class="card"><h3>Individual sales</h3><p>Sell one course at a time to one learner online.</p></div><div class="card"><h3>Subscriptions</h3><p>Support recurring individual and group access models.</p></div><div class="card"><h3>District bulk</h3><p>Let one district purchase seats and manage teacher sub-accounts.</p></div><div class="card"><h3>One-year aging</h3><p>Expire access one year after each learner’s enrollment date.</p></div></div></div>`,notes:`This slide reduces the platform decision to four functional requirements. TCEA needs to sell courses to individuals online. It also needs subscription options. More importantly, it needs district bulk sales where a parent account can manage a group of teacher seats with centralized billing. The trickiest requirement is rolling access expiration. A learner who enrolls in March should lose access the following March, not on a shared district calendar date. MemberPress maps well to this model because membership expiration is tied to each user’s purchase date, and Corporate Accounts handles the district parent-and-subaccount pattern.`},
+{bg:'light',title:'MemberPress Recommendation',html:`<div class="stage grid cols2"><div><div class="kicker">Recommendation</div><h2>Use MemberPress Scale as the pilot benchmark.</h2><p class="lead">Scale is the first viable tier because Corporate Accounts is required for district bulk sales.</p></div><div class="tablewrap"><table><thead><tr><th>Plan</th><th>Yearly cost</th><th>Fit</th></tr></thead><tbody><tr><td>Launch</td><td>About $199.50 year one, about $399 renewal</td><td>Not viable. Includes a 4.9 percent sale fee and no Corporate Accounts.</td></tr><tr><td>Growth</td><td>About $349.50 year one, about $699 renewal</td><td>Good for individual sales, but still misses Corporate Accounts.</td></tr><tr><td>Scale</td><td>About $499.50 year one, about $999 renewal</td><td>Required. Includes Corporate Accounts and zero MemberPress transaction fee.</td></tr></tbody></table></div></div>`,notes:`The important correction here is the plan level. If TCEA only needed individual course sales, Growth might be enough. It is not enough for the district model. Corporate Accounts is the feature that lets one district buy a parent account, assign sub-accounts, and manage teachers at scale. That feature sits in Scale. The right budget number is also the renewal price, not the first-year promotion. Around one thousand dollars a year is still a modest annual increase if it replaces LearnDash plus separate membership and bulk-licensing add-ons, but it needs to be planned honestly.`},
+{bg:'light',title:'Cost Reality',html:`<div class="stage grid cols2"><div class="card darkcard"><div class="stat">$999</div><h3>Plan around renewal</h3><p>MemberPress Scale renews around this amount, before payment processor fees and migration labor.</p></div><div><div class="kicker">Cost reality</div><h2>The license is not per learner.</h2><p class="lead">WordPress LMS plugins usually charge per website. The number of learners does not drive the license price. The commerce features drive the tier.</p><ul><li>Stripe and PayPal fees still apply separately</li><li>Migration labor is a one-time project cost</li><li>Fifty or more courses and five thousand or more user records need pilot verification</li></ul></div></div>`,notes:`This slide separates the license conversation from the real project cost. The license itself is per website, not per learner. TCEA could have five thousand learners or fifty thousand learners and the plugin license does not change because of that count. What changes the tier is the commerce feature set: Corporate Accounts, zero MemberPress transaction fee, gifting, gradebook, order bumps, and Authorize.net. Payment processor fees still apply, of course. The other cost is migration labor. With more than fifty courses and thousands of user records, that should be treated as a real project, not a weekend export.`},
+{bg:'navy',title:'Honest Limit',html:`<div class="stage"><div class="kicker">Limit</div><h2>MemberPress is not a K-12 student-information system.</h2><p class="lead">It handles selling, enrollment, group access, and expiration. If TCEA later needs district SSO, automated rostering, or grade passback, test that before committing.</p><div class="rule"></div><p class="lead">That is where Canvas or Moodle becomes the fallback, not because MemberPress is weak, but because the job changes.</p></div>`,notes:`This is the honest limit. MemberPress is a strong fit for commerce and course access, but it is not trying to be a district student-information system. If TCEA’s future needs include district SSO, automated rostering, or grade passback into school systems, those requirements need a pilot before a full migration decision. That does not make MemberPress the wrong choice today. It means the pilot should test the real workflow TCEA has now and the likely workflow TCEA may need later. If the job turns into school-system integration, Canvas or Moodle becomes the better fallback.`},
+{bg:'light',title:'Transition Path',html:`<div class="stage"><div class="kicker">Transition path</div><h2>Use the next 120 days to stabilize, test, and decide.</h2><div class="timeline"><div class="step"><div class="num">0–30</div><h3>Stabilize</h3><p>Confirm portal login, license keys, renewals, and billing. Do not upgrade reflexively.</p></div><div class="step"><div class="num">30–60</div><h3>Inventory</h3><p>Catalog courses, add-ons, dependencies, and retired tools.</p></div><div class="step"><div class="num">60–90</div><h3>Evaluate</h3><p>Pilot MemberPress Scale with individual sales, rolling expiration, and Corporate Accounts.</p></div><div class="step"><div class="num">90–120</div><h3>Decide</h3><p>Stay if support and cost hold. Migrate if the risk is unacceptable.</p></div><div class="step"><div class="num">Ongoing</div><h3>Exit-ready</h3><p>Keep content and learner records portable. Review the vendor at renewal.</p></div></div></div>`,notes:`This is the practical path. In the first thirty days, stabilize what already exists. Confirm portal access, renewal dates, billing, and license keys. In the next thirty days, inventory everything TCEA depends on. From sixty to ninety days, run the MemberPress Scale pilot against actual workflows: a course that expires one year after purchase, an individual subscription, and a Corporate Account for a sample district. From ninety to one hundred twenty days, decide. Staying is acceptable if LearnDash support holds and the cost makes sense. Leaving is acceptable if the risk or bundling is no longer worth it.`},
+{bg:'light',title:'Decision Gate',html:`<div class="stage grid cols2"><div><div class="kicker">Decision gate</div><h2>Stay only if the renewal is still defensible.</h2><p class="lead">The platform decision should be based on support quality, total cost, feature access, and migration confidence.</p></div><div class="card"><ul class="list"><li><span class="dot">✓</span><span>Portal access, billing, and licenses are stable.</span></li><li><span class="dot">✓</span><span>Needed add-on features remain available at an acceptable tier.</span></li><li><span class="dot">✓</span><span>Support responds well during the test period.</span></li><li><span class="dot">✓</span><span>MemberPress pilot proves the exit path works.</span></li><li><span class="dot">✓</span><span>Learner data export and verification are documented.</span></li></ul></div></div>`,notes:`The decision gate keeps this from becoming a vague preference debate. Staying with LearnDash is defensible if the operational pieces stabilize, support remains responsive, and the needed features are still available at a price TCEA can defend. Moving is defensible if the bundled pricing or vendor risk starts to outweigh the cost of migration. Either way, the MemberPress pilot is useful. If TCEA stays, the pilot gives us a tested exit. If TCEA leaves, the pilot gives us the first migration path instead of a theoretical replacement.`},
+{bg:'navy',title:'Close',html:`<div class="stage"><div class="kicker">Final takeaway</div><h2>Do not rush. Do not drift.</h2><p class="lead">Keep LearnDash stable now. Pilot MemberPress Scale against TCEA’s actual sales and access model. Preserve one full-exit option in case SSO, rostering, or grade passback becomes essential.</p><div class="rule"></div><p class="lead">The goal is not to flee the current platform. The goal is to make sure TCEA can leave on its own timeline.</p></div>`,notes:`I would close with this distinction. TCEA does not need to flee LearnDash. The product still works, and a rushed migration could create unnecessary disruption. But TCEA should not drift into another renewal cycle without leverage. The immediate work is simple: stabilize the current account, inventory dependencies, run a serious MemberPress Scale pilot, and document how content and learner records would move. That gives TCEA a choice. If LearnDash remains the right answer, stay. If it stops being the right answer, leave on TCEA’s timeline rather than the vendor’s.`}
+];
+</script>
+<script>
+(function(){
+  'use strict';
+  const CHANNEL_NAME = 'webdeck-learndash-risk-v3';
+  const params = new URLSearchParams(location.search);
+  const isNotesWindow = params.get('notes') === '1';
+  const isAudience = params.get('audience') === '1';
+  let currentIndex = 0;
+  let notesOpen = false;
+  let helpOpen = false;
+  let presenterMode = false;
+  let startTime = Date.now();
+  let audienceWindow = null;
+  let notesWindow = null;
+  let statusTimer = null;
+  const supportsBC = 'BroadcastChannel' in window;
+  const bc = supportsBC ? new BroadcastChannel(CHANNEL_NAME) : null;
+  const $ = id => document.getElementById(id);
+  const deck = $('deck');
+  const progress = $('progress');
+  const dots = $('dots');
+  const counter = $('counter');
+  const notesPanel = $('notesPanel');
+  const notesText = $('notesText');
+  const helpOverlay = $('helpOverlay');
+  const notesBtn = $('notesBtn');
+  const helpBtn = $('helpBtn');
+  const presentBtn = $('presentBtn');
+  const status = $('status');
+  function clamp(n,min,max){return Math.max(min,Math.min(max,n));}
+  function escapeHtml(str){return String(str).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+  function slideTitle(i){return SLIDES[i]?.title || 'Slide ' + (i + 1);}
+  function initFromHash(){
+    const n = parseInt(location.hash.slice(1),10);
+    if(Number.isFinite(n) && n >= 1 && n <= SLIDES.length) currentIndex = n - 1;
+  }
+  function normalizeSlideBg(bg){return bg || 'light';}
+  function renderSlideMarkup(s,i){
+    const bg = normalizeSlideBg(s.bg);
+    const classes = [bg, s.classes || ''].join(' ').trim();
+    return `<section class="slide ${classes}" data-index="${i}" aria-label="${escapeHtml(slideTitle(i))}" aria-hidden="${i===currentIndex?'false':'true'}">${s.html}</section>`;
+  }
+  function buildDeck(){
+    deck.innerHTML = SLIDES.map(renderSlideMarkup).join('');
+    dots.innerHTML = SLIDES.map((_,i)=>`<button class="dotbtn" type="button" data-dot="${i}" aria-label="Go to slide ${i+1}"></button>`).join('');
+    dots.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation();goTo(Number(btn.dataset.dot));}));
+    deck.querySelectorAll('a[href]').forEach(a=>{a.target = '_blank'; a.rel = 'noopener';});
+  }
+  function buildNotesWindow(){
+    document.body.classList.add('notes-only');
+    $('nwPrevBtn').addEventListener('click',()=>sendCommand('prev'));
+    $('nwNextBtn').addEventListener('click',()=>sendCommand('next'));
+  }
+  function setActiveSlide(){
+    document.querySelectorAll('#deck .slide').forEach((el,i)=>{
+      const active = i === currentIndex;
+      el.classList.toggle('active', active);
+      el.setAttribute('aria-hidden', active ? 'false' : 'true');
+    });
+    document.querySelectorAll('.dotbtn').forEach((el,i)=>{
+      const active = i === currentIndex;
+      el.classList.toggle('active', active);
+      el.setAttribute('aria-current', active ? 'step' : 'false');
+    });
+  }
+  function updateChrome(){
+    const total = SLIDES.length || 1;
+    const s = SLIDES[currentIndex] || {title:'',notes:''};
+    if(counter) counter.textContent = `${currentIndex + 1} / ${total}`;
+    if(progress) progress.style.width = `${((currentIndex + 1) / total) * 100}%`;
+    if(notesText) notesText.textContent = s.notes || '';
+    if(notesBtn) notesBtn.setAttribute('aria-expanded', String(notesOpen));
+    if(helpBtn) helpBtn.setAttribute('aria-expanded', String(helpOpen));
+    if(presentBtn) presentBtn.setAttribute('aria-pressed', String(presenterMode));
+  }
+  function updatePresenter(){
+    if(!presenterMode) return;
+    const s = SLIDES[currentIndex] || {title:'',html:'',notes:''};
+    $('pCounter').textContent = `Slide ${currentIndex + 1} of ${SLIDES.length}`;
+    $('pTitle').textContent = slideTitle(currentIndex);
+    $('pNotes').textContent = s.notes || '';
+    $('pNext').textContent = SLIDES[currentIndex + 1]?.title || 'End of deck';
+    $('miniSlide').innerHTML = renderSlideMarkup(s,currentIndex).replace('aria-hidden="false"','aria-hidden="false"');
+    const miniActive = $('miniSlide').querySelector('.slide');
+    if(miniActive) miniActive.classList.add('active');
+  }
+  function updateNotesWindowView(){
+    if(!isNotesWindow) return;
+    const s = SLIDES[currentIndex] || {title:'',notes:''};
+    $('nwCounter').textContent = `Slide ${currentIndex + 1} of ${SLIDES.length}`;
+    $('nwTitle').textContent = slideTitle(currentIndex);
+    $('nwNext').textContent = `Next: ${SLIDES[currentIndex + 1]?.title || 'End of deck'}`;
+    $('nwNotes').textContent = s.notes || '';
+  }
+  function render(options={}){
+    const pushHash = options.pushHash !== false;
+    const broadcast = options.broadcast !== false;
+    if(!isNotesWindow) setActiveSlide();
+    updateChrome();
+    updatePresenter();
+    updateNotesWindowView();
+    if(pushHash) setHash(currentIndex + 1);
+    if(broadcast && !isAudience) broadcastGoto();
+    syncChildHashes();
+  }
+  function setHash(slideNumber){
+    const newHash = '#' + slideNumber;
+    if(location.hash !== newHash) history.replaceState(null,'',newHash);
+  }
+  function syncChildHashes(){
+    const h = '#' + (currentIndex + 1);
+    try{ if(audienceWindow && !audienceWindow.closed && audienceWindow.location.hash !== h) audienceWindow.location.hash = h; }catch(_e){}
+    try{ if(notesWindow && !notesWindow.closed && notesWindow.location.hash !== h) notesWindow.location.hash = h; }catch(_e){}
+  }
+  function broadcastGoto(){
+    if(bc) bc.postMessage({type:'goto', index:currentIndex});
+  }
+  function sendCommand(action){
+    if(bc) bc.postMessage({type:'command', action});
+    if(action === 'next') next();
+    if(action === 'prev') prev();
+  }
+  function goTo(i,options={}){
+    currentIndex = clamp(i,0,SLIDES.length-1);
+    render(options);
+  }
+  function next(){goTo(currentIndex + 1);}
+  function prev(){goTo(currentIndex - 1);}
+  function toggleNotes(force){
+    if(isNotesWindow || isAudience) return;
+    notesOpen = typeof force === 'boolean' ? force : !notesOpen;
+    notesPanel.classList.toggle('open', notesOpen);
+    notesPanel.setAttribute('aria-hidden', notesOpen ? 'false' : 'true');
+    notesBtn.setAttribute('aria-expanded', String(notesOpen));
+  }
+  function toggleHelp(force){
+    if(isNotesWindow) return;
+    helpOpen = typeof force === 'boolean' ? force : !helpOpen;
+    helpOverlay.classList.toggle('open', helpOpen);
+    helpOverlay.setAttribute('aria-hidden', helpOpen ? 'false' : 'true');
+    helpBtn.setAttribute('aria-expanded', String(helpOpen));
+  }
+  function toggleFullscreen(){
+    const d = document;
+    if(!d.fullscreenElement){
+      const req = d.documentElement.requestFullscreen?.();
+      if(req && typeof req.catch === 'function') req.catch(()=>showStatus('Fullscreen is unavailable in this browser or embed.'));
+      if(!d.documentElement.requestFullscreen) showStatus('Fullscreen is unavailable in this browser or embed.');
+    } else {
+      d.exitFullscreen?.();
+    }
+  }
+  function openWindow(url,name,features){
+    let win = null;
+    try{ win = window.open(url,name,features); }catch(_e){ win = null; }
+    return win;
+  }
+  function openNotesWindow(silent){
+    if(isAudience) return false;
+    const url = new URL(location.href);
+    url.searchParams.delete('audience');
+    url.searchParams.set('notes','1');
+    url.hash = '#' + (currentIndex + 1);
+    notesWindow = openWindow(url.toString(),'webdeck_notes_window','popup=yes,width=560,height=760,menubar=no,toolbar=no,location=no,status=no');
+    if(!notesWindow){
+      if(!silent) showStatus('The notes window was blocked. Allow pop-ups, or use the built-in Notes panel.');
+      return false;
+    }
+    setTimeout(()=>broadcastGoto(),500);
+    return true;
+  }
+  function openPresenter(){
+    if(isNotesWindow) return;
+    const url = new URL(location.href);
+    url.searchParams.delete('notes');
+    url.searchParams.set('audience','1');
+    url.hash = '#' + (currentIndex + 1);
+    const win = openWindow(url.toString(),'webdeck_audience_window','popup=yes,width=1280,height=720,menubar=no,toolbar=no,location=no,status=no');
+    if(!win){
+      showStatus('Presenter view needs pop-ups. The deck will keep working in this window.');
+      return;
+    }
+    audienceWindow = win;
+    presenterMode = true;
+    document.body.classList.add('presenter-mode');
+    startTime = Date.now();
+    openNotesWindow(true);
+    render({broadcast:true});
+  }
+  function exitPresenter(){
+    presenterMode = false;
+    document.body.classList.remove('presenter-mode');
+    render({broadcast:true});
+  }
+  function showStatus(message){
+    if(!status) return;
+    status.textContent = message;
+    status.classList.add('show');
+    clearTimeout(statusTimer);
+    statusTimer = setTimeout(()=>status.classList.remove('show'),3600);
+  }
+  function isTypingTarget(target){
+    return !!target.closest('input, textarea, select, option, [contenteditable="true"], [contenteditable=""]');
+  }
+  function bindEvents(){
+    if(isNotesWindow) return;
+    $('prevBtn').addEventListener('click',e=>{e.stopPropagation();prev();});
+    $('nextBtn').addEventListener('click',e=>{e.stopPropagation();next();});
+    $('notesBtn').addEventListener('click',e=>{e.stopPropagation();toggleNotes();});
+    $('notesWindowBtn').addEventListener('click',e=>{e.stopPropagation();openNotesWindow(false);});
+    $('helpBtn').addEventListener('click',e=>{e.stopPropagation();toggleHelp();});
+    $('fullBtn').addEventListener('click',e=>{e.stopPropagation();toggleFullscreen();});
+    $('presentBtn').addEventListener('click',e=>{e.stopPropagation();openPresenter();});
+    $('pPrevBtn').addEventListener('click',prev);
+    $('pNextBtn').addEventListener('click',next);
+    $('pNotesWindowBtn').addEventListener('click',()=>openNotesWindow(false));
+    $('pExitBtn').addEventListener('click',exitPresenter);
+    document.addEventListener('click',handleClickNav);
+    let sx = 0, sy = 0;
+    document.addEventListener('touchstart',e=>{sx=e.changedTouches[0].clientX; sy=e.changedTouches[0].clientY;},{passive:true});
+    document.addEventListener('touchend',e=>{
+      const dx = e.changedTouches[0].clientX - sx;
+      const dy = e.changedTouches[0].clientY - sy;
+      if(Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)){ dx < 0 ? next() : prev(); }
+    },{passive:true});
+  }
+  function handleClickNav(e){
+    if(notesOpen || helpOpen || presenterMode) return;
+    if(e.target.closest('a, button, nav, .overlay, .presenterConsole, .notesOnly, input, textarea, select, [contenteditable]')) return;
+    if(String(window.getSelection()).length) return;
+    const x = e.clientX / window.innerWidth;
+    if(x < .33) prev();
+    else if(x > .67) next();
+  }
+  function bindKeys(){
+    document.addEventListener('keydown',e=>{
+      if(isTypingTarget(e.target)) return;
+      const key = e.key;
+      const lower = key.toLowerCase();
+      if(key === 'Escape'){
+        if(presenterMode) exitPresenter();
+        toggleNotes(false);
+        toggleHelp(false);
+        return;
+      }
+      if(lower === 'h' || key === '?'){ e.preventDefault(); toggleHelp(); return; }
+      if(lower === 'n'){ e.preventDefault(); toggleNotes(); return; }
+      if(lower === 'w'){ e.preventDefault(); openNotesWindow(false); return; }
+      if(lower === 'f'){ e.preventDefault(); toggleFullscreen(); return; }
+      if(lower === 'p'){ e.preventDefault(); openPresenter(); return; }
+      if(notesOpen || helpOpen) return;
+      if(['ArrowRight','ArrowDown','PageDown',' '].includes(key)){e.preventDefault();next();return;}
+      if(['ArrowLeft','ArrowUp','PageUp'].includes(key)){e.preventDefault();prev();return;}
+      if(key === 'Home'){e.preventDefault();goTo(0);return;}
+      if(key === 'End'){e.preventDefault();goTo(SLIDES.length-1);}
+    });
+  }
+  function bindHash(){
+    window.addEventListener('hashchange',()=>{
+      const n = parseInt(location.hash.slice(1),10);
+      if(Number.isFinite(n) && n >= 1 && n <= SLIDES.length) goTo(n - 1,{pushHash:false,broadcast:!isNotesWindow});
+    });
+  }
+  function bindBroadcast(){
+    if(!bc) return;
+    bc.onmessage = e => {
+      const msg = e.data || {};
+      if(msg.type === 'goto' && Number.isInteger(msg.index)){
+        if(msg.index !== currentIndex) goTo(msg.index,{pushHash:false,broadcast:false});
+      }
+      if(msg.type === 'command' && !isNotesWindow){
+        if(msg.action === 'next') next();
+        if(msg.action === 'prev') prev();
+        if(msg.action === 'goto' && Number.isInteger(msg.index)) goTo(msg.index);
+      }
+    };
+  }
+  function startTimer(){
+    setInterval(()=>{
+      const el = $('timer');
+      if(!el) return;
+      const seconds = Math.floor((Date.now() - startTime) / 1000);
+      const m = String(Math.floor(seconds/60)).padStart(2,'0');
+      const s = String(seconds%60).padStart(2,'0');
+      el.textContent = `${m}:${s}`;
+    },500);
+  }
+  function init(){
+    if(isAudience) document.body.classList.add('audience');
+    initFromHash();
+    bindBroadcast();
+    bindHash();
+    bindKeys();
+    startTimer();
+    if(isNotesWindow){
+      buildNotesWindow();
+      render({pushHash:false,broadcast:false});
+      return;
+    }
+    buildDeck();
+    bindEvents();
+    render({broadcast:false});
+  }
+  init();
+})();
+</script>
+<!-- Validation note: single-file WebDeck v3 structure, no external JS/CSS/images, system fonts only, hash navigation, guarded click navigation, swipe support, slide-up notes, separate movable notes window, presenter console, BroadcastChannel sync, fullscreen fallback, responsive breakpoints, and dark-surface readability safeguards included. -->
+</body>
+</html>

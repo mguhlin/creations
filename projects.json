@@ -6,7 +6,7 @@
     "description": "A curated portfolio of AI-powered tools, reference guides, coaching frameworks, and interactive resources built for educators, administrators, and knowledge workers.",
     "tallies": [
       {
-        "num": "56",
+        "num": "152",
         "label": "Projects"
       },
       {
@@ -1785,6 +1785,2512 @@
         {
           "label": "Open Game →",
           "href": "tcea/wds/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "57",
+      "id": "tcea-ddp",
+      "section": "TCEA Data & Dashboards",
+      "category": "Data Visualization",
+      "title": "Data Display Patterns",
+      "subtitle": "TCEA field guide for choosing and building useful data displays",
+      "stat": "Patterns",
+      "statLabel": "Guide",
+      "description": "A TCEA field guide to data display patterns, including easy and medium display patterns, charts, KPIs, hosting guidance, and a VIBES framework for building data displays.",
+      "features": [
+        "Data Display Patterns",
+        "Data Visualization",
+        "Charts",
+        "KPIs",
+        "Easy Patterns",
+        "Medium Patterns",
+        "Hosting Guide",
+        "VIBES Framework"
+      ],
+      "links": [
+        {
+          "label": "Open Data Display Patterns →",
+          "href": "tcea/ddp/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "58",
+      "id": "tcea-ai-adoption-checklist",
+      "section": "TCEA AI Resources",
+      "category": "Checklist",
+      "title": "Generative AI Adoption Checklist",
+      "subtitle": "Generative AI Adoption Checklist TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Generative AI Adoption Checklist is a TCEA resource available at tcea/ai-adoption-checklist/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "AI",
+        "Adoption",
+        "Checklist",
+        "TCEA AI Resources"
+      ],
+      "links": [
+        {
+          "label": "Open Generative AI Adoption Checklist →",
+          "href": "tcea/ai-adoption-checklist/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "59",
+      "id": "tcea-ai-adoption-roadmap",
+      "section": "TCEA AI Resources",
+      "category": "Roadmap",
+      "title": "AI Adoption Roadmap",
+      "subtitle": "AI Adoption Roadmap TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "AI Adoption Roadmap is a TCEA resource available at tcea/ai-adoption-roadmap/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "AI",
+        "Adoption",
+        "Roadmap",
+        "TCEA AI Resources"
+      ],
+      "links": [
+        {
+          "label": "Open AI Adoption Roadmap →",
+          "href": "tcea/ai-adoption-roadmap/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "60",
+      "id": "tcea-ai-essentials-prompt-library",
+      "section": "TCEA AI Resources",
+      "category": "Prompt Library",
+      "title": "AI Essentials for Educators · Prompt Library of 100",
+      "subtitle": "AI Essentials for Educators · Prompt Library of 100 TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "AI Essentials for Educators · Prompt Library of 100 is a TCEA resource available at tcea/ai-essentials-prompt-library/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "AI",
+        "Essentials",
+        "Prompt",
+        "Library",
+        "Prompt Library",
+        "TCEA AI Resources"
+      ],
+      "links": [
+        {
+          "label": "Open AI Essentials for Educators · Prompt Library of 100 →",
+          "href": "tcea/ai-essentials-prompt-library/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "61",
+      "id": "tcea-aidesign",
+      "section": "TCEA AI Resources",
+      "category": "TCEA Resource",
+      "title": "Strategy Reference — AI Design Companion",
+      "subtitle": "Strategy Reference — AI Design Companion TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Strategy Reference — AI Design Companion is a TCEA resource available at tcea/aidesign/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Aidesign",
+        "TCEA Resource",
+        "TCEA AI Resources"
+      ],
+      "links": [
+        {
+          "label": "Open Strategy Reference — AI Design Companion →",
+          "href": "tcea/aidesign/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "62",
+      "id": "tcea-aldo",
+      "section": "TCEA AI Resources",
+      "category": "TCEA Resource",
+      "title": "ALDO Prompt Studio",
+      "subtitle": "ALDO Prompt Studio TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "ALDO Prompt Studio is a TCEA resource available at tcea/aldo/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Aldo",
+        "TCEA Resource",
+        "TCEA AI Resources"
+      ],
+      "links": [
+        {
+          "label": "Open ALDO Prompt Studio →",
+          "href": "tcea/aldo/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "63",
+      "id": "tcea-alf",
+      "section": "TCEA AI Resources",
+      "category": "TCEA Resource",
+      "title": "The Augmented K–16 AI Learning Framework",
+      "subtitle": "The Augmented K–16 AI Learning Framework TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "The Augmented K–16 AI Learning Framework is a TCEA resource available at tcea/alf/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Alf",
+        "TCEA Resource",
+        "TCEA AI Resources"
+      ],
+      "links": [
+        {
+          "label": "Open The Augmented K–16 AI Learning Framework →",
+          "href": "tcea/alf/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "64",
+      "id": "tcea-blog-dats",
+      "section": "TCEA Data & Dashboards",
+      "category": "TCEA Resource",
+      "title": "Assessment System RFP Scoring Tool",
+      "subtitle": "Assessment System RFP Scoring Tool TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Assessment System RFP Scoring Tool is a TCEA resource available at tcea/blog/dats/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Blog",
+        "Dats",
+        "TCEA Resource",
+        "TCEA Data & Dashboards"
+      ],
+      "links": [
+        {
+          "label": "Open Assessment System RFP Scoring Tool →",
+          "href": "tcea/blog/dats/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "65",
+      "id": "tcea-buyback",
+      "section": "TCEA Resources",
+      "category": "TCEA Resource",
+      "title": "Buyback Technology Vendor Assessment Tool",
+      "subtitle": "Buyback Technology Vendor Assessment Tool TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Buyback Technology Vendor Assessment Tool is a TCEA resource available at tcea/buyback/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Buyback",
+        "TCEA Resource",
+        "TCEA Resources"
+      ],
+      "links": [
+        {
+          "label": "Open Buyback Technology Vendor Assessment Tool →",
+          "href": "tcea/buyback/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "66",
+      "id": "tcea-coach-tool",
+      "section": "TCEA Professional Learning",
+      "category": "TCEA Resource",
+      "title": "High-Effect Strategy Coach — K-12 Coaching Tool",
+      "subtitle": "High-Effect Strategy Coach — K-12 Coaching Tool TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "High-Effect Strategy Coach — K-12 Coaching Tool is a TCEA resource available at tcea/coach-tool/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Coach",
+        "Tool",
+        "TCEA Resource",
+        "TCEA Professional Learning"
+      ],
+      "links": [
+        {
+          "label": "Open High-Effect Strategy Coach — K-12 Coaching Tool →",
+          "href": "tcea/coach-tool/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "67",
+      "id": "tcea-courses",
+      "section": "TCEA Professional Learning",
+      "category": "Course Resource",
+      "title": "TCEA Professional Learning Catalog",
+      "subtitle": "TCEA Professional Learning Catalog TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "TCEA Professional Learning Catalog is a TCEA resource available at tcea/courses/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Courses",
+        "Course Resource",
+        "TCEA Professional Learning"
+      ],
+      "links": [
+        {
+          "label": "Open TCEA Professional Learning Catalog →",
+          "href": "tcea/courses/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "68",
+      "id": "tcea-custom-instructions-library",
+      "section": "TCEA Resources",
+      "category": "TCEA Resource",
+      "title": "TCEA AI Custom Instructions Library",
+      "subtitle": "TCEA AI Custom Instructions Library TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "TCEA AI Custom Instructions Library is a TCEA resource available at tcea/custom-instructions-library/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Custom",
+        "Instructions",
+        "Library",
+        "TCEA Resource",
+        "TCEA Resources"
+      ],
+      "links": [
+        {
+          "label": "Open TCEA AI Custom Instructions Library →",
+          "href": "tcea/custom-instructions-library/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "69",
+      "id": "tcea-dailywrite",
+      "section": "TCEA Professional Learning",
+      "category": "TCEA Resource",
+      "title": "Daily Quick Write Generator | TCEA Inspired",
+      "subtitle": "Daily Quick Write Generator | TCEA Inspired TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Daily Quick Write Generator | TCEA Inspired is a TCEA resource available at tcea/dailywrite/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Dailywrite",
+        "TCEA Resource",
+        "TCEA Professional Learning"
+      ],
+      "links": [
+        {
+          "label": "Open Daily Quick Write Generator | TCEA Inspired →",
+          "href": "tcea/dailywrite/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "70",
+      "id": "tcea-dashboard",
+      "section": "TCEA Data & Dashboards",
+      "category": "Dashboard",
+      "title": "TCEA Registration Dashboard",
+      "subtitle": "TCEA Registration Dashboard TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "TCEA Registration Dashboard is a TCEA resource available at tcea/dashboard/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Dashboard",
+        "TCEA Data & Dashboards"
+      ],
+      "links": [
+        {
+          "label": "Open TCEA Registration Dashboard →",
+          "href": "tcea/dashboard/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "71",
+      "id": "tcea-hesis",
+      "section": "TCEA Resources",
+      "category": "TCEA Resource",
+      "title": "Matching the Strategy to the Phase of Learning",
+      "subtitle": "Matching the Strategy to the Phase of Learning TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Matching the Strategy to the Phase of Learning is a TCEA resource available at tcea/hesis/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Hesis",
+        "TCEA Resource",
+        "TCEA Resources"
+      ],
+      "links": [
+        {
+          "label": "Open Matching the Strategy to the Phase of Learning →",
+          "href": "tcea/hesis/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "72",
+      "id": "tcea-ibingo",
+      "section": "TCEA Resources",
+      "category": "TCEA Resource",
+      "title": "iBINGO Game Maker",
+      "subtitle": "iBINGO Game Maker TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "iBINGO Game Maker is a TCEA resource available at tcea/ibingo/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Ibingo",
+        "TCEA Resource",
+        "TCEA Resources"
+      ],
+      "links": [
+        {
+          "label": "Open iBINGO Game Maker →",
+          "href": "tcea/ibingo/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "73",
+      "id": "tcea-k12-image-prompt-library",
+      "section": "TCEA AI Resources",
+      "category": "Prompt Library",
+      "title": "K–12 Image Prompt Library",
+      "subtitle": "K–12 Image Prompt Library TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "K–12 Image Prompt Library is a TCEA resource available at tcea/k12-image-prompt-library/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "K-12",
+        "Image",
+        "Prompt",
+        "Library",
+        "Prompt Library",
+        "TCEA AI Resources"
+      ],
+      "links": [
+        {
+          "label": "Open K–12 Image Prompt Library →",
+          "href": "tcea/k12-image-prompt-library/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "74",
+      "id": "tcea-kpi-dashboard",
+      "section": "TCEA Data & Dashboards",
+      "category": "Dashboard",
+      "title": "K-12 KPI Dashboard Generator",
+      "subtitle": "K-12 KPI Dashboard Generator TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "K-12 KPI Dashboard Generator is a TCEA resource available at tcea/kpi-dashboard/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "KPI",
+        "Dashboard",
+        "TCEA Data & Dashboards"
+      ],
+      "links": [
+        {
+          "label": "Open K-12 KPI Dashboard Generator →",
+          "href": "tcea/kpi-dashboard/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "75",
+      "id": "tcea-mappuzzle",
+      "section": "TCEA Resources",
+      "category": "TCEA Resource",
+      "title": "Map Puzzle Generator",
+      "subtitle": "Map Puzzle Generator TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Map Puzzle Generator is a TCEA resource available at tcea/mappuzzle/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Mappuzzle",
+        "TCEA Resource",
+        "TCEA Resources"
+      ],
+      "links": [
+        {
+          "label": "Open Map Puzzle Generator →",
+          "href": "tcea/mappuzzle/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "76",
+      "id": "tcea-other",
+      "section": "TCEA Resources",
+      "category": "TCEA Resource",
+      "title": "Tired of AI Tools That Miss the Mark | Apps by OneScreen",
+      "subtitle": "Tired of AI Tools That Miss the Mark | Apps by OneScreen TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Tired of AI Tools That Miss the Mark | Apps by OneScreen is a TCEA resource available at tcea/other/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Other",
+        "TCEA Resource",
+        "TCEA Resources"
+      ],
+      "links": [
+        {
+          "label": "Open Tired of AI Tools That Miss the Mark | Apps by OneScreen →",
+          "href": "tcea/other/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "77",
+      "id": "tcea-other-lssn",
+      "section": "TCEA Resources",
+      "category": "TCEA Resource",
+      "title": "Tired of AI Tools That Miss the Mark | Apps by OneScreen",
+      "subtitle": "Tired of AI Tools That Miss the Mark | Apps by OneScreen TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Tired of AI Tools That Miss the Mark | Apps by OneScreen is a TCEA resource available at tcea/other/lssn/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Other",
+        "Lssn",
+        "TCEA Resource",
+        "TCEA Resources"
+      ],
+      "links": [
+        {
+          "label": "Open Tired of AI Tools That Miss the Mark | Apps by OneScreen →",
+          "href": "tcea/other/lssn/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "78",
+      "id": "tcea-privacy-audit",
+      "section": "TCEA Resources",
+      "category": "Audit Tool",
+      "title": "Family App Privacy Audit · 15-Minute Interactive Guide",
+      "subtitle": "Family App Privacy Audit · 15-Minute Interactive Guide TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Family App Privacy Audit · 15-Minute Interactive Guide is a TCEA resource available at tcea/privacy-audit/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Privacy",
+        "Audit",
+        "Audit Tool",
+        "TCEA Resources"
+      ],
+      "links": [
+        {
+          "label": "Open Family App Privacy Audit · 15-Minute Interactive Guide →",
+          "href": "tcea/privacy-audit/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "79",
+      "id": "tcea-protect-rubric-v2",
+      "section": "TCEA AI Resources",
+      "category": "Rubric",
+      "title": "PROTECT Rubric v2.0",
+      "subtitle": "PROTECT Rubric v2.0 TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "PROTECT Rubric v2.0 is a TCEA resource available at tcea/protect_rubric_v2/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Protect",
+        "Rubric",
+        "V2",
+        "TCEA AI Resources"
+      ],
+      "links": [
+        {
+          "label": "Open PROTECT Rubric v2.0 →",
+          "href": "tcea/protect_rubric_v2/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "80",
+      "id": "tcea-reflect-tool",
+      "section": "TCEA Professional Learning",
+      "category": "TCEA Resource",
+      "title": "Reflection Time Assessment",
+      "subtitle": "Reflection Time Assessment TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Reflection Time Assessment is a TCEA resource available at tcea/reflect-tool/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Reflect",
+        "Tool",
+        "TCEA Resource",
+        "TCEA Professional Learning"
+      ],
+      "links": [
+        {
+          "label": "Open Reflection Time Assessment →",
+          "href": "tcea/reflect-tool/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "81",
+      "id": "tcea-sia",
+      "section": "TCEA Resources",
+      "category": "TCEA Resource",
+      "title": "Water Cycle Pre-Assessment Flashcards",
+      "subtitle": "Water Cycle Pre-Assessment Flashcards TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Water Cycle Pre-Assessment Flashcards is a TCEA resource available at tcea/sia/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "SIA",
+        "TCEA Resource",
+        "TCEA Resources"
+      ],
+      "links": [
+        {
+          "label": "Open Water Cycle Pre-Assessment Flashcards →",
+          "href": "tcea/sia/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "82",
+      "id": "tcea-surface-deep-transfer",
+      "section": "TCEA Resources",
+      "category": "TCEA Resource",
+      "title": "Comprehensive High-Impact Learning Phases",
+      "subtitle": "Comprehensive High-Impact Learning Phases TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Comprehensive High-Impact Learning Phases is a TCEA resource available at tcea/surface-deep-transfer/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Surface",
+        "Deep",
+        "Transfer",
+        "TCEA Resource",
+        "TCEA Resources"
+      ],
+      "links": [
+        {
+          "label": "Open Comprehensive High-Impact Learning Phases →",
+          "href": "tcea/surface-deep-transfer/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "83",
+      "id": "tcea-tceaainews",
+      "section": "TCEA Resources",
+      "category": "TCEA Resource",
+      "title": "AI-Powered Newsletter Architecture for Educators | TCEA Lunch & Learn",
+      "subtitle": "AI-Powered Newsletter Architecture for Educators | TCEA Lunch & Learn TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "AI-Powered Newsletter Architecture for Educators | TCEA Lunch & Learn is a TCEA resource available at tcea/tceaainews/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Tceaainews",
+        "TCEA Resource",
+        "TCEA Resources"
+      ],
+      "links": [
+        {
+          "label": "Open AI-Powered Newsletter Architecture for Educators | TCEA Lunch & Learn →",
+          "href": "tcea/tceaainews/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "84",
+      "id": "tcea-tools-coinflipping",
+      "section": "TCEA Tools",
+      "category": "Classroom Tool",
+      "title": "Classroom Coin Flipper",
+      "subtitle": "Classroom Coin Flipper TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Classroom Coin Flipper is a TCEA resource available at tcea/tools/coinflipping/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Tools",
+        "Coinflipping",
+        "Classroom Tool",
+        "TCEA Tools"
+      ],
+      "links": [
+        {
+          "label": "Open Classroom Coin Flipper →",
+          "href": "tcea/tools/coinflipping/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "85",
+      "id": "tcea-tools-colorpop",
+      "section": "TCEA Tools",
+      "category": "Classroom Tool",
+      "title": "Color Pop Magic",
+      "subtitle": "Color Pop Magic TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Color Pop Magic is a TCEA resource available at tcea/tools/colorpop/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Tools",
+        "Colorpop",
+        "Classroom Tool",
+        "TCEA Tools"
+      ],
+      "links": [
+        {
+          "label": "Open Color Pop Magic →",
+          "href": "tcea/tools/colorpop/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "86",
+      "id": "tcea-tools-crossword",
+      "section": "TCEA Tools",
+      "category": "Classroom Tool",
+      "title": "Crossword Puzzle Maker",
+      "subtitle": "Crossword Puzzle Maker TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Crossword Puzzle Maker is a TCEA resource available at tcea/tools/crossword/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Tools",
+        "Crossword",
+        "Classroom Tool",
+        "TCEA Tools"
+      ],
+      "links": [
+        {
+          "label": "Open Crossword Puzzle Maker →",
+          "href": "tcea/tools/crossword/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "87",
+      "id": "tcea-tools-dice",
+      "section": "TCEA Tools",
+      "category": "Classroom Tool",
+      "title": "Classroom Dice Roller",
+      "subtitle": "Classroom Dice Roller TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Classroom Dice Roller is a TCEA resource available at tcea/tools/dice/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Tools",
+        "Dice",
+        "Classroom Tool",
+        "TCEA Tools"
+      ],
+      "links": [
+        {
+          "label": "Open Classroom Dice Roller →",
+          "href": "tcea/tools/dice/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "88",
+      "id": "tcea-tools-dicebreakers",
+      "section": "TCEA Tools",
+      "category": "Classroom Tool",
+      "title": "Dicebreaker Creator",
+      "subtitle": "Dicebreaker Creator TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Dicebreaker Creator is a TCEA resource available at tcea/tools/dicebreakers/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Tools",
+        "Dicebreakers",
+        "Classroom Tool",
+        "TCEA Tools"
+      ],
+      "links": [
+        {
+          "label": "Open Dicebreaker Creator →",
+          "href": "tcea/tools/dicebreakers/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "89",
+      "id": "tcea-tools-digital-bingo",
+      "section": "TCEA Tools",
+      "category": "Classroom Tool",
+      "title": "Digital Bingo Game Maker",
+      "subtitle": "Digital Bingo Game Maker TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Digital Bingo Game Maker is a TCEA resource available at tcea/tools/digital_bingo/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Tools",
+        "Digital",
+        "Bingo",
+        "Classroom Tool",
+        "TCEA Tools"
+      ],
+      "links": [
+        {
+          "label": "Open Digital Bingo Game Maker →",
+          "href": "tcea/tools/digital_bingo/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "90",
+      "id": "tcea-tools-dotsboxes",
+      "section": "TCEA Tools",
+      "category": "Classroom Tool",
+      "title": "Dots and Boxes",
+      "subtitle": "Dots and Boxes TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Dots and Boxes is a TCEA resource available at tcea/tools/dotsboxes/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Tools",
+        "Dotsboxes",
+        "Classroom Tool",
+        "TCEA Tools"
+      ],
+      "links": [
+        {
+          "label": "Open Dots and Boxes →",
+          "href": "tcea/tools/dotsboxes/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "91",
+      "id": "tcea-tools-drawsketch",
+      "section": "TCEA Tools",
+      "category": "Classroom Tool",
+      "title": "Draw and Sketch",
+      "subtitle": "Draw and Sketch TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Draw and Sketch is a TCEA resource available at tcea/tools/drawsketch/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Tools",
+        "Drawsketch",
+        "Classroom Tool",
+        "TCEA Tools"
+      ],
+      "links": [
+        {
+          "label": "Open Draw and Sketch →",
+          "href": "tcea/tools/drawsketch/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "92",
+      "id": "tcea-tools-fortune",
+      "section": "TCEA Tools",
+      "category": "Classroom Tool",
+      "title": "Classroom Fortune Wheel Teacher",
+      "subtitle": "Classroom Fortune Wheel Teacher TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Classroom Fortune Wheel Teacher is a TCEA resource available at tcea/tools/fortune/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Tools",
+        "Fortune",
+        "Classroom Tool",
+        "TCEA Tools"
+      ],
+      "links": [
+        {
+          "label": "Open Classroom Fortune Wheel Teacher →",
+          "href": "tcea/tools/fortune/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "93",
+      "id": "tcea-tools",
+      "section": "TCEA Tools",
+      "category": "Classroom Tool",
+      "title": "TCEA Tools Menu",
+      "subtitle": "TCEA Tools Menu TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "TCEA Tools Menu is a TCEA resource available at tcea/tools/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Tools",
+        "Classroom Tool",
+        "TCEA Tools"
+      ],
+      "links": [
+        {
+          "label": "Open TCEA Tools Menu →",
+          "href": "tcea/tools/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "94",
+      "id": "tcea-tools-letterjam",
+      "section": "TCEA Tools",
+      "category": "Classroom Tool",
+      "title": "LetterJam Puzzle Maker",
+      "subtitle": "LetterJam Puzzle Maker TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "LetterJam Puzzle Maker is a TCEA resource available at tcea/tools/letterjam/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Tools",
+        "Letterjam",
+        "Classroom Tool",
+        "TCEA Tools"
+      ],
+      "links": [
+        {
+          "label": "Open LetterJam Puzzle Maker →",
+          "href": "tcea/tools/letterjam/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "95",
+      "id": "tcea-tools-mappuzzle",
+      "section": "TCEA Tools",
+      "category": "Classroom Tool",
+      "title": "Map Puzzle Generator",
+      "subtitle": "Map Puzzle Generator TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Map Puzzle Generator is a TCEA resource available at tcea/tools/mappuzzle/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Tools",
+        "Mappuzzle",
+        "Classroom Tool",
+        "TCEA Tools"
+      ],
+      "links": [
+        {
+          "label": "Open Map Puzzle Generator →",
+          "href": "tcea/tools/mappuzzle/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "96",
+      "id": "tcea-tools-memepuzzle",
+      "section": "TCEA Tools",
+      "category": "Classroom Tool",
+      "title": "Meme Puzzle Maker",
+      "subtitle": "Meme Puzzle Maker TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Meme Puzzle Maker is a TCEA resource available at tcea/tools/memepuzzle/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Tools",
+        "Memepuzzle",
+        "Classroom Tool",
+        "TCEA Tools"
+      ],
+      "links": [
+        {
+          "label": "Open Meme Puzzle Maker →",
+          "href": "tcea/tools/memepuzzle/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "97",
+      "id": "tcea-tools-shapespinner",
+      "section": "TCEA Tools",
+      "category": "Classroom Tool",
+      "title": "Classroom Shape Spinner",
+      "subtitle": "Classroom Shape Spinner TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Classroom Shape Spinner is a TCEA resource available at tcea/tools/shapespinner/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Tools",
+        "Shapespinner",
+        "Classroom Tool",
+        "TCEA Tools"
+      ],
+      "links": [
+        {
+          "label": "Open Classroom Shape Spinner →",
+          "href": "tcea/tools/shapespinner/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "98",
+      "id": "tcea-tools-storywheel",
+      "section": "TCEA Tools",
+      "category": "Classroom Tool",
+      "title": "Story Wheel Maker",
+      "subtitle": "Story Wheel Maker TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Story Wheel Maker is a TCEA resource available at tcea/tools/storywheel/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Tools",
+        "Storywheel",
+        "Classroom Tool",
+        "TCEA Tools"
+      ],
+      "links": [
+        {
+          "label": "Open Story Wheel Maker →",
+          "href": "tcea/tools/storywheel/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "99",
+      "id": "tcea-tools-wheelspinner",
+      "section": "TCEA Tools",
+      "category": "Classroom Tool",
+      "title": "Classroom Wheel Spinner",
+      "subtitle": "Classroom Wheel Spinner TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Classroom Wheel Spinner is a TCEA resource available at tcea/tools/wheelspinner/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Tools",
+        "Wheelspinner",
+        "Classroom Tool",
+        "TCEA Tools"
+      ],
+      "links": [
+        {
+          "label": "Open Classroom Wheel Spinner →",
+          "href": "tcea/tools/wheelspinner/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "100",
+      "id": "tcea-tools-wordsearch",
+      "section": "TCEA Tools",
+      "category": "Classroom Tool",
+      "title": "Classroom Word Search Maker",
+      "subtitle": "Classroom Word Search Maker TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Classroom Word Search Maker is a TCEA resource available at tcea/tools/wordsearch/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Tools",
+        "Wordsearch",
+        "Classroom Tool",
+        "TCEA Tools"
+      ],
+      "links": [
+        {
+          "label": "Open Classroom Word Search Maker →",
+          "href": "tcea/tools/wordsearch/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "101",
+      "id": "tcea-tools10-dotsboxes",
+      "section": "TCEA Tools10",
+      "category": "TCEA Resource",
+      "title": "Dots and Boxes",
+      "subtitle": "Dots and Boxes TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Dots and Boxes is a TCEA resource available at tcea/tools10/dotsboxes/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Tools10",
+        "Dotsboxes",
+        "TCEA Resource",
+        "TCEA Tools10"
+      ],
+      "links": [
+        {
+          "label": "Open Dots and Boxes →",
+          "href": "tcea/tools10/dotsboxes/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "102",
+      "id": "tcea-topspreso",
+      "section": "TCEA Resources",
+      "category": "TCEA Resource",
+      "title": "Top Instructional Strategies You Definitely Want to Embrace — TCEA",
+      "subtitle": "Top Instructional Strategies You Definitely Want to Embrace — TCEA TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Top Instructional Strategies You Definitely Want to Embrace — TCEA is a TCEA resource available at tcea/topspreso/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Topspreso",
+        "TCEA Resource",
+        "TCEA Resources"
+      ],
+      "links": [
+        {
+          "label": "Open Top Instructional Strategies You Definitely Want to Embrace — TCEA →",
+          "href": "tcea/topspreso/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "103",
+      "id": "tcea-topstrategies",
+      "section": "TCEA Resources",
+      "category": "TCEA Resource",
+      "title": "Beyond the 20% Policy — TCEA Strategy Guide",
+      "subtitle": "Beyond the 20% Policy — TCEA Strategy Guide TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Beyond the 20% Policy — TCEA Strategy Guide is a TCEA resource available at tcea/topstrategies/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Topstrategies",
+        "TCEA Resource",
+        "TCEA Resources"
+      ],
+      "links": [
+        {
+          "label": "Open Beyond the 20% Policy — TCEA Strategy Guide →",
+          "href": "tcea/topstrategies/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "104",
+      "id": "tcea-vcl",
+      "section": "TCEA Resources",
+      "category": "TCEA Resource",
+      "title": "Vibe Coding Projects for Librarians",
+      "subtitle": "Vibe Coding Projects for Librarians TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Vibe Coding Projects for Librarians is a TCEA resource available at tcea/vcl/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCL",
+        "TCEA Resource",
+        "TCEA Resources"
+      ],
+      "links": [
+        {
+          "label": "Open Vibe Coding Projects for Librarians →",
+          "href": "tcea/vcl/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "105",
+      "id": "tcea-vcl-libvibes-book-of-the-week-carousel",
+      "section": "TCEA LibVibes",
+      "category": "LibVibes Tool",
+      "title": "Book of the Week Spotlight Carousel · LibVibes",
+      "subtitle": "Book of the Week Spotlight Carousel · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Book of the Week Spotlight Carousel · LibVibes is a TCEA resource available at tcea/vcl/libvibes/book-of-the-week-carousel/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCL",
+        "Libvibes",
+        "Book",
+        "Of",
+        "The",
+        "Week",
+        "Carousel",
+        "LibVibes Tool",
+        "TCEA LibVibes"
+      ],
+      "links": [
+        {
+          "label": "Open Book of the Week Spotlight Carousel · LibVibes →",
+          "href": "tcea/vcl/libvibes/book-of-the-week-carousel/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "106",
+      "id": "tcea-vcl-libvibes-book-spine-poetry",
+      "section": "TCEA LibVibes",
+      "category": "LibVibes Tool",
+      "title": "Book Spine Poetry Maker · LibVibes",
+      "subtitle": "Book Spine Poetry Maker · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Book Spine Poetry Maker · LibVibes is a TCEA resource available at tcea/vcl/libvibes/book-spine-poetry/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCL",
+        "Libvibes",
+        "Book",
+        "Spine",
+        "Poetry",
+        "LibVibes Tool",
+        "TCEA LibVibes"
+      ],
+      "links": [
+        {
+          "label": "Open Book Spine Poetry Maker · LibVibes →",
+          "href": "tcea/vcl/libvibes/book-spine-poetry/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "107",
+      "id": "tcea-vcl-libvibes-boolean-search-trainer",
+      "section": "TCEA LibVibes",
+      "category": "LibVibes Tool",
+      "title": "Boolean Search Trainer · LibVibes",
+      "subtitle": "Boolean Search Trainer · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Boolean Search Trainer · LibVibes is a TCEA resource available at tcea/vcl/libvibes/boolean-search-trainer/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCL",
+        "Libvibes",
+        "Boolean",
+        "Search",
+        "Trainer",
+        "LibVibes Tool",
+        "TCEA LibVibes"
+      ],
+      "links": [
+        {
+          "label": "Open Boolean Search Trainer · LibVibes →",
+          "href": "tcea/vcl/libvibes/boolean-search-trainer/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "108",
+      "id": "tcea-vcl-libvibes-call-number-shelving-game",
+      "section": "TCEA LibVibes",
+      "category": "LibVibes Tool",
+      "title": "Call Number Shelving Game · LibVibes",
+      "subtitle": "Call Number Shelving Game · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Call Number Shelving Game · LibVibes is a TCEA resource available at tcea/vcl/libvibes/call-number-shelving-game/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCL",
+        "Libvibes",
+        "Call",
+        "Number",
+        "Shelving",
+        "Game",
+        "LibVibes Tool",
+        "TCEA LibVibes"
+      ],
+      "links": [
+        {
+          "label": "Open Call Number Shelving Game · LibVibes →",
+          "href": "tcea/vcl/libvibes/call-number-shelving-game/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "109",
+      "id": "tcea-vcl-libvibes-catalog-lookup",
+      "section": "TCEA LibVibes",
+      "category": "LibVibes Tool",
+      "title": "\"Is It On the Shelf?\" Catalog Lookup · LibVibes",
+      "subtitle": "\"Is It On the Shelf?\" Catalog Lookup · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "\"Is It On the Shelf?\" Catalog Lookup · LibVibes is a TCEA resource available at tcea/vcl/libvibes/catalog-lookup/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCL",
+        "Libvibes",
+        "Catalog",
+        "Lookup",
+        "LibVibes Tool",
+        "TCEA LibVibes"
+      ],
+      "links": [
+        {
+          "label": "Open \"Is It On the Shelf?\" Catalog Lookup · LibVibes →",
+          "href": "tcea/vcl/libvibes/catalog-lookup/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "110",
+      "id": "tcea-vcl-libvibes-citation-quick-helper",
+      "section": "TCEA LibVibes",
+      "category": "LibVibes Tool",
+      "title": "Citation Quick-Helper (MLA & APA) · LibVibes",
+      "subtitle": "Citation Quick-Helper (MLA & APA) · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Citation Quick-Helper (MLA & APA) · LibVibes is a TCEA resource available at tcea/vcl/libvibes/citation-quick-helper/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCL",
+        "Libvibes",
+        "Citation",
+        "Quick",
+        "Helper",
+        "LibVibes Tool",
+        "TCEA LibVibes"
+      ],
+      "links": [
+        {
+          "label": "Open Citation Quick-Helper (MLA & APA) · LibVibes →",
+          "href": "tcea/vcl/libvibes/citation-quick-helper/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "111",
+      "id": "tcea-vcl-libvibes-collection-diversity-dashboard",
+      "section": "TCEA LibVibes",
+      "category": "LibVibes Tool",
+      "title": "Collection Diversity Snapshot Dashboard · LibVibes",
+      "subtitle": "Collection Diversity Snapshot Dashboard · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Collection Diversity Snapshot Dashboard · LibVibes is a TCEA resource available at tcea/vcl/libvibes/collection-diversity-dashboard/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCL",
+        "Libvibes",
+        "Collection",
+        "Diversity",
+        "Dashboard",
+        "LibVibes Tool",
+        "TCEA LibVibes"
+      ],
+      "links": [
+        {
+          "label": "Open Collection Diversity Snapshot Dashboard · LibVibes →",
+          "href": "tcea/vcl/libvibes/collection-diversity-dashboard/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "112",
+      "id": "tcea-vcl-libvibes-dewey-explorer-wheel",
+      "section": "TCEA LibVibes",
+      "category": "LibVibes Tool",
+      "title": "Dewey Decimal Explorer Wheel · LibVibes",
+      "subtitle": "Dewey Decimal Explorer Wheel · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Dewey Decimal Explorer Wheel · LibVibes is a TCEA resource available at tcea/vcl/libvibes/dewey-explorer-wheel/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCL",
+        "Libvibes",
+        "Dewey",
+        "Explorer",
+        "Wheel",
+        "LibVibes Tool",
+        "TCEA LibVibes"
+      ],
+      "links": [
+        {
+          "label": "Open Dewey Decimal Explorer Wheel · LibVibes →",
+          "href": "tcea/vcl/libvibes/dewey-explorer-wheel/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "113",
+      "id": "tcea-vcl-libvibes-digital-citizenship-detective",
+      "section": "TCEA LibVibes",
+      "category": "LibVibes Tool",
+      "title": "Post or Pass? — Digital Citizenship Game · LibVibes",
+      "subtitle": "Post or Pass? — Digital Citizenship Game · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Post or Pass? — Digital Citizenship Game · LibVibes is a TCEA resource available at tcea/vcl/libvibes/digital-citizenship-detective/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCL",
+        "Libvibes",
+        "Digital",
+        "Citizenship",
+        "Detective",
+        "LibVibes Tool",
+        "TCEA LibVibes"
+      ],
+      "links": [
+        {
+          "label": "Open Post or Pass? — Digital Citizenship Game · LibVibes →",
+          "href": "tcea/vcl/libvibes/digital-citizenship-detective/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "114",
+      "id": "tcea-vcl-libvibes-event-countdown-banner",
+      "section": "TCEA LibVibes",
+      "category": "LibVibes Tool",
+      "title": "Library Event Countdown Banner · LibVibes",
+      "subtitle": "Library Event Countdown Banner · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Library Event Countdown Banner · LibVibes is a TCEA resource available at tcea/vcl/libvibes/event-countdown-banner/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCL",
+        "Libvibes",
+        "Event",
+        "Countdown",
+        "Banner",
+        "LibVibes Tool",
+        "TCEA LibVibes"
+      ],
+      "links": [
+        {
+          "label": "Open Library Event Countdown Banner · LibVibes →",
+          "href": "tcea/vcl/libvibes/event-countdown-banner/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "115",
+      "id": "tcea-vcl-libvibes-genre-quiz",
+      "section": "TCEA LibVibes",
+      "category": "LibVibes Tool",
+      "title": "\"Find Your Next Read\" Genre Quiz · LibVibes",
+      "subtitle": "\"Find Your Next Read\" Genre Quiz · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "\"Find Your Next Read\" Genre Quiz · LibVibes is a TCEA resource available at tcea/vcl/libvibes/genre-quiz/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCL",
+        "Libvibes",
+        "Genre",
+        "Quiz",
+        "LibVibes Tool",
+        "TCEA LibVibes"
+      ],
+      "links": [
+        {
+          "label": "Open \"Find Your Next Read\" Genre Quiz · LibVibes →",
+          "href": "tcea/vcl/libvibes/genre-quiz/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "116",
+      "id": "tcea-vcl-libvibes-library-floor-map",
+      "section": "TCEA LibVibes",
+      "category": "LibVibes Tool",
+      "title": "Interactive Library Floor Map · LibVibes",
+      "subtitle": "Interactive Library Floor Map · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Interactive Library Floor Map · LibVibes is a TCEA resource available at tcea/vcl/libvibes/library-floor-map/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCL",
+        "Libvibes",
+        "Library",
+        "Floor",
+        "Map",
+        "LibVibes Tool",
+        "TCEA LibVibes"
+      ],
+      "links": [
+        {
+          "label": "Open Interactive Library Floor Map · LibVibes →",
+          "href": "tcea/vcl/libvibes/library-floor-map/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "117",
+      "id": "tcea-vcl-libvibes-library-hours-card",
+      "section": "TCEA LibVibes",
+      "category": "LibVibes Tool",
+      "title": "Library Welcome & Hours Card · LibVibes",
+      "subtitle": "Library Welcome & Hours Card · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Library Welcome & Hours Card · LibVibes is a TCEA resource available at tcea/vcl/libvibes/library-hours-card/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCL",
+        "Libvibes",
+        "Library",
+        "Hours",
+        "Card",
+        "LibVibes Tool",
+        "TCEA LibVibes"
+      ],
+      "links": [
+        {
+          "label": "Open Library Welcome & Hours Card · LibVibes →",
+          "href": "tcea/vcl/libvibes/library-hours-card/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "118",
+      "id": "tcea-vcl-libvibes-mock-award-voting",
+      "section": "TCEA LibVibes",
+      "category": "LibVibes Tool",
+      "title": "Mock Caldecott / Newbery Award Voting Station · LibVibes",
+      "subtitle": "Mock Caldecott / Newbery Award Voting Station · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Mock Caldecott / Newbery Award Voting Station · LibVibes is a TCEA resource available at tcea/vcl/libvibes/mock-award-voting/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCL",
+        "Libvibes",
+        "Mock",
+        "Award",
+        "Voting",
+        "LibVibes Tool",
+        "TCEA LibVibes"
+      ],
+      "links": [
+        {
+          "label": "Open Mock Caldecott / Newbery Award Voting Station · LibVibes →",
+          "href": "tcea/vcl/libvibes/mock-award-voting/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "119",
+      "id": "tcea-vcl-libvibes-primary-secondary-sorter",
+      "section": "TCEA LibVibes",
+      "category": "LibVibes Tool",
+      "title": "Primary vs. Secondary Source Sorter · LibVibes",
+      "subtitle": "Primary vs. Secondary Source Sorter · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Primary vs. Secondary Source Sorter · LibVibes is a TCEA resource available at tcea/vcl/libvibes/primary-secondary-sorter/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCL",
+        "Libvibes",
+        "Primary",
+        "Secondary",
+        "Sorter",
+        "LibVibes Tool",
+        "TCEA LibVibes"
+      ],
+      "links": [
+        {
+          "label": "Open Primary vs. Secondary Source Sorter · LibVibes →",
+          "href": "tcea/vcl/libvibes/primary-secondary-sorter/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "120",
+      "id": "tcea-vcl-libvibes-reading-bingo-generator",
+      "section": "TCEA LibVibes",
+      "category": "LibVibes Tool",
+      "title": "Reading Bingo Board Generator · LibVibes",
+      "subtitle": "Reading Bingo Board Generator · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Reading Bingo Board Generator · LibVibes is a TCEA resource available at tcea/vcl/libvibes/reading-bingo-generator/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCL",
+        "Libvibes",
+        "Reading",
+        "Bingo",
+        "Generator",
+        "LibVibes Tool",
+        "TCEA LibVibes"
+      ],
+      "links": [
+        {
+          "label": "Open Reading Bingo Board Generator · LibVibes →",
+          "href": "tcea/vcl/libvibes/reading-bingo-generator/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "121",
+      "id": "tcea-vcl-libvibes-reading-challenge-tracker",
+      "section": "TCEA LibVibes",
+      "category": "LibVibes Tool",
+      "title": "Reading Challenge Tracker · LibVibes",
+      "subtitle": "Reading Challenge Tracker · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Reading Challenge Tracker · LibVibes is a TCEA resource available at tcea/vcl/libvibes/reading-challenge-tracker/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCL",
+        "Libvibes",
+        "Reading",
+        "Challenge",
+        "Tracker",
+        "LibVibes Tool",
+        "TCEA LibVibes"
+      ],
+      "links": [
+        {
+          "label": "Open Reading Challenge Tracker · LibVibes →",
+          "href": "tcea/vcl/libvibes/reading-challenge-tracker/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "122",
+      "id": "tcea-vcl-libvibes-signup-board",
+      "section": "TCEA LibVibes",
+      "category": "LibVibes Tool",
+      "title": "Makerspace / Study Room Sign-Up Board · LibVibes",
+      "subtitle": "Makerspace / Study Room Sign-Up Board · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Makerspace / Study Room Sign-Up Board · LibVibes is a TCEA resource available at tcea/vcl/libvibes/signup-board/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCL",
+        "Libvibes",
+        "Signup",
+        "Board",
+        "LibVibes Tool",
+        "TCEA LibVibes"
+      ],
+      "links": [
+        {
+          "label": "Open Makerspace / Study Room Sign-Up Board · LibVibes →",
+          "href": "tcea/vcl/libvibes/signup-board/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "123",
+      "id": "tcea-vcl-libvibes-source-evaluation-lab",
+      "section": "TCEA LibVibes",
+      "category": "LibVibes Tool",
+      "title": "Source Evaluation Lab (CRAAP Test) · LibVibes",
+      "subtitle": "Source Evaluation Lab (CRAAP Test) · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Source Evaluation Lab (CRAAP Test) · LibVibes is a TCEA resource available at tcea/vcl/libvibes/source-evaluation-lab/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCL",
+        "Libvibes",
+        "Source",
+        "Evaluation",
+        "Lab",
+        "LibVibes Tool",
+        "TCEA LibVibes"
+      ],
+      "links": [
+        {
+          "label": "Open Source Evaluation Lab (CRAAP Test) · LibVibes →",
+          "href": "tcea/vcl/libvibes/source-evaluation-lab/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "124",
+      "id": "tcea-vcll",
+      "section": "TCEA Resources",
+      "category": "TCEA Resource",
+      "title": "Vibe Coding Projects for Librarians",
+      "subtitle": "Vibe Coding Projects for Librarians TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Vibe Coding Projects for Librarians is a TCEA resource available at tcea/vcll/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCLL",
+        "TCEA Resource",
+        "TCEA Resources"
+      ],
+      "links": [
+        {
+          "label": "Open Vibe Coding Projects for Librarians →",
+          "href": "tcea/vcll/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "125",
+      "id": "tcea-vcll-libvibes-book-of-the-week-carousel",
+      "section": "TCEA LibVibes Locked",
+      "category": "LibVibes Tool",
+      "title": "Book of the Week Spotlight Carousel · LibVibes",
+      "subtitle": "Book of the Week Spotlight Carousel · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Book of the Week Spotlight Carousel · LibVibes is a TCEA resource available at tcea/vcll/libvibes/book-of-the-week-carousel/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCLL",
+        "Libvibes",
+        "Book",
+        "Of",
+        "The",
+        "Week",
+        "Carousel",
+        "LibVibes Tool",
+        "TCEA LibVibes Locked"
+      ],
+      "links": [
+        {
+          "label": "Open Book of the Week Spotlight Carousel · LibVibes →",
+          "href": "tcea/vcll/libvibes/book-of-the-week-carousel/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "126",
+      "id": "tcea-vcll-libvibes-book-spine-poetry",
+      "section": "TCEA LibVibes Locked",
+      "category": "LibVibes Tool",
+      "title": "Book Spine Poetry Maker · LibVibes",
+      "subtitle": "Book Spine Poetry Maker · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Book Spine Poetry Maker · LibVibes is a TCEA resource available at tcea/vcll/libvibes/book-spine-poetry/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCLL",
+        "Libvibes",
+        "Book",
+        "Spine",
+        "Poetry",
+        "LibVibes Tool",
+        "TCEA LibVibes Locked"
+      ],
+      "links": [
+        {
+          "label": "Open Book Spine Poetry Maker · LibVibes →",
+          "href": "tcea/vcll/libvibes/book-spine-poetry/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "127",
+      "id": "tcea-vcll-libvibes-boolean-search-trainer",
+      "section": "TCEA LibVibes Locked",
+      "category": "LibVibes Tool",
+      "title": "Boolean Search Trainer · LibVibes",
+      "subtitle": "Boolean Search Trainer · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Boolean Search Trainer · LibVibes is a TCEA resource available at tcea/vcll/libvibes/boolean-search-trainer/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCLL",
+        "Libvibes",
+        "Boolean",
+        "Search",
+        "Trainer",
+        "LibVibes Tool",
+        "TCEA LibVibes Locked"
+      ],
+      "links": [
+        {
+          "label": "Open Boolean Search Trainer · LibVibes →",
+          "href": "tcea/vcll/libvibes/boolean-search-trainer/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "128",
+      "id": "tcea-vcll-libvibes-call-number-shelving-game",
+      "section": "TCEA LibVibes Locked",
+      "category": "LibVibes Tool",
+      "title": "Call Number Shelving Game · LibVibes",
+      "subtitle": "Call Number Shelving Game · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Call Number Shelving Game · LibVibes is a TCEA resource available at tcea/vcll/libvibes/call-number-shelving-game/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCLL",
+        "Libvibes",
+        "Call",
+        "Number",
+        "Shelving",
+        "Game",
+        "LibVibes Tool",
+        "TCEA LibVibes Locked"
+      ],
+      "links": [
+        {
+          "label": "Open Call Number Shelving Game · LibVibes →",
+          "href": "tcea/vcll/libvibes/call-number-shelving-game/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "129",
+      "id": "tcea-vcll-libvibes-catalog-lookup",
+      "section": "TCEA LibVibes Locked",
+      "category": "LibVibes Tool",
+      "title": "\"Is It On the Shelf?\" Catalog Lookup · LibVibes",
+      "subtitle": "\"Is It On the Shelf?\" Catalog Lookup · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "\"Is It On the Shelf?\" Catalog Lookup · LibVibes is a TCEA resource available at tcea/vcll/libvibes/catalog-lookup/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCLL",
+        "Libvibes",
+        "Catalog",
+        "Lookup",
+        "LibVibes Tool",
+        "TCEA LibVibes Locked"
+      ],
+      "links": [
+        {
+          "label": "Open \"Is It On the Shelf?\" Catalog Lookup · LibVibes →",
+          "href": "tcea/vcll/libvibes/catalog-lookup/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "130",
+      "id": "tcea-vcll-libvibes-citation-quick-helper",
+      "section": "TCEA LibVibes Locked",
+      "category": "LibVibes Tool",
+      "title": "Citation Quick-Helper (MLA & APA) · LibVibes",
+      "subtitle": "Citation Quick-Helper (MLA & APA) · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Citation Quick-Helper (MLA & APA) · LibVibes is a TCEA resource available at tcea/vcll/libvibes/citation-quick-helper/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCLL",
+        "Libvibes",
+        "Citation",
+        "Quick",
+        "Helper",
+        "LibVibes Tool",
+        "TCEA LibVibes Locked"
+      ],
+      "links": [
+        {
+          "label": "Open Citation Quick-Helper (MLA & APA) · LibVibes →",
+          "href": "tcea/vcll/libvibes/citation-quick-helper/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "131",
+      "id": "tcea-vcll-libvibes-collection-diversity-dashboard",
+      "section": "TCEA LibVibes Locked",
+      "category": "LibVibes Tool",
+      "title": "Collection Diversity Snapshot Dashboard · LibVibes",
+      "subtitle": "Collection Diversity Snapshot Dashboard · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Collection Diversity Snapshot Dashboard · LibVibes is a TCEA resource available at tcea/vcll/libvibes/collection-diversity-dashboard/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCLL",
+        "Libvibes",
+        "Collection",
+        "Diversity",
+        "Dashboard",
+        "LibVibes Tool",
+        "TCEA LibVibes Locked"
+      ],
+      "links": [
+        {
+          "label": "Open Collection Diversity Snapshot Dashboard · LibVibes →",
+          "href": "tcea/vcll/libvibes/collection-diversity-dashboard/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "132",
+      "id": "tcea-vcll-libvibes-dewey-explorer-wheel",
+      "section": "TCEA LibVibes Locked",
+      "category": "LibVibes Tool",
+      "title": "Dewey Decimal Explorer Wheel · LibVibes",
+      "subtitle": "Dewey Decimal Explorer Wheel · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Dewey Decimal Explorer Wheel · LibVibes is a TCEA resource available at tcea/vcll/libvibes/dewey-explorer-wheel/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCLL",
+        "Libvibes",
+        "Dewey",
+        "Explorer",
+        "Wheel",
+        "LibVibes Tool",
+        "TCEA LibVibes Locked"
+      ],
+      "links": [
+        {
+          "label": "Open Dewey Decimal Explorer Wheel · LibVibes →",
+          "href": "tcea/vcll/libvibes/dewey-explorer-wheel/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "133",
+      "id": "tcea-vcll-libvibes-digital-citizenship-detective",
+      "section": "TCEA LibVibes Locked",
+      "category": "LibVibes Tool",
+      "title": "Post or Pass? — Digital Citizenship Game · LibVibes",
+      "subtitle": "Post or Pass? — Digital Citizenship Game · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Post or Pass? — Digital Citizenship Game · LibVibes is a TCEA resource available at tcea/vcll/libvibes/digital-citizenship-detective/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCLL",
+        "Libvibes",
+        "Digital",
+        "Citizenship",
+        "Detective",
+        "LibVibes Tool",
+        "TCEA LibVibes Locked"
+      ],
+      "links": [
+        {
+          "label": "Open Post or Pass? — Digital Citizenship Game · LibVibes →",
+          "href": "tcea/vcll/libvibes/digital-citizenship-detective/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "134",
+      "id": "tcea-vcll-libvibes-event-countdown-banner",
+      "section": "TCEA LibVibes Locked",
+      "category": "LibVibes Tool",
+      "title": "Library Event Countdown Banner · LibVibes",
+      "subtitle": "Library Event Countdown Banner · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Library Event Countdown Banner · LibVibes is a TCEA resource available at tcea/vcll/libvibes/event-countdown-banner/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCLL",
+        "Libvibes",
+        "Event",
+        "Countdown",
+        "Banner",
+        "LibVibes Tool",
+        "TCEA LibVibes Locked"
+      ],
+      "links": [
+        {
+          "label": "Open Library Event Countdown Banner · LibVibes →",
+          "href": "tcea/vcll/libvibes/event-countdown-banner/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "135",
+      "id": "tcea-vcll-libvibes-genre-quiz",
+      "section": "TCEA LibVibes Locked",
+      "category": "LibVibes Tool",
+      "title": "\"Find Your Next Read\" Genre Quiz · LibVibes",
+      "subtitle": "\"Find Your Next Read\" Genre Quiz · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "\"Find Your Next Read\" Genre Quiz · LibVibes is a TCEA resource available at tcea/vcll/libvibes/genre-quiz/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCLL",
+        "Libvibes",
+        "Genre",
+        "Quiz",
+        "LibVibes Tool",
+        "TCEA LibVibes Locked"
+      ],
+      "links": [
+        {
+          "label": "Open \"Find Your Next Read\" Genre Quiz · LibVibes →",
+          "href": "tcea/vcll/libvibes/genre-quiz/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "136",
+      "id": "tcea-vcll-libvibes-library-floor-map",
+      "section": "TCEA LibVibes Locked",
+      "category": "LibVibes Tool",
+      "title": "Interactive Library Floor Map · LibVibes",
+      "subtitle": "Interactive Library Floor Map · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Interactive Library Floor Map · LibVibes is a TCEA resource available at tcea/vcll/libvibes/library-floor-map/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCLL",
+        "Libvibes",
+        "Library",
+        "Floor",
+        "Map",
+        "LibVibes Tool",
+        "TCEA LibVibes Locked"
+      ],
+      "links": [
+        {
+          "label": "Open Interactive Library Floor Map · LibVibes →",
+          "href": "tcea/vcll/libvibes/library-floor-map/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "137",
+      "id": "tcea-vcll-libvibes-library-hours-card",
+      "section": "TCEA LibVibes Locked",
+      "category": "LibVibes Tool",
+      "title": "Library Welcome & Hours Card · LibVibes",
+      "subtitle": "Library Welcome & Hours Card · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Library Welcome & Hours Card · LibVibes is a TCEA resource available at tcea/vcll/libvibes/library-hours-card/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCLL",
+        "Libvibes",
+        "Library",
+        "Hours",
+        "Card",
+        "LibVibes Tool",
+        "TCEA LibVibes Locked"
+      ],
+      "links": [
+        {
+          "label": "Open Library Welcome & Hours Card · LibVibes →",
+          "href": "tcea/vcll/libvibes/library-hours-card/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "138",
+      "id": "tcea-vcll-libvibes-mock-award-voting",
+      "section": "TCEA LibVibes Locked",
+      "category": "LibVibes Tool",
+      "title": "Mock Caldecott / Newbery Award Voting Station · LibVibes",
+      "subtitle": "Mock Caldecott / Newbery Award Voting Station · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Mock Caldecott / Newbery Award Voting Station · LibVibes is a TCEA resource available at tcea/vcll/libvibes/mock-award-voting/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCLL",
+        "Libvibes",
+        "Mock",
+        "Award",
+        "Voting",
+        "LibVibes Tool",
+        "TCEA LibVibes Locked"
+      ],
+      "links": [
+        {
+          "label": "Open Mock Caldecott / Newbery Award Voting Station · LibVibes →",
+          "href": "tcea/vcll/libvibes/mock-award-voting/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "139",
+      "id": "tcea-vcll-libvibes-primary-secondary-sorter",
+      "section": "TCEA LibVibes Locked",
+      "category": "LibVibes Tool",
+      "title": "Primary vs. Secondary Source Sorter · LibVibes",
+      "subtitle": "Primary vs. Secondary Source Sorter · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Primary vs. Secondary Source Sorter · LibVibes is a TCEA resource available at tcea/vcll/libvibes/primary-secondary-sorter/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCLL",
+        "Libvibes",
+        "Primary",
+        "Secondary",
+        "Sorter",
+        "LibVibes Tool",
+        "TCEA LibVibes Locked"
+      ],
+      "links": [
+        {
+          "label": "Open Primary vs. Secondary Source Sorter · LibVibes →",
+          "href": "tcea/vcll/libvibes/primary-secondary-sorter/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "140",
+      "id": "tcea-vcll-libvibes-reading-bingo-generator",
+      "section": "TCEA LibVibes Locked",
+      "category": "LibVibes Tool",
+      "title": "Reading Bingo Board Generator · LibVibes",
+      "subtitle": "Reading Bingo Board Generator · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Reading Bingo Board Generator · LibVibes is a TCEA resource available at tcea/vcll/libvibes/reading-bingo-generator/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCLL",
+        "Libvibes",
+        "Reading",
+        "Bingo",
+        "Generator",
+        "LibVibes Tool",
+        "TCEA LibVibes Locked"
+      ],
+      "links": [
+        {
+          "label": "Open Reading Bingo Board Generator · LibVibes →",
+          "href": "tcea/vcll/libvibes/reading-bingo-generator/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "141",
+      "id": "tcea-vcll-libvibes-reading-challenge-tracker",
+      "section": "TCEA LibVibes Locked",
+      "category": "LibVibes Tool",
+      "title": "Reading Challenge Tracker · LibVibes",
+      "subtitle": "Reading Challenge Tracker · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Reading Challenge Tracker · LibVibes is a TCEA resource available at tcea/vcll/libvibes/reading-challenge-tracker/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCLL",
+        "Libvibes",
+        "Reading",
+        "Challenge",
+        "Tracker",
+        "LibVibes Tool",
+        "TCEA LibVibes Locked"
+      ],
+      "links": [
+        {
+          "label": "Open Reading Challenge Tracker · LibVibes →",
+          "href": "tcea/vcll/libvibes/reading-challenge-tracker/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "142",
+      "id": "tcea-vcll-libvibes-signup-board",
+      "section": "TCEA LibVibes Locked",
+      "category": "LibVibes Tool",
+      "title": "Makerspace / Study Room Sign-Up Board · LibVibes",
+      "subtitle": "Makerspace / Study Room Sign-Up Board · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Makerspace / Study Room Sign-Up Board · LibVibes is a TCEA resource available at tcea/vcll/libvibes/signup-board/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCLL",
+        "Libvibes",
+        "Signup",
+        "Board",
+        "LibVibes Tool",
+        "TCEA LibVibes Locked"
+      ],
+      "links": [
+        {
+          "label": "Open Makerspace / Study Room Sign-Up Board · LibVibes →",
+          "href": "tcea/vcll/libvibes/signup-board/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "143",
+      "id": "tcea-vcll-libvibes-source-evaluation-lab",
+      "section": "TCEA LibVibes Locked",
+      "category": "LibVibes Tool",
+      "title": "Source Evaluation Lab (CRAAP Test) · LibVibes",
+      "subtitle": "Source Evaluation Lab (CRAAP Test) · LibVibes LibVibes classroom/library tool",
+      "stat": "Tool",
+      "statLabel": "LibVibes",
+      "description": "Source Evaluation Lab (CRAAP Test) · LibVibes is a TCEA resource available at tcea/vcll/libvibes/source-evaluation-lab/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VCLL",
+        "Libvibes",
+        "Source",
+        "Evaluation",
+        "Lab",
+        "LibVibes Tool",
+        "TCEA LibVibes Locked"
+      ],
+      "links": [
+        {
+          "label": "Open Source Evaluation Lab (CRAAP Test) · LibVibes →",
+          "href": "tcea/vcll/libvibes/source-evaluation-lab/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "144",
+      "id": "tcea-vibe-app-intake-package",
+      "section": "TCEA AI Resources",
+      "category": "TCEA Resource",
+      "title": "School District App Intake Form",
+      "subtitle": "School District App Intake Form TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "School District App Intake Form is a TCEA resource available at tcea/vibe_app_intake_package/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Vibe",
+        "App",
+        "Intake",
+        "Package",
+        "TCEA Resource",
+        "TCEA AI Resources"
+      ],
+      "links": [
+        {
+          "label": "Open School District App Intake Form →",
+          "href": "tcea/vibe_app_intake_package/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "145",
+      "id": "tcea-vpo",
+      "section": "TCEA Resources",
+      "category": "TCEA Resource",
+      "title": "Codex Project Organizer",
+      "subtitle": "Codex Project Organizer TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Codex Project Organizer is a TCEA resource available at tcea/vpo/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "VPO",
+        "TCEA Resource",
+        "TCEA Resources"
+      ],
+      "links": [
+        {
+          "label": "Open Codex Project Organizer →",
+          "href": "tcea/vpo/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "146",
+      "id": "tcea-webdecks-aidesign",
+      "section": "TCEA Webdecks",
+      "category": "Webdeck",
+      "title": "AI as Your Instructional Design Partner WebDeck",
+      "subtitle": "AI as Your Instructional Design Partner WebDeck TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "AI as Your Instructional Design Partner WebDeck is a TCEA resource available at tcea/webdecks/aidesign/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Webdecks",
+        "Aidesign",
+        "Webdeck",
+        "TCEA Webdecks"
+      ],
+      "links": [
+        {
+          "label": "Open AI as Your Instructional Design Partner WebDeck →",
+          "href": "tcea/webdecks/aidesign/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "147",
+      "id": "tcea-webdecks-aipower",
+      "section": "TCEA Webdecks",
+      "category": "Webdeck",
+      "title": "Create AI-Powered Publications and Dashboards | TCEA WebDeck",
+      "subtitle": "Create AI-Powered Publications and Dashboards | TCEA WebDeck TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Create AI-Powered Publications and Dashboards | TCEA WebDeck is a TCEA resource available at tcea/webdecks/aipower/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Webdecks",
+        "Aipower",
+        "Webdeck",
+        "TCEA Webdecks"
+      ],
+      "links": [
+        {
+          "label": "Open Create AI-Powered Publications and Dashboards | TCEA WebDeck →",
+          "href": "tcea/webdecks/aipower/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "148",
+      "id": "tcea-webdecks-ibingo",
+      "section": "TCEA Webdecks",
+      "category": "Webdeck",
+      "title": "iBINGO Game Maker WebDeck",
+      "subtitle": "iBINGO Game Maker WebDeck TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "iBINGO Game Maker WebDeck is a TCEA resource available at tcea/webdecks/ibingo/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Webdecks",
+        "Ibingo",
+        "Webdeck",
+        "TCEA Webdecks"
+      ],
+      "links": [
+        {
+          "label": "Open iBINGO Game Maker WebDeck →",
+          "href": "tcea/webdecks/ibingo/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "149",
+      "id": "tcea-webdecks-ldtransition",
+      "section": "TCEA Webdecks",
+      "category": "Webdeck",
+      "title": "LearnDash Risk Assessment and Transition Path",
+      "subtitle": "LearnDash Risk Assessment and Transition Path TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "LearnDash Risk Assessment and Transition Path is a TCEA resource available at tcea/webdecks/ldtransition/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Webdecks",
+        "Ldtransition",
+        "Webdeck",
+        "TCEA Webdecks"
+      ],
+      "links": [
+        {
+          "label": "Open LearnDash Risk Assessment and Transition Path →",
+          "href": "tcea/webdecks/ldtransition/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "150",
+      "id": "tcea-webdecks-lessn",
+      "section": "TCEA Webdecks",
+      "category": "Webdeck",
+      "title": "Tired of AI Tools That Miss the Mark | Apps by OneScreen",
+      "subtitle": "Tired of AI Tools That Miss the Mark | Apps by OneScreen TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Tired of AI Tools That Miss the Mark | Apps by OneScreen is a TCEA resource available at tcea/webdecks/lessn/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Webdecks",
+        "Lessn",
+        "Webdeck",
+        "TCEA Webdecks"
+      ],
+      "links": [
+        {
+          "label": "Open Tired of AI Tools That Miss the Mark | Apps by OneScreen →",
+          "href": "tcea/webdecks/lessn/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "151",
+      "id": "tcea-webdecks-newsmaker-copyright",
+      "section": "TCEA Webdecks",
+      "category": "Webdeck",
+      "title": "Newsletter AI Assisted Creation: Copyright-Safe Curation",
+      "subtitle": "Newsletter AI Assisted Creation: Copyright-Safe Curation TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "Newsletter AI Assisted Creation: Copyright-Safe Curation is a TCEA resource available at tcea/webdecks/newsmaker-copyright/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Webdecks",
+        "Newsmaker",
+        "Copyright",
+        "Webdeck",
+        "TCEA Webdecks"
+      ],
+      "links": [
+        {
+          "label": "Open Newsletter AI Assisted Creation: Copyright-Safe Curation →",
+          "href": "tcea/webdecks/newsmaker-copyright/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "152",
+      "id": "tcea-webdecks-nsf26",
+      "section": "TCEA Webdecks",
+      "category": "Webdeck",
+      "title": "NSF TechAccess: AI-Ready America — TCEA Briefing",
+      "subtitle": "NSF TechAccess: AI-Ready America — TCEA Briefing TCEA resource",
+      "stat": "TCEA",
+      "statLabel": "Resource",
+      "description": "NSF TechAccess: AI-Ready America — TCEA Briefing is a TCEA resource available at tcea/webdecks/nsf26/index.html. Added to the creations index so it can be found through search and section navigation.",
+      "features": [
+        "TCEA",
+        "Webdecks",
+        "Nsf26",
+        "Webdeck",
+        "TCEA Webdecks"
+      ],
+      "links": [
+        {
+          "label": "Open NSF TechAccess: AI-Ready America — TCEA Briefing →",
+          "href": "tcea/webdecks/nsf26/index.html",
           "primary": true
         }
       ]

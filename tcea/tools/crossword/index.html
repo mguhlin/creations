@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crossword Puzzle Maker</title>
+  <style>
+    :root {
+      --navy: #1E398D;
+      --gold: #FAA634;
+      --black: #000000;
+      --white: #FFFFFF;
+      --red: #D1282F;
+      --blue: #0070B9;
+      --yellow: #FDDC3F;
+      --orange: #f58231;
+      --green: #3cb44b;
+      --gray-90: #404041;
+      --gray-50: #939597;
+      --gray-30: #BBBDC0;
+      --gray-10: #E6E7E8;
+      --line: #E6E7E8;
+      --shadow: 0 12px 24px rgba(64, 64, 65, 0.08);
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--gray-90);
+      background: var(--white);
+    }
+    button, input, select, textarea { font: inherit; }
+    .top-bar {
+      height: 12px;
+      background: linear-gradient(90deg, var(--navy) 0 32%, var(--gold) 32% 52%, var(--orange) 52% 64%, var(--red) 64% 76%, var(--blue) 76% 88%, var(--green) 88% 96%, var(--yellow) 96% 100%);
+    }
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0 46px;
+    }
+    header {
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding-bottom: 24px;
+      border-bottom: 2px solid var(--gray-10);
+    }
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--gold);
+      font-size: .82rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 0;
+      color: var(--navy);
+      font-size: clamp(2rem, 5vw, 4.1rem);
+      line-height: .95;
+      letter-spacing: 0;
+    }
+    .subtitle {
+      max-width: 760px;
+      margin: 10px 0 0;
+      font-size: 1.04rem;
+      line-height: 1.5;
+    }
+    .home-link {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      padding: 9px 14px;
+      border-radius: var(--radius);
+      background: var(--navy);
+      color: var(--white);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    main {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 20px;
+      padding-top: 22px;
+      align-items: start;
+    }
+    .panel, .preview {
+      border: 2px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+    h2 {
+      margin: 0 0 14px;
+      color: var(--navy);
+      font-size: .9rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .field { margin-bottom: 12px; }
+    label, .field-title {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--gray-50);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    input[type="text"], input[type="number"], select, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 9px 10px;
+      color: var(--gray-90);
+      background: var(--white);
+    }
+    textarea { min-height: 190px; resize: vertical; line-height: 1.4; }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .check-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 9px 10px;
+      font-weight: 700;
+    }
+    .help {
+      margin: 6px 0 0;
+      color: var(--gray-50);
+      font-size: .85rem;
+      line-height: 1.4;
+    }
+    .button-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .btn {
+      min-height: 42px;
+      border: 2px solid rgba(30, 57, 141, .2);
+      border-radius: var(--radius);
+      padding: 9px 12px;
+      color: var(--navy);
+      background: var(--white);
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .btn.primary { color: var(--white); background: var(--navy); border-color: var(--navy); }
+    .btn.gold { color: var(--black); background: var(--gold); border-color: var(--gold); }
+    .status {
+      min-height: 1.4em;
+      margin-top: 12px;
+      color: var(--navy);
+      font-weight: 800;
+      line-height: 1.4;
+    }
+    .preview-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+    .preview-title h2 {
+      margin: 0;
+      color: var(--black);
+      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      letter-spacing: 0;
+      text-transform: none;
+    }
+    .preview-title p { margin: 5px 0 0; color: var(--gray-50); }
+    .worksheet {
+      display: grid;
+      grid-template-columns: minmax(320px, 560px) minmax(240px, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+    .grid-wrap {
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 12px;
+      background: #fbfcff;
+    }
+    .crossword-grid {
+      border-collapse: collapse;
+      border-spacing: 0;
+      table-layout: fixed;
+      margin: 0 auto;
+      background: transparent;
+    }
+    .cell {
+      position: relative;
+      width: var(--cell-size);
+      height: var(--cell-size);
+      min-width: var(--cell-size);
+      min-height: var(--cell-size);
+      border: 1px solid var(--black);
+      background: var(--white);
+      color: var(--black);
+      text-align: center;
+      vertical-align: middle;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+    .cell.block { border: 0; background: transparent; }
+    .num {
+      position: absolute;
+      top: 2px;
+      left: 3px;
+      color: var(--black);
+      font-size: clamp(7px, 1.4vw, 11px);
+      font-weight: 800;
+      line-height: 1;
+    }
+    .answer-letter { font-size: clamp(13px, 2.4vw, 24px); }
+    body[data-font-size="compact"] .answer-letter { font-size: clamp(11px, 2vw, 20px); }
+    body[data-font-size="large"] .answer-letter { font-size: clamp(16px, 2.8vw, 28px); }
+    .clues {
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+    .clues h3 {
+      margin: 0 0 8px;
+      color: var(--navy);
+      font-size: 1rem;
+    }
+    .clues ol {
+      margin: 0;
+      padding-left: 26px;
+      line-height: 1.45;
+    }
+    .clues li { margin-bottom: 6px; }
+    body[data-font-size="compact"] .clues { font-size: .9rem; }
+    body[data-font-size="large"] .clues { font-size: 1.08rem; }
+    .print-footer { display: none; }
+    .empty {
+      padding: 26px;
+      color: var(--gray-50);
+      text-align: center;
+      border: 1px dashed var(--gray-30);
+      border-radius: var(--radius);
+      background: #fbfcff;
+    }
+    @media print {
+      .top-bar, header, .panel, .button-grid, .status { display: none !important; }
+      @page { margin: 0.35in; }
+      body { font-size: 10.5pt; }
+      .page { width: 100%; padding: 0; }
+      main { display: block; }
+      .worksheet { display: block; }
+      .preview { border: 0; box-shadow: none; padding: 0; }
+      .grid-wrap { border: 0; padding: 0; overflow: visible; }
+      .crossword-grid {
+        width: auto;
+        background: transparent;
+      }
+      .cell {
+        background: #fff;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+      .cell.block {
+        border: 0;
+        background: transparent;
+      }
+      body.print-puzzle .answer-letter { visibility: hidden; }
+      body.print-key .answer-letter { visibility: visible; }
+      body.print-key .clues { display: none; }
+      .preview-head { margin-bottom: 0.12in; }
+      .preview-title h2 { font-size: 18pt; line-height: 1.05; }
+      .preview-title p { font-size: 10.5pt; margin-top: 2px; }
+      .clues {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.25in;
+        margin-top: 0.16in;
+        font-size: 9.6pt;
+        line-height: 1.18;
+      }
+      .clues div { break-inside: avoid; margin-bottom: 0.12in; }
+      .clues h3 { margin: 0 0 4px; font-size: 11pt; }
+      .clues ol { padding-left: 20px; line-height: 1.18; }
+      .clues li { margin-bottom: 3px; }
+      .num { font-size: 7pt; top: 1px; left: 2px; }
+      body[data-print-layout="two-page"].print-puzzle .grid-wrap {
+        break-after: page;
+        page-break-after: always;
+      }
+      body[data-print-layout="two-page"].print-puzzle .clues {
+        margin-top: 0;
+      }
+      .print-footer {
+        display: block;
+        margin-top: 0.18in;
+        color: var(--gray-50);
+        font-size: 9pt;
+        font-weight: 800;
+        text-align: center;
+      }
+    }
+    @media (max-width: 980px) {
+      main, .worksheet { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .page { width: min(100% - 22px, 1180px); padding-top: 26px; }
+      header, .preview-head { flex-direction: column; }
+      .split, .button-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar" aria-hidden="true"></div>
+  <div class="page">
+    <header>
+      <div>
+        <p class="eyebrow">TCEA Tools</p>
+        <h1>Crossword Puzzle Maker</h1>
+        <p class="subtitle">Create printable crosswords and student solve links from a simple answer-and-clue list.</p>
+      </div>
+      <a class="home-link" href="../index.html">Tool Menu</a>
+    </header>
+
+    <main>
+      <section class="panel" aria-label="Crossword setup">
+        <h2>Setup</h2>
+        <div class="field">
+          <label for="titleInput">Title</label>
+          <input id="titleInput" type="text" maxlength="80" value="Vocabulary Crossword">
+        </div>
+        <div class="field">
+          <label for="instructionsInput">Instructions</label>
+          <input id="instructionsInput" type="text" maxlength="140" value="Use the clues to complete the crossword.">
+        </div>
+        <div class="split">
+          <div class="field">
+            <label for="gridSize">Grid Size</label>
+            <select id="gridSize">
+              <option value="13">13 x 13</option>
+              <option value="15" selected>15 x 15</option>
+              <option value="17">17 x 17</option>
+              <option value="19">19 x 19</option>
+              <option value="21">21 x 21 Large</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="fontSize">Print Font</label>
+            <select id="fontSize">
+              <option value="compact">Compact</option>
+              <option value="standard" selected>Standard</option>
+              <option value="large">Large</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="printLayout">Print Layout</label>
+          <select id="printLayout">
+            <option value="one-page" selected>Worksheet: puzzle and clues together</option>
+            <option value="two-page">Large puzzle: puzzle page 1, clues page 2</option>
+          </select>
+          <p class="help">Use the large layout for 35-36 clues or when you want the puzzle grid to fill the first page.</p>
+        </div>
+        <div class="field">
+          <label for="entryInput">Answers and Clues</label>
+          <textarea id="entryInput" spellcheck="true">photosynthesis | Process plants use to make food
+ecosystem | Community of living and nonliving things
+gravity | Force that pulls objects toward Earth
+fraction | Number that names part of a whole
+theme | Central message or big idea
+evidence | Details that support a claim
+habitat | Place where an organism lives
+variable | Factor that can change in an investigation
+metaphor | Comparison that does not use like or as
+inference | Conclusion based on evidence and reasoning</textarea>
+          <p class="help">Use <strong>answer | clue</strong> for best results. Crossword Labs-style lines such as <strong>answer clue</strong> also work.</p>
+        </div>
+        <label class="check-row" for="showInstructions">
+          <span>Print instructions under title</span>
+          <input id="showInstructions" type="checkbox" checked>
+        </label>
+        <div class="button-grid">
+          <button class="btn primary" id="generateBtn">Generate</button>
+          <button class="btn gold" id="copyLinkBtn">Copy Student Link</button>
+          <button class="btn" id="openStudentBtn">Open Student Page</button>
+          <button class="btn" id="printPuzzleBtn">Print Puzzle</button>
+          <button class="btn" id="printKeyBtn">Print Answer Key</button>
+          <button class="btn" id="downloadBtn">Download Setup</button>
+          <button class="btn" id="loadBtn">Load JSON</button>
+          <button class="btn" id="clearBtn">Clear</button>
+        </div>
+        <input id="loadInput" type="file" accept="application/json,.json" hidden>
+        <div class="status" id="status" role="status" aria-live="polite"></div>
+      </section>
+
+      <section class="preview" aria-label="Crossword preview">
+        <div class="preview-head">
+          <div class="preview-title">
+            <h2 id="previewTitle">Vocabulary Crossword</h2>
+            <p id="previewInstructions">Use the clues to complete the crossword.</p>
+          </div>
+          <div class="status" id="previewStatus"></div>
+        </div>
+        <div class="worksheet" id="worksheet"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const $ = (sel) => document.querySelector(sel);
+    let puzzle = null;
+
+    function cleanAnswer(text) {
+      return String(text || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9]/g, "").toUpperCase();
+    }
+
+    function parseEntries(text) {
+      const entries = [];
+      for (const line of text.split(/\n+/)) {
+        const row = line.trim();
+        if (!row) continue;
+        let answer = "";
+        let clue = "";
+        if (row.includes("|")) {
+          const parts = row.split("|");
+          answer = parts.shift();
+          clue = parts.join("|");
+        } else if (row.includes("\t")) {
+          const parts = row.split("\t");
+          answer = parts.shift();
+          clue = parts.join(" ");
+        } else {
+          const match = row.match(/^(\S+)\s+(.+)$/);
+          if (match) {
+            answer = match[1];
+            clue = match[2];
+          }
+        }
+        const cleaned = cleanAnswer(answer);
+        const trimmedClue = clue.trim();
+        if (cleaned.length >= 2 && trimmedClue) entries.push({ answer: cleaned, display: answer.trim(), clue: trimmedClue });
+      }
+      const seen = new Set();
+      return entries.filter(item => {
+        if (seen.has(item.answer)) return false;
+        seen.add(item.answer);
+        return true;
+      }).slice(0, 40);
+    }
+
+    function shuffled(items) {
+      const out = [...items];
+      for (let i = out.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [out[i], out[j]] = [out[j], out[i]];
+      }
+      return out;
+    }
+
+    function emptyGrid(size) {
+      return Array.from({ length: size }, () => Array.from({ length: size }, () => ""));
+    }
+
+    function inBounds(size, row, col) {
+      return row >= 0 && row < size && col >= 0 && col < size;
+    }
+
+    function canPlace(grid, answer, row, col, dir, requireCross) {
+      const size = grid.length;
+      const dr = dir === "down" ? 1 : 0;
+      const dc = dir === "across" ? 1 : 0;
+      const beforeRow = row - dr;
+      const beforeCol = col - dc;
+      const afterRow = row + dr * answer.length;
+      const afterCol = col + dc * answer.length;
+      if (!inBounds(size, row, col) || !inBounds(size, row + dr * (answer.length - 1), col + dc * (answer.length - 1))) return null;
+      if (inBounds(size, beforeRow, beforeCol) && grid[beforeRow][beforeCol]) return null;
+      if (inBounds(size, afterRow, afterCol) && grid[afterRow][afterCol]) return null;
+
+      let crosses = 0;
+      for (let i = 0; i < answer.length; i++) {
+        const r = row + dr * i;
+        const c = col + dc * i;
+        const existing = grid[r][c];
+        if (existing && existing !== answer[i]) return null;
+        if (existing === answer[i]) {
+          crosses += 1;
+        } else if (dir === "across") {
+          if ((inBounds(size, r - 1, c) && grid[r - 1][c]) || (inBounds(size, r + 1, c) && grid[r + 1][c])) return null;
+        } else if ((inBounds(size, r, c - 1) && grid[r][c - 1]) || (inBounds(size, r, c + 1) && grid[r][c + 1])) {
+          return null;
+        }
+      }
+      if (requireCross && crosses === 0) return null;
+      return crosses;
+    }
+
+    function place(grid, item, row, col, dir) {
+      const dr = dir === "down" ? 1 : 0;
+      const dc = dir === "across" ? 1 : 0;
+      for (let i = 0; i < item.answer.length; i++) grid[row + dr * i][col + dc * i] = item.answer[i];
+      return { ...item, row, col, dir };
+    }
+
+    function bestPlacement(grid, item, placed) {
+      const size = grid.length;
+      const center = (size - 1) / 2;
+      let best = null;
+      for (const dir of ["across", "down"]) {
+        for (let row = 0; row < size; row++) {
+          for (let col = 0; col < size; col++) {
+            const crosses = canPlace(grid, item.answer, row, col, dir, placed.length > 0);
+            if (crosses === null) continue;
+            const distance = Math.abs(row - center) + Math.abs(col - center);
+            const score = crosses * 100 - distance + Math.random();
+            if (!best || score > best.score) best = { row, col, dir, score };
+          }
+        }
+      }
+      return best;
+    }
+
+    function numberClues(grid, placed) {
+      const starts = new Map();
+      const sorted = [...placed].sort((a, b) => a.row - b.row || a.col - b.col);
+      let next = 1;
+      for (const item of sorted) {
+        const key = item.row + "," + item.col;
+        if (!starts.has(key)) starts.set(key, next++);
+        item.number = starts.get(key);
+      }
+      return placed.sort((a, b) => a.number - b.number || a.dir.localeCompare(b.dir));
+    }
+
+    function usedBounds(grid) {
+      let minRow = grid.length;
+      let maxRow = -1;
+      let minCol = grid.length;
+      let maxCol = -1;
+      for (let row = 0; row < grid.length; row++) {
+        for (let col = 0; col < grid.length; col++) {
+          if (!grid[row][col]) continue;
+          minRow = Math.min(minRow, row);
+          maxRow = Math.max(maxRow, row);
+          minCol = Math.min(minCol, col);
+          maxCol = Math.max(maxCol, col);
+        }
+      }
+      if (maxRow < 0) return { minRow: 0, maxRow: grid.length - 1, minCol: 0, maxCol: grid.length - 1 };
+      return { minRow, maxRow, minCol, maxCol };
+    }
+
+    function generatePuzzle(entries, size) {
+      const usable = entries.filter(item => item.answer.length <= size);
+      let best = { grid: emptyGrid(size), placed: [], failed: entries };
+      for (let attempt = 0; attempt < 90; attempt++) {
+        const grid = emptyGrid(size);
+        const placed = [];
+        const failed = [];
+        const order = shuffled(usable).sort((a, b) => b.answer.length - a.answer.length);
+        for (const item of order) {
+          if (placed.length === 0) {
+            const dir = Math.random() > .35 ? "across" : "down";
+            const row = dir === "across" ? Math.floor(size / 2) : Math.max(0, Math.floor((size - item.answer.length) / 2));
+            const col = dir === "across" ? Math.max(0, Math.floor((size - item.answer.length) / 2)) : Math.floor(size / 2);
+            if (canPlace(grid, item.answer, row, col, dir, false) !== null) placed.push(place(grid, item, row, col, dir));
+            else failed.push(item);
+            continue;
+          }
+          const candidate = bestPlacement(grid, item, placed);
+          if (candidate) placed.push(place(grid, item, candidate.row, candidate.col, candidate.dir));
+          else failed.push(item);
+        }
+        failed.push(...entries.filter(item => item.answer.length > size));
+        const score = placed.length * 1000 + placed.reduce((sum, item) => sum + item.answer.length, 0);
+        const bestScore = best.placed.length * 1000 + best.placed.reduce((sum, item) => sum + item.answer.length, 0);
+        if (score > bestScore) best = { grid, placed, failed };
+        if (failed.length === 0) break;
+      }
+      best.placed = numberClues(best.grid, best.placed);
+      best.bounds = usedBounds(best.grid);
+      return best;
+    }
+
+    function config() {
+      return {
+        title: $("#titleInput").value.trim() || "Crossword Puzzle",
+        instructions: $("#instructionsInput").value.trim(),
+        showInstructions: $("#showInstructions").checked,
+        gridSize: Number($("#gridSize").value),
+        fontSize: $("#fontSize").value,
+        printLayout: $("#printLayout").value,
+        entries: $("#entryInput").value
+      };
+    }
+
+    function makeSharePayload() {
+      const cfg = config();
+      return { ...cfg, puzzle };
+    }
+
+    function b64urlEncode(str) {
+      const bytes = new TextEncoder().encode(str);
+      let bin = "";
+      for (const b of bytes) bin += String.fromCharCode(b);
+      return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+    }
+
+    function studentUrl() {
+      if (!puzzle) generate();
+      const url = new URL("student.html", window.location.href);
+      url.hash = "c=" + b64urlEncode(JSON.stringify(makeSharePayload()));
+      return url.toString();
+    }
+
+    function escapeHTML(str) {
+      return String(str).replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+    }
+
+    function renderGrid(showAnswers) {
+      const bounds = puzzle.bounds || { minRow: 0, maxRow: puzzle.grid.length - 1, minCol: 0, maxCol: puzzle.grid.length - 1 };
+      const rows = bounds.maxRow - bounds.minRow + 1;
+      const cols = bounds.maxCol - bounds.minCol + 1;
+      const cfg = config();
+      const numbers = new Map(puzzle.placed.map(item => [item.row + "," + item.col, item.number]));
+      const tableRows = [];
+      for (let row = bounds.minRow; row <= bounds.maxRow; row++) {
+        const cells = [];
+        for (let col = bounds.minCol; col <= bounds.maxCol; col++) {
+          const letter = puzzle.grid[row][col];
+          if (!letter) {
+            cells.push('<td class="cell block"></td>');
+          } else {
+            const number = numbers.get(row + "," + col);
+            cells.push(`<td class="cell">${number ? `<span class="num">${number}</span>` : ""}<span class="answer-letter">${showAnswers ? letter : ""}</span></td>`);
+          }
+        }
+        tableRows.push(`<tr>${cells.join("")}</tr>`);
+      }
+      const screenPx = Math.max(18, Math.min(40, 560 / cols));
+      const printIn = cfg.printLayout === "two-page"
+        ? Math.max(0.16, Math.min(7.25 / cols, 8.05 / rows))
+        : Math.max(0.16, Math.min(5.8 / cols, 5.6 / rows));
+      return `<div class="grid-wrap"><table class="crossword-grid" style="--cell-size:min(${screenPx.toFixed(2)}px, ${printIn.toFixed(4)}in);"><tbody>${tableRows.join("")}</tbody></table></div>`;
+    }
+
+    function renderClues() {
+      const across = puzzle.placed.filter(item => item.dir === "across");
+      const down = puzzle.placed.filter(item => item.dir === "down");
+      const list = items => items.map(item => `<li value="${item.number}">${escapeHTML(item.clue)}</li>`).join("");
+      return `<aside class="clues"><div><h3>Across</h3><ol>${list(across) || "<li>No across clues placed.</li>"}</ol></div><div><h3>Down</h3><ol>${list(down) || "<li>No down clues placed.</li>"}</ol></div></aside>`;
+    }
+
+    function render() {
+      const cfg = config();
+      $("#previewTitle").textContent = cfg.title;
+      $("#previewInstructions").textContent = cfg.showInstructions && cfg.instructions ? cfg.instructions : "";
+      document.body.dataset.fontSize = cfg.fontSize;
+      document.body.dataset.printLayout = cfg.printLayout;
+      if (!puzzle) {
+        $("#worksheet").innerHTML = '<div class="empty">Add answers and clues, then generate the crossword.</div>';
+        return;
+      }
+      $("#worksheet").innerHTML = renderGrid(true) + renderClues() + '<div class="print-footer">TCEA Crossword Puzzle Maker</div>';
+      const skipped = puzzle.failed.length ? " Skipped: " + puzzle.failed.map(item => item.display || item.answer).join(", ") + "." : "";
+      $("#previewStatus").textContent = puzzle.placed.length + " of " + (puzzle.placed.length + puzzle.failed.length) + " words placed." + skipped;
+      $("#status").textContent = $("#previewStatus").textContent;
+    }
+
+    function generate() {
+      const cfg = config();
+      const entries = parseEntries(cfg.entries);
+      if (!entries.length) {
+        puzzle = null;
+        $("#status").textContent = "Add at least one answer and clue.";
+        render();
+        return;
+      }
+      puzzle = generatePuzzle(entries, cfg.gridSize);
+      render();
+    }
+
+    function printMode(mode) {
+      if (!puzzle) generate();
+      document.body.classList.remove("print-puzzle", "print-key");
+      document.body.classList.add(mode);
+      render();
+      window.print();
+      setTimeout(() => document.body.classList.remove(mode), 500);
+    }
+
+    async function copyLink() {
+      const url = studentUrl();
+      try {
+        await navigator.clipboard.writeText(url);
+        $("#status").textContent = "Student link copied.";
+      } catch {
+        window.prompt("Copy this student link:", url);
+      }
+    }
+
+    function downloadSetup() {
+      if (!puzzle) generate();
+      const blob = new Blob([JSON.stringify(makeSharePayload(), null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "crossword-puzzle.json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    function applyData(data) {
+      $("#titleInput").value = data.title || "Crossword Puzzle";
+      $("#instructionsInput").value = data.instructions || "";
+      $("#showInstructions").checked = data.showInstructions !== false;
+      $("#gridSize").value = data.gridSize || "15";
+      $("#fontSize").value = data.fontSize || "standard";
+      $("#printLayout").value = data.printLayout || "one-page";
+      $("#entryInput").value = data.entries || "";
+      puzzle = data.puzzle || null;
+      if (!puzzle) generate();
+      else render();
+    }
+
+    $("#generateBtn").addEventListener("click", generate);
+    $("#copyLinkBtn").addEventListener("click", copyLink);
+    $("#openStudentBtn").addEventListener("click", () => window.open(studentUrl(), "_blank", "noopener"));
+    $("#printPuzzleBtn").addEventListener("click", () => printMode("print-puzzle"));
+    $("#printKeyBtn").addEventListener("click", () => printMode("print-key"));
+    $("#downloadBtn").addEventListener("click", downloadSetup);
+    $("#loadBtn").addEventListener("click", () => $("#loadInput").click());
+    $("#loadInput").addEventListener("change", async event => {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      try {
+        applyData(JSON.parse(await file.text()));
+        $("#status").textContent = "Loaded " + file.name + ".";
+      } catch (error) {
+        $("#status").textContent = "Could not load JSON: " + error.message;
+      }
+      event.target.value = "";
+    });
+    $("#clearBtn").addEventListener("click", () => {
+      $("#entryInput").value = "";
+      puzzle = null;
+      render();
+      $("#status").textContent = "Cleared.";
+    });
+    ["titleInput", "instructionsInput", "showInstructions", "fontSize", "printLayout"].forEach(id => {
+      $("#" + id).addEventListener("input", render);
+      $("#" + id).addEventListener("change", render);
+    });
+    $("#gridSize").addEventListener("change", generate);
+
+    generate();
+  </script>
+</body>
+</html>

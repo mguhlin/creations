@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Water Cycle Pre-Assessment Flashcards</title>
+  <style>
+    :root {
+      --tcea-navy: #0A3476;
+      --tcea-gold: #FCB040;
+      --ink: #172033;
+      --paper: #ffffff;
+      --soft: #f4f7fb;
+      --shadow: 0 18px 48px rgba(10, 52, 118, 0.22);
+      --radius: 24px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #eef4ff 0%, #ffffff 50%, #fff4df 100%);
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .app {
+      width: min(1080px, 100%);
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid rgba(10, 52, 118, 0.12);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: clamp(18px, 3vw, 32px);
+    }
+
+    header { text-align: center; margin-bottom: 18px; }
+
+    h1 {
+      margin: 0 0 8px;
+      color: var(--tcea-navy);
+      font-size: clamp(1.45rem, 3vw, 2.25rem);
+      line-height: 1.15;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: #4d5f7a;
+      font-size: clamp(0.95rem, 2vw, 1.08rem);
+    }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin: 18px 0;
+      flex-wrap: wrap;
+    }
+
+    .counter {
+      font-weight: 700;
+      color: var(--tcea-navy);
+      background: var(--soft);
+      border: 1px solid rgba(10, 52, 118, 0.12);
+      border-radius: 999px;
+      padding: 10px 16px;
+    }
+
+    .hint { color: #5d6980; font-size: 0.95rem; }
+
+    .card-area { perspective: 1300px; min-height: 650px; }
+
+    .card {
+      width: 100%;
+      min-height: 650px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.55s ease;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .card.flipped { transform: rotateY(180deg); }
+
+    .face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: var(--radius);
+      padding: clamp(18px, 3vw, 34px);
+      display: flex;
+      flex-direction: column;
+      border: 4px solid rgba(255, 255, 255, 0.75);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.16);
+      overflow: auto;
+    }
+
+    .front { background: var(--tcea-navy); color: white; }
+    .back { background: var(--tcea-gold); color: #1f2430; transform: rotateY(180deg); justify-content: center; }
+
+    .label {
+      display: inline-flex;
+      align-self: flex-start;
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 800;
+      border-radius: 999px;
+      padding: 8px 12px;
+      margin-bottom: 14px;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .back .label {
+      background: rgba(10, 52, 118, 0.12);
+      border-color: rgba(10, 52, 118, 0.18);
+      color: var(--tcea-navy);
+    }
+
+    .student-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .term {
+      font-size: clamp(1.65rem, 4vw, 3rem);
+      line-height: 1.05;
+      font-weight: 900;
+      margin: 0;
+    }
+
+    .total-score {
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 999px;
+      padding: 9px 14px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .ticket-title {
+      margin: 2px 0 14px;
+      font-size: clamp(1.1rem, 2.2vw, 1.45rem);
+      font-weight: 900;
+    }
+
+    .question-list {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .question-card {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: start;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 16px;
+      padding: 12px 14px;
+    }
+
+    .q-number {
+      width: 32px;
+      height: 32px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.2);
+      font-weight: 900;
+      flex: none;
+    }
+
+    .q-text { line-height: 1.35; font-size: clamp(0.92rem, 1.8vw, 1.05rem); }
+    .q-text p { margin: 0 0 6px; }
+    .q-text p:last-child { margin-bottom: 0; }
+
+    .choices {
+      margin: 6px 0 0;
+      padding-left: 20px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(160px, 1fr));
+      gap: 3px 18px;
+    }
+
+    .match-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      overflow: hidden;
+      border-radius: 10px;
+      font-size: 0.94rem;
+    }
+
+    .match-table th,
+    .match-table td {
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      padding: 7px 8px;
+      text-align: left;
+    }
+
+    .match-table th { background: rgba(255, 255, 255, 0.15); }
+    .blank { letter-spacing: 0.08em; font-weight: 800; }
+
+    .score-badge {
+      align-self: start;
+      min-width: 48px;
+      text-align: center;
+      border-radius: 999px;
+      padding: 8px 10px;
+      font-weight: 900;
+      background: #ffffff;
+      color: var(--tcea-navy);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14);
+    }
+
+    .score-badge span { display: block; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .definition {
+      font-size: clamp(1.25rem, 3vw, 2rem);
+      line-height: 1.28;
+      margin: 0 0 18px;
+      font-weight: 900;
+      color: var(--tcea-navy);
+    }
+
+    .details {
+      display: grid;
+      gap: 12px;
+      margin-top: 4px;
+      font-size: clamp(1rem, 2vw, 1.18rem);
+      line-height: 1.45;
+    }
+
+    .detail-box {
+      background: rgba(255, 255, 255, 0.55);
+      border: 1px solid rgba(10, 52, 118, 0.16);
+      border-radius: 16px;
+      padding: 14px 16px;
+    }
+
+    .detail-box strong { color: var(--tcea-navy); }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    button {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      padding: 13px 22px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+    }
+
+    button:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(10, 52, 118, 0.18); }
+    button:active { transform: translateY(0); box-shadow: none; }
+
+    .primary { background: var(--tcea-navy); color: white; }
+    .secondary { background: var(--tcea-gold); color: #1f2430; }
+    .ghost { background: #eef3fb; color: var(--tcea-navy); border: 1px solid rgba(10, 52, 118, 0.14); }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 760px) {
+      body { padding: 12px; }
+      .card-area, .card { min-height: 820px; }
+      .question-card { grid-template-columns: auto 1fr; }
+      .score-badge { grid-column: 1 / -1; justify-self: start; }
+      .choices { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app" aria-label="Water Cycle Pre-Assessment Flashcard Deck">
+    <header>
+      <h1>Water Cycle Pre-Assessment Flashcards</h1>
+      <p class="subtitle">Click the card to flip. Use Next to advance or Shuffle to mix the deck.</p>
+    </header>
+
+    <section class="status-row" aria-live="polite">
+      <div class="counter" id="counter">Card 1 of 15</div>
+      <div class="hint">Front: actual entry-ticket questions · Back: ACE learning recommendation</div>
+    </section>
+
+    <section class="card-area">
+      <article class="card" id="card" tabindex="0" role="button" aria-label="Flashcard. Press Enter or Space to flip.">
+        <div class="face front">
+          <div class="label">Assessment Profile</div>
+          <div class="student-row">
+            <h2 class="term" id="term">Student 1</h2>
+            <div class="total-score" id="totalScore">Total: 1/5</div>
+          </div>
+          <div class="ticket-title">Water Cycle Pre-Assessment Entry Ticket</div>
+          <ol class="question-list" id="questionList"></ol>
+        </div>
+        <div class="face back">
+          <div class="label">ACE Recommendation</div>
+          <p class="definition" id="definition">Surface Learning · Unistructural</p>
+          <div class="details" id="details"></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="controls" aria-label="Flashcard controls">
+      <button class="ghost" type="button" id="flipBtn">Flip</button>
+      <button class="primary" type="button" id="nextBtn">Next</button>
+      <button class="secondary" type="button" id="shuffleBtn">Shuffle</button>
+    </section>
+
+    <p class="sr-only" id="screenReaderStatus" aria-live="polite"></p>
+  </main>
+
+  <script>
+    const questions = [
+      {
+        number: 1,
+        html: `<p>Draw what you think happens to water in nature. Label your drawing. <strong>(Drawing question)</strong></p>`
+      },
+      {
+        number: 2,
+        html: `<p>Which of these is part of the water cycle? <strong>(Multiple choice)</strong></p>
+          <ol class="choices" type="a">
+            <li>Photosynthesis</li>
+            <li>Evaporation</li>
+            <li>Erosion</li>
+            <li>Plate tectonics</li>
+          </ol>`
+      },
+      {
+        number: 3,
+        html: `<p>What causes rain to fall from clouds? <strong>(Short answer)</strong></p>`
+      },
+      {
+        number: 4,
+        html: `<p>Match the following terms to their definitions: <strong>(Matching)</strong></p>
+          <p><strong>Terms:</strong> Evaporation · Condensation · Precipitation</p>
+          <table class="match-table">
+            <thead><tr><th>Definition</th><th>Term</th></tr></thead>
+            <tbody>
+              <tr><td>Water vapor turns into liquid</td><td class="blank">_____</td></tr>
+              <tr><td>Water falls from the sky</td><td class="blank">_____</td></tr>
+              <tr><td>Liquid water turns into vapor</td><td class="blank">_____</td></tr>
+            </tbody>
+          </table>`
+      },
+      {
+        number: 5,
+        html: `<p>How might the water cycle be different in a desert compared to a rainforest? <strong>(Short answer)</strong></p>`
+      }
+    ];
+
+    const originalCards = [
+      { term: "Student 1", scores: [0, 0, 1, 0, 0], phase: "Surface Learning", solo: "Unistructural", ace: "Articulate: Have the student name and describe one water-cycle part using the drawing or a labeled picture. Then ask the student to say the idea aloud in one complete sentence." },
+      { term: "Student 2", scores: [0, 0, 0, 1, 1], phase: "Surface Learning", solo: "Multistructural", ace: "Connect: Have the student link two or more water-cycle parts, such as evaporation to condensation to precipitation, using arrows, sentence frames, or a quick concept map." },
+      { term: "Student 3", scores: [1, 1, 1, 0, 0], phase: "Deep Learning", solo: "Relational", ace: "Extend: Have the student explain how the parts work together in a model, then apply the model to a new place such as a desert, rainforest, or schoolyard after rain." },
+      { term: "Student 4", scores: [1, 1, 1, 1, 1], phase: "Transfer Learning", solo: "Extended Abstract", ace: "Extend: Have the student design and defend an investigation or comparison, such as testing how heat affects evaporation or explaining how the cycle changes across different climates." },
+      { term: "Student 5", scores: [0, 0, 0, 1, 0], phase: "Surface Learning", solo: "Unistructural", ace: "Articulate: Have the student name and describe one water-cycle part using the drawing or a labeled picture. Then ask the student to say the idea aloud in one complete sentence." },
+      { term: "Student 6", scores: [0, 1, 0, 1, 0], phase: "Surface Learning", solo: "Multistructural", ace: "Connect: Have the student link two or more water-cycle parts, such as evaporation to condensation to precipitation, using arrows, sentence frames, or a quick concept map." },
+      { term: "Student 7", scores: [1, 1, 0, 1, 0], phase: "Deep Learning", solo: "Relational", ace: "Extend: Have the student explain how the parts work together in a model, then apply the model to a new place such as a desert, rainforest, or schoolyard after rain." },
+      { term: "Student 8", scores: [0, 0, 1, 1, 0], phase: "Surface Learning", solo: "Multistructural", ace: "Connect: Have the student link two or more water-cycle parts, such as evaporation to condensation to precipitation, using arrows, sentence frames, or a quick concept map." },
+      { term: "Student 9", scores: [0, 1, 1, 1, 0], phase: "Deep Learning", solo: "Relational", ace: "Extend: Have the student explain how the parts work together in a model, then apply the model to a new place such as a desert, rainforest, or schoolyard after rain." },
+      { term: "Student 10", scores: [1, 0, 0, 1, 0], phase: "Surface Learning", solo: "Multistructural", ace: "Connect: Have the student link two or more water-cycle parts, such as evaporation to condensation to precipitation, using arrows, sentence frames, or a quick concept map." },
+      { term: "Student 11", scores: [1, 1, 1, 1, 0], phase: "Deep Learning", solo: "Relational", ace: "Extend: Have the student explain how the parts work together in a model, then apply the model to a new place such as a desert, rainforest, or schoolyard after rain." },
+      { term: "Student 12", scores: [0, 0, 1, 1, 0], phase: "Surface Learning", solo: "Multistructural", ace: "Connect: Have the student link two or more water-cycle parts, such as evaporation to condensation to precipitation, using arrows, sentence frames, or a quick concept map." },
+      { term: "Student 13", scores: [1, 0, 0, 0, 0], phase: "Surface Learning", solo: "Unistructural", ace: "Articulate: Have the student name and describe one water-cycle part using the drawing or a labeled picture. Then ask the student to say the idea aloud in one complete sentence." },
+      { term: "Student 14", scores: [1, 1, 0, 1, 0], phase: "Deep Learning", solo: "Relational", ace: "Extend: Have the student explain how the parts work together in a model, then apply the model to a new place such as a desert, rainforest, or schoolyard after rain." },
+      { term: "Student 15", scores: [0, 0, 0, 1, 1], phase: "Surface Learning", solo: "Multistructural", ace: "Connect: Have the student link two or more water-cycle parts, such as evaporation to condensation to precipitation, using arrows, sentence frames, or a quick concept map." }
+    ];
+
+    let cards = originalCards.slice();
+    let currentIndex = 0;
+
+    const cardElement = document.getElementById("card");
+    const counterElement = document.getElementById("counter");
+    const termElement = document.getElementById("term");
+    const totalScoreElement = document.getElementById("totalScore");
+    const questionListElement = document.getElementById("questionList");
+    const definitionElement = document.getElementById("definition");
+    const detailsElement = document.getElementById("details");
+    const srStatus = document.getElementById("screenReaderStatus");
+
+    function renderCard() {
+      const card = cards[currentIndex];
+      const total = card.scores.reduce((sum, score) => sum + score, 0);
+      cardElement.classList.remove("flipped");
+      counterElement.textContent = `Card ${currentIndex + 1} of ${cards.length}`;
+      termElement.textContent = card.term;
+      totalScoreElement.textContent = `Total: ${total}/5`;
+
+      questionListElement.innerHTML = "";
+      questions.forEach((question, index) => {
+        const item = document.createElement("li");
+        item.className = "question-card";
+        item.innerHTML = `
+          <div class="q-number">${question.number}</div>
+          <div class="q-text">${question.html}</div>
+          <div class="score-badge"><span>Score</span>${card.scores[index]}</div>
+        `;
+        questionListElement.appendChild(item);
+      });
+
+      definitionElement.textContent = `${card.phase} · ${card.solo}`;
+      detailsElement.innerHTML = `
+        <div class="detail-box"><strong>Phase of Learning:</strong> ${card.phase}</div>
+        <div class="detail-box"><strong>SOLO Taxonomy Level:</strong> ${card.solo}</div>
+        <div class="detail-box"><strong>ACE Framework Suggestion:</strong> ${card.ace}</div>
+      `;
+      srStatus.textContent = `${card.term}. Card ${currentIndex + 1} of ${cards.length}. Total score ${total} out of 5.`;
+    }
+
+    function flipCard() {
+      cardElement.classList.toggle("flipped");
+      srStatus.textContent = cardElement.classList.contains("flipped") ? "Card back shown." : "Card front shown.";
+    }
+
+    function nextCard() {
+      currentIndex = (currentIndex + 1) % cards.length;
+      renderCard();
+    }
+
+    function shuffleDeck() {
+      for (let i = cards.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [cards[i], cards[j]] = [cards[j], cards[i]];
+      }
+      currentIndex = 0;
+      renderCard();
+      srStatus.textContent = "Deck shuffled.";
+    }
+
+    cardElement.addEventListener("click", flipCard);
+    cardElement.addEventListener("keydown", function(event) {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        flipCard();
+      }
+    });
+
+    document.getElementById("flipBtn").addEventListener("click", flipCard);
+    document.getElementById("nextBtn").addEventListener("click", nextCard);
+    document.getElementById("shuffleBtn").addEventListener("click", shuffleDeck);
+
+    renderCard();
+  </script>
+</body>
+</html>

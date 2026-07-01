@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>School District App Intake Form</title>
+  <style>
+    :root{
+      --navy:#0A3476;
+      --navy-dark:#071f4a;
+      --gold:#FCB040;
+      --teal:#0f7f7f;
+      --teal-dark:#075f63;
+      --red:#b42318;
+      --orange:#b54708;
+      --green:#067647;
+      --ink:#172033;
+      --muted:#5f6b7a;
+      --line:#d9e2ef;
+      --panel:#ffffff;
+      --soft:#f6f8fc;
+      --gold-soft:#fff4db;
+      --teal-soft:#e9fbfb;
+      --navy-soft:#eaf0fb;
+      --radius:18px;
+      --shadow:0 18px 45px rgba(7,31,74,.13);
+      --focus:0 0 0 4px rgba(252,176,64,.35);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 5% 2%, rgba(252,176,64,.18), transparent 28rem),
+        radial-gradient(circle at 95% 5%, rgba(15,127,127,.16), transparent 32rem),
+        linear-gradient(180deg,#ffffff 0%,#f7f9fd 55%,#edf3fb 100%);
+      line-height:1.45;
+    }
+    a{color:var(--navy)}
+    button,input,select,textarea{font:inherit}
+    button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{outline:none;box-shadow:var(--focus)}
+    .wrap{width:min(1180px,94vw);margin:0 auto;padding:24px 0 64px}
+    .hero{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:22px;
+      align-items:stretch;
+      margin-bottom:22px;
+    }
+    .hero-card{
+      background:linear-gradient(135deg,var(--navy-dark),var(--navy));
+      color:white;
+      border-radius:28px;
+      padding:30px;
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero-card:after{
+      content:"";
+      position:absolute;
+      right:-70px;top:-70px;width:260px;height:260px;border-radius:50%;
+      background:rgba(252,176,64,.16);
+    }
+    .eyebrow{display:inline-flex;align-items:center;gap:.55rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#ffe2a6;font-size:.85rem;margin-bottom:10px}
+    h1{font-size:clamp(2rem,4.4vw,4.1rem);line-height:1;margin:0 0 14px;letter-spacing:-.045em}
+    .lead{font-size:clamp(1.05rem,1.8vw,1.35rem);max-width:64ch;margin:0;color:#ecf4ff}
+    .mini-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:22px;position:relative;z-index:1}
+    .mini-card{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:15px;padding:12px;font-size:.9rem;color:#f7fbff}
+    .mini-card strong{display:block;color:#fff;margin-bottom:3px}
+    .setup-panel{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:28px;
+      padding:22px;
+      box-shadow:var(--shadow);
+    }
+    .setup-panel h2{margin:0 0 8px;font-size:1.25rem;color:var(--navy)}
+    .setup-panel p{margin:0 0 14px;color:var(--muted)}
+    .endpoint-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end}
+    .endpoint-row input{width:100%;border:1px solid var(--line);border-radius:12px;padding:12px;background:#fff}
+    .btn{
+      border:0;border-radius:999px;background:var(--navy);color:#fff;font-weight:800;padding:12px 17px;cursor:pointer;
+      display:inline-flex;align-items:center;justify-content:center;gap:.45rem;
+      box-shadow:0 10px 24px rgba(10,52,118,.22);
+    }
+    .btn:hover{background:var(--navy-dark)}
+    .btn.secondary{background:#fff;color:var(--navy);border:1px solid var(--line);box-shadow:none}
+    .btn.gold{background:var(--gold);color:#2b1c00}
+    .btn.ghost{background:transparent;color:var(--navy);border:1px solid var(--line);box-shadow:none}
+    .status{margin-top:12px;border-radius:14px;padding:11px 13px;background:var(--navy-soft);border:1px solid #c7d5ed;color:var(--navy);font-weight:700;font-size:.92rem;display:none}
+    .status.show{display:block}
+    .status.error{background:#fff0ed;border-color:#ffd2cc;color:var(--red)}
+    .status.good{background:#ecfdf3;border-color:#abdcbf;color:var(--green)}
+    .progress-card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:16px 18px;margin-bottom:18px;box-shadow:0 10px 25px rgba(7,31,74,.06);position:sticky;top:0;z-index:5}
+    .progress-top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:10px}
+    .progress-top strong{color:var(--navy)}
+    .meter{height:12px;background:#e8edf5;border-radius:999px;overflow:hidden}
+    .meter span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--gold));transition:width .25s ease}
+    .risk-pill{border-radius:999px;padding:8px 12px;font-weight:900;background:var(--navy-soft);color:var(--navy);white-space:nowrap}
+    .risk-pill.low{background:#eafaf1;color:var(--green)}
+    .risk-pill.medium{background:#fff3df;color:var(--orange)}
+    .risk-pill.high{background:#fff0ed;color:var(--red)}
+    form{display:grid;gap:18px}
+    fieldset{border:0;margin:0;padding:0}
+    .section-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 12px 30px rgba(7,31,74,.07);overflow:hidden}
+    .section-head{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;padding:18px 20px;background:linear-gradient(90deg,var(--navy),var(--teal));color:#fff}
+    .section-head .num{width:44px;height:44px;border-radius:14px;background:var(--gold);color:#2a1a00;display:grid;place-items:center;font-weight:900;font-size:1.2rem}
+    .section-head h2{margin:0;font-size:1.32rem;line-height:1.1}
+    .section-head p{margin:4px 0 0;color:#e8f6f6}
+    .section-body{padding:20px;display:grid;gap:18px}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    label{font-weight:800;color:#24304a;display:block;margin-bottom:7px}
+    .hint{font-weight:500;color:var(--muted);font-size:.9rem;margin-top:5px}
+    input[type="text"],input[type="email"],input[type="url"],select,textarea{
+      width:100%;border:1px solid #cdd7e5;border-radius:13px;padding:12px 13px;background:#fff;color:var(--ink);
+    }
+    textarea{min-height:112px;resize:vertical}
+    .compact textarea{min-height:86px}
+    .choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .choice{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);background:var(--soft);border-radius:14px;padding:11px;min-height:52px}
+    .choice input{margin-top:3px;accent-color:var(--navy)}
+    .choice span{font-weight:700;color:#26324b}
+    .risk-boxes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .risk-box{border:1px solid var(--line);border-radius:16px;padding:14px;background:var(--soft)}
+    .risk-box strong{display:block;font-size:1rem;margin-bottom:4px}
+    .risk-box.low strong{color:var(--green)}
+    .risk-box.medium strong{color:var(--orange)}
+    .risk-box.high strong{color:var(--red)}
+    .review-panel{display:grid;grid-template-columns:1fr .9fr;gap:18px}
+    .summary{background:linear-gradient(180deg,#fff,#f8fbff);border:1px solid var(--line);border-radius:var(--radius);padding:18px;position:sticky;top:104px;align-self:start}
+    .summary h2{margin:0 0 10px;color:var(--navy)}
+    .summary dl{display:grid;grid-template-columns:120px 1fr;gap:7px 10px;margin:0;font-size:.95rem}
+    .summary dt{font-weight:900;color:var(--muted)}
+    .summary dd{margin:0;color:var(--ink);word-break:break-word}
+    .summary .flag-list{display:grid;gap:8px;margin-top:14px}
+    .flag{display:flex;gap:8px;align-items:flex-start;background:var(--navy-soft);border-radius:12px;padding:9px;color:var(--navy);font-weight:800}
+    .flag.warn{background:#fff5e5;color:var(--orange)}
+    .flag.danger{background:#fff0ed;color:var(--red)}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:10px}
+    .required-note{font-size:.9rem;color:var(--muted)}
+    .footer-note{margin-top:22px;color:var(--muted);font-size:.92rem;text-align:center}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .hidden{display:none !important}
+    @media (max-width: 980px){
+      .hero,.review-panel,.grid-2,.grid-3{grid-template-columns:1fr}
+      .summary{position:static}
+      .mini-cards,.risk-boxes{grid-template-columns:1fr}
+      .choice-grid{grid-template-columns:1fr}
+      .endpoint-row{grid-template-columns:1fr}
+    }
+    @media (max-width: 560px){
+      .wrap{width:min(95vw,1180px);padding-top:12px}
+      .hero-card,.setup-panel{border-radius:20px;padding:20px}
+      .section-head{grid-template-columns:1fr;padding:16px}
+      .section-head .num{width:38px;height:38px}
+      .section-body{padding:16px}
+      .progress-top{align-items:flex-start;flex-direction:column}
+      .summary dl{grid-template-columns:1fr}
+      .btn{width:100%}
+    }
+    @media print{
+      body{background:white}
+      .setup-panel,.progress-card,.actions,.footer-note .screen-only{display:none}
+      .wrap{width:100%;padding:0}
+      .section-card,.hero-card,.summary{box-shadow:none;break-inside:avoid}
+      .hero{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero" aria-labelledby="pageTitle">
+      <section class="hero-card">
+        <div class="eyebrow">School District Intake</div>
+        <h1 id="pageTitle">Teacher and Staff App Intake</h1>
+        <p class="lead">A five-minute disclosure form for Gen AI-built or vibe-coded apps. The point is to get the project into the light before it touches student, staff, or district data.</p>
+        <div class="mini-cards" aria-label="Three intake questions">
+          <div class="mini-card"><strong>One</strong>What does it do, and what problem does it solve?</div>
+          <div class="mini-card"><strong>Two</strong>What data does it use, and where does that data live?</div>
+          <div class="mini-card"><strong>Three</strong>Who maintains it, and who takes over if that person leaves?</div>
+        </div>
+      </section>
+      <aside class="setup-panel" aria-labelledby="setupTitle">
+        <h2 id="setupTitle">Google Sheets connection</h2>
+        <p>Paste your Apps Script web app URL here for testing, or hard-code it in the HTML file before sharing it.</p>
+        <div class="endpoint-row">
+          <div>
+            <label for="scriptUrl">Apps Script web app URL</label>
+            <input id="scriptUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off" />
+          </div>
+          <button class="btn secondary" id="checkConfig" type="button">Check</button>
+        </div>
+        <div class="endpoint-row" style="margin-top:10px">
+          <div>
+            <label for="sharedSecret">Optional shared secret</label>
+            <input id="sharedSecret" type="text" placeholder="Only if your script requires one" autocomplete="off" />
+          </div>
+          <button class="btn ghost" id="downloadJson" type="button">Download draft</button>
+        </div>
+        <div id="setupStatus" class="status" role="status" aria-live="polite"></div>
+      </aside>
+    </header>
+
+    <section class="progress-card" aria-label="Form progress and risk estimate">
+      <div class="progress-top">
+        <div><strong id="progressText">0 percent complete</strong><div class="hint">Required fields drive this estimate. Risk updates as you answer.</div></div>
+        <div class="risk-pill" id="riskPill">Risk: Not enough info</div>
+      </div>
+      <div class="meter" aria-hidden="true"><span id="progressBar"></span></div>
+    </section>
+
+    <form id="intakeForm" novalidate>
+      <section class="section-card">
+        <div class="section-head">
+          <div class="num">1</div>
+          <div><h2>What does it do?</h2><p>Name the app, the need, and who would use it.</p></div>
+        </div>
+        <div class="section-body">
+          <div class="grid-2">
+            <div><label for="submitterName">Your name <span aria-hidden="true">*</span></label><input id="submitterName" name="submitterName" type="text" required autocomplete="name" /></div>
+            <div><label for="submitterEmail">Your district email <span aria-hidden="true">*</span></label><input id="submitterEmail" name="submitterEmail" type="email" required autocomplete="email" /></div>
+          </div>
+          <div class="grid-3">
+            <div><label for="campus">Campus or department <span aria-hidden="true">*</span></label><input id="campus" name="campus" type="text" required /></div>
+            <div><label for="appName">App name <span aria-hidden="true">*</span></label><input id="appName" name="appName" type="text" required /></div>
+            <div><label for="appStatus">Current status</label><select id="appStatus" name="appStatus"><option>Idea only</option><option>Prototype</option><option>Used by one person</option><option>Used with staff</option><option>Used with students</option><option>Already public</option></select></div>
+          </div>
+          <div class="grid-2 compact">
+            <div><label for="problemSolved">What problem does this solve? <span aria-hidden="true">*</span></label><textarea id="problemSolved" name="problemSolved" required placeholder="Example: Tracks library equipment checkouts without emailing a spreadsheet around."></textarea></div>
+            <div><label for="whatItDoes">What does the app do? <span aria-hidden="true">*</span></label><textarea id="whatItDoes" name="whatItDoes" required placeholder="Explain the main workflow in plain language."></textarea></div>
+          </div>
+          <div class="grid-2">
+            <div><label for="intendedUsers">Who will use it? <span aria-hidden="true">*</span></label><input id="intendedUsers" name="intendedUsers" type="text" required placeholder="Teachers, counselors, students, parents, office staff" /></div>
+            <div><label for="approvedToolCheck">Is there already an approved tool?</label><select id="approvedToolCheck" name="approvedToolCheck"><option value="Unknown">Unknown</option><option value="No known approved tool">No known approved tool</option><option value="Yes, but it does not meet the need">Yes, but it does not meet the need</option><option value="Yes, and we should use it instead">Yes, and we should use it instead</option></select></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-card">
+        <div class="section-head">
+          <div class="num">2</div>
+          <div><h2>What data does it use?</h2><p>Sort the risk before anyone falls in love with the demo.</p></div>
+        </div>
+        <div class="section-body">
+          <div class="risk-boxes" aria-label="Risk tiers">
+            <div class="risk-box low"><strong>Low</strong>Public or non-sensitive data, no district systems</div>
+            <div class="risk-box medium"><strong>Medium</strong>Staff data or internal workflows</div>
+            <div class="risk-box high"><strong>High</strong>Student records, FERPA-covered data, SSO, or live district systems</div>
+          </div>
+          <fieldset>
+            <legend class="sr-only">Data types used</legend>
+            <label>What data will the app collect, store, display, or share? <span aria-hidden="true">*</span></label>
+            <div class="choice-grid" id="dataTypes">
+              <label class="choice"><input type="checkbox" name="dataTypes" value="Public or already-published data" data-risk="low"><span>Public or already-published data</span></label>
+              <label class="choice"><input type="checkbox" name="dataTypes" value="Staff names or work emails" data-risk="medium"><span>Staff names or work emails</span></label>
+              <label class="choice"><input type="checkbox" name="dataTypes" value="Internal workflow notes" data-risk="medium"><span>Internal workflow notes</span></label>
+              <label class="choice"><input type="checkbox" name="dataTypes" value="Student names or IDs" data-risk="high"><span>Student names or IDs</span></label>
+              <label class="choice"><input type="checkbox" name="dataTypes" value="Grades, attendance, behavior, or discipline" data-risk="high"><span>Grades, attendance, behavior, or discipline</span></label>
+              <label class="choice"><input type="checkbox" name="dataTypes" value="IEP, 504, health, financial, or government ID data" data-risk="high"><span>IEP, 504, health, financial, or government ID data</span></label>
+              <label class="choice"><input type="checkbox" name="dataTypes" value="Uploaded files, images, or audio" data-risk="medium"><span>Uploaded files, images, or audio</span></label>
+              <label class="choice"><input type="checkbox" name="dataTypes" value="No data stored" data-risk="low"><span>No data stored</span></label>
+            </div>
+            <div class="hint">Choose every option that applies. Sensitive student data should trigger full review.</div>
+          </fieldset>
+          <div class="grid-2">
+            <div><label for="dataLocation">Where does the data live? <span aria-hidden="true">*</span></label><select id="dataLocation" name="dataLocation" required><option value="">Select one</option><option>Browser only</option><option>District Google Sheet or Google Drive</option><option>Google Apps Script controlled by the district</option><option>Vendor cloud service</option><option>Custom database or self-hosted backend</option><option>Not sure yet</option></select></div>
+            <div><label for="studentData">Does it touch student data? <span aria-hidden="true">*</span></label><select id="studentData" name="studentData" required><option value="">Select one</option><option value="No">No</option><option value="Maybe">Maybe</option><option value="Yes">Yes</option></select></div>
+          </div>
+          <div class="grid-2 compact">
+            <div><label for="retentionPlan">Retention and deletion plan</label><textarea id="retentionPlan" name="retentionPlan" placeholder="Example: Delete submissions after 30 days unless needed for an active support ticket."></textarea></div>
+            <div><label for="thirdParties">Third-party services or APIs</label><textarea id="thirdParties" name="thirdParties" placeholder="List AI tools, APIs, storage providers, SSO, analytics, email tools, or say none."></textarea></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-card">
+        <div class="section-head">
+          <div class="num">3</div>
+          <div><h2>Who maintains it?</h2><p>Ownership matters after the clever person transfers campuses.</p></div>
+        </div>
+        <div class="section-body">
+          <div class="grid-2">
+            <div><label for="primaryOwner">Primary owner <span aria-hidden="true">*</span></label><input id="primaryOwner" name="primaryOwner" type="text" required /></div>
+            <div><label for="backupOwner">Backup owner <span aria-hidden="true">*</span></label><input id="backupOwner" name="backupOwner" type="text" required /></div>
+          </div>
+          <div class="grid-2">
+            <div><label for="codeLocation">Where is the code stored?</label><input id="codeLocation" name="codeLocation" type="text" placeholder="District GitHub, Google Drive folder, shared Team Drive" /></div>
+            <div><label for="credentialLocation">Where are credentials stored?</label><input id="credentialLocation" name="credentialLocation" type="text" placeholder="District password manager or approved vault" /></div>
+          </div>
+          <div class="grid-2 compact">
+            <div><label for="handoffPlan">Handoff plan if the builder leaves <span aria-hidden="true">*</span></label><textarea id="handoffPlan" name="handoffPlan" required></textarea></div>
+            <div><label for="supportPlan">Who approves updates and handles support?</label><textarea id="supportPlan" name="supportPlan"></textarea></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="review-panel">
+        <section class="section-card">
+          <div class="section-head">
+            <div class="num">4</div>
+            <div><h2>Final check</h2><p>This is a triage step, not a full security audit.</p></div>
+          </div>
+          <div class="section-body">
+            <fieldset>
+              <legend class="sr-only">Review checklist</legend>
+              <label>Before live use, which checks have already happened?</label>
+              <div class="choice-grid">
+                <label class="choice"><input type="checkbox" name="reviewChecks" value="Tested failure cases"><span>Tested failure cases, not just the happy path</span></label>
+                <label class="choice"><input type="checkbox" name="reviewChecks" value="OWASP review"><span>Ran an OWASP-style security review prompt</span></label>
+                <label class="choice"><input type="checkbox" name="reviewChecks" value="Server-side validation"><span>Confirmed server-side validation</span></label>
+                <label class="choice"><input type="checkbox" name="reviewChecks" value="Role-based access"><span>Checked role-based access or row-level controls</span></label>
+                <label class="choice"><input type="checkbox" name="reviewChecks" value="Secrets protected"><span>Protected API keys, tokens, and secrets</span></label>
+                <label class="choice"><input type="checkbox" name="reviewChecks" value="Accessibility check"><span>Ran an accessibility check</span></label>
+                <label class="choice"><input type="checkbox" name="reviewChecks" value="IT review"><span>Reviewed with IT or data privacy staff</span></label>
+                <label class="choice"><input type="checkbox" name="reviewChecks" value="Not yet reviewed"><span>Not yet reviewed</span></label>
+              </div>
+            </fieldset>
+            <div><label for="notes">Anything else the reviewer should know?</label><textarea id="notes" name="notes"></textarea></div>
+            <div class="actions">
+              <button class="btn gold" type="submit">Submit intake</button>
+              <button class="btn secondary" type="button" id="previewBtn">Update summary</button>
+              <button class="btn ghost" type="reset">Clear form</button>
+            </div>
+            <div class="required-note">Required fields are marked with an asterisk. This mockup stores data only when connected to your district Apps Script web app.</div>
+            <div id="formStatus" class="status" role="status" aria-live="polite"></div>
+          </div>
+        </section>
+        <aside class="summary" aria-labelledby="summaryTitle">
+          <h2 id="summaryTitle">Reviewer snapshot</h2>
+          <dl>
+            <dt>App</dt><dd id="sumApp">Not entered</dd>
+            <dt>Submitter</dt><dd id="sumSubmitter">Not entered</dd>
+            <dt>Users</dt><dd id="sumUsers">Not entered</dd>
+            <dt>Student data</dt><dd id="sumStudent">Not answered</dd>
+            <dt>Data lives</dt><dd id="sumLocation">Not answered</dd>
+            <dt>Owner</dt><dd id="sumOwner">Not entered</dd>
+            <dt>Backup</dt><dd id="sumBackup">Not entered</dd>
+            <dt>Risk</dt><dd id="sumRisk">Not enough info</dd>
+          </dl>
+          <div class="flag-list" id="flags" aria-live="polite"></div>
+        </aside>
+      </section>
+    </form>
+    <p class="footer-note">Plain-language mockup. Not legal advice. District counsel, IT, and data privacy staff should review local requirements before production use.</p>
+  </div>
+
+  <script>
+    const DEFAULT_SCRIPT_URL = "";
+    const VERSION = "1.0.0";
+    const form = document.getElementById('intakeForm');
+    const scriptUrlInput = document.getElementById('scriptUrl');
+    const sharedSecretInput = document.getElementById('sharedSecret');
+    const setupStatus = document.getElementById('setupStatus');
+    const formStatus = document.getElementById('formStatus');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const riskPill = document.getElementById('riskPill');
+    scriptUrlInput.value = DEFAULT_SCRIPT_URL;
+
+    function showStatus(el, message, type){
+      el.textContent = message;
+      el.className = 'status show' + (type ? ' ' + type : '');
+    }
+
+    function getChecked(name){
+      return [...document.querySelectorAll('input[name="'+name+'"]:checked')].map(i => i.value);
+    }
+
+    function getFormData(){
+      const fd = new FormData(form);
+      const data = {};
+      for(const [key, value] of fd.entries()){
+        if(data[key]){
+          if(Array.isArray(data[key])) data[key].push(value);
+          else data[key] = [data[key], value];
+        } else data[key] = value;
+      }
+      data.dataTypes = getChecked('dataTypes');
+      data.reviewChecks = getChecked('reviewChecks');
+      data.riskEstimate = calculateRisk().label;
+      data.version = VERSION;
+      data.submittedAtClient = new Date().toISOString();
+      return data;
+    }
+
+    function calculateRisk(){
+      const riskInputs = [...document.querySelectorAll('[data-risk]:checked')].map(i => i.dataset.risk);
+      const studentData = document.getElementById('studentData').value;
+      const appStatus = document.getElementById('appStatus').value;
+      const dataLocation = document.getElementById('dataLocation').value;
+      const dataTypes = getChecked('dataTypes').join(' ').toLowerCase();
+      let score = 0;
+      if(riskInputs.includes('low')) score = Math.max(score,1);
+      if(riskInputs.includes('medium')) score = Math.max(score,2);
+      if(riskInputs.includes('high')) score = Math.max(score,3);
+      if(studentData === 'Maybe') score = Math.max(score,2);
+      if(studentData === 'Yes') score = Math.max(score,3);
+      if(['Used with students','Already public'].includes(appStatus)) score = Math.max(score,3);
+      if(['Vendor cloud service','Custom database or self-hosted backend','Not sure yet'].includes(dataLocation)) score = Math.max(score,2);
+      if(dataTypes.includes('iep') || dataTypes.includes('health') || dataTypes.includes('discipline')) score = 3;
+      const labels = {0:'Not enough info',1:'Low',2:'Medium',3:'High'};
+      return {score,label:labels[score]};
+    }
+
+    function updateProgress(){
+      const required = [...form.querySelectorAll('[required]')];
+      const filled = required.filter(el => {
+        if(el.type === 'checkbox' || el.type === 'radio') return el.checked;
+        return String(el.value || '').trim().length > 0;
+      }).length;
+      const percent = Math.round((filled / required.length) * 100);
+      progressBar.style.width = percent + '%';
+      progressText.textContent = percent + ' percent complete';
+      const risk = calculateRisk();
+      riskPill.textContent = 'Risk: ' + risk.label;
+      riskPill.className = 'risk-pill ' + risk.label.toLowerCase();
+      updateSummary();
+    }
+
+    function updateSummary(){
+      const data = getFormData();
+      document.getElementById('sumApp').textContent = data.appName || 'Not entered';
+      document.getElementById('sumSubmitter').textContent = [data.submitterName, data.submitterEmail].filter(Boolean).join(' | ') || 'Not entered';
+      document.getElementById('sumUsers').textContent = data.intendedUsers || 'Not entered';
+      document.getElementById('sumStudent').textContent = data.studentData || 'Not answered';
+      document.getElementById('sumLocation').textContent = data.dataLocation || 'Not answered';
+      document.getElementById('sumOwner').textContent = data.primaryOwner || 'Not entered';
+      document.getElementById('sumBackup').textContent = data.backupOwner || 'Not entered';
+      document.getElementById('sumRisk').textContent = data.riskEstimate || 'Not enough info';
+      const flags = document.getElementById('flags');
+      flags.innerHTML = '';
+      const addFlag = (text, cls='') => {
+        const div = document.createElement('div');
+        div.className = 'flag ' + cls;
+        div.innerHTML = '<span aria-hidden="true">●</span><span>'+text+'</span>';
+        flags.appendChild(div);
+      };
+      if(data.studentData === 'Yes') addFlag('Student data involved: route to full review.', 'danger');
+      if(data.studentData === 'Maybe') addFlag('Student data unclear: reviewer should verify.', 'warn');
+      if(data.dataLocation === 'Not sure yet') addFlag('Data location unknown: do not approve until clarified.', 'warn');
+      if((data.dataTypes || []).some(x => /IEP|504|health|financial|government/i.test(x))) addFlag('Sensitive data selected: likely not appropriate without formal approval.', 'danger');
+      if((data.reviewChecks || []).includes('Not yet reviewed')) addFlag('No review yet: treat as pre-approval only.', 'warn');
+      if(!data.backupOwner) addFlag('Backup owner missing: handoff risk.', 'warn');
+      if(flags.children.length === 0) addFlag('No major flags from the quick triage. Reviewer still needs to check the details.');
+    }
+
+    function validateDataType(){
+      const hasDataType = getChecked('dataTypes').length > 0;
+      const group = document.getElementById('dataTypes');
+      if(!hasDataType){
+        group.setAttribute('aria-invalid','true');
+        return false;
+      }
+      group.removeAttribute('aria-invalid');
+      return true;
+    }
+
+    function download(filename, text){
+      const blob = new Blob([text], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    document.getElementById('downloadJson').addEventListener('click', () => {
+      const data = getFormData();
+      download('staff-app-intake-draft.json', JSON.stringify(data,null,2));
+    });
+
+    document.getElementById('checkConfig').addEventListener('click', () => {
+      const url = scriptUrlInput.value.trim();
+      if(!url){
+        showStatus(setupStatus, 'No Apps Script URL entered yet. You can still use the form as a mockup and download the draft as JSON.', 'error');
+        return;
+      }
+      if(!/^https:\/\/script\.google\.com\/macros\/s\//.test(url)){
+        showStatus(setupStatus, 'That does not look like a standard Apps Script web app URL. Check the deployment URL.', 'error');
+        return;
+      }
+      showStatus(setupStatus, 'URL format looks usable. Submit a test entry, then check the Google Sheet.', 'good');
+    });
+
+    document.getElementById('previewBtn').addEventListener('click', updateSummary);
+
+    form.addEventListener('input', updateProgress);
+    form.addEventListener('change', updateProgress);
+    form.addEventListener('reset', () => setTimeout(updateProgress, 0));
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const hasDataType = validateDataType();
+      if(!form.checkValidity() || !hasDataType){
+        showStatus(formStatus, 'Please complete the required fields, including at least one data type.', 'error');
+        form.reportValidity();
+        return;
+      }
+      const endpoint = scriptUrlInput.value.trim();
+      const payload = getFormData();
+      payload.sharedSecret = sharedSecretInput.value.trim();
+      if(!endpoint){
+        showStatus(formStatus, 'No Apps Script URL is connected. Download the draft JSON or paste a web app URL first.', 'error');
+        return;
+      }
+      try{
+        const body = new URLSearchParams();
+        body.set('payload', JSON.stringify(payload));
+        body.set('sharedSecret', payload.sharedSecret || '');
+        await fetch(endpoint, {method:'POST', mode:'no-cors', body});
+        showStatus(formStatus, 'Submission sent. Because Apps Script cross-origin responses are limited, confirm the new row in the Google Sheet.', 'good');
+      }catch(err){
+        showStatus(formStatus, 'The browser could not send the submission. Download the draft JSON and check the Apps Script deployment.', 'error');
+      }
+    });
+
+    updateProgress();
+  </script>
+</body>
+</html>

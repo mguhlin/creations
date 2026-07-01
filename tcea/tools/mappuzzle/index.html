@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Map Puzzle Generator</title>
+  <style>
+    :root {
+      --navy: #1E398D;
+      --gold: #FAA634;
+      --black: #000000;
+      --white: #FFFFFF;
+      --red: #D1282F;
+      --blue: #0070B9;
+      --yellow: #FDDC3F;
+      --orange: #f58231;
+      --green: #3cb44b;
+      --gray-90: #404041;
+      --gray-50: #939597;
+      --gray-30: #BBBDC0;
+      --gray-10: #E6E7E8;
+      --bg: #FFFFFF;
+      --surface: #FFFFFF;
+      --text: #404041;
+      --border: #E6E7E8;
+      --radius: 8px;
+      --shadow: 0 12px 24px rgba(64, 64, 65, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    button, select { font: inherit; }
+    button { cursor: pointer; }
+
+    .top-bar {
+      height: 12px;
+      background: linear-gradient(
+        90deg,
+        var(--navy) 0 32%,
+        var(--gold) 32% 52%,
+        var(--orange) 52% 64%,
+        var(--red) 64% 76%,
+        var(--blue) 76% 88%,
+        var(--green) 88% 96%,
+        var(--yellow) 96% 100%
+      );
+    }
+
+    .page {
+      width: min(1320px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 22px 0 38px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding-bottom: 18px;
+      border-bottom: 2px solid var(--gray-10);
+    }
+
+    .title-block { display: grid; gap: 8px; }
+
+    .eyebrow {
+      margin: 0;
+      color: var(--gold);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--navy);
+      font-size: clamp(2rem, 5vw, 4.2rem);
+      line-height: .95;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 0;
+      max-width: 860px;
+      color: var(--gray-90);
+      font-size: 1rem;
+      line-height: 1.45;
+    }
+
+    .home-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      color: var(--white);
+      background: var(--navy);
+      border-radius: var(--radius);
+      font-weight: 800;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: minmax(300px, 420px) minmax(320px, 1fr);
+      gap: 18px;
+      align-items: start;
+      padding-top: 20px;
+    }
+
+    .panel, .stage {
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .panel { padding: 18px; }
+
+    .panel h2 {
+      margin: 0 0 14px;
+      color: var(--black);
+      font-size: 1.2rem;
+      letter-spacing: 0;
+    }
+
+    .field { display: grid; gap: 7px; margin-bottom: 14px; }
+    label, .field-title { color: var(--gray-90); font-size: .86rem; font-weight: 800; }
+
+    select {
+      width: 100%;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      color: var(--text);
+      background: var(--white);
+      outline: none;
+    }
+
+    select:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(0, 112, 185, .18);
+    }
+
+    .segmented {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .segmented input { position: absolute; opacity: 0; pointer-events: none; }
+
+    .segmented label {
+      display: grid;
+      place-items: center;
+      min-height: 42px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--navy);
+      background: var(--white);
+      font-weight: 800;
+    }
+
+    .segmented input:checked + label {
+      color: var(--white);
+      border-color: var(--navy);
+      background: var(--navy);
+    }
+
+    .button-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .button-grid .wide { grid-column: span 2; }
+
+    .btn {
+      min-height: 42px;
+      border: 2px solid rgba(30, 57, 141, .22);
+      border-radius: var(--radius);
+      padding: 9px 12px;
+      color: var(--navy);
+      background: var(--white);
+      font-weight: 800;
+      box-shadow: 0 8px 18px rgba(64, 64, 65, .08);
+      transition: transform 140ms ease, opacity 140ms ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+    .btn:active { transform: translateY(1px); }
+    .btn.primary { color: var(--white); background: var(--navy); border-color: var(--navy); }
+    .btn.gold { color: var(--black); background: var(--gold); border-color: var(--gold); }
+
+    .help {
+      margin: 0;
+      color: var(--gray-50);
+      font-size: .85rem;
+      line-height: 1.4;
+    }
+
+    .stage {
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+      min-width: 0;
+      grid-column: 1 / -1;
+      order: -1;
+    }
+
+    .stage-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      border-bottom: 2px solid var(--gray-10);
+      padding-bottom: 12px;
+    }
+
+    .map-title {
+      margin: 0;
+      color: var(--navy);
+      font-size: clamp(1.25rem, 3vw, 2rem);
+      line-height: 1.1;
+    }
+
+    .status {
+      color: var(--gray-50);
+      font-size: .9rem;
+      font-weight: 800;
+      text-align: right;
+    }
+
+    .svg-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      background: #fbfcff;
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      user-select: none;
+      touch-action: none;
+    }
+
+    .bench-zone {
+      fill: rgba(230, 231, 232, .38);
+      stroke: rgba(187, 189, 192, .7);
+      stroke-dasharray: 8 7;
+      pointer-events: none;
+    }
+
+    .backdrop-piece {
+      fill: rgba(64, 64, 65, .12);
+      stroke: rgba(64, 64, 65, .42);
+      stroke-width: 1.4;
+      pointer-events: none;
+    }
+
+    .backdrop-piece.hidden {
+      opacity: 0;
+    }
+
+    .map-outline {
+      fill: none;
+      stroke: rgba(30, 57, 141, .7);
+      stroke-width: 3;
+      vector-effect: non-scaling-stroke;
+      pointer-events: none;
+    }
+
+    .piece {
+      stroke: var(--black);
+      stroke-width: 1.8;
+      vector-effect: non-scaling-stroke;
+      cursor: grab;
+      filter: drop-shadow(0 8px 8px rgba(31, 41, 55, .16));
+      transition: filter 120ms ease, opacity 120ms ease;
+    }
+
+    .piece.active {
+      stroke: var(--gold);
+      stroke-width: 3.2;
+      filter: drop-shadow(0 10px 12px rgba(30, 57, 141, .28));
+      cursor: grabbing;
+    }
+
+    .locked-piece {
+      stroke: var(--white);
+      stroke-width: 1.4;
+      vector-effect: non-scaling-stroke;
+      opacity: .94;
+      pointer-events: none;
+    }
+
+    .piece-label {
+      fill: var(--black);
+      paint-order: stroke;
+      stroke: rgba(255,255,255,.75);
+      stroke-width: 3px;
+      font-size: 10px;
+      font-weight: 900;
+      text-anchor: middle;
+      dominant-baseline: central;
+      pointer-events: none;
+    }
+
+    .hint-text {
+      position: absolute;
+      left: 12px;
+      bottom: 10px;
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--gray-50);
+      background: rgba(255,255,255,.9);
+      border: 1px solid var(--gray-10);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: .78rem;
+      font-weight: 800;
+      pointer-events: none;
+    }
+
+    .meter {
+      height: 16px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: var(--gray-10);
+      border: 1px solid var(--border);
+    }
+
+    .meter span {
+      display: block;
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--blue), var(--green));
+      transition: width 180ms ease;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .stat {
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px;
+      background: var(--white);
+    }
+
+    .stat span {
+      display: block;
+      color: var(--gray-50);
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 5px;
+      color: var(--navy);
+      font-size: 1.55rem;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+
+    .target-card {
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      background: #fbfcff;
+      margin-bottom: 14px;
+    }
+
+    .target-card .label {
+      color: var(--gray-50);
+      font-size: .78rem;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .target-card .name {
+      margin-top: 6px;
+      color: var(--navy);
+      font-size: 1.35rem;
+      font-weight: 900;
+      line-height: 1.1;
+      word-break: break-word;
+    }
+
+    .prompt-text {
+      margin: 8px 0 12px;
+      color: var(--gray-90);
+      font-size: .95rem;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    .mini-btn {
+      min-height: 34px;
+      border: 2px solid rgba(30, 57, 141, .2);
+      border-radius: 6px;
+      padding: 6px 10px;
+      color: var(--navy);
+      background: var(--white);
+      font-size: .82rem;
+      font-weight: 900;
+    }
+
+    .piece-list {
+      display: grid;
+      gap: 7px;
+      max-height: 330px;
+      overflow: auto;
+      padding-right: 3px;
+    }
+
+    .piece-row {
+      display: grid;
+      grid-template-columns: 14px 1fr auto;
+      gap: 8px;
+      align-items: center;
+      min-height: 34px;
+      padding: 7px 8px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--white);
+      font-size: .86rem;
+      font-weight: 800;
+    }
+
+    .swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      border: 1px solid rgba(0,0,0,.18);
+    }
+
+    .piece-row.locked {
+      color: var(--gray-50);
+      background: var(--gray-10);
+    }
+
+    .victory {
+      display: none;
+      position: absolute;
+      inset: 0;
+      place-items: center;
+      padding: 20px;
+      background: rgba(30, 57, 141, .22);
+      z-index: 4;
+    }
+
+    .victory.show { display: grid; }
+
+    .victory-card {
+      max-width: 430px;
+      padding: 24px;
+      text-align: center;
+      border: 5px solid var(--gold);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: 0 24px 60px rgba(31, 41, 55, .28);
+    }
+
+    .victory-card h2 {
+      margin: 0;
+      color: var(--navy);
+      font-size: clamp(2rem, 5vw, 3rem);
+      line-height: 1;
+    }
+
+    .victory-card p {
+      margin: 10px 0 18px;
+      color: var(--gray-90);
+      font-weight: 800;
+    }
+
+    @media (max-width: 1100px) {
+      .app-grid { grid-template-columns: 1fr; }
+      .stage { order: -1; }
+      .piece-list { max-height: 220px; }
+    }
+
+    @media (max-width: 640px) {
+      .page { width: min(100% - 18px, 1320px); padding-top: 18px; }
+      header, .stage-head { align-items: flex-start; flex-direction: column; }
+      .status { text-align: left; }
+      .button-grid, .stats { grid-template-columns: 1fr; }
+      .button-grid .wide { grid-column: auto; }
+      .panel { padding: 14px; }
+      .hint-text { display: none; }
+    }
+  </style>
+</head>
+<body>
+<div class="top-bar" aria-hidden="true"></div>
+  <div class="page">
+    <header>
+      <div class="title-block">
+        <p class="eyebrow">TCEA Tools</p>
+        <h1>Map Puzzle Generator</h1>
+        <p class="subtitle">Drag, rotate, and snap classroom map pieces into a faint target silhouette. Everything is embedded in this file for offline use.</p>
+      </div>
+      <a class="home-link" href="../index.html">Tool Menu</a>
+    </header>
+
+    <main class="app-grid">
+      <section class="panel" aria-label="Map puzzle setup">
+        <h2>Setup</h2>
+
+        <div class="field">
+          <label for="regionSelect">Region</label>
+          <select id="regionSelect">
+            <option value="us_states">United States (50 States)</option>
+            <option value="texas_counties">Texas (Major Regions / Counties)</option>
+            <option value="world_continents">World Continents</option>
+            <option value="europe_nations">Europe (Major Nations)</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <span class="field-title">Difficulty</span>
+          <div class="segmented">
+            <input id="easyMode" name="difficulty" type="radio" value="easy" checked>
+            <label for="easyMode">Easy</label>
+            <input id="hardMode" name="difficulty" type="radio" value="hard">
+            <label for="hardMode">Hard</label>
+          </div>
+          <p class="help">Easy starts pieces upright with visible placement outlines. Hard scatters 90 degree rotations and hides the outlines.</p>
+        </div>
+
+        <div class="field">
+          <label for="lensSelect">Thinking Lens</label>
+          <select id="lensSelect">
+            <option value="analysis">Map Analysis</option>
+            <option value="spatial">Spatial Reasoning</option>
+            <option value="creation">Map Creation</option>
+          </select>
+          <p class="help">Prompts shift the activity from matching shapes to explaining map choices, symbols, scale, and spatial relationships.</p>
+        </div>
+
+        <div class="button-grid">
+          <button class="btn primary wide" id="startBtn" type="button">Build Puzzle</button>
+          <button class="btn gold" id="shuffleBtn" type="button">Shuffle</button>
+          <button class="btn" id="rotateBtn" type="button">Rotate Selected</button>
+          <button class="btn" id="soundBtn" type="button">Sound On</button>
+        </div>
+      </section>
+
+      <section class="stage" aria-label="Map puzzle workspace">
+        <div class="stage-head">
+          <div>
+            <h2 class="map-title" id="mapTitle">United States</h2>
+            <p class="help" id="mapMeta">50 pieces ready to arrange.</p>
+          </div>
+          <div class="status" id="statusText">Choose a map and build the puzzle.</div>
+        </div>
+
+        <div class="svg-wrap">
+          <svg id="workspace" viewBox="0 0 800 500" role="img" aria-label="Interactive map puzzle workspace">
+            <defs>
+              <clipPath id="workspaceClip"><rect x="0" y="0" width="800" height="500" rx="0"></rect></clipPath>
+            </defs>
+            <rect class="bench-zone" x="14" y="22" width="150" height="456" rx="8"></rect>
+            <rect class="bench-zone" x="636" y="22" width="150" height="456" rx="8"></rect>
+            <g id="backdropLayer" clip-path="url(#workspaceClip)"></g>
+            <g id="lockedLayer" clip-path="url(#workspaceClip)"></g>
+            <g id="pieceLayer" clip-path="url(#workspaceClip)"></g>
+          </svg>
+          <div class="hint-text">Drag pieces. Tap or press Space to rotate 90 degrees.</div>
+          <div class="victory" id="victoryPanel">
+            <div class="victory-card">
+              <h2>Complete</h2>
+              <p id="victoryText">Map assembled.</p>
+              <button class="btn gold" id="victoryNewBtn" type="button">New Puzzle</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="panel" aria-label="Map puzzle progress">
+        <h2>Progress</h2>
+        <div class="stats">
+          <div class="stat">
+            <span>Complete</span>
+            <strong id="percentText">0%</strong>
+          </div>
+          <div class="stat">
+            <span>Timer</span>
+            <strong id="timerText">0:00</strong>
+          </div>
+        </div>
+        <div class="meter" aria-label="Completion meter"><span id="meterFill"></span></div>
+
+        <div class="target-card" style="margin-top:14px;">
+          <div class="label">Selected Piece</div>
+          <div class="name" id="selectedName">None</div>
+        </div>
+
+        <div class="target-card">
+          <div class="label">Critical Thinking Prompt</div>
+          <p class="prompt-text" id="promptText">Build a puzzle to get a map-thinking prompt.</p>
+          <button class="mini-btn" id="promptBtn" type="button">New Prompt</button>
+        </div>
+
+        <h2>Pieces</h2>
+        <div class="piece-list" id="pieceList" aria-label="Puzzle piece list"></div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    const $ = (sel) => document.querySelector(sel);
+
+    const PALETTE = ["#FAA634", "#1E398D", "#D1282F", "#0070B9", "#3cb44b", "#FDDC3F", "#f58231", "#BBBDC0"];
+    const REGION_TITLES = {
+      us_states: "United States",
+      texas_counties: "Texas Regions and Counties",
+      world_continents: "World Continents",
+      europe_nations: "Europe Major Nations"
+    };
+
+    const THINKING_PROMPTS = {
+      analysis: [
+        "What might this map make easy to notice, and what might it hide?",
+        "What symbols, colors, or borders would help a new reader understand this region?",
+        "How could a cartographer's goal change the way this place is drawn?",
+        "Which nearby regions help explain this piece's location or importance?",
+        "Where might this map be too abstract for a younger learner?"
+      ],
+      spatial: [
+        "Name one region that borders or sits near the selected piece.",
+        "Describe this piece's position using north, south, east, west, or relative location.",
+        "What physical feature or human activity might explain this region's shape?",
+        "How would travel routes change if this piece moved far from its neighbors?",
+        "What pattern do you notice as more pieces lock into place?"
+      ],
+      creation: [
+        "If you made a story map about this region, what first location would you add?",
+        "What label or icon would you design for this piece, and why?",
+        "What data layer would make this map more useful: population, climate, resources, or history?",
+        "How would you simplify this shape for a fantasy map without losing its identity?",
+        "What question could someone answer by studying your completed map?"
+      ]
+    };
+
+    const US_STATES_DETAILED = [{"id":"AL","name":"Alabama","path":"M 434.2 238.7 L 435.9 213 L 453.1 213.2 L 457.8 235.7 L 457 246.1 L 439.9 246.1 L 441.4 250.7 L 437.1 252.5 L 437.7 248.9 L 434.7 251.3 L 434.2 238.9 Z M 435.2 252.4 L 435.3 252.4 Z M 436.9 250.1 L 437.1 250.3 Z"},
+      {"id":"AR","name":"Arkansas","path":"M 393.7 200.7 L 423.1 200.7 L 421.6 204.9 L 426.4 205.7 L 416.9 221.5 L 416.4 229.5 L 397.5 229.4 L 397.5 225 L 394.5 224.3 L 393.7 200.8 Z"},
+      {"id":"AZ","name":"Arizona","path":"M 260.6 233.7 L 265.1 219.1 L 261.8 214.1 L 261 204.1 L 265 204.6 L 265.6 196.6 L 298.6 196.6 L 298.6 243.3 L 285.2 243.3 L 260.6 233.8 Z"},
+      {"id":"CA","name":"California","path":"M 197.3 168.2 L 198.7 155.4 L 226.4 155.4 L 226.4 180.1 L 261.8 213.1 L 265.1 219.1 L 261.2 226.2 L 262.5 231.6 L 245.4 233.4 L 243.1 227.1 L 236.2 221.1 L 222.3 216.8 L 222.2 211.9 L 210.6 195 L 211.4 187.7 L 209.7 189.9 L 206.5 188.4 L 197.4 168.4 Z M 226.9 220.8 L 229.6 221.1 L 227 220.9 Z M 235.6 225.7 L 237.6 227 L 235.6 225.7 Z M 224.8 221.3 L 224.9 221.4 Z M 235.6 229.5 L 237.2 231.1 L 235.7 229.5 Z M 223.3 221 L 223.4 221.1 Z M 230.1 221.2 L 230.1 221.2 Z M 229.2 227.3 L 229.2 227.5 Z M 232.7 225.8 L 232.7 225.8 Z M 210.7 189.8 L 210.8 189.9 Z M 210.3 189.5 L 210.3 189.5 Z M 206.5 190.8 L 206.6 190.9 Z"},
+      {"id":"CO","name":"Colorado","path":"M 298.5 183.4 L 298.6 163.6 L 344.7 163.6 L 344.7 196.6 L 298.6 196.6 L 298.5 184.2 Z"},
+      {"id":"CT","name":"Connecticut","path":"M 531.3 162.8 L 532.9 154.9 L 544 155.2 L 543.6 161 L 531.4 162.8 Z M 533.3 163.2 L 533.6 163.1 Z"},
+      {"id":"DE","name":"Delaware","path":"M 517.8 174.7 L 520.3 173.5 L 522.6 184.6 L 518.4 184.5 L 517.8 174.7 Z M 519.2 175 L 519.2 175 Z M 519.1 175.2 L 519.1 175.2 Z"},
+      {"id":"FL","name":"Florida","path":"M 439.7 247.2 L 457 246.1 L 457.9 248.5 L 475.8 251.4 L 477.1 247.5 L 480.6 248.5 L 489.8 280.7 L 487.4 293.5 L 482.9 294.6 L 478.9 288.5 L 476.4 279.5 L 475.1 281.4 L 471.9 274.6 L 474.2 272.2 L 472.3 270.9 L 472 274 L 471.5 261.4 L 465.8 255 L 462.3 253.4 L 454.8 257.2 L 449 251.5 L 440.5 252 L 439.7 247.2 Z M 484.9 296.9 L 488.8 291.3 L 485 296.9 Z M 482.6 298 L 482.6 298 Z M 478 299.2 L 481.4 298.4 L 478 299.2 Z M 475.1 281.7 L 476.7 283.6 L 475.1 281.8 Z M 471.3 270.2 L 471.3 270.2 Z M 475.7 299.2 L 475.7 299.3 Z M 456.4 257.4 L 459 256.2 L 456.4 257.4 Z M 481.2 297.7 L 481.2 297.7 Z M 484 297.3 L 484 297.3 Z M 455.6 257 L 455.7 257 Z M 471.2 269.1 L 471.2 269.4 Z M 484.4 297.2 L 484.4 297.2 Z M 471.3 269.9 L 471.3 269.9 Z M 485.4 296.4 L 485.4 296.4 Z M 473.9 271.9 L 474 271.9 Z M 459.2 256.1 L 459.2 256.2 Z M 481.6 298.4 L 481.8 298.3 Z M 473.9 272.3 L 474 272.3 Z M 471.8 274.2 L 471.8 274.3 Z"},
+      {"id":"GA","name":"Georgia","path":"M 453.1 213.2 L 469.5 213.1 L 468 215.7 L 480.2 229.5 L 484.5 237.8 L 480.5 248.5 L 476.7 247.8 L 476.5 251.3 L 457.6 248.1 L 453.1 213.5 Z"},
+      {"id":"IA","name":"Iowa","path":"M 380.3 149.3 L 380.6 143 L 416.1 143 L 417.1 149.2 L 423.1 156.1 L 417.2 160.2 L 415 168.7 L 386.1 167 L 380.4 149.3 Z"},
+      {"id":"ID","name":"Idaho","path":"M 244.6 135.6 L 249.7 125.6 L 245.8 119.5 L 246 97.6 L 252.4 97.6 L 254.6 110.6 L 263.8 117 L 262.3 125.9 L 267.2 125.6 L 273.5 135.9 L 283.2 132.6 L 285.4 134.9 L 285.4 155.3 L 246 155.4 L 246.9 137.5 L 244.6 135.8 Z"},
+      {"id":"IL","name":"Illinois","path":"M 414.1 170.4 L 417.2 160.2 L 422.9 156.9 L 419.9 151.2 L 438.6 151.3 L 440.6 182.2 L 434.3 196 L 428.2 196.2 L 427.3 190.9 L 421.7 186.5 L 423.4 181.3 L 420 181 L 414.1 170.4 Z"},
+      {"id":"IN","name":"Indiana","path":"M 436.9 189.5 L 440.6 182.2 L 440.4 157.8 L 458.3 157.3 L 458.3 181.9 L 454.2 182.3 L 450.2 188.7 L 448.1 186.7 L 446.3 189.6 L 436.9 189.5 Z"},
+      {"id":"KS","name":"Kansas","path":"M 344.7 171.8 L 391.5 172.7 L 393.7 196.6 L 344.7 196.6 L 344.7 173.1 Z"},
+      {"id":"KY","name":"Kentucky","path":"M 427.9 200.7 L 430.1 195.2 L 434.3 196 L 437.9 189 L 446.3 189.6 L 448.1 186.7 L 450.2 188.7 L 458.7 178.9 L 465.8 183.1 L 471 182.1 L 477 192.1 L 465.7 200 L 428 200.7 Z M 426.9 200.3 L 426.9 200.3 Z"},
+      {"id":"LA","name":"Louisiana","path":"M 397.5 232.1 L 397.5 229.4 L 416.9 229.7 L 418.3 234.8 L 413.3 246.1 L 425.9 246 L 427.2 252.8 L 425.1 254.5 L 429.3 254.5 L 426.1 258.3 L 430.5 260.8 L 429.7 262.8 L 425.1 258.6 L 418.6 262.2 L 411.7 255.7 L 409.1 258.2 L 398.8 256.9 L 400.9 245.8 L 397.5 232.4 Z M 410.7 257.8 L 412.8 257.9 L 410.7 257.9 Z M 431 257.1 L 431.5 253.9 L 431.1 257.1 Z M 428.4 253.8 L 428.4 254 Z M 427.7 253.2 L 427.8 253.3 Z M 424.4 260.3 L 424.5 260.3 Z M 420.5 261.8 L 420.6 261.9 Z M 417.8 262 L 417.9 262.1 Z"},
+      {"id":"MA","name":"Massachusetts","path":"M 532.8 154.6 L 534.4 149.2 L 549.9 148 L 552 150.1 L 549.3 153.1 L 553.2 157.5 L 555.4 154.9 L 556.4 157.9 L 549.6 160.2 L 551.8 157.7 L 548.5 159.5 L 546.8 155.2 L 532.9 154.9 Z M 550.4 160.7 L 552.9 160.1 L 550.4 160.8 Z M 554.1 161 L 556.2 161.4 L 554.1 161.1 Z M 549.5 152.8 L 549.5 152.8 Z M 550 152.6 L 550 152.7 Z M 549.7 152.7 L 549.7 152.7 Z M 550.4 161.5 L 550.4 161.5 Z M 550.4 158.7 L 550.4 158.7 Z M 549.6 153 L 549.6 153 Z M 553.9 160.8 L 553.9 160.8 Z"},
+      {"id":"MD","name":"Maryland","path":"M 493.4 177.8 L 493.4 174.1 L 517.8 174.1 L 518.4 184.5 L 522.5 185.1 L 517.1 189.1 L 517.2 185.4 L 514.7 185.7 L 516.4 175.5 L 512.8 178.4 L 514.2 188 L 508.1 185.2 L 510.4 181 L 504.2 175.1 L 498.1 174.7 L 493.4 177.8 Z M 515.7 187.3 L 515.8 187.4 Z M 516 188.5 L 516.1 188.7 Z M 514.6 177.8 L 514.6 177.8 Z M 513.8 182 L 513.8 182.1 Z M 513.8 178 L 513.8 178.1 Z"},
+      {"id":"ME","name":"Maine","path":"M 548.8 128.1 L 551.7 127.4 L 561 110.3 L 563.1 112.6 L 567.5 111.2 L 570.5 113.6 L 570.3 124.9 L 576 132.1 L 567 137 L 562.6 135.3 L 562.2 138.3 L 554.6 140.7 L 551.3 146.6 L 548.8 128.6 Z M 562.9 137.9 L 562.9 138 Z M 564.3 137 L 564.3 137.1 Z M 564.7 138.2 L 564.7 138.3 Z M 562.7 136.8 L 562.7 136.8 Z M 571.6 134.6 L 571.6 134.6 Z M 561.8 139 L 561.9 139 Z M 563.1 140.1 L 563.1 140.1 Z M 572.1 134.1 L 572.1 134.1 Z M 554.9 140.9 L 554.9 140.9 Z M 560.4 140.8 L 560.4 140.9 Z M 565.8 137.6 L 565.8 137.6 Z M 560 139.4 L 560.1 139.5 Z M 567.3 136.9 L 567.3 136.9 Z M 565.6 136.1 L 565.6 136.2 Z M 566.6 137.3 L 566.6 137.4 Z M 559.6 139.5 L 559.6 139.6 Z M 568.1 135.7 L 568.2 135.8 Z M 555 141.1 L 555 141.1 Z M 572 134.7 L 572 134.7 Z M 564.2 136.4 L 564.2 136.4 Z M 566.1 136 L 566.1 136 Z M 561.6 140 L 561.6 140 Z M 570.2 134.5 L 570.2 134.5 Z M 565.7 137.9 L 565.7 138 Z M 563.5 136.9 L 563.6 137 Z M 565.9 137.1 L 565.9 137.2 Z M 566.6 137.9 L 566.6 137.9 Z M 555 140.9 L 555 140.9 Z M 560.4 140 L 560.4 140 Z M 554.3 142.7 L 554.3 142.7 Z M 555.6 140.6 L 555.6 140.7 Z M 554.5 141.8 L 554.5 141.8 Z M 551.8 147.2 L 551.8 147.2 Z M 555.1 141.5 L 555.1 141.5 Z M 554.8 141.5 L 554.8 141.5 Z M 555.3 141.2 L 555.4 141.3 Z M 554.5 141.6 L 554.5 141.6 Z M 555.5 141 L 555.5 140.9 Z M 555.2 141.5 L 555.2 141.5 Z M 565.8 136.5 L 565.8 136.5 Z M 555.2 140.7 L 555.2 140.7 Z"},
+      {"id":"MI","name":"Michigan","path":"M 421.3 117.7 L 438.6 110.2 L 434.2 115.9 L 436.3 114.4 L 444.9 118.8 L 457.4 116 L 456.9 118.4 L 462.8 118 L 464.3 122.5 L 453.8 121.6 L 446.4 125.7 L 446.9 123.3 L 443.7 123.7 L 440 129.8 L 436.6 123 L 421.4 117.7 Z M 445 157.3 L 448.8 151.4 L 447.1 138.4 L 450 131.4 L 453.5 128.9 L 453.6 132.7 L 457.6 127.4 L 456.5 124.3 L 467 127.7 L 468 136.1 L 463.9 140.9 L 471.9 138.9 L 473.4 150.3 L 467.2 157.6 L 445 157.3 Z M 429 106.9 L 434.5 104.3 L 429 106.9 Z M 464.4 122.6 L 467.1 122.5 L 464.4 122.6 Z M 459.7 123.9 L 459.8 123.9 Z M 452.9 125.7 L 452.9 125.8 Z M 450 129.5 L 450.1 129.7 Z M 449.4 130.5 L 449.4 130.6 Z M 439.6 110.7 L 439.6 110.7 Z M 451.2 127 L 451.3 127.1 Z M 445.3 126.6 L 445.5 126.7 Z M 468 129 L 468.1 129.1 Z M 467.4 139.8 L 467.4 139.9 Z M 459.4 122.6 L 459.4 122.7 Z M 465.1 121.9 L 465.1 121.9 Z M 445.8 125.6 L 445.8 125.6 Z M 468.7 130.2 L 468.7 130.2 Z M 464.5 121.7 L 464.5 121.8 Z M 463.6 121.6 L 463.6 121.6 Z M 446.1 125.9 L 446.1 126 Z M 464.8 121.6 L 464.8 121.6 Z M 445.7 126.3 L 445.7 126.4 Z M 446 126.2 L 446 126.3 Z M 457.8 123.5 L 458 123.6 Z M 453.5 124 L 453.7 124.2 Z M 464.8 141.6 L 464.8 141.6 Z M 454.4 124.2 L 454.6 124.3 Z M 453.2 131.8 L 453.2 131.8 Z M 451.8 126.6 L 452 126.8 Z M 467.3 138.6 L 467.3 138.6 Z M 459.8 122.7 L 459.8 122.7 Z M 459.3 123.5 L 459.3 123.5 Z M 459.6 123.7 L 459.6 123.8 Z M 452.4 124.5 L 452.5 124.6 Z M 453 123.9 L 453 124 Z M 453.1 123.7 L 453.2 123.7 Z M 452.5 124.2 L 452.5 124.3 Z M 451.5 124.9 L 451.6 124.9 Z"},
+      {"id":"MN","name":"Minnesota","path":"M 376.4 97.9 L 390.1 97.6 L 391.4 94.6 L 393.5 99.7 L 399.1 101.6 L 427.5 105.7 L 409 116.9 L 409 121.8 L 405.2 124.7 L 405.6 132.7 L 414.7 138.9 L 416.1 143 L 381.6 143 L 376.4 97.9 Z"},
+      {"id":"MO","name":"Missouri","path":"M 386 167.1 L 413.4 167.4 L 419.8 180.8 L 423.4 181.4 L 421.8 186.6 L 430 196.9 L 426 204.8 L 421.6 204.9 L 423.1 200.7 L 393.7 200.7 L 393.8 178.8 L 386.1 167.2 Z"},
+      {"id":"MS","name":"Mississippi","path":"M 413.2 244 L 418.3 234.8 L 416 224 L 420.9 214 L 436 213.1 L 434.7 251.4 L 426.9 252.8 L 425.9 246 L 413.3 246.1 L 413.2 244 Z M 432.2 252.3 L 432.2 252.3 Z M 430.8 252.6 L 430.8 252.6 Z M 433.9 252.6 L 434 252.6 Z M 429.7 252.4 L 429.9 252.5 Z"},
+      {"id":"MT","name":"Montana","path":"M 252.4 102.5 L 252.4 97.6 L 331.5 97.6 L 331.6 130.6 L 285.3 130.6 L 285.4 134.9 L 283.2 132.6 L 273.5 135.9 L 267.2 125.6 L 262.3 125.9 L 263.8 117 L 254.6 110.6 L 252.4 103.3 Z"},
+      {"id":"NC","name":"North Carolina","path":"M 461.5 213.2 L 478.9 200 L 517.2 200.3 L 519.4 206.6 L 517 200.8 L 517.7 204.2 L 515.1 202.4 L 512.5 204.8 L 511.8 202.5 L 511.8 205.3 L 515.9 204.9 L 516.2 207.7 L 517.3 205 L 518.1 207.9 L 515.4 210.4 L 509.6 208.8 L 513.3 210.8 L 509.9 213 L 514.8 213.1 L 511.9 215.6 L 516.1 212.6 L 512.8 216.5 L 506.1 217.9 L 503.4 222.7 L 483.1 211.9 L 462.2 213.2 Z M 516.3 212.5 L 519.4 210.8 L 519.5 206.7 L 519.5 211.3 L 516.3 212.6 Z M 518.2 205.4 L 518.2 205.5 Z"},
+      {"id":"ND","name":"North Dakota","path":"M 331.5 98.9 L 376.5 97.6 L 380.8 122.9 L 331.5 122.8 L 331.5 99.2 Z"},
+      {"id":"NE","name":"Nebraska","path":"M 331.5 162.3 L 331.5 147.1 L 376 148.2 L 382 151.4 L 389.1 171.8 L 344.7 171.8 L 344.7 163.6 L 331.5 162.7 Z"},
+      {"id":"NH","name":"New Hampshire","path":"M 539 148.3 L 542.3 136.6 L 548.8 128.1 L 551.2 146.8 L 547.4 149.6 L 539.1 148.4 Z M 551.8 147.3 L 551.8 147.4 Z"},
+      {"id":"NJ","name":"New Jersey","path":"M 519.3 174.9 L 524.8 170.6 L 521.6 166.8 L 524.3 161 L 530.2 163.6 L 527.7 167.8 L 529.7 168.2 L 528.9 173.8 L 523.8 180.6 L 519.3 175 Z"},
+      {"id":"NM","name":"New Mexico","path":"M 298.6 242.1 L 298.6 196.6 L 338.4 196.6 L 338 237.8 L 314.6 237.8 L 315.2 239.6 L 304.1 239.6 L 304.1 243.3 L 298.6 243.3 Z"},
+      {"id":"NV","name":"Nevada","path":"M 226.4 178.2 L 226.4 155.4 L 265.7 155.4 L 265.6 203.2 L 261 204.1 L 261.8 213.1 L 226.4 178.3 Z"},
+      {"id":"NY","name":"New York","path":"M 491.6 153.3 L 497.6 148.9 L 496.1 144.9 L 511.1 144.6 L 514.9 142.6 L 514.3 137.2 L 521.1 131.9 L 533.9 130.5 L 534.4 149.2 L 530.8 165 L 543.7 163 L 529.9 167.4 L 530.2 163.6 L 520.6 155.4 L 491.6 155.4 L 491.6 153.4 Z M 527.8 167.7 L 527.9 167.7 Z M 542.5 161.5 L 542.7 161.5 Z M 514.1 138.6 L 514.2 138.6 Z M 514 139.9 L 514 139.9 Z M 513.8 138.6 L 513.8 138.6 Z M 531 164.6 L 531 164.6 Z M 541.8 162.8 L 541.8 162.8 Z M 531 164.8 L 531 164.9 Z M 513.4 139.8 L 513.4 139.8 Z M 541.3 162.1 L 541.3 162.2 Z M 529.2 166.2 L 529.2 166.2 Z"},
+      {"id":"OH","name":"Ohio","path":"M 458.2 178.2 L 458.3 157.9 L 473.6 160.5 L 486.6 155.5 L 484.5 174.3 L 476.6 179.9 L 474.6 184.7 L 471 182.1 L 465.2 183 L 458.2 178.3 Z M 472 158.6 L 472 158.7 Z M 471.3 158.3 L 471.3 158.3 Z M 471.4 158 L 471.4 158 Z M 471.3 157.7 L 471.3 157.8 Z"},
+      {"id":"OK","name":"Oklahoma","path":"M 338.4 200.5 L 338.4 196.6 L 393.7 196.6 L 394.5 224.4 L 389.7 221.6 L 377.1 223.7 L 360.2 218.2 L 358.2 216.7 L 358.2 200.7 L 338.4 200.7 Z"},
+      {"id":"OR","name":"Oregon","path":"M 196.3 148.5 L 200 120.4 L 205.9 120.8 L 211.3 126.1 L 233.4 122.4 L 246.7 122.4 L 249.7 125.5 L 244.6 135.6 L 246.9 137.5 L 246 155.4 L 198.7 155.4 L 196.5 148.6 Z"},
+      {"id":"PA","name":"Pennsylvania","path":"M 486.6 164.4 L 486.6 155.5 L 491.6 153.1 L 491.6 155.4 L 520.6 155.4 L 525 160.6 L 521.6 166.1 L 524.8 170.6 L 517.8 174.1 L 486.6 174.1 L 486.6 164.4 Z"},
+      {"id":"RI","name":"Rhode Island","path":"M 543.6 161 L 544 155.3 L 546.8 155.2 L 547.7 158.1 L 543.7 161.1 Z M 546.9 159.8 L 548.4 158.2 L 546.9 159.8 Z M 546.7 159.8 L 546.7 159.9 Z M 546.9 158.2 L 546.9 158.2 Z M 545.3 162.3 L 545.3 162.3 Z M 547 159.5 L 547.1 159.5 Z M 547.4 158.3 L 547.4 158.3 Z"},
+      {"id":"SC","name":"South Carolina","path":"M 467.9 215.3 L 474.2 211.3 L 483.1 211.9 L 484.7 214.6 L 492.1 214.7 L 499.6 222.6 L 483.9 237.5 L 467.9 215.4 Z"},
+      {"id":"SD","name":"South Dakota","path":"M 331.5 130.6 L 331.5 122.8 L 380.8 122.9 L 378.9 125.6 L 381.6 128.2 L 381.6 151.3 L 368.1 147.1 L 331.5 147.1 L 331.5 131.6 Z"},
+      {"id":"TN","name":"Tennessee","path":"M 422.1 213.1 L 427.1 200.7 L 479.1 199.8 L 461.5 213.2 L 422.1 213.1 Z"},
+      {"id":"TX","name":"Texas","path":"M 314.4 238.7 L 338 237.8 L 338.2 200.7 L 358.2 200.7 L 358.2 216.7 L 360.2 218.2 L 377.1 223.7 L 389.7 221.6 L 397.4 224.9 L 397.5 237.9 L 400.9 246.7 L 398.7 257 L 392.6 259.6 L 394.6 258 L 391.4 256.8 L 390.1 261.6 L 393 259.8 L 382.1 267.6 L 384.7 265.5 L 380.3 265 L 381.9 267.2 L 374.8 272 L 375.4 288.7 L 364.2 284 L 361.4 274.4 L 348.9 256.3 L 340.6 256.5 L 336.6 262.7 L 328.5 257.3 L 325.7 249.3 L 314.4 238.7 Z M 375.4 279.9 L 377.1 272.3 L 381.9 267.6 L 375.8 276.2 L 377 286.8 L 375.4 280 Z M 377.3 272.1 L 377.4 272.1 Z M 377.1 271.7 L 377.1 271.7 Z M 376.2 271.9 L 376.2 271.9 Z M 376.3 273.4 L 376.3 273.5 Z M 376.5 272.4 L 376.6 272.4 Z M 374.9 278.8 L 374.9 279 Z M 374.8 279.3 L 374.9 279.3 Z M 375 278.6 L 375 278.6 Z M 374.8 278.7 L 374.9 278.7 Z"},
+      {"id":"UT","name":"Utah","path":"M 265.6 191.7 L 265.7 155.4 L 285.4 155.3 L 285.4 163.6 L 298.6 163.6 L 298.6 196.6 L 265.6 196.6 L 265.6 192.2 Z"},
+      {"id":"VA","name":"Virginia","path":"M 465.8 199.9 L 477 192.2 L 478.9 194.9 L 488 192.4 L 492.3 183.5 L 494.7 184.9 L 500.9 176.3 L 509.5 181.2 L 507.7 185.2 L 514.8 189.3 L 514 191.6 L 511.2 189.4 L 514.4 192 L 514.4 196.6 L 510.3 194.8 L 516.4 197.2 L 517.2 200.3 L 465.8 199.9 Z M 516.2 194.5 L 518 189.1 L 521.4 188.1 L 516.2 194.5 Z M 516.4 189.7 L 516.4 189.8 Z M 516.1 188.7 L 516.1 188.9 Z"},
+      {"id":"VT","name":"Vermont","path":"M 533.2 138.5 L 533.9 130.5 L 546.2 130.5 L 540.2 142.4 L 539.7 149.4 L 534.3 149.2 L 533.2 138.5 Z"},
+      {"id":"WA","name":"Washington","path":"M 195.2 104.5 L 195.7 102.6 L 208.2 104.7 L 205.6 111.2 L 209.6 106.5 L 208.8 113.3 L 211.7 105.7 L 208.2 97.6 L 246 97.6 L 246.7 122.4 L 208.8 125.5 L 206.6 121.3 L 199.5 120.2 L 201 114.5 L 198.9 114.7 L 195.2 104.5 Z M 208.2 104 L 209.3 102.5 L 210.7 106.6 L 208.2 104.1 Z M 207 101.9 L 207 102 Z M 206.4 100.7 L 208.3 100.4 L 206.4 100.8 Z M 205.3 101 L 206.9 102.2 L 205.3 101 Z M 209.7 111.3 L 209.8 111.3 Z M 208.5 99.8 L 208.5 99.8 Z M 208.9 101.4 L 208.9 101.5 Z M 208.3 101.1 L 208.4 101.1 Z M 208.8 111.9 L 208.8 111.9 Z M 208.4 112.4 L 208.5 112.5 Z M 208.3 112.9 L 208.4 113 Z M 206.5 101.1 L 206.5 101.1 Z M 208.6 100.7 L 208.6 100.7 Z M 207.1 99.6 L 207.1 99.6 Z M 206 97.6 L 206.1 97.7 Z M 209.3 100.5 L 209.3 100.5 Z M 209.2 100.8 L 209.2 100.8 Z M 205.1 100.2 L 205.1 100.3 Z M 207.7 112 L 207.7 112 Z M 211 105.7 L 211 105.7 Z M 209 112.9 L 209 112.9 Z M 207.6 99.7 L 207.6 99.7 Z M 209.6 101.5 L 209.6 101.6 Z M 206.8 99.4 L 206.8 99.4 Z M 206.2 100.1 L 206.3 100.1 Z M 207 104.9 L 207 104.9 Z M 208.1 100.1 L 208.2 100.1 Z M 207.8 101.1 L 207.8 101.3 Z M 205.6 100.5 L 205.7 100.6 Z M 206.3 100.8 L 206.3 100.8 Z M 207.8 101 L 207.9 101 Z M 209.9 109.6 L 210 109.7 Z"},
+      {"id":"WI","name":"Wisconsin","path":"M 405.1 125.4 L 409 121.8 L 409 116.9 L 418.5 114.4 L 417.9 117.5 L 438.6 124.8 L 440 129.9 L 437.2 134.4 L 444 128.2 L 439 139.8 L 438.6 151.3 L 417.2 149.3 L 415.6 140.1 L 405.6 132.7 L 405.1 125.5 Z M 444.2 127.7 L 444.2 127.7 Z M 418.9 115.9 L 418.9 115.9 Z M 421 114.1 L 421 114.2 Z M 419.8 114.8 L 419.8 114.8 Z M 440.5 130.1 L 440.5 130.1 Z M 417.6 114.3 L 417.6 114.3 Z M 420.3 113.9 L 420.3 113.9 Z M 419.1 114.6 L 419.1 114.6 Z M 418.8 114.4 L 418.8 114.4 Z M 419.5 113.9 L 419.5 113.9 Z M 419.4 114.2 L 419.4 114.3 Z M 418.3 114.2 L 418.3 114.2 Z M 419.8 113.8 L 419.8 113.9 Z M 419.1 115.5 L 419.1 115.5 Z M 419.6 114.5 L 419.6 114.5 Z M 419 113.9 L 419 114 Z M 441.4 129.1 L 441.7 129.3 Z M 420.7 115.1 L 420.7 115.1 Z M 420 114.1 L 420 114.2 Z M 419.3 113.5 L 419.3 113.5 Z M 444.1 128.1 L 444.2 128.1 Z M 420.2 113.6 L 420.2 113.6 Z M 419.5 115.1 L 419.5 115.1 Z"},
+      {"id":"WV","name":"West Virginia","path":"M 472.6 187 L 476.6 179.9 L 484.2 175 L 485.9 166.7 L 486.6 174.1 L 493.4 174.1 L 493.4 178.4 L 498.1 174.7 L 504.7 176 L 504.3 179 L 500.9 176.3 L 494.7 184.9 L 492.3 183.5 L 486.9 193.1 L 478.9 194.9 L 472.6 187.1 Z"},
+      {"id":"WY","name":"Wyoming","path":"M 300 124 L 362 124 L 360 168 L 300 168 Z"},
+      {"id":"AK","name":"Alaska","path":"M 210 372 L 252 352 L 306 360 L 336 386 L 320 414 L 276 424 L 232 410 L 190 424 L 212 394 Z M 176 430 L 184 426 L 190 432 L 181 437 Z M 158 438 L 166 434 L 172 440 L 162 444 Z"},
+      {"id":"HI","name":"Hawaii","path":"M 376 406 L 392 402 L 402 410 L 388 418 Z M 412 416 L 426 414 L 436 422 L 420 428 Z M 448 430 L 466 428 L 478 438 L 458 444 Z M 492 446 L 512 444 L 528 456 L 506 464 Z"}];
+
+    const TEXAS_REGIONS_DETAILED = [
+      {"id":"PAN","name":"Panhandle","path":"M 326 54 L 417 54 L 417 127 L 426 134 L 426 223 L 326 223 Z","labelX":374,"labelY":140},
+      {"id":"NPL","name":"Northwest Plains","path":"M 218 227 L 326 223 L 326 307 L 282 312 L 269 275 Z","labelX":282,"labelY":260},
+      {"id":"NTX","name":"North Texas","path":"M 326 223 L 426 223 L 500 260 L 460 305 L 375 307 L 326 307 Z","labelX":407,"labelY":265},
+      {"id":"NET","name":"Northeast Texas","path":"M 426 134 L 503 159 L 561 149 L 596 164 L 596 223 L 500 260 L 426 223 Z","labelX":513,"labelY":197},
+      {"id":"ETX","name":"East Texas","path":"M 596 223 L 612 263 L 602 310 L 574 322 L 563 331 L 526 358 L 500 260 Z","labelX":568,"labelY":290},
+      {"id":"WTX","name":"West Texas","path":"M 269 275 L 282 312 L 319 336 L 337 308 L 375 307 L 390 350 L 350 390 L 310 360 Z","labelX":328,"labelY":335},
+      {"id":"CTX","name":"Central Texas","path":"M 375 307 L 460 305 L 500 260 L 526 358 L 493 378 L 432 389 L 390 350 Z","labelX":454,"labelY":334},
+      {"id":"GUL","name":"Gulf Coast","path":"M 526 358 L 563 331 L 574 322 L 526 358 L 493 378 L 496 454 L 445 433 L 432 389 Z","labelX":497,"labelY":391},
+      {"id":"STX","name":"South Texas","path":"M 350 390 L 390 350 L 432 389 L 420 420 Z","labelX":397,"labelY":389},
+      {"id":"RGV","name":"Rio Grande Valley","path":"M 420 420 L 432 389 L 445 433 L 496 454 L 465 450 Z","labelX":452,"labelY":430,"snapBoost":34}
+    ];
+
+    const MAP_OUTLINES = {
+      texas_counties: "M 218 226.9 L 325.4 222.8 L 326.3 54 L 417.3 54 L 417.3 126.8 L 426.4 133.6 L 503.3 158.6 L 560.6 149.1 L 595.7 164.1 L 596.1 223.3 L 611.6 263.3 L 601.6 310.2 L 573.8 322 L 582.9 314.7 L 568.4 309.3 L 562.4 331.1 L 575.6 322.9 L 526 358.4 L 537.9 348.8 L 517.8 346.6 L 525.1 356.6 L 492.8 378.4 L 495.6 454.4 L 444.6 433 L 431.9 389.3 L 375 307 L 337.2 307.9 L 319 336.1 L 282.2 311.5 L 269.4 275.1 L 218 226.9 Z M 495.6 414.4 L 503.3 379.8 L 525.1 358.4 L 497.4 397.5 L 502.8 445.8 L 495.6 414.8 Z"
+    };
+
+    const WORLD_CONTINENTS_DETAILED = [
+      {
+        id: "AF",
+        name: "Africa",
+        path: "M 378.2 190.4 L 378.7 190.1 L 379.3 189.1 L 379.6 188.3 L 379.6 187.6 L 379.9 186.9 L 380.1 185.5 L 380 184.1 L 379.9 183.4 L 380 182.7 L 379.7 182 L 379.1 181.4 L 379.1 180.8 L 379.2 180.1 L 379.7 179.7 L 380.1 179 L 380.1 178.5 L 380.5 177.5 L 381.2 176.6 L 381.6 176.4 L 382 175.5 L 382 174.8 L 382.5 173.9 L 383.3 173.4 L 384.2 171.9 L 384.2 171.9 L 384.8 171.3 L 385.9 171.2 L 386.9 170.2 L 387.5 169.8 L 388.6 168.6 L 388.3 166.8 L 388.8 165.6 L 389 164.9 L 389.8 163.9 L 391 163.2 L 391.9 162.7 L 392.8 161.2 L 393.2 160.3 L 394 160.3 L 394.7 160.9 L 395.9 160.8 L 397.1 161.1 L 397.6 161.1 L 398.8 160.4 L 400 160.1 L 400.8 159.5 L 401.9 159.1 L 403.9 158.8 L 405.9 158.7 L 406.5 158.9 L 407.6 158.4 L 408.8 158.4 L 409.3 158.7 L 410.1 158.6 L 411.4 158 L 412.2 158.2 L 412.2 158.9 L 413.2 158.4 L 413.3 158.7 L 412.7 159.4 L 412.7 160 L 413.2 160.4 L 413.1 161.6 L 412.3 162.3 L 412.5 163.1 L 413.2 163.1 L 413.5 163.8 L 414 164 L 415.4 164.5 L 415.9 164.4 L 416.9 164.7 L 418.5 165.3 L 419.1 166.6 L 420.2 166.8 L 422 167.4 L 423.3 168.2 L 423.9 167.8 L 424.4 167.1 L 424.1 166 L 424.4 165.3 L 425.2 164.7 L 426 164.5 L 427.7 164.8 L 428.1 165.4 L 428.6 165.4 L 429 165.6 L 430.2 165.8 L 430.5 166.3 L 432.1 166.3 L 433.3 166.6 L 434.5 167.1 L 435.1 167.3 L 436 166.8 L 436.5 166.4 L 437.5 166.3 L 438.4 166.5 L 438.8 167.2 L 439 166.7 L 440 167.1 L 441 167.1 L 441.5 166.8 L 441.5 166.8 L 442.4 168.9 L 442.6 169.2 L 442.3 169.8 L 442.1 170.9 L 441.8 171.6 L 441.6 171.9 L 441.1 171.4 L 440.5 170.8 L 439.5 168.7 L 439.4 168.9 L 440 170.4 L 440.9 171.8 L 442 174 L 442.5 174.8 L 442.9 175.6 L 444.1 177.2 L 443.9 177.5 L 444 178.4 L 445.5 179.7 L 445.7 180 L 446.2 181.4 L 446 181.6 L 446.2 183.1 L 446.8 184.8 L 447.3 185.2 L 448 185.7 L 448.8 187.3 L 449.2 188.6 L 449.9 189.3 L 451.7 190.7 L 452.4 191.5 L 453.1 192.3 L 453.5 192.8 L 454.2 193.3 L 454.5 193.7 L 454.5 194.3 L 453.8 194.6 L 454.3 195 L 454.7 195.3 L 455 195.9 L 455.6 196.5 L 456.2 196.5 L 457.4 196.1 L 458.7 195.9 L 459.8 195.5 L 460.5 195.4 L 460.9 195.1 L 461.6 195.1 L 461.6 195.1 L 462 195.1 L 462.6 194.9 L 463.2 194.7 L 463.8 194.2 L 464.3 194.2 L 464.3 194.6 L 464.2 195.4 L 464.3 196.2 L 464 196.7 L 463.7 198.3 L 463.2 199.8 L 462.5 201.7 L 461.4 203.8 L 460.4 205.4 L 458.9 207.3 L 457.7 208.5 L 455.8 209.9 L 454.6 211 L 453.2 212.7 L 453 213.5 L 452.7 213.8 L 451.8 214.4 L 451.5 215 L 451 215.1 L 450.8 216.1 L 450.4 216.7 L 450.1 217.6 L 449.6 218.1 L 449 219.8 L 449.1 220.6 L 449.8 221.2 L 449.9 221.5 L 449.5 222.4 L 449.6 222.8 L 449.5 223.5 L 449.9 224.4 L 450.4 225.8 L 450.8 226.1 L 450.8 226.1 L 451 226.8 L 450.9 228.2 L 451 229.5 L 451 231.7 L 451.2 232.4 L 450.7 233.4 L 450.2 234.4 L 449.4 235.3 L 448.2 235.8 L 446.8 236.5 L 445.3 238.1 L 444.8 238.3 L 443.9 239.3 L 443.3 239.7 L 443.2 240.7 L 443.7 241.8 L 443.9 242.6 L 443.9 243 L 444.1 243 L 444 244.4 L 443.8 245 L 444 245.3 L 443.8 245.9 L 443.3 246.4 L 442.2 246.9 L 440.7 247.6 L 440.1 248.2 L 440.2 248.8 L 440.5 248.9 L 440.3 249.6 L 440 250.6 L 439.7 251.8 L 439.4 252.5 L 438.5 253.2 L 438.2 253.4 L 437.6 254.1 L 437.2 254.9 L 436.5 255.9 L 435 257.4 L 434.1 258.2 L 433.1 258.9 L 431.8 259.4 L 431.2 259.5 L 431 259.9 L 430.3 259.7 L 429.7 260 L 428.4 259.7 L 427.7 259.9 L 427.2 259.8 L 425.9 260.3 L 424.9 260.6 L 424.1 261.1 L 423.5 261.1 L 423.1 260.6 L 422.7 260.6 L 422.2 260 L 422.1 260.2 L 422 259.8 L 422 259 L 421.7 258 L 422.1 257.7 L 422.1 256.6 L 421.4 255.3 L 420.9 254.1 L 420.9 254.1 L 420.1 252.2 L 419.2 251.1 L 418.8 250.1 L 418.5 248.7 L 418.3 247.7 L 417.9 245.5 L 417.9 243.8 L 417.8 243 L 417.3 242.4 L 416.7 241.2 L 416.1 239.5 L 415.8 238.6 L 414.9 237.2 L 414.8 236.1 L 414.7 235.2 L 414.9 234 L 415.3 232.7 L 415.4 232 L 415.8 230.8 L 416.1 230.2 L 416.9 229.2 L 417.3 228.6 L 417.4 227.5 L 417.4 226.7 L 417 226.2 L 416.7 225.4 L 416.4 224.5 L 416.4 224.2 L 416.8 223.6 L 416.5 222.3 L 416.2 221.3 L 415.6 220.4 L 415.7 220.1 L 415.5 219.7 L 415.2 218.6 L 414.2 217.1 L 412.9 215.6 L 412.1 214.5 L 411.3 213 L 411.3 212.5 L 411.6 212.1 L 411.9 211 L 412.2 210 L 411.9 209.7 L 412.4 208.1 L 412.5 207 L 412 206.1 L 411.5 205.8 L 411.2 205.2 L 410.9 205 L 410.9 204.6 L 409.6 205.1 L 409.1 205 L 408.6 205.3 L 407.6 205.3 L 406.9 204.4 L 406.5 203.4 L 405.6 202.4 L 404.7 202.5 L 403.6 202.5 L 402.5 202.6 L 401.5 202.9 L 399.5 203.8 L 398.8 204.3 L 397.7 204.7 L 396.6 204.3 L 396 204.3 L 395.1 204 L 394.3 204 L 392.8 204.3 L 392 204.7 L 390.7 205.2 L 390.5 205.2 L 390.1 205.2 L 388.8 204.5 L 387.7 203.4 L 386.6 202.6 L 385.8 201.7 L 385.4 201.6 L 384.5 201 L 383.9 200.3 L 383.7 199.7 L 383.5 198.7 L 383 197.8 L 382.5 197.3 L 382.2 197.1 L 381.9 196.8 L 381.7 196.2 L 381.6 195.9 L 381.2 195.6 L 380.5 195 L 380 194.9 L 379.7 194.5 L 379.7 194.3 L 379.4 194 L 379.3 193.7 L 379.1 192.6 L 379.3 192 L 378.8 190.9 z M 453.6 242.9 L 453.9 241.9 L 454.5 241.6 L 454.5 241.2 L 455.2 240.1 L 455.4 239.2 L 455.1 238.5 L 454.9 237.6 L 454.9 236.3 L 455.4 235.5 L 455.6 234.6 L 456.3 234.5 L 457 234.2 L 457.4 234 L 458 233.9 L 458.7 233.1 L 459.8 232.2 L 460.2 231.5 L 460.1 230.9 L 460.6 231.1 L 461.4 230.1 L 461.4 229.2 L 461.9 228.6 L 462.3 229.2 L 462.6 229.8 L 462.8 230.8 L 463 232.5 L 463.2 233.2 L 463.1 233.8 L 462.8 234.3 L 462.5 233.4 L 462.2 233.8 L 462.4 234.9 L 462.2 235.5 L 461.8 235.8 L 461.7 237 L 461.1 238.7 L 460.3 240.7 L 459.4 243.4 L 458.7 245.4 L 458 247 L 457 247.4 L 455.9 248 L 455.2 247.6 L 454.3 247.1 L 454 246.3 L 454 245.1 L 453.7 243.9 z",
+        labelX: 421,
+        labelY: 211
+      },
+      {
+        id: "AN",
+        name: "Antarctica",
+        path: "M 269.1 323.2 L 271 323.5 L 271.1 323.4 L 271.2 323.2 L 271.3 323.2 L 271.4 323.2 L 273.3 323.5 L 273.4 323.2 L 273.4 323.2 L 275.2 323 L 276.4 323.2 L 277 323.3 L 278.7 323.6 L 281.3 323.7 L 283.5 324 L 286.7 324.1 L 288.3 323.9 L 291.7 324.1 L 293.9 324.3 L 295.3 324.1 L 296.9 323.9 L 296.3 323.6 L 293.3 323.5 L 290.6 323.4 L 289.3 323.1 L 286.9 322.9 L 286.2 322.5 L 285.7 322.2 L 285.3 321.9 L 284.3 321.5 L 282.5 321.3 L 281.3 321 L 279.4 320.7 L 281.4 320.7 L 282.9 320.6 L 284.7 320.9 L 285.5 320.6 L 286 320.3 L 286 320 L 284.9 319.6 L 283.4 319.3 L 281.7 319 L 279.9 319 L 278.2 318.8 L 276.5 318.7 L 275.2 318.3 L 273.5 318 L 272.1 317.6 L 269.5 316.4 L 270.1 316.5 L 271.5 316.9 L 272.6 316.8 L 273.6 316.6 L 275.2 317.1 L 276.3 317 L 276.9 316.8 L 277.4 316.5 L 277.7 316.1 L 278.8 316 L 278.1 315.6 L 277.1 315.2 L 276.7 314.8 L 277.4 314.6 L 278.5 315 L 279.5 314.7 L 280 314.5 L 281.2 314.4 L 282.1 314.3 L 282.9 314.1 L 283.5 313.8 L 284.1 313.6 L 284.9 313.6 L 285.6 313.7 L 286.7 313.6 L 288.1 313.8 L 289.2 313.8 L 290.2 313.6 L 291.5 313.7 L 292.9 313.8 L 294 313.8 L 295.3 313.8 L 296.6 313.8 L 297.7 313.8 L 298.2 313.4 L 299 313.3 L 300.4 313.5 L 301.1 313.3 L 301.6 312.9 L 302.6 313.3 L 303.4 313.7 L 304.4 314 L 304.9 313.7 L 306.4 314.1 L 307.7 314.3 L 309 314.6 L 310.2 314.5 L 311 314.3 L 312.3 314.4 L 313.7 314.5 L 315 314.7 L 315 314.2 L 314 313.8 L 313.1 313.4 L 311.9 313.4 L 311 312.9 L 310.3 312.5 L 309.1 311.7 L 310 311.8 L 311.2 311.9 L 312.3 311.8 L 313.5 312 L 314.7 312.3 L 315.5 312.7 L 316.7 312.8 L 317.7 312.6 L 318.7 312.4 L 319.6 312.3 L 320.7 312.6 L 321.8 312.5 L 321.8 311.6 L 322.9 312.1 L 324.1 312.3 L 325.1 312.2 L 326.2 312.6 L 327.4 312.7 L 328.6 312.8 L 329.8 313.1 L 330.1 312.6 L 330.2 312.2 L 331.4 312.7 L 332.5 312.6 L 333.6 312.8 L 334.5 313.2 L 335.5 313.1 L 336.2 312.8 L 336.9 312.6 L 337.8 312.4 L 339 312.3 L 340 312.1 L 340.7 311.9 L 340.9 311.5 L 340.8 311 L 340.4 310.5 L 339.8 310.1 L 339.2 309.6 L 338.6 309.1 L 338.2 308.7 L 337.8 308.3 L 337.6 307.8 L 337.8 307.3 L 337.8 306.8 L 337.7 306.4 L 337.2 305.8 L 336.8 305.4 L 337 304.8 L 337.3 304.4 L 337.7 304 L 338.1 303.6 L 338.7 303.2 L 338.8 302.7 L 339.1 302.3 L 339.5 302 L 340.4 301.9 L 340.8 301.5 L 341.4 301.3 L 342.1 301.1 L 342.7 300.8 L 343.1 300.4 L 343.8 300.3 L 344.5 300.6 L 344.3 301 L 343.5 301.4 L 343.2 301.7 L 342.4 301.5 L 341.6 301.6 L 341.1 301.9 L 340.6 302.2 L 340.3 302.6 L 340.4 303.1 L 340.7 303.5 L 341.4 303.9 L 340.9 304.2 L 340 304.3 L 339.7 304.8 L 339.4 305.1 L 339.1 305.7 L 339.2 306.1 L 339.8 306.6 L 340.5 307 L 341.4 307.3 L 342.3 307.7 L 343 308.1 L 343.4 308.6 L 344 309 L 344.6 309.4 L 345.1 309.9 L 345.9 311 L 346.4 311.4 L 346.7 311.8 L 347.3 312.3 L 347.5 312.9 L 347.4 313.4 L 347.1 313.7 L 346.1 313.9 L 346 314.3 L 345.7 314.7 L 344.8 315.1 L 343.8 315.2 L 342.9 315.5 L 342 315.7 L 341.7 316.2 L 340.4 316.2 L 338.9 316.2 L 337.6 316.3 L 336.3 316.3 L 336.9 316.7 L 338.3 316.9 L 339.5 317.2 L 340.4 317.5 L 339.8 317.9 L 338.3 317.8 L 337.4 318 L 337.8 318.4 L 338.2 318.8 L 339.4 319.2 L 340 319.5 L 341.3 319.9 L 343.1 320 L 344.8 320.3 L 346.2 320.6 L 347.9 320.9 L 349.9 321 L 352 321.3 L 353.5 321.5 L 355.2 321.8 L 356.3 322.2 L 356.9 322.5 L 357.6 322.2 L 358.6 322 L 359.7 321.7 L 361.1 321.5 L 362.3 321.2 L 364.2 321.2 L 366.1 321.4 L 367.8 321.6 L 368 321.2 L 368.9 320.9 L 370.9 320.9 L 372.3 320.7 L 373.6 320.5 L 375.2 320.4 L 376.8 320.2 L 377.9 320 L 377.2 319.6 L 376.8 319.3 L 376.6 318.9 L 375.1 319 L 373.5 319.1 L 372 319.1 L 371.6 318.7 L 371.3 318 L 371.6 317.8 L 372.7 317.5 L 373.9 317.3 L 374.8 316.9 L 375.7 316.6 L 376.3 316.2 L 377.3 316 L 378.4 315.9 L 379 315.8 L 380.2 315.7 L 381.4 315.6 L 382.4 315.4 L 383.4 315.1 L 384.2 314.9 L 385.3 314.5 L 386 314.1 L 386.7 313.8 L 386.9 313.4 L 386 313.1 L 386.2 312.6 L 386.7 312.3 L 387.6 312 L 388.5 311.8 L 389.4 311.4 L 390 311 L 390.4 310.4 L 391 310.1 L 392.1 310.2 L 392.5 310.5 L 393.6 310.6 L 393.6 310.2 L 394 309.7 L 395 309.8 L 395.2 310.2 L 396.3 310.3 L 397.5 310.1 L 398.6 310 L 399.6 310 L 400 310.5 L 401 310.1 L 401.9 309.9 L 402.9 309.8 L 403.9 309.6 L 404.8 309.3 L 405.8 309.1 L 406.6 308.9 L 407.2 308.5 L 407.9 308.8 L 408.8 308.6 L 409.4 309.2 L 409.9 309.6 L 410.9 309.3 L 411.4 308.9 L 412.4 308.6 L 413.5 308.6 L 413.8 309.1 L 414.6 308.6 L 415.6 308.5 L 416.7 308.4 L 417.7 308.5 L 418.7 308.6 L 419.6 308.7 L 420 309.1 L 420.5 309.4 L 421.5 309.2 L 422.6 309.2 L 423.6 309.2 L 424.6 309.1 L 425.6 309 L 426.6 308.8 L 427.4 308.5 L 428.4 308.3 L 429.3 308.2 L 430.1 307.9 L 430.8 307.2 L 431.4 306.8 L 432.3 307 L 432.6 307.4 L 433.3 307.7 L 434.3 307.6 L 434.8 308 L 435.3 308.3 L 436.4 308 L 436.9 307.5 L 437.8 307.3 L 438.9 306.9 L 439.8 306.7 L 441 306.5 L 441.8 306.2 L 442.7 306 L 443.5 305.7 L 444.4 305.8 L 445.4 305.4 L 446.1 305.1 L 447 305.1 L 447.9 304.8 L 448.3 304.4 L 449.2 304 L 450.1 303.8 L 451.1 303.6 L 452 303.5 L 452.8 303.6 L 453.7 303.7 L 454.3 304 L 454.1 304.6 L 454.7 305 L 455.1 305.3 L 456.2 305.5 L 456.6 305.8 L 457.2 306.1 L 458.1 306.2 L 459 306 L 460 305.5 L 460.8 305.7 L 461.6 305.9 L 462.4 306 L 463.2 306.1 L 464.2 306.1 L 464.2 307.4 L 464 307.7 L 463.5 308.2 L 462.5 308.5 L 461.5 309 L 461.3 309.4 L 462.3 309.4 L 461.9 309.9 L 461.2 310.3 L 460.4 310.8 L 460.9 311.1 L 461.8 311.3 L 463 311 L 463.8 310.6 L 464.4 310.2 L 465.1 309.8 L 465.9 309.4 L 466.4 309 L 467.3 308.4 L 467.9 308.3 L 469 308.3 L 470 308.1 L 471.1 307.9 L 471.8 307.5 L 472.4 307 L 473.3 306.6 L 474.5 306.3 L 475.4 306 L 476.2 305.6 L 476.9 305.4 L 477.7 305.2 L 478.5 305.3 L 479.5 305.2 L 480.5 305.1 L 481.5 305.1 L 482.4 304.8 L 483.5 304 L 483.6 304.3 L 483.6 304.9 L 484.2 305.1 L 485 305.2 L 486 305.1 L 486.9 305.2 L 487.8 305.2 L 488.5 305.1 L 489.2 305.2 L 489.7 305.4 L 490.7 305.3 L 491.7 305.3 L 492.7 305.1 L 493.5 305.3 L 494.5 304.8 L 495.3 304.4 L 496.2 304.1 L 498.2 303.2 L 498.7 303.3 L 499.1 303.7 L 499.4 304.1 L 499.9 304.9 L 500.8 304.9 L 501.7 304.9 L 502.8 304.8 L 504 304.6 L 505.1 304.2 L 506.1 303.9 L 507.2 303.8 L 508.1 303.6 L 508.6 303.8 L 508.7 304.2 L 509 304.6 L 510.1 304.5 L 510.5 304.8 L 511.3 305.2 L 512.3 305.3 L 513.4 305.2 L 514.5 304.8 L 515.5 304.4 L 516.5 304.3 L 517.2 304.5 L 518 304.6 L 519.1 304.4 L 519.9 304.4 L 520.7 304.5 L 521.4 304.7 L 522.5 304.4 L 523.7 304.2 L 524.7 304.2 L 525.8 304.2 L 526.8 304.1 L 527.7 304 L 528.7 303.4 L 529.3 302.8 L 529.5 303.2 L 529 303.8 L 528.8 304.3 L 528.7 304.7 L 529.3 304.9 L 530.4 304.8 L 531.7 304.8 L 532.6 304.7 L 533.8 304.7 L 534.7 304.7 L 535.9 304.8 L 536.9 304.8 L 537 305.2 L 536.3 305.7 L 536.5 306.1 L 537.1 306.3 L 537.7 306.6 L 538.6 306.9 L 539.6 307.1 L 540.3 307.2 L 541.3 307.3 L 542.5 306.9 L 542.8 307.2 L 543 307.6 L 543.4 307.9 L 544.4 308 L 545.2 308.1 L 545 308.6 L 545.6 308.9 L 545.7 309.3 L 546.4 309.5 L 547.5 309.4 L 548.4 309.5 L 549.5 309.5 L 550.4 309.6 L 551.2 309.7 L 551.7 310 L 552.2 310.2 L 552.3 310.6 L 551.4 311 L 550.3 311.5 L 549 312 L 548 312.4 L 546.8 312.8 L 545.3 313 L 544.1 313.4 L 542.6 313.7 L 541.4 314.1 L 540 314.5 L 538.8 314.9 L 537.6 315.3 L 536.6 315.7 L 535.5 316.2 L 534.8 316.6 L 534.4 317.1 L 533.7 317.4 L 533.3 317.8 L 534.5 318 L 533.9 318.4 L 532.1 318.6 L 530.4 318.8 L 528.8 318.8 L 527 319.4 L 525.8 319.8 L 524.7 320.2 L 523.5 320.5 L 523.9 320.8 L 523.4 321.2 L 523.3 321.5 L 523.5 321.8 L 523.9 322.1 L 524.4 322.4 L 525.5 322.6 L 524.9 323 L 526.5 323.2 L 526.5 323.2 L 526.5 323.4 L 529 323.3 L 530 323.5 L 530.8 323.7 L 521.1 326.6 L 279.3 326.6 L 269.6 323.7 L 269.7 323.7 z M 333.5 310.6 L 334.2 310.1 L 334.2 310.1 L 334.7 310 L 335.7 310 L 335.6 309.4 L 335.4 309 L 334.7 308 L 334.9 307.4 L 335.6 307.2 L 336.4 307.7 L 336.9 308.1 L 337.6 308.7 L 338.2 309.2 L 338.8 309.7 L 339.3 310.3 L 339.4 310.7 L 339.4 311.1 L 338.5 311.3 L 337.7 311.5 L 336.5 311.5 L 336.6 311.1 L 335.7 311.2 L 334.8 311.4 L 333.9 311 z M 358 319.9 L 359.5 319.6 L 359.9 319.3 L 360.1 318.8 L 360.3 318.5 L 360.5 318.1 L 360.8 317.7 L 360.8 317.7 L 361.2 317.7 L 362.2 317.4 L 363.6 317.7 L 364.9 318.1 L 365.6 318.7 L 365.9 319.2 L 366.2 319.7 L 365.2 320 L 364.1 320.2 L 362.8 320.4 L 361.3 320.6 L 359.4 320.6 L 358.2 320.2 z M 309.5 310.8 L 309.9 310.6 L 311.1 310.8 L 312.5 310.9 L 313.6 311 L 314.5 310.9 L 315.6 311.5 L 314.8 311.5 L 313.8 311.5 L 312.7 311.5 L 311.6 311.5 L 310.4 311.3 L 309.5 310.8 z M 348.4 319.9 L 350.2 319.9 L 352 320 L 352.2 319.6 L 352.4 319.3 L 353.5 319.7 L 353.7 320.2 L 353.8 320.6 L 352.1 320.5 L 350.4 320.5 L 349.1 320.2 L 349.1 320.2 z M 268.4 317.9 L 270.3 318 L 271.7 318.3 L 273.1 318.7 L 274.3 319.1 L 273.1 319.3 L 271.3 318.9 L 270 318.6 L 269.9 318.5 L 268.8 318.2 L 268.8 318.2 z M 293.7 312.5 L 295 312.7 L 296.3 312.9 L 297.1 312.7 L 297.1 313.1 L 296.7 313.3 L 295.4 313.3 L 294 312.9 L 294 312.9 z M 289.7 312.6 L 290 312.4 L 291.2 312.7 L 293.1 313.1 L 292.5 313.1 L 291.3 312.9 L 289.7 312.6 z",
+        labelX: 448,
+        labelY: 315
+      },
+      {
+        id: "AS",
+        name: "Asia",
+        path: "M 430.7 155 L 431.8 153.7 L 433.6 153.6 L 434 152.5 L 436.2 152.7 L 437.5 151.8 L 438.8 151.4 L 440.7 151.4 L 442.8 152.4 L 444.6 152.9 L 445.9 152.7 L 446.9 152.8 L 448.1 152.1 L 448.2 151.5 L 447.7 150.5 L 447 150 L 446.3 149.8 L 445.8 149.4 L 445.9 149.2 L 446.9 149.5 L 448.6 149.7 L 450.3 150.4 L 450.6 150.6 L 451.2 150.4 L 452.4 150.7 L 452.8 151.3 L 453.6 151.6 L 454 151.7 L 454.9 152.5 L 455.5 152.6 L 455.6 152.3 L 456.2 151.7 L 456.9 152.4 L 457.7 153.5 L 458.3 153.5 L 458.7 153.9 L 457.8 154 L 457.8 155.1 L 457.7 155.6 L 457.3 156 L 457.5 156.7 L 458.1 157.7 L 459.3 158 L 460.2 158.7 L 461.9 159 L 463.7 158.6 L 463.7 158.3 L 463.3 157.2 L 463.2 155.8 L 462.2 155.3 L 462.3 154.3 L 461.5 154.2 L 461.5 153 L 462.6 153.4 L 463.5 152.9 L 462.5 152.1 L 462 151.3 L 461.1 151.6 L 461.3 152.7 L 460.7 151.7 L 460.5 151.4 L 460.7 150.8 L 460.3 150.3 L 458.9 149.8 L 458.1 148.6 L 457.4 148.2 L 457.2 147.8 L 458.4 147.9 L 458.1 146.9 L 459.1 146.6 L 460.1 146.8 L 459.9 145.5 L 459.5 144.6 L 458.4 144.7 L 457.4 144.3 L 456.2 144.9 L 455.3 145.2 L 454.6 145 L 454.6 144.3 L 453.6 143.4 L 452.8 143.4 L 451.6 142.5 L 452 141.4 L 451.6 141.1 L 452.1 139.6 L 453.4 140.4 L 453.3 139.4 L 455.1 137.9 L 456.8 137.9 L 459.5 138.8 L 461 139.4 L 461.9 138.8 L 463.6 138.8 L 465.3 139.5 L 465.4 139.1 L 467 139.1 L 467 138.5 L 464.9 137.5 L 465.7 136.9 L 465.4 136.5 L 466.3 136.1 L 465.2 135.2 L 465.5 134.7 L 469.2 134.3 L 469.6 133.9 L 472 133.4 L 472.7 132.9 L 474.8 133.2 L 475.7 134.6 L 476.7 134.2 L 478.3 134.7 L 478.5 135.4 L 479.5 135.4 L 481.6 134.1 L 481.4 134.5 L 483.3 135.6 L 487.3 139 L 487.6 138.3 L 489.4 139.1 L 490.8 138.8 L 491.5 139 L 492.5 139.8 L 493.3 140.1 L 494.1 140.7 L 495.4 140.5 L 496.4 141.3 L 496.8 141.2 L 497.8 141 L 499.3 139.8 L 500.6 139.1 L 501.8 139.5 L 503 139.6 L 504 140.2 L 505.2 140.3 L 506.9 140.6 L 507.5 139.6 L 506.6 138.8 L 506.9 137.4 L 508.4 138 L 509.5 138.1 L 511 138.5 L 511.8 139.5 L 513.7 140.1 L 514.6 139.9 L 515.8 139.7 L 517 139.9 L 518.5 140.5 L 519.6 141.2 L 520.6 141.2 L 522.1 141.4 L 522.9 141.1 L 524.3 140.9 L 525.2 139.9 L 526 140 L 526.9 140.5 L 528.1 140.4 L 529.8 140.9 L 530.7 140 L 530.3 139.4 L 530.3 138 L 530.6 137.5 L 530 136.8 L 529.2 136.4 L 529.5 135.8 L 530.7 135.5 L 532.1 135.5 L 534 135.9 L 535.3 136.4 L 537 137.8 L 537.9 138.4 L 538.9 139.2 L 540.3 140.6 L 542.5 141 L 544.5 142 L 545.8 143.3 L 547.5 143.3 L 548.1 142.8 L 549.6 142.3 L 549.9 143.6 L 549.8 144.1 L 550.5 145.6 L 550.6 147 L 549.1 146.8 L 548.4 147.2 L 549.5 148.5 L 550.3 150.1 L 549.8 150.2 L 550.2 150.9 L 550.2 150.9 L 550.5 151.1 L 550 151 L 549.8 151.5 L 549.7 152 L 550.4 153 L 549.9 153.3 L 549.9 153.6 L 549.7 154 L 549 154.2 L 548.7 154.6 L 549 155.2 L 548.9 155.4 L 549.5 155.6 L 550.5 156.2 L 552.3 157.9 L 553.1 158.8 L 553.8 160.5 L 553.7 161.3 L 552.8 161.5 L 552.1 162.1 L 551.1 162.3 L 550.6 161.5 L 550.3 160.4 L 549.2 158.9 L 549.9 158.7 L 548.5 157.5 L 547.8 157.2 L 547.8 157.5 L 547.5 157.6 L 547.4 157.3 L 547 157.2 L 546.6 157 L 546.6 156.3 L 546.8 156.2 L 546.6 155.9 L 546.5 155.1 L 546.3 154.9 L 545.5 154.7 L 544.8 154.4 L 543.4 154.8 L 542.8 155.4 L 541.8 155.8 L 542.1 155.2 L 541.5 154.6 L 542 153.7 L 541 152.9 L 540.2 153.4 L 539.4 154.4 L 539.2 155.3 L 538 155.4 L 537.8 156.1 L 538.8 157 L 539.9 157.3 L 540.2 157.9 L 541.3 158.3 L 542.2 157.3 L 543.5 157.8 L 544.3 157.9 L 544.8 158.6 L 543.3 159 L 543.1 159.8 L 542.2 160.5 L 542 161.5 L 543.6 162.3 L 544.6 163.7 L 545.8 165 L 547.1 166.1 L 547.4 167.2 L 546.8 167.6 L 547.3 168.3 L 548.2 168.8 L 548.4 169.9 L 548.4 171.1 L 547.8 171.2 L 547.3 172.7 L 546.8 174.6 L 546 176.3 L 544.6 177.6 L 543.2 178.8 L 541.8 179 L 541.2 179.6 L 540.6 179.2 L 540.1 179.9 L 538.5 180.6 L 537.2 180.8 L 537 182.3 L 536.3 182.4 L 535.9 181.4 L 536.1 180.8 L 534.3 180.4 L 533.8 180.6 L 532.3 181.8 L 531.5 183.2 L 531.4 184.2 L 532.6 185.7 L 534 187.5 L 535.3 188.4 L 536.2 189.6 L 537.1 192.2 L 537.2 194.7 L 536.2 195.7 L 534.9 196.6 L 533.9 197.8 L 532.4 199.1 L 531.9 198.2 L 532.2 197.2 L 531.2 196.4 L 530.1 196.2 L 529.6 195.5 L 528.8 194 L 527.6 193.3 L 526.5 193.4 L 526.6 192.2 L 525.5 192.2 L 525.6 193.8 L 525.1 195.9 L 524.8 197.2 L 524.9 198.2 L 525.7 198.2 L 526.3 199.5 L 526.6 200.8 L 527.4 201.6 L 528.2 201.8 L 528.8 202.5 L 529.1 202.6 L 529.9 203.5 L 530.5 204.5 L 530.6 205.4 L 530.5 206.1 L 530.6 206.6 L 530.8 207.4 L 531.2 207.8 L 531.7 209.1 L 531.7 209.5 L 530.8 209.6 L 529.6 208.6 L 528.1 207.5 L 527.9 206.7 L 527.2 205.8 L 526.9 204.6 L 526.5 203.8 L 526.5 202.8 L 526.2 202.2 L 525.7 201.6 L 525.5 200.9 L 524.7 200.1 L 524.1 199.4 L 523.9 200.3 L 523.7 199.5 L 523.7 198.6 L 524 197.2 L 523.8 196.1 L 524.1 195 L 523.6 194.2 L 523.6 192.6 L 523 191.9 L 522.4 190.2 L 521.9 188.4 L 521.3 187.2 L 520.5 187.9 L 519.2 188.9 L 518.5 188.8 L 517.7 188.5 L 517.9 186.7 L 517.5 185.4 L 516.3 183.7 L 516.4 183.2 L 515.6 183 L 514.6 181.9 L 514.1 181.1 L 513.9 180.4 L 513.6 179.7 L 513 178.9 L 511.8 178.8 L 512 179.4 L 511.7 180.2 L 511.2 179.9 L 511 180.2 L 510.7 180 L 510.2 179.9 L 510.1 180.4 L 509.2 180.4 L 507.7 180.7 L 507.9 181.8 L 507.4 182.6 L 505.7 183.6 L 504.5 185.2 L 503.7 186.1 L 502.6 187.1 L 502.7 187.7 L 502.1 188.1 L 501 188.6 L 500.4 188.7 L 500.2 189.8 L 500.6 191.6 L 500.8 192.8 L 500.3 194.2 L 500.5 196.6 L 499.8 196.7 L 499.3 197.8 L 499.7 198.2 L 498.6 198.6 L 498.2 199.6 L 497.8 200 L 496.5 198.7 L 495.8 196.7 L 495.2 195.2 L 494.8 194.6 L 494 193.2 L 493.5 191.4 L 493.3 190.5 L 491.9 188.5 L 491.1 185.8 L 490.6 184 L 490.4 182.2 L 490 180.9 L 488.3 181.7 L 487.4 181.6 L 485.6 179.8 L 486.2 179.3 L 485.7 178.8 L 484.1 177.5 L 483.2 177.2 L 482.7 176.2 L 481.6 175.1 L 479.4 175.3 L 477.4 175.4 L 475.7 175.6 L 473.3 175.1 L 472 174.8 L 470.6 174.6 L 469.8 172.9 L 469.2 172.6 L 468.3 172.9 L 467.1 173.6 L 465.6 173.1 L 464.2 172 L 463 171.6 L 462 170.2 L 460.9 168.3 L 460.3 168.6 L 459.4 168.1 L 459 168.6 L 458.3 168.6 L 458.7 169.2 L 458.6 169.5 L 459.1 170.6 L 459.7 171.8 L 460.4 172.2 L 460.6 172.7 L 461.5 173.3 L 461.7 173.9 L 461.6 174.3 L 461.8 174.8 L 462.2 175.2 L 462.4 175.7 L 462.6 176 L 462.4 175 L 462.7 174.2 L 463 174.1 L 463.4 174.5 L 463.5 175.4 L 463.3 176.2 L 463.6 176.8 L 463.8 176.7 L 463.9 177.1 L 464.9 176.9 L 465.9 176.9 L 466.6 176.9 L 467.4 176 L 468.2 175 L 468.9 174.2 L 469.2 173.7 L 469.3 173.8 L 469.3 174.4 L 469.2 174.7 L 469.5 175.8 L 470.1 176.8 L 470.8 177.3 L 471.8 177.5 L 472.5 177.7 L 473.2 178.5 L 473.5 179 L 474 179.2 L 474 179.5 L 473.7 180.4 L 473.5 180.8 L 473 181.2 L 472.6 182.2 L 472.1 182.1 L 471.8 182.5 L 471.7 183.2 L 471.9 184.2 L 471.8 184.3 L 471.3 184.3 L 470.5 184.9 L 470.5 185.6 L 470.2 185.9 L 469.4 185.8 L 469 186.2 L 469 186.8 L 468.5 187.2 L 467.8 187 L 467 187.5 L 466.4 187.6 L 465.5 188 L 465.3 188.6 L 465.3 189.1 L 464.1 189.7 L 462.2 190.4 L 461.1 191.4 L 460.5 191.5 L 460.2 191.4 L 459.5 192 L 458.7 192.3 L 457.6 192.3 L 457.3 192.4 L 457.1 192.8 L 456.7 192.9 L 456.6 193.3 L 455.9 193.2 L 455.5 193.4 L 454.7 193.3 L 454.3 192.5 L 454.3 191.7 L 454.1 191.3 L 453.8 190.2 L 453.4 189.7 L 453.7 189.6 L 453.5 188.9 L 453.6 188.7 L 453.5 188 L 453.3 187.4 L 452.9 187 L 452.8 186.4 L 452.1 185.9 L 451.4 184.7 L 451 183.6 L 450.1 182.6 L 449.5 182.3 L 448.6 181 L 448.4 180 L 448.4 179.1 L 447.6 177.6 L 447 177 L 446.3 176.7 L 445.8 175.9 L 445.9 175.6 L 445.5 174.8 L 445.1 174.5 L 444.5 173.4 L 443.7 172.3 L 443 171.3 L 442.4 171.3 L 442.5 170.5 L 442.5 170 L 442.6 169.5 L 442.6 169.2 L 442.4 168.9 L 441.5 166.8 L 441.5 166.8 L 441.5 166.8 L 441.8 166.3 L 441.8 166.2 L 442 165.6 L 442.1 164.5 L 442.3 164.1 L 442.3 164.1 L 442.6 163 L 443.1 161.9 L 443.1 161.9 L 442.8 160.8 L 443.1 160.2 L 442.5 159.6 L 442.9 159 L 442.2 159.2 L 441.2 158.8 L 440.5 159.6 L 438.7 159.8 L 437.6 159 L 436.4 159 L 436.2 159.6 L 435.4 159.8 L 434.1 159 L 432.8 159 L 432 157.6 L 431.1 156.8 L 431.5 155.7 z M 537.7 210.8 L 537.8 209.5 L 538.6 208.5 L 539.5 209 L 540.5 208.8 L 540.7 207.5 L 541.2 207.3 L 542.7 207 L 543.6 205.8 L 544.2 204.9 L 544.6 204.4 L 545.7 203.6 L 546.6 202.6 L 547.2 201.5 L 547.7 201.5 L 548.4 202.2 L 548.4 202.8 L 549.3 203.2 L 550.4 203.7 L 550.3 204.2 L 549.5 204.3 L 549.7 205 L 548.8 205.5 L 548.2 206.8 L 549.1 208.1 L 548.9 208.8 L 550.4 210.1 L 548.9 210.3 L 548.5 211.3 L 548.5 212.5 L 547.3 213.5 L 547.2 214.9 L 546.6 217.1 L 546.5 216.6 L 545 217.3 L 544.6 216.4 L 543.7 216.3 L 543 215.9 L 541.5 216.4 L 541.1 215.7 L 540.3 215.8 L 539.2 215.6 L 539.1 213.7 L 538.5 213.3 L 537.9 212.1 z M 550 215.4 L 550.6 214.5 L 550.8 213.3 L 551.4 211.2 L 551.7 210.6 L 552.7 209.5 L 553.7 209.9 L 555.3 210.1 L 556.8 210.1 L 558 209 L 558.2 209.4 L 557.2 210.8 L 556.3 211.1 L 555.1 210.8 L 553 210.9 L 551.9 211.1 L 551.7 212.1 L 552.8 213.4 L 553.5 212.8 L 555.9 212.3 L 555.7 212.9 L 555.2 212.7 L 554.6 213.6 L 553.5 214.1 L 554.6 215.9 L 554.4 216.4 L 555.5 218.1 L 555.4 219 L 554.7 219.4 L 554.2 218.9 L 554.9 217.8 L 553.6 218.3 L 553.3 217.9 L 553.5 217.4 L 552.7 216.5 L 552.8 215.2 L 551.9 215.6 L 552 217.3 L 551.9 219.3 L 551.1 219.5 L 550.6 219.1 L 551 217.8 L 550.9 216.4 L 550.4 216.4 z M 564.9 212.7 L 566.6 212.4 L 567.3 211.9 L 569.3 212.5 L 569.5 213 L 569.8 215.4 L 571 216.2 L 572.2 214.7 L 573.6 213.8 L 574.7 213.8 L 575.8 214.3 L 576.7 214.8 L 578.1 215.1 L 577.8 219.8 L 577.5 224.4 L 576.5 223.3 L 575.2 223 L 574.9 223.4 L 573.3 223.4 L 573.9 222.3 L 574.7 221.9 L 574.5 220.3 L 574 219.1 L 571.6 217.9 L 570.6 217.8 L 568.8 216.5 L 568.4 217.1 L 567.9 217.3 L 567.6 216.7 L 567.6 216.1 L 566.7 215.4 L 568.1 214.9 L 569 214.9 L 568.9 214.6 L 567 214.6 L 566.6 213.7 L 565.4 213.4 z M 555.2 163.8 L 556.1 163.4 L 556.4 162.5 L 557.3 161.7 L 557.7 160.8 L 559.9 160.3 L 561.3 160.6 L 561.3 158.1 L 562.4 158.8 L 563.4 157.4 L 563.8 156.8 L 563.6 155.1 L 562.4 153.5 L 562.4 152.6 L 563.4 152.3 L 565.3 154.3 L 565.9 155.4 L 565.6 156.9 L 566.4 158.3 L 566.5 159.5 L 567.1 160.2 L 567 161.2 L 565.8 161.9 L 563.7 162 L 562.7 163.6 L 561.7 163 L 561.2 162 L 559.2 162.3 L 558.1 163 L 556.7 163 L 558.4 164 L 558.6 166.5 L 558 167.1 L 557.2 166.5 L 557 165.2 L 556.1 164.8 z M 520.3 203.6 L 521.1 203.6 L 523 203.9 L 524.2 205.3 L 525.2 206.3 L 525.9 206.9 L 527.2 208.4 L 528.5 208.4 L 529.5 209.4 L 530.3 210.6 L 531.2 211.2 L 530.7 212.4 L 531.5 212.9 L 531.9 212.9 L 532.1 213.9 L 532.5 214.7 L 533.4 214.9 L 534 215.8 L 533.7 217.5 L 533.5 219.8 L 532.1 219.8 L 531.1 218.6 L 529.5 217.4 L 529 216.6 L 528.1 215.4 L 527.5 214.3 L 526.6 212.3 L 525.5 211.1 L 525.1 209.9 L 524.6 208.8 L 523.5 207.9 L 522.8 206.7 L 521.8 205.9 L 520.4 204.3 z M 549.7 188 L 550.3 188.5 L 550 186.3 L 550.2 185 L 551 185 L 551.8 185.4 L 552.1 185 L 552.3 185.4 L 552.2 185.9 L 552.8 187 L 552.7 188.2 L 552 188.6 L 552 189.8 L 552.4 190.9 L 553.1 191.1 L 553.6 190.9 L 555.3 191.7 L 555.3 192.5 L 555.7 192.8 L 555.7 193.5 L 554.6 192.8 L 554.1 192 L 553.8 192.6 L 552.9 191.7 L 551.8 191.9 L 551.1 191.6 L 551.1 191 L 551.5 190.6 L 551 190.3 L 551 190.8 L 550.2 190 L 549.9 189.4 z M 553.7 201.1 L 554.1 199.9 L 554.8 199.5 L 555.5 199 L 556 199.6 L 556.9 199.2 L 557.1 198.6 L 557.9 198.6 L 557.8 197.5 L 558.9 198.1 L 559 198.8 L 559.2 199.4 L 559.4 200.3 L 559.5 201.1 L 559.1 202.4 L 558.6 201 L 558 201.7 L 558.5 202.8 L 558.2 203.4 L 556.7 202.6 L 556.2 201.6 L 556.6 200.9 L 555.7 200.2 L 555.4 200.8 L 554.8 200.7 L 553.9 201.5 z M 532.9 221.2 L 533.8 219.8 L 535.3 219.9 L 536.3 220.5 L 536.8 220.6 L 537 221.1 L 539.4 221.2 L 539.7 220.6 L 542 221.3 L 542.4 222.2 L 544.2 222.5 L 545.7 223.4 L 544.3 223.9 L 542.9 223.3 L 541.8 223.4 L 540.5 223.3 L 539.3 223 L 537.9 222.5 L 537 222.3 L 536.4 222.5 L 534.2 221.9 L 534 221.3 z M 560.2 146.4 L 562.6 147.9 L 563.8 148.4 L 564.8 148.7 L 565.2 148.1 L 566.5 149.7 L 565.1 150 L 565 151.4 L 562.6 150.5 L 562.9 152 L 561.6 152 L 560.6 150.6 L 560.5 149.5 L 561.6 149.5 L 560.7 147.5 z M 555.3 226 L 555.4 225.5 L 556 224.7 L 557.3 224.1 L 557.5 223.8 L 558.6 223.4 L 559.5 223.4 L 559.9 223.2 L 560.4 223.4 L 559.9 223.8 L 558.5 224.4 L 557.4 224.8 L 556.5 225.9 L 555.4 226.2 z M 555.9 193.5 L 557.1 193.5 L 557.5 194 L 558.1 195.6 L 557.1 195.2 L 557.1 195.7 L 557.5 196.6 L 557 196.9 L 556.8 195.9 L 556.4 195.8 L 556.1 195 L 556.9 195.1 L 556.8 194.5 z M 430.3 151.7 L 431.4 151.2 L 432.4 151.4 L 432.6 152 L 433.7 152.4 L 433.5 152.8 L 432.1 152.8 L 431.7 153.3 L 430.8 154.1 L 430.4 153.4 L 430.4 153.1 L 430.6 152.9 L 430.9 152.1 z M 561 210 L 561.2 208.8 L 561.6 208.3 L 561.7 209.1 L 562.5 209.2 L 562.6 209.8 L 562.5 211 L 561.9 210.9 L 561.7 211.8 L 562.2 212.5 L 561.9 212.7 L 561.4 211.8 z M 558.6 163.6 L 558.9 162.7 L 559.7 162.9 L 559.9 162.3 L 560.9 162.6 L 561.3 163.1 L 561 164 L 560.3 163.5 L 559.8 163.8 L 559.9 164.7 L 558.9 164.3 z M 554 197.5 L 554.2 197.1 L 554.5 196.7 L 554.5 195.8 L 555.2 195.8 L 555.1 196.7 L 555.9 195.3 L 555.9 196.7 L 555.5 197.2 L 555.2 198.1 L 554.8 198.5 z M 438.5 161.2 L 439.1 161.2 L 439.2 161.2 L 439.3 160.8 L 440.2 160.9 L 441.2 160.4 L 440.5 161 L 440.6 161.3 L 440.6 161.4 L 439.5 162 L 438.9 161.8 z M 547 224.3 L 547.5 223.5 L 548.1 223.5 L 548.5 223 L 548.9 223.3 L 549.7 223.2 L 550 223.8 L 548.5 224.1 L 547.6 224.3 z M 535 183.7 L 535.5 183.1 L 536.8 182.7 L 537.5 182.7 L 537.9 183.3 L 537.4 183.9 L 537.3 184.7 L 536.3 185.4 L 535.2 185 z M 500.4 199.7 L 500.9 197.4 L 501.8 198.2 L 502.4 199.2 L 503.1 200.6 L 503 202.1 L 502.5 202.5 L 501.4 202.9 L 500.8 201.7 z M 561.5 216.2 L 561.8 215.5 L 563.4 215.4 L 564.8 215.8 L 565.2 216.9 L 564.1 216.3 L 563.1 216.2 L 562.4 216.3 z M 553 194.4 L 553.8 194.8 L 554.6 194.8 L 554.7 195.4 L 554.2 196 L 553.4 196.5 L 553.3 195.8 L 553.3 195.1 z M 551 224 L 551 223.5 L 552 223.2 L 552.8 223.6 L 553.7 223.5 L 554.8 223 L 554.6 223.8 L 552.7 224.2 z M 548.1 177.7 L 548.6 176.3 L 549.3 175.3 L 550 175.7 L 549.9 176.5 L 549.7 178.8 L 549.4 180 L 548.5 178.8 z M 547.6 199.4 L 548.1 198.4 L 549 197.6 L 549.6 196.6 L 550.1 195.2 L 550.5 196.3 L 549.7 197.1 L 549.2 198.1 z M 569.1 220.2 L 569.4 219.7 L 569.7 219.2 L 569.9 219.6 L 569.9 220.3 L 569.2 221.2 z M 549.7 225.1 L 550.9 224.8 L 551.5 225.2 L 551.9 225.6 L 551.8 226 L 551.3 226.1 z M 559.1 215.9 L 560.4 215.9 L 560.7 216.3 L 560.2 216.8 L 559.3 216.6 z M 550.8 192.2 L 551.9 192.2 L 552.4 192.7 L 552.2 194 L 551.6 193.2 z M 550.5 151.1 L 550.5 151.1 L 550.5 151.1 z",
+        labelX: 496,
+        labelY: 173
+      },
+      {
+        id: "EU",
+        name: "Europe",
+        path: "M 389 156.1 L 389.2 155.1 L 389.6 154.6 L 389.8 154 L 390 153.2 L 390 152.6 L 389.8 152.1 L 389.8 151.6 L 389.9 150.6 L 389.4 150 L 391.1 149 L 392.5 149.2 L 394 149.2 L 395.2 149.5 L 396.2 149.4 L 398 149.4 L 398.6 148.6 L 398.8 145.8 L 397.7 144.3 L 396.9 143.6 L 395.2 143.1 L 395.1 142.1 L 396.5 141.8 L 398.4 142.1 L 398.1 140.5 L 399.1 141.1 L 401.7 140.1 L 402 138.9 L 402.9 138.6 L 403.8 138.4 L 403.8 138.4 L 404.3 138 L 405.2 136 L 406.7 135.4 L 407.6 135.5 L 407.7 135.2 L 408.6 135.1 L 408.8 135.4 L 409.5 134.7 L 409.3 134.2 L 409.2 133.4 L 408.7 132.7 L 408.6 131.3 L 408.8 131 L 409 130.6 L 409.9 130.5 L 410.3 130.1 L 411.1 129.7 L 411.1 130.4 L 410.8 130.9 L 411 131.2 L 411.5 131.4 L 411.3 131.9 L 411 131.8 L 410.3 132.8 L 410.6 133.4 L 410.7 133.9 L 411.8 134.3 L 411.8 134.7 L 412.9 134.5 L 413.4 134.1 L 414.7 134.7 L 415.2 135.1 L 415.9 134.7 L 417.5 134.1 L 418.8 133.6 L 419.9 133.8 L 420 134.2 L 421 134.2 L 421.2 133.6 L 422.6 133.1 L 422.2 132 L 422.1 131 L 422.5 130.2 L 423.4 129.7 L 424.3 130.7 L 425.2 130.7 L 425.2 129.7 L 425.2 128.9 L 424.8 129 L 424.1 128.6 L 423.9 127.8 L 425.1 127.5 L 426.4 127.3 L 427.5 127.5 L 428.5 127.4 L 428.5 127.4 L 429.5 126.7 L 428.3 126.1 L 428.3 126.1 L 426.5 126.2 L 424.9 126.7 L 423.3 127 L 422.6 126.2 L 421.5 125.8 L 421.5 124.5 L 420.9 123.4 L 421.2 122.6 L 422 121.8 L 423.9 120.5 L 424.5 120.2 L 424.3 119.7 L 422.9 119.1 L 421.3 119.4 L 420.5 120.3 L 420.8 121.1 L 419.4 122.1 L 417.7 123.2 L 417.2 125 L 418.1 125.9 L 419.1 126.6 L 418.4 128.1 L 417.4 128.4 L 417.2 130.7 L 416.8 131.9 L 415.5 131.8 L 415 132.8 L 413.8 132.9 L 413.3 131.6 L 412.3 130.1 L 411.4 128.3 L 410.7 127.4 L 408.8 129 L 407.4 129.3 L 406 128.6 L 405.6 127.2 L 405.1 124.2 L 406 123.4 L 408.5 122.3 L 410.3 121 L 411.9 119.2 L 413.9 116.8 L 415.3 115.9 L 417.6 114.4 L 419.5 113.9 L 421 114 L 422.2 113 L 423.8 113 L 425.4 112.8 L 428.4 113.7 L 427.3 114 L 428.5 114.7 L 428.5 114.7 L 429.4 114.3 L 431.1 115 L 433.7 115.3 L 437.6 116.7 L 438.5 117.3 L 438.9 118.1 L 438 118.7 L 436.6 119.1 L 432.1 118.1 L 431.5 118.3 L 433.3 119.2 L 433.5 119.8 L 433.9 121.1 L 435.3 121.5 L 436.1 121.8 L 436 121.2 L 435.3 120.6 L 435.8 120.2 L 438.3 120.9 L 439.1 120.6 L 438.1 119.7 L 439.9 118.5 L 440.8 118.6 L 441.9 119 L 442.1 118.1 L 441 117.4 L 441.2 116.7 L 440.3 115.9 L 443 116.3 L 443.8 117 L 442.7 117.1 L 442.9 117.8 L 443.8 118.3 L 445.2 118 L 445.1 117.2 L 446.8 116.6 L 449.6 115.6 L 450.3 115.6 L 449.7 116.4 L 450.9 116.5 L 451.4 116.1 L 453.1 116 L 454.2 115.5 L 455.6 116.3 L 456.3 115.5 L 454.9 114.8 L 455.2 114.4 L 458.1 114.7 L 459.6 115.1 L 463.7 116.5 L 463.9 115.9 L 462.6 115.2 L 462.5 115 L 461.3 114.9 L 461.2 114.3 L 460.2 113.4 L 459.9 113 L 460.9 111.9 L 460.8 110.9 L 461.3 110.6 L 463.8 111 L 464.4 111.6 L 464.2 112.5 L 465.1 112.9 L 465.9 113.7 L 466.8 115.4 L 468.2 116.1 L 468.4 116.9 L 467.6 118.7 L 468.8 118.9 L 468.9 118.4 L 469.7 118.1 L 469.6 117.5 L 470 116.9 L 469 116.2 L 469 115.4 L 467.9 115.3 L 467.2 114.6 L 467.2 113.5 L 465.3 112.5 L 466.4 111.7 L 465.6 110.9 L 466 110.9 L 466.9 111.5 L 467.4 112.6 L 468.5 112.8 L 467.5 112 L 468.6 111.5 L 470.4 111.5 L 472.5 112.1 L 471 111.2 L 469.9 110 L 471.2 109.7 L 473.3 109.8 L 475.1 109.6 L 473.8 109 L 474.1 108.3 L 475.1 108.3 L 476.2 107.7 L 478.2 107.6 L 478.2 107.3 L 480.2 107.2 L 481.2 107.4 L 482.4 106.8 L 484 106.8 L 483.6 106.4 L 483.8 105.9 L 485.2 105.5 L 487.1 105.8 L 486.3 106.1 L 488.4 106.3 L 489.3 106.8 L 489.7 106.5 L 492.1 106.5 L 494.7 107.1 L 495.9 107.5 L 496.5 108.1 L 496 108.4 L 494.5 109 L 494.2 109.4 L 495.5 109.5 L 497.1 109.8 L 497.6 109.6 L 498.9 110.3 L 499 110 L 500.1 109.8 L 503.1 110 L 504 110.6 L 507.9 110.7 L 506.8 109.9 L 508.9 110.1 L 510.3 110 L 512.5 110.6 L 513.8 111.4 L 513.9 111.9 L 516.2 112.8 L 518.1 113.3 L 517.5 112 L 519.6 112.6 L 520.7 112.2 L 522.9 112.6 L 523.1 112.3 L 524.8 112.4 L 522.7 111.4 L 523.2 110.9 L 532.2 111.6 L 533.9 112.3 L 537.5 113.2 L 540.8 113 L 542.9 113.2 L 544.4 113.7 L 545.5 114.5 L 547.1 114.9 L 548 114.6 L 549.6 114.6 L 551.6 114.8 L 553.2 114.7 L 556.3 115.8 L 556.9 115.4 L 555 114.6 L 554.6 114.1 L 558 114.4 L 559.8 114.3 L 563.3 114.9 L 565.4 115.4 L 572.8 120.4 L 572.8 120.4 L 572.4 120.9 L 571 120.8 L 572.8 121.5 L 574.9 122.5 L 575.8 122.9 L 576.6 123.4 L 576.8 123.8 L 574.6 123.5 L 573.2 124.5 L 572.5 124.6 L 572.1 125.5 L 571.7 126.3 L 572.1 126.9 L 569.5 126 L 568.1 127 L 567.1 126.5 L 566.8 127.1 L 565.2 126.9 L 565.9 127.8 L 566.2 129.1 L 566.8 129.6 L 568.3 129.9 L 570.3 131.8 L 569.4 131.9 L 570.2 133 L 571.2 133.6 L 570.1 134.3 L 571.3 135.8 L 570.1 136.2 L 571.1 137.6 L 570.7 138.8 L 569.4 137.9 L 567.1 135.9 L 563.5 132.9 L 562 131 L 562.1 130.2 L 561.4 129.6 L 562.7 129.3 L 562.7 127.6 L 562.8 126.3 L 563.4 125.3 L 561.9 123.4 L 560.8 123.6 L 561.6 124.6 L 560.7 126 L 558 124.4 L 556 124.9 L 556 127.1 L 557.7 127.9 L 555.8 128.2 L 554.4 128.4 L 553.4 127.4 L 551.7 127.2 L 551.1 127.8 L 547.7 127.6 L 544.8 128 L 544 130.6 L 542.9 133.8 L 544.7 133.9 L 546 134.8 L 547.3 135.1 L 547.4 134.4 L 548.6 134.5 L 551.5 136 L 552.5 137.2 L 552.8 138.5 L 554.1 140.2 L 555.2 142.4 L 555 144.4 L 555.3 145.4 L 554.9 147 L 554.4 148.6 L 554.2 149.5 L 553.2 150.3 L 552.5 150.3 L 551.3 149.6 L 550.4 150.7 L 550.5 151.1 L 550.5 151.1 L 550.5 151.1 L 550.5 151.1 L 550.2 150.9 L 550.2 150.9 L 549.8 150.2 L 550.3 150.1 L 549.5 148.5 L 548.4 147.2 L 549.1 146.8 L 550.6 147 L 550.5 145.6 L 549.8 144.1 L 549.9 143.6 L 549.6 142.3 L 548.1 142.8 L 547.5 143.3 L 545.8 143.3 L 544.5 142 L 542.5 141 L 540.3 140.6 L 538.9 139.2 L 537.9 138.4 L 537 137.8 L 535.3 136.4 L 534 135.9 L 532.1 135.5 L 530.7 135.5 L 529.5 135.8 L 529.2 136.4 L 530 136.8 L 530.6 137.5 L 530.3 138 L 530.3 139.4 L 530.7 140 L 529.8 140.9 L 528.1 140.4 L 526.9 140.5 L 526 140 L 525.2 139.9 L 524.3 140.9 L 522.9 141.1 L 522.1 141.4 L 520.6 141.2 L 519.6 141.2 L 518.5 140.5 L 517 139.9 L 515.8 139.7 L 514.6 139.9 L 513.7 140.1 L 511.8 139.5 L 511 138.5 L 509.5 138.1 L 508.4 138 L 506.9 137.4 L 506.6 138.8 L 507.5 139.6 L 506.9 140.6 L 505.2 140.3 L 504 140.2 L 503 139.6 L 501.8 139.5 L 500.6 139.1 L 499.3 139.8 L 497.8 141 L 496.8 141.2 L 496.4 141.3 L 495.4 140.5 L 494.1 140.7 L 493.3 140.1 L 492.5 139.8 L 491.5 139 L 490.8 138.8 L 489.4 139.1 L 487.6 138.3 L 487.3 139 L 483.3 135.6 L 481.4 134.5 L 481.6 134.1 L 479.5 135.4 L 478.5 135.4 L 478.3 134.7 L 476.7 134.2 L 475.7 134.6 L 474.8 133.2 L 472.7 132.9 L 472 133.4 L 469.6 133.9 L 469.2 134.3 L 465.5 134.7 L 465.2 135.2 L 466.3 136.1 L 465.4 136.5 L 465.7 136.9 L 464.9 137.5 L 467 138.5 L 467 139.1 L 465.4 139.1 L 465.3 139.5 L 463.6 138.8 L 461.9 138.8 L 461 139.4 L 459.5 138.8 L 456.8 137.9 L 455.1 137.9 L 453.3 139.4 L 453.4 140.4 L 452.1 139.6 L 451.6 141.1 L 452 141.4 L 451.6 142.5 L 452.8 143.4 L 453.6 143.4 L 454.6 144.3 L 454.6 145 L 455.3 145.2 L 454.9 146.1 L 453.9 146.3 L 453.1 147.8 L 454.4 149.1 L 454.5 150 L 456.2 151.7 L 456.2 151.7 L 455.6 152.3 L 455.5 152.6 L 454.9 152.5 L 454 151.7 L 453.6 151.6 L 452.8 151.3 L 452.4 150.7 L 451.2 150.4 L 450.6 150.6 L 450.3 150.4 L 448.6 149.7 L 446.9 149.5 L 445.9 149.2 L 445.8 149.4 L 444.1 148.2 L 442.7 147.7 L 441.6 146.9 L 442.4 146.6 L 443.1 145.5 L 442.4 144.9 L 443.9 144.3 L 443.8 144 L 442.9 144.3 L 442 144.4 L 441.3 144.8 L 440.3 144.9 L 439.4 145.4 L 439.6 146.2 L 439.6 146.3 L 440.3 146.6 L 441.4 146.5 L 441.3 147 L 440.1 147.3 L 438.7 148.1 L 438 147.8 L 438.1 147.2 L 436.8 146.7 L 437 146.5 L 438 146 L 437.8 145.8 L 437.6 145.7 L 435.8 145.3 L 435.6 144.8 L 434.6 145 L 434.3 145.8 L 433.6 146.8 L 433.7 147.2 L 433.2 147.5 L 432.8 147.3 L 432.7 149 L 432.2 149.6 L 431.9 150.6 L 432.4 151.4 L 431.4 151.2 L 430.3 151.7 L 430.9 152.1 L 430.6 152.9 L 430.4 153.1 L 429.7 153.1 L 429 152.9 L 427.7 153.3 L 428.6 154.1 L 428 154.3 L 427.3 154.3 L 426.7 153.6 L 426.5 153.9 L 426.8 154.8 L 427.5 155.4 L 427 155.7 L 427.8 156.4 L 428.4 156.8 L 428.5 157.6 L 427.3 157.2 L 427.8 158 L 427 158.1 L 427.6 159.4 L 426.8 159.4 L 425.8 158.8 L 425.2 157.6 L 425 156.7 L 424.4 156 L 423.8 155.2 L 423.7 154.8 L 423.5 154.7 L 423.4 154.4 L 422.7 153.9 L 422.6 153.2 L 422.6 152.3 L 422.7 151.8 L 422.5 151.6 L 422.5 151.6 L 422.2 151.5 L 421.9 151 L 421.4 150.8 L 421.4 150.8 L 420.2 150.2 L 419.5 149.7 L 418.5 149.3 L 417.4 148.3 L 417.6 148.2 L 417.1 147.6 L 417 147.1 L 416.3 146.9 L 416 147.5 L 415.6 147 L 415.6 146.5 L 415.7 146.5 L 415.9 146.4 L 415 146.2 L 414.1 146.7 L 414.2 147.4 L 414.1 147.8 L 414.5 148.5 L 415.6 149.2 L 416.3 150.4 L 417.6 151.5 L 418.5 151.5 L 418.8 151.8 L 418.5 152.1 L 419.6 152.6 L 420.5 153 L 421.5 153.8 L 421.7 154 L 421.5 154.5 L 420.8 153.9 L 419.8 153.6 L 419.3 154.6 L 420.2 155.1 L 420.1 155.8 L 419.6 155.9 L 419.1 157.1 L 418.6 157.2 L 418.6 156.8 L 418.8 156 L 419 155.7 L 418.5 154.9 L 418.1 154.2 L 417.6 154 L 417.2 153.4 L 416.5 153.2 L 415.9 152.6 L 415.1 152.5 L 414.1 151.9 L 413 150.9 L 412.2 150.1 L 411.8 148.7 L 411.2 148.6 L 410.3 148.1 L 409.8 148.3 L 409.1 148.9 L 408.7 149 L 407.7 149.8 L 405.4 149.5 L 403.7 149.9 L 403.6 150.8 L 403.7 151.6 L 402.6 152.5 L 401.1 152.8 L 401 153.3 L 400.3 154.1 L 399.9 155.2 L 400.3 156.1 L 399.6 156.7 L 399.4 157.6 L 398.5 157.9 L 397.6 159 L 396.1 159 L 395 159 L 394.3 159.5 L 393.8 160 L 393.2 159.9 L 392.8 159.4 L 392.5 158.6 L 391.4 158.4 L 390.9 158.8 L 390.3 158.6 L 389.7 158.7 L 389.9 157.6 L 389.8 156.7 L 389.3 156.6 z M 393.8 131 L 394.2 129.6 L 395.1 128.6 L 395.9 128.7 L 397.1 128.5 L 396 130 L 397 129.8 L 398.2 129.8 L 397.9 130.9 L 396.9 132.1 L 398 132.2 L 398.1 132.3 L 399 133.9 L 399.7 134.1 L 400.4 135.7 L 400.7 136.2 L 402 136.5 L 401.9 137.3 L 401.3 137.7 L 401.8 138.5 L 400.8 139.2 L 399.3 139.2 L 397.5 139.5 L 397 139.3 L 396.2 139.9 L 395.2 139.8 L 394.4 140.3 L 393.9 140 L 395.5 138.6 L 396.5 138.3 L 396.5 138.3 L 394.8 138 L 394.5 137.5 L 395.6 137.1 L 395.1 136.3 L 395.3 135.4 L 396.9 135.6 L 396.9 135.6 L 397.1 134.8 L 396.4 133.9 L 396.3 133.9 L 395.1 133.7 L 394.8 133.3 L 395.2 132.7 L 394.9 132.3 L 394.3 133 L 394.3 131.7 z M 445.7 111.8 L 446.5 111.6 L 446.1 111 L 447.3 110 L 446.5 109.8 L 447.9 108.8 L 447.4 108.3 L 448.9 107.8 L 451.2 107 L 453.8 106.8 L 454.9 106.4 L 456.4 106.3 L 457.3 106.7 L 457 107.1 L 454.5 107.6 L 452.3 108.1 L 450.4 109.2 L 449.8 110.3 L 449 111.4 L 449.7 112.4 L 451.9 113.3 L 451.4 113.5 L 448.4 113.3 L 447.9 112.8 L 446.2 112.5 z M 227.6 120.4 L 234.9 115.4 L 235.8 116.4 L 236.4 117.6 L 235.2 118.4 L 235.4 118.7 L 236.5 117.8 L 238.7 117.9 L 239 119.1 L 237.3 119.7 L 235.5 119.8 L 233.8 121 L 233 121.3 L 232.2 121.2 L 232.1 120.8 L 231.3 120.4 L 231.9 119.9 L 231.2 119.7 L 229.9 119.8 L 230 119.4 L 230.9 118.9 L 229.3 119.2 L 228.9 119.8 z M 551 134.4 L 551.3 134.3 L 552.4 135.2 L 554 136.5 L 555.1 137.8 L 556.7 139.2 L 559.8 141.6 L 557.8 141.2 L 558.6 143.2 L 560.7 144.6 L 561.4 145.6 L 559.9 144.8 L 560 145.8 L 558.9 144.7 L 558.1 143.3 L 556.9 141.8 L 556.3 140.8 L 554.9 138.9 L 553.1 137.6 L 551.6 135.7 L 552 135.1 z M 377 119.6 L 377.8 118.8 L 379.3 118.6 L 380.6 119.4 L 382.2 118.7 L 383.3 119.1 L 384.9 118.4 L 386.5 118.5 L 386.2 119.3 L 387.2 120.2 L 385.8 121.1 L 382.9 122 L 382 122.2 L 380.8 122 L 378.1 121.6 L 379.2 121.1 L 377.2 120.5 L 378.9 120.2 L 379 119.9 z M 331.4 208.1 L 331.7 207.5 L 331.8 206.8 L 332.1 206.2 L 331.6 205.4 L 331.5 204.4 L 332.2 203.2 L 332.6 203.3 L 333.5 203.7 L 334.9 204.9 L 335.1 205.5 L 334.3 206.8 L 333.9 207.8 L 333.4 208.4 L 332.8 208.5 L 332.6 208.1 L 332.3 208 L 331.9 208.4 z M 408.4 103.5 L 410.5 103.1 L 411 103.5 L 412.1 103.5 L 412.4 103.1 L 413.5 103.1 L 414.6 103.4 L 417.4 104.2 L 415.5 104.6 L 415.2 105.4 L 414.5 105.6 L 414.3 106.4 L 413.3 106.5 L 411.5 105.8 L 412.1 105.4 L 410.9 105.1 L 409.2 104.3 z M 435 102.6 L 436.4 102.4 L 437.6 102.4 L 437.9 102.7 L 438.2 102.4 L 438.8 102.3 L 440.1 102.5 L 439.9 102.6 L 439 102.8 L 438.3 102.8 L 438.3 103 L 437.5 103.1 L 436.5 102.9 L 436.8 102.6 z M 413.7 102.8 L 416.1 102.6 L 417.3 102.8 L 418 102.5 L 420 102.8 L 421.7 103.1 L 420.7 103.6 L 418.4 103.7 L 416 103.6 L 415.8 103.3 L 414.7 103.3 z M 389.4 137.7 L 390.4 136.3 L 389.9 134.9 L 391.4 133.9 L 392.2 133.2 L 393.1 133.2 L 394.2 134 L 393.6 134.9 L 393.7 135.9 L 392.9 137.1 L 390.9 137.9 z M 471.3 102.8 L 472.5 102.2 L 473.9 102 L 476 102.4 L 479 103.4 L 480 104.3 L 478.5 104.4 L 475.9 104.1 L 474.1 103.7 L 472.6 103 z M 428.1 161 L 428.3 160.4 L 429 160.9 L 429.9 160.8 L 430.8 160.9 L 430.8 161.1 L 431.4 161 L 431.3 161.4 L 429.6 161.5 L 429.6 161.3 z M 414.8 157.7 L 414.9 156.9 L 416.3 157.1 L 417.5 156.9 L 418.4 156.8 L 418 157.9 L 418.2 158.3 L 418 159.1 L 417.1 158.5 L 416.5 158.4 z M 409.6 152.9 L 410.3 153 L 410.8 152.6 L 411.6 153.6 L 411.5 155.4 L 410.9 155.3 L 410.5 155.8 L 410 155.4 L 409.9 153.7 z M 515.4 107.4 L 516.1 107.2 L 518.4 107.2 L 522.4 107.8 L 523.1 108.6 L 519.9 108.6 L 518.9 108.9 L 516.1 108.1 z M 521.8 110.3 L 521.9 109.8 L 522.9 109.7 L 524.7 110.2 L 525.3 110.5 L 524 110.5 L 522 110.3 z M 417 104.9 L 418.6 104.7 L 419 105.1 L 420.3 105.3 L 418.6 105.8 L 417.1 105.5 L 417.6 105.2 z M 238.5 113.2 L 239.9 112.4 L 240.1 112.4 L 240.9 112.4 L 241.6 112.7 L 241.2 112.9 L 239.8 113.1 z M 523.6 107.9 L 525.5 108 L 528.1 108.3 L 527.9 108.8 L 526.3 108.7 L 524 108.2 z M 480.6 103.9 L 481.1 103.8 L 481.8 103.9 L 484.6 104.4 L 484.9 104.9 L 480.9 105.3 z M 410 151.1 L 410.2 150.5 L 410.9 150 L 411.2 151.2 L 410.8 152.3 L 410.3 152 z M 411.6 132.3 L 413.1 131.9 L 413.5 132.6 L 412.9 133.7 L 411.8 132.9 z M 560.2 112.9 L 560.5 112.4 L 561.8 113.2 L 560.9 113.3 z",
+        labelX: 467,
+        labelY: 135
+      },
+      {
+        id: "NA",
+        name: "North America",
+        path: "M 225.7 134.2 L 225.7 134 L 227.6 133.3 L 229 132.9 L 230.9 132.2 L 232.4 132 L 233.5 131.5 L 235.8 130.7 L 236.3 130.4 L 237.6 130 L 238.9 129 L 240.3 128.2 L 238.7 128.6 L 238.6 128.3 L 237.5 128.8 L 237.6 128.2 L 236.8 128.6 L 237.1 128 L 235.5 128.5 L 234.9 128.5 L 235.7 127.7 L 236.5 127.2 L 236.4 126.8 L 234.7 127 L 234.6 126.4 L 234.3 126.1 L 235.2 125.4 L 235.1 124.8 L 236.5 124.1 L 238.2 123.3 L 239.3 122.7 L 240.3 122.6 L 240.7 122.8 L 242.2 122.2 L 242.8 122.3 L 244 121.9 L 244.6 121.3 L 244.3 121.1 L 245.7 120.6 L 245.1 120.6 L 243.7 120.9 L 243 121.2 L 242.6 120.9 L 241.1 121 L 240.1 120.7 L 240.4 120.2 L 240.1 119.5 L 242.2 119 L 245.1 118.4 L 245.9 118.4 L 244.9 119 L 247 118.9 L 247.2 118.2 L 246.7 117.7 L 246.9 117.1 L 246.8 116.6 L 246 116.2 L 247.5 115.5 L 249.1 115.5 L 251.1 115 L 252.2 114.4 L 253.9 113.8 L 255 113.7 L 257.5 113.1 L 258.2 113.2 L 260.5 112.6 L 261.5 112.8 L 261.4 113.4 L 262.1 113.1 L 263.5 113.2 L 263.1 113.5 L 264.2 113.7 L 265.2 113.6 L 266.6 113.9 L 268.2 114.1 L 268.7 114.2 L 270.2 114 L 271.1 114.4 L 271.9 114.5 L 271.9 114.5 L 273.2 114.8 L 274 115.4 L 274.8 115.5 L 276.2 115 L 277.7 114.6 L 278.9 114.8 L 280.9 114.3 L 282.7 114 L 282.8 114.5 L 283.8 114.2 L 284.6 113.6 L 285.1 113.8 L 285.4 114.8 L 287.5 114 L 286.7 114.9 L 288 114.7 L 288.7 114.4 L 289.7 114.4 L 290.6 114.9 L 292.3 115.4 L 293.3 115.6 L 294.3 115.5 L 294.9 116.1 L 293 116.7 L 294.5 117 L 297.1 116.9 L 298.1 116.6 L 298.4 117.4 L 300 116.8 L 299.5 116.2 L 300.5 115.8 L 301.7 115.8 L 302.6 115.6 L 303 115.9 L 303.4 116.6 L 304.5 116.5 L 305.6 117 L 307.3 116.9 L 308.6 116.9 L 309.1 116.1 L 310.1 115.9 L 311.2 116.3 L 310.3 117.5 L 311.6 116.5 L 312.4 116.5 L 313.8 115.3 L 313.4 114.6 L 312.8 114.1 L 314 112.8 L 315.8 111.9 L 316.8 112.1 L 317.3 112.6 L 317.4 114 L 316.1 114.6 L 317.6 114.8 L 316.6 116 L 318.6 115.1 L 319.1 115.9 L 318.1 116.8 L 318.4 117.6 L 320 116.7 L 321.5 115.7 L 322.5 114.3 L 323.7 114.4 L 324.9 114.6 L 325.7 115.2 L 325.4 115.8 L 324.2 116.5 L 324.4 117.1 L 323.9 117.7 L 321.5 118.6 L 320 118.8 L 319.3 118.4 L 318.6 119 L 316.9 120.1 L 316.3 120.6 L 314.5 121.5 L 313.1 121.6 L 312 122.1 L 311.3 122.9 L 310 123.1 L 308.1 124.1 L 306 125.6 L 304.9 126.6 L 303.8 128.1 L 305.2 128.4 L 304.8 129.6 L 304.6 130.6 L 306.3 130.3 L 307.8 130.9 L 308.6 131.4 L 308.9 132.1 L 310 132.4 L 310.8 133 L 312.5 133.1 L 313.6 133.2 L 312.8 134.4 L 312.4 135.7 L 312.4 137.3 L 313.4 138.6 L 314.4 138.1 L 315.7 136.7 L 316.2 134.6 L 315.8 133.8 L 317.8 133.2 L 319.5 132.3 L 320.6 131.3 L 320.9 130.4 L 320.9 129.3 L 320.2 128.3 L 322.1 126.9 L 322.4 125.8 L 323.2 123.7 L 324.1 123.4 L 325.6 123.8 L 326.5 123.9 L 327.5 123.6 L 328.2 124 L 329 124.8 L 329 125.3 L 330.8 125.4 L 330.2 126.5 L 329.7 128.1 L 330.5 128.3 L 330.9 129.1 L 332.7 128.4 L 334.3 126.9 L 335.3 126.3 L 335.5 127.5 L 336.1 129.2 L 336.6 130.8 L 335.8 131.6 L 336.9 132.4 L 337.5 133.1 L 339.1 133.5 L 339.6 133.9 L 339.6 135.1 L 340.3 135.2 L 340.6 135.7 L 340.1 137.3 L 339.2 137.8 L 338.2 138.3 L 336.3 138.8 L 334.5 139.9 L 332.6 140.1 L 330.4 139.8 L 328.7 139.8 L 327.6 139.9 L 326.3 140.9 L 324.7 141.5 L 322.4 143.4 L 320.6 144.7 L 321.7 144.4 L 324.1 142.6 L 326.8 141.4 L 328.5 141.3 L 329.3 142 L 327.9 142.9 L 327.8 144.4 L 327.8 145.5 L 329 146.2 L 331 146 L 332.6 144.4 L 332.3 145.4 L 332.9 145.9 L 331.3 146.8 L 328.5 147.7 L 327.2 148.2 L 325.6 149.3 L 324.8 149.1 L 325.1 148 L 327.4 146.8 L 325.6 146.8 L 324.3 147 L 324.4 147.5 L 322.9 148.2 L 321.6 148.6 L 320.3 149.1 L 319.4 149.9 L 319.1 150.2 L 318.8 151 L 319 151.7 L 319.4 151.7 L 319.5 151.2 L 319.7 151.5 L 319.5 151.9 L 318.7 152.2 L 318.1 152.1 L 317.2 152.4 L 316.6 152.5 L 316 152.5 L 314.9 152.9 L 316.6 152.7 L 316.9 152.9 L 315.1 153.4 L 314.4 153.4 L 314.5 153.2 L 314 153.6 L 314.3 153.7 L 313.8 154.7 L 312.6 155.8 L 312.6 155.4 L 312.4 155.3 L 312.1 155 L 312.1 155.7 L 312.3 156 L 312.2 156.5 L 311.7 157.1 L 310.7 158.2 L 310.6 158.2 L 311.2 157.2 L 310.8 156.7 L 311 155.5 L 310.6 156.1 L 310.6 157 L 309.9 156.8 L 310.5 157.2 L 310.2 158.6 L 310.5 158.7 L 310.5 159.2 L 310.3 160.6 L 309.3 161.7 L 307.9 162.1 L 306.9 162.9 L 306.3 163 L 305.6 163.5 L 305.3 164 L 303.7 164.9 L 302.9 165.6 L 302.1 166.5 L 301.7 167.5 L 301.7 168.5 L 301.8 169.7 L 302.2 170.7 L 302 171.3 L 302.3 173 L 302.1 174 L 302 174.5 L 301.5 175.4 L 301.1 175.6 L 300.5 175.4 L 300.5 174.8 L 300 174.4 L 299.6 173.2 L 299.2 172.1 L 299.2 171.6 L 299.6 170.6 L 299.4 169.8 L 298.7 168.6 L 298.3 168.4 L 296.9 169.1 L 296.7 169 L 296.3 168.3 L 295.6 168 L 294.2 168.1 L 293.2 168 L 292.2 168.1 L 291.7 168.3 L 291.8 168.7 L 291.7 169.3 L 291.8 169.5 L 291.6 169.7 L 291.2 169.5 L 290.6 169.8 L 289.8 169.7 L 289.1 169 L 287.9 169.2 L 287.1 168.8 L 286.4 168.9 L 285.3 169.3 L 283.9 170.3 L 282.5 171 L 281.7 171.6 L 281.3 172.3 L 281.1 173.3 L 281 173.9 L 281.1 174.4 L 280.6 174.5 L 281.1 174.4 L 280.4 175.7 L 280 176.7 L 279.6 178.6 L 279.4 179.3 L 279.5 180.1 L 279.7 180.8 L 279.8 181.9 L 280.5 183 L 280.7 183.8 L 281.1 184.5 L 282.3 184.9 L 282.8 185.5 L 283.9 185.1 L 284.9 184.9 L 285.8 184.7 L 286.7 184.4 L 287.5 183.8 L 287.9 183 L 288.2 181.8 L 288.5 181.4 L 289.3 181 L 290.7 180.7 L 291.8 180.7 L 292.6 180.6 L 292.8 180.9 L 292.7 181.6 L 291.9 182.5 L 291.5 183.3 L 291.7 183.6 L 291.4 184.2 L 291 185.3 L 290.7 184.9 L 290.4 185 L 290.4 185.2 L 290.7 185.2 L 290.6 185.6 L 290.3 186.2 L 290.4 186.4 L 290.2 186.9 L 290.3 187.1 L 290 187.8 L 289.7 188.2 L 289.5 188.2 L 289.2 188.7 L 289.6 189 L 289.7 188.7 L 290.1 188.9 L 290.2 189 L 290.5 188.7 L 290.8 188.7 L 290.9 188.8 L 291.1 188.8 L 291.7 188.9 L 292.3 188.8 L 292.7 188.7 L 292.9 188.5 L 293.3 188.6 L 293.6 188.7 L 293.9 188.7 L 294.1 188.5 L 294.7 188.7 L 294.9 188.8 L 295.2 189 L 295.6 189.4 L 296 189.6 L 296.3 190 L 296.2 190.1 L 296.1 190.4 L 296.2 190.9 L 295.8 191.4 L 295.6 192 L 295.5 192.6 L 295.6 193 L 295.6 193.7 L 295.4 193.8 L 295.2 194.4 L 295.2 194.8 L 295 195.1 L 295 195.5 L 295.2 195.8 L 295.4 196.5 L 295.9 197.1 L 296.4 197.7 L 296.9 198.2 L 296.8 198.5 L 297.3 198.6 L 297.4 198.5 L 297.8 198.8 L 298.4 198.7 L 298.9 198.4 L 299.7 198.1 L 300.2 197.7 L 300.9 197.7 L 300.8 197.9 L 301.5 197.9 L 302.1 198.2 L 302.4 198.6 L 302.9 199 L 302.7 199.2 L 303 200.1 L 302.7 200.5 L 302.3 200.4 L 302.1 201.1 L 301.7 200.7 L 301.5 199.9 L 301.8 199.5 L 301.5 199.4 L 301.3 198.9 L 300.7 198.5 L 300.1 198.6 L 299.9 199.1 L 299.3 199.5 L 299.1 199.5 L 298.9 199.8 L 299.5 200.6 L 299.1 200.8 L 298.9 201 L 298.4 201.1 L 298.2 200.2 L 298 200.5 L 297.6 200.4 L 297.4 199.8 L 296.9 199.7 L 296.5 199.5 L 296 199.6 L 295.9 199.9 L 295.8 199.6 L 295.1 199.3 L 294.9 199 L 295.1 198.8 L 295 198.5 L 294.7 198.1 L 294.2 197.8 L 293.8 197.7 L 293.7 197.2 L 293.4 197 L 293.5 197.4 L 293.2 197.7 L 293 197.3 L 292.6 197.2 L 292.4 196.9 L 292.4 196.5 L 292.6 196 L 292.3 195.8 L 292.6 195.6 L 292.2 195.1 L 291.7 194.5 L 291.4 194 L 290.9 193.6 L 290.4 193 L 290.5 192.7 L 290.7 192.9 L 290.8 192.8 L 290.6 192.4 L 290.3 192.3 L 290.1 192.6 L 289.4 192.6 L 288.9 192.5 L 288.4 192.2 L 287.7 192.1 L 287.4 191.8 L 286.8 191.5 L 286 191.5 L 285.5 191.2 L 284.9 190.6 L 283.6 189.1 L 283 188.6 L 282.1 188.2 L 281.4 188.4 L 280.3 188.9 L 279.6 189 L 278.8 188.7 L 277.9 188.4 L 276.8 187.7 L 275.9 187.5 L 274.6 186.9 L 273.7 186.2 L 273.4 185.8 L 272.7 185.7 L 271.5 185.3 L 271.1 184.6 L 269.9 183.8 L 269.4 182.9 L 269.2 182.2 L 269.6 182.1 L 269.6 181.7 L 269.9 181.3 L 270 180.8 L 269.7 180.1 L 269.7 179.6 L 269.4 178.9 L 268.6 177.4 L 267.5 176.3 L 267.1 175.4 L 266.2 174.8 L 266 174.5 L 266.4 173.6 L 265.9 173.3 L 265.3 172.6 L 265.3 171.6 L 264.6 171.5 L 264.1 170.7 L 263.8 170 L 263.8 169.6 L 263.5 168.5 L 263.4 167.4 L 263.6 166.9 L 262.9 166.3 L 262.5 166.4 L 262 166 L 261.6 166.5 L 261.5 167.2 L 261.3 168.3 L 261.5 168.9 L 262.2 169.9 L 262.3 170.2 L 262.4 170.3 L 262.4 170.8 L 262.7 170.8 L 262.7 171.7 L 262.9 172.1 L 263.1 172.6 L 263.6 173.3 L 263.7 174.6 L 264 175.3 L 264.2 175.9 L 264.1 176.7 L 264.7 176.7 L 265 177.4 L 265.4 178 L 265.3 178.3 L 264.7 178.8 L 264.5 178.8 L 264.3 177.9 L 263.6 177.1 L 262.9 176.4 L 262.3 176 L 262.6 175 L 262.6 174.2 L 262.1 173.8 L 261.4 173.2 L 261.2 173.3 L 261 173 L 260.3 172.6 L 259.8 171.8 L 260 171.7 L 260.4 171.8 L 261 171.2 L 261.3 170.6 L 260.6 169.6 L 260 169.2 L 259.8 168.3 L 259.7 167.3 L 259.5 166.2 L 259.5 164.9 L 259.6 164.2 L 259.1 163.4 L 258.6 163.2 L 258.6 162.8 L 258 162.7 L 257.7 162.3 L 256.6 162.2 L 256.4 161.9 L 256.6 161.2 L 256.1 159.7 L 256 157.7 L 256.2 157.4 L 255.9 156.9 L 255.5 155.8 L 255.9 154.6 L 255.7 153.8 L 256.6 152.6 L 257.2 151.4 L 257.5 150.4 L 258.7 149 L 259.6 147.7 L 260.5 146.5 L 261.4 144.6 L 261.8 143.4 L 261.9 142.8 L 262.2 142.5 L 263.5 143 L 263.3 144.3 L 263.8 143.9 L 264.3 142.8 L 264.7 141.6 L 264.5 141.6 L 263.3 140.3 L 263 139.7 L 261.4 139.1 L 261.7 137.9 L 262.5 137 L 261.6 136.4 L 262.3 135.3 L 261.8 134.4 L 262.4 133.7 L 262.4 133.7 L 262.2 133.2 L 261.7 132.7 L 262.4 131.6 L 262.1 130.5 L 262.7 129.2 L 261.8 129.1 L 260.2 129.1 L 259.3 128.7 L 258.6 127.4 L 257.9 127.1 L 256.6 126.6 L 255.1 126.8 L 253.7 126.2 L 253.1 125.6 L 251.7 125.9 L 251 126.8 L 250.3 126.9 L 248.8 127.1 L 247.5 127.6 L 246 127.9 L 246.7 127.1 L 248.6 125.8 L 250.1 125.4 L 250.2 125.1 L 248.1 125.8 L 246.5 126.7 L 244 127.6 L 244 128.2 L 242 129.2 L 240.3 129.7 L 238.9 130.2 L 238 130.7 L 235.6 131.4 L 234.6 132.1 L 232.8 132.6 L 232.2 132.5 L 230.8 132.9 L 229.2 133.4 L 227.9 133.8 z M 340.8 105.1 L 341.3 104.7 L 344.8 104.2 L 348.1 103.7 L 348.8 103.4 L 346.9 103 L 348 102.7 L 351.2 102 L 352.5 101.9 L 352.5 101.5 L 354.5 101.3 L 356.9 101.1 L 359.3 101.1 L 359.9 101.4 L 362.2 100.9 L 363.8 101.3 L 364.8 101.3 L 366.2 101.6 L 364.7 101.1 L 365.1 100.8 L 367.9 100.3 L 370.5 100.3 L 371.6 100 L 374.3 99.9 L 380.1 100 L 384.6 100.7 L 383.1 101 L 380.2 101 L 376.1 101.1 L 376.4 101.3 L 379.1 101.2 L 381.3 101.5 L 382.8 101.2 L 383.4 101.5 L 382.4 102.1 L 384.4 101.7 L 388.2 101.4 L 390.5 101.6 L 390.8 101.9 L 387.5 102.6 L 387 102.8 L 384.5 103 L 386.3 103 L 385.2 103.7 L 384.4 104.4 L 384.1 105.6 L 385 106.2 L 383.7 106.3 L 382.2 106.6 L 383.6 107.2 L 383.6 108.2 L 382.7 108.3 L 383.6 109.2 L 381.6 109.3 L 382.5 109.8 L 382.2 110.2 L 380.9 110.3 L 379.7 110.3 L 380.6 111.1 L 380.5 111.6 L 378.9 111.2 L 378.3 111.5 L 379.5 111.8 L 380.5 112.5 L 380.6 113.4 L 379 113.6 L 378.4 113.2 L 377.4 112.5 L 377.5 113.3 L 376.3 113.9 L 378.7 114 L 379.9 114 L 377.3 115.1 L 374.6 116 L 371.8 116.5 L 370.7 116.5 L 369.6 116.9 L 368 118.2 L 365.7 119.1 L 365 119.2 L 363.7 119.5 L 362.2 119.8 L 361.1 120.5 L 360.8 121.4 L 360.1 122.3 L 358.1 123.3 L 358.2 124.3 L 357.4 125.4 L 356.5 126.6 L 355.1 126.7 L 353.9 125.6 L 351.9 125.6 L 351.2 124.9 L 351 123.7 L 350 122.1 L 349.8 121.2 L 350.2 120.1 L 349.3 119 L 350.1 118 L 349.6 117.6 L 351.2 116.2 L 352.8 115.7 L 353.4 115.2 L 354 114.3 L 352.8 114.7 L 352.2 114.9 L 351.3 115.1 L 350.4 114.7 L 350.7 113.9 L 351.4 113.2 L 352.2 113.2 L 353.9 113.5 L 352.7 112.8 L 352.1 112.4 L 351.1 112.5 L 350.6 112.3 L 352.1 111.2 L 351.8 110.7 L 351.6 110 L 351.3 108.8 L 350.5 108.3 L 350.8 107.9 L 349 107.2 L 347.3 107.1 L 345 107.2 L 342.9 107.3 L 342.2 106.9 L 341.4 106.2 L 343.8 105.9 L 345.5 105.8 L 342.2 105.6 z M 319.7 113.3 L 321.1 112.8 L 319.9 112.8 L 320.6 111.6 L 322.2 110.5 L 323.5 110.1 L 326 109.8 L 324.7 110.5 L 324.8 111.2 L 326.4 110.3 L 329 109.8 L 329.5 111 L 328.8 111.8 L 330.8 111.4 L 332 111 L 333.5 111.6 L 334.3 112.1 L 334.1 112.6 L 335.9 112.4 L 336.3 113.1 L 338.2 113.6 L 338.7 114.1 L 338.9 115.2 L 336.8 115.7 L 338.6 116.5 L 339.9 116.8 L 340.6 117.9 L 342 118 L 341.3 118.9 L 338.9 120.3 L 338 119.8 L 337.1 118.6 L 335.8 118.8 L 335.3 119.5 L 335.9 120.2 L 336.9 120.8 L 337.1 121.1 L 337.1 122.4 L 336.3 123.3 L 335.3 122.9 L 333.4 121.9 L 334.2 123 L 334.8 123.8 L 334.7 124.2 L 332.3 123.7 L 330.6 123 L 329.8 122.4 L 330.3 122 L 329.2 121.3 L 328.2 120.7 L 328 121.1 L 325.1 121.3 L 324.5 120.9 L 325.7 119.9 L 327.5 119.9 L 329.6 119.8 L 329.6 119.3 L 330.3 118.7 L 332.2 117.5 L 332.3 116.9 L 332.2 116.5 L 331.2 115.9 L 329.6 115.5 L 330.4 115.2 L 329.9 114.5 L 329.1 114.4 L 328.7 114 L 328 114.4 L 326.2 114.5 L 323.1 114.2 L 321.5 113.9 L 320.1 113.7 z M 325.8 106.8 L 326.3 106.3 L 328.1 106 L 328.5 105.3 L 329.1 105.2 L 330.8 105.7 L 330.4 105 L 329.3 104.8 L 330.4 104.4 L 332.1 104.1 L 332.7 103.8 L 332 103.4 L 332.3 102.9 L 334.4 103 L 334.9 103.1 L 336.5 102.7 L 334.9 102.6 L 332.1 102.7 L 331.1 102.3 L 330.9 102 L 330.4 101.7 L 330.6 101.4 L 332 101.2 L 332.9 101.2 L 334.5 101.1 L 336 100.7 L 336.9 100.8 L 337.4 101 L 338.6 100.6 L 339.7 100.4 L 341.2 100.4 L 343.5 100.3 L 343.8 100.4 L 346.1 100.3 L 347.6 100.3 L 349.2 100.4 L 351.1 100.4 L 352.6 100.5 L 353.8 100.8 L 353.5 101 L 351.3 101.4 L 349.3 101.5 L 348.4 101.7 L 350.1 101.7 L 347.8 102.3 L 346.3 102.6 L 344.2 103.3 L 342.4 103.5 L 341.7 103.7 L 339.2 103.8 L 340.2 103.9 L 339.4 104.1 L 339.6 104.6 L 338.5 105 L 336.9 105.3 L 336.1 105.7 L 334.7 106 L 334.6 106.3 L 336 106.2 L 335.8 106.5 L 332.9 107.1 L 331.1 106.8 L 328.4 107 L 327.3 106.9 z M 293.7 114.3 L 294.4 114.1 L 296.1 113.9 L 297.3 114 L 298.7 113.8 L 297.2 113.5 L 295.2 113.6 L 293.9 113.6 L 293.9 113.1 L 296.5 112.7 L 295.1 112.7 L 293.9 112.4 L 295.7 111.5 L 296.8 111 L 300 110.3 L 300.6 110.6 L 299.5 111.1 L 301.9 110.7 L 302.5 111.3 L 304.1 110.7 L 304.5 111.1 L 304 112.3 L 305 111.8 L 305.6 110.6 L 306.5 110.4 L 307.2 110.6 L 307.7 111.1 L 307.1 112.2 L 306.6 113 L 307.5 113.6 L 308.6 114.2 L 308 114.7 L 306.5 114.8 L 306.6 115.3 L 305.9 115.7 L 304.4 115.5 L 303.2 115.2 L 302 115.3 L 299.9 115.7 L 297.4 115.8 L 295.6 116 L 295.7 115.4 L 294.8 115.1 L 293.8 115.2 z M 295.2 180.1 L 295.9 179.7 L 296.2 179.2 L 296.8 178.8 L 297.5 178.6 L 298.5 178.4 L 298.8 178.3 L 299.8 178.4 L 300.8 178.4 L 301.9 178.9 L 302.3 179.4 L 303.5 179.2 L 303.9 179.6 L 304.8 180.5 L 305.5 181.1 L 305.9 181.1 L 306.6 181.4 L 306.5 181.8 L 307.4 181.8 L 308.3 182.4 L 308.1 182.7 L 307.2 182.9 L 306.4 183 L 305.6 182.9 L 303.8 183 L 304.7 182.2 L 304.2 181.9 L 303.4 181.8 L 303.1 181.4 L 302.9 180.5 L 302.2 180.6 L 301.1 180.2 L 300.7 179.9 L 299.1 179.7 L 298.7 179.4 L 299.3 179.1 L 298.1 179 L 297.1 179.7 L 296.6 179.7 L 296.3 180.1 L 295.7 180.2 z M 307.6 185.2 L 307.8 184.7 L 308.9 184.9 L 309.8 185 L 310.3 184.7 L 309.8 184.1 L 309.9 183.6 L 309.1 183.3 L 309.4 182.9 L 310.2 183 L 311.2 183.2 L 311.4 183 L 312.4 183 L 313.1 183.4 L 313.4 183.3 L 313.6 183.8 L 314.3 183.8 L 314.2 184.2 L 314.7 184.3 L 315.3 184.8 L 314.8 185.4 L 314.2 185.1 L 313.6 185.1 L 313.2 185.1 L 313 185.3 L 312.5 185.4 L 312.3 185.1 L 311.9 185.3 L 311.3 186.3 L 311 186 L 311 185.6 L 310.2 185.4 L 309.6 185.5 L 308.9 185.4 L 308.2 185.6 z M 334.2 143.1 L 335 142.7 L 334.6 142.3 L 335.8 141.4 L 337.7 139.2 L 338.6 138.5 L 339.7 138 L 340.2 138 L 339.9 138.4 L 339 139.3 L 337.9 140.5 L 338.7 140 L 339.4 140.3 L 338.9 140.8 L 339.7 141.2 L 340.3 140.8 L 341.3 141.3 L 340.7 142.3 L 341.5 142.1 L 341.4 142.8 L 341.6 143.7 L 340.8 144.9 L 340.2 144.9 L 339.6 144.7 L 340.1 143.5 L 339.9 143.4 L 338.2 144.6 L 337.6 144.5 L 338.6 143.9 L 337.6 143.5 L 336.4 143.6 L 334.2 143.6 z M 319.8 106.5 L 320.7 106.1 L 322.3 106.1 L 322.8 106.5 L 324.4 106.5 L 324.8 106.8 L 324.1 107.2 L 324.8 107.5 L 325.1 107.8 L 326.2 107.8 L 327.3 107.9 L 328.9 107.7 L 330.7 107.6 L 332 107.6 L 332.5 108.1 L 332.3 108.5 L 331.5 108.8 L 330 109.1 L 329 108.9 L 326.4 109.1 L 324.6 109.1 L 323.4 109 L 321.5 108.6 L 321.8 108 L 322.3 107.4 L 322 107 L 320.4 106.8 z M 300.5 108.2 L 303.1 107.1 L 304.3 106.8 L 306.2 107.2 L 306.8 107.8 L 308.2 107.9 L 308.3 106.8 L 309.6 106.5 L 310.3 106.6 L 309.9 107.1 L 309.7 107.5 L 310.7 107.3 L 311.5 107.4 L 311 107.9 L 309.9 108.4 L 306.8 108.6 L 304 109.1 L 302.7 109.1 L 303 108.7 L 305.4 108.2 L 301.4 108.4 z M 324.5 103.4 L 324.5 103 L 325.6 102.6 L 326.6 102.3 L 327.4 102.2 L 327.4 102 L 329.2 102 L 329.6 102.5 L 330.6 102.7 L 331.7 102.8 L 331.6 103.5 L 332.1 103.8 L 330.7 104.1 L 328.3 104.9 L 326.8 104.9 L 325.3 104.8 L 325 104.4 L 325.4 104 L 326.4 103.8 L 324.9 103.8 z M 315.3 122.2 L 316.5 121.5 L 317.4 120.6 L 318.5 119.4 L 319.1 119.5 L 318.9 120.1 L 319.5 119.9 L 319.8 120.2 L 320.6 120.6 L 321.5 121 L 321.2 121.6 L 321.9 121.5 L 322.4 121.9 L 321.2 122.3 L 319.9 122 L 319.7 121.5 L 318.3 122.1 L 316.5 122.8 L 316.7 122.1 z M 288.5 112 L 289.5 111.5 L 291.2 110.7 L 292.9 109.9 L 293 109.2 L 296.1 109 L 297 109.3 L 299.1 109.3 L 299.6 109.7 L 299.9 110.2 L 298.5 110.4 L 295.4 111.2 L 293.3 112.1 L 292.7 112.6 L 289.7 113.1 L 289.9 112.6 z M 206.6 184.2 L 206.7 183.8 L 206.6 183.2 L 206.7 183.1 L 207 182.9 L 207 182.6 L 207.1 182.4 L 207.1 182.5 L 207.6 182.7 L 207.8 182.8 L 207.9 183 L 208.1 183.5 L 208.1 183.6 L 207.5 183.9 L 207.1 184.1 L 206.8 184.4 z M 259.9 140.2 L 260 139.5 L 260.3 139.2 L 261.3 139.5 L 261.8 139.7 L 262.7 139.8 L 262.8 140.3 L 262.8 141 L 263.6 141.5 L 263.5 142.3 L 262.8 142.5 L 261.4 141.9 L 261.4 141.4 L 260.8 140.9 L 260.9 140.5 z M 310.1 111.3 L 310.5 110.9 L 312.1 111 L 311.9 110.3 L 313.5 109.7 L 314.3 110 L 316 109.8 L 315.9 110.2 L 314.5 110.7 L 315.4 111.2 L 314.2 112.2 L 312.3 112.7 L 311.6 112.6 L 311.4 112.2 z M 313.8 107.8 L 314.8 107 L 315.6 107 L 317.3 106.6 L 318.4 106.7 L 318.7 106.5 L 318.7 107 L 318.1 107.6 L 316.8 108.4 L 315.3 108.5 L 314.5 108.4 L 315.3 107.7 z M 297.5 107.2 L 300.1 106.4 L 302.9 105.7 L 304.1 105.7 L 305.4 105.5 L 304.1 106.4 L 303 106.7 L 302.1 106.8 L 299.9 107.3 L 298.3 107.4 L 297.5 107.2 z M 232.7 122.4 L 233.4 121.9 L 233.7 122.1 L 234.5 122 L 234.8 122.3 L 235.6 122.5 L 235.3 122.6 L 234.2 122.9 L 233.8 122.6 L 233.8 122.4 L 232.8 122.5 z M 329.8 110.3 L 330.2 109.9 L 330.7 109.8 L 332.6 109.9 L 333.6 110.6 L 333.4 110.9 L 332.5 110.9 L 331.6 110.8 L 330.5 111 L 330.3 110.9 z M 315.8 111.8 L 316.2 110.8 L 316.8 110.2 L 317.7 109.7 L 318.9 109.4 L 320.6 109.4 L 322 109.7 L 319.8 110.7 L 318.5 111 L 316.8 111.8 z M 315.4 104.8 L 316.6 104.5 L 316 104.2 L 316.5 103.8 L 317.9 104 L 319.5 104.3 L 319.5 104.8 L 319.3 105.3 L 318.1 105.2 L 317.2 104.8 z M 309 114.9 L 310.2 114.5 L 311.3 114 L 311.9 114.4 L 312.3 114.6 L 312.4 114.8 L 312.5 115.3 L 311.6 115.7 L 310.7 115.3 L 309.8 115.5 z M 302.8 185.4 L 303 185 L 303.5 184.9 L 303.8 185 L 304.6 185.1 L 305.2 185.4 L 305.4 185.8 L 304.5 185.9 L 304.1 186.1 L 303.4 185.9 z M 258.1 135.6 L 258.4 135 L 258.9 134.5 L 259.2 134.7 L 260.3 134.6 L 258.7 136.1 L 258.8 137.2 L 258.3 137.2 L 258.2 136.6 L 258.3 136 z M 328.1 144.8 L 328.7 144.4 L 328.8 145 L 329.6 145.2 L 330.7 145.2 L 329.9 145.8 L 329.5 145.8 L 328.2 145.3 z M 328 117.7 L 328.2 117.1 L 329 116.4 L 330 116.3 L 330.5 116.6 L 330.2 117.1 L 329.9 117.3 L 329.1 117.7 z M 320.7 105.1 L 320.9 104.7 L 321.4 104.3 L 322.3 104.3 L 322.7 104.4 L 323.2 104.7 L 322.6 105.1 L 321.1 105.3 z M 316.6 185.1 L 316.8 184.9 L 317.8 184.9 L 318.4 185.1 L 318.6 185.4 L 318.3 185.7 L 317.3 185.7 L 316.6 185.8 z M 240.1 130.7 L 240.6 130.1 L 242 129.6 L 242.8 129.4 L 243.4 129.5 L 243.4 129.9 L 241.8 130.6 L 240.3 131.1 z M 206.2 181.6 L 206.2 181.5 L 206.4 181.4 L 206.8 181.5 L 207.1 181.7 L 206.9 181.9 L 206.5 182 L 206.3 181.7 z M 204.5 180.6 L 204.9 180.4 L 204.9 180.5 L 205.2 180.9 L 205.1 181 L 205 181 L 204.6 180.9 L 204.5 180.6 z M 329.4 140.4 L 329.9 140.3 L 331.2 140.6 L 332.1 141.2 L 332.1 141.5 L 331.5 141.5 L 330.2 141.1 z M 322.4 197 L 322.7 196.6 L 322.7 196 L 323.5 195.8 L 323.7 195.9 L 323.6 197 L 322.6 197.1 z M 320.7 124.1 L 320.8 124 L 321.5 123.7 L 321.9 123.7 L 321.9 123.9 L 321.1 124.6 L 320.8 124.5 z M 317.8 108.5 L 318.8 108 L 320.4 107.7 L 320.7 108.1 L 320.6 108.5 L 319.7 108.9 L 318.6 108.8 z M 303.8 176.3 L 304.2 175.4 L 304.6 175.4 L 304.8 176.6 L 304.7 177.4 L 304.4 177.5 L 304.2 176.7 z M 321.6 105.6 L 321.8 105.3 L 323.4 105.4 L 323.7 105.6 L 323.5 105.7 L 323.1 105.7 z M 317.5 123.9 L 317.5 123.6 L 318.6 123 L 320 123 L 319.8 123.2 L 318.2 123.9 z M 309.6 104.7 L 309.8 104.6 L 311.1 104.3 L 311.4 104.3 L 312.2 104.5 L 310.9 104.7 z M 307.7 105.5 L 308.9 105.1 L 310.2 105 L 311.1 105.2 L 310.4 105.5 L 308.5 105.8 z M 305.1 172.9 L 305.1 172.8 L 306 173.4 L 305.6 174.4 L 305.4 174.2 L 305.5 173.5 z M 231.7 126.5 L 233 126.2 L 233.7 126.4 L 233.1 126.9 L 232.3 127.1 L 231.9 126.8 z M 202.8 179.9 L 202.9 179.8 L 203.1 179.6 L 203.4 179.7 L 203.3 180 L 203.1 180.1 z M 307.3 110.2 L 307.8 110 L 309 110 L 309.4 110.2 L 307.8 111 z M 303.6 173.6 L 303.6 173.1 L 304.2 173 L 305 173 L 305 173.4 z M 205.5 181.3 L 205.7 181.1 L 206.2 181.1 L 206.2 181.3 z",
+        labelX: 251,
+        labelY: 158
+      },
+      {
+        id: "OC",
+        name: "Australia and Oceania",
+        path: "M 537.5 260.3 L 537.8 259.4 L 538.5 259.2 L 538.8 258.9 L 539 258.4 L 539.5 257.4 L 539.6 256.6 L 539.5 255.1 L 539.5 254.3 L 539.8 253.5 L 539.6 252.6 L 539.7 252.1 L 539.3 251.6 L 539.5 250.5 L 539 249.3 L 539 248.7 L 539.4 249.3 L 539.3 248 L 539.8 248.4 L 540 249 L 540.2 248.2 L 539.8 247.1 L 539.8 246.7 L 539.6 246.2 L 539.9 245.4 L 540.2 245.1 L 540.6 244.3 L 540.6 243.5 L 541.3 242.5 L 541.2 243.6 L 541.9 242.6 L 543 242.1 L 543.7 241.5 L 544.7 241 L 545.3 240.9 L 545.6 241 L 546.7 240.5 L 547.4 240.3 L 547.7 240 L 548 239.9 L 548.7 239.9 L 550.1 239.5 L 550.9 238.9 L 551.3 238.1 L 552.2 237.4 L 552.3 236.8 L 552.5 236.1 L 553.6 234.8 L 553.9 236.1 L 554.5 235.8 L 554.1 235.1 L 554.7 234.4 L 555.2 234.7 L 555.5 233.6 L 556.3 232.9 L 556.7 232.4 L 557.3 232.1 L 557.4 231.7 L 557.9 231.9 L 558 231.5 L 558.6 231.3 L 559.2 231.1 L 560 231.8 L 560.6 232.6 L 561.4 232.7 L 562.2 232.8 L 562 232 L 562.8 230.9 L 563.4 230.5 L 563.2 230.1 L 563.9 229.3 L 564.7 228.8 L 565.3 229 L 566.4 228.7 L 566.5 228 L 565.6 227.5 L 566.3 227.3 L 567.1 227.7 L 567.7 228.2 L 568.7 228.6 L 569.1 228.5 L 569.8 228.9 L 570.6 228.5 L 571 228.6 L 571.4 228.3 L 571.9 229 L 571.4 229.8 L 570.9 230.4 L 570.4 230.4 L 570.5 231 L 570 231.7 L 569.5 232.4 L 569.5 232.8 L 570.4 233.6 L 571.2 234.1 L 571.8 234.6 L 572.5 235.4 L 572.9 235.4 L 573.5 235.8 L 573.6 236.2 L 574.7 236.7 L 575.6 236.2 L 576 235.4 L 576.4 234.8 L 576.7 234 L 577.2 232.9 L 577.2 232.2 L 577.3 231.8 L 577.3 231 L 577.6 229.9 L 577.9 229.6 L 577.8 229.1 L 578.2 228.4 L 578.5 227.6 L 578.6 227.2 L 579.1 226.6 L 579.4 227.3 L 579.4 228.2 L 579.7 228.4 L 579.6 229 L 580 229.7 L 580 230.5 L 579.9 231.1 L 580.1 232.2 L 581 231.6 L 581.3 232.2 L 581.8 232.8 L 581.6 233.4 L 581.6 234.7 L 581.7 235.4 L 582 235.6 L 582.1 236.8 L 581.8 237.5 L 582 238.5 L 583.2 239.2 L 583.9 239.9 L 584.6 240.5 L 584.4 240.9 L 584.9 241.8 L 585 243.3 L 585.5 243 L 585.9 243.6 L 586.3 243.4 L 586.1 244.9 L 586.7 245.8 L 587.2 246.3 L 587.8 247.5 L 587.8 248.6 L 587.6 249.5 L 587.2 250.3 L 587.3 251.6 L 586.8 252.8 L 586.3 253.5 L 585.4 254.8 L 585.1 255.6 L 584.4 256.6 L 583.3 257.9 L 582.1 258.6 L 581.1 259.7 L 580.4 260.4 L 579.4 261.7 L 578.6 262.4 L 577.7 263.4 L 577 264.4 L 576.8 264.9 L 575.9 265.4 L 574.5 265.4 L 573.1 266 L 572.3 266.5 L 571.2 267.2 L 570.6 266.5 L 570 266.3 L 570.6 265.5 L 569.8 265.8 L 568.2 266.8 L 567.4 266.4 L 566.9 266.2 L 566.3 266.1 L 565.4 265.7 L 565.1 264.8 L 565.4 263.8 L 565.5 263 L 565.2 262.5 L 564.1 262.3 L 564.8 261.6 L 565 260.5 L 564 261.5 L 562.8 261.8 L 563.8 261 L 564.4 260.2 L 565.1 259.5 L 565.5 258.4 L 564 259.6 L 563 260.1 L 562.1 261.2 L 561.4 260.7 L 561.8 259.9 L 561.5 258.9 L 561.1 258.3 L 561.4 258 L 560.2 257.1 L 559.4 257.1 L 558.5 256.4 L 556.3 256.5 L 554.6 257 L 553 257.5 L 551.9 257.4 L 550.3 258.2 L 549.2 258.5 L 548.6 259.2 L 548 259.8 L 546.9 259.9 L 546.1 260 L 545.2 259.7 L 544.3 259.9 L 543.4 259.9 L 542.4 260.7 L 542.1 260.6 L 541.3 261 L 540.6 261.5 L 539.7 261.4 L 538.9 261.4 L 538 260.5 z M 602 270.3 L 603.5 269.2 L 603.7 268.4 L 602.9 267.8 L 603.3 267.3 L 604.5 266.8 L 605.4 265.7 L 605.9 264.8 L 606.1 263.8 L 606.3 263.6 L 606.1 263 L 605.9 261.7 L 606 260.7 L 606.5 260.6 L 606.7 261.4 L 607.4 261.8 L 607 263.1 L 606.9 264.6 L 607.5 263.6 L 607.8 264 L 607.3 265 L 607.9 265.5 L 608.6 265.6 L 609.7 265.1 L 610.1 265.2 L 609 266.5 L 608.1 267.3 L 607.2 267.3 L 606.6 267.7 L 606.2 268.4 L 605.9 268.6 L 604.9 269.4 L 603.5 270.4 L 602.2 270.9 L 602.3 270.5 z M 577.5 224.4 L 577.8 219.8 L 578.1 215.1 L 580.2 216.1 L 582.5 216.9 L 583.3 217.6 L 584 218.4 L 584.1 219.2 L 586.2 220.1 L 586.4 220.8 L 585.3 221 L 585.5 222 L 586.5 222.9 L 587.2 224.4 L 587.9 224.4 L 587.8 225 L 588.7 225.2 L 588.3 225.5 L 589.6 226.1 L 589.4 226.5 L 588.6 226.6 L 588.3 226.2 L 587.2 226.1 L 586 225.9 L 585.1 225 L 584.5 224.2 L 583.9 222.9 L 582.4 222.3 L 581.3 222.7 L 580.4 223.2 L 580.5 224.2 L 579.5 224.7 L 578.8 224.5 z M 587.3 277.3 L 587.6 276.8 L 589 275.7 L 591.6 274.4 L 592.5 274.1 L 593.7 273.6 L 595.3 272.8 L 596.6 272.1 L 597.9 271 L 598.6 270.7 L 599.4 269.9 L 600.7 269.2 L 600.5 269.8 L 600.3 270.4 L 601.6 269.8 L 601.4 270.4 L 601 271 L 600 271.7 L 598.5 272.7 L 597.4 273.3 L 597.3 274 L 596.4 274 L 595 274.5 L 593.9 275.4 L 592.1 276.9 L 590.7 277.5 L 589.8 277.9 L 588.8 277.9 L 588.5 277.4 z M 587.1 219.6 L 587.2 219.2 L 588.3 219.4 L 589 219.3 L 589.2 218.6 L 589.4 218.5 L 589.5 219.3 L 590.2 219.2 L 590.6 218.7 L 591.3 218.2 L 591.3 217.4 L 592 217.3 L 592.3 217.6 L 592.2 218.4 L 591.7 219.2 L 591 219.3 L 590.8 219.7 L 590.1 220.1 L 589.4 220.4 L 588.8 220.4 L 587.7 220 z M 566.8 273.5 L 566.9 272.3 L 567.4 271.4 L 567.5 270.2 L 567.9 269.5 L 568.6 269.7 L 569.4 270.1 L 570.2 269.9 L 571.3 269.7 L 571.9 269.8 L 570.9 271.4 L 570.2 271.9 L 569.3 273.1 L 569.1 272.7 L 567.7 273.7 L 567.5 273.6 z M 590.3 215.3 L 590.6 215 L 591.3 215.4 L 591.7 215.7 L 592.2 216 L 592.7 216.6 L 593.1 217.1 L 593.2 217.8 L 592.8 218.2 L 592.6 217.4 L 592.4 216.8 L 591.8 216.3 L 591.1 215.7 z M 603.5 240.1 L 604 240.1 L 604.6 240.6 L 605 241.1 L 605.3 241.5 L 606.1 242.4 L 606.6 243.1 L 606 243.4 L 605.4 243 L 604.7 242.4 L 604.1 241.6 L 603.5 240.6 z M 594.9 218.7 L 595.1 218.6 L 595.2 219 L 595.6 219.4 L 596.1 220.3 L 596.7 220.7 L 596.5 221.1 L 596.1 221.3 L 595.6 220.7 L 595.1 219.8 z M 620.8 237.4 L 620.8 236.7 L 621.4 236.2 L 621.9 236.4 L 622.3 236.2 L 622.6 236.6 L 622.2 237.3 L 621.4 237.5 z M 599.3 222 L 599.5 221.9 L 600.1 222.2 L 601 222.9 L 601.3 223.3 L 601.3 223.6 L 600.4 223 L 599.8 222.5 z M 622.8 235.2 L 623.5 234.9 L 623.9 234.8 L 624.8 234.4 L 624.6 235.1 L 623.7 235.4 L 622.8 235.7 z M 600.8 225.2 L 601 224.6 L 601.8 224.8 L 602.1 225.1 L 602.3 225.5 L 601.8 225.5 L 601 225.4 z M 608.3 233.4 L 608.5 232.3 L 609 232.7 L 609 233.9 L 608.7 233.7 L 608.4 233.8 z M 602.2 223.3 L 602.6 223.3 L 603 224.4 L 603.4 225.1 L 603.2 225.4 L 602.4 224.1 z M 597.2 221.1 L 597.3 220.8 L 598 221.4 L 598.5 221.9 L 598.2 222 L 597.7 221.7 z M 602.8 226 L 603.5 226.3 L 603.8 226.4 L 604.1 226.9 L 603.2 226.9 z M 608.7 234.5 L 608.9 234.1 L 609.5 234.9 L 609 235.1 z M 175.6 234.4 L 175.9 234.3 L 175.9 235 L 175.8 235.1 z",
+        labelX: 546,
+        labelY: 249
+      },
+      {
+        id: "SA",
+        name: "South America",
+        path: "M 297.6 218.2 L 297.9 217.2 L 298.9 216.3 L 299.5 215.2 L 299.3 214.6 L 298.8 215.2 L 298 214.6 L 298.3 214.2 L 298 212.9 L 298.5 212.7 L 298.7 211.8 L 299.2 210.9 L 299.1 210.3 L 299.8 210 L 300.7 209.4 L 300.5 209 L 301 208.9 L 300.9 208.2 L 301.2 207.6 L 301.9 207.5 L 302.4 206.6 L 302.9 205.9 L 302.5 205.6 L 302.7 204.7 L 302.5 203.4 L 302.8 203 L 302.6 201.8 L 302.1 201.1 L 302.3 200.4 L 302.7 200.5 L 303 200.1 L 302.7 199.2 L 302.9 199 L 303.5 199.1 L 304.5 198.1 L 305.1 197.9 L 305.1 197.4 L 305.4 196.2 L 306.2 195.6 L 307 195.5 L 307.1 195.2 L 308.1 195.4 L 309.1 194.6 L 309.6 194.3 L 310.2 193.6 L 310.7 193.7 L 311 194.1 L 310.7 194.6 L 310.7 194.9 L 309.9 195.1 L 310.3 195.7 L 310.2 196.5 L 309.6 197.3 L 310 198.4 L 310.6 198.3 L 310.9 197.3 L 310.6 196.8 L 310.6 195.7 L 312.2 195.1 L 312 194.5 L 312.5 194 L 312.9 195 L 313.8 195 L 314.5 195.8 L 314.6 196.3 L 315.7 196.3 L 317 196.2 L 317.7 196.8 L 318.7 197 L 319.4 196.6 L 319.4 196.2 L 321 196.1 L 322.5 196.1 L 321.4 196.5 L 321.8 197.2 L 322.8 197.3 L 323.7 198 L 323.9 199.1 L 324.5 199.1 L 325 199.4 L 325.8 200 L 326.6 200.9 L 326.6 201.6 L 327.1 201.7 L 327.7 202.4 L 328.2 202.9 L 329.7 203.1 L 329.8 202.9 L 330.9 202.8 L 332.2 203.2 L 331.5 204.4 L 331.6 205.4 L 332.1 206.2 L 331.8 206.8 L 331.7 207.5 L 331.4 208.1 L 331.9 208.4 L 332.3 208 L 332.6 208.1 L 332.8 208.5 L 333.4 208.4 L 333.9 207.8 L 334.3 206.8 L 335.1 205.5 L 335.5 205.4 L 335.8 206.2 L 336.5 208.7 L 337.1 208.9 L 337.1 209.9 L 336.2 211.1 L 336.6 211.5 L 338.8 211.7 L 338.9 213.2 L 339.8 212.2 L 341.4 212.7 L 343.5 213.6 L 344.1 214.5 L 343.9 215.2 L 345.4 214.8 L 347.9 215.6 L 349.8 215.5 L 351.6 216.7 L 353.3 218.3 L 354.2 218.7 L 355.3 218.8 L 355.8 219.2 L 356.2 221 L 356.5 221.9 L 356 224.3 L 355.4 225.2 L 353.7 227.2 L 352.9 228.8 L 352.1 230 L 351.7 230.1 L 351.4 231.1 L 351.6 233.8 L 351.4 236 L 351.3 236.9 L 351 237.5 L 350.9 239.4 L 349.7 241.3 L 349.6 242.7 L 348.6 243.4 L 348.4 244.2 L 347.1 244.2 L 345.2 244.8 L 344.3 245.4 L 343 245.8 L 341.7 247 L 340.7 248.4 L 340.7 249.4 L 341 250.2 L 340.9 251.7 L 340.7 252.4 L 340 253.2 L 339 255.7 L 338.1 256.8 L 337.3 257.5 L 337 258.8 L 336.4 259.6 L 336 260.5 L 334.8 261.3 L 333.9 261.1 L 333.3 261.2 L 332 260.6 L 331.2 260.6 L 330.4 259.8 L 330.4 260.6 L 332.2 261.8 L 332.2 262.8 L 333.1 263.4 L 333.2 264.1 L 332.4 265.9 L 330.9 266.7 L 328.6 267 L 327.3 266.9 L 327.7 267.7 L 327.7 268.8 L 328.1 269.5 L 327.6 270 L 326.5 270.2 L 325.2 269.7 L 324.9 270 L 325.4 271.4 L 326.3 271.9 L 326.8 271.4 L 327.4 272.2 L 326.5 272.6 L 325.8 273.5 L 326.1 274.9 L 326 275.6 L 325 275.6 L 324.3 276.4 L 324.3 277.4 L 325.8 278.4 L 326.9 278.7 L 327 280 L 326 280.8 L 325.8 282.4 L 325 282.9 L 324.8 283.6 L 325.8 285 L 326.8 285.8 L 326.3 285.7 L 325.4 285.7 L 325 286 L 324.2 286.5 L 324.6 287.8 L 324.2 287.8 L 322.8 287.4 L 321.1 286.5 L 321.1 286.5 L 319.4 285.7 L 318.7 284.8 L 318.7 284 L 317.7 283.1 L 316.6 280.7 L 316.6 279.4 L 317.3 278.3 L 315.5 277.9 L 316.1 276.7 L 315.6 274.3 L 317.1 274.8 L 316.7 271.9 L 315.8 271.5 L 316 273.3 L 315.2 273.1 L 314.9 271.1 L 314.5 268.4 L 314.7 267.5 L 314 266.1 L 313.4 264.5 L 313.9 264.4 L 314 262.1 L 314.3 259.8 L 314.3 257.7 L 313.6 255.6 L 313.7 254.4 L 313.3 252.6 L 313.7 250.9 L 313.5 248.1 L 313.5 245.2 L 313.5 242 L 313.2 239.6 L 312.7 237.6 L 311.4 236.8 L 311.2 236.2 L 308.6 234.8 L 306.2 233.2 L 305.2 232.3 L 304.5 231.1 L 304.7 230.7 L 303.5 228.9 L 302.1 226.2 L 300.8 223.4 L 300.2 222.7 L 299.8 221.7 L 298.8 220.7 L 297.8 220.2 L 298.2 219.5 z M 320.1 286.5 L 321.1 286.7 L 323 287.7 L 324.7 288.1 L 324.9 287.5 L 324.9 286.6 L 325.6 286 L 326.5 286.2 L 327.1 286.8 L 328.1 287.8 L 329.8 288.7 L 331.5 289 L 331.3 289.7 L 330.3 289.7 L 329.6 289.3 L 329.4 289.8 L 328.7 290.2 L 328.2 290.2 L 327.5 290.1 L 326.6 289.7 L 325.4 289.5 L 323.7 288.7 L 322.3 288 z M 334 285.1 L 335 284.3 L 336.1 284.6 L 336.6 284.1 L 337.6 284.7 L 337.5 285.2 L 336.2 285.6 L 335.5 285.1 L 334.8 285.7 z",
+        labelX: 299,
+        labelY: 243
+      }
+    ];
+
+    const EUROPE_LAYOUT = [
+      ["IS","Iceland",222,88,46,28],["IE","Ireland",272,172,30,42],["GB","United Kingdom",308,152,42,58],["NO","Norway",396,70,40,94],["SE","Sweden",440,92,44,88],
+      ["FI","Finland",490,86,50,74],["DK","Denmark",394,178,34,24],["NL","Netherlands",354,212,28,26],["BE","Belgium",382,224,28,24],["FR","France",352,254,70,62],
+      ["ES","Spain",302,326,72,50],["PT","Portugal",276,330,24,46],["DE","Germany",424,212,50,58],["PL","Poland",480,218,58,46],["CZ","Czechia",444,276,42,24],
+      ["CH","Switzerland",416,294,38,24],["IT","Italy",454,318,42,74],["AT","Austria",464,300,52,24],["HU","Hungary",518,300,44,26],["UA","Ukraine",572,248,72,50],
+      ["RO","Romania",562,308,54,42],["GR","Greece",540,366,48,42],["TR","Turkey",594,368,86,34],["RU","European Russia",628,132,112,90]
+    ];
+
+    function rectPath(x, y, w, h, notch) {
+      const n = Math.min(w, h) * .18;
+      if (notch % 4 === 0) return `M ${x},${y+n} L ${x+n},${y} L ${x+w},${y} L ${x+w-n},${y+h} L ${x},${y+h} Z`;
+      if (notch % 4 === 1) return `M ${x},${y} L ${x+w-n},${y} L ${x+w},${y+n} L ${x+w},${y+h} L ${x+n},${y+h} L ${x},${y+h-n} Z`;
+      if (notch % 4 === 2) return `M ${x+n},${y} L ${x+w},${y} L ${x+w},${y+h-n} L ${x+w-n},${y+h} L ${x},${y+h} L ${x},${y+n} Z`;
+      return `M ${x},${y} L ${x+w},${y+n} L ${x+w},${y+h} L ${x+n},${y+h} L ${x},${y+h-n} Z`;
+    }
+
+    function fromLayout(layout) {
+      return layout.map((item, i) => ({
+        id: item[0],
+        name: item[1],
+        path: rectPath(item[2], item[3], item[4], item[5], i),
+        labelX: item[2] + item[4] / 2,
+        labelY: item[3] + item[5] / 2,
+        size: item[4] * item[5]
+      }));
+    }
+
+    const MAP_DATABASE = {
+      us_states: US_STATES_DETAILED,
+      texas_counties: TEXAS_REGIONS_DETAILED,
+      world_continents: WORLD_CONTINENTS_DETAILED,
+      europe_nations: fromLayout(EUROPE_LAYOUT)
+    };
+
+    const state = {
+      mapRegions: [],
+      activeRegion: null,
+      selectedRegion: null,
+      difficulty: "easy",
+      completionPercent: 0,
+      phase: "menu",
+      lens: "analysis",
+      startedAt: 0,
+      elapsed: 0,
+      timerId: null,
+      sound: true,
+      pointer: null
+    };
+
+    const svg = $("#workspace");
+    const backdropLayer = $("#backdropLayer");
+    const lockedLayer = $("#lockedLayer");
+    const pieceLayer = $("#pieceLayer");
+    let audioCtx = null;
+    $("#statusText").textContent = "Loading map data...";
+
+    function parseMapData(regionKey) {
+      return MAP_DATABASE[regionKey].map((raw, index) => ({
+        id: raw.id,
+        name: raw.name,
+        originalPath: raw.path,
+        currentX: 0,
+        currentY: 0,
+        targetX: 0,
+        targetY: 0,
+        rotation: 0,
+        isLocked: false,
+        fill: PALETTE[index % PALETTE.length],
+        labelX: raw.labelX || 0,
+        labelY: raw.labelY || 0,
+        snapBoost: raw.snapBoost || 0,
+        size: raw.size || 3200,
+        bbox: null,
+        element: null
+      }));
+    }
+
+    function svgPoint(evt) {
+      const pt = svg.createSVGPoint();
+      pt.x = evt.clientX;
+      pt.y = evt.clientY;
+      return pt.matrixTransform(svg.getScreenCTM().inverse());
+    }
+
+    function seededRandom(seed) {
+      let t = seed + 0x6D2B79F5;
+      return function() {
+        t += 0x6D2B79F5;
+        let x = Math.imul(t ^ t >>> 15, 1 | t);
+        x ^= x + Math.imul(x ^ x >>> 7, 61 | x);
+        return ((x ^ x >>> 14) >>> 0) / 4294967296;
+      };
+    }
+
+    function updateTimer() {
+      if (state.phase === "solving") state.elapsed = Math.floor((Date.now() - state.startedAt) / 1000);
+      const m = Math.floor(state.elapsed / 60);
+      const s = String(state.elapsed % 60).padStart(2, "0");
+      $("#timerText").textContent = `${m}:${s}`;
+    }
+
+    function startTimer() {
+      clearInterval(state.timerId);
+      state.startedAt = Date.now();
+      state.elapsed = 0;
+      updateTimer();
+      state.timerId = setInterval(updateTimer, 1000);
+    }
+
+    function currentPromptPool() {
+      return THINKING_PROMPTS[state.lens] || THINKING_PROMPTS.analysis;
+    }
+
+    function showPrompt(piece) {
+      const pool = currentPromptPool();
+      const index = Math.floor(Math.random() * pool.length);
+      const prefix = piece ? `${piece.name}: ` : "";
+      $("#promptText").textContent = prefix + pool[index];
+    }
+
+    function tone(freq, start, duration, type, gainValue) {
+      if (!state.sound) return;
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.0001, audioCtx.currentTime + start);
+      gain.gain.exponentialRampToValueAtTime(gainValue, audioCtx.currentTime + start + 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + start + duration);
+      osc.connect(gain).connect(audioCtx.destination);
+      osc.start(audioCtx.currentTime + start);
+      osc.stop(audioCtx.currentTime + start + duration + 0.03);
+    }
+
+    function playSelect() {
+      tone(150, 0, .07, "triangle", .09);
+    }
+
+    function playSnap() {
+      tone(659.25, 0, .12, "sine", .12);
+      tone(880, .11, .16, "sine", .12);
+    }
+
+    function playVictory() {
+      [440, 554.37, 659.25, 880, 1108.73].forEach((f, i) => tone(f, i * .09, .18, "sine", .12));
+    }
+
+    function pieceTransform(piece) {
+      const box = piece.bbox || { x: 400, y: 250, width: 1, height: 1 };
+      const cx = box.x + box.width / 2;
+      const cy = box.y + box.height / 2;
+      return `translate(${piece.currentX} ${piece.currentY}) rotate(${piece.rotation} ${cx} ${cy})`;
+    }
+
+    function makePath(piece, className) {
+      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path.setAttribute("d", piece.originalPath);
+      path.setAttribute("class", className);
+      path.setAttribute("fill", piece.fill);
+      path.dataset.id = piece.id;
+      return path;
+    }
+
+    function renderBackdrop() {
+      backdropLayer.innerHTML = "";
+      state.mapRegions.forEach(piece => {
+        const path = makePath(piece, `backdrop-piece ${state.difficulty === "hard" ? "hidden" : ""}`);
+        backdropLayer.appendChild(path);
+      });
+      const outlinePath = MAP_OUTLINES[$("#regionSelect").value];
+      if (outlinePath && state.difficulty === "easy") {
+        const outline = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        outline.setAttribute("d", outlinePath);
+        outline.setAttribute("class", "map-outline");
+        backdropLayer.appendChild(outline);
+      }
+    }
+
+    function renderPieces() {
+      lockedLayer.innerHTML = "";
+      pieceLayer.innerHTML = "";
+      state.mapRegions.forEach(piece => {
+        const path = makePath(piece, piece.isLocked ? "locked-piece" : "piece");
+        path.setAttribute("transform", pieceTransform(piece));
+        if (!piece.isLocked) {
+          path.addEventListener("pointerdown", onPointerDown);
+          piece.element = path;
+          pieceLayer.appendChild(path);
+        } else {
+          lockedLayer.appendChild(path);
+        }
+        if (piece.isLocked || state.mapRegions.length <= 24) {
+          const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+          const box = piece.bbox || path.getBBox();
+          label.setAttribute("x", piece.labelX || (box.x + box.width / 2));
+          label.setAttribute("y", piece.labelY || (box.y + box.height / 2));
+          label.setAttribute("class", "piece-label");
+          label.setAttribute("transform", pieceTransform(piece));
+          label.textContent = piece.id.toUpperCase();
+          (piece.isLocked ? lockedLayer : pieceLayer).appendChild(label);
+        }
+      });
+      const outlinePath = MAP_OUTLINES[$("#regionSelect").value];
+      if (outlinePath && state.difficulty === "easy") {
+        const outline = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        outline.setAttribute("d", outlinePath);
+        outline.setAttribute("class", "map-outline");
+        lockedLayer.appendChild(outline);
+      }
+      markActive();
+    }
+
+    function measurePieces() {
+      const scratch = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      svg.appendChild(scratch);
+      state.mapRegions.forEach(piece => {
+        const path = makePath(piece, "backdrop-piece");
+        scratch.appendChild(path);
+        piece.bbox = path.getBBox();
+        if (!piece.labelX) piece.labelX = piece.bbox.x + piece.bbox.width / 2;
+        if (!piece.labelY) piece.labelY = piece.bbox.y + piece.bbox.height / 2;
+        if (!piece.size) piece.size = piece.bbox.width * piece.bbox.height;
+      });
+      scratch.remove();
+    }
+
+    function scatterPieces() {
+      const rng = seededRandom(Date.now() & 0xfffffff);
+      state.mapRegions.forEach((piece, i) => {
+        const side = i % 2 === 0 ? "left" : "right";
+        const box = piece.bbox;
+        const benchX = side === "left" ? 24 : 646;
+        const benchW = 124;
+        const oversized = box.width > 360;
+        const x = oversized ? 192 + rng() * 120 : benchX + rng() * Math.max(10, benchW - box.width);
+        const y = oversized ? 386 + rng() * 22 : 36 + rng() * Math.max(10, 424 - box.height);
+        piece.currentX = Math.round(x - box.x);
+        piece.currentY = Math.round(y - box.y);
+        piece.rotation = state.difficulty === "hard" ? [0, 90, 180, 270][Math.floor(rng() * 4)] : 0;
+        piece.isLocked = false;
+      });
+    }
+
+    function buildPuzzle() {
+      const regionKey = $("#regionSelect").value;
+      state.difficulty = document.querySelector("input[name='difficulty']:checked").value;
+      state.lens = $("#lensSelect").value;
+      state.mapRegions = parseMapData(regionKey);
+      state.activeRegion = null;
+      state.selectedRegion = null;
+      state.phase = "solving";
+      $("#victoryPanel").classList.remove("show");
+      $("#mapTitle").textContent = REGION_TITLES[regionKey];
+      $("#mapMeta").textContent = `${state.mapRegions.length} embedded vector pieces.`;
+      $("#selectedName").textContent = "None";
+      renderBackdrop();
+      measurePieces();
+      scatterPieces();
+      renderPieces();
+      updateProgress();
+      showPrompt(null);
+      startTimer();
+      $("#statusText").textContent = "Drag pieces from the side benches onto the target map.";
+    }
+
+    function updateProgress() {
+      const locked = state.mapRegions.filter(p => p.isLocked).length;
+      state.completionPercent = Math.round((locked / state.mapRegions.length) * 100);
+      $("#percentText").textContent = `${state.completionPercent}%`;
+      $("#meterFill").style.width = `${state.completionPercent}%`;
+      $("#statusText").textContent = `${locked} of ${state.mapRegions.length} pieces locked.`;
+      renderPieceList();
+      if (locked === state.mapRegions.length && state.phase === "solving") {
+        state.phase = "victory";
+        clearInterval(state.timerId);
+        updateTimer();
+        $("#victoryText").textContent = `Finished ${$("#mapTitle").textContent} in ${$("#timerText").textContent}.`;
+        $("#victoryPanel").classList.add("show");
+        playVictory();
+      }
+    }
+
+    function renderPieceList() {
+      $("#pieceList").innerHTML = state.mapRegions.map(piece => `
+        <div class="piece-row ${piece.isLocked ? "locked" : ""}">
+          <span class="swatch" style="background:${piece.fill}"></span>
+          <span>${piece.name}</span>
+          <span>${piece.isLocked ? "Locked" : `${piece.rotation}deg`}</span>
+        </div>
+      `).join("");
+    }
+
+    function markActive() {
+      document.querySelectorAll(".piece").forEach(el => {
+        el.classList.toggle("active", state.selectedRegion && el.dataset.id === state.selectedRegion.id);
+      });
+    }
+
+    function selectPiece(piece) {
+      state.selectedRegion = piece;
+      $("#selectedName").textContent = piece ? piece.name : "None";
+      if (piece) showPrompt(piece);
+      markActive();
+    }
+
+    function onPointerDown(evt) {
+      const id = evt.currentTarget.dataset.id;
+      const piece = state.mapRegions.find(p => p.id === id);
+      if (!piece || piece.isLocked || state.phase !== "solving") return;
+      evt.preventDefault();
+      const pt = svgPoint(evt);
+      pieceLayer.appendChild(evt.currentTarget);
+      state.activeRegion = piece;
+      selectPiece(piece);
+      state.pointer = {
+        id: evt.pointerId,
+        startX: pt.x,
+        startY: pt.y,
+        baseX: piece.currentX,
+        baseY: piece.currentY,
+        moved: false
+      };
+      evt.currentTarget.setPointerCapture(evt.pointerId);
+      playSelect();
+      markActive();
+    }
+
+    function onPointerMove(evt) {
+      if (!state.activeRegion || !state.pointer || evt.pointerId !== state.pointer.id) return;
+      const pt = svgPoint(evt);
+      const dx = pt.x - state.pointer.startX;
+      const dy = pt.y - state.pointer.startY;
+      if (Math.hypot(dx, dy) > 4) state.pointer.moved = true;
+      state.activeRegion.currentX = Math.round(state.pointer.baseX + dx);
+      state.activeRegion.currentY = Math.round(state.pointer.baseY + dy);
+      state.activeRegion.element.setAttribute("transform", pieceTransform(state.activeRegion));
+      const label = [...pieceLayer.querySelectorAll(".piece-label")].find(el => el.textContent === state.activeRegion.id.toUpperCase());
+      if (label) label.setAttribute("transform", pieceTransform(state.activeRegion));
+    }
+
+    function normalizeRotation(deg) {
+      return ((deg % 360) + 360) % 360;
+    }
+
+    function rotateSelected() {
+      const piece = state.selectedRegion;
+      if (!piece || piece.isLocked || state.phase !== "solving") return;
+      piece.rotation = normalizeRotation(piece.rotation + 90);
+      renderPieces();
+      renderPieceList();
+      playSelect();
+    }
+
+    function snapThreshold(piece) {
+      const area = Math.max(1, piece.size);
+      return Math.max(15, Math.min(44, 15 + 520 / Math.sqrt(area)) + piece.snapBoost);
+    }
+
+    function canSnap(piece) {
+      const distance = Math.hypot(piece.currentX - piece.targetX, piece.currentY - piece.targetY);
+      return distance <= snapThreshold(piece) && normalizeRotation(piece.rotation) === 0;
+    }
+
+    function evaluateSnap(piece) {
+      if (canSnap(piece)) {
+        piece.currentX = piece.targetX;
+        piece.currentY = piece.targetY;
+        piece.rotation = 0;
+        piece.isLocked = true;
+        selectPiece(null);
+        renderPieces();
+        playSnap();
+        updateProgress();
+      } else {
+        renderPieces();
+      }
+    }
+
+    function onPointerUp(evt) {
+      if (!state.activeRegion || !state.pointer || evt.pointerId !== state.pointer.id) return;
+      const piece = state.activeRegion;
+      if (!state.pointer.moved && !canSnap(piece)) {
+        piece.rotation = normalizeRotation(piece.rotation + 90);
+      }
+      state.activeRegion = null;
+      state.pointer = null;
+      evaluateSnap(piece);
+      renderPieceList();
+    }
+
+    window.addEventListener("pointermove", onPointerMove);
+    window.addEventListener("pointerup", onPointerUp);
+    window.addEventListener("pointercancel", onPointerUp);
+    window.addEventListener("keydown", (evt) => {
+      if (evt.code === "Space" && state.phase === "solving") {
+        evt.preventDefault();
+        rotateSelected();
+      }
+    });
+
+    $("#startBtn").addEventListener("click", buildPuzzle);
+    $("#shuffleBtn").addEventListener("click", () => {
+      if (!state.mapRegions.length) return buildPuzzle();
+      scatterPieces();
+      state.phase = "solving";
+      $("#victoryPanel").classList.remove("show");
+      startTimer();
+      renderPieces();
+      updateProgress();
+    });
+    $("#rotateBtn").addEventListener("click", rotateSelected);
+    $("#soundBtn").addEventListener("click", () => {
+      state.sound = !state.sound;
+      $("#soundBtn").textContent = state.sound ? "Sound On" : "Sound Off";
+    });
+    $("#promptBtn").addEventListener("click", () => showPrompt(state.selectedRegion));
+    $("#lensSelect").addEventListener("change", () => {
+      state.lens = $("#lensSelect").value;
+      showPrompt(state.selectedRegion);
+    });
+    $("#victoryNewBtn").addEventListener("click", buildPuzzle);
+    $("#regionSelect").addEventListener("change", () => {
+      const key = $("#regionSelect").value;
+      $("#mapTitle").textContent = REGION_TITLES[key];
+      $("#mapMeta").textContent = `${MAP_DATABASE[key].length} pieces ready to arrange.`;
+    });
+
+    try {
+      buildPuzzle();
+    } catch (err) {
+      $("#statusText").textContent = `Map setup error: ${err.message}`;
+      throw err;
+    }
+  </script>
+</body>
+</html>

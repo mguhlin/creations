@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>window.__VCLL_BASE="../../";</script>
+<script src="../../lock.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>"Is It On the Shelf?" Catalog Lookup · LibVibes | TCEA</title>
+<meta name="description" content=""Is It On the Shelf?" Catalog Lookup — a advanced library vibe-coding starter prompt from LibVibes, with the VIBES framework game plan. By Miguel Guhlin, TCEA.">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0A3476;--navy-dark:#071F4A;--navy-mid:#12428F;--gold:#FCB040;--gold-light:#FDD17A;--gold-pale:#FEF0D0;
+    --pale-navy:#D0D8F0;--white:#fff;--off-white:#F7F8FC;--text:#1A1A2E;--text-muted:#5A6680;--border:#E2E7F5;
+    --teal:#0E6B8A;--teal-pale:#D9ECF2;
+    --beg:#1f9d63;--beg-pale:#dff4e8;--int:#d98b0a;--int-pale:#fdedcf;--adv:#c2493f;--adv-pale:#fbe3e1;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'DM Sans',sans-serif;color:var(--text);background:var(--off-white);line-height:1.55}
+  a{color:var(--teal)}
+
+  .nav{position:sticky;top:0;z-index:30;background:var(--navy);border-bottom:3px solid var(--gold)}
+  .nav-inner{max-width:920px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.7rem 1.4rem;flex-wrap:wrap}
+  .nav-brand{display:flex;align-items:center;gap:.6rem;text-decoration:none}
+  .nav-brand-mark{width:34px;height:34px;border-radius:8px;background:var(--gold);color:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:800;font-family:'DM Serif Display',serif}
+  .nav-brand-text{color:#fff;font-weight:700;font-size:1.1rem;line-height:1}
+  .nav-brand-text small{display:block;font-size:.68rem;color:var(--gold-light);font-weight:400;letter-spacing:.05em;text-transform:uppercase;margin-top:2px}
+  .nav-links{display:flex;gap:.4rem;flex-wrap:wrap}
+  .nav-links a{color:#fff;text-decoration:none;font-size:.85rem;font-weight:600;padding:.4rem .7rem;border-radius:6px}
+  .nav-links a:hover{background:var(--navy-dark)}
+  .nav-links a.home{background:var(--gold);color:var(--navy)}
+
+  .crumb{max-width:920px;margin:0 auto;padding:1rem 1.4rem .2rem;font-size:.82rem;color:var(--text-muted)}
+  .crumb a{color:var(--teal);text-decoration:none}
+  .crumb a:hover{text-decoration:underline}
+
+  .hero{max-width:920px;margin:0 auto;padding:1.4rem 1.4rem 1rem}
+  .badges{display:flex;gap:.45rem;flex-wrap:wrap;margin-bottom:.9rem}
+  .badge{font-size:.68rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:.25rem .6rem;border-radius:5px}
+  .badge-type{background:var(--teal-pale);color:var(--teal)}
+  .badge-host{background:#eef2fa;color:var(--navy)}
+  .badge-lvl-beginner{background:var(--beg-pale);color:var(--beg)}
+  .badge-lvl-intermediate{background:var(--int-pale);color:var(--int)}
+  .badge-lvl-advanced{background:var(--adv-pale);color:var(--adv)}
+  .hero h1{font-family:'DM Serif Display',serif;font-size:clamp(1.9rem,4vw,2.7rem);color:var(--navy);line-height:1.08}
+  .hero .num{font-family:'DM Mono',monospace;color:var(--gold);font-weight:600;font-size:.95rem}
+
+  section{max-width:920px;margin:0 auto;padding:1.4rem 1.4rem}
+  .section-eyebrow{color:var(--teal);font-weight:700;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase}
+  .section-title{font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--navy);margin:.2rem 0 .8rem}
+
+  .prompt-card{background:#fff;border:1px solid var(--border);border-left:5px solid var(--gold);border-radius:12px;overflow:hidden;box-shadow:0 4px 14px rgba(10,52,118,.05)}
+  .prompt-card[data-level="beginner"]{border-left-color:var(--beg)}
+  .prompt-card[data-level="intermediate"]{border-left-color:var(--int)}
+  .prompt-card[data-level="advanced"]{border-left-color:var(--adv)}
+  .prompt-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.9rem 1.2rem;border-bottom:1px solid var(--border);flex-wrap:wrap}
+  .prompt-head h3{font-size:1rem;color:var(--navy)}
+  .copy-btn{flex:none;background:var(--navy);border:0;color:#fff;padding:.5rem 1rem;border-radius:8px;font-size:.82rem;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s}
+  .copy-btn:hover{background:var(--teal)}
+  .copy-btn.copied{background:var(--gold);color:var(--navy)}
+  .prompt-body{font-family:'DM Mono',monospace;font-size:.82rem;color:#2a3550;line-height:1.65;background:#f5f7fc;padding:1.1rem 1.2rem;white-space:pre-wrap}
+
+  .vibes-list{list-style:none;display:grid;gap:.7rem;margin-top:.4rem}
+  .vibes-list li{display:flex;gap:.7rem;align-items:flex-start;font-size:.95rem;color:var(--text);background:#fff;border:1px solid var(--border);border-radius:10px;padding:.8rem .9rem}
+  .vibes-list b{flex:none;width:1.8rem;height:1.8rem;background:var(--navy);color:#fff;border-radius:7px;text-align:center;line-height:1.8rem;font-family:'DM Serif Display',serif;font-size:.95rem}
+
+  .built{background:var(--navy-dark);border-radius:14px;overflow:hidden;box-shadow:0 14px 34px rgba(0,0,0,.25);margin-top:.4rem}
+  .built-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1.1rem 1.3rem;flex-wrap:wrap}
+  .built-head .section-eyebrow{color:var(--gold-light)}
+  .built-title{font-family:'DM Serif Display',serif;color:#fff;font-size:1.3rem}
+  .built-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+  .btn-gold{background:var(--gold);color:var(--navy);font-weight:700;text-decoration:none;padding:.55rem 1rem;border-radius:8px;font-size:.85rem;white-space:nowrap}
+  .btn-gold:hover{background:var(--gold-light)}
+  .btn-soft{background:#eef2fa;color:var(--navy);font-weight:700;text-decoration:none;padding:.55rem 1rem;border-radius:8px;font-size:.85rem;white-space:nowrap;border:1px solid #dbe3f4}
+  .btn-soft:hover{background:#dde6f7}
+  .built-frame{border:0;width:100%;height:560px;background:#eef2fa}
+
+  .host-note{background:var(--gold-pale);border-left:4px solid var(--gold);border-radius:0 10px 10px 0;padding:1rem 1.2rem;font-size:.92rem;color:#5a4413}
+  .host-note a{color:var(--navy);font-weight:700}
+
+  footer{background:var(--navy-dark);color:var(--pale-navy);text-align:center;padding:2rem 1.4rem;border-top:4px solid var(--gold);margin-top:1.5rem}
+  footer a{color:var(--gold-light);text-decoration:none;font-weight:700}
+  footer .row{display:flex;gap:.4rem 1.4rem;justify-content:center;flex-wrap:wrap;margin-bottom:.8rem}
+  footer .fine{opacity:.7;font-size:.78rem;margin-top:.6rem}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../../libvibes.html" class="nav-brand">
+      <span class="nav-brand-mark">L</span>
+      <span class="nav-brand-text">LibVibes<small>TCEA · Starter Prompt</small></span>
+    </a>
+    <div class="nav-links">
+      <a href="../../libvibes.html">All prompts</a>
+      <a class="home" href="../../libvibes-host.html">Host It Free</a>
+    </div>
+  </div>
+</nav>
+
+<div class="crumb">
+  <a href="../../../index.html">TCEA</a> &rsaquo;
+  <a href="../../index.html">Vibe Coding for Librarians</a> &rsaquo;
+  <a href="../../libvibes.html">LibVibes</a> &rsaquo;
+  <span>"Is It On the Shelf?" Catalog Lookup</span>
+</div>
+
+<header class="hero">
+  <div class="badges">
+    <span class="badge badge-lvl-advanced">Advanced</span>
+    <span class="badge badge-type">Operations</span>
+    <span class="badge badge-host">Apps Script + Sites</span>
+  </div>
+  <div class="num">Prompt #15</div>
+  <h1>"Is It On the Shelf?" Catalog Lookup</h1>
+</header>
+
+    <section>
+      <div class="built">
+        <div class="built-head">
+          <div>
+            <div class="section-eyebrow">Built &amp; playable</div>
+            <h2 class="built-title">Try the built example</h2>
+          </div>
+          <div class="built-actions">
+            <a class="btn-gold" href="app.html" target="_blank" rel="noopener">Open full screen ↗</a>
+            <a class="btn-soft" href="catalog-lookup.zip" download>⬇ Download .zip</a>
+          </div>
+        </div>
+        <img src="preview.png" alt="Preview of the &quot;Is It On the Shelf?&quot; Catalog Lookup tool" loading="lazy" onerror="this.style.display='none'" style="width:100%;display:block">
+        <iframe class="built-frame" src="app.html" title="&quot;Is It On the Shelf?&quot; Catalog Lookup built example" loading="lazy"></iframe>
+      </div>
+    </section>
+
+<section>
+  <div class="section-eyebrow">Paste · Iterate · Ship</div>
+  <h2 class="section-title">The starter prompt</h2>
+  <div class="prompt-card" data-level="advanced">
+    <div class="prompt-head">
+      <h3>Copy this into ChatGPT, Claude, Gemini, or BoodleBox</h3>
+      <button class="copy-btn" id="copyBtn" data-target="promptText">Copy prompt</button>
+    </div>
+    <pre class="prompt-body" id="promptText" data-enc="P0MNAQ0NSREVAQ0KHw0YCgcTTB0LBxtdQyhUCAJOQxlFDQ9PEEgTCw8dCRUGRU8MWENGekFaAlxFEAwAAEIbSRETHRcVU14ABhUSA08gExwfB0EZDE8PDTFeQgkDEQ0kHhMBWSMXGwYeWRcRVgMZAkIVWkMODU4HDAZWCxtFEg0zDAoGQQpCNR0WBhVYSRsGTAIRQQsbBw0WGhYWHB4AGk8NRVIFWEFOC1cRHgYeTExMCw0ZAkIMAA0VFQQIQQ4AChBTFAgAAQAbWVZdQgkIHUMCTgocV3p+OgoaWEdcOUwZLktFMQwDC0EJSTEeDAcRU0UVEEUCQgMXCxsAWUEgABsCSFoRbBsbHEIXQkM1HB4GDENOblYKX0F3Fl8HExFATH4YCBYDGkJNOkNUTEUiRQoBDRAXQy4BHU9BDTlfDSYAGElMQkMTFxRUJQANTEMPXA8zThIxHgZMG0gOSQMGGUIXFkwQEEUHXwAPRgEbChJUOgcLSAIRQQcZESdvPRcHHRUaHUIITFQPXQYZEFcEBAAETF0NDgdMY09FPEMRQxYETB0BDlURDBlUHQcPWVZcTBoMHEgWThcbDRwRSSA8DVYTRwlWERIEBUMYBEhMGhYDDQcLBw0AGhUEXk9KChwFBkESAAMaSARYQwlGfgBFPAYBDBwAGk8PXhcFUhNdEAhFAgoYAEhASQMDHQoKAQFUAAQNQU8MExgRBhNYSQMBThdFRAEBWA0EAAdSGFAXBgMBXxoFXAVcBxIWAgIYGV5MGQsaBUJNFF8RBgtBZAFORhQeAQQGSSAADT5eQQpDVF8ACkMxERUXAgoKDXgTR0gzThIkVgQJAl8JSQQfBRYAAQ0VDQFBTE9AFR0cFEEbBwMXDRdHTAcDFU8JC0FSDR8TDgMLJxpGckFfEVsAGAcAFQ0JBBICEEIWB0wABkUWRQoMRhscFwkdBwhOQBdFTgYKBwFFHRYVHhUHHQYAShcSWwRAQ1MWHUMNGA0YAQdWDQcWGCd+JwASRAgMXH9eQywbCwYCSFtXRBwcABZFCAIBDVxUBwBOXVYBVkFLBl4KFwcfVw0cCA4THRYAU0MVFRxBDl8jVUFEVUFfSQgBQRIRDigsNh1RXmlfWSMACBsbXhcWWg1VEBIEBAZMD0IABhBbCg0BFklUIislDQMDBBAfBgVUAAFOWRNJWU5HEEILSRdSCxUYEE8BQxcFXA1WERIEGgwCCQRmREIlHAARH0hUEA4EQQoWCRtcDw4VDQYASlZCRQcCGUgXThQaEBwRSR0LXkIKRxIZBVcRFQtmZnoNBQlWBAdFB0UGDBAGRU8BCRsdBgIAAAEJDQJZSE48HEgAGkMTFxRUDQoeQVgfWg9eTRIiHxUJTEAJSQMaBUIRG0hUBQwNSBxM"></pre>
+  </div>
+</section>
+
+<section>
+  <div class="section-eyebrow">The Method</div>
+  <h2 class="section-title">VIBES game plan for this build</h2>
+  <ul class="vibes-list">
+      <li><b>V</b><span><strong>Vision.</strong> Turn a spreadsheet you already keep into a self-serve availability checker.</span></li>
+      <li><b>I</b><span><strong>Instruct.</strong> Give it your exact column names and status values so the backend maps cleanly.</span></li>
+      <li><b>B</b><span><strong>Build.</strong> Sheet read + search first; add filters and status colors; add loading states.</span></li>
+      <li><b>E</b><span><strong>Evaluate.</strong> Search real titles, flip a status in the Sheet, confirm the app reflects it.</span></li>
+      <li><b>S</b><span><strong>Ship.</strong> Embed the search page in your catalog Google Site; share the link on signage.</span></li>
+  </ul>
+</section>
+
+<section>
+  <div class="host-note">
+    <strong>Ready to put it online?</strong> Once your tool works, host it free on GitHub Pages and embed it in Google Sites — follow the step-by-step walkthrough on the <a href="../../libvibes-host.html">main Vibe Coding page</a>.
+  </div>
+</section>
+
+
+<section>
+  <div class="section-divider"></div>
+  <div class="section-eyebrow">Put it in Google Sites</div>
+  <h2 class="section-title">Embed code for Google Sites</h2>
+  <p class="section-lead">In Google Sites, choose <strong>Insert &rarr; Embed &rarr; Embed code</strong> and paste the snippet below — the live tool loads right inside your page. (Or use <strong>Embed &rarr; By URL</strong> with the <code>app.html</code> link.)</p>
+  <div class="prompt-card">
+    <div class="prompt-head">
+      <h3>Google Sites embed snippet</h3>
+      <button class="copy-btn" id="embedCopy">Copy embed code</button>
+    </div>
+    <pre class="prompt-body" id="embedCode" data-enc="SgoKHkwBDEIFGwFYUUUAFxUSF0BNCxIfBgAGB0EJRAJZWAxBHUJKGgAXGF8CCgNBQV4ERQhbBkFKFQIYDUEDDk8aBg0OBl1bAhURAwcWCxlRQxYdDRsGEFQAHV5KVg0NCwoVEQRJS1hcHRVGQBVAD1dYVAEDHkkJG1hGUgAKAUkREUgTTAsLEwZJUlMEEU1OQRlQSQcBExBHAgIIAFJUHQYaQVJbEUNwEBIsAkMjAg0YAQdWOgoAH0tLQUUiTBsDChoUQy0bBgQbXVQPEUEGEl8EAwZM"></pre>
+  </div>
+  <p class="tip" style="font-size:.85rem;color:var(--text-muted);margin-top:.6rem">Adjust <code>height</code> to fit your tool. The tool is already published, so the embed works as soon as you paste it.</p>
+</section>
+
+<footer>
+  <div class="row">
+    <a href="../../libvibes.html">← All 18 LibVibes prompts</a>
+    <a href="../../index.html">Vibe Coding for Librarians</a>
+    <a href="../../../index.html">TCEA Directory</a>
+  </div>
+  <div>Miguel Guhlin · Director of Professional Development, TCEA</div>
+  <div class="fine">LibVibes · Companion resource for “Vibe Your Way to Free” · TCEA 2026</div>
+</footer>
+
+<script>
+  const btn=document.getElementById('copyBtn');
+  btn.addEventListener('click',async()=>{
+    const text=document.getElementById('promptText').innerText;
+    try{ await navigator.clipboard.writeText(text); }
+    catch(e){ const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta); }
+    const o=btn.innerText; btn.innerText='Copied!'; btn.classList.add('copied');
+    setTimeout(()=>{btn.innerText=o;btn.classList.remove('copied');},1700);
+  });
+</script>
+
+<script>
+/* Auto-extend the embedded tool to its full height so there is no inner scrollbar (responsive: re-measures on resize). */
+(function(){
+  function fit(f){ try{ var d=f.contentWindow.document; var h=Math.max(d.documentElement.scrollHeight, d.body.scrollHeight); if(h) f.style.height=h+"px"; }catch(e){} }
+  function fitAll(){ document.querySelectorAll("iframe.built-frame").forEach(fit); }
+  document.querySelectorAll("iframe.built-frame").forEach(function(f){
+    f.addEventListener("load", function(){ fit(f); setTimeout(function(){fit(f);},300); });
+    try{ if(f.contentWindow.document.readyState==="complete") fit(f); }catch(e){}
+  });
+  var t; window.addEventListener("resize", function(){ clearTimeout(t); t=setTimeout(fitAll,200); });
+})();
+</script>
+<script>
+(function(){var b=document.getElementById("embedCopy");if(!b)return;
+  b.addEventListener("click",async function(){var t=document.getElementById("embedCode").textContent;
+    try{await navigator.clipboard.writeText(t);}catch(e){var ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);}
+    var o=b.textContent;b.textContent="Copied!";b.classList.add("copied");setTimeout(function(){b.textContent=o;b.classList.remove("copied");},1700);});
+})();
+</script>
+<script src="../../libvibes-notice.js"></script>
+</body>
+</html>

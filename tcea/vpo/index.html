@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Codex Project Organizer</title>
+  <style>
+    :root{
+      --navy:#0A3476;
+      --navy-dark:#061d43;
+      --navy-mid:#12428f;
+      --gold:#FCB040;
+      --gold-soft:#fff3d8;
+      --teal:#0e6b8a;
+      --teal-soft:#e8f6f8;
+      --pale-navy:#D0D8F0;
+      --white:#ffffff;
+      --off:#f7f9fc;
+      --text:#172033;
+      --muted:#5c6b82;
+      --line:#dbe3f1;
+      --ok:#168a56;
+      --danger:#9b1c31;
+      --shadow:0 14px 35px rgba(10,52,118,.12);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color:var(--text);
+      background:linear-gradient(135deg,#fdfefe 0%,#f5f8fd 44%,#eef5f8 100%);
+    }
+    a{color:var(--navy)}
+    .app{
+      min-height:100vh;
+      display:grid;
+      grid-template-columns: 260px 1fr;
+    }
+    aside{
+      background:linear-gradient(180deg,var(--navy-dark),#08285c 58%,#041937);
+      color:white;
+      padding:24px 18px;
+      position:sticky;
+      top:0;
+      height:100vh;
+      overflow:auto;
+    }
+    .brand{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      padding:8px 6px 24px;
+      border-bottom:1px solid rgba(255,255,255,.15);
+      margin-bottom:18px;
+    }
+    .badge{
+      width:54px;height:54px;border:3px solid var(--gold);border-radius:16px;
+      display:grid;place-items:center;font-size:30px;font-weight:900;color:var(--gold);
+    }
+    .brand h1{font-size:22px;line-height:1;margin:0}
+    .brand p{margin:5px 0 0;color:#c8d7f2;font-size:12px}
+    nav button, nav a.navlink{
+      width:100%;border:0;background:transparent;color:#eaf1ff;
+      text-align:left;padding:13px 12px;border-radius:14px;margin:3px 0;
+      display:flex;gap:10px;align-items:center;font-weight:700;cursor:pointer;text-decoration:none;
+    }
+    nav button.active, nav button:hover, nav a.navlink:hover{background:rgba(252,176,64,.14);color:#fff}
+    nav button.active{box-shadow:inset 4px 0 0 var(--gold)}
+    nav a.navlink{margin-top:8px;border-top:1px solid rgba(255,255,255,.12);border-radius:0 0 14px 14px;font-weight:800}
+    nav a.navlink .meta{margin-left:auto;font-size:11px;font-weight:800;color:var(--gold);border:1px solid rgba(252,176,64,.5);border-radius:999px;padding:2px 8px}
+    .side-card{
+      margin-top:24px;background:rgba(14,107,138,.42);border:1px solid rgba(255,255,255,.2);
+      border-radius:18px;padding:16px;font-size:14px;line-height:1.45;
+    }
+    .side-card strong{display:block;color:white;margin-bottom:8px}
+    .progress-wrap{margin-top:22px;font-size:13px;color:#dce8ff}
+    .bar{height:10px;background:rgba(255,255,255,.18);border-radius:999px;overflow:hidden;margin-top:8px}
+    .bar span{display:block;height:100%;background:linear-gradient(90deg,var(--gold),#42c8d9);width:0%}
+    main{padding:28px;max-width:1680px;width:100%;margin:0 auto}
+    header.top{
+      display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:22px;
+    }
+    .title h2{font-size:42px;margin:0;color:var(--navy-dark);letter-spacing:-.03em}
+    .title p{margin:8px 0 0;color:var(--muted);font-size:17px}
+    .actions-top{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .pill{border:1px solid var(--line);background:white;border-radius:999px;padding:10px 13px;font-weight:800;color:var(--navy);box-shadow:0 4px 16px rgba(10,52,118,.06)}
+    .workflow{
+      background:white;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
+      padding:20px;margin-bottom:22px;
+    }
+    .flow-row{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;position:relative}
+    .flow-step{
+      position:relative;text-align:center;padding:12px 8px 10px;border-radius:16px;border:1px solid #e5ecf7;background:#fbfdff;
+    }
+    .flow-step:not(:last-child)::after{
+      content:"→";position:absolute;right:-15px;top:38px;color:var(--navy-mid);font-size:24px;font-weight:900;z-index:2;
+    }
+    .flow-icon{
+      width:52px;height:52px;border-radius:16px;background:var(--teal-soft);border:1px solid #b7e1e7;
+      display:grid;place-items:center;margin:0 auto 8px;font-size:27px;
+    }
+    .flow-step strong{display:block;color:var(--navy-dark)}
+    .flow-step span{display:block;color:var(--muted);font-size:12px;margin-top:3px}
+    .grid{
+      display:grid;
+      grid-template-columns:minmax(520px,1.05fr) minmax(470px,.95fr);
+      gap:22px;
+      align-items:start;
+    }
+    .panel{
+      background:white;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
+      padding:20px;
+    }
+    .section-title{display:flex;align-items:center;gap:12px;margin:0 0 16px}
+    .section-title h3{margin:0;color:var(--navy-dark);font-size:22px}
+    .mini{color:var(--muted);font-size:13px;margin:4px 0 0}
+    .form-card{
+      display:grid;grid-template-columns:70px 1fr;gap:14px;padding:16px;border:1px solid #e5ecf7;
+      border-radius:18px;background:linear-gradient(180deg,#fff,#fbfdff);margin-bottom:14px;
+    }
+    .iconbox{
+      width:56px;height:56px;border-radius:16px;display:grid;place-items:center;font-size:28px;
+      background:var(--teal-soft);border:1px solid #b7e1e7;
+    }
+    label{display:block;font-weight:900;color:var(--navy-dark);font-size:16px;margin-bottom:5px}
+    .help{color:var(--muted);font-size:13px;line-height:1.35;margin-bottom:8px}
+    textarea,input,select{
+      width:100%;border:1px solid #cad6e8;border-radius:12px;padding:12px 13px;font:inherit;background:white;color:var(--text);
+      outline:none;
+    }
+    textarea:focus,input:focus,select:focus{border-color:var(--teal);box-shadow:0 0 0 4px rgba(14,107,138,.12)}
+    textarea{min-height:84px;resize:vertical}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .checks{display:grid;gap:9px;margin-top:8px}
+    .checkline{display:flex;align-items:center;gap:9px;color:var(--text);font-size:14px}
+    .checkline input{width:18px;height:18px;accent-color:var(--teal)}
+    .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}
+    .chip{
+      border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 10px;cursor:pointer;font-weight:800;color:var(--muted);
+      font-size:13px;
+    }
+    .chip.active{background:#e8f6f8;border-color:#90d0db;color:var(--teal)}
+    .btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}
+    button.primary, button.secondary, button.gold, .download-link{
+      border:0;border-radius:13px;padding:13px 15px;font-weight:900;cursor:pointer;text-decoration:none;display:inline-flex;gap:8px;align-items:center;
+    }
+    button.gold{background:var(--gold);color:#241503}
+    button.primary{background:var(--teal);color:white}
+    button.secondary{background:#edf2fb;color:var(--navy-dark);border:1px solid var(--line)}
+    .download-link{background:var(--navy);color:white}
+    .preview-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+    .preview-head h3{margin:0;color:var(--navy-dark)}
+    .status{font-size:13px;color:var(--ok);font-weight:900}
+    pre{
+      margin:0;white-space:pre-wrap;word-wrap:break-word;background:#0d1830;color:#eaf1ff;border-radius:16px;
+      padding:18px;min-height:540px;max-height:690px;overflow:auto;border:1px solid #1f3768;
+      font:14px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    }
+    .summary{
+      margin-top:22px;display:grid;grid-template-columns:repeat(6,1fr);gap:12px;
+    }
+    .idea{
+      background:white;border:1px solid var(--line);border-radius:18px;padding:14px;text-align:center;box-shadow:0 8px 22px rgba(10,52,118,.07);
+    }
+    .idea .big{font-size:31px;margin-bottom:8px}
+    .idea strong{color:var(--navy-dark);display:block;font-size:14px}
+    .idea span{display:block;color:var(--muted);font-size:12px;margin-top:4px;line-height:1.35}
+    .template-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    .template{
+      border:1px solid var(--line);background:#fff;border-radius:18px;padding:16px;cursor:pointer;
+    }
+    .template:hover{outline:3px solid rgba(252,176,64,.35)}
+    .template h4{margin:0 0 8px;color:var(--navy-dark)}
+    .template p{margin:0;color:var(--muted);font-size:14px;line-height:1.4}
+    .notice{
+      background:var(--gold-soft);border:1px solid #f8d792;color:#5c3a00;border-radius:14px;padding:12px 14px;margin:12px 0;font-size:14px;
+    }
+    .hidden{display:none!important}
+    .toast{
+      position:fixed;right:22px;bottom:22px;background:var(--navy-dark);color:white;padding:13px 16px;border-radius:14px;
+      box-shadow:var(--shadow);opacity:0;transform:translateY(10px);transition:.2s;pointer-events:none;z-index:20;
+    }
+    .toast.show{opacity:1;transform:translateY(0)}
+    @media(max-width:1100px){
+      .app{grid-template-columns:1fr}
+      aside{position:relative;height:auto}
+      .grid{grid-template-columns:1fr}
+      .flow-row{grid-template-columns:repeat(3,1fr)}
+      .flow-step:nth-child(3)::after{display:none}
+      .summary{grid-template-columns:repeat(3,1fr)}
+    }
+    @media(max-width:700px){
+      main{padding:16px}
+      .title h2{font-size:32px}
+      header.top{display:block}
+      .flow-row{grid-template-columns:1fr}
+      .flow-step::after{display:none!important}
+      .form-card{grid-template-columns:1fr}
+      .row{grid-template-columns:1fr}
+      .summary,.template-grid{grid-template-columns:1fr}
+      pre{min-height:360px}
+    }
+    @media print{
+      aside,.actions-top,.btnrow,.workflow,.summary{display:none}
+      .app{display:block}
+      main{padding:0}
+      .grid{display:block}
+      .panel{box-shadow:none;border:0}
+      pre{background:white;color:black;border:1px solid #ccc}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside>
+      <div class="brand">
+        <div class="badge">C</div>
+        <div>
+          <h1>CODEX</h1>
+          <p>Project Organizer</p>
+        </div>
+      </div>
+      <nav aria-label="Tool sections">
+        <button class="active" data-view="organizer">🏠 Organizer</button>
+        <button data-view="templates">🧩 Templates</button>
+        <button data-view="library">📚 Prompt Library</button>
+        <button data-view="about">❔ How It Works</button>
+        <a class="navlink" href="modular.html">🧬 Modular Version <span class="meta">Advanced</span></a>
+      </nav>
+      <div class="side-card">
+        <strong>💡 Tip</strong>
+        Fill in each section for a stronger brief. The more context you provide, the faster Codex can help.
+      </div>
+      <div class="progress-wrap">
+        <strong id="progressText">0 / 7 sections complete</strong>
+        <div class="bar"><span id="progressBar"></span></div>
+      </div>
+    </aside>
+
+    <main>
+      <header class="top">
+        <div class="title">
+          <h2>Codex Project Organizer</h2>
+          <p>Build clearer prompts. Organize projects. Generate a Markdown brief.</p>
+        </div>
+        <div class="actions-top">
+          <span class="pill">✨ Beginner Friendly</span>
+          <span class="pill">🔒 Browser Only</span>
+          <span class="pill">⬇ Export .md</span>
+        </div>
+      </header>
+
+      <section class="workflow" aria-label="Vibe-coding workflow">
+        <div class="flow-row">
+          <div class="flow-step"><div class="flow-icon">🎯</div><strong>Goal</strong><span>Define the why</span></div>
+          <div class="flow-step"><div class="flow-icon">🔎</div><strong>Inspect</strong><span>Understand context</span></div>
+          <div class="flow-step"><div class="flow-icon">📋</div><strong>Plan</strong><span>Smallest next step</span></div>
+          <div class="flow-step"><div class="flow-icon">🛠️</div><strong>Build</strong><span>One change at a time</span></div>
+          <div class="flow-step"><div class="flow-icon">✅</div><strong>Test</strong><span>Verify results</span></div>
+          <div class="flow-step"><div class="flow-icon">🔁</div><strong>Report</strong><span>Iterate clearly</span></div>
+        </div>
+      </section>
+
+      <section id="organizerView" class="view">
+        <div class="grid">
+          <section class="panel">
+            <div class="section-title">
+              <div class="iconbox">🧭</div>
+              <div>
+                <h3>Project Brief Builder</h3>
+                <p class="mini">Complete the fields. The Markdown updates automatically.</p>
+              </div>
+            </div>
+
+            <div class="form-card">
+              <div class="iconbox">🎯</div>
+              <div>
+                <label for="goal">Project Goal</label>
+                <p class="help">What are you building? What should success look like?</p>
+                <textarea id="goal" placeholder="Example: Build a classroom exit ticket analyzer that lets a teacher paste CSV data and see student needs by skill."></textarea>
+              </div>
+            </div>
+
+            <div class="form-card">
+              <div class="iconbox">👥</div>
+              <div>
+                <label for="user">Target User</label>
+                <p class="help">Who is this for? What do they need to do without coding knowledge?</p>
+                <textarea id="user" placeholder="Example: K-12 teachers who need a fast way to review assessment data and choose next instructional steps."></textarea>
+              </div>
+            </div>
+
+            <div class="form-card">
+              <div class="iconbox">🧱</div>
+              <div>
+                <label for="type">Project Type</label>
+                <p class="help">Choose the closest format.</p>
+                <div class="row">
+                  <select id="type">
+                    <option>Single self-contained HTML file</option>
+                    <option>Simple website with HTML, CSS, and JavaScript</option>
+                    <option>GitHub Pages project</option>
+                    <option>WordPress-friendly embed</option>
+                    <option>Small web app</option>
+                    <option>Existing app improvement</option>
+                  </select>
+                  <input id="platform" placeholder="Platform, if any: GitHub Pages, WordPress, local file..." />
+                </div>
+                <div class="chips" aria-label="Quick project type choices">
+                  <button class="chip" data-fill="type" data-value="Single self-contained HTML file">HTML file</button>
+                  <button class="chip" data-fill="type" data-value="WordPress-friendly embed">WordPress</button>
+                  <button class="chip" data-fill="type" data-value="GitHub Pages project">GitHub Pages</button>
+                  <button class="chip" data-fill="type" data-value="Existing app improvement">Improve app</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-card">
+              <div class="iconbox">🎨</div>
+              <div>
+                <label for="design">Design Requirements</label>
+                <p class="help">Describe visual style, branding, accessibility, and layout needs.</p>
+                <textarea id="design" placeholder="Example: Clean, professional, mobile-friendly, large readable text, high contrast, navy/gold/teal color palette, classroom-ready."></textarea>
+              </div>
+            </div>
+
+            <div class="form-card">
+              <div class="iconbox">☑️</div>
+              <div>
+                <label for="features">Features to Include</label>
+                <p class="help">List must-have features first. Keep nice-to-haves separate.</p>
+                <textarea id="features" placeholder="Example: CSV paste/upload, item analysis table, summary recommendations, export report, sample data button."></textarea>
+              </div>
+            </div>
+
+            <div class="form-card">
+              <div class="iconbox">🛡️</div>
+              <div>
+                <label>Data & Privacy</label>
+                <p class="help">Codex should know what data is used and what must be protected.</p>
+                <div class="checks">
+                  <label class="checkline"><input id="noAccounts" type="checkbox" checked> No user accounts required</label>
+                  <label class="checkline"><input id="browserOnly" type="checkbox" checked> Keep data in the browser when possible</label>
+                  <label class="checkline"><input id="studentData" type="checkbox"> Student data may be involved</label>
+                  <label class="checkline"><input id="noPaid" type="checkbox" checked> Avoid paid services or new dependencies</label>
+                </div>
+                <textarea id="privacyNotes" placeholder="Optional privacy notes: Do not save uploaded files. Do not send data to external services. Warn me before adding storage."></textarea>
+              </div>
+            </div>
+
+            <div class="form-card">
+              <div class="iconbox">⚙️</div>
+              <div>
+                <label for="workflowRules">Workflow Rules for Codex</label>
+                <p class="help">These rules reduce confusion and keep the project moving safely.</p>
+                <textarea id="workflowRules">Use plain language. Inspect first. Plan before editing. Build one small feature at a time. Avoid rewriting unrelated code. After editing, explain what changed and give click-by-click test steps.</textarea>
+              </div>
+            </div>
+
+            <div class="notice" id="privacyWarning" hidden>⚠️ Student data may be involved. The generated brief will tell Codex to warn before adding storage, accounts, external APIs, or analytics.</div>
+
+            <div class="btnrow">
+              <button class="gold" id="fillExample">⚡ Fill Example</button>
+              <button class="primary" id="copyBtn">📋 Copy Markdown</button>
+              <a class="download-link" id="downloadBtn" href="#" download="codex-project-brief.md">⬇ Download .md</a>
+              <button class="secondary" id="resetBtn">↺ Reset</button>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="preview-head">
+              <div>
+                <h3>Live Markdown Preview</h3>
+                <div class="status">● Updates automatically</div>
+              </div>
+              <button class="secondary" id="printBtn">🖨️ Print</button>
+            </div>
+            <pre id="preview" aria-live="polite"></pre>
+          </section>
+        </div>
+
+        <section class="summary" aria-label="Big ideas">
+          <div class="idea"><div class="big">💬</div><strong>Use plain language</strong><span>Explain the tool like you are talking to a friend.</span></div>
+          <div class="idea"><div class="big">⭐</div><strong>One feature at a time</strong><span>Focus on one change that delivers value.</span></div>
+          <div class="idea"><div class="big">🛡️</div><strong>Small safe changes</strong><span>Prefer edits that are easy to test and undo.</span></div>
+          <div class="idea"><div class="big">✅</div><strong>Always test</strong><span>Know what to click and what result should appear.</span></div>
+          <div class="idea"><div class="big">🔒</div><strong>Protect privacy</strong><span>Do not expose sensitive or student data.</span></div>
+          <div class="idea"><div class="big">⛰️</div><strong>Keep it simple</strong><span>Avoid complexity unless it clearly helps.</span></div>
+        </section>
+      </section>
+
+      <section id="templatesView" class="view hidden">
+        <section class="panel">
+          <div class="section-title">
+            <div class="iconbox">🧩</div>
+            <div>
+              <h3>Quick Templates</h3>
+              <p class="mini">Select a template to fill the organizer with a starter brief.</p>
+            </div>
+          </div>
+          <div class="template-grid">
+            <div class="template" data-template="htmlTool"><h4>Single HTML Tool</h4><p>Best for simple classroom utilities that run offline or on GitHub Pages.</p></div>
+            <div class="template" data-template="wordpress"><h4>WordPress Embed</h4><p>Best for WordPress.com Custom HTML blocks with no scripting dependencies.</p></div>
+            <div class="template" data-template="dashboard"><h4>Data Dashboard</h4><p>Best for CSV, Markdown, or Google Sheet-powered visual summaries.</p></div>
+            <div class="template" data-template="cleanup"><h4>Messy Project Cleanup</h4><p>Best when a vibe-coded project has become confusing or fragile.</p></div>
+          </div>
+        </section>
+      </section>
+
+      <section id="libraryView" class="view hidden">
+        <section class="panel">
+          <div class="section-title">
+            <div class="iconbox">📚</div>
+            <div>
+              <h3>Prompt Library</h3>
+              <p class="mini">Copy these into Codex when you need a narrower task.</p>
+            </div>
+          </div>
+          <pre># Inspect First
+Inspect this project and summarize what it does. Do not edit files yet. Identify the important files, how to run it, and the safest first improvement.
+
+# New Feature
+Add this feature using the existing project style. Make the smallest working version first. Do not add dependencies unless necessary. After editing, give me click-by-click test steps.
+
+# Bug Fix
+Find the root cause of this bug. Fix it with the smallest safe change. Do not rewrite unrelated files. Explain how to verify the fix manually.
+
+# Cleanup
+This project has become confusing. Inspect the files, identify duplicate or unused code, and suggest a cleanup plan in small steps. Do not change behavior unless I approve it.
+
+# Pre-Publish Check
+Check that this project opens correctly, has no missing files, works on mobile and desktop, protects privacy, and has clear instructions. Do not add new features.</pre>
+        </section>
+      </section>
+
+      <section id="aboutView" class="view hidden">
+        <section class="panel">
+          <div class="section-title">
+            <div class="iconbox">❔</div>
+            <div>
+              <h3>How This Helps</h3>
+              <p class="mini">The goal is to give Codex better context before coding starts.</p>
+            </div>
+          </div>
+          <p>This website turns a vague project idea into a structured Markdown brief. Non-coders can use it to explain goals, users, features, privacy limits, and workflow rules before asking Codex to inspect or change files.</p>
+          <p>The recommended workflow is: <strong>Define → Inspect → Plan → Build Small → Test → Report</strong>. This prevents large accidental rewrites and makes it easier to understand what changed.</p>
+          <div class="notice">Best first instruction for Codex: “Start by inspecting the project. Do not edit files yet.”</div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast">Copied</div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const fields = ["goal","user","type","platform","design","features","privacyNotes","workflowRules"];
+    const checks = ["noAccounts","browserOnly","studentData","noPaid"];
+
+    const examples = {
+      goal:"Build a classroom exit ticket analyzer that lets a teacher paste or upload CSV data and see student needs by skill.",
+      user:"K-12 teachers who need a fast, nontechnical way to review assessment data and choose next instructional steps.",
+      type:"Single self-contained HTML file",
+      platform:"GitHub Pages or local browser file",
+      design:"Clean, professional, mobile-friendly, large readable text, high contrast, navy/gold/teal color palette, classroom-ready. Include simple icons and clear section headings.",
+      features:"Must-have: CSV paste/upload, sample data button, item analysis table, student grouping by need, SOLO/learning phase recommendations, export summary.\nNice-to-have: printable report, chart view, saved examples.",
+      privacyNotes:"Do not save uploaded data. Do not send data to external services. Do not add analytics. Warn me before adding accounts, storage, external APIs, or database features.",
+      workflowRules:"Use plain language. Inspect first. Plan before editing. Build one small feature at a time. Avoid rewriting unrelated code. Prefer simple HTML, CSS, and JavaScript. After editing, explain what changed and give click-by-click test steps."
+    };
+
+    const templates = {
+      htmlTool:{
+        goal:"Build a simple self-contained classroom tool that opens in a browser and does not require installation.",
+        user:"Teachers, librarians, or workshop participants who need a practical tool they can use without coding.",
+        type:"Single self-contained HTML file",
+        platform:"Local file, GitHub Pages, or simple web hosting",
+        design:"Clean, readable, responsive, professional, accessible contrast, large buttons, classroom-friendly layout.",
+        features:"Input form, example data, clear results area, copy/export option, reset button, brief help text.",
+        privacyNotes:"Keep everything in the browser. Do not collect accounts, emails, analytics, or student data unless explicitly approved.",
+        workflowRules:"Inspect first. Plan before editing. Build one feature at a time. Keep all code self-contained. Explain tests in plain language."
+      },
+      wordpress:{
+        goal:"Build a WordPress.com-friendly interactive block that can be pasted into a Custom HTML block.",
+        user:"Blog readers or educators who need a simple interactive resource embedded in a post.",
+        type:"WordPress-friendly embed",
+        platform:"WordPress.com Custom HTML block",
+        design:"Clean, compact, responsive, no external libraries, no script dependencies that WordPress.com may block unless explicitly allowed.",
+        features:"Clear title, short instructions, interactive fields, generated output, copy button, accessible labels.",
+        privacyNotes:"Do not collect personal data. Do not use external APIs. Do not store user responses.",
+        workflowRules:"Keep the code embeddable. Avoid style conflicts by scoping CSS. Make text readable on mobile."
+      },
+      dashboard:{
+        goal:"Build a simple dashboard that turns editable data into clear visual summaries.",
+        user:"Educators or administrators who need to understand patterns quickly without using complicated software.",
+        type:"Simple website with HTML, CSS, and JavaScript",
+        platform:"GitHub Pages or local browser file",
+        design:"Professional dashboard layout, readable cards, simple charts, responsive, accessible contrast.",
+        features:"Data input, validation, summary cards, chart or table view, export/copy summary, sample data.",
+        privacyNotes:"Use sample data by default. If real student data is used, keep it local in the browser and warn before adding storage or sharing.",
+        workflowRules:"Validate data carefully. Explain expected data format. Build one chart or summary at a time. Test empty, normal, and malformed data."
+      },
+      cleanup:{
+        goal:"Organize a confusing vibe-coded project so it is easier to understand, test, and continue improving.",
+        user:"A non-coder who has been building with AI and needs the project cleaned up without breaking it.",
+        type:"Existing app improvement",
+        platform:"Current project folder",
+        design:"Preserve current design unless a specific visual cleanup is approved.",
+        features:"File map, duplicate code review, unused code identification, small cleanup plan, README update, test checklist.",
+        privacyNotes:"Check for exposed keys, personal data, student data, unnecessary storage, and risky external links.",
+        workflowRules:"Do not change behavior without approval. Inspect first. Suggest cleanup steps. Make one safe cleanup at a time and test after each change."
+      }
+    };
+
+    function bullets(text){
+      const lines = (text || "").split(/\n|,/).map(s=>s.trim()).filter(Boolean);
+      return lines.length ? lines.map(s=>`- ${s}`).join("\n") : "- Not specified yet";
+    }
+    function val(id){ return ($(id)?.value || "").trim(); }
+    function checked(id){ return $(id)?.checked; }
+
+    function makeMarkdown(){
+      const dataPrivacy = [
+        checked("noAccounts") ? "No user accounts required" : "User accounts may be needed",
+        checked("browserOnly") ? "Keep data in the browser when possible" : "Browser-only storage not required",
+        checked("studentData") ? "Student data may be involved. Warn before adding storage, accounts, external APIs, analytics, or database features." : "No student data expected",
+        checked("noPaid") ? "Avoid paid services or new dependencies" : "Paid services or dependencies may be considered if approved"
+      ];
+      if(val("privacyNotes")) dataPrivacy.push(val("privacyNotes"));
+
+      return `# Codex Vibe-Coding Project Organizer
+
+> A structured brief for AI-assisted product development.
+
+## Project Goal
+
+${val("goal") || "[Describe the tool in one or two plain-language sentences.]"}
+
+## Target User
+
+${val("user") || "[Describe who will use this and what they need to accomplish.]"}
+
+## Project Type
+
+${val("type") || "[Choose a project type.]"}
+
+## Platform or Hosting Context
+
+${val("platform") || "[Name the platform, host, or file format if known.]"}
+
+## Design Requirements
+
+${bullets(val("design"))}
+
+## Features to Include
+
+${bullets(val("features"))}
+
+## Data & Privacy Rules
+
+${dataPrivacy.map(s=>`- ${s}`).join("\n")}
+
+## Workflow Rules for Codex
+
+${bullets(val("workflowRules"))}
+
+## Development Process
+
+1. Inspect the current project first.
+2. Explain the important files and how the project works.
+3. Recommend the smallest useful next step.
+4. List the files that will change before editing.
+5. Build one clear change at a time.
+6. Give click-by-click test instructions.
+7. Summarize what changed, what was tested, and what remains.
+
+## First Task for Codex
+
+Start by inspecting the project.
+
+Do not edit files yet.
+
+Tell me:
+- What this project appears to be
+- Which files matter
+- How to run or open it
+- What seems unfinished or broken
+- The safest first improvement`;
+    }
+
+    function update(){
+      const md = makeMarkdown();
+      $("preview").textContent = md;
+      const blob = new Blob([md], {type:"text/markdown"});
+      const url = URL.createObjectURL(blob);
+      $("downloadBtn").href = url;
+      const completed = [
+        val("goal"),val("user"),val("type"),val("design"),val("features"),
+        checked("noAccounts") || checked("browserOnly") || checked("studentData") || checked("noPaid") || val("privacyNotes"),
+        val("workflowRules")
+      ].filter(Boolean).length;
+      $("progressText").textContent = `${completed} / 7 sections complete`;
+      $("progressBar").style.width = `${Math.round((completed/7)*100)}%`;
+      $("privacyWarning").hidden = !checked("studentData");
+    }
+
+    function showToast(message){
+      const toast = $("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(()=>toast.classList.remove("show"),1700);
+    }
+
+    fields.forEach(id => $(id)?.addEventListener("input", update));
+    checks.forEach(id => $(id)?.addEventListener("change", update));
+
+    document.querySelectorAll(".chip").forEach(chip=>{
+      chip.addEventListener("click", () => {
+        $(chip.dataset.fill).value = chip.dataset.value;
+        document.querySelectorAll(`.chip[data-fill="${chip.dataset.fill}"]`).forEach(c=>c.classList.remove("active"));
+        chip.classList.add("active");
+        update();
+      });
+    });
+
+    $("fillExample").addEventListener("click", () => {
+      Object.entries(examples).forEach(([k,v]) => $(k).value = v);
+      $("noAccounts").checked = true;
+      $("browserOnly").checked = true;
+      $("studentData").checked = true;
+      $("noPaid").checked = true;
+      update();
+      showToast("Example filled");
+    });
+
+    $("resetBtn").addEventListener("click", () => {
+      fields.forEach(id => {
+        if(id === "type") $("type").selectedIndex = 0;
+        else if(id === "workflowRules") $(id).value = "Use plain language. Inspect first. Plan before editing. Build one small feature at a time. Avoid rewriting unrelated code. After editing, explain what changed and give click-by-click test steps.";
+        else $(id).value = "";
+      });
+      $("noAccounts").checked = true;
+      $("browserOnly").checked = true;
+      $("studentData").checked = false;
+      $("noPaid").checked = true;
+      document.querySelectorAll(".chip").forEach(c=>c.classList.remove("active"));
+      update();
+      showToast("Reset complete");
+    });
+
+    $("copyBtn").addEventListener("click", async () => {
+      try{
+        await navigator.clipboard.writeText(makeMarkdown());
+        showToast("Markdown copied");
+      }catch(e){
+        showToast("Copy failed. Select preview text manually.");
+      }
+    });
+
+    $("printBtn").addEventListener("click", () => window.print());
+
+    document.querySelectorAll("nav button").forEach(btn=>{
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+        btn.classList.add("active");
+        document.querySelectorAll(".view").forEach(v=>v.classList.add("hidden"));
+        $(`${btn.dataset.view}View`).classList.remove("hidden");
+      });
+    });
+
+    document.querySelectorAll(".template").forEach(card=>{
+      card.addEventListener("click", () => {
+        const t = templates[card.dataset.template];
+        Object.entries(t).forEach(([k,v]) => $(k).value = v);
+        $("noAccounts").checked = true;
+        $("browserOnly").checked = true;
+        $("studentData").checked = card.dataset.template === "dashboard";
+        $("noPaid").checked = true;
+        document.querySelector('nav button[data-view="organizer"]').click();
+        update();
+        showToast("Template loaded");
+      });
+    });
+
+    update();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Display Patterns — A TCEA Field Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #0A3476;
+    --navy-dark: #071f4a;
+    --navy-mid: #12428f;
+    --gold: #FCB040;
+    --gold-light: #fdd17a;
+    --gold-pale: #FEF0D0;
+    --pale-navy: #D0D8F0;
+    --white: #ffffff;
+    --off-white: #f7f8fc;
+    --text: #1a1a2e;
+    --text-muted: #5a6680;
+    --border: #e2e7f5;
+    --teal: #0e6b8a;
+    --green: #2e7d32;
+    --green-pale: #e8f5e9;
+    --amber: #b8860b;
+    --red: #b3261e;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: "DM Sans", sans-serif; background: var(--off-white); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+  /* HEADER */
+  .site-header {
+    background: var(--navy-dark);
+    background-image: radial-gradient(ellipse 80% 70% at 78% 40%, rgba(252,176,64,0.14) 0%, transparent 62%);
+    padding: 40px 24px 34px;
+  }
+  .site-header-inner { max-width: 1100px; margin: 0 auto; }
+  .site-badge { display: inline-block; background: var(--gold); color: var(--navy-dark); font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; padding: 5px 14px; border-radius: 100px; margin-bottom: 14px; }
+  .site-header h1 { font-family: "DM Serif Display", serif; font-size: 2.5rem; color: var(--white); line-height: 1.12; }
+  .site-header h1 em { font-style: italic; color: var(--gold); }
+  .site-header p { color: rgba(255,255,255,0.7); font-size: 0.98rem; margin-top: 10px; max-width: 640px; }
+
+  /* NAV */
+  .site-nav { background: var(--white); border-bottom: 2px solid var(--border); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(10,52,118,0.07); }
+  .site-nav-inner { display: flex; overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto; padding: 0 12px; }
+  .site-nav-inner::-webkit-scrollbar { display: none; }
+  .nav-tab { padding: 15px 18px; font-size: 0.82rem; font-weight: 700; color: var(--text-muted); background: none; border: none; white-space: nowrap; border-bottom: 3px solid transparent; transition: color 0.2s, border-color 0.2s; cursor: pointer; font-family: inherit; }
+  .nav-tab:hover { color: var(--navy); }
+  .nav-tab.active { color: var(--navy); border-color: var(--gold); }
+
+  /* MAIN */
+  main { max-width: 1100px; margin: 0 auto; padding: 44px 24px 90px; }
+  .page { display: none; animation: fade 0.35s ease; }
+  .page.active { display: block; }
+  @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  .lead { font-size: 1.06rem; color: var(--text-muted); max-width: 720px; margin-bottom: 30px; }
+
+  h2.section-title { font-family: "DM Serif Display", serif; font-size: 1.7rem; color: var(--navy); margin-bottom: 6px; }
+  h3.sub-title { font-family: "DM Serif Display", serif; font-size: 1.25rem; color: var(--navy); margin: 34px 0 14px; }
+  .section-intro { color: var(--text-muted); font-size: 0.92rem; margin-bottom: 26px; max-width: 720px; }
+
+  /* INTRO CARDS */
+  .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; margin: 28px 0; }
+  .feature-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 12px; padding: 22px; }
+  .feature-card .fc-icon { font-size: 1.6rem; }
+  .feature-card h4 { font-weight: 700; color: var(--navy); margin: 10px 0 6px; font-size: 1rem; }
+  .feature-card p { font-size: 0.86rem; color: var(--text-muted); line-height: 1.55; }
+
+  /* GLOSSARY */
+  .glossary { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+  .gloss-item { background: var(--white); border: 1.5px solid var(--border); border-left: 4px solid var(--gold); border-radius: 10px; padding: 16px 18px; }
+  .gloss-item dt { font-weight: 700; color: var(--navy); font-size: 0.92rem; margin-bottom: 4px; }
+  .gloss-item dd { font-size: 0.84rem; color: var(--text-muted); line-height: 1.55; }
+
+  /* DIFFICULTY LEGEND */
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; margin: 24px 0 8px; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--text-muted); }
+  .dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+  .dot.easy { background: var(--green); }
+  .dot.medium { background: var(--gold); }
+  .dot.hard { background: var(--red); }
+
+  .difficulty-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; padding: 4px 12px; border-radius: 100px; }
+  .difficulty-tag.easy { background: var(--green-pale); color: var(--green); }
+  .difficulty-tag.medium { background: var(--gold-pale); color: var(--amber); }
+  .difficulty-tag.hard { background: #fdeaea; color: var(--red); }
+
+  /* PATTERN CARD */
+  .pattern-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 14px; padding: 0; margin-bottom: 28px; overflow: hidden; box-shadow: 0 2px 14px rgba(10,52,118,0.05); }
+  .pattern-head { padding: 22px 26px; border-bottom: 1.5px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .pattern-head h3 { font-family: "DM Serif Display", serif; font-size: 1.35rem; color: var(--navy); }
+  .pattern-head .ph-desc { font-size: 0.88rem; color: var(--text-muted); margin-top: 4px; max-width: 560px; }
+  .pattern-body { padding: 24px 26px; }
+
+  .meta-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 22px; }
+  .meta-box { background: var(--off-white); border: 1px solid var(--border); border-radius: 9px; padding: 13px 15px; }
+  .meta-box .ml { font-size: 9px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 5px; }
+  .meta-box .mv { font-size: 0.82rem; color: var(--text); line-height: 1.5; }
+  .meta-box .mv strong { color: var(--navy); }
+
+  .demo-wrap { border: 1px dashed var(--pale-navy); border-radius: 10px; padding: 22px; margin-bottom: 22px; background: linear-gradient(180deg, #fbfcff 0%, var(--white) 100%); }
+  .demo-label { font-size: 9px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 14px; }
+
+  /* PROMPT BLOCK */
+  .prompt-block { background: var(--navy-dark); border-radius: 11px; border-left: 4px solid var(--gold); overflow: hidden; }
+  .prompt-top { display: flex; align-items: center; justify-content: space-between; padding: 11px 18px; background: rgba(255,255,255,0.04); }
+  .prompt-top .pt-label { font-size: 9px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); }
+  .copy-btn { background: var(--gold); color: var(--navy-dark); border: none; font-family: inherit; font-weight: 700; font-size: 0.74rem; padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: background 0.2s, transform 0.1s; }
+  .copy-btn:hover { background: var(--gold-light); }
+  .copy-btn:active { transform: scale(0.96); }
+  .copy-btn.copied { background: var(--green); color: var(--white); }
+  .prompt-block pre { font-family: "Courier New", monospace; font-size: 0.8rem; color: rgba(255,255,255,0.9); white-space: pre-wrap; line-height: 1.65; padding: 18px; }
+
+  /* DATA-SOURCE PILL */
+  .src-pill { display: inline-block; font-size: 0.74rem; font-weight: 600; padding: 4px 10px; border-radius: 100px; margin: 2px 4px 2px 0; }
+  .src-paste { background: var(--pale-navy); color: var(--navy); }
+  .src-link { background: var(--gold-pale); color: var(--amber); }
+  .src-open { background: var(--green-pale); color: var(--green); }
+
+  /* HOST TABLE */
+  .host-table { width: 100%; border-collapse: collapse; background: var(--white); border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; margin: 18px 0; font-size: 0.84rem; }
+  .host-table th { background: var(--navy); color: var(--white); text-align: left; padding: 12px 14px; font-size: 0.78rem; letter-spacing: 0.5px; }
+  .host-table td { padding: 11px 14px; border-top: 1px solid var(--border); color: var(--text); vertical-align: top; }
+  .host-table tr:nth-child(even) td { background: var(--off-white); }
+  .host-table .yes { color: var(--green); font-weight: 700; }
+  .host-table .no { color: var(--red); font-weight: 700; }
+  .host-table .maybe { color: var(--amber); font-weight: 700; }
+
+  /* VIBES */
+  .vibes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin: 24px 0; }
+  .vibes-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 12px; padding: 20px 18px; text-align: center; }
+  .vibes-letter { width: 52px; height: 52px; border-radius: 50%; background: var(--navy); color: var(--gold); font-family: "DM Serif Display", serif; font-size: 1.7rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; }
+  .vibes-card:nth-child(2) .vibes-letter { background: var(--teal); color: var(--white); }
+  .vibes-card:nth-child(3) .vibes-letter { background: var(--gold); color: var(--navy-dark); }
+  .vibes-card:nth-child(4) .vibes-letter { background: var(--navy-mid); color: var(--white); }
+  .vibes-card:nth-child(5) .vibes-letter { background: var(--navy-dark); color: var(--gold); }
+  .vibes-card h4 { font-family: "DM Serif Display", serif; color: var(--navy); font-size: 1.15rem; margin-bottom: 8px; }
+  .vibes-card p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+
+  .code-md { background: #0d1b35; border-radius: 11px; padding: 0; overflow: hidden; margin: 18px 0; }
+  .code-md .cm-top { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background: rgba(255,255,255,0.05); }
+  .code-md .cm-label { font-size: 9px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); }
+  .code-md pre { font-family: "Courier New", monospace; font-size: 0.78rem; color: #c9d8ff; white-space: pre-wrap; line-height: 1.6; padding: 18px; }
+
+  .callout { background: linear-gradient(135deg, #f0f4ff 0%, var(--gold-pale) 100%); border: 1.5px solid var(--pale-navy); border-radius: 12px; padding: 18px 22px; margin: 22px 0; display: flex; gap: 14px; align-items: flex-start; }
+  .callout .co-icon { font-size: 1.4rem; flex-shrink: 0; }
+  .callout h4 { font-weight: 700; color: var(--navy); font-size: 0.92rem; margin-bottom: 3px; }
+  .callout p { font-size: 0.84rem; color: var(--text-muted); line-height: 1.55; }
+
+  footer { background: var(--navy-dark); color: rgba(255,255,255,0.6); text-align: center; padding: 26px 24px; font-size: 0.82rem; }
+  footer a { color: var(--gold); text-decoration: none; }
+
+  /* ---- demo component styles ---- */
+  .flip { background: transparent; width: 200px; height: 130px; perspective: 800px; display: inline-block; }
+  .flip-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer; }
+  .flip:hover .flip-inner, .flip.flipped .flip-inner { transform: rotateY(180deg); }
+  .flip-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 14px; text-align: center; }
+  .flip-front { background: var(--navy); color: var(--white); }
+  .flip-front .ff-num { font-family: "DM Serif Display", serif; font-size: 2rem; color: var(--gold); }
+  .flip-back { background: var(--gold); color: var(--navy-dark); transform: rotateY(180deg); font-size: 0.82rem; font-weight: 600; }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+  .kpi { background: var(--white); border: 1.5px solid var(--border); border-top: 4px solid var(--gold); border-radius: 11px; padding: 18px; }
+  .kpi .k-num { font-family: "DM Serif Display", serif; font-size: 2rem; color: var(--navy); line-height: 1; }
+  .kpi .k-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 6px; font-weight: 600; }
+  .kpi .k-trend { font-size: 0.74rem; font-weight: 700; margin-top: 8px; }
+  .kpi .k-trend.up { color: var(--green); }
+  .kpi .k-trend.down { color: var(--red); }
+
+  .bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .bar-row .b-label { width: 90px; font-size: 0.8rem; font-weight: 600; color: var(--navy); flex-shrink: 0; }
+  .bar-track { flex: 1; background: var(--border); border-radius: 100px; height: 22px; overflow: hidden; }
+  .bar-fill { height: 100%; background: linear-gradient(90deg, var(--navy), var(--navy-mid)); border-radius: 100px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; color: var(--white); font-size: 0.72rem; font-weight: 700; }
+
+  .acc-item { border: 1.5px solid var(--border); border-radius: 9px; margin-bottom: 8px; overflow: hidden; background: var(--white); }
+  .acc-item summary { padding: 13px 16px; font-weight: 700; color: var(--navy); cursor: pointer; font-size: 0.88rem; list-style: none; }
+  .acc-item summary::-webkit-details-marker { display: none; }
+  .acc-item summary::before { content: "+ "; color: var(--gold); font-weight: 800; }
+  .acc-item[open] summary::before { content: "– "; }
+  .acc-item .acc-body { padding: 0 16px 14px; font-size: 0.84rem; color: var(--text-muted); }
+
+  .tabs-demo .tab-btns { display: flex; gap: 6px; border-bottom: 2px solid var(--border); margin-bottom: 14px; }
+  .tabs-demo .tb { background: none; border: none; padding: 9px 16px; font-weight: 700; font-size: 0.82rem; color: var(--text-muted); border-bottom: 3px solid transparent; cursor: pointer; font-family: inherit; margin-bottom: -2px; }
+  .tabs-demo .tb.active { color: var(--navy); border-color: var(--gold); }
+  .tabs-demo .tp { display: none; font-size: 0.86rem; color: var(--text-muted); }
+  .tabs-demo .tp.active { display: block; }
+
+  .filter-demo input { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 0.86rem; margin-bottom: 12px; }
+  .filter-demo input:focus { outline: none; border-color: var(--navy); }
+  .chip-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .data-chip { background: var(--pale-navy); color: var(--navy); padding: 6px 14px; border-radius: 100px; font-size: 0.8rem; font-weight: 600; }
+
+  .timeline { position: relative; padding-left: 26px; }
+  .timeline::before { content: ""; position: absolute; left: 7px; top: 4px; bottom: 4px; width: 2px; background: var(--pale-navy); }
+  .tl-item { position: relative; margin-bottom: 16px; }
+  .tl-item::before { content: ""; position: absolute; left: -23px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: var(--gold); border: 2px solid var(--white); box-shadow: 0 0 0 2px var(--navy); }
+  .tl-item .tl-date { font-size: 0.74rem; font-weight: 800; color: var(--navy); letter-spacing: 0.5px; }
+  .tl-item .tl-text { font-size: 0.84rem; color: var(--text-muted); }
+
+  .donut-wrap { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+  .donut { width: 130px; height: 130px; border-radius: 50%; background: conic-gradient(var(--navy) 0% 45%, var(--gold) 45% 70%, var(--teal) 70% 88%, var(--pale-navy) 88% 100%); display: flex; align-items: center; justify-content: center; }
+  .donut::after { content: ""; width: 78px; height: 78px; background: var(--white); border-radius: 50%; }
+  .donut-legend { font-size: 0.82rem; }
+  .donut-legend div { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .donut-legend .sw { width: 12px; height: 12px; border-radius: 3px; }
+
+  .gauge { width: 160px; height: 90px; position: relative; overflow: hidden; margin: 0 auto; }
+  .gauge-bg { width: 160px; height: 160px; border-radius: 50%; background: conic-gradient(from 270deg, var(--green) 0deg 54deg, var(--gold) 54deg 90deg, var(--red) 90deg 108deg, var(--border) 108deg 180deg); }
+  .gauge-center { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 110px; height: 55px; background: var(--white); border-radius: 110px 110px 0 0; }
+  .gauge-val { position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); font-family: "DM Serif Display", serif; font-size: 1.4rem; color: var(--navy); }
+
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+  .compare-table th { background: var(--navy); color: var(--white); padding: 9px 12px; text-align: left; }
+  .compare-table td { padding: 9px 12px; border-top: 1px solid var(--border); }
+  .compare-table tr:nth-child(even) td { background: var(--off-white); }
+
+  .hotspot-wrap { position: relative; width: 260px; height: 150px; background: linear-gradient(135deg, var(--navy), var(--navy-mid)); border-radius: 12px; }
+  .hotspot { position: absolute; width: 24px; height: 24px; border-radius: 50%; background: var(--gold); color: var(--navy-dark); font-weight: 800; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 2px solid var(--white); }
+  .hotspot:hover::after { content: attr(data-tip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: var(--white); color: var(--navy); font-size: 0.72rem; font-weight: 600; padding: 6px 10px; border-radius: 7px; white-space: nowrap; box-shadow: 0 4px 12px rgba(0,0,0,0.18); }
+
+  /* ---- added pattern demo styles ---- */
+  .radial-row { display: flex; gap: 22px; flex-wrap: wrap; }
+  .radial-item { text-align: center; }
+  .radial-item .r-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 8px; font-weight: 600; }
+  .radial { position: relative; width: 104px; height: 104px; border-radius: 50%; margin: 0 auto; }
+  .radial::after { content: ""; position: absolute; inset: 13px; background: var(--white); border-radius: 50%; }
+  .radial .r-val { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: "DM Serif Display", serif; font-size: 1.3rem; color: var(--navy); z-index: 1; }
+
+  .waffle { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; width: 236px; max-width: 100%; }
+  .waffle .w-cell { aspect-ratio: 1; border-radius: 3px; background: var(--border); }
+  .waffle .w-cell.on { background: var(--navy); }
+  .waffle .w-cell.on2 { background: var(--gold); }
+  .waffle-legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 12px; font-size: 0.8rem; color: var(--text-muted); }
+  .waffle-legend div { display: flex; align-items: center; gap: 6px; }
+  .waffle-legend .sw, .stacked-legend .sw { width: 12px; height: 12px; border-radius: 3px; }
+
+  .rank-list { display: grid; gap: 10px; }
+  .rank-row { display: flex; align-items: center; gap: 12px; }
+  .rank-num { width: 26px; height: 26px; border-radius: 50%; background: var(--navy); color: var(--gold); font-weight: 800; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .rank-row .b-label { width: 110px; }
+
+  .steps { display: flex; flex-wrap: wrap; }
+  .step { flex: 1; min-width: 120px; text-align: center; position: relative; padding: 0 8px; margin-bottom: 10px; }
+  .step .s-num { width: 40px; height: 40px; border-radius: 50%; background: var(--navy); color: var(--white); font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; position: relative; z-index: 1; }
+  .step.done .s-num { background: var(--gold); color: var(--navy-dark); }
+  .step::before { content: ""; position: absolute; top: 20px; left: -50%; width: 100%; height: 3px; background: var(--border); z-index: 0; }
+  .step:first-child::before { display: none; }
+  .step .s-label { font-size: 0.8rem; font-weight: 700; color: var(--navy); }
+  .step .s-desc { font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; }
+
+  .funnel { display: grid; gap: 6px; }
+  .funnel .f-row { background: linear-gradient(90deg, var(--navy), var(--navy-mid)); color: #fff; text-align: center; padding: 10px; border-radius: 6px; font-size: 0.82rem; font-weight: 600; margin: 0 auto; }
+  .funnel .f-row:last-child { background: linear-gradient(90deg, var(--gold), var(--gold-light)); color: var(--navy-dark); }
+
+  .stacked { display: flex; height: 36px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+  .stacked .seg { display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.74rem; font-weight: 700; min-width: 0; }
+  .stacked-legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 12px; font-size: 0.8rem; color: var(--text-muted); }
+  .stacked-legend div { display: flex; align-items: center; gap: 6px; }
+
+  .heatmap { display: inline-grid; grid-auto-flow: column; grid-template-rows: repeat(7, 16px); gap: 4px; }
+  .heatmap .hm-cell { width: 16px; height: 16px; border-radius: 3px; background: var(--border); }
+  .heat-scale { display: flex; align-items: center; gap: 6px; margin-top: 12px; font-size: 0.76rem; color: var(--text-muted); }
+  .heat-scale .hs-cell { width: 14px; height: 14px; border-radius: 3px; }
+
+  .carousel { position: relative; border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--white); }
+  .carousel-track { display: flex; transition: transform 0.4s ease; }
+  .carousel-slide { min-width: 100%; padding: 30px 26px; text-align: center; }
+  .carousel-slide .cs-num { font-family: "DM Serif Display", serif; font-size: 2.4rem; color: var(--navy); }
+  .carousel-slide .cs-cap { color: var(--text-muted); font-size: 0.9rem; margin-top: 6px; }
+  .carousel-nav { position: absolute; top: 42%; left: 0; right: 0; display: flex; justify-content: space-between; padding: 0 10px; pointer-events: none; }
+  .carousel-nav button { pointer-events: auto; background: var(--navy); color: #fff; border: none; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; font-weight: 800; font-size: 1rem; }
+  .carousel-dots { display: flex; justify-content: center; gap: 8px; padding: 12px; }
+  .carousel-dots button { width: 9px; height: 9px; border-radius: 50%; border: none; background: var(--border); cursor: pointer; padding: 0; }
+  .carousel-dots button.active { background: var(--gold); }
+
+  .sortable-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+  .sortable-table th { background: var(--navy); color: #fff; padding: 9px 12px; text-align: left; cursor: pointer; user-select: none; white-space: nowrap; }
+  .sortable-table th .sarr { opacity: 0.45; font-size: 0.82em; }
+  .sortable-table th.asc .sarr, .sortable-table th.desc .sarr { opacity: 1; color: var(--gold); }
+  .sortable-table td { padding: 9px 12px; border-top: 1px solid var(--border); }
+  .sortable-table tr:nth-child(even) td { background: var(--off-white); }
+
+  .ba { position: relative; width: 300px; max-width: 100%; height: 180px; border-radius: 12px; overflow: hidden; }
+  .ba .ba-layer { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.05rem; }
+  .ba .ba-before { background: linear-gradient(135deg, var(--navy), var(--navy-mid)); color: #fff; }
+  .ba .ba-after { background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy-dark); clip-path: inset(0 0 0 50%); }
+  .ba .ba-divider { position: absolute; top: 0; bottom: 0; left: 50%; width: 3px; background: #fff; transform: translateX(-50%); pointer-events: none; }
+  .ba .ba-range { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; }
+
+  .whatif { display: grid; gap: 14px; }
+  .whatif .wi-field label { font-size: 0.84rem; font-weight: 700; color: var(--navy); display: flex; justify-content: space-between; }
+  .whatif input[type=range] { width: 100%; accent-color: var(--navy); margin-top: 6px; }
+  .whatif .wi-out { background: var(--navy); color: #fff; border-radius: 12px; padding: 16px; text-align: center; }
+  .whatif .wi-out .wo-num { font-family: "DM Serif Display", serif; font-size: 2rem; color: var(--gold); }
+  .whatif .wi-out .wo-label { font-size: 0.8rem; color: rgba(255,255,255,0.75); margin-top: 4px; }
+
+  .svg-chart { width: 100%; max-width: 440px; height: auto; display: block; }
+  .spark-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .spark-row .sp-label { width: 96px; font-size: 0.82rem; font-weight: 600; color: var(--navy); }
+  .spark-row svg { flex: 1; max-width: 160px; }
+  .spark-row .sp-val { font-weight: 800; color: var(--navy); }
+  .spark-row .sp-val.down { color: var(--red); }
+
+  /* counts, stat strip, jump list */
+  .count-badge { display: inline-block; background: var(--gold); color: var(--navy-dark); font-size: 0.95rem; font-weight: 800; padding: 2px 13px; border-radius: 100px; vertical-align: middle; margin-left: 10px; }
+  .nav-count { display: inline-block; background: var(--pale-navy); color: var(--navy); font-size: 0.68rem; font-weight: 800; padding: 1px 7px; border-radius: 100px; margin-left: 5px; vertical-align: middle; }
+  .nav-tab.active .nav-count { background: var(--gold); color: var(--navy-dark); }
+
+  .stat-strip { display: flex; flex-wrap: wrap; gap: 14px; margin: 8px 0 30px; }
+  .stat-pill { background: var(--white); border: 1.5px solid var(--border); border-top: 4px solid var(--navy); border-radius: 12px; padding: 14px 22px; text-align: center; min-width: 118px; flex: 1 1 118px; }
+  .stat-pill.total { border-top-color: var(--gold); }
+  .stat-pill .sp-num { font-family: "DM Serif Display", serif; font-size: 1.85rem; color: var(--navy); line-height: 1; }
+  .stat-pill .sp-lab { font-size: 0.76rem; color: var(--text-muted); margin-top: 6px; font-weight: 600; }
+
+  .pattern-index-wrap { margin: 0 0 30px; padding: 18px 20px; background: var(--white); border: 1.5px solid var(--border); border-left: 4px solid var(--gold); border-radius: 12px; }
+  .pi-label { font-size: 9px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
+  .pattern-index { list-style: none; margin: 0; padding: 0; columns: 270px; column-gap: 30px; }
+  .pattern-index li { break-inside: avoid; margin-bottom: 9px; font-size: 0.88rem; line-height: 1.5; }
+  .pattern-index li a { color: var(--navy); font-weight: 700; text-decoration: none; }
+  .pattern-index li a:hover { color: var(--navy-mid); text-decoration: underline; }
+  .pattern-index li .pi-desc { color: var(--text-muted); }
+  .pattern-card { scroll-margin-top: 78px; }
+
+  @media (max-width: 640px) {
+    .site-header h1 { font-size: 1.9rem; }
+    .pattern-head, .pattern-body { padding: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <span class="site-badge">TCEA Field Guide</span>
+    <h1>Data Display <em>Patterns</em></h1>
+    <p>A working catalog of ways to show data in a single, self-contained HTML file you can embed in WordPress, Google Sites, GitHub Pages, and most learning platforms. Each pattern includes a live demo, a copy-ready prompt, suggested data sources, and where it hosts best.</p>
+  </div>
+</header>
+
+<nav class="site-nav">
+  <div class="site-nav-inner" id="navBar">
+    <button class="nav-tab active" data-page="home">Introduction</button>
+    <button class="nav-tab" data-page="easy">Easy Patterns</button>
+    <button class="nav-tab" data-page="medium">Medium Patterns</button>
+    <button class="nav-tab" data-page="charts">Charts &amp; KPIs</button>
+    <button class="nav-tab" data-page="hosting">Hosting Guide</button>
+    <button class="nav-tab" data-page="vibes">VIBES Framework</button>
+  </div>
+</nav>
+
+<main>
+
+<!-- ===================== HOME ===================== -->
+<section class="page active" id="page-home">
+  <h2 class="section-title">What is a data display pattern?</h2>
+  <p class="lead">A data display pattern is a reusable way of arranging information so a reader can understand it at a glance. The same numbers can land as a wall of text or as a clean set of cards, a bar chart, or a flip card that hides detail until someone wants it. The pattern is the structure, not the data.</p>
+
+  <p class="section-intro">This guide focuses on patterns that live inside one HTML file with no build step and no backend. That matters because the place you embed a page decides what survives. WordPress strips inline scripts for many users. Google Sites sandboxes everything in an iframe. GitHub Pages serves whatever you give it. So the real measure of difficulty here is not how clever the code is. It is how many extra libraries the pattern needs, and whether those libraries get stripped out by your host.</p>
+
+  <div class="stat-strip">
+    <div class="stat-pill total"><div class="sp-num" id="countTotal">—</div><div class="sp-lab">Patterns total</div></div>
+    <div class="stat-pill"><div class="sp-num" id="countEasy">—</div><div class="sp-lab">Easy</div></div>
+    <div class="stat-pill"><div class="sp-num" id="countMedium">—</div><div class="sp-lab">Medium</div></div>
+    <div class="stat-pill"><div class="sp-num" id="countCharts">—</div><div class="sp-lab">Charts &amp; KPIs</div></div>
+  </div>
+
+  <div class="feature-grid">
+    <div class="feature-card"><div class="fc-icon">🧩</div><h4>Structure over data</h4><p>Pick the pattern that matches the question your reader is asking, then pour your data into it.</p></div>
+    <div class="feature-card"><div class="fc-icon">📦</div><h4>Self-contained</h4><p>One file. All CSS and JavaScript embedded. Fonts from a CDN are fine. No frameworks.</p></div>
+    <div class="feature-card"><div class="fc-icon">🚦</div><h4>Difficulty by dependency</h4><p>Easy means CSS only. Medium means a little vanilla JavaScript. Hard means a charting library that some hosts will block.</p></div>
+    <div class="feature-card"><div class="fc-icon">📋</div><h4>Copy the prompt</h4><p>Every pattern has a ready prompt. Paste your data, or point it at a public source or an article link.</p></div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><span class="dot easy"></span> <strong style="color:var(--green)">Easy</strong> — CSS only, works everywhere</div>
+    <div class="legend-item"><span class="dot medium"></span> <strong style="color:var(--amber)">Medium</strong> — vanilla JavaScript, watch WordPress</div>
+    <div class="legend-item"><span class="dot hard"></span> <strong style="color:var(--red)">Hard</strong> — external library, often stripped or sandboxed</div>
+  </div>
+
+  <h3 class="sub-title">Glossary</h3>
+  <dl class="glossary">
+    <div class="gloss-item"><dt>Self-contained HTML</dt><dd>A single .html file holding its own CSS and JavaScript, with no external dependencies except optional web fonts.</dd></div>
+    <div class="gloss-item"><dt>Custom HTML block</dt><dd>The WordPress Gutenberg block that lets you paste raw HTML into a page. It keeps markup and CSS but strips inline scripts on save for most roles.</dd></div>
+    <div class="gloss-item"><dt>iframe embed</dt><dd>A page nested inside another page in a sandboxed frame. Google Sites and many platforms use this. It is the most reliable way to keep your JavaScript intact.</dd></div>
+    <div class="gloss-item"><dt>KSES filtering</dt><dd>The WordPress security layer that removes script tags and unsafe attributes when a non-admin saves content.</dd></div>
+    <div class="gloss-item"><dt>CDN</dt><dd>Content Delivery Network. A public host for shared assets such as Google Fonts or a charting library, loaded by URL.</dd></div>
+    <div class="gloss-item"><dt>KPI</dt><dd>Key Performance Indicator. A single headline metric that signals whether something is on track, often shown as a big number with a trend.</dd></div>
+    <div class="gloss-item"><dt>CSS only</dt><dd>A pattern built with styling and markup alone, no scripting. The safest tier because nothing can be stripped.</dd></div>
+    <div class="gloss-item"><dt>Scroll-spy</dt><dd>Navigation that highlights the section currently in view as the reader scrolls.</dd></div>
+    <div class="gloss-item"><dt>conic-gradient</dt><dd>A CSS gradient that sweeps around a center point, used to fake donut and gauge charts without any library.</dd></div>
+    <div class="gloss-item"><dt>localStorage</dt><dd>Browser storage that persists data on the reader's device. Often blocked inside sandboxed iframes.</dd></div>
+  </dl>
+
+  <div class="callout">
+    <span class="co-icon">💡</span>
+    <div><h4>How to use this guide</h4><p>Browse the three pattern tiers, find one that fits your data, copy its prompt into your AI tool, and paste in your numbers or a link to an article you want visualized. Then check the Hosting Guide to confirm it survives where you plan to embed it.</p></div>
+  </div>
+</section>
+
+<!-- ===================== EASY ===================== -->
+<section class="page" id="page-easy">
+  <h2 class="section-title">Easy Patterns <span class="count-badge" id="secEasy"></span></h2>
+  <p class="section-intro">CSS only or near-zero JavaScript. Nothing to strip out, so these work in every host including WordPress Custom HTML blocks, Google Sites embeds, and GitHub Pages.</p>
+  <div id="easyMount"></div>
+</section>
+
+<!-- ===================== MEDIUM ===================== -->
+<section class="page" id="page-medium">
+  <h2 class="section-title">Medium Patterns <span class="count-badge" id="secMedium"></span></h2>
+  <p class="section-intro">These need a little vanilla JavaScript for filtering, switching, or animation. No external library. They run fine on GitHub Pages and inside iframe embeds. In WordPress, use an iframe rather than a Custom HTML block, since inline scripts get stripped on save.</p>
+  <div id="mediumMount"></div>
+</section>
+
+<!-- ===================== CHARTS & KPIs ===================== -->
+<section class="page" id="page-charts">
+  <h2 class="section-title">Charts and KPIs <span class="count-badge" id="secCharts"></span></h2>
+  <p class="section-intro">Charts split into two camps. CSS and SVG charts stay self-contained and survive everywhere. Library charts like Chart.js or D3 look richer but pull in an external script that strict hosts block or sandbox. KPIs are the easiest win of all and belong on almost every dashboard.</p>
+  <div id="chartsMount"></div>
+</section>
+
+<!-- ===================== HOSTING ===================== -->
+<section class="page" id="page-hosting">
+  <h2 class="section-title">Hosting Guide</h2>
+  <p class="section-intro">The same file behaves differently depending on where you embed it. This is the real source of difficulty. Match your pattern tier to your host before you build.</p>
+
+  <table class="host-table">
+    <thead>
+      <tr><th>Host</th><th>CSS-only (Easy)</th><th>Vanilla JS (Medium)</th><th>Library charts (Hard)</th><th>Best method</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>GitHub Pages</strong></td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td><td>Upload the file directly. Nothing is stripped.</td></tr>
+      <tr><td><strong>Google Sites</strong></td><td class="yes">Yes</td><td class="yes">Yes</td><td class="maybe">Usually</td><td>Insert &gt; Embed &gt; Code. Runs in a sandboxed iframe. Avoid localStorage.</td></tr>
+      <tr><td><strong>WordPress Custom HTML block</strong></td><td class="yes">Yes</td><td class="no">Scripts stripped</td><td class="no">Scripts stripped</td><td>Fine for CSS-only. For anything with JS, host the file elsewhere and iframe it in.</td></tr>
+      <tr><td><strong>WordPress (iframe embed)</strong></td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td><td>Host the file on GitHub Pages, then embed with an iframe block.</td></tr>
+      <tr><td><strong>LMS (Canvas, Schoology, etc.)</strong></td><td class="yes">Yes</td><td class="maybe">Often</td><td class="maybe">Varies</td><td>Use the iframe or external-tool option. Inline JS support varies by platform.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <span class="co-icon">🛡️</span>
+    <div><h4>The one rule that prevents most heartache</h4><p>If your pattern uses any JavaScript and your destination is WordPress, do not paste it into a Custom HTML block. Host the file on GitHub Pages and pull it in with an iframe. The iframe keeps your script intact because it is a separate document.</p></div>
+  </div>
+
+  <div class="callout">
+    <span class="co-icon">📐</span>
+    <div><h4>Sizing an iframe embed</h4><p>Sandboxed embeds do not auto-grow to fit content. Set an explicit height on the iframe, or design the pattern to a fixed height. For Google Sites, drag the embed handles after inserting.</p></div>
+  </div>
+</section>
+
+<!-- ===================== VIBES ===================== -->
+<section class="page" id="page-vibes">
+  <h2 class="section-title">VIBES for Data Display Patterns</h2>
+  <p class="section-intro">VIBES is a five-step checklist for building a data display with AI. It is the same spirit as the marketing version, adapted so the output is a clean, embeddable visualization rather than a campaign.</p>
+
+  <div class="vibes-grid">
+    <div class="vibes-card"><div class="vibes-letter">V</div><h4>Vision</h4><p>Name the one question the reader should answer in five seconds, the audience, and where it will be embedded.</p></div>
+    <div class="vibes-card"><div class="vibes-letter">I</div><h4>Instruct</h4><p>Give the AI the pattern, the host, the brand colors, and the rule that it must be one self-contained file.</p></div>
+    <div class="vibes-card"><div class="vibes-letter">B</div><h4>Build</h4><p>Paste your data or a public source link. Ask for a first version of just the display, no extras.</p></div>
+    <div class="vibes-card"><div class="vibes-letter">E</div><h4>Evaluate</h4><p>Check accuracy, readability on mobile, and whether it survives your host. Test the embed before trusting it.</p></div>
+    <div class="vibes-card"><div class="vibes-letter">S</div><h4>Ship</h4><p>Embed it, set the iframe height, and confirm the live page renders the same as the preview.</p></div>
+  </div>
+
+  <p class="section-intro" style="margin-top:8px">Below is the framework in a markdown code block, ready to drop into your image generator or documentation.</p>
+
+  <div class="code-md">
+    <div class="cm-top"><span class="cm-label">Markdown — VIBES Framework for Data Display Patterns</span><button class="copy-btn" data-copy="vibesMd">Copy</button></div>
+    <pre id="vibesMd"># VIBES Framework for Data Display Patterns
+**Turning raw data into a clean, embeddable visualization with AI**
+
+Use VIBES as a simple checklist for building data displays with AI.
+
+## V — Vision
+Name the one question the reader should answer at a glance, the audience, and the destination (GitHub Pages, Google Sites, WordPress, an LMS). Example: show three years of enrollment so a board member sees the trend instantly.
+
+## I — Instruct
+Give the AI the context it needs: the chosen pattern, the host, the brand colors, and the constraint that the output must be one self-contained HTML file with no frameworks. Example: build a CSS-only bar chart in TCEA navy and gold for a WordPress Custom HTML block.
+
+## B — Build
+Provide the data. Paste a table, point at a public source, or share a link to an article you want visualized. Ask for a first version of the display only, one pattern at a time.
+
+## E — Evaluate
+Check the numbers, the labels, mobile readability, and color contrast. Confirm it survives the host: a Custom HTML block strips scripts, an iframe keeps them. Fix one thing at a time.
+
+## S — Ship
+Embed the file, set an explicit iframe height so it is not cut off, and load the live page to confirm it renders the same as the preview. Track whether readers act on what they see.
+
+> In practice, VIBES moves you from a screenshot of a spreadsheet to a purposeful display.
+> Frame it, feed it, build it, check it, embed it.
+
+Citation: Miguel Guhlin (mguhlin.org)</pre>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Data Display Patterns — A TCEA Field Guide &nbsp;·&nbsp; Built with the VIBES framework &nbsp;·&nbsp; Citation: <a href="https://mguhlin.org">Miguel Guhlin (mguhlin.org)</a>
+</footer>
+
+<script>
+/* ---------- routing ---------- */
+const navBar = document.getElementById('navBar');
+navBar.addEventListener('click', e => {
+  const btn = e.target.closest('.nav-tab');
+  if (!btn) return;
+  const page = btn.dataset.page;
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t === btn));
+  document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === 'page-' + page));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+/* ---------- copy buttons (event delegation, works for static + generated) ---------- */
+document.body.addEventListener('click', e => {
+  const btn = e.target.closest('.copy-btn');
+  if (!btn) return;
+  const targetId = btn.dataset.copy;
+  const node = document.getElementById(targetId);
+  if (!node) return;
+  const text = node.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 1600);
+  }).catch(() => {
+    // fallback
+    const r = document.createRange(); r.selectNode(node);
+    const s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+    try { document.execCommand('copy'); btn.textContent = 'Copied'; setTimeout(()=>btn.textContent='Copy',1600); } catch(_){}
+    s.removeAllRanges();
+  });
+});
+
+/* ---------- pattern data model ---------- */
+const patterns = [
+  /* ---- EASY ---- */
+  {
+    tier: 'easy', id: 'flip', name: 'Card Flip',
+    desc: 'A card that flips on hover or click to reveal detail on the back. Good for a headline number with an explanation behind it.',
+    best: 'Anywhere. CSS transforms only. Survives WordPress Custom HTML, Google Sites, and GitHub Pages with no changes.',
+    sources: [['paste','Paste a short list of label / detail pairs'],['open','Any small fact set you already have']],
+    demo: `<div class="flip" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-face flip-front"><div class="ff-num">73%</div><div>Tap to flip</div></div>
+        <div class="flip-face flip-back">73% of staff completed the AI training in Q2</div>
+      </div></div>
+      <div class="flip" onclick="this.classList.toggle('flipped')"><div class="flip-inner">
+        <div class="flip-face flip-front"><div class="ff-num">12</div><div>Tap to flip</div></div>
+        <div class="flip-face flip-back">12 campuses now have a coaching cycle in place</div>
+      </div></div>`,
+    prompt: `Build a single self-contained HTML file with a row of flip cards.
+Each card shows a headline number on the front and a short explanation on the back, flipping on hover and on click.
+Use CSS transforms only, no JavaScript libraries. TCEA brand: navy #0A3476, gold #FCB040, white text on the front, navy text on a gold back.
+Make it responsive and embeddable in a WordPress Custom HTML block.
+
+Data (label, number, back-of-card explanation):
+[PASTE YOUR DATA HERE — e.g. "Staff trained, 73%, 73% of staff completed AI training in Q2"]`
+  },
+  {
+    tier: 'easy', id: 'accordion', name: 'Accordion / Collapsible Sections',
+    desc: 'Stacked sections that expand one at a time. Best for dense reference data a reader scans selectively.',
+    best: 'Anywhere. Uses the native details and summary elements, so zero JavaScript. Perfect for WordPress Custom HTML blocks.',
+    sources: [['paste','Paste headings with their body text'],['link','Link an article and ask for it summarized into collapsible sections']],
+    demo: `<details class="acc-item" open><summary>What counts as Surface learning?</summary><div class="acc-body">Building foundational facts and skills. Effect size around 0.54.</div></details>
+      <details class="acc-item"><summary>What counts as Deep learning?</summary><div class="acc-body">Connecting ideas and relating concepts to one another.</div></details>
+      <details class="acc-item"><summary>What counts as Transfer learning?</summary><div class="acc-body">Applying learning to new and unfamiliar situations.</div></details>`,
+    prompt: `Build a single self-contained HTML file with an accordion of collapsible sections.
+Use the native <details> and <summary> elements so there is no JavaScript at all.
+Style with TCEA navy #0A3476 headings, gold #FCB040 plus/minus markers, white cards with a light border.
+The first item open by default. Fully embeddable in a WordPress Custom HTML block.
+
+Data (each item is a heading and its body):
+[PASTE HEADINGS AND BODY TEXT, or: "Summarize this article into 5 collapsible sections: PASTE ARTICLE URL"]`
+  },
+  {
+    tier: 'easy', id: 'progress', name: 'Progress Bars',
+    desc: 'Horizontal bars comparing values against a whole. The fastest way to show proportion or completion.',
+    best: 'Anywhere. Pure CSS widths. No scripting, so nothing gets stripped on any host.',
+    sources: [['paste','Paste label and percentage pairs'],['open','Survey results, completion rates, budget shares']],
+    demo: `<div class="bar-row"><span class="b-label">ChatGPT</span><div class="bar-track"><div class="bar-fill" style="width:82%">82%</div></div></div>
+      <div class="bar-row"><span class="b-label">Gemini</span><div class="bar-track"><div class="bar-fill" style="width:61%">61%</div></div></div>
+      <div class="bar-row"><span class="b-label">Perplexity</span><div class="bar-track"><div class="bar-fill" style="width:44%">44%</div></div></div>`,
+    prompt: `Build a single self-contained HTML file with horizontal progress bars.
+Each row has a label, a track, and a filled portion sized by CSS width with the percentage shown inside the fill.
+Pure CSS, no JavaScript. TCEA navy #0A3476 gradient fills, gold #FCB040 reserved for any highlighted bar.
+Responsive and safe for a WordPress Custom HTML block.
+
+Data (label, percentage):
+[PASTE LABEL AND PERCENTAGE PAIRS — e.g. "ChatGPT, 82" / "Gemini, 61"]`
+  },
+  {
+    tier: 'easy', id: 'compare', name: 'Comparison Table',
+    desc: 'A clean, styled table for side-by-side attributes. Still the clearest pattern when the reader needs exact values.',
+    best: 'Anywhere. Styled HTML table, no scripting. Reliable in every host including email-style embeds.',
+    sources: [['paste','Paste rows and columns'],['link','Link two product or tool pages to compare']],
+    demo: `<table class="compare-table"><thead><tr><th>Tool</th><th>Free tier</th><th>Best for</th></tr></thead>
+      <tbody><tr><td>BoodleBox</td><td>Yes</td><td>Multi-model classrooms</td></tr>
+      <tr><td>NotebookLM</td><td>Yes</td><td>Source-grounded research</td></tr>
+      <tr><td>Perplexity</td><td>Limited</td><td>Cited answers</td></tr></tbody></table>`,
+    prompt: `Build a single self-contained HTML file with a styled comparison table.
+Navy #0A3476 header row with white text, alternating off-white row stripes, gold #FCB040 accent on any recommended row.
+Responsive: allow horizontal scroll on narrow screens. No JavaScript. Safe for a WordPress Custom HTML block.
+
+Data (columns then rows):
+[PASTE YOUR TABLE — e.g. columns "Tool, Free tier, Best for" then one row per item]`
+  },
+  {
+    tier: 'easy', id: 'hotspot', name: 'Image / Diagram Hotspots',
+    desc: 'Clickable or hover points on a graphic that reveal a label. Good for annotated diagrams and maps.',
+    best: 'Anywhere with hover-only tooltips (pure CSS). Click-to-reveal versions need a touch of JavaScript, so treat those as Medium for WordPress.',
+    sources: [['paste','Paste point positions and their labels'],['open','Annotate a diagram or floor plan you provide']],
+    demo: `<div class="hotspot-wrap">
+      <div class="hotspot" data-tip="Empower and Engage" style="top:20px;left:24px">1</div>
+      <div class="hotspot" data-tip="Investigate and Innovate" style="top:90px;left:90px">2</div>
+      <div class="hotspot" data-tip="Implement and Improve" style="top:40px;left:180px">3</div>
+    </div><p style="font-size:0.78rem;color:var(--text-muted);margin-top:8px">Hover a point to see its label.</p>`,
+    prompt: `Build a single self-contained HTML file with image hotspots.
+Position small numbered markers over a background graphic. On hover, each marker shows a tooltip label. Use pure CSS tooltips so it works in a WordPress Custom HTML block.
+TCEA gold #FCB040 markers with white borders on a navy #0A3476 background.
+
+Data (marker number, x/y position, label):
+[PASTE MARKERS AND LABELS, and describe or attach the background image]`
+  },
+
+  {
+    tier: 'easy', id: 'radial', name: 'Radial Progress Ring',
+    desc: 'A circular progress indicator built from a CSS conic-gradient. Best for a single completion percentage that reads at a glance.',
+    best: 'Anywhere. The ring is pure CSS conic-gradient with no script, so it survives WordPress Custom HTML, Google Sites, and GitHub Pages.',
+    sources: [['paste','Paste a label and a percentage'],['open','Completion rates, goal progress, readiness scores']],
+    demo: `<div class="radial-row">
+      <div class="radial-item"><div class="radial" style="background:conic-gradient(var(--navy) 0% 78%, var(--border) 78% 100%)"><div class="r-val">78%</div></div><div class="r-label">Training complete</div></div>
+      <div class="radial-item"><div class="radial" style="background:conic-gradient(var(--gold) 0% 92%, var(--border) 92% 100%)"><div class="r-val">92%</div></div><div class="r-label">Satisfaction</div></div>
+      <div class="radial-item"><div class="radial" style="background:conic-gradient(var(--teal) 0% 45%, var(--border) 45% 100%)"><div class="r-val">45%</div></div><div class="r-label">Devices refreshed</div></div>
+    </div>`,
+    prompt: `Build a single self-contained HTML file with radial progress rings.
+Each ring is a circle filled by a CSS conic-gradient up to its percentage, with a white hole in the middle and the percentage in the center. Put a label beneath each ring.
+Pure CSS, no JavaScript and no charting library. TCEA navy #0A3476 fill with gold #FCB040 for a highlighted ring, light gray for the remainder.
+Responsive and safe for a WordPress Custom HTML block.
+
+Data (label, percentage):
+[PASTE LABEL AND PERCENTAGE PAIRS — e.g. "Training complete, 78"]`
+  },
+  {
+    tier: 'easy', id: 'waffle', name: 'Waffle Chart',
+    desc: 'A ten-by-ten grid of squares where each square is one percent. Best for making a proportion feel concrete, like 64 in 100.',
+    best: 'Anywhere. One hundred styled squares, no script needed in production. Reliable in every host.',
+    sources: [['paste','Paste one or two percentages'],['open','Share of a whole, participation rate, "X in 100"']],
+    demo: `<div class="waffle"></div>
+      <div class="waffle-legend"><div><span class="sw" style="background:var(--navy)"></span> Adopted — 64%</div><div><span class="sw" style="background:var(--gold)"></span> Piloting — 18%</div><div><span class="sw" style="background:var(--border)"></span> Not yet — 18%</div></div>`,
+    demoInit: function(root){
+      const w = root.querySelector('.waffle');
+      let html = '';
+      for (let i = 0; i < 100; i++) { const cls = i < 64 ? 'on' : (i < 82 ? 'on2' : ''); html += `<div class="w-cell ${cls}"></div>`; }
+      w.innerHTML = html;
+    },
+    prompt: `Build a single self-contained HTML file with a waffle chart.
+Render a 10 by 10 grid of 100 small squares. Fill the first squares to match each category's percentage using different colors, and leave the remainder gray. Add a legend with the categories and percentages.
+Pure CSS grid, no charting library. TCEA navy #0A3476 and gold #FCB040. Safe for a WordPress Custom HTML block.
+
+Data (category, percentage — totalling 100):
+[PASTE CATEGORIES AND PERCENTAGES — e.g. "Adopted, 64" / "Piloting, 18"]`
+  },
+  {
+    tier: 'easy', id: 'leaderboard', name: 'Ranked Leaderboard',
+    desc: 'A numbered list of items with an inline bar for each value. Best for a top-ten where both order and magnitude matter.',
+    best: 'Anywhere. Numbered rows with CSS bars, no script. Works in every host including Custom HTML blocks.',
+    sources: [['paste','Paste ranked label and value pairs'],['open','Most-used tools, top campuses, survey rankings']],
+    demo: `<div class="rank-list">
+      <div class="rank-row"><span class="rank-num">1</span><span class="b-label">ChatGPT</span><div class="bar-track"><div class="bar-fill" style="width:100%">1,240</div></div></div>
+      <div class="rank-row"><span class="rank-num">2</span><span class="b-label">Gemini</span><div class="bar-track"><div class="bar-fill" style="width:74%">918</div></div></div>
+      <div class="rank-row"><span class="rank-num">3</span><span class="b-label">NotebookLM</span><div class="bar-track"><div class="bar-fill" style="width:52%">642</div></div></div>
+    </div>`,
+    prompt: `Build a single self-contained HTML file with a ranked leaderboard.
+Each row has a rank number in a circle, a label, and a horizontal bar sized by value with the value shown inside. Sort highest to lowest and scale the bars against the top value.
+Pure CSS, no JavaScript. TCEA navy #0A3476 bars, gold #FCB040 rank badges. Safe for a WordPress Custom HTML block.
+
+Data (label, value):
+[PASTE LABEL AND VALUE PAIRS — they will be ranked by value]`
+  },
+  {
+    tier: 'easy', id: 'steps', name: 'Process Steps',
+    desc: 'A horizontal row of numbered steps connected by a line, with some marked complete. Best for a rollout, workflow, or phase view.',
+    best: 'Anywhere. CSS layout with no script. Works in every host and wraps to a stack on mobile.',
+    sources: [['paste','Paste step labels in order'],['open','Adoption phases, approval workflow, onboarding stages']],
+    demo: `<div class="steps">
+      <div class="step done"><div class="s-num">1</div><div class="s-label">Explore</div><div class="s-desc">Awareness sessions</div></div>
+      <div class="step done"><div class="s-num">2</div><div class="s-label">Pilot</div><div class="s-desc">Three campuses</div></div>
+      <div class="step"><div class="s-num">3</div><div class="s-label">Scale</div><div class="s-desc">District-wide</div></div>
+      <div class="step"><div class="s-num">4</div><div class="s-label">Sustain</div><div class="s-desc">Coaching cycle</div></div>
+    </div>`,
+    prompt: `Build a single self-contained HTML file with a horizontal process-steps indicator.
+Each step is a numbered circle with a short label and caption, connected by a line. Completed steps use a filled accent color; upcoming steps are muted. It should wrap to a vertical stack on narrow screens.
+Pure CSS, no JavaScript. TCEA navy #0A3476 for upcoming, gold #FCB040 for completed. Safe for a WordPress Custom HTML block.
+
+Data (step label, caption, and whether it is complete):
+[PASTE STEPS IN ORDER — e.g. "Explore, Awareness sessions, done"]`
+  },
+  {
+    tier: 'easy', id: 'funnel', name: 'Funnel Chart',
+    desc: 'Stacked bars that narrow at each stage. Best for showing drop-off through a pipeline or conversion path.',
+    best: 'Anywhere. Centered bars sized by CSS width, no script. Reliable in every host.',
+    sources: [['paste','Paste stage labels and values'],['open','Registration to completion, application funnel, adoption stages']],
+    demo: `<div class="funnel">
+      <div class="f-row" style="width:100%">Invited — 1,000</div>
+      <div class="f-row" style="width:72%">Registered — 720</div>
+      <div class="f-row" style="width:48%">Attended — 480</div>
+      <div class="f-row" style="width:30%">Completed — 300</div>
+    </div>`,
+    prompt: `Build a single self-contained HTML file with a funnel chart.
+Each stage is a centered bar whose width shrinks with its value, labeled with the stage name and count. The final stage uses a highlight color.
+Pure CSS widths, no JavaScript. TCEA navy #0A3476 stages with a gold #FCB040 final stage. Safe for a WordPress Custom HTML block.
+
+Data (stage label, value — in funnel order):
+[PASTE STAGES AND VALUES — e.g. "Invited, 1000" / "Registered, 720"]`
+  },
+
+  /* ---- MEDIUM ---- */
+  {
+    tier: 'medium', id: 'tabs', name: 'Tabs',
+    desc: 'Switch between panels of content in the same space. Best for parallel views the reader toggles between.',
+    best: 'GitHub Pages and iframe embeds. A CSS-only checkbox version exists, but the readable version uses a little JavaScript, so iframe it into WordPress rather than pasting into a Custom HTML block.',
+    sources: [['paste','Paste one block of content per tab'],['open','Group related metrics by category']],
+    demo: `<div class="tabs-demo">
+      <div class="tab-btns">
+        <button class="tb active" data-t="0">Surface</button><button class="tb" data-t="1">Deep</button><button class="tb" data-t="2">Transfer</button>
+      </div>
+      <div class="tp active">Foundational facts and skills. Strongest early in a unit.</div>
+      <div class="tp">Connecting and relating ideas to build understanding.</div>
+      <div class="tp">Applying learning to new and unfamiliar contexts.</div>
+    </div>`,
+    demoInit: function(root){
+      const btns = root.querySelectorAll('.tb'), panels = root.querySelectorAll('.tp');
+      root.querySelector('.tab-btns').addEventListener('click', e=>{
+        const b = e.target.closest('.tb'); if(!b) return;
+        btns.forEach(x=>x.classList.remove('active')); b.classList.add('active');
+        panels.forEach((p,i)=>p.classList.toggle('active', i==b.dataset.t));
+      });
+    },
+    prompt: `Build a single self-contained HTML file with a tabbed panel.
+A row of tab buttons switches which content panel is visible using a small amount of vanilla JavaScript, no libraries.
+TCEA navy #0A3476 text, gold #FCB040 active-tab underline, white panels.
+Note: this uses JavaScript, so embed it in WordPress via an iframe rather than a Custom HTML block.
+
+Data (one content block per tab):
+[PASTE TAB TITLES AND THEIR CONTENT]`
+  },
+  {
+    tier: 'medium', id: 'filter', name: 'Searchable / Filterable List',
+    desc: 'A live search box that filters a set of items as the reader types. Best for catalogs and long lists.',
+    best: 'GitHub Pages and iframe embeds. Needs vanilla JavaScript. Use an iframe for WordPress.',
+    sources: [['paste','Paste a list of items'],['open','Course catalog, glossary, tool directory'],['link','Link a list-style article to make searchable']],
+    demo: `<div class="filter-demo">
+      <input type="text" placeholder="Type to filter tools..." class="filterInput">
+      <div class="chip-list">
+        <span class="data-chip">BoodleBox</span><span class="data-chip">ChatGPT</span><span class="data-chip">Gemini</span>
+        <span class="data-chip">NotebookLM</span><span class="data-chip">Perplexity</span><span class="data-chip">Claude</span>
+      </div></div>`,
+    demoInit: function(root){
+      const input = root.querySelector('.filterInput');
+      const chips = root.querySelectorAll('.data-chip');
+      input.addEventListener('input', ()=>{
+        const q = input.value.toLowerCase();
+        chips.forEach(c => c.style.display = c.textContent.toLowerCase().includes(q) ? '' : 'none');
+      });
+    },
+    prompt: `Build a single self-contained HTML file with a searchable, filterable list.
+A text input filters the items live as the user types, using vanilla JavaScript only, no libraries.
+Render items as cards or chips. TCEA navy #0A3476 and gold #FCB040 styling.
+Note: uses JavaScript, so embed in WordPress via an iframe, not a Custom HTML block.
+
+Data (list of items, optionally with a category for each):
+[PASTE YOUR LIST — e.g. course titles, tool names, glossary terms]`
+  },
+  {
+    tier: 'medium', id: 'timeline', name: 'Timeline',
+    desc: 'A vertical sequence of dated events. Best for showing change or a rollout over time.',
+    best: 'CSS-only timelines work anywhere. Add scroll-reveal animation and it becomes Medium, so iframe it into WordPress.',
+    sources: [['paste','Paste date and event pairs'],['link','Link a history or project-update article'],['open','Project milestones, adoption phases']],
+    demo: `<div class="timeline">
+      <div class="tl-item"><div class="tl-date">AUG 2025</div><div class="tl-text">Pilot launches on three campuses</div></div>
+      <div class="tl-item"><div class="tl-date">NOV 2025</div><div class="tl-text">Coaching cycle added district-wide</div></div>
+      <div class="tl-item"><div class="tl-date">FEB 2026</div><div class="tl-text">First cohort earns certificates</div></div>
+    </div>`,
+    prompt: `Build a single self-contained HTML file with a vertical timeline.
+Each entry has a date and a short description, connected by a vertical line with gold #FCB040 dots.
+Use CSS for the layout and optional light vanilla JavaScript for scroll-reveal. TCEA navy #0A3476 text.
+If you add scroll animation, embed in WordPress via an iframe.
+
+Data (date, event):
+[PASTE DATE AND EVENT PAIRS, or: "Build a timeline from this article: PASTE URL"]`
+  },
+  {
+    tier: 'medium', id: 'flashcards', name: 'Flashcard Deck',
+    desc: 'A shuffleable deck the reader steps through one card at a time. Best for study sets and term review.',
+    best: 'GitHub Pages and iframe embeds. State tracking needs JavaScript. Avoid localStorage if the destination is a sandboxed iframe.',
+    sources: [['paste','Paste term and definition pairs'],['open','Vocabulary, key concepts, quiz prep']],
+    demo: `<div style="text-align:center">
+      <div class="flip" id="fcDemo" onclick="this.classList.toggle('flipped')" style="margin:0 auto">
+        <div class="flip-inner">
+          <div class="flip-face flip-front"><div style="font-weight:700">Effect size</div><div style="font-size:0.74rem;margin-top:6px">Tap to flip</div></div>
+          <div class="flip-face flip-back">A measure of the impact of an influence on achievement</div>
+        </div></div>
+      <div style="margin-top:14px"><button class="copy-btn fcNext" style="background:var(--navy);color:#fff">Next card →</button></div>
+    </div>`,
+    demoInit: function(root){
+      const deck = [['Effect size','A measure of the impact of an influence on achievement'],
+        ['SOLO Taxonomy','A model of increasing complexity in student understanding'],
+        ['Transfer','Applying learning to new and unfamiliar situations']];
+      let i=0; const front = root.querySelector('.flip-front div'); const back = root.querySelector('.flip-back');
+      root.querySelector('.fcNext').addEventListener('click', ()=>{
+        i=(i+1)%deck.length; root.querySelector('#fcDemo').classList.remove('flipped');
+        front.textContent = deck[i][0]; back.textContent = deck[i][1];
+      });
+    },
+    prompt: `Build a single self-contained HTML file with a flashcard deck.
+Show one card at a time with a term on the front and definition on the back, flipping on click. A Next button advances through the deck, with a Shuffle option.
+Use vanilla JavaScript only, no libraries, and no localStorage so it works inside sandboxed iframes.
+TCEA navy #0A3476 fronts, gold #FCB040 backs. Embed in WordPress via an iframe.
+
+Data (term, definition):
+[PASTE TERM AND DEFINITION PAIRS]`
+  },
+  {
+    tier: 'medium', id: 'toggleview', name: 'Toggle Data Views',
+    desc: 'One dataset, switchable between table, cards, and bars. Best when different readers want different formats.',
+    best: 'GitHub Pages and iframe embeds. Re-rendering on toggle needs JavaScript. Iframe into WordPress.',
+    sources: [['paste','Paste one dataset'],['open','Any table you want viewable three ways']],
+    demo: `<div class="tabs-demo" data-toggle>
+      <div class="tab-btns"><button class="tb active" data-t="0">Cards</button><button class="tb" data-t="1">Bars</button></div>
+      <div class="tp active"><div class="kpi-grid"><div class="kpi"><div class="k-num">82%</div><div class="k-label">ChatGPT use</div></div><div class="kpi"><div class="k-num">61%</div><div class="k-label">Gemini use</div></div></div></div>
+      <div class="tp"><div class="bar-row"><span class="b-label">ChatGPT</span><div class="bar-track"><div class="bar-fill" style="width:82%">82%</div></div></div><div class="bar-row"><span class="b-label">Gemini</span><div class="bar-track"><div class="bar-fill" style="width:61%">61%</div></div></div></div>
+    </div>`,
+    demoInit: function(root){
+      const wrap = root.querySelector('[data-toggle]');
+      const btns = wrap.querySelectorAll('.tb'), panels = wrap.querySelectorAll('.tp');
+      wrap.querySelector('.tab-btns').addEventListener('click', e=>{
+        const b=e.target.closest('.tb'); if(!b) return;
+        btns.forEach(x=>x.classList.remove('active')); b.classList.add('active');
+        panels.forEach((p,i)=>p.classList.toggle('active', i==b.dataset.t));
+      });
+    },
+    prompt: `Build a single self-contained HTML file that shows one dataset in switchable views.
+A toggle lets the reader flip the same data between a table, a card grid, and CSS bars, re-rendered from one data array in vanilla JavaScript, no libraries.
+TCEA navy #0A3476 and gold #FCB040 styling. Embed in WordPress via an iframe.
+
+Data (label, value pairs from one dataset):
+[PASTE YOUR DATASET]`
+  },
+
+  {
+    tier: 'medium', id: 'carousel', name: 'Carousel / Slideshow',
+    desc: 'A single-frame slideshow the reader steps through with arrows or dots. Best for rotating highlights, quotes, or one metric at a time.',
+    best: 'GitHub Pages and iframe embeds. Slide switching needs vanilla JavaScript, so iframe it into WordPress rather than a Custom HTML block.',
+    sources: [['paste','Paste one slide of content per item'],['open','Featured stats, testimonials, weekly highlights']],
+    demo: `<div class="carousel">
+      <div class="carousel-track">
+        <div class="carousel-slide"><div class="cs-num">1,248</div><div class="cs-cap">Educators trained this year</div></div>
+        <div class="carousel-slide"><div class="cs-num">94%</div><div class="cs-cap">Would recommend the program</div></div>
+        <div class="carousel-slide"><div class="cs-num">12</div><div class="cs-cap">Active coaching cohorts</div></div>
+      </div>
+      <div class="carousel-nav"><button class="c-prev" type="button" aria-label="Previous">‹</button><button class="c-next" type="button" aria-label="Next">›</button></div>
+      <div class="carousel-dots"></div>
+    </div>`,
+    demoInit: function(root){
+      const track = root.querySelector('.carousel-track');
+      const slides = root.querySelectorAll('.carousel-slide');
+      const dots = root.querySelector('.carousel-dots');
+      let i = 0;
+      slides.forEach((_, n) => { const b = document.createElement('button'); b.type = 'button'; if (n === 0) b.className = 'active'; b.addEventListener('click', () => go(n)); dots.appendChild(b); });
+      function go(n){ i = (n + slides.length) % slides.length; track.style.transform = 'translateX(-' + (i * 100) + '%)'; dots.querySelectorAll('button').forEach((d, k) => d.classList.toggle('active', k === i)); }
+      root.querySelector('.c-prev').addEventListener('click', () => go(i - 1));
+      root.querySelector('.c-next').addEventListener('click', () => go(i + 1));
+    },
+    prompt: `Build a single self-contained HTML file with a carousel or slideshow.
+Show one slide at a time inside a fixed frame. Previous and next arrows and a row of clickable dots move between slides by translating a flex track. Optional auto-advance on a timer that pauses on hover.
+Use vanilla JavaScript only, no libraries. TCEA navy #0A3476 controls, gold #FCB040 active dot.
+Note: this uses JavaScript, so embed it in WordPress via an iframe, not a Custom HTML block.
+
+Data (one slide of content per item):
+[PASTE SLIDE CONTENT — e.g. a number and caption, or a short quote, per slide]`
+  },
+  {
+    tier: 'medium', id: 'sortable', name: 'Sortable Table',
+    desc: 'A table whose columns sort when the reader clicks a header. Best when readers want to reorder data by different measures.',
+    best: 'GitHub Pages and iframe embeds. Sorting needs vanilla JavaScript. Use an iframe for WordPress.',
+    sources: [['paste','Paste a table of rows and columns'],['open','Rankings, budgets, tool comparisons with numbers']],
+    demo: `<table class="sortable-table">
+      <thead><tr><th data-type="text">Tool <span class="sarr">⇅</span></th><th data-type="num">Users <span class="sarr">⇅</span></th><th data-type="num">Cost <span class="sarr">⇅</span></th></tr></thead>
+      <tbody>
+        <tr><td>ChatGPT</td><td>1240</td><td>20</td></tr>
+        <tr><td>Gemini</td><td>918</td><td>0</td></tr>
+        <tr><td>NotebookLM</td><td>642</td><td>0</td></tr>
+        <tr><td>Perplexity</td><td>430</td><td>20</td></tr>
+      </tbody></table>`,
+    demoInit: function(root){
+      const table = root.querySelector('.sortable-table');
+      const tbody = table.querySelector('tbody');
+      table.querySelectorAll('th').forEach((th, col) => {
+        th.addEventListener('click', () => {
+          const type = th.dataset.type;
+          const asc = !th.classList.contains('asc');
+          table.querySelectorAll('th').forEach(h => h.classList.remove('asc', 'desc'));
+          th.classList.add(asc ? 'asc' : 'desc');
+          const rows = Array.from(tbody.querySelectorAll('tr'));
+          rows.sort((a, b) => {
+            let x = a.children[col].textContent.trim(), y = b.children[col].textContent.trim();
+            if (type === 'num') { return asc ? parseFloat(x) - parseFloat(y) : parseFloat(y) - parseFloat(x); }
+            return asc ? x.localeCompare(y) : y.localeCompare(x);
+          });
+          rows.forEach(r => tbody.appendChild(r));
+        });
+      });
+    },
+    prompt: `Build a single self-contained HTML file with a sortable table.
+Clicking a column header sorts the rows by that column, toggling ascending and descending, with an arrow showing the active sort. Support both text and numeric columns.
+Use vanilla JavaScript only, no libraries. TCEA navy #0A3476 header, gold #FCB040 active-sort arrow, striped rows.
+Note: uses JavaScript, so embed in WordPress via an iframe, not a Custom HTML block.
+
+Data (columns then rows, marking which columns are numeric):
+[PASTE YOUR TABLE — e.g. columns "Tool, Users, Cost" then one row per item]`
+  },
+  {
+    tier: 'medium', id: 'countup', name: 'Animated Count-Up Stats',
+    desc: 'KPI numbers that animate from zero to their value on load. Best for a headline that should draw the eye the moment the page opens.',
+    best: 'GitHub Pages and iframe embeds. The animation needs vanilla JavaScript. Iframe it into WordPress.',
+    sources: [['paste','Paste metric, value, and label'],['open','Impact numbers, annual report highlights']],
+    demo: `<div class="kpi-grid">
+      <div class="kpi"><div class="k-num" data-count="1248">0</div><div class="k-label">Educators trained</div></div>
+      <div class="kpi"><div class="k-num" data-count="94" data-suffix="%">0</div><div class="k-label">Satisfaction</div></div>
+      <div class="kpi"><div class="k-num" data-count="12">0</div><div class="k-label">Active cohorts</div></div>
+    </div><div style="margin-top:12px"><button class="copy-btn cuReplay" type="button" style="background:var(--navy);color:#fff">Replay animation</button></div>`,
+    demoInit: function(root){
+      const nums = root.querySelectorAll('.k-num[data-count]');
+      function run(){
+        nums.forEach(n => {
+          const target = parseFloat(n.dataset.count); const suffix = n.dataset.suffix || ''; const dur = 1100; let start = null;
+          function step(ts){ if (start === null) start = ts; const p = Math.min((ts - start) / dur, 1); const val = Math.round(target * (0.5 - Math.cos(p * Math.PI) / 2)); n.textContent = val.toLocaleString() + suffix; if (p < 1) requestAnimationFrame(step); }
+          requestAnimationFrame(step);
+        });
+      }
+      root.querySelector('.cuReplay').addEventListener('click', run);
+      run();
+    },
+    prompt: `Build a single self-contained HTML file with animated count-up stat cards.
+Each card shows a large number that animates from zero up to its final value when the page loads, using requestAnimationFrame with an ease. Support an optional suffix like a percent sign.
+Use vanilla JavaScript only, no libraries. TCEA navy #0A3476 numbers, gold #FCB040 accents.
+Note: uses JavaScript, so embed in WordPress via an iframe, not a Custom HTML block.
+
+Data (label, final value, optional suffix):
+[PASTE YOUR STATS — e.g. "Educators trained, 1248" / "Satisfaction, 94, %"]`
+  },
+  {
+    tier: 'medium', id: 'beforeafter', name: 'Before / After Slider',
+    desc: 'Two states with a draggable divider that wipes between them. Best for comparing a before and after, or two versions of a visual.',
+    best: 'GitHub Pages and iframe embeds. The drag needs vanilla JavaScript. Iframe it into WordPress.',
+    sources: [['paste','Provide two images or two states'],['open','Before and after redesigns, growth over time']],
+    demo: `<div class="ba">
+      <div class="ba-layer ba-before">Before</div>
+      <div class="ba-layer ba-after">After</div>
+      <div class="ba-divider"></div>
+      <input class="ba-range" type="range" min="0" max="100" value="50" aria-label="Reveal">
+    </div>`,
+    demoInit: function(root){
+      const range = root.querySelector('.ba-range');
+      const after = root.querySelector('.ba-after');
+      const div = root.querySelector('.ba-divider');
+      function upd(){ const v = range.value; after.style.clipPath = 'inset(0 0 0 ' + v + '%)'; div.style.left = v + '%'; }
+      range.addEventListener('input', upd); upd();
+    },
+    prompt: `Build a single self-contained HTML file with a before-and-after comparison slider.
+Stack two layers (two images or two states) and let a draggable vertical divider wipe between them by adjusting a clip-path. A range input drives the reveal so it works with mouse, touch, and keyboard.
+Use vanilla JavaScript only, no libraries. TCEA navy #0A3476 for the before layer, gold #FCB040 for the after, white divider.
+Note: uses JavaScript, so embed in WordPress via an iframe, not a Custom HTML block.
+
+Data (the two states or images to compare):
+[DESCRIBE OR ATTACH the before and after — e.g. two screenshots, or two data states]`
+  },
+  {
+    tier: 'medium', id: 'whatif', name: 'What-If Slider Calculator',
+    desc: 'Sliders the reader moves to see a live-updating result. Best for letting people explore a scenario instead of reading a fixed number.',
+    best: 'GitHub Pages and iframe embeds. The live calculation needs vanilla JavaScript. Iframe it into WordPress.',
+    sources: [['paste','Give the inputs and the formula'],['open','Cost estimators, staffing models, budget what-ifs']],
+    demo: `<div class="whatif">
+      <div class="wi-field"><label>Students <span class="wi-a">500</span></label><input type="range" class="wiA" min="100" max="2000" step="50" value="500"></div>
+      <div class="wi-field"><label>Cost per seat <span class="wi-b">$12</span></label><input type="range" class="wiB" min="2" max="40" step="1" value="12"></div>
+      <div class="wi-out"><div class="wo-num wiOut">$6,000</div><div class="wo-label">Estimated annual cost</div></div>
+    </div>`,
+    demoInit: function(root){
+      const a = root.querySelector('.wiA'), b = root.querySelector('.wiB');
+      const la = root.querySelector('.wi-a'), lb = root.querySelector('.wi-b'), out = root.querySelector('.wiOut');
+      function upd(){ la.textContent = (+a.value).toLocaleString(); lb.textContent = '$' + b.value; out.textContent = '$' + (a.value * b.value).toLocaleString(); }
+      a.addEventListener('input', upd); b.addEventListener('input', upd); upd();
+    },
+    prompt: `Build a single self-contained HTML file with a what-if slider calculator.
+Two or three range sliders feed a simple formula and a headline result updates live as the reader drags. Show each slider's current value beside its label.
+Use vanilla JavaScript only, no libraries. TCEA navy #0A3476 result panel with a gold #FCB040 number.
+Note: uses JavaScript, so embed in WordPress via an iframe, not a Custom HTML block.
+
+Data (input names, ranges, and the formula):
+[DESCRIBE THE INPUTS AND FORMULA — e.g. "students 100 to 2000, cost per seat 2 to 40, result = students × cost"]`
+  },
+
+  /* ---- CHARTS & KPIs ---- */
+  {
+    tier: 'charts', id: 'kpi', name: 'KPI Cards',
+    desc: 'Big single-number callouts with a label and a trend arrow. The clearest signal of whether something is on track.',
+    best: 'Anywhere when static. Pure CSS. Add an animated count-up and it becomes Medium, so iframe that version into WordPress.',
+    sources: [['paste','Paste metric, value, and trend'],['open','Dashboard headline numbers, board reports']],
+    demo: `<div class="kpi-grid">
+      <div class="kpi"><div class="k-num">1,248</div><div class="k-label">Educators trained</div><div class="k-trend up">▲ 18% vs last year</div></div>
+      <div class="kpi"><div class="k-num">94%</div><div class="k-label">Satisfaction</div><div class="k-trend up">▲ 3 pts</div></div>
+      <div class="kpi"><div class="k-num">12</div><div class="k-label">Active cohorts</div><div class="k-trend down">▼ 1 vs Q1</div></div>
+    </div>`,
+    prompt: `Build a single self-contained HTML file with a row of KPI cards.
+Each card has a large headline number, a label beneath it, and a colored trend indicator (green up, red down) with the comparison.
+Static version is pure CSS. If you want the numbers to count up on load, use vanilla JavaScript only.
+TCEA navy #0A3476 numbers, gold #FCB040 top accent on each card. Responsive grid.
+
+Data (metric label, value, trend):
+[PASTE YOUR KPIs — e.g. "Educators trained, 1248, up 18% vs last year"]`
+  },
+  {
+    tier: 'charts', id: 'cssbar', name: 'CSS Bar Chart',
+    desc: 'A grouped bar chart built from div heights or widths. Self-contained, no library, survives strict hosts.',
+    best: 'Anywhere. Pure CSS and a little optional JavaScript to scale values. The safe alternative to a charting library.',
+    sources: [['paste','Paste category and value pairs'],['link','Link a data article to chart'],['open','Public datasets like data.gov or Census QuickFacts']],
+    demo: `<div style="display:flex;align-items:flex-end;gap:18px;height:140px;padding:10px 4px;border-bottom:2px solid var(--border)">
+      <div style="text-align:center;flex:1"><div style="background:var(--navy);height:60px;border-radius:6px 6px 0 0"></div><div style="font-size:0.72rem;margin-top:6px;color:var(--text-muted)">2023</div></div>
+      <div style="text-align:center;flex:1"><div style="background:var(--navy-mid);height:95px;border-radius:6px 6px 0 0"></div><div style="font-size:0.72rem;margin-top:6px;color:var(--text-muted)">2024</div></div>
+      <div style="text-align:center;flex:1"><div style="background:var(--gold);height:125px;border-radius:6px 6px 0 0"></div><div style="font-size:0.72rem;margin-top:6px;color:var(--text-muted)">2025</div></div>
+    </div>`,
+    prompt: `Build a single self-contained HTML file with a bar chart made from CSS only, no charting library.
+Bars are div elements scaled by height as a percentage of the maximum value, with category labels beneath and value labels on top. Optional vanilla JavaScript to compute the scaling.
+TCEA navy #0A3476 bars with a gold #FCB040 highlight on the latest or largest. Works in any host because there is no external script.
+
+Data (category, value):
+[PASTE CATEGORY AND VALUE PAIRS, or: "Chart the figures in this article: PASTE URL"]`
+  },
+  {
+    tier: 'charts', id: 'donut', name: 'CSS Donut / Pie',
+    desc: 'A proportional circle built with conic-gradient. Shows parts of a whole without any library.',
+    best: 'Anywhere. The conic-gradient is pure CSS. A genuinely self-contained pie chart.',
+    sources: [['paste','Paste segment labels and percentages'],['open','Budget breakdown, response distribution']],
+    demo: `<div class="donut-wrap"><div class="donut"></div>
+      <div class="donut-legend">
+        <div><span class="sw" style="background:var(--navy)"></span> ChatGPT — 45%</div>
+        <div><span class="sw" style="background:var(--gold)"></span> Gemini — 25%</div>
+        <div><span class="sw" style="background:var(--teal)"></span> Perplexity — 18%</div>
+        <div><span class="sw" style="background:var(--pale-navy)"></span> Other — 12%</div>
+      </div></div>`,
+    prompt: `Build a single self-contained HTML file with a donut chart using CSS conic-gradient, no library.
+Each segment is a slice of the conic-gradient sized by its percentage, with a matching legend beside it and a white hole in the center.
+TCEA palette: navy #0A3476, gold #FCB040, teal #0e6b8a, pale navy #D0D8F0 for additional slices.
+Fully self-contained, safe for any host including a WordPress Custom HTML block.
+
+Data (segment label, percentage — should total 100):
+[PASTE SEGMENT LABELS AND PERCENTAGES]`
+  },
+  {
+    tier: 'charts', id: 'gauge', name: 'Gauge / Dial',
+    desc: 'A half-circle dial pointing at a value against a colored range. Best for a single score versus a target.',
+    best: 'Anywhere when built with conic-gradient and CSS. SVG versions also stay self-contained. No library needed.',
+    sources: [['paste','Paste the score and its range'],['open','Satisfaction score, readiness index, goal progress']],
+    demo: `<div class="gauge"><div class="gauge-bg"></div><div class="gauge-center"></div><div class="gauge-val">78</div></div>
+      <p style="text-align:center;font-size:0.78rem;color:var(--text-muted);margin-top:6px">Readiness score out of 100</p>`,
+    prompt: `Build a single self-contained HTML file with a gauge or dial.
+A half-circle shows colored zones (green, gold, red) with the current value displayed in the center. Build it with CSS conic-gradient or inline SVG, no charting library.
+TCEA accent colors. Self-contained and safe for any host.
+
+Data (current value, scale, and zone thresholds):
+[PASTE THE VALUE — e.g. "Score 78 out of 100, green above 70, gold 50 to 70, red below 50"]`
+  },
+  {
+    tier: 'charts', id: 'stackedbar', name: '100% Stacked Bar',
+    desc: 'A single horizontal bar split into proportional segments. Best for showing the composition of a whole in one line.',
+    best: 'Anywhere. Flexbox segments sized by CSS, no library. Reliable in every host.',
+    sources: [['paste','Paste segment labels and percentages'],['open','Budget split, response breakdown, time allocation']],
+    demo: `<div class="stacked">
+      <div class="seg" style="width:45%;background:var(--navy)">45%</div>
+      <div class="seg" style="width:25%;background:var(--navy-mid)">25%</div>
+      <div class="seg" style="width:18%;background:var(--gold);color:var(--navy-dark)">18%</div>
+      <div class="seg" style="width:12%;background:var(--pale-navy);color:var(--navy-dark)">12%</div>
+    </div>
+    <div class="stacked-legend"><div><span class="sw" style="background:var(--navy)"></span> Instruction</div><div><span class="sw" style="background:var(--navy-mid)"></span> Assessment</div><div><span class="sw" style="background:var(--gold)"></span> Planning</div><div><span class="sw" style="background:var(--pale-navy)"></span> Other</div></div>`,
+    prompt: `Build a single self-contained HTML file with a 100% stacked bar.
+One horizontal bar is split into segments sized by each category's share of the whole, with the percentage inside each segment and a legend beneath.
+Pure CSS flexbox widths, no JavaScript. TCEA navy #0A3476, navy-mid, gold #FCB040, and pale navy for segments. Safe for a WordPress Custom HTML block.
+
+Data (segment label, percentage — totalling 100):
+[PASTE SEGMENT LABELS AND PERCENTAGES]`
+  },
+  {
+    tier: 'charts', id: 'heatmap', name: 'Heatmap Grid',
+    desc: 'A grid of cells shaded by intensity, like a contribution calendar. Best for showing activity across days or a matrix of values.',
+    best: 'Anywhere. Colored cells with no script needed in production. Reliable in every host.',
+    sources: [['paste','Paste a matrix or a date and count list'],['open','Attendance, activity by day, usage by hour']],
+    demo: `<div class="heatmap"></div>
+      <div class="heat-scale">Less <span class="hs-cell" style="background:var(--border)"></span><span class="hs-cell" style="background:rgba(10,52,118,0.3)"></span><span class="hs-cell" style="background:rgba(10,52,118,0.55)"></span><span class="hs-cell" style="background:rgba(10,52,118,0.8)"></span><span class="hs-cell" style="background:#0A3476"></span> More</div>`,
+    demoInit: function(root){
+      const grid = root.querySelector('.heatmap');
+      const vals = [0,1,2,1,3,4,2,0,2,3,4,3,1,0,1,2,3,2,4,3,2,1,0,1,3,4,2,1,2,3,4,4,3,2,1,0,1,2,3,4,2,1,0,2,3,4,3,2,1,2,0,1,2,3,4,3,2,1,0,1,2,3,4,2,1,0,2,3,4,2];
+      const colors = ['var(--border)','rgba(10,52,118,0.3)','rgba(10,52,118,0.55)','rgba(10,52,118,0.8)','#0A3476'];
+      grid.innerHTML = vals.map(v => `<div class="hm-cell" style="background:${colors[v]}"></div>`).join('');
+    },
+    prompt: `Build a single self-contained HTML file with a heatmap grid.
+Lay out cells in a grid (for example seven rows for days of the week, one column per week) and shade each cell by its value using steps of a single color. Add a low-to-high scale legend.
+Pure CSS grid with the colors set from your data, no charting library. TCEA navy #0A3476 intensity steps. Safe for a WordPress Custom HTML block.
+
+Data (a date and count list, or a labeled matrix of values):
+[PASTE YOUR VALUES — e.g. "2025-08-01, 3" per day, or a rows-by-columns matrix]`
+  },
+  {
+    tier: 'charts', id: 'svgline', name: 'SVG Line Chart',
+    desc: 'A line chart drawn as an inline SVG polyline. Best for a trend over time without pulling in a charting library.',
+    best: 'Anywhere. Inline SVG is part of the HTML, so nothing is stripped. The self-contained answer to a trend line.',
+    sources: [['paste','Paste x labels and a series of values'],['link','Link a data article to chart'],['open','Enrollment over years, monthly usage, budget trend']],
+    demo: `<svg class="svg-chart" viewBox="0 0 320 160" role="img" aria-label="Line chart">
+      <line x1="30" y1="10" x2="30" y2="130" stroke="#e2e7f5"/><line x1="30" y1="130" x2="310" y2="130" stroke="#e2e7f5"/>
+      <polyline fill="none" stroke="#0A3476" stroke-width="3" stroke-linejoin="round" points="30,110 90,86 150,92 210,54 270,40 310,28"/>
+      <g fill="#FCB040" stroke="#0A3476" stroke-width="2"><circle cx="30" cy="110" r="4"/><circle cx="90" cy="86" r="4"/><circle cx="150" cy="92" r="4"/><circle cx="210" cy="54" r="4"/><circle cx="270" cy="40" r="4"/><circle cx="310" cy="28" r="4"/></g>
+      <g fill="#5a6680" font-size="10"><text x="20" y="145">2020</text><text x="140" y="145">2023</text><text x="286" y="145">2025</text></g>
+    </svg>`,
+    prompt: `Build a single self-contained HTML file with a line chart drawn as inline SVG, no charting library.
+Plot the series as an SVG polyline with a light axis, circle markers at each point, and x labels beneath. Compute the point coordinates by scaling values to the SVG viewBox.
+TCEA navy #0A3476 line, gold #FCB040 markers. Because it is inline SVG it works in any host including a WordPress Custom HTML block.
+
+Data (x label, value):
+[PASTE X LABELS AND VALUES — e.g. "2020, 320" / "2021, 410", or point at an article]`
+  },
+  {
+    tier: 'charts', id: 'svgarea', name: 'SVG Area Chart',
+    desc: 'A filled line chart with a soft gradient beneath the curve. Best for emphasizing volume or cumulative growth in a trend.',
+    best: 'Anywhere. Inline SVG with a gradient fill, no library. Self-contained and safe for strict hosts.',
+    sources: [['paste','Paste x labels and values'],['open','Cumulative signups, usage volume, growth over time']],
+    demo: `<svg class="svg-chart" viewBox="0 0 320 160" role="img" aria-label="Area chart">
+      <defs><linearGradient id="ddpArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0A3476" stop-opacity="0.45"/><stop offset="100%" stop-color="#0A3476" stop-opacity="0.03"/></linearGradient></defs>
+      <path d="M30,120 L90,96 L150,100 L210,62 L270,44 L310,32 L310,130 L30,130 Z" fill="url(#ddpArea)"/>
+      <polyline fill="none" stroke="#0A3476" stroke-width="3" points="30,120 90,96 150,100 210,62 270,44 310,32"/>
+      <g fill="#5a6680" font-size="10"><text x="22" y="145">Aug</text><text x="140" y="145">Nov</text><text x="290" y="145">Feb</text></g>
+    </svg>`,
+    prompt: `Build a single self-contained HTML file with an area chart drawn as inline SVG, no charting library.
+Draw the trend as an SVG path, close it to the baseline, and fill it with a vertical gradient. Overlay a solid line on top and add x labels.
+TCEA navy #0A3476 line and gradient. Inline SVG works in any host including a WordPress Custom HTML block.
+
+Data (x label, value):
+[PASTE X LABELS AND VALUES]`
+  },
+  {
+    tier: 'charts', id: 'sparkline', name: 'Sparklines',
+    desc: 'Tiny inline trend lines beside a label and current value. Best for showing many small trends compactly, like a watchlist.',
+    best: 'Anywhere. Each sparkline is a small inline SVG, no library. Great inside tables and lists.',
+    sources: [['paste','Paste a short series of values per row'],['open','Metric trends, per-campus movement, weekly counts']],
+    demo: `<div class="spark-row"><span class="sp-label">ChatGPT</span><svg viewBox="0 0 100 30" preserveAspectRatio="none" height="26"><polyline fill="none" stroke="#0A3476" stroke-width="2" points="0,22 20,18 40,20 60,10 80,8 100,4"/></svg><span class="sp-val">▲ 82%</span></div>
+      <div class="spark-row"><span class="sp-label">Gemini</span><svg viewBox="0 0 100 30" preserveAspectRatio="none" height="26"><polyline fill="none" stroke="#0A3476" stroke-width="2" points="0,10 20,14 40,12 60,18 80,16 100,20"/></svg><span class="sp-val down">▼ 61%</span></div>
+      <div class="spark-row"><span class="sp-label">NotebookLM</span><svg viewBox="0 0 100 30" preserveAspectRatio="none" height="26"><polyline fill="none" stroke="#0A3476" stroke-width="2" points="0,20 20,16 40,17 60,12 80,14 100,9"/></svg><span class="sp-val">▲ 47%</span></div>`,
+    prompt: `Build a single self-contained HTML file with sparklines.
+Each row has a label, a small inline SVG polyline showing a short trend, and the current value with an up or down marker. Scale each series to the tiny SVG viewBox.
+No charting library. TCEA navy #0A3476 lines, red for a downward value. Inline SVG works in any host.
+
+Data (label, series of values):
+[PASTE ONE ROW PER LABEL WITH ITS SERIES — e.g. "ChatGPT: 40,52,48,70,74,82"]`
+  },
+  {
+    tier: 'charts', id: 'radar', name: 'Radar / Spider Chart',
+    desc: 'A polygon plotted on radial axes. Best for comparing one or two items across several dimensions, like a skills profile.',
+    best: 'Anywhere. Drawn as inline SVG, no library. Self-contained and safe for strict hosts.',
+    sources: [['paste','Paste dimension names and scores'],['open','Skills self-assessment, readiness across domains']],
+    demo: `<svg class="svg-chart" viewBox="0 0 200 195" role="img" aria-label="Radar chart" style="max-width:260px">
+      <g fill="none" stroke="#e2e7f5"><polygon points="100,25 169,65 169,135 100,175 31,135 31,65"/><polygon points="100,55 135,75 135,125 100,145 65,125 65,75"/></g>
+      <g stroke="#e2e7f5"><line x1="100" y1="100" x2="100" y2="25"/><line x1="100" y1="100" x2="169" y2="65"/><line x1="100" y1="100" x2="169" y2="135"/><line x1="100" y1="100" x2="100" y2="175"/><line x1="100" y1="100" x2="31" y2="135"/><line x1="100" y1="100" x2="31" y2="65"/></g>
+      <polygon points="100,38 156,70 150,128 100,160 54,124 48,70" fill="rgba(10,52,118,0.25)" stroke="#0A3476" stroke-width="2"/>
+      <g fill="#5a6680" font-size="9" text-anchor="middle"><text x="100" y="19">Vision</text><text x="184" y="62">Build</text><text x="184" y="145">Evaluate</text><text x="100" y="190">Ship</text><text x="16" y="145">Instruct</text><text x="16" y="62">Data</text></g>
+    </svg>`,
+    prompt: `Build a single self-contained HTML file with a radar or spider chart drawn as inline SVG, no library.
+Draw evenly spaced axes for each dimension, faint gridline polygons, then plot the data as a filled polygon by converting each score to a point along its axis. Label each axis.
+TCEA navy #0A3476 shape with a translucent fill. Inline SVG works in any host including a WordPress Custom HTML block.
+
+Data (dimension name, score, and the scale maximum):
+[PASTE DIMENSIONS AND SCORES — e.g. "Vision 4, Instruct 3, Build 5 (out of 5)"]`
+  },
+  {
+    tier: 'charts', id: 'scatter', name: 'Scatter Plot',
+    desc: 'Points placed by two values to show correlation or spread. Best for revealing a relationship between two measures.',
+    best: 'Anywhere. Inline SVG circles on two axes, no library. Self-contained and safe for strict hosts.',
+    sources: [['paste','Paste x and y pairs'],['open','Spend vs outcome, usage vs satisfaction']],
+    demo: `<svg class="svg-chart" viewBox="0 0 320 170" role="img" aria-label="Scatter plot">
+      <line x1="34" y1="12" x2="34" y2="140" stroke="#e2e7f5"/><line x1="34" y1="140" x2="310" y2="140" stroke="#e2e7f5"/>
+      <g fill="rgba(10,52,118,0.75)"><circle cx="70" cy="118" r="6"/><circle cx="110" cy="96" r="6"/><circle cx="150" cy="104" r="6"/><circle cx="190" cy="70" r="6"/><circle cx="230" cy="58" r="6"/><circle cx="270" cy="40" r="6"/><circle cx="120" cy="120" r="6"/><circle cx="250" cy="82" r="6"/></g>
+      <g fill="#5a6680" font-size="10"><text x="150" y="158">Spend &#8594;</text><text x="10" y="80" transform="rotate(-90 10 80)">Outcome &#8594;</text></g>
+    </svg>`,
+    prompt: `Build a single self-contained HTML file with a scatter plot drawn as inline SVG, no library.
+Draw an x and y axis, then place a circle for each data pair by scaling its x and y to the plot area. Optionally size or color points by a third value.
+TCEA navy #0A3476 points. Inline SVG works in any host including a WordPress Custom HTML block.
+
+Data (x value, y value, optional label):
+[PASTE X AND Y PAIRS — e.g. "1200, 78" / "1600, 84"]`
+  },
+  {
+    tier: 'charts', id: 'library', name: 'Library Chart (Chart.js / D3)',
+    desc: 'Rich interactive charts with tooltips, legends, and animation. The most capable option and the least portable.',
+    best: 'GitHub Pages and iframe embeds only. The external script is blocked in WordPress Custom HTML blocks and may be sandboxed in Google Sites. Host it yourself and iframe it in.',
+    sources: [['paste','Paste a full dataset'],['link','Link a data-rich article or CSV'],['open','data.gov, World Bank Open Data, public CSVs']],
+    demo: `<div style="background:var(--off-white);border:1px solid var(--border);border-radius:10px;padding:20px;text-align:center;color:var(--text-muted);font-size:0.86rem">
+      <div style="font-size:1.6rem;margin-bottom:8px">📊</div>
+      Library charts render from an external script (Chart.js, D3) loaded by CDN.<br>They are powerful but get stripped or sandboxed by strict hosts, so preview them on GitHub Pages.</div>`,
+    prompt: `Build a single self-contained HTML file with an interactive chart using Chart.js loaded from a CDN.
+Include the Chart.js script tag, a canvas element, and the config inline. Use a [bar / line / radar / pie] chart with tooltips and a legend.
+TCEA navy #0A3476 and gold #FCB040 dataset colors.
+IMPORTANT: this loads an external script, so it will NOT work in a WordPress Custom HTML block. Host the file on GitHub Pages and embed it in WordPress or Google Sites with an iframe.
+
+Data (full dataset with labels and one or more series):
+[PASTE YOUR DATASET, or: "Chart the data in this article/CSV: PASTE URL"]`
+  }
+];
+
+/* ---------- render ---------- */
+function difficultyTag(tier){
+  if (tier === 'easy') return '<span class="difficulty-tag easy">● Easy — CSS only</span>';
+  if (tier === 'medium') return '<span class="difficulty-tag medium">● Medium — vanilla JS</span>';
+  if (tier === 'charts') return '<span class="difficulty-tag medium">● Varies — see hosting</span>';
+  return '<span class="difficulty-tag hard">● Hard</span>';
+}
+function srcPills(sources){
+  const map = { paste:'src-paste', link:'src-link', open:'src-open' };
+  const icon = { paste:'📋 Paste', link:'🔗 Link', open:'🗂 Source' };
+  return sources.map(([type,txt]) => `<span class="src-pill ${map[type]}">${icon[type]}: ${txt}</span>`).join('');
+}
+function cardHTML(p, idx){
+  // per-card difficulty: charts tier shows individual difficulty in meta, others by tier
+  let diff = difficultyTag(p.tier);
+  if (p.tier === 'charts') {
+    diff = (p.id === 'library')
+      ? '<span class="difficulty-tag hard">● Hard — external library</span>'
+      : '<span class="difficulty-tag easy">● Easy — self-contained</span>';
+  }
+  const promptId = 'prompt-' + p.id;
+  return `<div class="pattern-card" id="pat-${p.id}" data-init="${idx}">
+    <div class="pattern-head">
+      <div><h3>${p.name}</h3><div class="ph-desc">${p.desc}</div></div>
+      ${diff}
+    </div>
+    <div class="pattern-body">
+      <div class="meta-row">
+        <div class="meta-box"><div class="ml">Where it works best</div><div class="mv">${p.best}</div></div>
+        <div class="meta-box"><div class="ml">Data sources</div><div class="mv">${srcPills(p.sources)}</div></div>
+      </div>
+      <div class="demo-wrap"><div class="demo-label">Live demo</div>${p.demo}</div>
+      <div class="prompt-block">
+        <div class="prompt-top"><span class="pt-label">Copy this prompt</span><button class="copy-btn" data-copy="${promptId}">Copy</button></div>
+        <pre id="${promptId}">${p.prompt.replace(/</g,'&lt;')}</pre>
+      </div>
+    </div>
+  </div>`;
+}
+function oneLiner(desc){
+  const s = desc.split(/\.\s/)[0].trim();
+  return s.endsWith('.') ? s : s + '.';
+}
+function tierCount(tier){ return patterns.filter(p => p.tier === tier).length; }
+function mount(tier, elId){
+  const el = document.getElementById(elId);
+  const items = patterns.filter(p => p.tier === tier);
+  const index = `<div class="pattern-index-wrap">
+      <div class="pi-label">Jump to a pattern — ${items.length} in this tier</div>
+      <ul class="pattern-index">${items.map(p =>
+        `<li><a href="#pat-${p.id}">${p.name}</a> — <span class="pi-desc">${oneLiner(p.desc)}</span></li>`
+      ).join('')}</ul>
+    </div>`;
+  el.innerHTML = index + items.map((p,i) => cardHTML(p, patterns.indexOf(p))).join('');
+  // run demoInit for any interactive demos now in the DOM
+  el.querySelectorAll('.pattern-card[data-init]').forEach(card => {
+    const p = patterns[+card.dataset.init];
+    if (p && typeof p.demoInit === 'function') p.demoInit(card);
+  });
+}
+mount('easy','easyMount');
+mount('medium','mediumMount');
+mount('charts','chartsMount');
+
+/* ---------- counts ---------- */
+function setText(id, val){ const n = document.getElementById(id); if (n) n.textContent = val; }
+setText('countTotal', patterns.length);
+setText('countEasy', tierCount('easy'));
+setText('countMedium', tierCount('medium'));
+setText('countCharts', tierCount('charts'));
+setText('secEasy', tierCount('easy'));
+setText('secMedium', tierCount('medium'));
+setText('secCharts', tierCount('charts'));
+document.querySelectorAll('.nav-tab').forEach(tab => {
+  const tier = tab.dataset.page;
+  if (tier === 'easy' || tier === 'medium' || tier === 'charts') {
+    tab.insertAdjacentHTML('beforeend', ` <span class="nav-count">${tierCount(tier)}</span>`);
+  }
+});
+</script>
+</body>
+</html>

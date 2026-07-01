@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Classroom Shape Spinner</title>
+  <style>
+    :root {
+      --navy: #1E398D;
+      --gold: #FAA634;
+      --black: #000000;
+      --white: #FFFFFF;
+      --red: #D1282F;
+      --blue: #0070B9;
+      --yellow: #FDDC3F;
+      --orange: #f58231;
+      --green: #3cb44b;
+      --gray-90: #404041;
+      --gray-50: #939597;
+      --gray-30: #BBBDC0;
+      --gray-10: #E6E7E8;
+      --bg: #FFFFFF;
+      --surface: #FFFFFF;
+      --text: #404041;
+      --border: #E6E7E8;
+      --radius: 8px;
+      --shadow: 0 12px 24px rgba(64, 64, 65, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    button, textarea, select, input { font: inherit; }
+    button { cursor: pointer; }
+
+    .top-bar {
+      height: 12px;
+      background: linear-gradient(
+        90deg,
+        var(--navy) 0 32%,
+        var(--gold) 32% 52%,
+        var(--orange) 52% 64%,
+        var(--red) 64% 76%,
+        var(--blue) 76% 88%,
+        var(--green) 88% 96%,
+        var(--yellow) 96% 100%
+      );
+    }
+
+    .page {
+      width: min(1280px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 22px 0 38px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding-bottom: 18px;
+      border-bottom: 2px solid var(--gray-10);
+    }
+
+    .title-block { display: grid; gap: 8px; }
+
+    .eyebrow {
+      margin: 0;
+      color: var(--gold);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--navy);
+      font-size: clamp(2rem, 5vw, 4.2rem);
+      line-height: .95;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 0;
+      max-width: 780px;
+      color: var(--gray-90);
+      font-size: 1rem;
+      line-height: 1.45;
+    }
+
+    .home-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      color: var(--white);
+      background: var(--navy);
+      border-radius: var(--radius);
+      font-weight: 800;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: minmax(300px, 390px) 1fr minmax(260px, 330px);
+      gap: 18px;
+      align-items: start;
+      padding-top: 20px;
+    }
+
+    .panel, .stage {
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .panel { padding: 18px; }
+
+    .panel h2 {
+      margin: 0 0 14px;
+      color: var(--black);
+      font-size: 1.2rem;
+      letter-spacing: 0;
+    }
+
+    .field { display: grid; gap: 7px; margin-bottom: 14px; }
+    label, .field-title { color: var(--gray-90); font-size: .86rem; font-weight: 800; }
+
+    textarea, select, input[type="text"], input[type="number"] {
+      width: 100%;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      color: var(--text);
+      background: var(--white);
+      outline: none;
+    }
+
+    textarea { min-height: 180px; resize: vertical; line-height: 1.45; }
+
+    textarea:focus, select:focus, input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(0, 112, 185, .18);
+    }
+
+    .help { margin: 0; color: var(--gray-50); font-size: .85rem; line-height: 1.4; }
+
+    .button-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .button-grid .wide { grid-column: span 2; }
+
+    .btn {
+      min-height: 42px;
+      border: 2px solid transparent;
+      border-radius: var(--radius);
+      padding: 9px 12px;
+      color: var(--navy);
+      background: var(--white);
+      font-weight: 800;
+      box-shadow: 0 8px 18px rgba(64, 64, 65, .08);
+      transition: transform 140ms ease, opacity 140ms ease, box-shadow 140ms ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+    .btn:active { transform: translateY(1px); }
+    .btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+    .btn.primary { color: var(--white); background: var(--navy); }
+    .btn.gold { color: var(--black); background: var(--gold); }
+    .btn.outline { border-color: rgba(30, 57, 141, .24); }
+    .btn.danger { color: #991b1b; background: #fee2e2; border-color: #fecaca; }
+
+    .stage {
+      padding: 20px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .wheel-wrap {
+      position: relative;
+      width: min(100%, 620px);
+      aspect-ratio: 1 / 1;
+      margin: 0 auto;
+      display: grid;
+      place-items: center;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      filter: drop-shadow(0 16px 22px rgba(31, 41, 55, .22));
+    }
+
+    .pointer {
+      position: absolute;
+      right: -4px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-top: 24px solid transparent;
+      border-bottom: 24px solid transparent;
+      border-right: 44px solid var(--gray-10);
+      filter: drop-shadow(0 4px 5px rgba(31, 41, 55, .24));
+      z-index: 2;
+    }
+
+    .center-dot {
+      position: absolute;
+      width: 22%;
+      height: 22%;
+      display: grid;
+      place-items: center;
+      color: var(--white);
+      background: var(--navy);
+      border: 8px solid var(--white);
+      border-radius: 50%;
+      box-shadow: 0 8px 18px rgba(31, 41, 55, .18);
+      font-weight: 900;
+      text-align: center;
+      z-index: 3;
+    }
+
+    .stage-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .result-box {
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      background: linear-gradient(135deg, rgba(30, 57, 141, .08), rgba(250, 166, 52, .14));
+    }
+
+    .small-label {
+      color: var(--gray-50);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .winner {
+      margin-top: 8px;
+      color: var(--navy);
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 900;
+      line-height: 1.1;
+      word-break: break-word;
+    }
+
+    .activity {
+      margin-top: 10px;
+      color: var(--gray-90);
+      line-height: 1.4;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .stat {
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px;
+      background: var(--white);
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 4px;
+      color: var(--navy);
+      font-size: 1.6rem;
+    }
+
+    .history-list, .race-list {
+      display: grid;
+      gap: 8px;
+      min-height: 42px;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 8px 10px;
+      background: #fbfcff;
+      font-weight: 700;
+    }
+
+    .race-row {
+      display: grid;
+      grid-template-columns: 86px 1fr 28px;
+      gap: 8px;
+      align-items: center;
+      font-size: .9rem;
+    }
+
+    .bar {
+      height: 12px;
+      border-radius: 999px;
+      background: var(--gray-10);
+      overflow: hidden;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: var(--gold);
+    }
+
+    .template-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill {
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 7px 10px;
+      background: var(--white);
+      color: var(--navy);
+      font-size: .84rem;
+      font-weight: 800;
+    }
+
+    .pill.active {
+      color: var(--white);
+      background: var(--navy);
+      border-color: var(--navy);
+    }
+
+    .shape-choice-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .shape-choice {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 38px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 8px 10px;
+      background: var(--white);
+      color: var(--navy);
+      font-size: .88rem;
+      font-weight: 800;
+    }
+
+    .shape-choice input { width: auto; accent-color: var(--navy); }
+    .shape-choice:has(input:checked) { border-color: var(--navy); background: rgba(30, 57, 141, .08); }
+    .shape-choice:has(input:disabled) { opacity: .52; }
+
+    .advanced-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+      color: var(--gray-90);
+      font-size: .88rem;
+      font-weight: 800;
+    }
+
+    .advanced-option input { width: auto; accent-color: var(--navy); }
+    .hidden { display: none !important; }
+    .advanced-option.hidden { display: none; }
+    .advanced-settings.hidden { display: none; }
+
+    .empty { color: var(--gray-50); font-size: .92rem; }
+
+    @media (max-width: 1040px) {
+      .app-grid { grid-template-columns: 1fr; }
+      .stage { order: -1; }
+    }
+
+    @media (max-width: 640px) {
+      .page { width: min(100% - 18px, 1280px); padding-top: 18px; }
+      header { align-items: flex-start; flex-direction: column; }
+      .stage-actions, .button-grid { grid-template-columns: 1fr; }
+      .button-grid .wide { grid-column: auto; }
+      .shape-choice-grid { grid-template-columns: 1fr; }
+      .pointer {
+        right: -2px;
+        border-top-width: 18px;
+        border-bottom-width: 18px;
+        border-right-width: 34px;
+      }
+    }
+  </style>
+</head>
+<body><div class="top-bar" aria-hidden="true"></div>
+  <div class="page">
+    <header>
+      <div class="title-block">
+        <p class="eyebrow">TCEA Tools</p>
+        <h1>Shape Spinner</h1>
+        <p class="subtitle">Spin shapes and emojis for identification, graph races, and trace-and-describe activities.</p>
+      </div>
+      <a class="home-link" href="../index.html">Tool Menu</a>
+    </header>
+
+    <main class="app-grid">
+      <section class="panel" aria-label="Spinner setup">
+        <h2>Setup</h2>
+        <textarea id="itemsInput" hidden></textarea>
+
+        <div class="field">
+          <span class="field-title">Spinner Mode</span>
+          <div class="template-row" aria-label="Shape library mode">
+            <button class="pill shape-mode active" data-shape-mode="basic">Basic</button>
+            <button class="pill shape-mode" data-shape-mode="advanced">Advanced</button>
+          </div>
+        </div>
+
+        <div class="advanced-settings hidden" id="advancedSettings">
+          <div class="field">
+            <label for="templateSelect">Quick Starts</label>
+            <div class="template-row">
+              <button class="pill" data-template="shapes">Shapes</button>
+              <button class="pill" data-template="blank">Clear</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="field-title">Shape Library</span>
+            <div class="shape-choice-grid" id="shapeChoices"></div>
+            <label class="advanced-option" id="showLabelsOption">
+              <input id="showLabels" type="checkbox" checked>
+              <span>Show labels on spinner</span>
+            </label>
+            <label class="advanced-option" id="showAttributesOption">
+              <input id="showAttributes" type="checkbox">
+              <span>Show attributes after spin</span>
+            </label>
+            <p class="help"><span id="shapeLimitText">Choose up to 6 shapes.</span></p>
+          </div>
+
+          <div class="field">
+            <label for="spinStyle">Spin Style</label>
+            <select id="spinStyle">
+              <option value="standard">Standard Spin</option>
+              <option value="power">Power Spin</option>
+            </select>
+          </div>
+
+          <div class="button-grid">
+            <button class="btn primary wide" id="applyBtn">Build Spinner</button>
+            <button class="btn outline" id="copyLinkBtn">Copy Share Link</button>
+            <button class="btn outline" id="copyEmbedBtn">Copy Embed Code</button>
+            <button class="btn outline" id="saveBtn">Download JSON</button>
+            <button class="btn outline" id="loadBtn">Load JSON</button>
+            <button class="btn danger wide" id="clearBtn">Reset Counts</button>
+            <input id="loadInput" type="file" accept="application/json,.json" hidden>
+          </div>
+        </div>
+      </section>
+
+      <section class="stage" aria-label="Shape spinner">
+        <div class="wheel-wrap">
+          <canvas id="wheelCanvas" width="900" height="900" aria-label="Shape spinner wheel"></canvas>
+          <div class="pointer" aria-hidden="true"></div>
+          <div class="center-dot" aria-hidden="true">SPIN</div>
+        </div>
+
+        <div class="stage-actions">
+          <button class="btn gold" id="spinBtn">Spin</button>
+          <button class="btn outline" id="speakBtn">Speak Result</button>
+        </div>
+      </section>
+
+      <aside class="panel" aria-label="Spinner results">
+        <h2>Results</h2>
+
+        <div class="result-box">
+          <div class="small-label">Selected</div>
+          <div class="winner" id="winnerText">Ready to spin?</div>
+          <div class="activity" id="activityText">Build the spinner, then press Spin.</div>
+        </div>
+
+        <div class="stats" style="margin-top:14px;">
+          <div class="stat">
+            <span class="small-label">Entries</span>
+            <strong id="entryCount">0</strong>
+          </div>
+          <div class="stat">
+            <span class="small-label">Spins</span>
+            <strong id="spinCount">0</strong>
+          </div>
+        </div>
+
+        <div class="graph-race-section hidden" id="graphRaceSection">
+          <h2 style="margin-top:18px;">Graph Race</h2>
+          <div class="race-list" id="raceList"></div>
+        </div>
+
+        <h2 style="margin-top:18px;">History</h2>
+        <div class="history-list" id="historyList"></div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    const $ = (sel) => document.querySelector(sel);
+    const $$ = (sel) => [...document.querySelectorAll(sel)];
+
+    const palettes = ["#D1282F", "#F58231", "#FDDC3F", "#7B2CBF", "#0070B9", "#3CB44B"];
+    const maxSelectedShapes = 6;
+    const basicShapes = [
+      { label: "Star", visual: "star" },
+      { label: "Oval", visual: "oval" },
+      { label: "Square", visual: "square" },
+      { label: "Rectangle", visual: "rectangle" },
+      { label: "Circle", visual: "circle" },
+      { label: "Triangle", visual: "triangle" }
+    ];
+    const advancedShapes = [
+      ...basicShapes,
+      { label: "Pentagon", visual: "pentagon" },
+      { label: "Trapezoid", visual: "trapezoid" },
+      { label: "Hexagon", visual: "hexagon" },
+      { label: "Octagon", visual: "octagon" },
+      { label: "Diamond", visual: "diamond" },
+      { label: "Heart", visual: "heart" },
+      { label: "Crescent", visual: "crescent" },
+      { label: "Rhombus", visual: "rhombus" },
+      { label: "Parallelogram", visual: "parallelogram" }
+    ];
+    const shapeLibraries = { basic: basicShapes, advanced: advancedShapes };
+    const shapeAttributes = {
+      star: "A star has points that stick out from the center.",
+      oval: "An oval is a stretched-out circle with no corners.",
+      square: "A square has four equal sides and four square corners.",
+      rectangle: "A rectangle has four sides and four square corners, with opposite sides the same length.",
+      circle: "A circle is round with no sides and no corners.",
+      triangle: "A triangle has three sides and three corners.",
+      pentagon: "A pentagon has five sides and five corners.",
+      trapezoid: "A trapezoid has four sides with one pair of sides that are parallel.",
+      hexagon: "A hexagon has six sides and six corners.",
+      octagon: "An octagon has eight sides and eight corners.",
+      diamond: "A diamond has four sides and looks like a square turned on its point.",
+      heart: "A heart has two rounded bumps at the top and a point at the bottom.",
+      crescent: "A crescent is a curved shape that looks like a thin moon.",
+      rhombus: "A rhombus has four equal sides and opposite sides that are parallel.",
+      parallelogram: "A parallelogram has four sides, with opposite sides that are parallel and the same length."
+    };
+    const templates = {
+      shapes: [
+        "Star | star | Identify this shape and describe its attributes.",
+        "Oval | oval | Identify this shape and describe its attributes.",
+        "Square | square | Identify this shape and describe its attributes.",
+        "Rectangle | rectangle | Identify this shape and describe its attributes.",
+        "Circle | circle | Identify this shape and describe its attributes.",
+        "Triangle | triangle | Identify this shape and describe its attributes."
+      ],
+      blank: [""]
+    };
+
+    const state = {
+      entries: [],
+      history: [],
+      counts: {},
+      rotation: 0,
+      isSpinning: false,
+      spinStyle: "standard",
+      shapeLibraryMode: "basic",
+      showLabels: true,
+      showAttributes: false
+    };
+
+    const canvas = $("#wheelCanvas");
+    const ctx = canvas.getContext("2d");
+
+    function b64urlEncode(str) {
+      const bytes = new TextEncoder().encode(str);
+      let bin = "";
+      for (const b of bytes) bin += String.fromCharCode(b);
+      return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+    }
+
+    function b64urlDecode(s) {
+      const pad = s.length % 4 === 0 ? "" : "=".repeat(4 - (s.length % 4));
+      const norm = s.replace(/-/g, "+").replace(/_/g, "/") + pad;
+      const bin = atob(norm);
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      return new TextDecoder().decode(bytes);
+    }
+
+    function parseEntries(text) {
+      return text.split(/\n+/)
+        .map(line => line.trim())
+        .filter(Boolean)
+        .map((line, i) => {
+          const parts = line.split("|").map(p => p.trim());
+          const label = parts[0] || "Entry " + (i + 1);
+          const visual = normalizeVisual(parts[1] || inferVisual(label));
+          const activity = parts[2] || defaultActivity(label);
+          const id = window.crypto && crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random() + i);
+          const attribute = shapeAttributes[visual] || "";
+          return { id, label, visual, activity, attribute, color: sliceColor(i) };
+        });
+    }
+
+    function normalizeVisual(visual) {
+      const trimmed = visual.trim();
+      return trimmed.toLowerCase();
+    }
+
+    function sliceColor(index) {
+      return palettes[index % palettes.length];
+    }
+
+    function shapeEntryLine(shape) {
+      return `${shape.label} | ${shape.visual} | Identify this shape and describe its attributes.`;
+    }
+
+    function selectedVisualsFromText() {
+      return new Set($("#itemsInput").value.split(/\n+/)
+        .map(line => line.split("|")[1])
+        .filter(Boolean)
+        .map(visual => normalizeVisual(visual)));
+    }
+
+    function setEntriesFromShapes(shapes) {
+      $("#itemsInput").value = shapes.map(shapeEntryLine).join("\n");
+      state.counts = {};
+      state.history = [];
+      build();
+    }
+
+    function renderShapeChoices(mode = state.shapeLibraryMode) {
+      state.shapeLibraryMode = mode;
+      const shapes = shapeLibraries[mode];
+      const selected = selectedVisualsFromText();
+      const selectedSet = selected.size
+        ? new Set(shapes.filter(shape => selected.has(shape.visual)).map(shape => shape.visual))
+        : new Set(basicShapes.map(shape => shape.visual));
+
+      $(".shape-mode[data-shape-mode='basic']").classList.toggle("active", mode === "basic");
+      $(".shape-mode[data-shape-mode='advanced']").classList.toggle("active", mode === "advanced");
+      $("#advancedSettings").classList.toggle("hidden", mode !== "advanced");
+      $("#graphRaceSection").classList.toggle("hidden", mode !== "advanced");
+      $("#showLabelsOption").classList.toggle("hidden", mode !== "advanced");
+      $("#shapeChoices").innerHTML = shapes.map(shape => `
+        <label class="shape-choice">
+          <input type="checkbox" value="${shape.visual}" ${selectedSet.has(shape.visual) ? "checked" : ""}>
+          <span>${shape.label}</span>
+        </label>
+      `).join("");
+      updateShapeChoiceState();
+    }
+
+    function updateShapeChoiceState() {
+      const choices = $$("#shapeChoices input");
+      const checked = choices.filter(input => input.checked);
+      choices.forEach(input => {
+        input.disabled = !input.checked && checked.length >= maxSelectedShapes;
+      });
+      $("#shapeLimitText").textContent = `${checked.length} selected. Choose up to ${maxSelectedShapes} shapes.`;
+    }
+
+    function syncShapeChoicesToEntries() {
+      const choices = $$("#shapeChoices input");
+      if (!choices.length) return;
+      const selected = selectedVisualsFromText();
+      choices.forEach(input => {
+        input.checked = selected.has(input.value);
+      });
+      updateShapeChoiceState();
+    }
+
+    function selectedShapesFromChoices() {
+      const selected = new Set($$("#shapeChoices input:checked").map(input => input.value));
+      return shapeLibraries[state.shapeLibraryMode].filter(shape => selected.has(shape.visual));
+    }
+
+    function inferVisual(label) {
+      const v = label.toLowerCase();
+      for (const key of advancedShapes.map(shape => shape.visual)) {
+        if (v.includes(key)) return key;
+      }
+      return "circle";
+    }
+
+    function defaultActivity(label) {
+      return "Identify it, describe it, or tell one thing you notice.";
+    }
+
+    function serialize() {
+      return {
+        entries: $("#itemsInput").value,
+        spinStyle: state.spinStyle,
+        shapeLibraryMode: state.shapeLibraryMode,
+        showLabels: state.showLabels,
+        showAttributes: state.showAttributes
+      };
+    }
+
+    function applySerialized(data) {
+      $("#itemsInput").value = data.entries || templates.shapes.join("\n");
+      $("#spinStyle").value = data.spinStyle || "standard";
+      state.shapeLibraryMode = data.shapeLibraryMode || "basic";
+      $("#showLabels").checked = data.showLabels !== false;
+      $("#showAttributes").checked = data.showAttributes === true;
+      build();
+      renderShapeChoices(state.shapeLibraryMode);
+    }
+
+    function build() {
+      state.spinStyle = $("#spinStyle").value;
+      state.showLabels = $("#showLabels").checked || state.shapeLibraryMode !== "advanced";
+      state.showAttributes = state.shapeLibraryMode === "advanced" && $("#showAttributes").checked;
+      state.entries = parseEntries($("#itemsInput").value);
+      for (const e of state.entries) {
+        if (!(e.label in state.counts)) state.counts[e.label] = 0;
+      }
+      drawWheel();
+      renderMeta();
+      syncShapeChoicesToEntries();
+    }
+
+    function drawWheel() {
+      const W = canvas.width;
+      const H = canvas.height;
+      const cx = W / 2;
+      const cy = H / 2;
+      const r = Math.min(W, H) * .46;
+      ctx.clearRect(0, 0, W, H);
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(state.rotation);
+      ctx.translate(-cx, -cy);
+
+      if (!state.entries.length) {
+        ctx.fillStyle = "#E6E7E8";
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+        return;
+      }
+
+      const slice = Math.PI * 2 / state.entries.length;
+      state.entries.forEach((entry, i) => {
+        const start = i * slice;
+        const end = start + slice;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, r, start, end);
+        ctx.closePath();
+        ctx.fillStyle = entry.color;
+        ctx.fill();
+        ctx.strokeStyle = "#FFFFFF";
+        ctx.lineWidth = 5;
+        ctx.stroke();
+
+        const mid = start + slice / 2;
+        const labelRadius = r * .85;
+        const iconRadius = r * .55;
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(mid - Math.PI / 2);
+        drawVisual(ctx, entry, 0, iconRadius, Math.max(88, r * .34));
+
+        if (state.showLabels) {
+          ctx.fillStyle = readableText(entry.color);
+          ctx.font = "900 24px Arial, Helvetica, sans-serif";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          wrapCanvasText(ctx, entry.label, 0, labelRadius, r * .24, 25);
+        }
+        ctx.restore();
+      });
+
+      ctx.restore();
+    }
+
+    function readableText(hex) {
+      const c = hex.replace("#", "");
+      const r = parseInt(c.slice(0, 2), 16);
+      const g = parseInt(c.slice(2, 4), 16);
+      const b = parseInt(c.slice(4, 6), 16);
+      return (r * 299 + g * 587 + b * 114) / 1000 > 150 ? "#000000" : "#FFFFFF";
+    }
+
+    function wrapCanvasText(context, text, x, y, maxWidth, lineHeight) {
+      const words = text.split(/\s+/);
+      const lines = [];
+      let line = "";
+      for (const word of words) {
+        const test = line ? line + " " + word : word;
+        if (context.measureText(test).width > maxWidth && line) {
+          lines.push(line);
+          line = word;
+        } else {
+          line = test;
+        }
+      }
+      if (line) lines.push(line);
+      const start = y - ((lines.length - 1) * lineHeight) / 2;
+      lines.slice(0, 3).forEach((ln, idx) => context.fillText(ln, x, start + idx * lineHeight));
+    }
+
+    function drawVisual(context, entry, x, y, size) {
+      const visual = entry.visual || "circle";
+      context.save();
+      context.translate(x, y);
+      context.fillStyle = "#FFFFFF";
+      context.strokeStyle = "#404041";
+      context.lineWidth = Math.max(3, size * .06);
+      const s = size * .82;
+      context.beginPath();
+      if (visual === "square") context.rect(-s / 2, -s / 2, s, s);
+      else if (visual === "rectangle") context.rect(-s * .56, -s * .36, s * 1.12, s * .72);
+      else if (visual === "triangle") polygon(context, 3, s * .58, -Math.PI / 2);
+      else if (visual === "pentagon") polygon(context, 5, s * .54, -Math.PI / 2);
+      else if (visual === "hexagon") polygon(context, 6, s * .53, Math.PI / 6);
+      else if (visual === "octagon") polygon(context, 8, s * .53, Math.PI / 8);
+      else if (visual === "star") star(context, s * .53, s * .24);
+      else if (visual === "heart") heart(context, s * .76);
+      else if (visual === "diamond") polygon(context, 4, s * .52, 0);
+      else if (visual === "rhombus") rhombus(context, s);
+      else if (visual === "trapezoid") trapezoid(context, s);
+      else if (visual === "parallelogram") parallelogram(context, s);
+      else if (visual === "crescent") crescent(context, s);
+      else if (visual === "oval") context.ellipse(0, 0, s * .55, s * .39, 0, 0, Math.PI * 2);
+      else context.arc(0, 0, s * .48, 0, Math.PI * 2);
+      context.fill();
+      context.stroke();
+      context.restore();
+    }
+
+    function polygon(context, sides, radius, rotation) {
+      context.beginPath();
+      for (let i = 0; i < sides; i++) {
+        const a = rotation + i * Math.PI * 2 / sides;
+        const x = Math.cos(a) * radius;
+        const y = Math.sin(a) * radius;
+        if (i === 0) context.moveTo(x, y);
+        else context.lineTo(x, y);
+      }
+      context.closePath();
+    }
+
+    function star(context, outer, inner) {
+      context.beginPath();
+      for (let i = 0; i < 10; i++) {
+        const r = i % 2 ? inner : outer;
+        const a = -Math.PI / 2 + i * Math.PI / 5;
+        const x = Math.cos(a) * r;
+        const y = Math.sin(a) * r;
+        if (i === 0) context.moveTo(x, y);
+        else context.lineTo(x, y);
+      }
+      context.closePath();
+    }
+
+    function heart(context, size) {
+      context.beginPath();
+      context.moveTo(0, size * .34);
+      context.bezierCurveTo(-size, -size * .25, -size * .35, -size * .7, 0, -size * .28);
+      context.bezierCurveTo(size * .35, -size * .7, size, -size * .25, 0, size * .34);
+      context.closePath();
+    }
+
+    function trapezoid(context, size) {
+      context.beginPath();
+      context.moveTo(-size * .34, -size * .36);
+      context.lineTo(size * .34, -size * .36);
+      context.lineTo(size * .54, size * .36);
+      context.lineTo(-size * .54, size * .36);
+      context.closePath();
+    }
+
+    function parallelogram(context, size) {
+      context.beginPath();
+      context.moveTo(-size * .34, -size * .38);
+      context.lineTo(size * .56, -size * .38);
+      context.lineTo(size * .34, size * .38);
+      context.lineTo(-size * .56, size * .38);
+      context.closePath();
+    }
+
+    function rhombus(context, size) {
+      context.beginPath();
+      context.moveTo(0, -size * .48);
+      context.lineTo(size * .56, 0);
+      context.lineTo(0, size * .48);
+      context.lineTo(-size * .56, 0);
+      context.closePath();
+    }
+
+    function crescent(context, size) {
+      context.beginPath();
+      context.arc(-size * .08, 0, size * .54, -Math.PI / 2, Math.PI / 2, false);
+      context.bezierCurveTo(size * .12, size * .32, size * .12, -size * .32, -size * .08, -size * .54);
+      context.closePath();
+    }
+
+    function spin() {
+      if (state.isSpinning || !state.entries.length) return;
+      state.isSpinning = true;
+      $("#spinBtn").disabled = true;
+      const slice = Math.PI * 2 / state.entries.length;
+      const targetIndex = Math.floor(Math.random() * state.entries.length);
+      const pointerAngle = 0;
+      const targetMid = targetIndex * slice + slice / 2;
+      const turns = state.spinStyle === "power" ? 8 + Math.random() * 3 : 4 + Math.random() * 2;
+      const targetRotation = turns * Math.PI * 2 + pointerAngle - targetMid;
+      const start = state.rotation;
+      const end = start + targetRotation;
+      const duration = state.spinStyle === "power" ? 3800 : 2400;
+      const t0 = performance.now();
+
+      function frame(now) {
+        const p = Math.min(1, (now - t0) / duration);
+        const eased = 1 - Math.pow(1 - p, 4);
+        state.rotation = start + (end - start) * eased;
+        drawWheel();
+        if (p < 1) {
+          requestAnimationFrame(frame);
+        } else {
+          state.rotation = ((state.rotation % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+          finishSpin(targetIndex);
+        }
+      }
+      requestAnimationFrame(frame);
+    }
+
+    function finishSpin(index) {
+      const entry = state.entries[index];
+      state.history.unshift(entry.label);
+      state.history = state.history.slice(0, 12);
+      state.counts[entry.label] = (state.counts[entry.label] || 0) + 1;
+      $("#winnerText").textContent = entry.label;
+      $("#activityText").textContent = activityFor(entry);
+      state.isSpinning = false;
+      $("#spinBtn").disabled = false;
+      renderMeta();
+    }
+
+    function activityFor(entry) {
+      if (state.showAttributes && entry.attribute) return entry.attribute;
+      if (entry.activity) return entry.activity;
+      return defaultActivity(entry.label);
+    }
+
+    function renderMeta() {
+      $("#entryCount").textContent = state.entries.length;
+      $("#spinCount").textContent = Object.values(state.counts).reduce((sum, n) => sum + n, 0);
+      $("#historyList").innerHTML = state.history.length
+        ? state.history.map((h, i) => `<div class="history-item"><span>${escapeHTML(h)}</span><span>#${state.history.length - i}</span></div>`).join("")
+        : '<div class="empty">No spins yet.</div>';
+      $("#raceList").innerHTML = state.entries.length
+        ? state.entries.map(e => {
+            const count = state.counts[e.label] || 0;
+            const highest = Math.max(1, ...state.entries.map(entry => state.counts[entry.label] || 0));
+            const pct = Math.min(100, count / highest * 100);
+            return `<div class="race-row"><span>${escapeHTML(e.label)}</span><div class="bar"><span style="width:${pct}%"></span></div><strong>${count}</strong></div>`;
+          }).join("")
+        : '<div class="empty">Build the spinner to start a graph race.</div>';
+    }
+
+    function escapeHTML(str) {
+      return String(str).replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+    }
+
+    function copyText(text, label) {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => showStatus(label));
+      } else {
+        window.prompt(label, text);
+      }
+    }
+
+    function shareUrl() {
+      const url = new URL(window.location.href);
+      url.hash = "s=" + b64urlEncode(JSON.stringify(serialize()));
+      return url.toString();
+    }
+
+    function showStatus(text) {
+      $("#activityText").textContent = text;
+    }
+
+    function downloadJSON() {
+      const blob = new Blob([JSON.stringify(serialize(), null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "shape-spinner.json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    function loadFromHash() {
+      const hash = window.location.hash || "";
+      if (!hash.startsWith("#s=")) return false;
+      try {
+        applySerialized(JSON.parse(b64urlDecode(hash.slice(3))));
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
+    function init() {
+      $("#itemsInput").value = templates.shapes.join("\n");
+      renderShapeChoices("basic");
+      if (!loadFromHash()) build();
+
+      $("#applyBtn").addEventListener("click", build);
+      $("#spinBtn").addEventListener("click", spin);
+      $("#speakBtn").addEventListener("click", () => {
+        const text = $("#winnerText").textContent + ". " + $("#activityText").textContent;
+        if ("speechSynthesis" in window) speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+      });
+      $("#spinStyle").addEventListener("change", build);
+      $("#showLabels").addEventListener("change", build);
+      $("#showAttributes").addEventListener("change", build);
+      $("#clearBtn").addEventListener("click", () => {
+        state.counts = {};
+        state.history = [];
+        build();
+        $("#winnerText").textContent = "Ready to spin?";
+        $("#activityText").textContent = "Counts are reset.";
+      });
+      $("#copyLinkBtn").addEventListener("click", () => copyText(shareUrl(), "Share link copied."));
+      $("#copyEmbedBtn").addEventListener("click", () => {
+        copyText(`<iframe src="${shareUrl()}" width="900" height="760" style="border:0;" title="Shape Spinner"></iframe>`, "Embed code copied.");
+      });
+      $("#saveBtn").addEventListener("click", downloadJSON);
+      $("#loadBtn").addEventListener("click", () => $("#loadInput").click());
+      $("#loadInput").addEventListener("change", async (event) => {
+        const file = event.target.files && event.target.files[0];
+        if (!file) return;
+        applySerialized(JSON.parse(await file.text()));
+        renderShapeChoices(state.shapeLibraryMode);
+        event.target.value = "";
+      });
+      $$(".pill[data-template]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          $("#itemsInput").value = templates[btn.dataset.template].join("\n");
+          state.counts = {};
+          state.history = [];
+          if (btn.dataset.template === "shapes") {
+            state.shapeLibraryMode = "basic";
+            renderShapeChoices("basic");
+          }
+          build();
+        });
+      });
+      $$(".shape-mode").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const mode = btn.dataset.shapeMode;
+          if (mode === "basic") {
+            $("#showLabels").checked = true;
+            $("#showAttributes").checked = false;
+            setEntriesFromShapes(basicShapes);
+          }
+          renderShapeChoices(mode);
+          build();
+        });
+      });
+      $("#shapeChoices").addEventListener("change", (event) => {
+        if (!event.target.matches("input[type='checkbox']")) return;
+        const checked = $$("#shapeChoices input:checked");
+        if (checked.length > maxSelectedShapes) {
+          event.target.checked = false;
+          showStatus(`Choose up to ${maxSelectedShapes} shapes at one time.`);
+          updateShapeChoiceState();
+          return;
+        }
+        const selected = selectedShapesFromChoices();
+        if (!selected.length) {
+          event.target.checked = true;
+          showStatus("Keep at least one shape on the spinner.");
+          updateShapeChoiceState();
+          return;
+        }
+        setEntriesFromShapes(selected);
+      });
+    }
+
+    init();
+  </script>
+</body>
+</html>

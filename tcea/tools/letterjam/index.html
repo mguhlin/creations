@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LetterJam Puzzle Maker</title>
+  <style>
+    :root {
+      --navy: #1E398D;
+      --gold: #FAA634;
+      --black: #000000;
+      --white: #FFFFFF;
+      --red: #D1282F;
+      --blue: #0070B9;
+      --yellow: #FDDC3F;
+      --orange: #f58231;
+      --green: #3cb44b;
+      --gray-90: #404041;
+      --gray-50: #939597;
+      --gray-30: #BBBDC0;
+      --gray-10: #E6E7E8;
+      --border: #E6E7E8;
+      --shadow: 0 12px 24px rgba(64, 64, 65, 0.08);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--gray-90);
+      background: var(--white);
+    }
+
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+
+    .top-bar {
+      height: 12px;
+      background: linear-gradient(
+        90deg,
+        var(--navy) 0 32%,
+        var(--gold) 32% 52%,
+        var(--orange) 52% 64%,
+        var(--red) 64% 76%,
+        var(--blue) 76% 88%,
+        var(--green) 88% 96%,
+        var(--yellow) 96% 100%
+      );
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 28px 0 44px;
+    }
+
+    header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      padding-bottom: 22px;
+      border-bottom: 2px solid var(--gray-10);
+    }
+
+    .title-block { display: grid; gap: 8px; }
+
+    .eyebrow {
+      margin: 0;
+      color: var(--gold);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--navy);
+      font-size: clamp(2.1rem, 5vw, 4.2rem);
+      line-height: .95;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      max-width: 760px;
+      margin: 0;
+      color: var(--gray-90);
+      font-size: 1rem;
+      line-height: 1.45;
+    }
+
+    .home-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      color: var(--white);
+      background: var(--navy);
+      border-radius: var(--radius);
+      font-weight: 800;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(320px, 430px) 1fr;
+      gap: 18px;
+      align-items: start;
+      padding-top: 20px;
+    }
+
+    .panel, .preview {
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      color: var(--black);
+      font-size: 1.2rem;
+      letter-spacing: 0;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+      margin-bottom: 16px;
+    }
+
+    label {
+      color: var(--gray-90);
+      font-size: .88rem;
+      font-weight: 800;
+    }
+
+    input {
+      width: 100%;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 11px 12px;
+      color: var(--gray-90);
+      background: var(--white);
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(0, 112, 185, .18);
+    }
+
+    .counter {
+      min-height: 1.2em;
+      margin: -8px 0 14px;
+      color: var(--gray-50);
+      font-size: .86rem;
+      text-align: right;
+    }
+
+    .help {
+      margin: -8px 0 16px;
+      color: var(--gray-50);
+      font-size: .85rem;
+      line-height: 1.4;
+    }
+
+    .button-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .btn {
+      min-height: 44px;
+      border: 2px solid rgba(30, 57, 141, .22);
+      border-radius: var(--radius);
+      padding: 9px 12px;
+      color: var(--navy);
+      background: var(--white);
+      font-weight: 800;
+      box-shadow: 0 8px 18px rgba(64, 64, 65, .08);
+    }
+
+    .btn.primary {
+      color: var(--white);
+      background: var(--navy);
+      border-color: var(--navy);
+    }
+
+    .btn.gold {
+      color: var(--black);
+      background: var(--gold);
+      border-color: var(--gold);
+    }
+
+    .btn[disabled] {
+      color: var(--gray-50);
+      background: var(--gray-10);
+      border-color: var(--gray-10);
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    .share-box {
+      display: grid;
+      gap: 8px;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 2px solid var(--gray-10);
+    }
+
+    .share-box input {
+      color: var(--gray-50);
+      font-size: .9rem;
+    }
+
+    .status {
+      min-height: 1.35em;
+      margin: 12px 0 0;
+      color: var(--navy);
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .puzzle-card {
+      display: grid;
+      gap: 18px;
+      align-content: start;
+    }
+
+    .preview-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .preview-title {
+      display: grid;
+      gap: 5px;
+    }
+
+    .preview-title strong {
+      color: var(--navy);
+      font-size: clamp(1.45rem, 3vw, 2.4rem);
+      line-height: 1;
+    }
+
+    .preview-title span { color: var(--gray-50); }
+
+    .badge {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 0 12px;
+      color: var(--white);
+      background: var(--green);
+      border-radius: 999px;
+      font-size: .86rem;
+      font-weight: 800;
+    }
+
+    .letter-grid {
+      display: grid;
+      grid-template-columns: repeat(var(--letters), minmax(38px, 58px));
+      gap: 8px;
+      justify-content: center;
+      padding: 18px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      background: #fbfcff;
+    }
+
+    .tile {
+      aspect-ratio: 1 / 1;
+      display: grid;
+      place-items: center;
+      border: 3px solid var(--gray-30);
+      border-radius: 4px;
+      color: var(--black);
+      background: var(--white);
+      font-size: clamp(1.4rem, 4vw, 2.2rem);
+      font-weight: 900;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .tile.correct {
+      color: var(--white);
+      border-color: #5C9E55;
+      background: #5C9E55;
+    }
+
+    .tile.present {
+      color: var(--white);
+      border-color: #C9B458;
+      background: #C9B458;
+    }
+
+    .tile.absent {
+      color: var(--white);
+      border-color: #787C7E;
+      background: #787C7E;
+    }
+
+    .sample {
+      display: grid;
+      gap: 12px;
+    }
+
+    .sample-row {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(34px, 46px));
+      gap: 6px;
+      align-items: center;
+    }
+
+    .sample-text {
+      margin: 0;
+      color: var(--gray-90);
+      line-height: 1.45;
+    }
+
+    .summary {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .summary p {
+      margin: 0;
+      line-height: 1.45;
+    }
+
+    .summary strong { color: var(--navy); }
+
+    .brand-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 18px 0 26px;
+      border-top: 2px solid var(--gray-10);
+      color: var(--gray-50);
+      font-size: .92rem;
+      line-height: 1.4;
+    }
+
+    .brand-footer strong {
+      color: var(--navy);
+      font-weight: 900;
+    }
+
+    .brand-footer a {
+      color: var(--navy);
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      header, main { grid-template-columns: 1fr; }
+      header { display: grid; }
+      .home-link { justify-self: start; }
+      main { display: grid; }
+    }
+
+    @media (max-width: 560px) {
+      .page { width: min(100% - 22px, 1180px); padding-top: 22px; }
+      .panel, .preview { padding: 14px; }
+      .button-grid { grid-template-columns: 1fr; }
+      .letter-grid {
+        gap: 5px;
+        padding: 12px;
+        grid-template-columns: repeat(var(--letters), minmax(30px, 1fr));
+      }
+      .tile { border-width: 2px; }
+      .preview-head { display: grid; }
+      .badge { justify-self: start; }
+      .brand-footer {
+        align-items: flex-start;
+        flex-direction: column;
+        width: min(100% - 22px, 1180px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar" aria-hidden="true"></div>
+  <div class="page">
+    <header>
+      <div class="title-block">
+        <p class="eyebrow">TCEA Tools</p>
+        <h1>LetterJam</h1>
+        <p class="subtitle">Create a Wordle-style puzzle link with a custom 4-7 letter answer, display name, and optional clue.</p>
+      </div>
+      <a class="home-link" href="../index.html">Tool Menu</a>
+    </header>
+
+    <main>
+      <section class="panel" aria-labelledby="setup-title">
+        <h2 id="setup-title">Create your puzzle</h2>
+
+        <div class="field">
+          <label for="answer">Choose your 4-7 letter word</label>
+          <input id="answer" type="text" maxlength="7" autocomplete="off" spellcheck="false" placeholder="PLANT">
+        </div>
+        <p class="help">Letters only. The answer must be a real word.</p>
+
+        <div class="field">
+          <label for="displayName">Add your display name</label>
+          <input id="displayName" type="text" maxlength="10" autocomplete="off" placeholder="Ms. R">
+        </div>
+        <p class="counter" id="nameCounter">10 characters left</p>
+
+        <div class="field">
+          <label for="clue">Include a clue in your shared message (optional)</label>
+          <input id="clue" type="text" maxlength="50" autocomplete="off" placeholder="Science vocabulary">
+        </div>
+        <p class="counter" id="clueCounter">50 characters left</p>
+
+        <button class="btn primary" id="createBtn" type="button" disabled>Create LetterJam link</button>
+
+        <div class="share-box">
+          <label for="shareLink">Share link</label>
+          <input id="shareLink" type="text" readonly placeholder="Your link will appear here">
+          <div class="button-grid">
+            <button class="btn gold" id="copyBtn" type="button" disabled>Copy link</button>
+            <button class="btn" id="openBtn" type="button" disabled>Open puzzle</button>
+          </div>
+        </div>
+
+        <p class="status" id="status" aria-live="polite"></p>
+      </section>
+
+      <section class="preview" aria-labelledby="preview-title">
+        <div class="puzzle-card">
+          <div class="preview-head">
+            <div class="preview-title">
+              <strong id="preview-title">LetterJam Preview</strong>
+              <span id="previewMeta">A 5-letter puzzle, ready for 6 tries.</span>
+            </div>
+            <span class="badge">Student view</span>
+          </div>
+
+          <div class="letter-grid" id="previewGrid" style="--letters: 5;" aria-label="Puzzle preview">
+            <span class="tile correct">L</span>
+            <span class="tile">E</span>
+            <span class="tile present">A</span>
+            <span class="tile absent">R</span>
+            <span class="tile">N</span>
+          </div>
+
+          <div class="summary">
+            <p><strong>How students play:</strong> They guess the hidden word in 6 tries. Green means the letter is correct, gold means it is in the word but misplaced, and gray means it is not in the word.</p>
+            <p id="previewClue"><strong>Clue:</strong> Add an optional clue to give students a nudge.</p>
+          </div>
+
+          <div class="sample" aria-label="Color examples">
+            <div>
+              <div class="sample-row">
+                <span class="tile correct">T</span>
+                <span class="tile">E</span>
+                <span class="tile">A</span>
+                <span class="tile">C</span>
+                <span class="tile">H</span>
+              </div>
+              <p class="sample-text"><strong>T</strong> is in the word and in the correct spot.</p>
+            </div>
+            <div>
+              <div class="sample-row">
+                <span class="tile">M</span>
+                <span class="tile present">U</span>
+                <span class="tile">S</span>
+                <span class="tile">I</span>
+                <span class="tile">C</span>
+              </div>
+              <p class="sample-text"><strong>U</strong> is in the word but in the wrong spot.</p>
+            </div>
+            <div>
+              <div class="sample-row">
+                <span class="tile">P</span>
+                <span class="tile absent">A</span>
+                <span class="tile">I</span>
+                <span class="tile">N</span>
+                <span class="tile">T</span>
+              </div>
+              <p class="sample-text"><strong>A</strong> is not in the word in any spot.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="brand-footer">
+    <span><strong>TCEA Tools</strong> | LetterJam Puzzle Maker</span>
+    <a href="../index.html">Tool Menu</a>
+  </footer>
+
+  <script src="words.js"></script>
+  <script>
+    const answerInput = document.querySelector("#answer");
+    const nameInput = document.querySelector("#displayName");
+    const clueInput = document.querySelector("#clue");
+    const nameCounter = document.querySelector("#nameCounter");
+    const clueCounter = document.querySelector("#clueCounter");
+    const createBtn = document.querySelector("#createBtn");
+    const copyBtn = document.querySelector("#copyBtn");
+    const openBtn = document.querySelector("#openBtn");
+    const shareLink = document.querySelector("#shareLink");
+    const statusEl = document.querySelector("#status");
+    const previewGrid = document.querySelector("#previewGrid");
+    const previewMeta = document.querySelector("#previewMeta");
+    const previewClue = document.querySelector("#previewClue");
+
+    let currentUrl = "";
+
+    function cleanAnswer(value) {
+      return value.toUpperCase().replace(/[^A-Z]/g, "").slice(0, 7);
+    }
+
+    function cleanName(value) {
+      return value.replace(/\s+/g, " ").trim().slice(0, 10);
+    }
+
+    function cleanClue(value) {
+      return value.replace(/\s+/g, " ").trim().slice(0, 50);
+    }
+
+    function isRealWord(word) {
+      if (!window.LETTERJAM_WORDS) return false;
+      if (window.LETTERJAM_WORDS.has(word)) return true;
+      return getSingularForms(word).some((singular) => window.LETTERJAM_WORDS.has(singular));
+    }
+
+    function getSingularForms(word) {
+      const forms = [];
+      if (word.length < 4 || !word.endsWith("S")) return forms;
+
+      if (word.endsWith("IES") && word.length > 5) {
+        forms.push(`${word.slice(0, -3)}Y`);
+      }
+
+      if (word.endsWith("VES") && word.length > 5) {
+        forms.push(`${word.slice(0, -3)}F`);
+        forms.push(`${word.slice(0, -3)}FE`);
+      }
+
+      if (word.endsWith("ES") && /(CH|SH|S|X|Z)ES$/.test(word)) {
+        forms.push(word.slice(0, -2));
+      }
+
+      const singular = word.slice(0, -1);
+      if (!/[BCDFGHJKLMNPQRSTVWXYZ]Y$/.test(singular) && !/(CH|SH|S|X|Z)$/.test(singular)) {
+        forms.push(singular);
+      }
+
+      return forms;
+    }
+
+    function encodePuzzle(puzzle) {
+      const json = JSON.stringify(puzzle);
+      const bytes = new TextEncoder().encode(json);
+      let binary = "";
+      bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
+      return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+    }
+
+    function buildStudentUrl(puzzle) {
+      const base = new URL("student.html", window.location.href);
+      base.hash = encodePuzzle(puzzle);
+      return base.href;
+    }
+
+    function setStatus(message, isError = false) {
+      statusEl.textContent = message;
+      statusEl.style.color = isError ? "var(--red)" : "var(--navy)";
+    }
+
+    function updateCounters() {
+      nameCounter.textContent = `${10 - nameInput.value.length} characters left`;
+      clueCounter.textContent = `${50 - clueInput.value.length} characters left`;
+    }
+
+    function updatePreview() {
+      const answer = cleanAnswer(answerInput.value) || "LEARN";
+      const displayName = cleanName(nameInput.value) || "your class";
+      const clue = cleanClue(clueInput.value);
+      const visible = answer.slice(0, 7);
+      const sampleStates = ["correct", "", "present", "absent", "", "present", ""];
+
+      previewGrid.style.setProperty("--letters", visible.length);
+      previewGrid.innerHTML = "";
+      visible.split("").forEach((letter, index) => {
+        const tile = document.createElement("span");
+        tile.className = `tile ${sampleStates[index] || ""}`.trim();
+        tile.textContent = letter;
+        previewGrid.append(tile);
+      });
+
+      previewMeta.textContent = `${displayName} is sharing a ${visible.length}-letter puzzle with 6 tries.`;
+      previewClue.innerHTML = clue
+        ? `<strong>Clue:</strong> ${escapeHtml(clue)}`
+        : "<strong>Clue:</strong> Add an optional clue to give students a nudge.";
+    }
+
+    function escapeHtml(value) {
+      const div = document.createElement("div");
+      div.textContent = value;
+      return div.innerHTML;
+    }
+
+    function validateForm() {
+      const answer = cleanAnswer(answerInput.value);
+      if (answerInput.value !== answer) answerInput.value = answer;
+      const valid = answer.length >= 4 && answer.length <= 7 && isRealWord(answer) && cleanName(nameInput.value).length > 0;
+      createBtn.disabled = !valid;
+      if (!answer.length) {
+        setStatus("");
+      } else if (answer.length < 4) {
+        setStatus("Add at least 4 letters for the puzzle word.", true);
+      } else if (!isRealWord(answer)) {
+        setStatus("That is not a real word in the LetterJam dictionary.", true);
+      } else if (!cleanName(nameInput.value)) {
+        setStatus("Add a display name before creating the link.", true);
+      } else {
+        setStatus("");
+      }
+      updatePreview();
+      updateCounters();
+    }
+
+    function createPuzzle() {
+      const puzzle = {
+        v: 1,
+        answer: cleanAnswer(answerInput.value),
+        name: cleanName(nameInput.value),
+        clue: cleanClue(clueInput.value),
+        tries: 6
+      };
+
+      if (puzzle.answer.length < 4 || puzzle.answer.length > 7 || !isRealWord(puzzle.answer) || !puzzle.name) {
+        validateForm();
+        return;
+      }
+
+      currentUrl = buildStudentUrl(puzzle);
+      shareLink.value = currentUrl;
+      copyBtn.disabled = false;
+      openBtn.disabled = false;
+      setStatus("All set. Copy the link or open the student puzzle.");
+    }
+
+    async function copyUrl() {
+      if (!currentUrl) return;
+      try {
+        await navigator.clipboard.writeText(currentUrl);
+        setStatus("Link copied.");
+      } catch (error) {
+        shareLink.focus();
+        shareLink.select();
+        document.execCommand("copy");
+        setStatus("Link copied.");
+      }
+    }
+
+    answerInput.addEventListener("input", validateForm);
+    nameInput.addEventListener("input", validateForm);
+    clueInput.addEventListener("input", validateForm);
+    createBtn.addEventListener("click", createPuzzle);
+    copyBtn.addEventListener("click", copyUrl);
+    openBtn.addEventListener("click", () => {
+      if (currentUrl) window.open(currentUrl, "_blank", "noopener");
+    });
+    shareLink.addEventListener("focus", () => shareLink.select());
+
+    validateForm();
+  </script>
+</body>
+</html>

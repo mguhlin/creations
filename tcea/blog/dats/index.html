@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Assessment System RFP Scoring Tool</title>
+</head>
+<body style="margin:0;background:#eef3fb;padding:1rem;">
+<div id="assessment-rfp-tool" class="assessment-rfp-tool">
+  <style>
+    #assessment-rfp-tool{--navy:#0A3476;--gold:#FCB040;--navy-dark:#071f4a;--pale:#eef3fb;--ink:#182033;--muted:#5d6878;--line:#d9e1ef;--green:#146c43;--red:#b42318;--white:#fff;font-family:Arial,Helvetica,sans-serif;color:var(--ink);max-width:1100px;margin:1rem auto;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--white);box-shadow:0 14px 35px rgba(10,52,118,.12)}
+    #assessment-rfp-tool *{box-sizing:border-box}
+    #assessment-rfp-tool .hero{background:linear-gradient(135deg,var(--navy),var(--navy-dark));color:#fff;padding:1.25rem 1.4rem}
+    #assessment-rfp-tool .hero h2{margin:0 0 .35rem;font-size:clamp(1.35rem,3vw,2rem);line-height:1.15;color:#fff}
+    #assessment-rfp-tool .hero p{margin:.25rem 0 0;max-width:75ch;color:#e8eefb;line-height:1.45}
+    #assessment-rfp-tool .wrap{padding:1.1rem;display:grid;gap:1rem}
+    #assessment-rfp-tool .panel{border:1px solid var(--line);border-radius:14px;background:#fff;padding:1rem}
+    #assessment-rfp-tool .grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    #assessment-rfp-tool label{font-weight:700;display:block;margin:.35rem 0;color:var(--navy)}
+    #assessment-rfp-tool input[type=text],#assessment-rfp-tool select,#assessment-rfp-tool textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:.7rem;font-size:1rem;background:#fff;color:var(--ink)}
+    #assessment-rfp-tool textarea{min-height:86px;resize:vertical}
+    #assessment-rfp-tool .gates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.55rem;margin-top:.5rem}
+    #assessment-rfp-tool .gate{display:flex;gap:.5rem;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:.65rem;background:var(--pale);font-weight:600;color:var(--ink)}
+    #assessment-rfp-tool .gate input{margin-top:.15rem;accent-color:var(--navy)}
+    #assessment-rfp-tool table{width:100%;border-collapse:collapse;font-size:.95rem}
+    #assessment-rfp-tool th,#assessment-rfp-tool td{border-bottom:1px solid var(--line);padding:.7rem;text-align:left;vertical-align:top}
+    #assessment-rfp-tool th{background:var(--pale);color:var(--navy);font-size:.86rem;text-transform:uppercase;letter-spacing:.03em}
+    #assessment-rfp-tool .criterion-title{font-weight:800;color:var(--ink);margin-bottom:.15rem}
+    #assessment-rfp-tool .criterion-note{color:var(--muted);font-size:.9rem;line-height:1.35}
+    #assessment-rfp-tool .weight{font-weight:800;color:var(--navy)}
+    #assessment-rfp-tool .score-select{min-width:7.5rem}
+    #assessment-rfp-tool .results{display:grid;grid-template-columns:1.1fr .9fr;gap:1rem;align-items:stretch}
+    #assessment-rfp-tool .scorebox{background:var(--navy);color:#fff;border-radius:16px;padding:1rem;display:grid;align-content:center;min-height:150px}
+    #assessment-rfp-tool .score{font-size:clamp(2.6rem,8vw,4.6rem);font-weight:900;line-height:1;color:#fff}
+    #assessment-rfp-tool .scorebox p{margin:.35rem 0;color:#eef3fb}
+    #assessment-rfp-tool .status{display:inline-block;border-radius:999px;padding:.35rem .7rem;margin-top:.35rem;background:#fff;color:var(--navy);font-weight:800;width:max-content}
+    #assessment-rfp-tool .status.warn{background:#fff4d6;color:#7a4b00}.status.good{background:#e7f7ef;color:var(--green)}.status.stop{background:#fee4e2;color:var(--red)}
+    #assessment-rfp-tool .btns{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.8rem}
+    #assessment-rfp-tool button{border:0;border-radius:10px;padding:.72rem .9rem;font-weight:800;cursor:pointer;background:var(--navy);color:#fff;font-size:.95rem}
+    #assessment-rfp-tool button.secondary{background:var(--gold);color:#1d2433}#assessment-rfp-tool button.light{background:var(--pale);color:var(--navy);border:1px solid var(--line)}
+    #assessment-rfp-tool .small{font-size:.86rem;color:var(--muted);line-height:1.4}
+    #assessment-rfp-tool .compare-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin-top:.75rem}
+    #assessment-rfp-tool .compare-wrap table{min-width:720px}
+    #assessment-rfp-tool .tag{display:inline-block;background:var(--pale);color:var(--navy);border:1px solid var(--line);border-radius:999px;padding:.25rem .5rem;font-size:.8rem;font-weight:800;margin:.12rem}
+    #assessment-rfp-tool .copied{color:var(--green);font-weight:800;margin-left:.4rem}
+    @media (max-width:800px){#assessment-rfp-tool .grid,#assessment-rfp-tool .results{grid-template-columns:1fr}#assessment-rfp-tool .gates{grid-template-columns:1fr}#assessment-rfp-tool th:nth-child(2),#assessment-rfp-tool td:nth-child(2){display:none}#assessment-rfp-tool .score-select{min-width:6.5rem}}
+  </style>
+  <section class="hero">
+    <h2>Assessment System RFP Scoring Tool</h2>
+    <p>Use this quick rubric to compare district assessment systems. Score each platform from zero to four, check the non-negotiables, and add options to a side-by-side table.</p>
+  </section>
+  <div class="wrap">
+    <section class="panel grid" aria-label="Vendor information">
+      <div>
+        <label for="vendorSelect">Vendor or product</label>
+        <select id="vendorSelect">
+          <option>Current or legacy system</option>
+          <option>Eduphoria Aware</option>
+          <option>Mastery Connect by Instructure</option>
+          <option>PowerSchool Performance Matters</option>
+          <option>LinkIt!</option>
+          <option>DMAC Solutions / TEKScore</option>
+          <option>Otus</option>
+          <option>Renaissance DnA / Illuminate DnA</option>
+          <option>Cambium Assessment</option>
+          <option>NWEA MAP Growth</option>
+          <option>i-Ready Assessment</option>
+          <option>Renaissance Star Assessments</option>
+          <option>Schoolnet by Pearson</option>
+          <option>Other</option>
+        </select>
+        <label for="vendorName">Custom name</label>
+        <input id="vendorName" type="text" placeholder="Use this for exact product naming or your current system">
+      </div>
+      <div>
+        <label for="notes">RFP notes</label>
+        <textarea id="notes" placeholder="Example: Strong item analysis, but QTI export and accessibility docs need confirmation."></textarea>
+      </div>
+    </section>
+    <section class="panel" aria-label="Non-negotiable gate checks">
+      <strong style="color:var(--navy);font-size:1.05rem">Non-negotiable gate checks</strong>
+      <p class="small">A vendor can score well and still be a poor choice if these are missing. Treat unchecked items as follow-up questions before award.</p>
+      <div class="gates" id="gates"></div>
+    </section>
+    <section class="panel" aria-label="Weighted scoring rubric">
+      <div style="display:flex;justify-content:space-between;gap:1rem;align-items:end;flex-wrap:wrap">
+        <div><strong style="color:var(--navy);font-size:1.05rem">Weighted selection criteria</strong><p class="small">Scale: zero = not documented, one = weak, two = adequate, three = strong, four = proven with district references.</p></div>
+        <button class="light" id="resetScores" type="button">Reset scores</button>
+      </div>
+      <div class="compare-wrap" style="border:0;margin-top:.65rem">
+        <table id="criteriaTable"><thead><tr><th>Criterion</th><th>What to look for</th><th>Weight</th><th>Score</th></tr></thead><tbody></tbody></table>
+      </div>
+    </section>
+    <section class="results">
+      <div class="scorebox" aria-live="polite">
+        <div class="score"><span id="totalScore">0</span><span style="font-size:1.4rem">/100</span></div>
+        <p id="gateText">Complete the rubric to estimate fit.</p>
+        <span class="status warn" id="statusBadge">Needs review</span>
+      </div>
+      <div class="panel">
+        <strong style="color:var(--navy);font-size:1.05rem">Recommendation bands</strong>
+        <p class="small"><span class="tag">85–100 finalist</span><span class="tag">70–84 viable</span><span class="tag">55–69 risky</span><span class="tag">0–54 weak fit</span></p>
+        <p class="small">Use this score for shortlisting. Final award should still include reference checks, security review, accessibility review, contract terms, and total cost.</p>
+        <div class="btns"><button id="addVendor" type="button">Add vendor to comparison</button><button class="secondary" id="copyCSV" type="button">Copy CSV</button><button class="light" id="clearAll" type="button">Clear comparison</button><span id="copyMsg" class="copied" aria-live="polite"></span></div>
+      </div>
+    </section>
+    <section class="panel" aria-label="Comparison table">
+      <strong style="color:var(--navy);font-size:1.05rem">Side-by-side comparison</strong>
+      <div class="compare-wrap"><table id="compareTable"><thead><tr><th>Vendor</th><th>Score</th><th>Gate status</th><th>Top risk</th><th>Notes</th><th>Remove</th></tr></thead><tbody><tr><td colspan="6" class="small">No vendors added yet.</td></tr></tbody></table></div>
+    </section>
+  </div>
+  <script>
+    (function(){
+      const root=document.getElementById('assessment-rfp-tool');
+      const criteria=[
+        ['instruction','Instructional fit and assessment design',15,'Supports classroom formative checks, district benchmarks, performance tasks, rubrics, item analysis, and clear re-teaching decisions.'],
+        ['standards','Standards alignment and item banks',12,'Aligns to state standards, supports local curriculum maps, offers quality item banks, and documents item review processes.'],
+        ['delivery','Authoring, delivery, accommodations, and scoring',12,'Makes test creation, online delivery, paper options, accommodations, constructed response scoring, and retakes manageable.'],
+        ['reporting','Data use, dashboards, and MTSS action',15,'Turns results into teacher-friendly views, student groups, standards mastery reports, longitudinal trends, and intervention next steps.'],
+        ['interop','Interoperability and migration',12,'Supports SSO, rostering, SIS and LMS connections, data exports, QTI where appropriate, and clean migration from the current assessment system.'],
+        ['privacy','Privacy, security, and accessibility',15,'Provides a signed DPA, clear data retention, FERPA and COPPA terms, role-based access, audit logs, and accessibility documentation.'],
+        ['usability','Usability, support, and professional learning',10,'Teachers can learn it quickly, help docs are current, support responds quickly, and training fits the school calendar.'],
+        ['cost','Cost, contract, and exit terms',9,'Pricing is transparent, implementation costs are clear, renewals are controlled, and the district can export data when leaving.']
+      ];
+      const gates=[
+        'Signed district data privacy agreement available',
+        'FERPA, COPPA, and state privacy terms reviewed',
+        'SSO and roster automation confirmed',
+        'Accessible testing experience and current VPAT requested',
+        'Exportable results and item/test data confirmed',
+        'Implementation timeline fits the school calendar'
+      ];
+      const comparison=[];
+      const tbody=root.querySelector('#criteriaTable tbody');
+      tbody.innerHTML=criteria.map(c=>`<tr><td><div class="criterion-title">${c[1]}</div></td><td><div class="criterion-note">${c[3]}</div></td><td class="weight">${c[2]}</td><td><select class="score-select" data-id="${c[0]}"><option value="0">0 Not documented</option><option value="1">1 Weak</option><option value="2">2 Adequate</option><option value="3">3 Strong</option><option value="4">4 Proven</option></select></td></tr>`).join('');
+      root.querySelector('#gates').innerHTML=gates.map((g,i)=>`<label class="gate"><input type="checkbox" data-gate="${i}"><span>${g}</span></label>`).join('');
+      const totalScore=root.querySelector('#totalScore'),gateText=root.querySelector('#gateText'),statusBadge=root.querySelector('#statusBadge');
+      function currentVendor(){const custom=root.querySelector('#vendorName').value.trim();const selected=root.querySelector('#vendorSelect').value;return custom||selected;}
+      function scores(){return Array.from(root.querySelectorAll('.score-select')).reduce((acc,el)=>{acc[el.dataset.id]=Number(el.value);return acc;},{});}
+      function calc(){const s=scores();let total=0;criteria.forEach(c=>{total+=(s[c[0]]/4)*c[2];});total=Math.round(total);const checked=Array.from(root.querySelectorAll('[data-gate]')).filter(x=>x.checked).length;const gateOk=checked===gates.length;totalScore.textContent=total;gateText.textContent=`${checked} of ${gates.length} gate checks complete.`;statusBadge.className='status '+(gateOk&&total>=85?'good':(!gateOk?'stop':'warn'));statusBadge.textContent=!gateOk?'Gate review needed':(total>=85?'Finalist candidate':(total>=70?'Viable with checks':(total>=55?'Risky fit':'Weak fit')));return {total,checked,gateOk,s};}
+      root.addEventListener('change',calc);root.addEventListener('input',calc);
+      root.querySelector('#resetScores').addEventListener('click',()=>{root.querySelectorAll('.score-select').forEach(s=>s.value='0');root.querySelectorAll('[data-gate]').forEach(g=>g.checked=false);root.querySelector('#notes').value='';calc();});
+      function topRisk(scores){const low=criteria.filter(c=>scores[c[0]]<=1).map(c=>c[1]);return low[0]||'No major low-score area entered';}
+      function renderCompare(){const body=root.querySelector('#compareTable tbody');if(!comparison.length){body.innerHTML='<tr><td colspan="6" class="small">No vendors added yet.</td></tr>';return;}body.innerHTML=comparison.map((v,i)=>`<tr><td>${v.vendor}</td><td><strong>${v.total}/100</strong></td><td>${v.gateOk?'Passed':'Needs review'} (${v.checked}/${gates.length})</td><td>${v.risk}</td><td>${v.notes||''}</td><td><button class="light" data-remove="${i}" type="button">Remove</button></td></tr>`).join('');}
+      root.querySelector('#addVendor').addEventListener('click',()=>{const c=calc();comparison.push({vendor:currentVendor(),total:c.total,checked:c.checked,gateOk:c.gateOk,risk:topRisk(c.s),notes:root.querySelector('#notes').value.trim()});renderCompare();});
+      root.querySelector('#compareTable').addEventListener('click',e=>{const btn=e.target.closest('[data-remove]');if(!btn)return;comparison.splice(Number(btn.dataset.remove),1);renderCompare();});
+      root.querySelector('#clearAll').addEventListener('click',()=>{comparison.splice(0);renderCompare();root.querySelector('#copyMsg').textContent='';});
+      root.querySelector('#copyCSV').addEventListener('click',async()=>{const header='Vendor,Score,Gate Status,Top Risk,Notes';const rows=comparison.map(v=>[v.vendor,v.total,(v.gateOk?'Passed':'Needs review')+` (${v.checked}/${gates.length})`,v.risk,v.notes].map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(','));const csv=[header,...rows].join('\n');try{await navigator.clipboard.writeText(csv);root.querySelector('#copyMsg').textContent='Copied';}catch(err){root.querySelector('#copyMsg').textContent='Copy failed';}});
+      calc();
+    })();
+  </script>
+</div>
+</body>
+</html>

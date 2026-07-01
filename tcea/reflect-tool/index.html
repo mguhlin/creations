@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Reflection Time Assessment</title>
+<style>
+:root{
+  --tcea-blue:#0A3476;
+  --tcea-gold:#FCB040;
+  --navy:#061B3D;
+  --ink:#10233F;
+  --muted:#60708A;
+  --paper:#F7F9FC;
+  --white:#fff;
+  --line:#D9E2F2;
+  --success:#117A4D;
+  --shadow:0 18px 45px rgba(6,27,61,.18);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 12% 12%,rgba(252,176,64,.18),transparent 28%),
+    radial-gradient(circle at 90% 8%,rgba(10,52,118,.18),transparent 26%),
+    linear-gradient(180deg,#ffffff 0%,#eef3fb 100%);
+  min-height:100vh;
+}
+header{
+  background:linear-gradient(135deg,var(--tcea-blue),#031A42);
+  color:var(--white);
+  padding:clamp(1.4rem,4vw,3rem) 1rem;
+  text-align:center;
+  border-bottom:6px solid var(--tcea-gold);
+}
+.logo-mark{
+  display:inline-flex;align-items:center;gap:.6rem;
+  padding:.45rem .8rem;border:1px solid rgba(255,255,255,.28);border-radius:999px;
+  background:rgba(255,255,255,.08);font-weight:800;letter-spacing:.04em;text-transform:uppercase;font-size:.8rem;
+}
+.logo-dot{width:.75rem;height:.75rem;border-radius:50%;background:var(--tcea-gold);box-shadow:0 0 0 5px rgba(252,176,64,.18)}
+h1{font-size:clamp(2.1rem,7vw,5rem);line-height:.95;margin:1rem 0 .5rem;font-weight:900;letter-spacing:-.04em}
+.subhead{font-size:clamp(1.05rem,2.3vw,1.6rem);max-width:820px;margin:0 auto;color:#EAF1FF;line-height:1.35}
+.subhead strong{color:var(--tcea-gold)}
+main{width:min(1180px,94vw);margin:clamp(1rem,4vw,2.25rem) auto 3rem}
+.notice{
+  background:#fff;border:1px solid var(--line);border-left:6px solid var(--tcea-gold);
+  border-radius:18px;padding:1rem 1.1rem;margin-bottom:1.25rem;box-shadow:0 8px 20px rgba(6,27,61,.06);
+}
+.notice p{margin:.25rem 0;color:var(--muted);line-height:1.5}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.25rem 0}
+.card{
+  border:2px solid var(--line);background:rgba(255,255,255,.94);border-radius:24px;
+  padding:1.15rem;min-height:235px;box-shadow:0 10px 22px rgba(6,27,61,.08);
+  cursor:pointer;position:relative;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;
+  display:flex;flex-direction:column;gap:.65rem;
+}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.card[aria-checked="true"]{border-color:var(--tcea-gold);box-shadow:0 0 0 5px rgba(252,176,64,.22),var(--shadow)}
+.card[aria-checked="true"]::after{content:"Selected";position:absolute;top:.9rem;right:.9rem;background:var(--tcea-blue);color:white;border-radius:999px;font-size:.75rem;font-weight:800;padding:.3rem .55rem}
+.icon{width:72px;height:72px;color:var(--tcea-blue);filter:drop-shadow(0 7px 10px rgba(10,52,118,.14))}
+.card:nth-child(even) .icon{color:var(--tcea-gold)}
+.card h2{margin:.1rem 0 0;color:var(--tcea-blue);font-size:1.25rem;letter-spacing:.02em;text-transform:uppercase}
+.card p{margin:0;color:#394B66;line-height:1.42;font-size:1.02rem}
+.form-panel{
+  display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:end;background:white;border:1px solid var(--line);border-radius:22px;
+  padding:1rem;box-shadow:0 10px 24px rgba(6,27,61,.08);
+}
+label{display:block;font-weight:800;color:var(--tcea-blue);margin-bottom:.35rem}
+input,textarea{
+  width:100%;border:1px solid #C7D3E8;border-radius:14px;padding:.85rem 1rem;font:inherit;background:#fff;color:var(--ink);
+}
+textarea{min-height:88px;resize:vertical;margin-top:.75rem}
+button{
+  border:0;border-radius:16px;background:var(--tcea-gold);color:#1D2330;font-weight:900;font-size:1rem;padding:.92rem 1.15rem;cursor:pointer;
+  box-shadow:0 10px 18px rgba(252,176,64,.25);
+}
+button:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
+.secondary{background:var(--tcea-blue);color:white;box-shadow:0 10px 18px rgba(10,52,118,.20)}
+.status{margin-top:1rem;padding:.9rem 1rem;border-radius:16px;background:#EFF7F3;color:var(--success);font-weight:800;display:none}
+.status.error{background:#FFF1F1;color:#9B1C1C}
+footer{text-align:center;color:var(--muted);font-size:.9rem;margin-top:1.5rem}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}.form-panel{grid-template-columns:1fr}}
+@media(max-width:560px){.grid{grid-template-columns:1fr}.card{min-height:auto}.icon{width:58px;height:58px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo-mark"><span class="logo-dot"></span> TCEA Reflection Check</div>
+  <h1>Reflection Time</h1>
+  <p class="subhead">Which type of technology <strong>best describes you</strong> at the end of the workshop session today?</p>
+</header>
+<main>
+  <section class="notice" aria-label="Instructions">
+    <p>Choose the option that best fits how you are leaving the session. Add an optional note if you want the facilitator to see more context.</p>
+    <p>No student data is requested. Keep comments professional and avoid personal information.</p>
+  </section>
+
+  <section class="grid" id="choices" aria-label="Technology choices"></section>
+
+  <section class="form-panel">
+    <div>
+      <label for="sessionName">Workshop session name or code</label>
+      <input id="sessionName" maxlength="80" placeholder="Example: ai-workshop-june-11" required />
+      <label for="displayName" style="margin-top:.75rem">Name or table number, optional</label>
+      <input id="displayName" maxlength="60" placeholder="Example: Table 4 or Miguel" />
+      <textarea id="note" maxlength="400" placeholder="Optional reflection note"></textarea>
+    </div>
+    <button id="submitBtn" disabled>Submit Reflection</button>
+  </section>
+  <div id="status" class="status" role="status"></div>
+  <footer>Connected to the workshop response system. Enter your session name or code, choose one option, then submit.</footer>
+</main>
+<script>
+/*
+SETUP
+1. Paste your deployed Apps Script Web App URL below.
+2. Participants enter the workshop session name or code on the page.
+3. API_URL is already set for this deployment.
+*/
+const API_URL = "https://script.google.com/macros/s/AKfycbzo26E43Fhv1IbBYS5AmFLjA8B9hPjTPt_XWUxWMflScdYrUOt6qHmc1yKD58o7Nr2q/exec";
+const WORKSHOP_TITLE = "Workshop Reflection";
+
+const OPTIONS = [
+  {id:"printer", label:"Printer", desc:"I’m going to journal about my learning.", icon:"printer"},
+  {id:"monitor", label:"Monitor", desc:"I want to show some things to different folks.", icon:"monitor"},
+  {id:"thumbdrive", label:"Thumbdrive", desc:"I want to pass on my learning to others.", icon:"usb"},
+  {id:"headphones", label:"Headphones", desc:"I need time to reflect and process what I’ve heard.", icon:"headphones"},
+  {id:"camera", label:"Camera", desc:"I’m taking ideas and inspiration back with me.", icon:"camera"},
+  {id:"cloud", label:"Cloud Storage", desc:"I’m storing everything away to explore later.", icon:"cloud"}
+];
+const icons = {
+printer:'<svg class="icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 24V8h28v16"/><path d="M18 48H10a6 6 0 0 1-6-6V30a6 6 0 0 1 6-6h44a6 6 0 0 1 6 6v12a6 6 0 0 1-6 6h-8"/><path d="M18 40h28v16H18z"/><path d="M46 33h6"/><path d="M24 47h16"/></svg>',
+monitor:'<svg class="icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="10" width="48" height="34" rx="5"/><path d="M24 56h16M32 44v12"/></svg>',
+usb:'<svg class="icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M30 4h14l8 8v12H30z"/><path d="M34 9v8M44 9v8"/><path d="M28 24 12 46a10 10 0 0 0 16 12l16-22"/><path d="M22 37l16 12"/></svg>',
+headphones:'<svg class="icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M10 36a22 22 0 0 1 44 0"/><rect x="6" y="34" width="12" height="20" rx="6"/><rect x="46" y="34" width="12" height="20" rx="6"/></svg>',
+camera:'<svg class="icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20l4-8h16l4 8h8a6 6 0 0 1 6 6v24a6 6 0 0 1-6 6H12a6 6 0 0 1-6-6V26a6 6 0 0 1 6-6z"/><circle cx="32" cy="38" r="11"/><path d="M48 28h4"/></svg>',
+cloud:'<svg class="icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 50H16a12 12 0 0 1 0-24 17 17 0 0 1 32-6 14 14 0 0 1 2 28H40"/><path d="M32 52V30M22 40l10-10 10 10"/></svg>'
+};
+let selected = null;
+const choices = document.getElementById('choices');
+const submitBtn = document.getElementById('submitBtn');
+const statusBox = document.getElementById('status');
+
+function esc(s){return String(s||'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
+function renderChoices(){
+  choices.innerHTML = OPTIONS.map(o=>`<article class="card" role="radio" tabindex="0" aria-checked="false" data-id="${o.id}">${icons[o.icon]}<h2>${esc(o.label)}</h2><p>${esc(o.desc)}</p></article>`).join('');
+  choices.querySelectorAll('.card').forEach(card=>{
+    card.addEventListener('click',()=>selectCard(card.dataset.id));
+    card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectCard(card.dataset.id);}});
+  });
+}
+function sessionSlug(value){
+  return String(value||'')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g,'-')
+    .replace(/^-+|-+$/g,'')
+    .slice(0,80);
+}
+function updateSubmitState(){
+  submitBtn.disabled = !(selected && sessionSlug(document.getElementById('sessionName').value));
+}
+function selectCard(id){
+  selected = OPTIONS.find(o=>o.id===id);
+  choices.querySelectorAll('.card').forEach(c=>c.setAttribute('aria-checked', c.dataset.id===id ? 'true':'false'));
+  updateSubmitState();
+}
+document.getElementById('sessionName').addEventListener('input', updateSubmitState);
+function toMarkdown(entry){
+  return `## ${entry.workshopTitle}\n\n- Time: ${entry.timestamp}\n- Session: ${entry.sessionId}\n- Choice: ${entry.choiceLabel}\n- Name/Table: ${entry.displayName || 'Anonymous'}\n- Note: ${entry.note || 'None'}\n\n`;
+}
+function download(filename, text){
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([text],{type:'text/markdown'}));
+  a.download=filename;
+  document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(a.href);
+}
+function showStatus(msg,isError=false){
+  statusBox.textContent=msg;statusBox.className='status'+(isError?' error':'');statusBox.style.display='block';
+}
+submitBtn.addEventListener('click', async()=>{
+  if(!selected) return;
+  submitBtn.disabled=true;
+  const rawSession=document.getElementById('sessionName').value.trim();
+  const entry={
+    sessionId:sessionSlug(rawSession),
+    workshopTitle:rawSession || WORKSHOP_TITLE,
+    choiceId:selected.id,
+    choiceLabel:selected.label,
+    displayName:document.getElementById('displayName').value.trim(),
+    note:document.getElementById('note').value.trim(),
+    timestamp:new Date().toISOString(),
+    userAgent:navigator.userAgent.slice(0,120)
+  };
+  try{
+    if(!API_URL){
+      download(`reflection-${Date.now()}.md`, toMarkdown(entry));
+      showStatus('Offline demo mode: your markdown response was downloaded. Add an Apps Script URL to collect responses live.');
+      return;
+    }
+    const res = await fetch(API_URL,{method:'POST',body:JSON.stringify(entry),headers:{'Content-Type':'text/plain;charset=utf-8'}});
+    const data = await res.json();
+    if(!data.ok) throw new Error(data.error||'Submission failed');
+    showStatus('Reflection submitted. Thank you.');
+    document.getElementById('note').value='';
+  }catch(err){
+    showStatus('Could not submit. Check the Apps Script URL and deployment permissions. '+err.message,true);
+    submitBtn.disabled=false;
+  }
+});
+renderChoices();
+</script>
+</body>
+</html>

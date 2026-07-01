@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Color Pop Magic</title>
+  <style>
+    :root {
+      --navy: #1E398D;
+      --gold: #FAA634;
+      --black: #000000;
+      --white: #FFFFFF;
+      --red: #D1282F;
+      --blue: #0070B9;
+      --yellow: #FDDC3F;
+      --orange: #f58231;
+      --green: #3cb44b;
+      --gray-90: #404041;
+      --gray-50: #939597;
+      --gray-30: #BBBDC0;
+      --gray-10: #E6E7E8;
+      --bg: #FFFFFF;
+      --surface: #FFFFFF;
+      --screen: #F8FAFF;
+      --radius: 8px;
+      --shadow: 0 12px 24px rgba(64, 64, 65, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--gray-90);
+      background: var(--bg);
+    }
+
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+
+    .top-bar {
+      height: 12px;
+      background: linear-gradient(
+        90deg,
+        var(--navy) 0 32%,
+        var(--gold) 32% 52%,
+        var(--orange) 52% 64%,
+        var(--red) 64% 76%,
+        var(--blue) 76% 88%,
+        var(--green) 88% 96%,
+        var(--yellow) 96% 100%
+      );
+    }
+
+    .page {
+      width: min(1280px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 22px 0 38px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding-bottom: 18px;
+      border-bottom: 2px solid var(--gray-10);
+    }
+
+    .title-block { display: grid; gap: 8px; }
+
+    .eyebrow {
+      margin: 0;
+      color: var(--gold);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--navy);
+      font-size: clamp(2rem, 5vw, 4.2rem);
+      line-height: .95;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 0;
+      max-width: 820px;
+      color: var(--gray-90);
+      font-size: 1rem;
+      line-height: 1.45;
+    }
+
+    .home-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      color: var(--white);
+      background: var(--navy);
+      border-radius: var(--radius);
+      font-weight: 800;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: minmax(280px, 360px) 1fr;
+      gap: 18px;
+      align-items: start;
+      padding-top: 20px;
+    }
+
+    .panel, .stage-shell {
+      border: 2px solid var(--gray-10);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .panel {
+      display: grid;
+      gap: 18px;
+      padding: 18px;
+    }
+
+    .panel-section {
+      display: grid;
+      gap: 10px;
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--black);
+      font-size: 1.15rem;
+      letter-spacing: 0;
+    }
+
+    .directions {
+      margin: 0;
+      color: var(--gray-90);
+      font-size: .95rem;
+      line-height: 1.45;
+    }
+
+    .select-field {
+      width: 100%;
+      min-height: 46px;
+      border: 2px solid var(--gray-10);
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      color: var(--navy);
+      background: var(--white);
+      font-weight: 800;
+      box-shadow: 0 8px 18px rgba(64, 64, 65, .08);
+    }
+
+    .segmented {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .choice, .btn {
+      min-height: 42px;
+      border: 2px solid var(--gray-10);
+      border-radius: var(--radius);
+      padding: 9px 12px;
+      color: var(--navy);
+      background: var(--white);
+      font-weight: 800;
+      box-shadow: 0 8px 18px rgba(64, 64, 65, .08);
+      transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease;
+    }
+
+    .choice:hover, .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .choice.active {
+      border-color: var(--navy);
+      color: var(--white);
+      background: var(--navy);
+    }
+
+    .choice.white-cover.active {
+      border-color: var(--blue);
+      color: var(--black);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(0, 112, 185, .22), 0 8px 18px rgba(64, 64, 65, .08);
+    }
+
+    .brush-control {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--blue);
+    }
+
+    .size-badge {
+      min-width: 58px;
+      padding: 7px 10px;
+      border-radius: var(--radius);
+      color: var(--white);
+      background: var(--navy);
+      font-size: .9rem;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .button-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .btn.primary {
+      grid-column: span 2;
+      color: var(--black);
+      background: var(--gold);
+      border-color: var(--gold);
+    }
+
+    .btn.warn {
+      color: var(--white);
+      background: var(--red);
+      border-color: var(--red);
+    }
+
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: .48;
+      transform: none;
+    }
+
+    .stage-shell {
+      overflow: hidden;
+    }
+
+    .stage-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      color: var(--white);
+      background: var(--navy);
+      flex-wrap: wrap;
+    }
+
+    .stage-title {
+      margin: 0;
+      color: var(--white);
+      font-size: 1.1rem;
+      font-weight: 900;
+    }
+
+    .prompt {
+      margin: 0;
+      color: var(--white);
+      font-size: .92rem;
+      line-height: 1.35;
+    }
+
+    .stage-frame {
+      padding: 18px;
+      background: var(--navy);
+    }
+
+    .canvas-wrap {
+      position: relative;
+      border: 8px solid var(--gold);
+      border-radius: var(--radius);
+      background: var(--screen);
+      overflow: hidden;
+      box-shadow: inset 0 0 0 2px rgba(30, 57, 141, .12);
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: var(--screen);
+      touch-action: none;
+    }
+
+    .scratch-canvas {
+      position: absolute;
+      inset: 0;
+      background: transparent;
+    }
+
+    .brush-preview {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--gold);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .18);
+      box-shadow: 0 0 0 2px rgba(30, 57, 141, .65);
+      pointer-events: none;
+      transform: translate(-999px, -999px);
+    }
+
+    .status-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 11px 16px 14px;
+      color: var(--white);
+      background: var(--navy);
+      font-size: .88rem;
+      font-weight: 800;
+      flex-wrap: wrap;
+    }
+
+    .brand-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      width: min(1280px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 18px 0 26px;
+      border-top: 2px solid var(--gray-10);
+      color: var(--gray-50);
+      font-size: .92rem;
+      line-height: 1.4;
+    }
+
+    .brand-footer strong {
+      color: var(--navy);
+      font-weight: 900;
+    }
+
+    .brand-footer a {
+      color: var(--navy);
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible {
+      outline: 4px solid rgba(0, 112, 185, .28);
+      outline-offset: 2px;
+    }
+
+    @media (max-width: 980px) {
+      .app-grid {
+        grid-template-columns: 1fr;
+      }
+
+    }
+
+    @media (max-width: 680px) {
+      .page {
+        width: min(100% - 22px, 1280px);
+        padding-top: 18px;
+      }
+
+      header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .home-link {
+        width: 100%;
+      }
+
+      .brand-footer {
+        align-items: flex-start;
+        flex-direction: column;
+        width: min(100% - 22px, 1280px);
+      }
+
+      .stage-frame {
+        padding: 10px;
+      }
+
+      .canvas-wrap {
+        border-width: 5px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar" aria-hidden="true"></div>
+  <div class="page">
+    <header>
+      <div class="title-block">
+        <p class="eyebrow">TCEA Tools</p>
+        <h1>Color Pop Magic</h1>
+        <p class="subtitle">Choose a hidden color background, cover it with black or white, then scratch away the top layer to reveal your Color Pop Magic. Create a design, word, pattern, or picture, then download your finished art.</p>
+      </div>
+      <a class="home-link" href="../index.html">Tool Menu</a>
+    </header>
+
+    <main class="app-grid">
+      <aside class="panel" aria-label="Color Pop Magic controls">
+        <section class="panel-section">
+          <h2>1. Hidden Background</h2>
+          <p class="directions">Choose a mystery background name to hide underneath.</p>
+          <select class="select-field" id="backgroundSelect" aria-label="Choose hidden background"></select>
+        </section>
+
+        <section class="panel-section">
+          <h2>2. Cover Color</h2>
+          <div class="segmented" aria-label="Choose cover color">
+            <button class="choice active" type="button" data-cover="#000000">Black</button>
+            <button class="choice white-cover" type="button" data-cover="#FFFFFF">White</button>
+          </div>
+        </section>
+
+        <section class="panel-section">
+          <h2>3. Scratch Pen</h2>
+          <div class="brush-control">
+            <input id="brushSize" type="range" min="8" max="120" step="2" value="42" aria-label="Scratch pen size">
+            <span class="size-badge" id="brushLabel">42</span>
+          </div>
+        </section>
+
+        <section class="panel-section">
+          <h2>4. Create</h2>
+          <div class="button-grid">
+            <button class="btn" id="undoBtn" type="button" disabled>Undo</button>
+            <button class="btn" id="clearBtn" type="button">Clear</button>
+            <button class="btn warn" id="resetBtn" type="button">Reset</button>
+            <button class="btn primary" id="downloadBtn" type="button">Save My Art</button>
+          </div>
+        </section>
+      </aside>
+
+      <section class="stage-shell" aria-label="Color Pop Magic drawing area">
+        <div class="stage-head">
+          <h2 class="stage-title">Scratch Canvas</h2>
+          <p class="prompt">What will you reveal?</p>
+        </div>
+        <div class="stage-frame">
+          <div class="canvas-wrap" id="canvasWrap">
+            <canvas id="backgroundCanvas" width="1920" height="1080" aria-label="Hidden background layer"></canvas>
+            <canvas class="scratch-canvas" id="scratchCanvas" width="1920" height="1080" aria-label="Scratch drawing layer"></canvas>
+            <div class="brush-preview" id="brushPreview" aria-hidden="true"></div>
+          </div>
+        </div>
+        <div class="status-line">
+          <span id="backgroundStatus">Background: Wave Maker</span>
+          <span id="coverStatus">Cover: Black</span>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="brand-footer">
+    <span><strong>TCEA Tools</strong> | Color Pop Magic</span>
+    <a href="../index.html">Tool Menu</a>
+  </footer>
+
+  <script>
+    const backgrounds = [
+      { name: 'Wave Maker', file: 'Color Pop Backgrounds/Wave Maker.png' },
+      { name: 'Smooth Move', file: 'Color Pop Backgrounds/Smooth Move.png' },
+      { name: 'Splash Party', file: 'Color Pop Backgrounds/Splash Party.png' },
+      { name: 'Spin Cycle', file: 'Color Pop Backgrounds/Spin Cycle.png' },
+      { name: 'Rainbow Glow', file: 'Color Pop Backgrounds/Rainbow Glow.png' },
+      { name: 'Swirl Power', file: 'Color Pop Backgrounds/Swirl Power.png' },
+      { name: 'Stripe Hype', file: 'Color Pop Backgrounds/Stripe Hype.png' },
+      { name: 'Diagonal Pop', file: 'Color Pop Backgrounds/Diagonal Pop.png' },
+      { name: 'Burst Mode', file: 'Color Pop Backgrounds/Burst Mode.png' }
+    ];
+
+    const bgCanvas = document.getElementById('backgroundCanvas');
+    const scratchCanvas = document.getElementById('scratchCanvas');
+    const bgCtx = bgCanvas.getContext('2d');
+    const scratchCtx = scratchCanvas.getContext('2d');
+    const backgroundSelect = document.getElementById('backgroundSelect');
+    const brushSize = document.getElementById('brushSize');
+    const brushLabel = document.getElementById('brushLabel');
+    const brushPreview = document.getElementById('brushPreview');
+    const backgroundStatus = document.getElementById('backgroundStatus');
+    const coverStatus = document.getElementById('coverStatus');
+    const undoBtn = document.getElementById('undoBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    let activeBackground = backgrounds[0];
+    let activeCover = '#000000';
+    let isDrawing = false;
+    let lastPoint = null;
+    let undoStack = [];
+    let currentImage = null;
+
+    function loadImage(src) {
+      return new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => resolve(image);
+        image.onerror = reject;
+        image.src = src;
+      });
+    }
+
+    function drawBackground(image) {
+      bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+      bgCtx.drawImage(image, 0, 0, bgCanvas.width, bgCanvas.height);
+    }
+
+    function coverCanvas() {
+      scratchCtx.globalCompositeOperation = 'source-over';
+      scratchCtx.clearRect(0, 0, scratchCanvas.width, scratchCanvas.height);
+      scratchCtx.fillStyle = activeCover;
+      scratchCtx.fillRect(0, 0, scratchCanvas.width, scratchCanvas.height);
+      undoStack = [];
+      undoBtn.disabled = true;
+      updateStatus();
+    }
+
+    async function chooseBackground(background) {
+      activeBackground = background;
+      currentImage = await loadImage(background.file);
+      drawBackground(currentImage);
+      coverCanvas();
+      backgroundSelect.value = background.name;
+    }
+
+    function updateStatus() {
+      backgroundStatus.textContent = `Background: ${activeBackground.name}`;
+      coverStatus.textContent = `Cover: ${activeCover === '#000000' ? 'Black' : 'White'}`;
+    }
+
+    function saveUndoState() {
+      undoStack.push(scratchCtx.getImageData(0, 0, scratchCanvas.width, scratchCanvas.height));
+      if (undoStack.length > 12) undoStack.shift();
+      undoBtn.disabled = false;
+    }
+
+    function canvasPoint(event) {
+      const rect = scratchCanvas.getBoundingClientRect();
+      const x = (event.clientX - rect.left) * (scratchCanvas.width / rect.width);
+      const y = (event.clientY - rect.top) * (scratchCanvas.height / rect.height);
+      return { x, y };
+    }
+
+    function scratchAt(point, previousPoint = null) {
+      const size = Number(brushSize.value);
+      scratchCtx.globalCompositeOperation = 'destination-out';
+      scratchCtx.lineCap = 'round';
+      scratchCtx.lineJoin = 'round';
+      scratchCtx.lineWidth = size;
+
+      if (previousPoint) {
+        scratchCtx.beginPath();
+        scratchCtx.moveTo(previousPoint.x, previousPoint.y);
+        scratchCtx.lineTo(point.x, point.y);
+        scratchCtx.stroke();
+      } else {
+        scratchCtx.beginPath();
+        scratchCtx.arc(point.x, point.y, size / 2, 0, Math.PI * 2);
+        scratchCtx.fill();
+      }
+    }
+
+    function movePreview(event) {
+      const rect = scratchCanvas.getBoundingClientRect();
+      const size = Number(brushSize.value);
+      brushPreview.style.width = `${Math.max(12, size * rect.width / scratchCanvas.width)}px`;
+      brushPreview.style.height = brushPreview.style.width;
+      brushPreview.style.transform = `translate(${event.clientX - rect.left}px, ${event.clientY - rect.top}px) translate(-50%, -50%)`;
+    }
+
+    function hidePreview() {
+      brushPreview.style.transform = 'translate(-999px, -999px)';
+    }
+
+    function startScratch(event) {
+      event.preventDefault();
+      scratchCanvas.setPointerCapture(event.pointerId);
+      saveUndoState();
+      isDrawing = true;
+      lastPoint = canvasPoint(event);
+      scratchAt(lastPoint);
+      movePreview(event);
+    }
+
+    function continueScratch(event) {
+      if (!isDrawing) {
+        movePreview(event);
+        return;
+      }
+      event.preventDefault();
+      const nextPoint = canvasPoint(event);
+      scratchAt(nextPoint, lastPoint);
+      lastPoint = nextPoint;
+      movePreview(event);
+    }
+
+    function stopScratch(event) {
+      if (!isDrawing) return;
+      isDrawing = false;
+      lastPoint = null;
+      if (scratchCanvas.hasPointerCapture(event.pointerId)) {
+        scratchCanvas.releasePointerCapture(event.pointerId);
+      }
+    }
+
+    function downloadArt() {
+      const exportCanvas = document.createElement('canvas');
+      exportCanvas.width = bgCanvas.width;
+      exportCanvas.height = bgCanvas.height;
+      const exportCtx = exportCanvas.getContext('2d');
+      exportCtx.drawImage(bgCanvas, 0, 0);
+      exportCtx.drawImage(scratchCanvas, 0, 0);
+      exportCanvas.toBlob((blob) => {
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.download = 'color-pop-magic.png';
+        link.href = url;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+      }, 'image/png');
+    }
+
+    backgrounds.forEach((background) => {
+      const option = document.createElement('option');
+      option.value = background.name;
+      option.textContent = background.name;
+      backgroundSelect.appendChild(option);
+    });
+
+    backgroundSelect.addEventListener('change', () => {
+      const nextBackground = backgrounds.find((background) => background.name === backgroundSelect.value);
+      if (nextBackground) chooseBackground(nextBackground);
+    });
+
+    document.querySelectorAll('[data-cover]').forEach((button) => {
+      button.addEventListener('click', () => {
+        activeCover = button.dataset.cover;
+        document.querySelectorAll('[data-cover]').forEach((choice) => {
+          choice.classList.toggle('active', choice === button);
+        });
+        coverCanvas();
+      });
+    });
+
+    brushSize.addEventListener('input', () => {
+      brushLabel.textContent = brushSize.value;
+    });
+
+    undoBtn.addEventListener('click', () => {
+      const previousState = undoStack.pop();
+      if (!previousState) return;
+      scratchCtx.putImageData(previousState, 0, 0);
+      undoBtn.disabled = undoStack.length === 0;
+    });
+
+    clearBtn.addEventListener('click', () => {
+      if (confirm('Clear your drawing and cover the colors again?')) {
+        coverCanvas();
+      }
+    });
+
+    resetBtn.addEventListener('click', () => {
+      if (confirm('Start over with new choices?')) {
+        activeCover = '#000000';
+        brushSize.value = '42';
+        brushLabel.textContent = '42';
+        document.querySelectorAll('[data-cover]').forEach((choice) => {
+          choice.classList.toggle('active', choice.dataset.cover === activeCover);
+        });
+        chooseBackground(backgrounds[0]);
+      }
+    });
+
+    downloadBtn.addEventListener('click', downloadArt);
+
+    scratchCanvas.addEventListener('pointerdown', startScratch);
+    scratchCanvas.addEventListener('pointermove', continueScratch);
+    scratchCanvas.addEventListener('pointerup', stopScratch);
+    scratchCanvas.addEventListener('pointercancel', stopScratch);
+    scratchCanvas.addEventListener('pointerleave', hidePreview);
+    scratchCanvas.addEventListener('pointerenter', movePreview);
+
+    chooseBackground(activeBackground);
+  </script>
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comprehensive High-Impact Learning Phases</title>
+<style>
+:root {
+  --font-sans: system-ui, -apple-system, sans-serif;
+  --color-text-primary: #111827;
+  --color-text-secondary: #4B5563;
+  --color-background-primary: #ffffff;
+  --color-background-secondary: #F9FAFB;
+  --color-border-primary: #9CA3AF;
+  --color-border-secondary: #D1D5DB;
+  --color-border-tertiary: #E5E7EB;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --accent-surface: #1D9E75;
+  --accent-deep: #7F77DD;
+  --accent-transfer: #D85A30;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-text-primary: #F9FAFB;
+    --color-text-secondary: #9CA3AF;
+    --color-background-primary: #111827;
+    --color-background-secondary: #1F2937;
+    --color-border-primary: #4B5563;
+    --color-border-secondary: #374151;
+    --color-border-tertiary: #374151;
+  }
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); font-size: 15px; line-height: 1.5; color: var(--color-text-primary); background: var(--color-background-primary); }
+.wrapper { padding: 1.25rem; max-width: 1200px; margin: auto; }
+
+/* Progression bar */
+.progression-bar { display: flex; border: 1px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); overflow: hidden; margin-bottom: 1.25rem; }
+.prog-seg { flex: 1; padding: 10px; text-align: center; font-size: 12px; cursor: pointer; background: var(--color-background-secondary); border-right: 1px solid var(--color-border-tertiary); transition: 0.2s; }
+.prog-seg:last-child { border-right: none; }
+.prog-seg.s-on.surface { background: #E1F5EE; color: #085041; font-weight: 600; }
+.prog-seg.s-on.deep { background: #EEEDFE; color: #26215C; font-weight: 600; }
+.prog-seg.s-on.transfer { background: #FAECE7; color: #4A1B0C; font-weight: 600; }
+
+/* Tabs */
+.phase-tabs { display: flex; gap: 8px; margin-bottom: 1.25rem; }
+.tab-btn { flex: 1; padding: 12px; border: 1px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); cursor: pointer; font-size: 14px; color: var(--color-text-secondary); }
+.tab-btn.active { border-width: 2px; font-weight: 600; }
+.tab-btn.t-surface.active { border-color: var(--accent-surface); color: #085041; background: #E1F5EE; }
+.tab-btn.t-deep.active { border-color: var(--accent-deep); color: #26215C; background: #EEEDFE; }
+.tab-btn.t-transfer.active { border-color: var(--accent-transfer); color: #4A1B0C; background: #FAECE7; }
+
+/* Panels */
+.panel { display: none; }
+.panel.active { display: block; }
+.panel-card { border-radius: var(--border-radius-lg); border: 1px solid var(--color-border-tertiary); background: var(--color-background-primary); overflow: hidden; }
+
+/* Headers */
+.panel-header { padding: 1.5rem; border-bottom: 1px solid var(--color-border-tertiary); }
+.phase-title { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+
+/* Interactive SOLO Level */
+.solo-row { padding: 1rem 1.5rem; border-bottom: 1px solid var(--color-border-tertiary); background: var(--color-background-secondary); cursor: pointer; transition: background 0.2s; }
+.solo-row:hover { background: var(--color-border-tertiary); }
+.solo-details { display: none; padding-top: 10px; font-size: 14px; border-top: 1px dashed var(--color-border-secondary); margin-top: 10px; line-height: 1.6; }
+.solo-row.open .solo-details { display: block; }
+
+/* Strategy Chips */
+.strategy-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; padding: 1.5rem; }
+.strategy-chip { padding: 15px; border-radius: var(--border-radius-md); border: 1px solid var(--color-border-tertiary); background: var(--color-background-secondary); cursor: pointer; transition: 0.2s; position: relative; display: flex; flex-direction: column; }
+.strategy-chip:hover { border-color: var(--color-border-primary); transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+.chip-name { font-weight: 700; font-size: 15px; display: block; margin-bottom: 4px; }
+.chip-effect { font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 20px; text-transform: uppercase; align-self: flex-start; }
+.content-box { display: none; margin-top: 12px; padding: 12px; background: var(--color-background-primary); border-left: 3px solid var(--color-border-primary); font-size: 13px; }
+.strategy-chip.open .content-box { display: block; }
+
+/* Color States */
+.es-surface { background: #D1FAE5; color: #065F46; }
+.es-deep { background: #EDE9FE; color: #4C1D95; }
+.es-transfer { background: #FEE2E2; color: #7F1D1D; }
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="progression-bar" id="progBar">
+    <div class="prog-seg s-on surface" onclick="switchTab('surface')">Uni-structural</div>
+    <div class="prog-seg s-on surface" onclick="switchTab('surface')">Multi-structural</div>
+    <div class="prog-seg" onclick="switchTab('deep')">Relational</div>
+    <div class="prog-seg" onclick="switchTab('transfer')">Extended abstract</div>
+  </div>
+
+  <div class="phase-tabs">
+    <button class="tab-btn t-surface active" onclick="switchTab('surface')">Surface Learning</button>
+    <button class="tab-btn t-deep" onclick="switchTab('deep')">Deep Learning</button>
+    <button class="tab-btn t-transfer" onclick="switchTab('transfer')">Transfer Learning</button>
+  </div>
+
+  <div id="panel-surface" class="panel active">
+    <div class="panel-card">
+      <div class="panel-header">
+        <div class="phase-title" style="color: var(--accent-surface)">Phase 1: Surface Learning</div>
+        <p>Mastering basic facts, vocabulary, and separate skills. Focus on the foundational "what."</p>
+      </div>
+      
+      <div class="solo-row" onclick="toggleSolo(this)">
+        <strong>SOLO Levels: Uni-structural & Multi-structural (Click to view)</strong>
+        <div class="solo-details">
+          <strong>Uni-structural:</strong> Focus on one relevant part of the task (e.g., naming one step in a process).<br>
+          <strong>Multi-structural:</strong> Identifying several relevant aspects independently (e.g., listing all steps but not how they interact).
+        </div>
+      </div>
+
+      <div class="strategy-grid">
+        <div class="strategy-chip" onclick="toggleExample(this)">
+          <span class="chip-name">Jigsaw Method (Surface)</span>
+          <span class="chip-effect es-surface">d = 0.92</span>
+          <div class="content-box">
+            <strong>Definition:</strong> Students master sub-topics in expert groups and teach them to home groups.<br><br>
+            <strong>Example:</strong> In a science unit on animal types, each group learns about one class (Mammals, Reptiles, etc.) to share with the home group.
+          </div>
+        </div>
+        <div class="strategy-chip" onclick="toggleExample(this)">
+          <span class="chip-name">Outlining and Organizing</span>
+          <span class="chip-effect es-surface">d = 0.84</span>
+          <div class="content-box">
+            <strong>Definition:</strong> Structuring information into a logical, hierarchical format to prioritize key ideas.<br><br>
+            <strong>Example:</strong> 4th graders use a graphic organizer to list the main characters and setting before reading a new story.
+          </div>
+        </div>
+        <div class="strategy-chip" onclick="toggleExample(this)">
+          <span class="chip-name">Repeated Reading</span>
+          <span class="chip-effect es-surface">d = 0.80</span>
+          <div class="content-box">
+            <strong>Definition:</strong> Reading a text multiple times to improve fluency, accuracy, and basic comprehension.<br><br>
+            <strong>Example:</strong> 3rd graders practice reading a short poem aloud three times to improve their speed and expression.
+          </div>
+        </div>
+        <div class="strategy-chip" onclick="toggleExample(this)">
+          <span class="chip-name">Vocabulary Programs</span>
+          <span class="chip-effect es-surface">d = 0.65</span>
+          <div class="content-box">
+            <strong>Definition:</strong> Explicit instruction of word meanings and roots to build foundational knowledge.<br><br>
+            <strong>Example:</strong> 5th graders use a Frayer Model to define "biodiversity," listing its characteristics and drawing an example.
+          </div>
+        </div>
+        <div class="strategy-chip" onclick="toggleExample(this)">
+          <span class="chip-name">Spaced Practice</span>
+          <span class="chip-effect es-surface">d = 0.62</span>
+          <div class="content-box">
+            <strong>Definition:</strong> Distributing study sessions over days or weeks rather than cramming.<br><br>
+            <strong>Example:</strong> 6th graders review history dates for 5 minutes every Tuesday and Thursday for a month.
+          </div>
+        </div>
+        <div class="strategy-chip" onclick="toggleExample(this)">
+          <span class="chip-name">Retrieval Practice</span>
+          <span class="chip-effect es-surface">d = 0.49</span>
+          <div class="content-box">
+            <strong>Definition:</strong> Actively recalling information from memory through low-stakes testing.<br><br>
+            <strong>Example:</strong> Students take a quick, ungraded quiz at the start of class to remember yesterday's science lesson.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="panel-deep" class="panel">
+    <div class="panel-card">
+      <div class="panel-header">
+        <div class="phase-title" style="color: var(--accent-deep)">Phase 2: Deep Learning</div>
+        <p>Connecting ideas, identifying patterns, and understanding the "why" through interaction.</p>
+      </div>
+
+      <div class="solo-row" onclick="toggleSolo(this)">
+        <strong>SOLO Level: Relational (Click to view)</strong>
+        <div class="solo-details">
+          <strong>Relational:</strong> Integrating several parts into a coherent whole. Understanding relationships between concepts and the big picture.
+        </div>
+      </div>
+
+      <div class="strategy-grid">
+        <div class="strategy-chip" onclick="toggleExample(this)">
+          <span class="chip-name">Micro-Teaching</span>
+          <span class="chip-effect es-deep">d = 0.99</span>
+          <div class="content-box">
+            <strong>Definition:</strong> Recording and reviewing teaching segments to reflect on student engagement and understanding.<br><br>
+            <strong>Example:</strong> A teacher reviews a video of their lesson on "Theme" to see which students participated during the group discussion.
+          </div>
+        </div>
+        <div class="strategy-chip" onclick="toggleExample(this)">
+          <span class="chip-name">Jigsaw Method (Deep)</span>
+          <span class="chip-effect es-deep">d = 0.92</span>
+          <div class="content-box">
+            <strong>Definition:</strong> Collaborating to foster connections between sub-topics learned by different experts.<br><br>
+            <strong>Example:</strong> Home groups discuss how the different landforms they learned about in Phase 1 affect local weather patterns together.
+          </div>
+        </div>
+        <div class="strategy-chip" onclick="toggleExample(this)">
+          <span class="chip-name">Constructivist Teaching</span>
+          <span class="chip-effect es-deep">d = 0.90</span>
+          <div class="content-box">
+            <strong>Definition:</strong> Active exploration where students generate and evaluate their own solutions.<br><br>
+            <strong>Example:</strong> 5th graders explore simple machines by building them and discovering which ones make lifting a weight easier.
+          </div>
+        </div>
+        <div class="strategy-chip" onclick="toggleExample(this)">
+          <span class="chip-name">Feedback (Timing)</span>
+          <span class="chip-effect es-deep">d = 0.89</span>
+          <div class="content-box">
+            <strong>Definition:</strong> Adjusting feedback timing—delaying it for complex tasks can encourage deeper self-reflection.<br><br>
+            <strong>Example:</strong> Instead of immediate grading, a 6th-grade teacher leaves questions on student drafts to guide their next round of editing.
+          </div>
+        </div>
+        <div class="strategy-chip" onclick="toggleExample(this)">
+          <span class="chip-name">Argumentation</span>
+          <span class="chip-effect es-deep">d = 0.86</span>
+          <div class="content-box">
+            <strong>Definition:</strong> Using evidence to construct and evaluate claims in structured debates or dialogues.<br><br>
+            <strong>Example:</strong> 4th graders debate which character in a novel was the most courageous, using text evidence to defend their pick.
+          </div>
+        </div>
+        <div class="strategy-chip" onclick="toggleExample(this)">
+          <span class="chip-name">Reciprocal Teaching</span>
+          <span class="chip-effect es-deep">d = 0.74</span>
+          <div class="content-box">
+            <strong>Definition:</strong> A structured group dialogue using predicting, questioning, clarifying, and summarizing.<br><br>
+            <strong>Example:</strong> In a reading circle, students rotate roles to lead their peers through a challenging informational text.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="panel-transfer" class="panel">
+    <div class="panel-card">
+      <div class="panel-header">
+        <div class="phase-title" style="color: var(--accent-transfer)">Phase 3: Transfer Learning</div>
+        <p>Applying knowledge to novel situations and generalizing concepts across domains.</p>
+      </div>
+
+      <div class="solo-row" onclick="toggleSolo(this)">
+        <strong>SOLO Level: Extended Abstract (Click to view)</strong>
+        <div class="solo-details">
+          <strong>Extended Abstract:</strong> Generalizing to a higher level of abstraction. Creating hypotheses or connecting the learning to a new field.
+        </div>
+      </div>
+
+      <div class="strategy-grid">
+        <div class="strategy-chip" onclick="toggleExample(this)">
+          <span class="chip-name">Self-Reported Grades</span>
+          <span class="chip-effect es-transfer">d = 0.96</span>
+          <div class="content-box">
+            <strong>Definition:</strong> Students assess and predict their own performance to foster self-regulation.<br><br>
+            <strong>Example:</strong> Before turning in a project, 5th graders "grade" themselves against the success criteria and set a goal for their next task.
+          </div>
+        </div>
+        <div class="strategy-chip" onclick="toggleExample(this)">
+          <span class="chip-name">Mathematics Problem Solving</span>
+          <span class="chip-effect es-transfer">d = 0.88</span>
+          <div class="content-box">
+            <strong>Definition:</strong> Applying math strategies to solve complex, real-world, ill-structured problems.<br><br>
+            <strong>Example:</strong> 6th graders calculate the area and materials cost needed to build a vegetable garden in a small community space.
+          </div>
+        </div>
+        <div class="strategy-chip" onclick="toggleExample(this)">
+          <span class="chip-name">Virtual Reality (Science)</span>
+          <span class="chip-effect es-transfer">d = 0.80</span>
+          <div class="content-box">
+            <strong>Definition:</strong> Using VR simulations to apply science theories in immersive, unfamiliar environments.<br><br>
+            <strong>Example:</strong> Students use VR to "walk" through a human lung to apply what they learned about the respiratory system in class.
+          </div>
+        </div>
+        <div class="strategy-chip" onclick="toggleExample(this)">
+          <span class="chip-name">Transfer Strategies</span>
+          <span class="chip-effect es-transfer">d = 0.75</span>
+          <div class="content-box">
+            <strong>Definition:</strong> Explicitly prompting students to connect learning across different contexts or subjects.<br><br>
+            <strong>Example:</strong> 4th graders explain how the "Patterns" they see in music are similar to the patterns they find in their math multiplication tables.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(tab) {
+  const phases = ['surface', 'deep', 'transfer'];
+  phases.forEach(p => {
+    document.getElementById('panel-' + p).classList.toggle('active', p === tab);
+    document.querySelector('.tab-btn.t-' + p).classList.toggle('active', p === tab);
+  });
+  
+  const segs = document.querySelectorAll('.prog-seg');
+  segs.forEach((seg, i) => {
+    seg.className = 'prog-seg';
+    if (tab === 'surface' && i < 2) seg.classList.add('s-on', 'surface');
+    if (tab === 'deep' && i === 2) seg.classList.add('s-on', 'deep');
+    if (tab === 'transfer' && i === 3) seg.classList.add('s-on', 'transfer');
+  });
+}
+
+function toggleSolo(el) { el.classList.toggle('open'); }
+function toggleExample(el) { el.classList.toggle('open'); }
+</script>
+
+<nav class="mg-bottom-nav" aria-label="Back navigation" style="text-align:center;padding:1.25rem 1.5rem;background:#071F4A;border-top:3px solid #FCB040;font-family:system-ui,-apple-system,sans-serif;">
+  <a href="../index.html" style="color:#FDD17A;text-decoration:none;font-weight:700;font-size:0.85rem;margin:0 0.7rem;">← TCEA</a>
+</nav>
+</body>
+</html>
