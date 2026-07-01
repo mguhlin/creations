@@ -1327,24 +1327,27 @@
     },
     {
       "num": "38",
-      "id": "tcea-clear-teacher",
+      "id": "tcea-clear-breakouts",
       "section": "TCEA CLEAR",
-      "category": "Teacher Resources",
-      "title": "CLEAR Breakouts Teacher Resources",
-      "subtitle": "Teacher-facing answer keys and support resources for CLEAR breakouts",
-      "stat": "Teacher",
-      "statLabel": "Guide",
-      "description": "Teacher support materials for the CLEAR critical-thinking breakouts, including answer key links and supporting pages.",
+      "category": "Digital Breakouts",
+      "title": "CLEAR Critical Thinking Digital Breakouts",
+      "subtitle": "Grade-band reasoning escapes for CLEAR critical thinking",
+      "stat": "3",
+      "statLabel": "Breakouts",
+      "description": "A hub for CLEAR critical-thinking digital breakouts across grade bands, with student activities, teacher resources, answer keys, and supporting materials.",
       "features": [
-        "Teacher Guide",
-        "Answer Keys",
         "CLEAR",
-        "Breakout Support"
+        "Digital Breakouts",
+        "Grades 3-5",
+        "Grades 6-8",
+        "Grades 9-12",
+        "Teacher Resources",
+        "Answer Keys"
       ],
       "links": [
         {
-          "label": "Open Teacher Resources →",
-          "href": "tcea/clear/breakouts/teacher/index.html",
+          "label": "Open CLEAR Breakouts →",
+          "href": "tcea/clear/breakouts/",
           "primary": true
         }
       ]
