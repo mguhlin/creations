@@ -6,7 +6,7 @@
     "description": "A curated portfolio of AI-powered tools, reference guides, coaching frameworks, and interactive resources built for educators, administrators, and knowledge workers.",
     "tallies": [
       {
-        "num": "29",
+        "num": "56",
         "label": "Projects"
       },
       {
@@ -1120,6 +1120,669 @@
           "label": "Open Breakouts",
           "href": "tcea/clear/breakouts/index.html",
           "primary": false
+        }
+      ]
+    },
+    {
+      "num": "30",
+      "id": "tcea-cts",
+      "section": "TCEA Resources",
+      "category": "Technology Integration",
+      "title": "TCEA Technology Integration Resources",
+      "subtitle": "Planning, assessing, and understanding technology integration",
+      "stat": "2",
+      "statLabel": "Resource Areas",
+      "description": "A TCEA resource hub for technology integration planning, assessment, PATI resources, and edtech frameworks.",
+      "features": [
+        "Technology Integration",
+        "PATI",
+        "EdTech Frameworks",
+        "Planning Resources"
+      ],
+      "links": [
+        {
+          "label": "Open Resources →",
+          "href": "tcea/CTS/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "31",
+      "id": "tcea-cts-etf",
+      "section": "TCEA Resources",
+      "category": "EdTech Frameworks",
+      "title": "EdTech Frameworks",
+      "subtitle": "Quick reference collection for common educational technology frameworks",
+      "stat": "9",
+      "statLabel": "Frameworks",
+      "description": "A TCEA framework library covering SAMR, TPACK, TIM, RAT, Triple E, T3, LoTi, HEAT, and related instructional technology models.",
+      "features": [
+        "SAMR",
+        "TPACK",
+        "TIM",
+        "RAT",
+        "Triple E",
+        "T3",
+        "LoTi",
+        "HEAT"
+      ],
+      "links": [
+        {
+          "label": "Open Frameworks →",
+          "href": "tcea/CTS/etf/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "32",
+      "id": "tcea-cts-pati",
+      "section": "TCEA Resources",
+      "category": "Technology Integration",
+      "title": "PATI",
+      "subtitle": "Planning and assessing technology integration resources",
+      "stat": "5",
+      "statLabel": "Sections",
+      "description": "A PATI resource sequence for exploring past practice, classroom implementation, research, perspectives, and practical tips.",
+      "features": [
+        "Technology Planning",
+        "Classroom Practice",
+        "Research",
+        "Perspectives",
+        "Implementation Tips"
+      ],
+      "links": [
+        {
+          "label": "Open PATI →",
+          "href": "tcea/CTS/pati/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "33",
+      "id": "tcea-district-kpi-dashboard",
+      "section": "TCEA Data & Dashboards",
+      "category": "District Dashboard",
+      "title": "District KPI Dashboard",
+      "subtitle": "District KPI dashboard for school performance indicators",
+      "stat": "KPI",
+      "statLabel": "Dashboard",
+      "description": "A dashboard interface for tracking district-level KPIs and school performance metrics.",
+      "features": [
+        "District KPIs",
+        "School Metrics",
+        "Dashboard View",
+        "Data Visualization"
+      ],
+      "links": [
+        {
+          "label": "Open Dashboard →",
+          "href": "tcea/Dashboard_SchoolKPIs/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "34",
+      "id": "tcea-ai-adoption-checklist",
+      "section": "TCEA AI Resources",
+      "category": "AI Adoption",
+      "title": "Generative AI Adoption Checklist",
+      "subtitle": "K-16 checklist for responsible institutional AI adoption",
+      "stat": "8",
+      "statLabel": "Focus Areas",
+      "description": "A TCEA checklist for K-16 institutions adopting generative AI, covering guidance, academic integrity, student data, educator capacity, learning outcomes, equity, transparency, and review.",
+      "features": [
+        "AI Guidance",
+        "Academic Integrity",
+        "Student Data",
+        "Educator Capacity",
+        "Learning Outcomes",
+        "Equity"
+      ],
+      "links": [
+        {
+          "label": "Open Checklist →",
+          "href": "tcea/checklist/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "35",
+      "id": "tcea-clear-breakouts-grade35",
+      "section": "TCEA CLEAR",
+      "category": "Digital Breakout",
+      "title": "CLEAR Breakout: Grades 3-5",
+      "subtitle": "The Mixed-Up Lunchroom logic and observation breakout",
+      "stat": "3-5",
+      "statLabel": "Grades",
+      "description": "A grades 3-5 CLEAR digital breakout where students use clues, logic, and observation to solve a lunchroom mystery.",
+      "features": [
+        "CLEAR",
+        "Digital Breakout",
+        "Logic",
+        "Observation",
+        "Elementary"
+      ],
+      "links": [
+        {
+          "label": "Open Grades 3-5 →",
+          "href": "tcea/clear/breakouts/grade35/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "36",
+      "id": "tcea-clear-breakouts-grade68",
+      "section": "TCEA CLEAR",
+      "category": "Digital Breakout",
+      "title": "CLEAR Breakout: Grades 6-8",
+      "subtitle": "Signal Check media literacy breakout for viral claims",
+      "stat": "6-8",
+      "statLabel": "Grades",
+      "description": "A grades 6-8 CLEAR digital breakout focused on tracing sources, spotting red flags, and deciding whether a viral claim should be shared.",
+      "features": [
+        "CLEAR",
+        "Digital Breakout",
+        "Media Literacy",
+        "Viral Claims",
+        "Middle School"
+      ],
+      "links": [
+        {
+          "label": "Open Grades 6-8 →",
+          "href": "tcea/clear/breakouts/grade68/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "37",
+      "id": "tcea-clear-breakouts-grade912",
+      "section": "TCEA CLEAR",
+      "category": "Digital Breakout",
+      "title": "CLEAR Breakout: Grades 9-12",
+      "subtitle": "High school critical-thinking breakout for complex claims",
+      "stat": "9-12",
+      "statLabel": "Grades",
+      "description": "A grades 9-12 CLEAR digital breakout for evaluating claims, evidence, and responsible conclusions.",
+      "features": [
+        "CLEAR",
+        "Digital Breakout",
+        "Evidence",
+        "Reasoning",
+        "High School"
+      ],
+      "links": [
+        {
+          "label": "Open Grades 9-12 →",
+          "href": "tcea/clear/breakouts/grade912/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "38",
+      "id": "tcea-clear-teacher",
+      "section": "TCEA CLEAR",
+      "category": "Teacher Resources",
+      "title": "CLEAR Breakouts Teacher Resources",
+      "subtitle": "Teacher-facing answer keys and support resources for CLEAR breakouts",
+      "stat": "Teacher",
+      "statLabel": "Guide",
+      "description": "Teacher support materials for the CLEAR critical-thinking breakouts, including answer key links and supporting pages.",
+      "features": [
+        "Teacher Guide",
+        "Answer Keys",
+        "CLEAR",
+        "Breakout Support"
+      ],
+      "links": [
+        {
+          "label": "Open Teacher Resources →",
+          "href": "tcea/clear/breakouts/teacher/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "39",
+      "id": "tcea-technology-dashboard",
+      "section": "TCEA Data & Dashboards",
+      "category": "Technology Dashboard",
+      "title": "Technology Dashboard",
+      "subtitle": "Dashboard interface for tracking technology-related metrics",
+      "stat": "KPI",
+      "statLabel": "Dashboard",
+      "description": "A TCEA technology dashboard page for viewing technology metrics and dashboard data.",
+      "features": [
+        "Technology KPIs",
+        "Dashboard",
+        "Metrics",
+        "Data Visualization"
+      ],
+      "links": [
+        {
+          "label": "Open Technology Dashboard →",
+          "href": "tcea/dashboardkpi/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "40",
+      "id": "tcea-eles",
+      "section": "TCEA Resources",
+      "category": "Alignment Assistant",
+      "title": "ELEs Alignment Assistant",
+      "subtitle": "Assistant for aligning materials to essential learning expectations",
+      "stat": "AI",
+      "statLabel": "Assistant",
+      "description": "A TCEA alignment assistant for pasting instructional material and aligning it to target groups and AI in education expectations.",
+      "features": [
+        "ELEs",
+        "Alignment",
+        "AI in Education",
+        "Instructional Materials"
+      ],
+      "links": [
+        {
+          "label": "Open ELEs Assistant →",
+          "href": "tcea/eles/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "41",
+      "id": "tcea-oreos",
+      "section": "TCEA Interactive Activities",
+      "category": "Personality Activity",
+      "title": "Oreo Teaching Personality",
+      "subtitle": "Teaching personality activity based on how participants eat Oreo cookies",
+      "stat": "Live",
+      "statLabel": "Activity",
+      "description": "A TCEA interactive activity that maps Oreo-eating styles to teaching personality results and supports live session results.",
+      "features": [
+        "Personality Quiz",
+        "Teaching Styles",
+        "Live Results",
+        "Session Activity"
+      ],
+      "links": [
+        {
+          "label": "Open Oreo Activity →",
+          "href": "tcea/oreos/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "42",
+      "id": "tcea-pathfinders",
+      "section": "TCEA Workshop Resources",
+      "category": "School PR Workshop",
+      "title": "SPR Pathfinders",
+      "subtitle": "Data, analytics, and mapping workshop for school public relations",
+      "stat": "PR",
+      "statLabel": "Workshop",
+      "description": "A school public relations workshop site for data collection, data analysis, implementation planning, four-corners discussion, and handouts.",
+      "features": [
+        "School PR",
+        "Data Collection",
+        "Data Analysis",
+        "Implementation",
+        "Workshop Handouts"
+      ],
+      "links": [
+        {
+          "label": "Open Pathfinders →",
+          "href": "tcea/pathfinders/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "43",
+      "id": "tcea-sharespace",
+      "section": "TCEA Workshop Resources",
+      "category": "Slide Deck",
+      "title": "Vibe Coding a Free ShareSpace",
+      "subtitle": "Slide deck for building a Padlet-style classroom sharing board",
+      "stat": "20",
+      "statLabel": "Minutes",
+      "description": "A TCEA slide deck showing how K-12 educators can vibe-code a free ShareSpace using HTML, Google Apps Script, and Google Drive.",
+      "features": [
+        "ShareSpace",
+        "Vibe Coding",
+        "Google Apps Script",
+        "Google Drive",
+        "Classroom Sharing"
+      ],
+      "links": [
+        {
+          "label": "Open ShareSpace Deck →",
+          "href": "tcea/sharespace/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "44",
+      "id": "tcea-tool-coinflipping",
+      "section": "TCEA Tools10",
+      "category": "Classroom Tool",
+      "title": "Coin Flipping",
+      "subtitle": "Classroom coin-flipping tool for quick random choices",
+      "stat": "Tool",
+      "statLabel": "Randomizer",
+      "description": "A TCEA Tools10 classroom utility for flipping coins and making quick randomized choices.",
+      "features": [
+        "Coin Flip",
+        "Randomizer",
+        "Classroom Tool",
+        "TCEA Tools10"
+      ],
+      "links": [
+        {
+          "label": "Open Coin Flipping →",
+          "href": "tcea/tools10/coinflipping/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "45",
+      "id": "tcea-tool-dice",
+      "section": "TCEA Tools10",
+      "category": "Classroom Tool",
+      "title": "Dice",
+      "subtitle": "Classroom dice roller for activities and random prompts",
+      "stat": "Tool",
+      "statLabel": "Randomizer",
+      "description": "A TCEA Tools10 dice utility for classroom games, activities, and random selection.",
+      "features": [
+        "Dice",
+        "Randomizer",
+        "Classroom Tool",
+        "TCEA Tools10"
+      ],
+      "links": [
+        {
+          "label": "Open Dice →",
+          "href": "tcea/tools10/dice/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "46",
+      "id": "tcea-tool-dicebreakers",
+      "section": "TCEA Tools10",
+      "category": "Classroom Tool",
+      "title": "Dicebreakers",
+      "subtitle": "Dice-based icebreakers and discussion prompts",
+      "stat": "Tool",
+      "statLabel": "Prompts",
+      "description": "A TCEA Tools10 dicebreaker activity tool for icebreakers, reflection prompts, and group discussion.",
+      "features": [
+        "Dicebreakers",
+        "Icebreakers",
+        "Discussion Prompts",
+        "Classroom Tool"
+      ],
+      "links": [
+        {
+          "label": "Open Dicebreakers →",
+          "href": "tcea/tools10/dicebreakers/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "47",
+      "id": "tcea-tool-drawsketch",
+      "section": "TCEA Tools10",
+      "category": "Classroom Tool",
+      "title": "Draw Sketch",
+      "subtitle": "Quick sketching and drawing tool for classroom activities",
+      "stat": "Tool",
+      "statLabel": "Drawing",
+      "description": "A TCEA Tools10 drawing tool for quick sketching, visual prompts, and classroom creativity.",
+      "features": [
+        "Drawing",
+        "Sketching",
+        "Classroom Tool",
+        "Visual Activity"
+      ],
+      "links": [
+        {
+          "label": "Open Draw Sketch →",
+          "href": "tcea/tools10/drawsketch/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "48",
+      "id": "tcea-tool-fortune",
+      "section": "TCEA Tools10",
+      "category": "Classroom Tool",
+      "title": "Fortune Teller",
+      "subtitle": "Interactive fortune-teller style prompt activity",
+      "stat": "Tool",
+      "statLabel": "Prompts",
+      "description": "A TCEA Tools10 fortune teller activity for randomized prompts, reflections, and playful classroom interaction.",
+      "features": [
+        "Fortune Teller",
+        "Prompts",
+        "Student View",
+        "Classroom Tool"
+      ],
+      "links": [
+        {
+          "label": "Open Fortune Teller →",
+          "href": "tcea/tools10/fortune/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "49",
+      "id": "tcea-tool-memepuzzle",
+      "section": "TCEA Tools10",
+      "category": "Classroom Tool",
+      "title": "Meme Puzzle",
+      "subtitle": "Meme puzzle activity for classroom engagement",
+      "stat": "Tool",
+      "statLabel": "Puzzle",
+      "description": "A TCEA Tools10 meme puzzle tool with teacher and student-facing activity options.",
+      "features": [
+        "Meme Puzzle",
+        "Student View",
+        "Classroom Tool",
+        "Engagement"
+      ],
+      "links": [
+        {
+          "label": "Open Meme Puzzle →",
+          "href": "tcea/tools10/memepuzzle/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "50",
+      "id": "tcea-tool-shapespinner",
+      "section": "TCEA Tools10",
+      "category": "Classroom Tool",
+      "title": "Shape Spinner",
+      "subtitle": "Spinner tool for shape-based random selection",
+      "stat": "Tool",
+      "statLabel": "Spinner",
+      "description": "A TCEA Tools10 shape spinner for random selection, classroom games, and warm-up activities.",
+      "features": [
+        "Shape Spinner",
+        "Randomizer",
+        "Classroom Tool",
+        "Warm-Up"
+      ],
+      "links": [
+        {
+          "label": "Open Shape Spinner →",
+          "href": "tcea/tools10/shapespinner/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "51",
+      "id": "tcea-tool-storywheel",
+      "section": "TCEA Tools10",
+      "category": "Classroom Tool",
+      "title": "Story Wheel",
+      "subtitle": "Story prompt spinner for writing and discussion",
+      "stat": "Tool",
+      "statLabel": "Writing",
+      "description": "A TCEA Tools10 story wheel that generates writing, storytelling, and discussion prompts.",
+      "features": [
+        "Story Wheel",
+        "Writing Prompts",
+        "Discussion",
+        "Classroom Tool"
+      ],
+      "links": [
+        {
+          "label": "Open Story Wheel →",
+          "href": "tcea/tools10/storywheel/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "52",
+      "id": "tcea-tool-wheelspinner",
+      "section": "TCEA Tools10",
+      "category": "Classroom Tool",
+      "title": "Wheel Spinner",
+      "subtitle": "General-purpose wheel spinner for classroom random selection",
+      "stat": "Tool",
+      "statLabel": "Spinner",
+      "description": "A TCEA Tools10 wheel spinner for choosing names, prompts, groups, tasks, or other classroom options.",
+      "features": [
+        "Wheel Spinner",
+        "Randomizer",
+        "Classroom Tool",
+        "Selection"
+      ],
+      "links": [
+        {
+          "label": "Open Wheel Spinner →",
+          "href": "tcea/tools10/wheelspinner/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "53",
+      "id": "tcea-tool-wordsearch",
+      "section": "TCEA Tools10",
+      "category": "Classroom Tool",
+      "title": "Word Search",
+      "subtitle": "Word search classroom activity tool",
+      "stat": "Tool",
+      "statLabel": "Puzzle",
+      "description": "A TCEA Tools10 word search tool for classroom vocabulary practice, review, and warm-ups.",
+      "features": [
+        "Word Search",
+        "Vocabulary",
+        "Puzzle",
+        "Classroom Tool"
+      ],
+      "links": [
+        {
+          "label": "Open Word Search →",
+          "href": "tcea/tools10/wordsearch/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "54",
+      "id": "tcea-vibeprojects",
+      "section": "TCEA AI Resources",
+      "category": "Vibe Coding",
+      "title": "Vibe-Coding in the K-12 Classroom",
+      "subtitle": "Curriculum map for classroom vibe-coding across grade bands",
+      "stat": "K-12",
+      "statLabel": "Curriculum",
+      "description": "A TCEA curriculum resource for introducing vibe-coding in the K-12 classroom, with grade-band progressions from guided exploration to shipping and defending work.",
+      "features": [
+        "Vibe Coding",
+        "K-12",
+        "Curriculum Map",
+        "Grade Bands",
+        "AI Literacy"
+      ],
+      "links": [
+        {
+          "label": "Open Vibe-Coding Resource →",
+          "href": "tcea/vibeprojects/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "55",
+      "id": "tcea-vlet",
+      "section": "TCEA Instructional Strategy",
+      "category": "Strategy Reference",
+      "title": "Visible Learning with Ed Tech - TCEA",
+      "subtitle": "Evidence-based teaching strategies and edtech guidance",
+      "stat": "ES",
+      "statLabel": "Reference",
+      "description": "A TCEA version of the Visible Learning with Ed Tech strategy reference for evidence-based teaching, SOLO taxonomy, and AI-supported instructional planning.",
+      "features": [
+        "Visible Learning",
+        "Ed Tech",
+        "SOLO Taxonomy",
+        "Instructional Strategies",
+        "AI Guidance"
+      ],
+      "links": [
+        {
+          "label": "Open TCEA VLET →",
+          "href": "tcea/vlet/index.html",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "num": "56",
+      "id": "tcea-wds",
+      "section": "TCEA Interactive Activities",
+      "category": "Cybersecurity Game",
+      "title": "When Disaster Strikes",
+      "subtitle": "K-12 cyber incident response game and scenario generator",
+      "stat": "NIST",
+      "statLabel": "CSF 2.0",
+      "description": "A TCEA K-12 cyber incident response game with scenarios, response guidance, and NIST CSF 2.0 references.",
+      "features": [
+        "Cybersecurity",
+        "Incident Response",
+        "Scenario Generator",
+        "NIST CSF 2.0",
+        "K-12"
+      ],
+      "links": [
+        {
+          "label": "Open Game →",
+          "href": "tcea/wds/index.html",
+          "primary": true
         }
       ]
     }
