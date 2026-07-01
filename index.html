@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MGuhlin.org - Creations</title>
+<link rel="alternate" type="application/rss+xml" title="Creative Works RSS" href="feed.xml">
 <style>
 :root {
   --page: #fff;
@@ -71,6 +72,15 @@ a:hover {
   margin-bottom: 10px;
 }
 
+.eyebrow a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.eyebrow a:hover {
+  text-decoration: underline;
+}
+
 h1 {
   margin: 0;
   font-size: clamp(2.1rem, 6vw, 4.2rem);
@@ -115,6 +125,31 @@ h1 {
 .primary-link:hover {
   background: #333;
   border-color: #333;
+}
+
+.feed-link {
+  display: inline-flex;
+  gap: 7px;
+  align-items: center;
+  min-height: 38px;
+  padding: 8px 12px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  color: #111;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.feed-link:hover {
+  border-color: #000;
+  background: var(--soft);
+}
+
+.feed-link svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  flex: 0 0 auto;
 }
 
 .stats {
@@ -431,12 +466,18 @@ h1 {
 
 <div class="site">
   <header class="hero" id="top">
-    <div class="eyebrow">MGuhlin.org - Digital Creations</div>
+    <div class="eyebrow"><a href="https://mguhlin.org" target="_blank" rel="noopener">MGuhlin.org</a> - Digital Creations</div>
     <h1>Creative Works</h1>
     <p class="byline" id="hero-byline"></p>
     <p class="description" id="hero-desc"></p>
     <div class="hero-row">
       <a class="primary-link" href="https://go.mgpd.org/aic" target="_blank" rel="noopener">go.mgpd.org/aic</a>
+      <a class="feed-link" href="feed.xml" type="application/rss+xml" aria-label="Creative Works RSS feed">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M6.18 17.82a2.18 2.18 0 1 1-4.36 0 2.18 2.18 0 0 1 4.36 0ZM2 8.72v3.09c5.62 0 10.19 4.57 10.19 10.19h3.09C15.28 14.67 9.33 8.72 2 8.72ZM2 2v3.09c9.32 0 16.91 7.59 16.91 16.91H22C22 10.97 13.03 2 2 2Z"/>
+        </svg>
+        RSS
+      </a>
       <div class="stats" id="hero-tally" aria-label="Project statistics"></div>
     </div>
   </header>
@@ -563,7 +604,9 @@ function buildSections(projects) {
   main.innerHTML = '';
 
   getDisplayGroups(projects).forEach(group => {
-    const projectsInSection = projects.filter(project => displayGroupFor(project) === group.name);
+    const projectsInSection = projects
+      .filter(project => displayGroupFor(project) === group.name)
+      .sort(compareProjectsByTitle);
     const block = document.createElement('section');
     block.className = 'section-block';
     block.id = sectionId(group.name);
@@ -602,7 +645,7 @@ function buildProjectItem(project) {
   const href = primary ? primary.href : `#${project.id}`;
   const target = primary && primary.external ? ' target="_blank" rel="noopener"' : '';
   const title = displayTitleFor(project);
-  const summary = oneLine(cleanSummary(project.subtitle || project.description || project.category || '', project));
+  const summary = oneLine(displaySummaryFor(project));
 
   item.innerHTML = `
     <div class="project-line">
@@ -686,6 +729,22 @@ function displayTitleFor(project) {
     .replace(/\s+\|\s+TCEA\s+WebDeck$/i, ' WebDeck')
     .replace(/\s+TCEA\s+resource$/i, '')
     .trim();
+}
+
+function compareProjectsByTitle(a, b) {
+  return displayTitleFor(a).localeCompare(displayTitleFor(b), undefined, {
+    numeric: true,
+    sensitivity: 'base'
+  });
+}
+
+function displaySummaryFor(project) {
+  const options = [project.subtitle, project.description, project.category];
+  for (const option of options) {
+    const summary = cleanSummary(option || '', project);
+    if (summary) return summary;
+  }
+  return stripTags(project.category || '');
 }
 
 function cleanSummary(value, project) {
