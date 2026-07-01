@@ -309,7 +309,7 @@ h1 {
 .project-list {
   margin: 0;
   padding: 0;
-  list-style-position: inside;
+  list-style: none;
 }
 
 .project-item {
@@ -332,9 +332,15 @@ h1 {
 
 .project-line {
   display: grid;
-  grid-template-columns: minmax(170px, 240px) 1fr auto;
+  grid-template-columns: 10px minmax(170px, 240px) 1fr auto;
   gap: 12px;
   align-items: baseline;
+}
+
+.project-line::before {
+  content: "\2022";
+  color: #000;
+  font-weight: 700;
 }
 
 .project-title {
