@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<title>Grades 9–12 · More Critical Thinking Breakouts</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>:root{
+  --c1:#7c5cbf;--c2:#1aa3b8;--c3:#46a23c;--c4:#f08a16;--c5:#2f6fe0;
+  --navy:#102a54;--navy-d:#0b1d3d;--gold:#FCB040;--gold-d:#c97f12;
+  --paper:#fbf8f1;--ink:#1c2436;--ink-soft:#54607a;--card:#fff;--line:#e3e8f2;
+  --good:#2f9e44;--bad:#e03131;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;color:var(--ink);background:
+  radial-gradient(ellipse 60% 50% at 80% 0%,rgba(252,176,64,.12)0%,transparent 60%),
+  radial-gradient(ellipse 50% 40% at 0% 100%,rgba(47,111,224,.10)0%,transparent 60%),var(--paper);
+  min-height:100vh;line-height:1.55}
+.wrap{max-width:880px;margin:0 auto;padding:20px 18px 80px}
+.crumb{font-size:.82rem;font-weight:700;margin-bottom:10px}
+.crumb a{color:var(--c5);text-decoration:none}
+header.top{text-align:center;padding:8px 0 4px}
+.eyebrow{display:inline-block;background:var(--navy);color:#fff;font-family:'Fredoka',sans-serif;
+  font-weight:600;font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;padding:6px 16px;border-radius:100px;margin-bottom:12px}
+h1{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(1.9rem,6vw,3rem);color:var(--navy);line-height:1.04}
+.sub{color:var(--ink-soft);font-weight:600;margin-top:8px;max-width:620px;margin-left:auto;margin-right:auto}
+
+/* language bar */
+.langbar{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:10px 0 0}
+.langbar a,.langbar button{font-family:'Fredoka',sans-serif;font-weight:600;font-size:.78rem;border:2px solid var(--line);
+  background:#fff;color:var(--ink-soft);border-radius:100px;padding:5px 12px;cursor:pointer;text-decoration:none;transition:.15s}
+.langbar a:hover,.langbar button:hover{border-color:var(--gold);color:var(--navy)}
+.langbar a.active,.langbar button.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+.progress-wrap{display:flex;align-items:center;gap:12px;justify-content:center;flex-wrap:wrap;position:sticky;top:8px;z-index:30;margin:12px 0 6px;padding:10px 14px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:12px;box-shadow:0 4px 14px rgba(16,42,84,.07)}
+.lockdots{display:flex;gap:8px}
+.ld{width:30px;height:30px;border-radius:9px;background:#d8deea;display:flex;align-items:center;justify-content:center;
+  font-size:1rem;transition:.3s;border:2px solid transparent}
+.ld.open{background:var(--good);color:#fff;border-color:#1f7a31}
+.pcount{font-family:'Fredoka',sans-serif;font-weight:600;color:var(--navy)}
+.resetbtn{background:#fff;border:2px solid var(--line);border-radius:9px;padding:7px 14px;font-family:'Fredoka',sans-serif;
+  font-weight:600;color:var(--ink-soft);cursor:pointer;font-size:.85rem}
+.resetbtn:hover{border-color:var(--bad);color:var(--bad)}
+
+.brief{background:#fffdf6;border:2px dashed var(--gold-d);border-radius:14px;padding:16px 20px;margin:18px 0}
+.brief h2{font-family:'Fredoka',sans-serif;font-size:1.15rem;color:var(--navy);margin-bottom:6px}
+.brief .tag{font-family:'Fredoka',sans-serif;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-d);font-weight:600}
+
+.section-title{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.2rem;color:var(--navy);margin:24px 0 4px}
+.hint{color:var(--ink-soft);font-weight:600;font-size:.92rem;margin-bottom:12px}
+
+/* clue board */
+.clue-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.clue{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;
+  transition:.18s;text-align:center;font-family:inherit}
+.clue:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 8px 20px rgba(16,42,84,.1)}
+.clue .ico{font-size:2rem;line-height:1}
+.clue .nm{font-weight:700;margin-top:6px;color:var(--navy);font-size:.92rem}
+.clue.opened{border-color:var(--c3);background:#f2fbef}
+.clue.opened .nm::after{content:' ✓';color:var(--good)}
+
+/* locks */
+.locks{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:6px}
+@media(max-width:640px){.locks{grid-template-columns:1fr}.clue-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}}
+.lock{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:18px;position:relative}
+.lock.solved{border-color:var(--good);background:#f3fbf975}
+.lock .lk-head{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.lk-badge{width:38px;height:38px;border-radius:10px;color:#fff;font-family:'Fredoka',sans-serif;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.2rem}
+.lk-title{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.05rem;color:var(--navy);line-height:1.1}
+.lk-q{font-size:.9rem;color:var(--ink-soft);font-weight:600;margin:8px 0 12px}
+.lk-solved-msg{display:none;color:var(--good);font-weight:800;font-family:'Fredoka',sans-serif;margin-top:6px}
+.lock.solved .lk-solved-msg{display:block}
+.lock.solved .lk-body{display:none}
+
+/* digit pad */
+.digits{display:flex;gap:8px;margin-bottom:10px}
+.digit{width:46px;height:54px;border:2px solid var(--line);border-radius:10px;text-align:center;font-size:1.5rem;
+  font-weight:800;font-family:'Fredoka',sans-serif;color:var(--navy)}
+.digit:focus{outline:none;border-color:var(--c5)}
+
+/* word input */
+.wordin{width:100%;border:2px solid var(--line);border-radius:10px;padding:11px 13px;font-size:1.05rem;
+  font-weight:700;font-family:inherit;color:var(--navy)}
+.wordin:focus{outline:none;border-color:var(--c5)}
+
+/* MC */
+.mc{display:flex;flex-direction:column;gap:8px}
+.mc button{text-align:left;background:#fff;border:2px solid var(--line);border-radius:10px;padding:10px 13px;
+  font-family:inherit;font-weight:600;cursor:pointer;font-size:.92rem;transition:.15s}
+.mc button:hover{border-color:var(--navy);background:#f7f9ff}
+
+/* sequence */
+.seq-pads{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.seqpad{width:46px;height:46px;border-radius:10px;border:3px solid rgba(0,0,0,.12);cursor:pointer;font-size:1.3rem;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800}
+.seq-current{min-height:30px;font-family:'Fredoka',sans-serif;font-weight:700;color:var(--navy);letter-spacing:2px;font-size:1.2rem;
+  background:#f0f3fa;border-radius:8px;padding:4px 10px;display:inline-block;margin-bottom:8px;min-width:120px}
+.seq-clear{background:none;border:none;color:var(--ink-soft);font-weight:700;cursor:pointer;text-decoration:underline;font-size:.82rem;margin-left:8px}
+
+.lk-submit{background:var(--navy);color:#fff;border:none;border-radius:9px;padding:10px 20px;font-family:'Fredoka',sans-serif;
+  font-weight:600;cursor:pointer;font-size:.92rem;margin-top:4px}
+.lk-submit:hover{background:var(--navy-d)}
+.lk-feedback{margin-top:10px;font-weight:700;font-size:.88rem;min-height:20px}
+.lk-feedback.bad{color:var(--bad)}
+.lk-feedback.good{color:var(--good)}
+
+/* multi-select */
+.multi{display:flex;flex-direction:column;gap:8px}
+.multi-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:#fff;border:2px solid var(--line);border-radius:10px;padding:10px 13px;font-family:inherit;font-weight:600;cursor:pointer;font-size:.92rem;transition:.15s}
+.multi-opt:hover{border-color:var(--navy);background:#f7f9ff}
+.multi-opt .mbox{width:22px;height:22px;border-radius:6px;border:2px solid var(--line);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff}
+.multi-opt.picked{border-color:var(--c5);background:#eef4ff}
+.multi-opt.picked .mbox{background:var(--c5);border-color:var(--c5)}
+.multi-opt.picked .mbox::after{content:'✓'}
+
+/* clue modal */
+.modal-bg{position:fixed;inset:0;background:rgba(16,29,61,.55);display:none;align-items:center;justify-content:center;z-index:40;padding:20px}
+.modal-bg.show{display:flex}
+.modal{background:#fff;border-radius:18px;padding:26px 24px;max-width:440px;width:100%;animation:pop .25s ease}
+@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+.modal .mico{font-size:2.6rem;text-align:center}
+.modal h3{font-family:'Fredoka',sans-serif;color:var(--navy);text-align:center;margin:6px 0 12px;font-size:1.3rem}
+.modal p{font-weight:600;color:var(--ink);margin:8px 0}
+.modal .closebtn{display:block;margin:16px auto 0;background:var(--gold);color:var(--navy-d);border:none;border-radius:9px;
+  padding:10px 24px;font-family:'Fredoka',sans-serif;font-weight:600;cursor:pointer}
+.reasoning{background:#f4f1ff;border-left:4px solid var(--c1);border-radius:8px;padding:10px 13px;font-size:.88rem;color:#43386b;font-weight:600;margin-top:10px}
+
+/* win */
+.win{position:fixed;inset:0;background:rgba(16,29,61,.7);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+.win.show{display:flex}
+.win-card{background:#fff;border-radius:22px;padding:34px 30px;max-width:480px;text-align:center;animation:pop .3s ease}
+.win-card .stamp{display:inline-block;font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.3rem;color:var(--good);
+  border:4px solid var(--good);border-radius:12px;padding:8px 20px;transform:rotate(-6deg);margin-bottom:16px}
+.win-card h2{font-family:'Fredoka',sans-serif;color:var(--navy);font-size:1.6rem;margin-bottom:8px}
+.win-card p{font-weight:600;color:var(--ink-soft);margin-bottom:18px}
+.win-card button{background:var(--navy);color:#fff;border:none;border-radius:10px;padding:12px 26px;font-family:'Fredoka',sans-serif;
+  font-weight:600;cursor:pointer;font-size:1rem}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:60}
+footer{text-align:center;margin-top:30px;font-size:.8rem;color:var(--ink-soft);font-weight:600}
+footer a{color:var(--c5);font-weight:700;text-decoration:none}
+
+/* RTL */
+[dir=rtl] .reasoning{border-left:none;border-right:4px solid var(--c1)}
+[dir=rtl] .mc button,[dir=rtl] .multi-opt{text-align:right}
+[dir=rtl] .seq-clear{margin-left:0;margin-right:8px}
+
+/* catalog */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;margin-top:24px}
+.cat-card{display:flex;flex-direction:column;background:var(--card);border:2px solid var(--line);border-radius:18px;
+  padding:20px;text-decoration:none;color:inherit;transition:.18s}
+.cat-card:hover{transform:translateY(-4px);box-shadow:0 14px 32px rgba(16,42,84,.12);border-color:var(--gold)}
+.cat-card .ico{font-size:2.4rem;line-height:1}
+.cat-card .subj{font-family:'Fredoka',sans-serif;font-size:.66rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:#fff;padding:4px 11px;border-radius:100px;align-self:flex-start;margin:10px 0}
+.cat-card h2{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.22rem;color:var(--navy);margin:4px 0 6px;line-height:1.12}
+.cat-card p{font-size:.9rem;color:var(--ink-soft);font-weight:600;flex:1}
+.cat-card .go{margin-top:14px;font-family:'Fredoka',sans-serif;font-weight:600;color:var(--navy)}
+.cat-card .go::after{content:' →'}
+[dir=rtl] .cat-card .go::after{content:' ←'}
+
+  .cat-head{text-align:center;padding:10px 0}
+  .cat-head h1{font-size:clamp(1.8rem,5vw,2.7rem)}
+  .cat-intro{color:var(--ink-soft);font-weight:600;max-width:620px;margin:8px auto 0}
+  .langlabel{font-family:'Fredoka',sans-serif;font-weight:600;color:var(--navy);font-size:.8rem;margin-top:18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="crumb"><a href="../index.html" id="hubLink">‹ Grades 9–12</a></div>
+  <header class="cat-head">
+    <div class="eyebrow" id="bandEy">Grades 9–12</div>
+    <h1 id="catTitle">Grades 9–12 Breakouts</h1>
+    <p class="cat-intro" id="catIntro">Pick an activity, then choose your language. Every breakout runs in any browser — no logins, no prep.</p>
+    <div class="langlabel" id="langLabel">Language</div>
+    <div class="langbar" id="langbar"><button data-lang="en" lang="en">English</button><button data-lang="es" lang="es">Español</button><button data-lang="vi" lang="vi">Tiếng Việt</button><button data-lang="zh" lang="zh">中文</button><button data-lang="hi" lang="hi">हिन्दी</button><button data-lang="ar" lang="ar">العربية</button><button data-lang="ur" lang="ur">اردو</button></div>
+  </header>
+  <div class="cat-grid" id="grid"></div>
+  <footer>Critical Thinking Breakouts · Grades 9–12</footer>
+</div>
+<script>
+const ACTS=[{"slug":"g912-sci-genetics","icon":"🧬","subject":"Science","color":"var(--c3)","langs":["en","es","vi","zh","hi","ar","ur"],"t":{"en":{"title":"The Midnight Kennel Mystery","sub":"A champion show dog's litter has a surprise puppy nobody can explain. Crack the genetics to clear the breeder's name before the registry locks the file forever."},"es":{"title":"El Misterio del Criadero a Medianoche","sub":"La camada de una perra campeona de exposición tiene un cachorro sorpresa que nadie puede explicar. Descifra la genética para limpiar el nombre de la criadora antes de que el registro cierre el expediente para siempre."},"vi":{"title":"Bí Ẩn Trại Chó Lúc Nửa Đêm","sub":"Lứa con của một chú chó vô địch triển lãm có một chú cún bất ngờ mà không ai giải thích được. Hãy giải mã di truyền học để minh oan cho người nhân giống trước khi sổ đăng ký niêm phong hồ sơ vĩnh viễn."},"zh":{"title":"午夜犬舍之谜","sub":"一只冠军赛级犬的一窝幼崽中出现了一只谁也解释不了的意外小狗。在登记处永久封存档案之前,破解遗传学之谜,为育种人洗清嫌疑。"},"hi":{"title":"आधी रात का केनेल रहस्य","sub":"एक चैंपियन शो डॉग के पिल्लों के झुंड में एक हैरान करने वाला पिल्ला है जिसकी व्याख्या कोई नहीं कर सकता। रजिस्ट्री द्वारा फ़ाइल हमेशा के लिए बंद किए जाने से पहले ब्रीडर का नाम साफ़ करने के लिए आनुवंशिकी को सुलझाओ।"},"ar":{"title":"لغز بيت الكلاب في منتصف الليل","sub":"جرو مفاجئ في مجموعة صغار كلبة عرض بطلة لا يستطيع أحد تفسيره. فكّ شفرة علم الوراثة لتبرئة اسم المربّية قبل أن يغلق السجل الملف إلى الأبد."},"ur":{"title":"آدھی رات کے کینل کا معمہ","sub":"ایک چیمپیئن شو کتیا کے بچوں کے جھنڈ میں ایک حیران کن پلّا ہے جس کی وضاحت کوئی نہیں کر سکتا۔ رجسٹری کے فائل کو ہمیشہ کے لیے بند کرنے سے پہلے بریڈر کا نام صاف کرنے کے لیے جینیات کو حل کریں۔"}}},{"slug":"g912-sci-periodic","icon":"🧪","subject":"Science","color":"var(--c3)","langs":["en","es","vi","zh","hi","ar","ur"],"t":{"en":{"title":"The Sealed Lab of Dr. Volkov","sub":"A chemist vanished mid-experiment and locked her findings behind four reasoning puzzles. Crack the evidence cards to reopen the lab before the fume hood shuts down for good."},"es":{"title":"El Laboratorio Sellado de la Dra. Volkov","sub":"Una química desapareció en medio de un experimento y cerró sus hallazgos detrás de cuatro acertijos de razonamiento. Descifra las tarjetas de evidencia para reabrir el laboratorio antes de que la campana de extracción se apague para siempre."},"vi":{"title":"Phòng Thí Nghiệm Bị Niêm Phong của Tiến sĩ Volkov","sub":"Một nhà hóa học biến mất giữa lúc làm thí nghiệm và đã khóa các phát hiện của mình sau bốn câu đố suy luận. Hãy giải các thẻ bằng chứng để mở lại phòng thí nghiệm trước khi tủ hút khí tắt vĩnh viễn."},"zh":{"title":"沃尔科夫博士的密封实验室","sub":"一位化学家在实验进行到一半时失踪了,并把她的发现锁在了四道推理谜题之后。破解证据卡,在通风橱彻底关闭之前重新打开实验室。"},"hi":{"title":"डॉ. वोल्कोव की सीलबंद प्रयोगशाला","sub":"एक रसायनशास्त्री प्रयोग के बीच में ही गायब हो गई और उसने अपने निष्कर्षों को चार तर्क-पहेलियों के पीछे बंद कर दिया। फ्यूम हुड के हमेशा के लिए बंद होने से पहले प्रयोगशाला फिर से खोलने के लिए साक्ष्य कार्ड हल करें।"},"ar":{"title":"مختبر الدكتورة فولكوف المُغلق","sub":"اختفت كيميائية في منتصف تجربة وأغلقت اكتشافاتها خلف أربعة ألغاز استدلالية. فُكَّ رموز بطاقات الأدلة لإعادة فتح المختبر قبل أن تتوقف خزانة الأبخرة نهائيًا."},"ur":{"title":"ڈاکٹر وولکوف کی مہربند لیبارٹری","sub":"ایک کیمیادان تجربے کے دوران ہی غائب ہو گئی اور اس نے اپنی دریافتیں چار استدلالی پہیلیوں کے پیچھے بند کر دیں۔ فیوم ہُڈ کے ہمیشہ کے لیے بند ہونے سے پہلے لیبارٹری دوبارہ کھولنے کے لیے شواہد کے کارڈ حل کریں۔"}}},{"slug":"g912-sci-energy","icon":"🎢","subject":"Science","color":"var(--c3)","langs":["en","es","vi","zh","hi","ar","ur"],"t":{"en":{"title":"Lockdown at Thrill Ridge: The Runaway Coaster","sub":"A test cart is stuck on the new \"Conservation Coaster,\" and the safety computer is frozen. Crack the locks using only the sensor data to release the brakes before the night shift ends."},"es":{"title":"Bloqueo en Thrill Ridge: La Montaña Rusa Desbocada","sub":"Un carro de prueba está atascado en la nueva \"Montaña Rusa de la Conservación\" y la computadora de seguridad se ha congelado. Descifra los candados usando solo los datos de los sensores para soltar los frenos antes de que termine el turno de noche."},"vi":{"title":"Phong tỏa tại Thrill Ridge: Tàu lượn mất kiểm soát","sub":"Một xe thử nghiệm bị kẹt trên \"Tàu lượn Bảo toàn\" mới, và máy tính an toàn đã bị treo. Hãy phá các ổ khóa chỉ bằng dữ liệu cảm biến để nhả phanh trước khi ca đêm kết thúc."},"zh":{"title":"惊险山脊封锁：失控过山车","sub":"一辆测试车卡在新建的\"守恒过山车\"上，安全计算机已死机。只用传感器数据破解每道锁，在夜班结束前松开刹车。"},"hi":{"title":"थ्रिल रिज पर लॉकडाउन: बेकाबू कोस्टर","sub":"एक टेस्ट कार्ट नई \"कंज़र्वेशन कोस्टर\" पर फँस गई है, और सुरक्षा कंप्यूटर जम गया है। रात की पाली खत्म होने से पहले ब्रेक छोड़ने के लिए सिर्फ़ सेंसर डेटा से तालों को खोलो।"},"ar":{"title":"إغلاق في ثريل ريدج: الأفعوانية الجامحة","sub":"عربة اختبار عالقة على \"أفعوانية الحفظ\" الجديدة، وقد تجمّد حاسوب السلامة. حلّ الأقفال باستخدام بيانات المستشعرات فقط لتحرير الفرامل قبل انتهاء وردية الليل."},"ur":{"title":"تھرل رِج پر لاک ڈاؤن: بے قابو کوسٹر","sub":"ایک ٹیسٹ کارٹ نئی \"کنزرویشن کوسٹر\" پر پھنس گئی ہے، اور سیفٹی کمپیوٹر جم گیا ہے۔ رات کی شفٹ ختم ہونے سے پہلے بریک کھولنے کے لیے صرف سینسر ڈیٹا سے تالے توڑو۔"}}},{"slug":"g912-sci-expdesign","icon":"🧪","subject":"Science","color":"var(--c3)","langs":["en","es","vi","zh","hi","ar","ur"],"t":{"en":{"title":"The Vanishing Vines: Lab 7 Lockdown","sub":"A rival science club sabotaged your greenhouse experiment and locked the data vault. Only by reading the lab notes like a real scientist can you crack the codes before the plants wilt for good."},"es":{"title":"Las enredaderas que desaparecen: Bloqueo del Laboratorio 7","sub":"Un club de ciencias rival saboteó el experimento de tu invernadero y bloqueó la bóveda de datos. Solo leyendo las notas de laboratorio como un verdadero científico podrás descifrar los códigos antes de que las plantas se marchiten para siempre."},"vi":{"title":"Những dây leo biến mất: Phong tỏa Phòng thí nghiệm 7","sub":"Một câu lạc bộ khoa học đối thủ đã phá hoại thí nghiệm trong nhà kính của bạn và khóa kho dữ liệu. Chỉ bằng cách đọc các ghi chú thí nghiệm như một nhà khoa học thực thụ, bạn mới có thể bẻ khóa các mật mã trước khi cây héo hẳn."},"zh":{"title":"消失的藤蔓：7号实验室封锁","sub":"一个竞争对手科学社团破坏了你的温室实验，并锁住了数据库。只有像真正的科学家那样阅读实验笔记，你才能在植物彻底枯萎前破解密码。"},"hi":{"title":"गायब होती बेलें: लैब 7 लॉकडाउन","sub":"एक प्रतिद्वंद्वी विज्ञान क्लब ने तुम्हारे ग्रीनहाउस प्रयोग में तोड़फोड़ की और डेटा वॉल्ट को बंद कर दिया। केवल एक सच्चे वैज्ञानिक की तरह लैब नोट्स पढ़कर ही तुम पौधों के हमेशा के लिए मुरझाने से पहले कोड तोड़ सकते हो।"},"ar":{"title":"الكروم المتلاشية: إغلاق المختبر 7","sub":"قام نادٍ علمي منافس بتخريب تجربة الدفيئة الخاصة بك وأقفل خزنة البيانات. لا يمكنك فك الرموز قبل أن تذبل النباتات إلى الأبد إلا بقراءة ملاحظات المختبر كعالم حقيقي."},"ur":{"title":"غائب ہوتی بیلیں: لیب 7 لاک ڈاؤن","sub":"ایک حریف سائنس کلب نے تمہارے گرین ہاؤس کے تجربے کو خراب کیا اور ڈیٹا والٹ کو تالا لگا دیا۔ صرف ایک حقیقی سائنسدان کی طرح لیب نوٹس پڑھ کر ہی تم پودوں کے ہمیشہ کے لیے مرجھانے سے پہلے کوڈ توڑ سکتے ہو۔"}}},{"slug":"g912-ela-rhetoric","icon":"🎤","subject":"ELA","color":"var(--c2)","langs":["en","es","vi","zh","hi","ar","ur"],"t":{"en":{"title":"The Locked Campaign HQ","sub":"A persuasion expert vanished the night before the big speech, locking her vault of evidence. Crack the appeals to free the file before the rally."},"es":{"title":"El cuartel general de campaña cerrado","sub":"Una experta en persuasión desapareció la noche antes del gran discurso y cerró su caja fuerte de pruebas. Descifra los recursos retóricos para liberar el archivo antes del mitin."},"vi":{"title":"Tổng hành dinh chiến dịch bị khóa","sub":"Một chuyên gia thuyết phục biến mất vào đêm trước bài diễn văn lớn, khóa kín két chứng cứ của mình. Hãy giải mã các thủ pháp thuyết phục để giải phóng tập tài liệu trước buổi vận động."},"zh":{"title":"被锁住的竞选总部","sub":"一位说服力专家在重要演讲前夜失踪了,把她的证据保险库锁了起来。在集会前破解这些说服手法,解放那份文件。"},"hi":{"title":"बंद पड़ा प्रचार मुख्यालय","sub":"बड़े भाषण से एक रात पहले एक प्रेरण विशेषज्ञ गायब हो गई और अपने सबूतों की तिजोरी को बंद कर गई। रैली से पहले फ़ाइल को मुक्त करने के लिए इन प्रेरक युक्तियों को सुलझाओ।"},"ar":{"title":"مقر الحملة المغلق","sub":"اختفت خبيرة في فنّ الإقناع ليلة الخطاب الكبير، وأغلقت خزنة أدلتها. فكّك أساليب الإقناع لتحرير الملف قبل المهرجان الانتخابي."},"ur":{"title":"مقفل انتخابی صدر دفتر","sub":"بڑی تقریر سے ایک رات پہلے ترغیب کی ایک ماہر غائب ہو گئی اور اپنے ثبوتوں کی تجوری مقفل کر گئی۔ جلسے سے پہلے فائل آزاد کرنے کے لیے ان ترغیبی حربوں کو حل کرو۔"}}},{"slug":"g912-ela-fallacies","icon":"🔍","subject":"ELA","color":"var(--c2)","langs":["en","es","vi","zh","hi","ar","ur"],"t":{"en":{"title":"The Smear Campaign: Crack the Debate Vault","sub":"A dirty campaign flooded your school's mock election with broken arguments. Open the locked vault of \"evidence\" and prove which fallacy each candidate used to win."},"es":{"title":"La campaña de difamación: descifra la cámara del debate","sub":"Una campaña sucia inundó la elección simulada de tu escuela con argumentos defectuosos. Abre la cámara acorazada de \"pruebas\" y demuestra qué falacia usó cada candidato para ganar."},"vi":{"title":"Chiến dịch bôi nhọ: Phá khóa Két Tranh luận","sub":"Một chiến dịch bẩn thỉu làm tràn ngập cuộc bầu cử giả định ở trường bạn bằng những lập luận sai lầm. Hãy mở chiếc két chứa \"bằng chứng\" bị khóa và chứng minh mỗi ứng cử viên đã dùng ngụy biện nào để thắng cử."},"zh":{"title":"抹黑行动：破解辩论保险库","sub":"一场肮脏的竞选用站不住脚的论证淹没了你们学校的模拟选举。打开锁住的\"证据\"保险库，证明每位候选人为获胜各用了哪种谬误。"},"hi":{"title":"बदनामी अभियान: बहस की तिजोरी खोलो","sub":"एक गंदे अभियान ने तुम्हारे स्कूल के नकली चुनाव को खोखले तर्कों से भर दिया है। \"सबूतों\" की बंद तिजोरी खोलो और साबित करो कि हर उम्मीदवार ने जीतने के लिए कौन-सी तार्किक भूल का इस्तेमाल किया।"},"ar":{"title":"حملة التشهير: افكّ شيفرة خزنة المناظرة","sub":"أغرقت حملةٌ قذرة انتخابات مدرستك الصورية بحُججٍ واهية. افتح خزنة \"الأدلّة\" المُقفلة وأثبت أيّ مغالطة استخدمها كل مرشّح لكي يفوز."},"ur":{"title":"بدنامی کی مہم: مباحثے کی تجوری کا تالا کھولو","sub":"ایک گندی مہم نے تمہارے اسکول کے فرضی انتخاب کو کھوکھلے دلائل سے بھر دیا۔ \"ثبوتوں\" کی بند تجوری کھولو اور ثابت کرو کہ ہر امیدوار نے جیتنے کے لیے کون سی منطقی مغالطہ آرائی استعمال کی۔"}}},{"slug":"g912-ela-sources","icon":"🕵️","subject":"ELA","color":"var(--c2)","langs":["en","es","vi","zh","hi","ar","ur"],"t":{"en":{"title":"The Viral Post Lockdown","sub":"A scary \"study\" is spreading across your school's feeds. Crack the locks by proving which sources you can actually trust."},"es":{"title":"El bloqueo de la publicación viral","sub":"Un \"estudio\" alarmante se está propagando por las redes de tu escuela. Abre los candados demostrando en qué fuentes puedes confiar de verdad."},"vi":{"title":"Khóa chặn bài đăng lan truyền","sub":"Một \"nghiên cứu\" đáng sợ đang lan khắp bảng tin của trường bạn. Hãy mở các ổ khóa bằng cách chứng minh nguồn nào bạn thật sự có thể tin tưởng."},"zh":{"title":"病毒式帖子封锁","sub":"一项吓人的\"研究\"正在你们学校的信息流里疯传。证明哪些来源真正可信，破解这些锁。"},"hi":{"title":"वायरल पोस्ट लॉकडाउन","sub":"एक डरावना \"अध्ययन\" आपके स्कूल के फ़ीड में फैल रहा है। यह साबित करके ताले खोलिए कि आप वास्तव में किन स्रोतों पर भरोसा कर सकते हैं।"},"ar":{"title":"إغلاق المنشور المنتشر","sub":"\"دراسة\" مخيفة تنتشر عبر خلاصات مدرستك. افتح الأقفال بإثبات أيّ المصادر يمكنك الوثوق بها فعلاً."},"ur":{"title":"وائرل پوسٹ لاک ڈاؤن","sub":"ایک ڈراؤنی \"تحقیق\" آپ کے اسکول کی فیڈز میں پھیل رہی ہے۔ یہ ثابت کر کے تالے کھولیے کہ آپ واقعی کن ذرائع پر بھروسا کر سکتے ہیں۔"}}},{"slug":"g912-ela-tone","icon":"🔍","subject":"ELA","color":"var(--c2)","langs":["en","es","vi","zh","hi","ar","ur"],"t":{"en":{"title":"The Diary in the Locker","sub":"A graduating senior left behind a locked diary and a stack of letters. The words don't say how she felt, but they prove it. Read the evidence, crack the locks, and decode her true attitude before the bell rings."},"es":{"title":"El diario en el casillero","sub":"Una estudiante a punto de graduarse dejó un diario cerrado con llave y un montón de cartas. Las palabras no dicen cómo se sentía, pero lo demuestran. Lee las pruebas, abre los candados y descifra su verdadera actitud antes de que suene el timbre."},"vi":{"title":"Cuốn nhật ký trong tủ khóa","sub":"Một học sinh sắp tốt nghiệp đã để lại một cuốn nhật ký bị khóa và một xấp thư. Những con chữ không nói cô ấy cảm thấy thế nào, nhưng chúng chứng minh điều đó. Hãy đọc bằng chứng, mở các ổ khóa và giải mã thái độ thật của cô ấy trước khi chuông reo."},"zh":{"title":"储物柜里的日记","sub":"一名即将毕业的高年级学生留下了一本上了锁的日记和一摞信件。文字没有直说她的感受,却证明了它。请阅读这些证据,破解这些锁,在铃声响起之前解码出她真正的态度。"},"hi":{"title":"लॉकर में रखी डायरी","sub":"एक विद्यार्थी जो स्नातक होने वाली थी, एक तालाबंद डायरी और चिट्ठियों का ढेर पीछे छोड़ गई। शब्द यह नहीं बताते कि वह कैसा महसूस करती थी, पर वे इसे साबित करते हैं। सबूत पढ़ो, तालों को खोलो, और घंटी बजने से पहले उसके असली रवैये का पता लगाओ।"},"ar":{"title":"اليوميات في الخزانة","sub":"تركت طالبة على وشك التخرّج وراءها مذكّرات مقفلة وحزمة من الرسائل. الكلمات لا تقول كيف كانت تشعر، لكنها تثبت ذلك. اقرأ الأدلة، وافتح الأقفال، وفُكّ شيفرة موقفها الحقيقي قبل أن يدقّ الجرس."},"ur":{"title":"لاکر میں رکھی ڈائری","sub":"ایک طالبہ جو فارغ التحصیل ہونے والی تھی، ایک تالہ بند ڈائری اور خطوط کا ایک ڈھیر پیچھے چھوڑ گئی۔ الفاظ یہ نہیں بتاتے کہ وہ کیسا محسوس کرتی تھی، مگر وہ اِسے ثابت کرتے ہیں۔ ثبوت پڑھو، تالے کھولو، اور گھنٹی بجنے سے پہلے اُس کے اصل رویّے کا سراغ لگاؤ۔"}}},{"slug":"g912-ss-government","icon":"⚖️","subject":"Social Studies","color":"var(--c1)","langs":["en","es","vi","zh","hi","ar","ur"],"t":{"en":{"title":"The Locked Constitution Vault","sub":"A power-hungry official has sealed the archive to push through an unconstitutional order. Only citizens who understand how the branches check each other can crack the codes."},"es":{"title":"La Bóveda Sellada de la Constitución","sub":"Un funcionario ávido de poder selló el archivo para imponer una orden inconstitucional. Solo los ciudadanos que entienden cómo se controlan las ramas podrán descifrar los códigos."},"vi":{"title":"Hầm Khóa Hiến Pháp","sub":"Một quan chức khát quyền lực đã niêm phong kho lưu trữ để thông qua một mệnh lệnh vi hiến. Chỉ những công dân hiểu cách các nhánh kiểm soát lẫn nhau mới có thể phá được mật mã."},"zh":{"title":"上锁的宪法金库","sub":"一名渴权的官员封锁了档案库，想强行推行一项违宪命令。只有懂得各部门如何相互制衡的公民才能破解密码。"},"hi":{"title":"बंद संविधान तिजोरी","sub":"सत्ता का भूखा एक अधिकारी एक असंवैधानिक आदेश थोपने के लिए अभिलेखागार को बंद कर चुका है। केवल वे नागरिक जो समझते हैं कि शाखाएँ एक-दूसरे पर नियंत्रण कैसे रखती हैं, कोड तोड़ सकते हैं।"},"ar":{"title":"خزنة الدستور المقفلة","sub":"مسؤول متعطش للسلطة أغلق الأرشيف لفرض أمر غير دستوري. لن يتمكن من كسر الرموز إلا المواطنون الذين يفهمون كيف تراقب السلطات بعضها بعضًا."},"ur":{"title":"مقفل آئینی خزانہ","sub":"اقتدار کا بھوکا ایک اہلکار ایک غیر آئینی حکم مسلط کرنے کے لیے آرکائیو کو بند کر چکا ہے۔ صرف وہ شہری جو سمجھتے ہیں کہ شاخیں ایک دوسرے کو کیسے جانچتی ہیں، کوڈ توڑ سکتے ہیں۔"}}},{"slug":"g912-ss-economics","icon":"🏦","subject":"Social Studies","color":"var(--c1)","langs":["en","es","vi","zh","hi","ar","ur"],"t":{"en":{"title":"The Locked Ledger","sub":"A city's emergency food council left behind a sealed strongbox of economic evidence. Crack it before the market opens at dawn."},"es":{"title":"El Libro Contable Cerrado","sub":"El consejo de emergencia alimentaria de una ciudad dejó una caja fuerte sellada con evidencia económica. Ábrela antes de que el mercado abra al amanecer."},"vi":{"title":"Sổ Cái Bị Khóa","sub":"Hội đồng lương thực khẩn cấp của một thành phố đã để lại một két sắt niêm phong chứa bằng chứng kinh tế. Hãy mở nó trước khi chợ mở cửa lúc bình minh."},"zh":{"title":"被锁的账本","sub":"某城市的紧急食品委员会留下了一个密封的保险箱,里面装着经济证据。请在黎明市场开市前打开它。"},"hi":{"title":"बंद बहीखाता","sub":"एक शहर की आपातकालीन खाद्य परिषद ने आर्थिक साक्ष्यों से भरा एक सीलबंद तिजोरी छोड़ी है। इसे भोर में बाज़ार खुलने से पहले खोलें।"},"ar":{"title":"دفتر الحسابات المُقفل","sub":"تركت لجنة الطوارئ الغذائية في مدينة ما خزنة مختومة مليئة بالأدلة الاقتصادية. افتحها قبل أن يفتح السوق عند الفجر."},"ur":{"title":"مقفل کھاتہ","sub":"ایک شہر کی ہنگامی غذائی کونسل نے معاشی شواہد سے بھری ایک سربمہر تجوری چھوڑی ہے۔ اسے صبح سویرے بازار کھلنے سے پہلے کھولیں۔"}}},{"slug":"g912-ss-history","icon":"🕵️","subject":"Social Studies","color":"var(--c1)","langs":["en","es","vi","zh","hi","ar","ur"],"t":{"en":{"title":"The Sealed Archive: Road to Rupture","sub":"A locked archive holds five evidence cards from the years before a young republic split apart. Read the documents, ignore the junk, and let the paper trail — not the dates you memorized — tell you what caused what, and in what order."},"es":{"title":"El Archivo Sellado: El Camino a la Ruptura","sub":"Un archivo cerrado guarda cinco tarjetas de evidencia de los años previos a la división de una joven república. Lee los documentos, ignora la basura y deja que el rastro de papel — no las fechas que memorizaste — te diga qué causó qué, y en qué orden."},"vi":{"title":"Kho Lưu Trữ Niêm Phong: Con Đường Đến Đổ Vỡ","sub":"Một kho lưu trữ khóa kín chứa năm thẻ bằng chứng từ những năm trước khi một nền cộng hòa non trẻ chia rẽ. Đọc các tài liệu, bỏ qua thứ vô dụng, và để dấu vết giấy tờ — không phải những ngày tháng bạn đã thuộc lòng — cho bạn biết điều gì gây ra điều gì, và theo thứ tự nào."},"zh":{"title":"封存的档案：走向分裂之路","sub":"一个上锁的档案库保存着五张证据卡，来自一个年轻共和国分裂前的岁月。阅读文件，忽略无用之物，让纸面线索——而非你背下的日期——告诉你什么导致了什么，以及顺序如何。"},"hi":{"title":"बंद अभिलेखागार: टूटन की ओर राह","sub":"एक बंद अभिलेखागार में एक युवा गणराज्य के बिखरने से पहले के वर्षों के पाँच साक्ष्य-कार्ड रखे हैं। दस्तावेज़ पढ़ें, बेकार चीज़ों को नज़रअंदाज़ करें, और कागज़ी सुरागों को — न कि याद की हुई तारीखों को — यह बताने दें कि किस चीज़ ने क्या कारण बनाया, और किस क्रम में।"},"ar":{"title":"الأرشيف المختوم: الطريق إلى الانقسام","sub":"يحتوي أرشيف مغلق على خمس بطاقات أدلة من السنوات التي سبقت انقسام جمهورية فتية. اقرأ الوثائق، وتجاهل ما لا فائدة منه، ودع أثر الورق — لا التواريخ التي حفظتها — يخبرك بما تسبب في ماذا، وبأي ترتيب."},"ur":{"title":"بند آرکائیو: ٹوٹ کی جانب راستہ","sub":"ایک مقفل آرکائیو میں ایک نوجوان جمہوریہ کے بکھرنے سے پہلے کے برسوں کے پانچ ثبوتی کارڈ رکھے ہیں۔ دستاویزات پڑھیں، بیکار چیزوں کو نظر انداز کریں، اور کاغذی سراغوں کو — نہ کہ یاد کی ہوئی تاریخوں کو — یہ بتانے دیں کہ کس چیز نے کیا سبب بنایا، اور کس ترتیب میں۔"}}},{"slug":"g912-ss-geography","icon":"🗺️","subject":"Social Studies","color":"var(--c1)","langs":["en","es","vi","zh","hi","ar","ur"],"t":{"en":{"title":"The Vanishing Lake: Crack the Aral Sea Case File","sub":"A government panel claims a canal project saved the region. Open the sealed evidence and decide if the claim actually holds up."},"es":{"title":"El lago que desaparece: Resuelve el caso del mar de Aral","sub":"Un panel del gobierno afirma que un proyecto de canales salvó la región. Abre las pruebas selladas y decide si la afirmación realmente se sostiene."},"vi":{"title":"Hồ nước biến mất: Phá vỡ hồ sơ vụ án Biển Aral","sub":"Một hội đồng chính phủ tuyên bố rằng một dự án kênh đào đã cứu vùng này. Hãy mở các bằng chứng niêm phong và quyết định xem tuyên bố đó có thực sự đứng vững hay không."},"zh":{"title":"消失的湖泊：破解咸海案卷","sub":"一个政府小组声称一项运河工程拯救了这一地区。打开密封的证据，判断这一说法是否真的站得住脚。"},"hi":{"title":"लुप्त होती झील: अरल सागर की केस फ़ाइल को सुलझाओ","sub":"एक सरकारी समिति का दावा है कि एक नहर परियोजना ने इस क्षेत्र को बचा लिया। सीलबंद सबूत खोलो और तय करो कि क्या यह दावा सचमुच टिकता है।"},"ar":{"title":"البحيرة المتلاشية: حُلَّ ملف قضية بحر آرال","sub":"تزعم لجنة حكومية أن مشروع قناة أنقذ المنطقة. افتح الأدلة المختومة وقرّر ما إذا كان هذا الزعم صحيحًا بالفعل."},"ur":{"title":"غائب ہوتی جھیل: بحیرہ ارال کی کیس فائل حل کریں","sub":"ایک سرکاری کمیٹی دعویٰ کرتی ہے کہ ایک نہری منصوبے نے علاقے کو بچا لیا۔ مہربند ثبوت کھولیں اور فیصلہ کریں کہ آیا یہ دعویٰ واقعی درست ثابت ہوتا ہے۔"}}}];
+const CH={"en":{"subjects":{"Science":"Science","ELA":"English / Language Arts","Social Studies":"Social Studies"},"openBtn":"Open activity","chooseLanguage":"Language","catalogIntro":"Pick an activity, then choose your language. Every breakout runs in any browser — no logins, no prep.","band":"Grades 9–12","backToHub":"Critical Thinking Breakouts"},"es":{"subjects":{"Science":"Ciencias","ELA":"Lengua y Literatura","Social Studies":"Estudios Sociales"},"openBtn":"Abrir actividad","chooseLanguage":"Idioma","catalogIntro":"Elige una actividad y luego tu idioma. Cada reto funciona en cualquier navegador: sin inicios de sesión ni preparación.","band":"Grados 9.º a 12.º","backToHub":"Retos de pensamiento crítico"},"vi":{"subjects":{"Science":"Khoa học","ELA":"Ngữ văn","Social Studies":"Khoa học Xã hội"},"openBtn":"Mở hoạt động","chooseLanguage":"Ngôn ngữ","catalogIntro":"Chọn một hoạt động, rồi chọn ngôn ngữ của bạn. Mỗi phá đảo đều chạy trên mọi trình duyệt — không cần đăng nhập, không cần chuẩn bị.","band":"Lớp 9–12","backToHub":"Phá đảo tư duy phản biện"},"zh":{"subjects":{"Science":"科学","ELA":"英语/语言艺术","Social Studies":"社会研究"},"openBtn":"打开活动","chooseLanguage":"语言","catalogIntro":"先选一个活动，再选择你的语言。每个闯关都能在任何浏览器中运行——无需登录，无需准备。","band":"9–12 年级","backToHub":"批判性思维闯关"},"hi":{"subjects":{"Science":"विज्ञान","ELA":"अंग्रेज़ी / भाषा कला","Social Studies":"सामाजिक अध्ययन"},"openBtn":"गतिविधि खोलें","chooseLanguage":"भाषा","catalogIntro":"कोई गतिविधि चुनें, फिर अपनी भाषा चुनें। हर ब्रेकआउट किसी भी ब्राउज़र में चलता है — न कोई लॉगिन, न कोई तैयारी।","band":"कक्षा 9–12","backToHub":"समीक्षात्मक चिंतन ब्रेकआउट"},"ar":{"subjects":{"Science":"العلوم","ELA":"اللغة الإنجليزية / فنون اللغة","Social Studies":"الدراسات الاجتماعية"},"openBtn":"افتح النشاط","chooseLanguage":"اللغة","catalogIntro":"اختر نشاطًا، ثم اختر لغتك. كل تحدٍّ يعمل في أي متصفّح — بلا تسجيل دخول، ولا تحضير.","band":"الصفوف 9–12","backToHub":"تحديات التفكير الناقد"},"ur":{"subjects":{"Science":"سائنس","ELA":"انگریزی / لینگویج آرٹس","Social Studies":"سماجی علوم"},"openBtn":"سرگرمی کھولیں","chooseLanguage":"زبان","catalogIntro":"کوئی سرگرمی چنیں، پھر اپنی زبان منتخب کریں۔ ہر بریک آؤٹ کسی بھی براؤزر میں چلتا ہے — نہ کوئی لاگ اِن، نہ کوئی تیاری۔","band":"جماعت 9–12","backToHub":"تنقیدی سوچ کے بریک آؤٹ"}};
+let lang='en';
+function render(){
+  const c=CH[lang]; document.documentElement.lang=lang;
+  document.documentElement.dir=(lang==='ar'||lang==='ur')?'rtl':'ltr';
+  document.getElementById('catIntro').textContent=c.catalogIntro;
+  document.getElementById('langLabel').textContent=c.chooseLanguage;
+  document.getElementById('catTitle').textContent=c.band;
+  document.getElementById('bandEy').textContent=c.band;
+  document.getElementById('hubLink').textContent='‹ '+c.backToHub;
+  document.querySelectorAll('#langbar button').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));
+  const grid=document.getElementById('grid'); grid.innerHTML='';
+  ACTS.forEach(a=>{
+    const use=a.langs.indexOf(lang)>=0?lang:'en';
+    const tt=a.t[use]||a.t.en||{title:a.slug,sub:''};
+    const card=document.createElement('a'); card.className='cat-card';
+    card.href='activities/'+a.slug+'/'+use+'.html';
+    card.innerHTML='<div class="ico">'+a.icon+'</div>'+
+      '<span class="subj" style="background:'+a.color+'">'+(c.subjects[a.subject]||a.subject)+'</span>'+
+      '<h2>'+tt.title+'</h2><p>'+tt.sub+'</p><span class="go">'+c.openBtn+'</span>';
+    grid.appendChild(card);
+  });
+}
+document.querySelectorAll('#langbar button').forEach(b=>b.onclick=()=>{lang=b.dataset.lang;render();});
+render();
+</script>
+</body>
+</html>

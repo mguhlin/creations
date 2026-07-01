@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<title>Answer Key — The Mystery Word at Camp Cedar Hollow</title>
+<style>
+  :root{--navy:#102a54;--gold-d:#c97f12;--paper:#fbf8f1;--ink:#1c2436;--ink-soft:#54607a;--card:#fff;--line:#e3e8f2;--good:#2f7a28}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--paper);line-height:1.55}
+  .wrap{max-width:760px;margin:0 auto;padding:28px 20px 80px}
+  .crumb{font-size:.82rem;font-weight:700;margin-bottom:14px}.crumb a{color:#2f6fe0;text-decoration:none}
+  .warn{background:#fde8e8;border:2px solid #f3b6b6;color:#9a2b2b;border-radius:12px;padding:14px 18px;font-weight:700;margin-bottom:20px}
+  h1{font-size:1.7rem;color:var(--navy);font-weight:800}
+  h2{font-size:1.2rem;color:var(--navy);margin:26px 0 4px;border-left:5px solid var(--gold-d);padding-left:12px}
+  .band{font-weight:700;color:var(--ink-soft);font-size:.86rem;margin-bottom:10px}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.9rem}
+  th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+  th{background:#f0f3fa;color:var(--navy)}.ans{font-weight:800;color:var(--good)}
+  .acc{margin-top:6px;font-size:.82rem;color:var(--ink-soft)}
+  .printbtn{background:var(--gold-d);color:#fff;border:none;border-radius:9px;padding:9px 18px;font-weight:700;cursor:pointer;margin-top:8px}
+  @media print{.printbtn,.crumb,#gate{display:none}}
+  #gate{max-width:420px;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:24px;margin-top:6px}
+  #gate label{display:block;font-weight:700;color:var(--navy);margin-bottom:8px}
+  #gate input{width:100%;padding:11px 13px;font-size:1rem;border:2px solid var(--line);border-radius:9px}
+  #gate input:focus{outline:none;border-color:var(--gold-d)}
+  #gate button{margin-top:12px;background:var(--navy);color:#fff;border:none;border-radius:9px;padding:11px 22px;font-weight:700;cursor:pointer;font-size:1rem}
+  #gateMsg{color:#9a2b2b;font-weight:700;font-size:.9rem;margin-top:10px;min-height:1.2em}
+  .lock-note{color:var(--ink-soft);font-size:.84rem;font-weight:600;margin:10px 0 0}
+  footer{margin-top:30px;font-size:.8rem;color:var(--ink-soft);font-weight:600}</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="crumb"><a href="../index.html">‹ Teacher hub</a></div>
+  <h1>Teacher Answer Key</h1>
+  <div class="warn">⚠️ For teachers only. Do not share this page, its URL, or the password with students.</div>
+  <div id="gate">
+    <label for="pw">🔒 Enter the teacher password to view the answer key</label>
+    <input type="password" id="pw" autocomplete="off" autofocus placeholder="Password">
+    <button id="unlock">Unlock answer key</button>
+    <div id="gateMsg"></div>
+    <p class="lock-note">The answers are encrypted in this file — unreadable without the password, even in the page source.</p>
+  </div>
+  <div id="content"></div>
+  <footer>Critical Thinking Breakouts · Teacher answer key · Keep private.</footer>
+</div>
+<script>const CIPHER={"salt":"MI2t+SoKaK59ueWNZhkWjA==","iv":"R7yxtlJwOwUNVNP/","iters":250000,"data":"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"};
+  const b64ToBytes=b=>Uint8Array.from(atob(b),ch=>ch.charCodeAt(0));
+  async function decrypt(pw){
+    const enc=new TextEncoder();
+    const bk=await crypto.subtle.importKey("raw",enc.encode(pw),"PBKDF2",false,["deriveKey"]);
+    const key=await crypto.subtle.deriveKey({name:"PBKDF2",salt:b64ToBytes(CIPHER.salt),iterations:CIPHER.iters,hash:"SHA-256"},bk,{name:"AES-GCM",length:256},false,["decrypt"]);
+    const plain=await crypto.subtle.decrypt({name:"AES-GCM",iv:b64ToBytes(CIPHER.iv)},key,b64ToBytes(CIPHER.data));
+    return new TextDecoder().decode(plain);
+  }
+  async function tryUnlock(){
+    const pw=document.getElementById("pw").value,msg=document.getElementById("gateMsg");msg.textContent="";
+    if(!pw){msg.textContent="Please enter the password.";return;}
+    try{document.getElementById("content").innerHTML=await decrypt(pw);document.getElementById("gate").style.display="none";}
+    catch(e){msg.textContent="Incorrect password. Try again.";document.getElementById("pw").value="";document.getElementById("pw").focus();}
+  }
+  document.getElementById("unlock").addEventListener("click",tryUnlock);
+  document.getElementById("pw").addEventListener("keydown",e=>{if(e.key==="Enter")tryUnlock();});</script>
+</body>
+</html>

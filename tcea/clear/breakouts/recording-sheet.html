@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<title>Student Recording Sheet — Critical Thinking Breakouts</title>
+<style>
+  :root{--navy:#102a54;--ink:#1c2436;--ink-soft:#54607a;--line:#c9d2e3;--gold-d:#c97f12;--accent:#2f6fe0}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:#eef1f7;line-height:1.5}
+  .bar{max-width:760px;margin:0 auto;padding:14px 20px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .bar a{color:var(--accent);font-weight:700;text-decoration:none;font-size:.85rem}
+  .bar button{background:var(--gold-d);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-weight:700;cursor:pointer;margin-left:auto}
+  .sheet{max-width:760px;margin:0 auto 30px;background:#fff;padding:34px 40px;box-shadow:0 6px 20px rgba(16,42,84,.1)}
+  .head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid var(--navy);padding-bottom:12px;margin-bottom:6px;gap:16px}
+  .head h1{font-size:1.5rem;color:var(--navy);line-height:1.1}
+  .head .badge{font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--navy);padding:5px 12px;border-radius:100px;white-space:nowrap}
+  .namerow{display:flex;gap:20px;flex-wrap:wrap;margin:14px 0 6px;font-size:.92rem;font-weight:700;color:var(--ink-soft)}
+  .namerow span{flex:1;min-width:180px;border-bottom:2px solid var(--line);padding-bottom:4px}
+  .which{margin:14px 0;font-size:.92rem;font-weight:700}
+  .which label{margin-right:18px;white-space:nowrap}
+  .which input{width:16px;height:16px;vertical-align:-2px}
+  .intro{background:#f4f6fb;border-left:4px solid var(--accent);border-radius:6px;padding:10px 14px;font-size:.9rem;font-weight:600;margin:8px 0 18px;color:#33405c}
+  .lock{border:1.5px solid var(--line);border-radius:10px;padding:14px 16px;margin:12px 0;page-break-inside:avoid}
+  .lock h3{font-size:1rem;color:var(--navy);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .lock .num{width:26px;height:26px;border-radius:7px;background:var(--navy);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+  .q{font-size:.86rem;font-weight:700;color:var(--ink-soft);margin-bottom:8px}
+  .field{font-size:.85rem;font-weight:700;color:var(--ink);margin:8px 0 2px}
+  .lines{border-bottom:1.5px solid var(--line);height:22px;margin-top:14px}
+  .answer-box{display:inline-block;min-width:120px;border:1.5px solid var(--navy);border-radius:6px;height:30px;vertical-align:middle;margin-left:6px}
+  .reflect{margin-top:18px;border:2px dashed var(--gold-d);border-radius:10px;padding:14px 16px;page-break-inside:avoid}
+  .reflect h3{color:var(--gold-d);font-size:1rem;margin-bottom:6px}
+  .reflect .lines{border-color:#e0c89a}
+  footer{max-width:760px;margin:0 auto 40px;padding:0 40px;font-size:.78rem;color:var(--ink-soft);font-weight:600;text-align:center}
+  @media print{
+    body{background:#fff}
+    .bar{display:none}
+    .sheet{box-shadow:none;margin:0;padding:18px 14px;max-width:100%}
+    @page{margin:1.4cm}
+  }
+</style>
+</head>
+<body>
+  <div class="bar">
+    <a href="index.html">‹ Back to breakouts</a>
+    <button onclick="window.print()">🖨 Print this sheet</button>
+  </div>
+
+  <div class="sheet">
+    <div class="head">
+      <h1>Critical Thinking Breakout<br>Recording Sheet</h1>
+      <span class="badge">Detective Log</span>
+    </div>
+
+    <div class="namerow">
+      <span>Name: ____________________</span>
+      <span>Date: ____________</span>
+      <span>Partner(s): ____________________</span>
+    </div>
+
+    <div class="which">Which breakout?
+      <label><input type="checkbox"> 🍎 Mixed-Up Lunchroom (3–5)</label>
+      <label><input type="checkbox"> 📡 Signal Check (6–8)</label>
+      <label><input type="checkbox"> 🔬 Lab Report Lockdown (9–12)</label>
+    </div>
+
+    <div class="intro">A good thinker can explain <b>why</b>, not just <b>what</b>. For each lock, write your answer <u>and</u> the clue or reason that proves it. If a clue doesn't prove something, write "No Compute" instead of guessing.</div>
+
+    <div class="lock">
+      <h3><span class="num">1</span> Lock 1</h3>
+      <div class="q">What is the question asking? (Write it in your own words.)</div>
+      <div class="lines"></div>
+      <div class="field">My answer: <span class="answer-box"></span></div>
+      <div class="field">The clue/evidence that proves it:</div>
+      <div class="lines"></div>
+    </div>
+
+    <div class="lock">
+      <h3><span class="num">2</span> Lock 2</h3>
+      <div class="q">What is the question asking?</div>
+      <div class="lines"></div>
+      <div class="field">My answer: <span class="answer-box"></span></div>
+      <div class="field">The clue/evidence that proves it:</div>
+      <div class="lines"></div>
+    </div>
+
+    <div class="lock">
+      <h3><span class="num">3</span> Lock 3</h3>
+      <div class="q">What is the question asking?</div>
+      <div class="lines"></div>
+      <div class="field">My answer: <span class="answer-box"></span></div>
+      <div class="field">The clue/evidence that proves it:</div>
+      <div class="lines"></div>
+    </div>
+
+    <div class="lock">
+      <h3><span class="num">4</span> Lock 4</h3>
+      <div class="q">What is the question asking?</div>
+      <div class="lines"></div>
+      <div class="field">My answer: <span class="answer-box"></span></div>
+      <div class="field">The clue/evidence that proves it:</div>
+      <div class="lines"></div>
+    </div>
+
+    <div class="reflect">
+      <h3>🧠 Think it through</h3>
+      <div class="field">Which clue did NOT help at all? Why was it a distraction?</div>
+      <div class="lines"></div>
+      <div class="field">Where were you tempted to guess instead of using evidence?</div>
+      <div class="lines"></div>
+      <div class="field">One thing this breakout taught me about careful thinking:</div>
+      <div class="lines"></div>
+      <div class="lines"></div>
+    </div>
+  </div>
+
+  <footer>Critical Thinking Breakouts · Student Recording Sheet · Pairs with any of the three breakouts. By Miguel Guhlin (TCEA), CC BY 4.0.</footer>
+</body>
+</html>

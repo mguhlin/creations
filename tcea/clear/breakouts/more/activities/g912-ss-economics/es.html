@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<title>El Libro Contable Cerrado — Critical Thinking Breakouts</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>:root{
+  --c1:#7c5cbf;--c2:#1aa3b8;--c3:#46a23c;--c4:#f08a16;--c5:#2f6fe0;
+  --navy:#102a54;--navy-d:#0b1d3d;--gold:#FCB040;--gold-d:#c97f12;
+  --paper:#fbf8f1;--ink:#1c2436;--ink-soft:#54607a;--card:#fff;--line:#e3e8f2;
+  --good:#2f9e44;--bad:#e03131;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;color:var(--ink);background:
+  radial-gradient(ellipse 60% 50% at 80% 0%,rgba(252,176,64,.12)0%,transparent 60%),
+  radial-gradient(ellipse 50% 40% at 0% 100%,rgba(47,111,224,.10)0%,transparent 60%),var(--paper);
+  min-height:100vh;line-height:1.55}
+.wrap{max-width:880px;margin:0 auto;padding:20px 18px 80px}
+.crumb{font-size:.82rem;font-weight:700;margin-bottom:10px}
+.crumb a{color:var(--c5);text-decoration:none}
+header.top{text-align:center;padding:8px 0 4px}
+.eyebrow{display:inline-block;background:var(--navy);color:#fff;font-family:'Fredoka',sans-serif;
+  font-weight:600;font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;padding:6px 16px;border-radius:100px;margin-bottom:12px}
+h1{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(1.9rem,6vw,3rem);color:var(--navy);line-height:1.04}
+.sub{color:var(--ink-soft);font-weight:600;margin-top:8px;max-width:620px;margin-left:auto;margin-right:auto}
+
+/* language bar */
+.langbar{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:10px 0 0}
+.langbar a,.langbar button{font-family:'Fredoka',sans-serif;font-weight:600;font-size:.78rem;border:2px solid var(--line);
+  background:#fff;color:var(--ink-soft);border-radius:100px;padding:5px 12px;cursor:pointer;text-decoration:none;transition:.15s}
+.langbar a:hover,.langbar button:hover{border-color:var(--gold);color:var(--navy)}
+.langbar a.active,.langbar button.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+.progress-wrap{display:flex;align-items:center;gap:12px;justify-content:center;flex-wrap:wrap;position:sticky;top:8px;z-index:30;margin:12px 0 6px;padding:10px 14px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:12px;box-shadow:0 4px 14px rgba(16,42,84,.07)}
+.lockdots{display:flex;gap:8px}
+.ld{width:30px;height:30px;border-radius:9px;background:#d8deea;display:flex;align-items:center;justify-content:center;
+  font-size:1rem;transition:.3s;border:2px solid transparent}
+.ld.open{background:var(--good);color:#fff;border-color:#1f7a31}
+.pcount{font-family:'Fredoka',sans-serif;font-weight:600;color:var(--navy)}
+.resetbtn{background:#fff;border:2px solid var(--line);border-radius:9px;padding:7px 14px;font-family:'Fredoka',sans-serif;
+  font-weight:600;color:var(--ink-soft);cursor:pointer;font-size:.85rem}
+.resetbtn:hover{border-color:var(--bad);color:var(--bad)}
+
+.brief{background:#fffdf6;border:2px dashed var(--gold-d);border-radius:14px;padding:16px 20px;margin:18px 0}
+.brief h2{font-family:'Fredoka',sans-serif;font-size:1.15rem;color:var(--navy);margin-bottom:6px}
+.brief .tag{font-family:'Fredoka',sans-serif;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-d);font-weight:600}
+
+.section-title{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.2rem;color:var(--navy);margin:24px 0 4px}
+.hint{color:var(--ink-soft);font-weight:600;font-size:.92rem;margin-bottom:12px}
+
+/* clue board */
+.clue-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.clue{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;
+  transition:.18s;text-align:center;font-family:inherit}
+.clue:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 8px 20px rgba(16,42,84,.1)}
+.clue .ico{font-size:2rem;line-height:1}
+.clue .nm{font-weight:700;margin-top:6px;color:var(--navy);font-size:.92rem}
+.clue.opened{border-color:var(--c3);background:#f2fbef}
+.clue.opened .nm::after{content:' ✓';color:var(--good)}
+
+/* locks */
+.locks{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:6px}
+@media(max-width:640px){.locks{grid-template-columns:1fr}.clue-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}}
+.lock{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:18px;position:relative}
+.lock.solved{border-color:var(--good);background:#f3fbf975}
+.lock .lk-head{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.lk-badge{width:38px;height:38px;border-radius:10px;color:#fff;font-family:'Fredoka',sans-serif;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.2rem}
+.lk-title{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.05rem;color:var(--navy);line-height:1.1}
+.lk-q{font-size:.9rem;color:var(--ink-soft);font-weight:600;margin:8px 0 12px}
+.lk-solved-msg{display:none;color:var(--good);font-weight:800;font-family:'Fredoka',sans-serif;margin-top:6px}
+.lock.solved .lk-solved-msg{display:block}
+.lock.solved .lk-body{display:none}
+
+/* digit pad */
+.digits{display:flex;gap:8px;margin-bottom:10px}
+.digit{width:46px;height:54px;border:2px solid var(--line);border-radius:10px;text-align:center;font-size:1.5rem;
+  font-weight:800;font-family:'Fredoka',sans-serif;color:var(--navy)}
+.digit:focus{outline:none;border-color:var(--c5)}
+
+/* word input */
+.wordin{width:100%;border:2px solid var(--line);border-radius:10px;padding:11px 13px;font-size:1.05rem;
+  font-weight:700;font-family:inherit;color:var(--navy)}
+.wordin:focus{outline:none;border-color:var(--c5)}
+
+/* MC */
+.mc{display:flex;flex-direction:column;gap:8px}
+.mc button{text-align:left;background:#fff;border:2px solid var(--line);border-radius:10px;padding:10px 13px;
+  font-family:inherit;font-weight:600;cursor:pointer;font-size:.92rem;transition:.15s}
+.mc button:hover{border-color:var(--navy);background:#f7f9ff}
+
+/* sequence */
+.seq-pads{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.seqpad{width:46px;height:46px;border-radius:10px;border:3px solid rgba(0,0,0,.12);cursor:pointer;font-size:1.3rem;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800}
+.seq-current{min-height:30px;font-family:'Fredoka',sans-serif;font-weight:700;color:var(--navy);letter-spacing:2px;font-size:1.2rem;
+  background:#f0f3fa;border-radius:8px;padding:4px 10px;display:inline-block;margin-bottom:8px;min-width:120px}
+.seq-clear{background:none;border:none;color:var(--ink-soft);font-weight:700;cursor:pointer;text-decoration:underline;font-size:.82rem;margin-left:8px}
+
+.lk-submit{background:var(--navy);color:#fff;border:none;border-radius:9px;padding:10px 20px;font-family:'Fredoka',sans-serif;
+  font-weight:600;cursor:pointer;font-size:.92rem;margin-top:4px}
+.lk-submit:hover{background:var(--navy-d)}
+.lk-feedback{margin-top:10px;font-weight:700;font-size:.88rem;min-height:20px}
+.lk-feedback.bad{color:var(--bad)}
+.lk-feedback.good{color:var(--good)}
+
+/* multi-select */
+.multi{display:flex;flex-direction:column;gap:8px}
+.multi-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:#fff;border:2px solid var(--line);border-radius:10px;padding:10px 13px;font-family:inherit;font-weight:600;cursor:pointer;font-size:.92rem;transition:.15s}
+.multi-opt:hover{border-color:var(--navy);background:#f7f9ff}
+.multi-opt .mbox{width:22px;height:22px;border-radius:6px;border:2px solid var(--line);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff}
+.multi-opt.picked{border-color:var(--c5);background:#eef4ff}
+.multi-opt.picked .mbox{background:var(--c5);border-color:var(--c5)}
+.multi-opt.picked .mbox::after{content:'✓'}
+
+/* clue modal */
+.modal-bg{position:fixed;inset:0;background:rgba(16,29,61,.55);display:none;align-items:center;justify-content:center;z-index:40;padding:20px}
+.modal-bg.show{display:flex}
+.modal{background:#fff;border-radius:18px;padding:26px 24px;max-width:440px;width:100%;animation:pop .25s ease}
+@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+.modal .mico{font-size:2.6rem;text-align:center}
+.modal h3{font-family:'Fredoka',sans-serif;color:var(--navy);text-align:center;margin:6px 0 12px;font-size:1.3rem}
+.modal p{font-weight:600;color:var(--ink);margin:8px 0}
+.modal .closebtn{display:block;margin:16px auto 0;background:var(--gold);color:var(--navy-d);border:none;border-radius:9px;
+  padding:10px 24px;font-family:'Fredoka',sans-serif;font-weight:600;cursor:pointer}
+.reasoning{background:#f4f1ff;border-left:4px solid var(--c1);border-radius:8px;padding:10px 13px;font-size:.88rem;color:#43386b;font-weight:600;margin-top:10px}
+
+/* win */
+.win{position:fixed;inset:0;background:rgba(16,29,61,.7);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+.win.show{display:flex}
+.win-card{background:#fff;border-radius:22px;padding:34px 30px;max-width:480px;text-align:center;animation:pop .3s ease}
+.win-card .stamp{display:inline-block;font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.3rem;color:var(--good);
+  border:4px solid var(--good);border-radius:12px;padding:8px 20px;transform:rotate(-6deg);margin-bottom:16px}
+.win-card h2{font-family:'Fredoka',sans-serif;color:var(--navy);font-size:1.6rem;margin-bottom:8px}
+.win-card p{font-weight:600;color:var(--ink-soft);margin-bottom:18px}
+.win-card button{background:var(--navy);color:#fff;border:none;border-radius:10px;padding:12px 26px;font-family:'Fredoka',sans-serif;
+  font-weight:600;cursor:pointer;font-size:1rem}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:60}
+footer{text-align:center;margin-top:30px;font-size:.8rem;color:var(--ink-soft);font-weight:600}
+footer a{color:var(--c5);font-weight:700;text-decoration:none}
+
+/* RTL */
+[dir=rtl] .reasoning{border-left:none;border-right:4px solid var(--c1)}
+[dir=rtl] .mc button,[dir=rtl] .multi-opt{text-align:right}
+[dir=rtl] .seq-clear{margin-left:0;margin-right:8px}
+
+/* catalog */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;margin-top:24px}
+.cat-card{display:flex;flex-direction:column;background:var(--card);border:2px solid var(--line);border-radius:18px;
+  padding:20px;text-decoration:none;color:inherit;transition:.18s}
+.cat-card:hover{transform:translateY(-4px);box-shadow:0 14px 32px rgba(16,42,84,.12);border-color:var(--gold)}
+.cat-card .ico{font-size:2.4rem;line-height:1}
+.cat-card .subj{font-family:'Fredoka',sans-serif;font-size:.66rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:#fff;padding:4px 11px;border-radius:100px;align-self:flex-start;margin:10px 0}
+.cat-card h2{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.22rem;color:var(--navy);margin:4px 0 6px;line-height:1.12}
+.cat-card p{font-size:.9rem;color:var(--ink-soft);font-weight:600;flex:1}
+.cat-card .go{margin-top:14px;font-family:'Fredoka',sans-serif;font-weight:600;color:var(--navy)}
+.cat-card .go::after{content:' →'}
+[dir=rtl] .cat-card .go::after{content:' ←'}
+</style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+<div class="wrap">
+  <div class="crumb"><a href="../../grade912.html">‹ Volver a las actividades</a></div>
+  <header class="top">
+    <div class="eyebrow">Reto digital · Grados 9.º a 12.º</div>
+    <h1>El Libro Contable Cerrado</h1>
+    <p class="sub">El consejo de emergencia alimentaria de una ciudad dejó una caja fuerte sellada con evidencia económica. Ábrela antes de que el mercado abra al amanecer.</p>
+    <div class="langbar"><a class="" href="en.html" lang="en">English</a><a class="active" href="es.html" lang="es">Español</a><a class="" href="vi.html" lang="vi">Tiếng Việt</a><a class="" href="zh.html" lang="zh">中文</a><a class="" href="hi.html" lang="hi">हिन्दी</a><a class="" href="ar.html" lang="ar">العربية</a><a class="" href="ur.html" lang="ur">اردو</a></div>
+  </header>
+
+  <div class="progress-wrap">
+    <span class="pcount" id="pcount">0</span>
+    <div class="lockdots" id="lockdots"></div>
+    <button class="resetbtn" id="resetBtn">↺ Reiniciar</button>
+  </div>
+
+  <div class="brief">
+    <span class="tag">🏦 Informe de misión</span>
+    <h2>Misión: Reabrir el Mercado</h2>
+    <p>Eres el analista más nuevo del Consejo Económico de Ciudad Puerto. Durante la noche, una escasez de café disparó los precios y los ciudadanos exigen respuestas. La economista jefe que se jubila cerró la caja de decisiones del consejo y solo dejó tarjetas de evidencia. Abre cada PISTA y luego usa SOLO lo que esas tarjetas demuestran para resolver los CERROJOS. No uses conocimiento externo: la caja solo acepta razonamientos que la evidencia respalde. Resuelve cada cerrojo para reabrir el mercado y restaurar el orden.</p>
+  </div>
+
+  <div class="section-title">🔍 Las pistas</div>
+  <p class="hint">Toca cada elemento para investigar. (Puedes volver a abrirlos cuando quieras.)</p>
+  <div class="clue-grid" id="clueGrid"></div>
+
+  <div class="section-title">🔒 Los candados</div>
+  <p class="hint">Resuelve cada candado usando las pistas de arriba.</p>
+  <div class="locks" id="locks"></div>
+
+  <footer>Critical Thinking Breakouts · Grados 9.º a 12.º · Funciona totalmente en tu navegador: sin inicios de sesión ni recopilación de datos. · <a href="../../../policy.html">Privacidad y cumplimiento</a></footer>
+</div>
+
+<div class="modal-bg" id="modalBg"><div class="modal" id="modal"></div></div>
+<div class="win" id="win"><div class="win-card">
+  <div class="stamp">MERCADO REABIERTO ✓</div>
+  <h2>¡El Libro Contable Está Abierto!</h2>
+  <p>Razonaste como economista: leíste la evidencia para explicar la oferta y la demanda, sopesaste el costo de oportunidad y distinguiste una economía de mercado de una economía de mando usando solo lo que las pistas probaron.</p>
+  <button id="winBtn">Jugar otra vez</button>
+</div></div>
+
+<script>const DATA={"T":{"locksOpen":"{n} de {t} candados abiertos","check":"Comprobar","gotIt":"Entendido","typeAnswer":"Escribe tu respuesta","clear":"borrar","solved":"¡Resuelto!","fbDefault":"Casi — vuelve a revisar las pistas.","fbDigit":"Ese número no coincide con las pistas. Cuenta de nuevo.","fbWord":"Revisa las pistas para encontrar la respuesta que encaja.","fbMc":"Esa opción no está respaldada por las pruebas. Mira otra vez.","fbSeq":"Ese orden no coincide con las pistas. Inténtalo de nuevo.","fbMultiExtra":"Una de tus elecciones no es una prueba sólida — sólida significa hechos que puedes verificar, no rumores ni sentimientos.","fbMultiMissing":"Te falta una prueba sólida. Encuéntralas todas."},"clues":[{"id":"c0","ico":"📈","nm":"Precios del Café","title":"Pista 1 — El Informe de Precios","body":"Una sequía destruyó la mitad de la cosecha de café de Ciudad Puerto. Con muchos menos granos disponibles pero la misma cantidad de compradores que quieren café, el precio en el estante saltó de $4 a $9 por bolsa en una semana. Las tiendas reportan estantes vacíos para el mediodía."},{"id":"c1","ico":"⚖️","nm":"El Sacrificio","title":"Pista 2 — La Decisión del Consejo","body":"El Consejo tiene $1,000,000 en fondos de emergencia. Puede gastar el dinero O EN subsidiar importaciones de café O EN reparar la planta de agua dañada por la inundación, no en ambos. La jefa escribió: 'Sea lo que elijamos, el costo verdadero es lo mejor que dejamos de hacer.'"},{"id":"c2","ico":"🏛️","nm":"Dos Sistemas","title":"Pista 3 — Mercado vs. Mando","body":"En una economía de MERCADO, los precios suben y bajan según la oferta y la demanda, y las empresas deciden qué vender. En una economía de MANDO, un gobierno central fija los precios y decide qué se produce. Ciudad Puerto siempre ha dejado que los precios se muevan libremente."},{"id":"c3","ico":"🚚","nm":"Suministro Fresco","title":"Pista 4 — El Envío Entrante","body":"Como los precios subieron tanto, vendedores de café de tres regiones vecinas enviaron cargamentos extra a Ciudad Puerto para ganar la ganancia. En días, la oferta aumentó, los estantes se llenaron y los precios comenzaron a bajar hacia $5."},{"id":"c4","ico":"🎡","nm":"Aviso del Festival","title":"Pista 5 — La Feria de Primavera","body":"La Feria de Primavera anual de Ciudad Puerto tendrá una rueda de la fortuna, música en vivo y un concurso de comer pastel este sábado de mediodía a 8 p.m. La entrada es gratis para residentes. Hay estacionamiento en el lote norte."},{"id":"c5","ico":"🧾","nm":"Definición de la Jefa","title":"Pista 6 — Una Nota sobre Términos","body":"La tarjeta de glosario de la jefa dice: 'El COSTO DE OPORTUNIDAD es el valor de la siguiente mejor alternativa que dejas de lado al tomar una decisión. Cuando el gobierno FIJA un precio por debajo del nivel del mercado, los compradores quieren más de lo que los vendedores ofrecerán: resulta una ESCASEZ.'"}],"locks":[{"id":"L1","color":"var(--c5)","type":"digit","title":"Cerrojo 1 — El Salto de Precio","q":"Usando el Informe de Precios, ¿cuántos DÓLARES subió una bolsa de café durante la semana de la sequía? Ingresa la diferencia.","reason":"El precio pasó de $4 a $9, una subida de $5, porque la oferta cayó mientras la demanda se mantuvo igual.","len":1,"answer":["5"]},{"id":"L2","color":"var(--c4)","type":"mc","title":"Cerrojo 2 — Por Qué Subieron los Precios","q":"Según las pistas, ¿POR QUÉ subió el precio del café de $4 a $9?","reason":"La Pista 1 muestra que la oferta cayó (sequía) mientras la demanda se mantuvo firme, lo que empuja el precio hacia arriba en una economía de mercado.","options":["La oferta cayó mientras la demanda se mantuvo igual","El gobierno ordenó un precio más alto","La demanda desapareció por completo","Los compradores dejaron de querer café de repente"],"answerIndex":0},{"id":"L3","color":"var(--c3)","type":"word","title":"Cerrojo 3 — Nombra el Costo","q":"La Pista 6 define el valor de la siguiente mejor alternativa que se deja de lado cuando el Consejo elige una opción sobre la otra. ¿Qué término económico de TRES PALABRAS nombra esto? (Piensa en lo que el Consejo pierde al elegir la planta de agua O el subsidio del café.)","reason":"Las Pistas 2 y 6 juntas definen el costo de oportunidad: elegir un uso del $1,000,000 significa renunciar al otro.","answer":["opportunity cost","opportunitycost","opportunity-cost","costo de oportunidad","costodeoportunidad","costo-de-oportunidad"]},{"id":"L4","color":"var(--c1)","type":"multi","title":"Cerrojo 4 — Evidencia de Economía de Mercado","q":"La caja solo se abrirá si seleccionas las afirmaciones que las PISTAS prueban que son ciertas sobre la economía de MERCADO de Ciudad Puerto. Elige cada afirmación respaldada por la evidencia.","reason":"Las Pistas 3 y 4 muestran precios que se mueven libremente y vendedores que responden a la ganancia: rasgos de una economía de mercado. Un gobierno central que fija precios describe una economía de mando, no a Ciudad Puerto.","items":[{"t":"Los precios subían y bajaban según la oferta y la demanda","strong":true},{"t":"Los vendedores enviaron suministro extra para ganar la mayor ganancia","strong":true},{"t":"Un gobierno central fijó el precio del café","strong":false},{"t":"Las empresas decidían libremente qué vender","strong":true},{"t":"El gobierno prohibió todas las ventas de café","strong":false}]},{"id":"L5","color":"var(--c2)","type":"seq","title":"Cerrojo 5 — El Ciclo del Mercado","q":"Ordena los cuatro eventos de la crisis del café en el orden correcto de causa y efecto que describen las pistas. Usa las Pistas 1 y 4 para decidir qué evento va primero y cuál va al final.","reason":"Las Pistas 1 y 4 trazan el ciclo: la sequía reduce la oferta → el precio se dispara y los estantes se vacían → la alta ganancia atrae nuevos vendedores → la oferta regresa y el precio baja.","pads":[{"k":"drought","e":"🌵","c":"#e03131"},{"k":"spike","e":"📈","c":"#2f6fe0"},{"k":"sellers","e":"🚚","c":"#f08a16"},{"k":"fall","e":"📉","c":"#46a23c"}],"answer":["drought","spike","sellers","fall"]}]};</script>
+<script>/* Critical Thinking Breakouts — shared player engine.
+   Reads a global DATA object injected per page. No external requests. */
+(function(){
+  const T = DATA.T;
+  const CLUES = DATA.clues;
+  const LOCKS = DATA.locks;
+  const $ = s => document.querySelector(s);
+  let solved = {};
+  const opened = new Set();
+
+  function renderClues(){
+    const g = $('#clueGrid'); g.innerHTML = '';
+    CLUES.forEach(c => {
+      const b = document.createElement('button');
+      b.className = 'clue' + (opened.has(c.id) ? ' opened' : '');
+      b.innerHTML = '<div class="ico">' + c.ico + '</div><div class="nm">' + c.nm + '</div>';
+      b.onclick = () => openClue(c);
+      g.appendChild(b);
+    });
+  }
+  function openClue(c){
+    opened.add(c.id);
+    $('#modal').innerHTML = '<div class="mico">' + c.ico + '</div><h3>' + c.title + '</h3><p>' + c.body + '</p>' +
+      '<button class="closebtn" id="clueClose">' + T.gotIt + '</button>';
+    $('#modal').querySelector('#clueClose').onclick = () => $('#modalBg').classList.remove('show');
+    $('#modalBg').classList.add('show');
+    renderClues();
+  }
+  $('#modalBg').onclick = e => { if(e.target.id === 'modalBg') e.currentTarget.classList.remove('show'); };
+
+  function renderDots(){
+    const d = $('#lockdots'); d.innerHTML = '';
+    LOCKS.forEach(l => {
+      const s = document.createElement('div');
+      s.className = 'ld' + (solved[l.id] ? ' open' : '');
+      s.textContent = solved[l.id] ? '🔓' : '🔒';
+      d.appendChild(s);
+    });
+    const n = Object.keys(solved).filter(k => solved[k]).length;
+    $('#pcount').textContent = T.locksOpen.replace('{n}', n).replace('{t}', LOCKS.length);
+    if(n === LOCKS.length) setTimeout(showWin, 400);
+  }
+
+  function renderLocks(){
+    const wrap = $('#locks'); wrap.innerHTML = '';
+    LOCKS.forEach(l => {
+      const card = document.createElement('div');
+      card.className = 'lock' + (solved[l.id] ? ' solved' : '');
+      card.id = 'card-' + l.id;
+      let body = '';
+      if(l.type === 'digit'){
+        body = '<div class="digits">' + Array.from({length:l.len}).map((_,i) =>
+          '<input class="digit" data-i="' + i + '" maxlength="1" inputmode="numeric" pattern="[0-9]">').join('') + '</div>';
+      } else if(l.type === 'word'){
+        body = '<input class="wordin" placeholder="' + T.typeAnswer + '">';
+      } else if(l.type === 'mc'){
+        body = '<div class="mc">' + l.options.map((o,i) => '<button data-i="' + i + '">' + o + '</button>').join('') + '</div>';
+      } else if(l.type === 'seq'){
+        body = '<div class="seq-current" id="seq-' + l.id + '">— — —</div><button class="seq-clear" data-clear>' + T.clear + '</button>' +
+          '<div class="seq-pads">' + l.pads.map(p => '<button class="seqpad" data-k="' + p.k + '" style="background:' + p.c + '">' + p.e + '</button>').join('') + '</div>';
+      } else if(l.type === 'multi'){
+        body = '<div class="multi">' + l.items.map((o,i) =>
+          '<button class="multi-opt" data-i="' + i + '"><span class="mbox"></span><span>' + o.t + '</span></button>').join('') + '</div>';
+      }
+      const showSubmit = l.type !== 'mc';
+      card.innerHTML =
+        '<div class="lk-head"><div class="lk-badge" style="background:' + l.color + '">' + l.id.replace('L','') + '</div>' +
+        '<div class="lk-title">' + l.title + '</div></div>' +
+        '<div class="lk-body"><div class="lk-q">' + l.q + '</div>' + body +
+        (showSubmit ? '<button class="lk-submit">' + T.check + '</button>' : '') +
+        '<div class="lk-feedback" data-fb></div></div>' +
+        '<div class="lk-solved-msg">🔓 ' + T.solved + '</div>' +
+        '<div class="reasoning" style="' + (solved[l.id] ? '' : 'display:none') + '">' + l.reason + '</div>';
+      wrap.appendChild(card);
+      wireLock(l, card);
+    });
+  }
+
+  function wireLock(l, card){
+    if(solved[l.id]) return;
+    const fb = card.querySelector('[data-fb]');
+    const ok = () => {
+      solved[l.id] = true;
+      card.classList.add('solved');
+      card.querySelector('.reasoning').style.display = 'block';
+      renderDots();
+    };
+    const fail = msg => { fb.className = 'lk-feedback bad'; fb.textContent = msg || T.fbDefault; };
+
+    if(l.type === 'digit'){
+      const inputs = [...card.querySelectorAll('.digit')];
+      inputs.forEach((inp,i) => inp.addEventListener('input', () => { if(inp.value && i < inputs.length-1) inputs[i+1].focus(); }));
+      card.querySelector('.lk-submit').onclick = () => {
+        const val = inputs.map(x => x.value).join('');
+        if(l.answer.includes(val)) ok(); else fail(T.fbDigit);
+      };
+    } else if(l.type === 'word'){
+      const inp = card.querySelector('.wordin');
+      const go = () => { const v = inp.value.trim().toLowerCase(); if(l.answer.includes(v)) ok(); else fail(T.fbWord); };
+      card.querySelector('.lk-submit').onclick = go;
+      inp.addEventListener('keydown', e => { if(e.key === 'Enter') go(); });
+    } else if(l.type === 'mc'){
+      card.querySelectorAll('.mc button').forEach(b => {
+        b.onclick = () => { if(+b.dataset.i === l.answerIndex) ok(); else fail(T.fbMc); };
+      });
+    } else if(l.type === 'seq'){
+      let seq = [];
+      const disp = card.querySelector('#seq-' + l.id);
+      const draw = () => { disp.textContent = seq.length ? seq.map(k => l.pads.find(p => p.k === k).e).join(' ') : '— — —'; };
+      card.querySelectorAll('.seqpad').forEach(p => {
+        p.onclick = () => { seq.push(p.dataset.k); if(seq.length > l.answer.length) seq = seq.slice(-l.answer.length); draw(); };
+      });
+      card.querySelector('[data-clear]').onclick = () => { seq = []; draw(); };
+      card.querySelector('.lk-submit').onclick = () => {
+        if(seq.length === l.answer.length && seq.every((k,i) => k === l.answer[i])) ok();
+        else fail(T.fbSeq);
+      };
+    } else if(l.type === 'multi'){
+      const picked = new Set();
+      card.querySelectorAll('.multi-opt').forEach(b => {
+        b.onclick = () => { const i = +b.dataset.i; if(picked.has(i)){ picked.delete(i); b.classList.remove('picked'); } else { picked.add(i); b.classList.add('picked'); } };
+      });
+      card.querySelector('.lk-submit').onclick = () => {
+        const correct = l.items.map((o,i) => o.strong ? i : -1).filter(i => i >= 0);
+        const chosen = [...picked].sort((a,b) => a-b);
+        const good = chosen.length === correct.length && chosen.every((v,i) => v === correct[i]);
+        if(good) ok();
+        else { const extra = [...picked].some(i => !l.items[i].strong); fail(extra ? T.fbMultiExtra : T.fbMultiMissing); }
+      };
+    }
+  }
+
+  function showWin(){ $('#win').classList.add('show'); fireConfetti(); }
+  $('#resetBtn').onclick = () => { solved = {}; opened.clear(); renderClues(); renderLocks(); renderDots(); };
+  const wb = $('#winBtn'); if(wb) wb.onclick = () => location.reload();
+
+  function fireConfetti(){
+    const cv = $('#confetti'), ctx = cv.getContext('2d');
+    cv.width = innerWidth; cv.height = innerHeight;
+    const cols = ['#7c5cbf','#1aa3b8','#46a23c','#f08a16','#2f6fe0','#FCB040'];
+    const bits = Array.from({length:130}, () => ({ x:Math.random()*cv.width, y:-20-Math.random()*cv.height*.5,
+      r:5+Math.random()*7, c:cols[(Math.random()*cols.length)|0], vy:2.5+Math.random()*3.5, vx:-1.5+Math.random()*3, rot:Math.random()*6, vr:-.2+Math.random()*.4 }));
+    let f = 0;
+    (function a(){
+      ctx.clearRect(0,0,cv.width,cv.height);
+      bits.forEach(b => { b.x+=b.vx; b.y+=b.vy; b.rot+=b.vr;
+        ctx.save(); ctx.translate(b.x,b.y); ctx.rotate(b.rot); ctx.fillStyle=b.c; ctx.fillRect(-b.r/2,-b.r/2,b.r,b.r*.6); ctx.restore(); });
+      f++; if(f<150) requestAnimationFrame(a); else ctx.clearRect(0,0,cv.width,cv.height);
+    })();
+  }
+  addEventListener('resize', () => { const cv = $('#confetti'); cv.width = innerWidth; cv.height = innerHeight; });
+
+  renderClues(); renderLocks(); renderDots();
+})();
+</script>
+</body>
+</html>

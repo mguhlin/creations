@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<title>Grades 6–8 · More Critical Thinking Breakouts</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>:root{
+  --c1:#7c5cbf;--c2:#1aa3b8;--c3:#46a23c;--c4:#f08a16;--c5:#2f6fe0;
+  --navy:#102a54;--navy-d:#0b1d3d;--gold:#FCB040;--gold-d:#c97f12;
+  --paper:#fbf8f1;--ink:#1c2436;--ink-soft:#54607a;--card:#fff;--line:#e3e8f2;
+  --good:#2f9e44;--bad:#e03131;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;color:var(--ink);background:
+  radial-gradient(ellipse 60% 50% at 80% 0%,rgba(252,176,64,.12)0%,transparent 60%),
+  radial-gradient(ellipse 50% 40% at 0% 100%,rgba(47,111,224,.10)0%,transparent 60%),var(--paper);
+  min-height:100vh;line-height:1.55}
+.wrap{max-width:880px;margin:0 auto;padding:20px 18px 80px}
+.crumb{font-size:.82rem;font-weight:700;margin-bottom:10px}
+.crumb a{color:var(--c5);text-decoration:none}
+header.top{text-align:center;padding:8px 0 4px}
+.eyebrow{display:inline-block;background:var(--navy);color:#fff;font-family:'Fredoka',sans-serif;
+  font-weight:600;font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;padding:6px 16px;border-radius:100px;margin-bottom:12px}
+h1{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(1.9rem,6vw,3rem);color:var(--navy);line-height:1.04}
+.sub{color:var(--ink-soft);font-weight:600;margin-top:8px;max-width:620px;margin-left:auto;margin-right:auto}
+
+/* language bar */
+.langbar{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:10px 0 0}
+.langbar a,.langbar button{font-family:'Fredoka',sans-serif;font-weight:600;font-size:.78rem;border:2px solid var(--line);
+  background:#fff;color:var(--ink-soft);border-radius:100px;padding:5px 12px;cursor:pointer;text-decoration:none;transition:.15s}
+.langbar a:hover,.langbar button:hover{border-color:var(--gold);color:var(--navy)}
+.langbar a.active,.langbar button.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+.progress-wrap{display:flex;align-items:center;gap:12px;justify-content:center;flex-wrap:wrap;position:sticky;top:8px;z-index:30;margin:12px 0 6px;padding:10px 14px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:12px;box-shadow:0 4px 14px rgba(16,42,84,.07)}
+.lockdots{display:flex;gap:8px}
+.ld{width:30px;height:30px;border-radius:9px;background:#d8deea;display:flex;align-items:center;justify-content:center;
+  font-size:1rem;transition:.3s;border:2px solid transparent}
+.ld.open{background:var(--good);color:#fff;border-color:#1f7a31}
+.pcount{font-family:'Fredoka',sans-serif;font-weight:600;color:var(--navy)}
+.resetbtn{background:#fff;border:2px solid var(--line);border-radius:9px;padding:7px 14px;font-family:'Fredoka',sans-serif;
+  font-weight:600;color:var(--ink-soft);cursor:pointer;font-size:.85rem}
+.resetbtn:hover{border-color:var(--bad);color:var(--bad)}
+
+.brief{background:#fffdf6;border:2px dashed var(--gold-d);border-radius:14px;padding:16px 20px;margin:18px 0}
+.brief h2{font-family:'Fredoka',sans-serif;font-size:1.15rem;color:var(--navy);margin-bottom:6px}
+.brief .tag{font-family:'Fredoka',sans-serif;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-d);font-weight:600}
+
+.section-title{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.2rem;color:var(--navy);margin:24px 0 4px}
+.hint{color:var(--ink-soft);font-weight:600;font-size:.92rem;margin-bottom:12px}
+
+/* clue board */
+.clue-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.clue{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;
+  transition:.18s;text-align:center;font-family:inherit}
+.clue:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 8px 20px rgba(16,42,84,.1)}
+.clue .ico{font-size:2rem;line-height:1}
+.clue .nm{font-weight:700;margin-top:6px;color:var(--navy);font-size:.92rem}
+.clue.opened{border-color:var(--c3);background:#f2fbef}
+.clue.opened .nm::after{content:' ✓';color:var(--good)}
+
+/* locks */
+.locks{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:6px}
+@media(max-width:640px){.locks{grid-template-columns:1fr}.clue-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}}
+.lock{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:18px;position:relative}
+.lock.solved{border-color:var(--good);background:#f3fbf975}
+.lock .lk-head{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.lk-badge{width:38px;height:38px;border-radius:10px;color:#fff;font-family:'Fredoka',sans-serif;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.2rem}
+.lk-title{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.05rem;color:var(--navy);line-height:1.1}
+.lk-q{font-size:.9rem;color:var(--ink-soft);font-weight:600;margin:8px 0 12px}
+.lk-solved-msg{display:none;color:var(--good);font-weight:800;font-family:'Fredoka',sans-serif;margin-top:6px}
+.lock.solved .lk-solved-msg{display:block}
+.lock.solved .lk-body{display:none}
+
+/* digit pad */
+.digits{display:flex;gap:8px;margin-bottom:10px}
+.digit{width:46px;height:54px;border:2px solid var(--line);border-radius:10px;text-align:center;font-size:1.5rem;
+  font-weight:800;font-family:'Fredoka',sans-serif;color:var(--navy)}
+.digit:focus{outline:none;border-color:var(--c5)}
+
+/* word input */
+.wordin{width:100%;border:2px solid var(--line);border-radius:10px;padding:11px 13px;font-size:1.05rem;
+  font-weight:700;font-family:inherit;color:var(--navy)}
+.wordin:focus{outline:none;border-color:var(--c5)}
+
+/* MC */
+.mc{display:flex;flex-direction:column;gap:8px}
+.mc button{text-align:left;background:#fff;border:2px solid var(--line);border-radius:10px;padding:10px 13px;
+  font-family:inherit;font-weight:600;cursor:pointer;font-size:.92rem;transition:.15s}
+.mc button:hover{border-color:var(--navy);background:#f7f9ff}
+
+/* sequence */
+.seq-pads{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.seqpad{width:46px;height:46px;border-radius:10px;border:3px solid rgba(0,0,0,.12);cursor:pointer;font-size:1.3rem;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800}
+.seq-current{min-height:30px;font-family:'Fredoka',sans-serif;font-weight:700;color:var(--navy);letter-spacing:2px;font-size:1.2rem;
+  background:#f0f3fa;border-radius:8px;padding:4px 10px;display:inline-block;margin-bottom:8px;min-width:120px}
+.seq-clear{background:none;border:none;color:var(--ink-soft);font-weight:700;cursor:pointer;text-decoration:underline;font-size:.82rem;margin-left:8px}
+
+.lk-submit{background:var(--navy);color:#fff;border:none;border-radius:9px;padding:10px 20px;font-family:'Fredoka',sans-serif;
+  font-weight:600;cursor:pointer;font-size:.92rem;margin-top:4px}
+.lk-submit:hover{background:var(--navy-d)}
+.lk-feedback{margin-top:10px;font-weight:700;font-size:.88rem;min-height:20px}
+.lk-feedback.bad{color:var(--bad)}
+.lk-feedback.good{color:var(--good)}
+
+/* multi-select */
+.multi{display:flex;flex-direction:column;gap:8px}
+.multi-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:#fff;border:2px solid var(--line);border-radius:10px;padding:10px 13px;font-family:inherit;font-weight:600;cursor:pointer;font-size:.92rem;transition:.15s}
+.multi-opt:hover{border-color:var(--navy);background:#f7f9ff}
+.multi-opt .mbox{width:22px;height:22px;border-radius:6px;border:2px solid var(--line);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff}
+.multi-opt.picked{border-color:var(--c5);background:#eef4ff}
+.multi-opt.picked .mbox{background:var(--c5);border-color:var(--c5)}
+.multi-opt.picked .mbox::after{content:'✓'}
+
+/* clue modal */
+.modal-bg{position:fixed;inset:0;background:rgba(16,29,61,.55);display:none;align-items:center;justify-content:center;z-index:40;padding:20px}
+.modal-bg.show{display:flex}
+.modal{background:#fff;border-radius:18px;padding:26px 24px;max-width:440px;width:100%;animation:pop .25s ease}
+@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+.modal .mico{font-size:2.6rem;text-align:center}
+.modal h3{font-family:'Fredoka',sans-serif;color:var(--navy);text-align:center;margin:6px 0 12px;font-size:1.3rem}
+.modal p{font-weight:600;color:var(--ink);margin:8px 0}
+.modal .closebtn{display:block;margin:16px auto 0;background:var(--gold);color:var(--navy-d);border:none;border-radius:9px;
+  padding:10px 24px;font-family:'Fredoka',sans-serif;font-weight:600;cursor:pointer}
+.reasoning{background:#f4f1ff;border-left:4px solid var(--c1);border-radius:8px;padding:10px 13px;font-size:.88rem;color:#43386b;font-weight:600;margin-top:10px}
+
+/* win */
+.win{position:fixed;inset:0;background:rgba(16,29,61,.7);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+.win.show{display:flex}
+.win-card{background:#fff;border-radius:22px;padding:34px 30px;max-width:480px;text-align:center;animation:pop .3s ease}
+.win-card .stamp{display:inline-block;font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.3rem;color:var(--good);
+  border:4px solid var(--good);border-radius:12px;padding:8px 20px;transform:rotate(-6deg);margin-bottom:16px}
+.win-card h2{font-family:'Fredoka',sans-serif;color:var(--navy);font-size:1.6rem;margin-bottom:8px}
+.win-card p{font-weight:600;color:var(--ink-soft);margin-bottom:18px}
+.win-card button{background:var(--navy);color:#fff;border:none;border-radius:10px;padding:12px 26px;font-family:'Fredoka',sans-serif;
+  font-weight:600;cursor:pointer;font-size:1rem}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:60}
+footer{text-align:center;margin-top:30px;font-size:.8rem;color:var(--ink-soft);font-weight:600}
+footer a{color:var(--c5);font-weight:700;text-decoration:none}
+
+/* RTL */
+[dir=rtl] .reasoning{border-left:none;border-right:4px solid var(--c1)}
+[dir=rtl] .mc button,[dir=rtl] .multi-opt{text-align:right}
+[dir=rtl] .seq-clear{margin-left:0;margin-right:8px}
+
+/* catalog */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;margin-top:24px}
+.cat-card{display:flex;flex-direction:column;background:var(--card);border:2px solid var(--line);border-radius:18px;
+  padding:20px;text-decoration:none;color:inherit;transition:.18s}
+.cat-card:hover{transform:translateY(-4px);box-shadow:0 14px 32px rgba(16,42,84,.12);border-color:var(--gold)}
+.cat-card .ico{font-size:2.4rem;line-height:1}
+.cat-card .subj{font-family:'Fredoka',sans-serif;font-size:.66rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:#fff;padding:4px 11px;border-radius:100px;align-self:flex-start;margin:10px 0}
+.cat-card h2{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.22rem;color:var(--navy);margin:4px 0 6px;line-height:1.12}
+.cat-card p{font-size:.9rem;color:var(--ink-soft);font-weight:600;flex:1}
+.cat-card .go{margin-top:14px;font-family:'Fredoka',sans-serif;font-weight:600;color:var(--navy)}
+.cat-card .go::after{content:' →'}
+[dir=rtl] .cat-card .go::after{content:' ←'}
+
+  .cat-head{text-align:center;padding:10px 0}
+  .cat-head h1{font-size:clamp(1.8rem,5vw,2.7rem)}
+  .cat-intro{color:var(--ink-soft);font-weight:600;max-width:620px;margin:8px auto 0}
+  .langlabel{font-family:'Fredoka',sans-serif;font-weight:600;color:var(--navy);font-size:.8rem;margin-top:18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="crumb"><a href="../index.html" id="hubLink">‹ Grades 6–8</a></div>
+  <header class="cat-head">
+    <div class="eyebrow" id="bandEy">Grades 6–8</div>
+    <h1 id="catTitle">Grades 6–8 Breakouts</h1>
+    <p class="cat-intro" id="catIntro">Pick an activity, then choose your language. Every breakout runs in any browser — no logins, no prep.</p>
+    <div class="langlabel" id="langLabel">Language</div>
+    <div class="langbar" id="langbar"><button data-lang="en" lang="en">English</button><button data-lang="es" lang="es">Español</button><button data-lang="vi" lang="vi">Tiếng Việt</button><button data-lang="zh" lang="zh">中文</button><button data-lang="hi" lang="hi">हिन्दी</button><button data-lang="ar" lang="ar">العربية</button><button data-lang="ur" lang="ur">اردو</button></div>
+  </header>
+  <div class="cat-grid" id="grid"></div>
+  <footer>Critical Thinking Breakouts · Grades 6–8</footer>
+</div>
+<script>
+const ACTS=[{"slug":"g68-sci-cells","icon":"🔬","subject":"Science","color":"var(--c3)","langs":["en","es","vi","zh","hi","ar","ur"],"t":{"en":{"title":"The Locked Lab: Specimen X","sub":"A mystery cell is trapped in the school's bio-vault, and only your reasoning can unlock it. Read the evidence cards, prove what the cell is, and crack every lock."},"es":{"title":"El laboratorio cerrado: Espécimen X","sub":"Una célula misteriosa está atrapada en la biocámara de la escuela, y solo tu razonamiento puede liberarla. Lee las tarjetas de evidencia, demuestra qué es la célula y abre cada cerradura."},"vi":{"title":"Phòng thí nghiệm bị khóa: Mẫu vật X","sub":"Một tế bào bí ẩn bị nhốt trong két sinh học của trường, và chỉ có lập luận của bạn mới mở khóa được nó. Hãy đọc các thẻ bằng chứng, chứng minh tế bào đó là gì, và phá mọi ổ khóa."},"zh":{"title":"上锁的实验室：标本X","sub":"一个神秘的细胞被困在学校的生物保险库里，只有你的推理才能解锁它。阅读证据卡，证明这个细胞是什么，并破解每一个锁。"},"hi":{"title":"बंद प्रयोगशाला: नमूना X","sub":"एक रहस्यमय कोशिका स्कूल की जैव-तिजोरी में फँसी है, और केवल आपका तर्क ही इसे खोल सकता है। सबूत कार्ड पढ़ें, साबित करें कि कोशिका क्या है, और हर ताला तोड़ें।"},"ar":{"title":"المختبر المُقفَل: العينة X","sub":"خلية غامضة محبوسة في الخزنة الحيوية في المدرسة، ولا يمكن فتحها إلا بتفكيرك المنطقي. اقرأ بطاقات الأدلة، وأثبت ما هي الخلية، وافتح كل قفل."},"ur":{"title":"مقفل لیبارٹری: نمونہ X","sub":"ایک پُراسرار خلیہ اسکول کے حیاتیاتی والٹ میں قید ہے، اور صرف آپ کی استدلالی سوچ ہی اسے کھول سکتی ہے۔ ثبوت کے کارڈ پڑھیں، ثابت کریں کہ خلیہ کیا ہے، اور ہر تالا توڑیں۔"}}},{"slug":"g68-sci-watercycle","icon":"💧","subject":"Science","color":"var(--c3)","langs":["en","es","vi","zh","hi","ar","ur"],"t":{"en":{"title":"Operation Vanishing Reservoir","sub":"Lake Cielo is dropping fast and nobody knows why. Crack the field journal of a missing hydrologist to unlock the truth before the town runs dry."},"es":{"title":"Operación Embalse Desvaneciente","sub":"El lago Cielo está bajando rápidamente y nadie sabe por qué. Descifra el diario de campo de una hidróloga desaparecida para revelar la verdad antes de que el pueblo se quede sin agua."},"vi":{"title":"Chiến Dịch Hồ Chứa Biến Mất","sub":"Hồ Cielo đang cạn nhanh và không ai biết tại sao. Hãy giải mã nhật ký thực địa của một nhà thủy văn mất tích để tìm ra sự thật trước khi cả thị trấn cạn nước."},"zh":{"title":"消失水库行动","sub":"切埃洛湖的水位正在迅速下降，没人知道原因。破解一位失踪水文学家的野外日志，在小镇枯竭之前揭开真相。"},"hi":{"title":"ऑपरेशन गायब होता जलाशय","sub":"सिएलो झील तेज़ी से घट रही है और किसी को नहीं पता क्यों। शहर के सूखने से पहले सच जानने के लिए एक लापता जलविज्ञानी की फ़ील्ड डायरी का राज़ खोलो।"},"ar":{"title":"عملية الخزان المتلاشي","sub":"تنخفض بحيرة سيِيلو بسرعة ولا أحد يعرف السبب. فُكَّ رموز السجل الميداني لعالمة هيدرولوجيا مفقودة لتكشف الحقيقة قبل أن تجف المدينة."},"ur":{"title":"آپریشن غائب ہوتا ذخیرہ","sub":"سیِیلو جھیل تیزی سے گھٹ رہی ہے اور کسی کو نہیں معلوم کیوں۔ شہر کے خشک ہونے سے پہلے سچ جاننے کے لیے ایک لاپتہ ماہرِ آبیات کی میدانی ڈائری کا راز کھولو۔"}}},{"slug":"g68-sci-forces","icon":"🚀","subject":"Science","color":"var(--c3)","langs":["en","es","vi","zh","hi","ar","ur"],"t":{"en":{"title":"Stranded: Escape Velocity","sub":"Your cargo pod is drifting toward an asteroid. The autopilot is locked, and only clear thinking about forces can free the controls before impact."},"es":{"title":"Varados: Velocidad de Escape","sub":"Tu cápsula de carga está a la deriva hacia un asteroide. El piloto automático está bloqueado, y solo pensar con claridad sobre las fuerzas puede liberar los controles antes del impacto."},"vi":{"title":"Mắc Kẹt: Vận Tốc Thoát Ly","sub":"Khoang hàng của bạn đang trôi về phía một tiểu hành tinh. Chế độ lái tự động đã bị khóa, và chỉ có tư duy rõ ràng về lực mới có thể giải phóng bộ điều khiển trước khi va chạm."},"zh":{"title":"困境：逃逸速度","sub":"你的货舱正漂向一颗小行星。自动驾驶已被锁定，只有清晰地思考力的作用，才能在撞击前解放控制系统。"},"hi":{"title":"फँसे हुए: पलायन वेग","sub":"आपका कार्गो पॉड एक क्षुद्रग्रह की ओर बह रहा है। ऑटोपायलट लॉक है, और टकराव से पहले नियंत्रण को मुक्त करने के लिए बलों के बारे में केवल स्पष्ट सोच ही काम आ सकती है।"},"ar":{"title":"عالقون: سرعة الإفلات","sub":"كبسولة الشحن الخاصة بك تنجرف نحو كويكب. الطيار الآلي مقفل، والتفكير الواضح في القوى وحده يمكنه تحرير أدوات التحكم قبل الاصطدام."},"ur":{"title":"پھنسے ہوئے: فرار کی رفتار","sub":"آپ کا کارگو پوڈ ایک سیارچے کی طرف بہہ رہا ہے۔ آٹو پائلٹ مقفل ہے، اور ٹکراؤ سے پہلے کنٹرول آزاد کرنے کے لیے قوتوں کے بارے میں صرف واضح سوچ ہی کام آ سکتی ہے۔"}}},{"slug":"g68-sci-ecosystems","icon":"🦉","subject":"Science","color":"var(--c3)","langs":["en","es","vi","zh","hi","ar","ur"],"t":{"en":{"title":"Lights Out at Cedar Bayou: The Vanishing Hawk Mystery","sub":"A top predator is disappearing from the Cedar Bayou wetland, and the energy is leaking out of the food web. Crack the locks using only the field evidence to reopen the preserve."},"es":{"title":"Apagón en Cedar Bayou: El misterio del halcón que desaparece","sub":"Un depredador tope está desapareciendo del humedal de Cedar Bayou, y la energía se está escapando de la red alimentaria. Abre los candados usando solo la evidencia de campo para reabrir la reserva."},"vi":{"title":"Mất điện ở Cedar Bayou: Bí ẩn về con diều hâu biến mất","sub":"Một loài săn mồi đầu bảng đang biến mất khỏi vùng đất ngập nước Cedar Bayou, và năng lượng đang rò rỉ ra khỏi lưới thức ăn. Hãy mở các ổ khóa chỉ bằng bằng chứng thực địa để mở lại khu bảo tồn."},"zh":{"title":"雪松湾断电：消失的鹰之谜","sub":"一种顶级捕食者正从雪松湾湿地消失，能量正从食物网中流失。仅凭实地证据破解锁，重新开放保护区。"},"hi":{"title":"सीडर बेयू में बत्ती गुल: गायब होते बाज़ का रहस्य","sub":"सीडर बेयू आर्द्रभूमि से एक शीर्ष शिकारी गायब हो रहा है, और ऊर्जा खाद्य जाल से बाहर रिस रही है। संरक्षित क्षेत्र को फिर से खोलने के लिए केवल क्षेत्रीय साक्ष्य का उपयोग करके तालों को खोलो।"},"ar":{"title":"انطفاء الأنوار في سيدار بايو: لغز الصقر المتلاشي","sub":"يختفي مفترس قمة من أراضي سيدار بايو الرطبة، والطاقة تتسرب من الشبكة الغذائية. افتح الأقفال باستخدام الأدلة الميدانية فقط لإعادة فتح المحمية."},"ur":{"title":"سیڈر بایو میں اندھیرا: غائب ہوتے باز کا معمہ","sub":"سیڈر بایو کی دلدلی زمین سے ایک اعلیٰ شکاری غائب ہو رہا ہے، اور توانائی غذائی جال سے باہر رِس رہی ہے۔ محفوظ علاقے کو دوبارہ کھولنے کے لیے صرف میدانی شواہد استعمال کرتے ہوئے تالے کھولو۔"}}},{"slug":"g68-ela-authorspurpose","icon":"🔓","subject":"ELA","color":"var(--c2)","langs":["en","es","vi","zh","hi","ar","ur"],"t":{"en":{"title":"The Locked Newsroom: Crack the Author's Code","sub":"Four mystery documents are sealed inside the old newsroom safe. To get out, you have to prove WHY each one was written using nothing but the words on the page."},"es":{"title":"La sala de redacción cerrada: descifra el código del autor","sub":"Cuatro documentos misteriosos están sellados dentro de la vieja caja fuerte de la redacción. Para salir, tienes que demostrar POR QUÉ se escribió cada uno usando únicamente las palabras de la página."},"vi":{"title":"Tòa soạn bị khóa: Phá giải mật mã của tác giả","sub":"Bốn tài liệu bí ẩn được niêm phong trong két sắt cũ của tòa soạn. Để thoát ra, bạn phải chứng minh TẠI SAO mỗi tài liệu được viết, chỉ dùng những từ ngữ trên trang giấy."},"zh":{"title":"被锁的新闻编辑室：破解作者的密码","sub":"四份神秘文件被封存在旧编辑室的保险箱里。要想出去，你必须仅凭页面上的文字来证明每一份文件被写出来的原因。"},"hi":{"title":"बंद न्यूज़रूम: लेखक का कोड तोड़ो","sub":"पुराने न्यूज़रूम की तिजोरी में चार रहस्यमय दस्तावेज़ बंद हैं। बाहर निकलने के लिए, तुम्हें सिर्फ़ पन्ने पर लिखे शब्दों के आधार पर यह साबित करना होगा कि हर एक क्यों लिखा गया था।"},"ar":{"title":"غرفة الأخبار المُقفلة: فُكّ شيفرة الكاتب","sub":"أربع وثائق غامضة مختومة داخل خزنة غرفة الأخبار القديمة. للخروج، عليك أن تُثبت لماذا كُتبت كل واحدة منها مستخدمًا الكلمات الموجودة على الصفحة فقط."},"ur":{"title":"مقفل نیوز روم: مصنف کا کوڈ توڑیں","sub":"پرانے نیوز روم کی تجوری میں چار پُراسرار دستاویزات بند ہیں۔ باہر نکلنے کے لیے، آپ کو صرف صفحے پر لکھے الفاظ کی مدد سے یہ ثابت کرنا ہوگا کہ ہر ایک کیوں لکھی گئی تھی۔"}}},{"slug":"g68-ela-theme","icon":"🔦","subject":"ELA","color":"var(--c2)","langs":["en","es","vi","zh","hi","ar","ur"],"t":{"en":{"title":"The Lighthouse Letter","sub":"A retired lighthouse keeper left behind a locked footlocker and a stack of evidence cards. Crack it open using only what the cards actually prove, not what you assume."},"es":{"title":"La Carta del Faro","sub":"Una farera jubilada dejó un baúl cerrado con candado y un montón de tarjetas de evidencia. Ábrelo usando solo lo que las tarjetas realmente prueban, no lo que supones."},"vi":{"title":"Lá Thư Hải Đăng","sub":"Một người giữ hải đăng đã nghỉ hưu để lại một chiếc rương khóa kín và một xấp thẻ bằng chứng. Hãy mở nó ra chỉ bằng những gì các thẻ thực sự chứng minh, chứ không phải những gì bạn phỏng đoán."},"zh":{"title":"灯塔来信","sub":"一位退休的灯塔看守人留下了一只上锁的行李箱和一叠证据卡片。只用卡片真正能证明的内容来打开它，而不是你的猜测。"},"hi":{"title":"लाइटहाउस का पत्र","sub":"एक सेवानिवृत्त लाइटहाउस रक्षक एक तालाबंद बक्सा और सबूत कार्डों का ढेर छोड़ गया। इसे केवल उसी से खोलें जो कार्ड सचमुच साबित करते हैं, उससे नहीं जो आप मान लेते हैं।"},"ar":{"title":"رسالة المنارة","sub":"ترك حارس منارة متقاعد صندوقًا مقفلًا وكومة من بطاقات الأدلة. افتحه مستخدمًا فقط ما تثبته البطاقات فعلًا، لا ما تفترضه."},"ur":{"title":"لائٹ ہاؤس کا خط","sub":"ایک ریٹائرڈ لائٹ ہاؤس کے نگہبان نے ایک تالا لگا صندوق اور ثبوتی کارڈوں کا ایک ڈھیر چھوڑا۔ اسے صرف اُسی چیز سے کھولیں جو کارڈ واقعی ثابت کرتے ہیں، اُس سے نہیں جو آپ فرض کر لیتے ہیں۔"}}},{"slug":"g68-ela-argument","icon":"🔒","subject":"ELA","color":"var(--c2)","langs":["en","es","vi","zh","hi","ar","ur"],"t":{"en":{"title":"The Vanishing Mascot: Case of the Locked Trophy Vault","sub":"Cooper the school mascot costume disappeared the night before the big game. Crack the locks on the trophy vault using only what the evidence proves."},"es":{"title":"La mascota desaparecida: el caso de la bóveda de trofeos cerrada","sub":"El disfraz de Cooper, la mascota de la escuela, desapareció la noche antes del gran partido. Abre los candados de la bóveda de trofeos usando solo lo que prueban las evidencias."},"vi":{"title":"Linh vật biến mất: Vụ án kho cúp bị khóa","sub":"Bộ trang phục linh vật Cooper của trường biến mất vào đêm trước trận đấu lớn. Hãy mở các ổ khóa của kho cúp chỉ bằng những gì bằng chứng chứng minh."},"zh":{"title":"消失的吉祥物：奖杯保险库上锁谜案","sub":"学校吉祥物库珀的服装在大赛前一晚消失了。只用证据能证明的东西，破解奖杯保险库上的密码锁。"},"hi":{"title":"गायब शुभंकर: बंद ट्रॉफी तिजोरी का मामला","sub":"स्कूल के शुभंकर कूपर की पोशाक बड़े मैच से ठीक एक रात पहले गायब हो गई। केवल उसी पर भरोसा करो जो सबूत साबित करते हैं, और ट्रॉफी तिजोरी के तालों को खोलो।"},"ar":{"title":"التميمة المختفية: قضية خزنة الكؤوس المقفلة","sub":"اختفى زي كوبر تميمة المدرسة في الليلة السابقة للمباراة الكبرى. افتح أقفال خزنة الكؤوس مستخدمًا فقط ما تثبته الأدلة."},"ur":{"title":"غائب ہونے والا میسکوٹ: مقفل ٹرافی والٹ کا مقدمہ","sub":"بڑے میچ سے ایک رات پہلے اسکول کے میسکوٹ کوپر کا لباس غائب ہو گیا۔ صرف اسی پر انحصار کرو جو ثبوت ثابت کرتے ہیں اور ٹرافی والٹ کے تالے کھولو۔"}}},{"slug":"g68-ela-figurative","icon":"🔓","subject":"ELA","color":"var(--c2)","langs":["en","es","vi","zh","hi","ar","ur"],"t":{"en":{"title":"The Poet's Locked Studio","sub":"A famous poet vanished mid-draft, leaving her studio sealed. The only way in is to decode the figurative language scribbled across her notebooks."},"es":{"title":"El estudio cerrado de la poeta","sub":"Una poeta famosa desapareció a mitad de un borrador y dejó su estudio sellado. La única forma de entrar es descifrar el lenguaje figurado garabateado en sus cuadernos."},"vi":{"title":"Phòng làm việc bị khóa của nhà thơ","sub":"Một nhà thơ nổi tiếng biến mất khi đang viết dở, để lại phòng làm việc bị niêm phong. Cách duy nhất để vào là giải mã ngôn ngữ tượng hình được viết nguệch ngoạc khắp các cuốn sổ của bà."},"zh":{"title":"诗人上锁的工作室","sub":"一位著名诗人在写作中途消失,留下一间封闭的工作室。唯一进入的方法,就是破译她笔记本上潦草写下的比喻性语言。"},"hi":{"title":"कवयित्री का बंद स्टूडियो","sub":"एक प्रसिद्ध कवयित्री अपनी रचना के बीच में ही गायब हो गई और अपना स्टूडियो सील छोड़ गई। अंदर जाने का एकमात्र तरीका है उसकी कॉपियों में जहाँ-तहाँ लिखी अलंकारिक भाषा को सुलझाना।"},"ar":{"title":"استوديو الشاعرة المُغلق","sub":"اختفت شاعرة مشهورة في منتصف مسودتها، تاركةً استوديوها محكم الإغلاق. والطريقة الوحيدة للدخول هي فكّ شِفرة اللغة المجازية المخربشة في دفاترها."},"ur":{"title":"شاعرہ کا مقفل اسٹوڈیو","sub":"ایک مشہور شاعرہ اپنی تخلیق کے درمیان ہی غائب ہو گئی اور اپنا اسٹوڈیو بند چھوڑ گئی۔ اندر جانے کا واحد راستہ یہ ہے کہ اس کی کاپیوں پر جا بجا لکھی مجازی زبان کا معمہ حل کیا جائے۔"}}},{"slug":"g68-ss-sources","icon":"🔎","subject":"Social Studies","color":"var(--c1)","langs":["en","es","vi","zh","hi","ar","ur"],"t":{"en":{"title":"The Vault of the Vanished Diary","sub":"A famous explorer's lost diary just surfaced... or did it? Crack the locks by proving which sources you can actually trust."},"es":{"title":"La Bóveda del Diario Desaparecido","sub":"El diario perdido de un famoso explorador acaba de aparecer... ¿o no? Abre los candados demostrando en qué fuentes puedes confiar realmente."},"vi":{"title":"Hầm Két của Cuốn Nhật Ký Biến Mất","sub":"Cuốn nhật ký thất lạc của một nhà thám hiểm nổi tiếng vừa xuất hiện... hay không phải vậy? Hãy mở các ổ khóa bằng cách chứng minh nguồn tư liệu nào bạn thực sự có thể tin tưởng."},"zh":{"title":"消失日记的保险库","sub":"一位著名探险家失踪的日记刚刚浮出水面……真的吗?通过证明哪些资料才真正可信，来破解每一道锁。"},"hi":{"title":"गुम हुई डायरी की तिजोरी","sub":"एक मशहूर खोजकर्ता की खोई हुई डायरी अभी-अभी सामने आई है... या सच में? यह साबित करके तालों को खोलो कि किन स्रोतों पर तुम वाकई भरोसा कर सकते हो।"},"ar":{"title":"خزينة اليوميات المفقودة","sub":"يوميات مستكشف شهير ضائعة ظهرت للتو... أم هل ظهرت حقاً؟ افتح الأقفال بإثبات أيّ المصادر يمكنك أن تثق بها فعلاً."},"ur":{"title":"غائب شدہ ڈائری کی تجوری","sub":"ایک مشہور مہم جو کی گمشدہ ڈائری ابھی سامنے آئی ہے... یا واقعی؟ یہ ثابت کر کے تالے کھولو کہ تم سچ مچ کن ماخذوں پر بھروسہ کر سکتے ہو۔"}}},{"slug":"g68-ss-texashistory","icon":"🤠","subject":"Social Studies","color":"var(--c1)","langs":["en","es","vi","zh","hi","ar","ur"],"t":{"en":{"title":"Locked in the Alamo Archives","sub":"A dusty trunk of Texas Revolution evidence just turned up in the old mission. Crack the locks using ONLY what the documents prove."},"es":{"title":"Encerrado en los Archivos del Álamo","sub":"Acaba de aparecer en la antigua misión un baúl polvoriento con pruebas de la Revolución de Texas. Abre los candados usando SOLO lo que los documentos demuestran."},"vi":{"title":"Bị khóa trong Kho lưu trữ Alamo","sub":"Một chiếc rương bụi bặm chứa bằng chứng về Cách mạng Texas vừa được tìm thấy trong khu truyền giáo cũ. Hãy mở các ổ khóa CHỈ bằng những gì tài liệu chứng minh."},"zh":{"title":"被锁在阿拉莫档案馆里","sub":"在古老的传教站里，刚刚翻出一只满是灰尘、装着得克萨斯革命证据的箱子。只能用文件能证明的内容来破解这些锁。"},"hi":{"title":"अलामो अभिलेखागार में बंद","sub":"पुराने मिशन में अभी-अभी टेक्सास क्रांति के सबूतों से भरा एक धूल भरा संदूक मिला है। तालों को सिर्फ़ उसी से खोलो जो दस्तावेज़ साबित करते हैं।"},"ar":{"title":"محتجزون في أرشيف الألامو","sub":"ظهر للتو في الإرسالية القديمة صندوق مغبرّ مليء بأدلة الثورة التكساسية. افتح الأقفال مستخدمًا فقط ما تثبته الوثائق."},"ur":{"title":"الامو آرکائیوز میں بند","sub":"پرانے مشن میں ابھی ابھی ٹیکساس انقلاب کے ثبوتوں سے بھرا ایک گرد آلود صندوق برآمد ہوا ہے۔ تالے صرف اسی سے کھولو جو دستاویزات ثابت کرتی ہیں۔"}}},{"slug":"g68-ss-economics","icon":"🎡","subject":"Social Studies","color":"var(--c1)","langs":["en","es","vi","zh","hi","ar","ur"],"t":{"en":{"title":"The Funnel Cake Lockdown","sub":"The State Fair opens in one hour, but the snack-stand cash box is locked and the owner is stuck in traffic. Crack the locks using the booth's records before the gates open."},"es":{"title":"El Cierre del Funnel Cake","sub":"La Feria Estatal abre en una hora, pero la caja registradora del puesto de aperitivos está cerrada y el dueño está atascado en el tráfico. Abre los candados usando los registros del puesto antes de que se abran las puertas."},"vi":{"title":"Vụ Khóa Bánh Funnel Cake","sub":"Hội chợ Bang sẽ mở cửa trong một giờ nữa, nhưng hộp tiền của quầy đồ ăn vặt đang bị khóa và chủ quầy thì kẹt xe. Hãy mở các ổ khóa bằng cách dùng hồ sơ của quầy trước khi cổng mở."},"zh":{"title":"漏斗蛋糕封锁事件","sub":"州博览会一小时后开门，但小吃摊的钱箱锁住了，老板还堵在路上。在大门开启之前，用摊位的记录破解这些锁。"},"hi":{"title":"फनल केक लॉकडाउन","sub":"राज्य मेला एक घंटे में खुलता है, लेकिन स्नैक-स्टैंड का नकदी बक्सा बंद है और मालिक ट्रैफ़िक में फंसा है। द्वार खुलने से पहले स्टैंड के रिकॉर्ड का उपयोग करके तालों को खोलो।"},"ar":{"title":"إغلاق كعكة القمع","sub":"يفتح معرض الولاية بعد ساعة واحدة، لكن صندوق نقود كشك الوجبات الخفيفة مقفل والمالك عالق في الزحام. افتح الأقفال باستخدام سجلات الكشك قبل أن تُفتح البوابات."},"ur":{"title":"فنل کیک لاک ڈاؤن","sub":"ریاستی میلہ ایک گھنٹے میں کھلتا ہے، لیکن اسنیک اسٹینڈ کا نقدی صندوق بند ہے اور مالک ٹریفک میں پھنسا ہوا ہے۔ دروازے کھلنے سے پہلے اسٹینڈ کے ریکارڈ استعمال کر کے تالے کھولو۔"}}},{"slug":"g68-ss-constitution","icon":"🏛️","subject":"Social Studies","color":"var(--c1)","langs":["en","es","vi","zh","hi","ar","ur"],"t":{"en":{"title":"Lockdown at Liberty Hall: The Constitution Vault","sub":"A power-hungry official tried to grab all the government's power at once. The founders booby-trapped the vault so only someone who understands checks and balances can open it. That's you."},"es":{"title":"Cierre de emergencia en Liberty Hall: La bóveda de la Constitución","sub":"Un funcionario ávido de poder intentó apoderarse de todo el poder del gobierno de una sola vez. Los fundadores pusieron trampas en la bóveda para que solo alguien que entienda los pesos y contrapesos pueda abrirla. Ese eres tú."},"vi":{"title":"Phong tỏa tại Liberty Hall: Hầm chứa Hiến pháp","sub":"Một quan chức khát quyền lực đã cố giành lấy toàn bộ quyền lực của chính phủ cùng một lúc. Những người sáng lập đã gài bẫy hầm chứa để chỉ ai hiểu về kiểm soát và cân bằng mới mở được. Đó là bạn."},"zh":{"title":"自由大厅封锁：宪法保险库","sub":"一名贪权的官员企图一举夺取政府的全部权力。开国者在保险库里布下了机关，只有理解制衡原则的人才能打开它。那个人就是你。"},"hi":{"title":"लिबर्टी हॉल में लॉकडाउन: संविधान तिजोरी","sub":"सत्ता का भूखा एक अधिकारी सरकार की सारी शक्ति एक ही बार में हड़पना चाहता था। संस्थापकों ने तिजोरी में ऐसे जाल बिछाए कि उसे केवल वही खोल सके जो नियंत्रण और संतुलन को समझता हो। वह आप हैं।"},"ar":{"title":"إغلاق في قاعة الحرية: خزينة الدستور","sub":"حاول مسؤول متعطّش للسلطة أن يستولي على كل سلطة الحكومة دفعة واحدة. لقد نصب المؤسسون فخاخًا في الخزينة بحيث لا يستطيع فتحها إلا من يفهم الضوابط والتوازنات. وهذا الشخص هو أنت."},"ur":{"title":"لبرٹی ہال میں لاک ڈاؤن: آئین کی تجوری","sub":"اقتدار کا بھوکا ایک افسر حکومت کی تمام طاقت ایک ہی بار میں ہتھیانا چاہتا تھا۔ بانیوں نے تجوری میں ایسے جال بچھائے کہ اسے صرف وہی کھول سکے جو ضابطوں اور توازن کو سمجھتا ہو۔ وہ شخص آپ ہیں۔"}}}];
+const CH={"en":{"subjects":{"Science":"Science","ELA":"English / Language Arts","Social Studies":"Social Studies"},"openBtn":"Open activity","chooseLanguage":"Language","catalogIntro":"Pick an activity, then choose your language. Every breakout runs in any browser — no logins, no prep.","band":"Grades 6–8","backToHub":"Critical Thinking Breakouts"},"es":{"subjects":{"Science":"Ciencias","ELA":"Lengua y Literatura","Social Studies":"Estudios Sociales"},"openBtn":"Abrir actividad","chooseLanguage":"Idioma","catalogIntro":"Elige una actividad y luego tu idioma. Cada reto funciona en cualquier navegador: sin inicios de sesión ni preparación.","band":"Grados 6.º a 8.º","backToHub":"Retos de pensamiento crítico"},"vi":{"subjects":{"Science":"Khoa học","ELA":"Ngữ văn","Social Studies":"Khoa học Xã hội"},"openBtn":"Mở hoạt động","chooseLanguage":"Ngôn ngữ","catalogIntro":"Chọn một hoạt động, rồi chọn ngôn ngữ của bạn. Mỗi phá đảo đều chạy trên mọi trình duyệt — không cần đăng nhập, không cần chuẩn bị.","band":"Lớp 6–8","backToHub":"Phá đảo tư duy phản biện"},"zh":{"subjects":{"Science":"科学","ELA":"英语/语言艺术","Social Studies":"社会研究"},"openBtn":"打开活动","chooseLanguage":"语言","catalogIntro":"先选一个活动，再选择你的语言。每个闯关都能在任何浏览器中运行——无需登录，无需准备。","band":"6–8 年级","backToHub":"批判性思维闯关"},"hi":{"subjects":{"Science":"विज्ञान","ELA":"अंग्रेज़ी / भाषा कला","Social Studies":"सामाजिक अध्ययन"},"openBtn":"गतिविधि खोलें","chooseLanguage":"भाषा","catalogIntro":"कोई गतिविधि चुनें, फिर अपनी भाषा चुनें। हर ब्रेकआउट किसी भी ब्राउज़र में चलता है — न कोई लॉगिन, न कोई तैयारी।","band":"कक्षा 6–8","backToHub":"समीक्षात्मक चिंतन ब्रेकआउट"},"ar":{"subjects":{"Science":"العلوم","ELA":"اللغة الإنجليزية / فنون اللغة","Social Studies":"الدراسات الاجتماعية"},"openBtn":"افتح النشاط","chooseLanguage":"اللغة","catalogIntro":"اختر نشاطًا، ثم اختر لغتك. كل تحدٍّ يعمل في أي متصفّح — بلا تسجيل دخول، ولا تحضير.","band":"الصفوف 6–8","backToHub":"تحديات التفكير الناقد"},"ur":{"subjects":{"Science":"سائنس","ELA":"انگریزی / لینگویج آرٹس","Social Studies":"سماجی علوم"},"openBtn":"سرگرمی کھولیں","chooseLanguage":"زبان","catalogIntro":"کوئی سرگرمی چنیں، پھر اپنی زبان منتخب کریں۔ ہر بریک آؤٹ کسی بھی براؤزر میں چلتا ہے — نہ کوئی لاگ اِن، نہ کوئی تیاری۔","band":"جماعت 6–8","backToHub":"تنقیدی سوچ کے بریک آؤٹ"}};
+let lang='en';
+function render(){
+  const c=CH[lang]; document.documentElement.lang=lang;
+  document.documentElement.dir=(lang==='ar'||lang==='ur')?'rtl':'ltr';
+  document.getElementById('catIntro').textContent=c.catalogIntro;
+  document.getElementById('langLabel').textContent=c.chooseLanguage;
+  document.getElementById('catTitle').textContent=c.band;
+  document.getElementById('bandEy').textContent=c.band;
+  document.getElementById('hubLink').textContent='‹ '+c.backToHub;
+  document.querySelectorAll('#langbar button').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));
+  const grid=document.getElementById('grid'); grid.innerHTML='';
+  ACTS.forEach(a=>{
+    const use=a.langs.indexOf(lang)>=0?lang:'en';
+    const tt=a.t[use]||a.t.en||{title:a.slug,sub:''};
+    const card=document.createElement('a'); card.className='cat-card';
+    card.href='activities/'+a.slug+'/'+use+'.html';
+    card.innerHTML='<div class="ico">'+a.icon+'</div>'+
+      '<span class="subj" style="background:'+a.color+'">'+(c.subjects[a.subject]||a.subject)+'</span>'+
+      '<h2>'+tt.title+'</h2><p>'+tt.sub+'</p><span class="go">'+c.openBtn+'</span>';
+    grid.appendChild(card);
+  });
+}
+document.querySelectorAll('#langbar button').forEach(b=>b.onclick=()=>{lang=b.dataset.lang;render();});
+render();
+</script>
+</body>
+</html>

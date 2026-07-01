@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The CLEAR Crew — Detective Thinking Game</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --claim:#7c5cbf; --claim-d:#5e3fa0;
+    --lens:#1aa3b8; --lens-d:#0e7d8f;
+    --evidence:#46a23c; --evidence-d:#2f7a28;
+    --alt:#f08a16; --alt-d:#c96e08;
+    --resp:#2f6fe0; --resp-d:#1c52b8;
+    --navy:#102a54; --navy-d:#0b1d3d;
+    --gold:#FCB040; --gold-d:#e89a2a;
+    --paper:#fbf8f1; --ink:#1c2436; --ink-soft:#54607a;
+    --card:#ffffff; --line:#e3e8f2; --good:#2f9e44; --bad:#e03131;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Nunito',sans-serif;color:var(--ink);
+    background:
+      radial-gradient(ellipse 60% 50% at 80% 0%, rgba(252,176,64,.12) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 0% 100%, rgba(47,111,224,.10) 0%, transparent 60%),
+      var(--paper);
+    min-height:100vh;line-height:1.5;-webkit-font-smoothing:antialiased;
+  }
+  body::before{
+    content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  }
+  .wrap{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:20px 18px 80px}
+
+  /* ---------- HEADER ---------- */
+  header{text-align:center;padding:18px 0 8px}
+  .badge-eyebrow{
+    display:inline-flex;align-items:center;gap:7px;background:var(--navy);color:#fff;
+    font-family:'Fredoka',sans-serif;font-weight:600;font-size:.72rem;letter-spacing:.14em;
+    text-transform:uppercase;padding:6px 16px;border-radius:100px;margin-bottom:14px;
+  }
+  .badge-eyebrow span{width:8px;height:8px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+  h1{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(2.1rem,7vw,3.4rem);
+    color:var(--navy);line-height:1;letter-spacing:-.01em}
+  h1 em{color:var(--gold-d);font-style:normal}
+  .tagline{font-size:1rem;color:var(--ink-soft);margin-top:8px;font-weight:600}
+
+  /* ---------- HEROES ---------- */
+  .crew{display:flex;gap:14px;justify-content:center;margin:22px 0 8px;flex-wrap:wrap}
+  .hero-card{
+    display:flex;align-items:center;gap:12px;background:var(--card);border:2px solid var(--line);
+    border-radius:16px;padding:12px 18px 12px 12px;box-shadow:0 4px 14px rgba(16,42,84,.06)
+  }
+  .hero-av{width:54px;height:54px;border-radius:14px;flex-shrink:0}
+  .hero-name{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.05rem;color:var(--navy);line-height:1.1}
+  .hero-role{font-size:.78rem;color:var(--ink-soft);font-weight:600}
+
+  /* ---------- PROGRESS ---------- */
+  .progress{
+    display:flex;gap:6px;justify-content:center;margin:18px 0 6px;flex-wrap:wrap
+  }
+  .pstep{
+    width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+    font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.05rem;color:#fff;opacity:.32;
+    transition:opacity .3s,transform .3s;position:relative
+  }
+  .pstep.on{opacity:1;transform:scale(1.05)}
+  .pstep.done::after{content:'✓';position:absolute;top:-6px;right:-6px;background:var(--good);
+    color:#fff;width:18px;height:18px;border-radius:50%;font-size:.7rem;display:flex;
+    align-items:center;justify-content:center;border:2px solid var(--paper)}
+  .pstep[data-c="C"]{background:var(--claim)} .pstep[data-c="L"]{background:var(--lens)}
+  .pstep[data-c="E"]{background:var(--evidence)} .pstep[data-c="A"]{background:var(--alt)}
+  .pstep[data-c="R"]{background:var(--resp)}
+
+  /* ---------- SCREENS ---------- */
+  .screen{display:none;animation:fade .4s ease}
+  .screen.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+  .panel{
+    background:var(--card);border:2px solid var(--line);border-radius:20px;
+    padding:26px 24px;box-shadow:0 8px 28px rgba(16,42,84,.07);margin-top:8px
+  }
+
+  /* case picker */
+  .picker-top{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+  .case-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin-top:18px}
+  .case-tile{
+    text-align:left;background:var(--card);border:2px solid var(--line);border-radius:16px;
+    padding:18px;cursor:pointer;transition:.18s;font-family:inherit;position:relative;overflow:hidden
+  }
+  .case-tile:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:0 10px 26px rgba(16,42,84,.12)}
+  .case-tile .tag{font-family:'Fredoka',sans-serif;font-size:.66rem;font-weight:600;letter-spacing:.08em;
+    text-transform:uppercase;color:#fff;padding:3px 10px;border-radius:100px;display:inline-block;margin-bottom:10px}
+  .case-tile h3{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.18rem;color:var(--navy);line-height:1.15;margin-bottom:6px}
+  .case-tile p{font-size:.85rem;color:var(--ink-soft);font-weight:600}
+  .case-tile .solved{position:absolute;top:10px;right:10px;font-size:1.3rem}
+  .diff{margin-top:10px;font-size:.74rem;font-weight:700;color:var(--ink-soft)}
+
+  /* step header */
+  .step-head{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+  .step-letter{
+    width:60px;height:60px;border-radius:16px;display:flex;align-items:center;justify-content:center;
+    font-family:'Fredoka',sans-serif;font-weight:700;font-size:2.2rem;color:#fff;flex-shrink:0
+  }
+  .step-title{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.5rem;color:var(--navy);line-height:1}
+  .step-q{font-size:.92rem;color:var(--ink-soft);font-weight:700;margin-top:3px}
+  .detect-tip{
+    display:flex;gap:10px;align-items:flex-start;background:#f4f1ff;border-left:4px solid var(--claim);
+    border-radius:10px;padding:12px 14px;margin:16px 0;font-size:.9rem;font-weight:600;color:#43386b
+  }
+  .detect-tip .who{font-family:'Fredoka',sans-serif;white-space:nowrap;color:var(--claim-d)}
+
+  .casefile{
+    background:#fffdf6;border:2px dashed var(--gold-d);border-radius:14px;padding:16px 18px;margin:14px 0;
+    font-size:.95rem;font-weight:600;color:var(--ink)
+  }
+  .casefile .cf-label{font-family:'Fredoka',sans-serif;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--gold-d);font-weight:600;display:block;margin-bottom:6px}
+
+  .prompt{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.1rem;color:var(--navy);margin:18px 0 12px}
+
+  /* options */
+  .opts{display:flex;flex-direction:column;gap:10px}
+  .opt{
+    text-align:left;background:var(--card);border:2px solid var(--line);border-radius:12px;
+    padding:14px 16px;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:600;color:var(--ink);
+    transition:.15s;display:flex;gap:12px;align-items:flex-start
+  }
+  .opt:hover:not(.locked){border-color:var(--navy);background:#f7f9ff}
+  .opt .mark{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;margin-top:1px}
+  .opt.correct{border-color:var(--good);background:#ebfbee}
+  .opt.correct .mark{background:var(--good);border-color:var(--good);color:#fff}
+  .opt.wrong{border-color:var(--bad);background:#fff0f0}
+  .opt.wrong .mark{background:var(--bad);border-color:var(--bad);color:#fff}
+  .opt.locked{cursor:default;opacity:.6}
+  .opt.locked.correct,.opt.locked.wrong{opacity:1}
+
+  .feedback{
+    margin-top:14px;border-radius:12px;padding:14px 16px;font-weight:700;font-size:.92rem;
+    display:none;animation:fade .3s ease
+  }
+  .feedback.show{display:block}
+  .feedback.good{background:#ebfbee;color:#1f7a31;border:2px solid #a3e2b0}
+  .feedback.bad{background:#fff0f0;color:#b32424;border:2px solid #f3b6b6}
+
+  /* sort game (Evidence step) */
+  .sort-bank{display:flex;flex-direction:column;gap:9px;margin:14px 0}
+  .clue{
+    background:var(--card);border:2px solid var(--line);border-radius:11px;padding:12px 14px;
+    font-weight:600;font-size:.92rem;display:flex;gap:10px;align-items:center;flex-wrap:wrap
+  }
+  .clue .ctext{flex:1;min-width:140px}
+  .clue .cbtns{display:flex;gap:6px}
+  .cbtn{font-family:'Fredoka',sans-serif;font-weight:600;font-size:.74rem;border:2px solid var(--line);
+    background:#fff;border-radius:8px;padding:5px 11px;cursor:pointer;color:var(--ink-soft);transition:.15s}
+  .cbtn:hover{border-color:var(--evidence)}
+  .clue.tagged-strong{border-color:var(--good);background:#ebfbee}
+  .clue.tagged-weak{border-color:var(--alt);background:#fff6e9}
+  .clue .verdict{font-family:'Fredoka',sans-serif;font-weight:600;font-size:.78rem}
+  .clue.tagged-strong .verdict{color:var(--evidence-d)}
+  .clue.tagged-weak .verdict{color:var(--alt-d)}
+
+  /* response checklist */
+  .resp-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+  @media(max-width:520px){.resp-grid{grid-template-columns:1fr}}
+  .resp-opt{
+    background:var(--card);border:2px solid var(--line);border-radius:12px;padding:13px 14px;cursor:pointer;
+    font-family:inherit;font-weight:700;font-size:.9rem;color:var(--ink);text-align:left;transition:.15s
+  }
+  .resp-opt:hover{border-color:var(--resp)}
+  .resp-opt.picked{border-color:var(--resp);background:#eef4ff;color:var(--resp-d)}
+  .resp-opt.picked::before{content:'✓ ';color:var(--resp)}
+
+  /* nav buttons */
+  .nav{display:flex;justify-content:space-between;gap:12px;margin-top:22px;flex-wrap:wrap}
+  .btn{
+    font-family:'Fredoka',sans-serif;font-weight:600;font-size:1rem;border:none;border-radius:12px;
+    padding:13px 26px;cursor:pointer;transition:.18s;display:inline-flex;align-items:center;gap:8px
+  }
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn-go{background:var(--navy);color:#fff}
+  .btn-go:hover:not(:disabled){background:var(--navy-d);transform:translateY(-2px)}
+  .btn-ghost{background:#fff;color:var(--navy);border:2px solid var(--line)}
+  .btn-ghost:hover{border-color:var(--navy)}
+  .btn-gold{background:var(--gold);color:var(--navy-d)}
+  .btn-gold:hover{background:var(--gold-d);transform:translateY(-2px)}
+
+  /* win screen */
+  .solved-wrap{text-align:center;padding:14px 0}
+  .stamp{
+    display:inline-block;font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.4rem;color:var(--good);
+    border:4px solid var(--good);border-radius:14px;padding:10px 24px;transform:rotate(-7deg);
+    margin:6px 0 18px;letter-spacing:.04em;animation:stampin .5s cubic-bezier(.2,1.4,.5,1)
+  }
+  @keyframes stampin{0%{transform:rotate(-7deg) scale(2.4);opacity:0}100%{transform:rotate(-7deg) scale(1);opacity:1}}
+  .recap{text-align:left;background:#f7f9ff;border-radius:14px;padding:16px 18px;margin:16px 0}
+  .recap-row{display:flex;gap:12px;align-items:flex-start;padding:7px 0;font-size:.9rem;font-weight:600}
+  .recap-row .rl{width:30px;height:30px;border-radius:8px;color:#fff;font-family:'Fredoka',sans-serif;
+    font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.95rem}
+
+  /* footer / teks */
+  footer{text-align:center;margin-top:34px;font-size:.82rem;color:var(--ink-soft);font-weight:600}
+  .teks-toggle{font-family:'Fredoka',sans-serif;background:none;border:none;color:var(--navy);
+    font-weight:600;cursor:pointer;text-decoration:underline;font-size:.85rem}
+  .teks-box{display:none;text-align:left;background:#fff;border:2px solid var(--line);border-radius:14px;
+    padding:18px 20px;margin-top:14px;font-size:.85rem;font-weight:600;color:var(--ink-soft)}
+  .teks-box.show{display:block}
+  .teks-box h4{font-family:'Fredoka',sans-serif;color:var(--navy);margin-bottom:8px;font-size:1rem}
+  .teks-box li{margin:5px 0 5px 18px}
+  .teks-box code{background:#eef2fb;padding:1px 6px;border-radius:5px;color:var(--navy);font-weight:700}
+
+  /* confetti */
+  #confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
+</style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+<div class="wrap">
+
+  <header>
+    <div class="badge-eyebrow"><span></span>Junior Detective Academy</div>
+    <h1>The <em>CLEAR</em> Crew</h1>
+    <p class="tagline">Crack the case with smart thinking — one clue at a time.</p>
+
+    <div class="crew">
+      <div class="hero-card">
+        <svg class="hero-av" viewBox="0 0 54 54" aria-label="Vera Lens">
+          <rect width="54" height="54" rx="14" fill="#1aa3b8"/>
+          <circle cx="27" cy="21" r="10" fill="#ffe0c2"/>
+          <path d="M14 46c0-8 6-13 13-13s13 5 13 13z" fill="#7c5cbf"/>
+          <path d="M14 18c2-9 24-9 26 0-3-3-9-4-13-4s-10 1-13 4z" fill="#3a2f55"/>
+          <circle cx="23" cy="21" r="4.6" fill="none" stroke="#102a54" stroke-width="1.6"/>
+          <circle cx="33" cy="21" r="4.6" fill="none" stroke="#102a54" stroke-width="1.6"/>
+          <line x1="27.6" y1="21" x2="28.4" y2="21" stroke="#102a54" stroke-width="1.6"/>
+        </svg>
+        <div><div class="hero-name">Vera Lens</div><div class="hero-role">Spots hidden assumptions</div></div>
+      </div>
+      <div class="hero-card">
+        <svg class="hero-av" viewBox="0 0 54 54" aria-label="Theo Clue">
+          <rect width="54" height="54" rx="14" fill="#f08a16"/>
+          <circle cx="27" cy="22" r="10" fill="#e8b58a"/>
+          <path d="M14 47c0-8 6-13 13-13s13 5 13 13z" fill="#2f6fe0"/>
+          <path d="M16 16h22l-3-5H19z" fill="#46a23c"/>
+          <rect x="14" y="15" width="26" height="4" rx="2" fill="#2f7a28"/>
+          <circle cx="23" cy="22" r="1.7" fill="#102a54"/>
+          <circle cx="31" cy="22" r="1.7" fill="#102a54"/>
+          <path d="M23 27q4 3 8 0" fill="none" stroke="#102a54" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        <div><div class="hero-name">Theo Clue</div><div class="hero-role">Hunts for real evidence</div></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ SCREEN: CASE PICKER ============ -->
+  <section class="screen active" id="s-picker">
+    <div class="panel">
+      <div class="picker-top">
+        <div class="step-head" style="margin-bottom:0">
+          <div class="step-letter" style="background:var(--navy);font-size:1.6rem">🗂️</div>
+          <div>
+            <div class="step-title">Pick a Case File</div>
+            <div class="step-q">Solve it using all 5 CLEAR steps to earn your badge.</div>
+          </div>
+        </div>
+        <button class="btn btn-gold" id="randomBtn">🎲 Surprise Case</button>
+      </div>
+      <div class="case-grid" id="caseGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ SCREEN: GAMEPLAY ============ -->
+  <section class="screen" id="s-play">
+    <div class="progress" id="progress"></div>
+    <div class="panel" id="stepPanel"></div>
+    <div class="nav">
+      <button class="btn btn-ghost" id="backBtn">‹ Back to Cases</button>
+      <button class="btn btn-go" id="nextBtn" disabled>Next Step ›</button>
+    </div>
+  </section>
+
+  <!-- ============ SCREEN: SOLVED ============ -->
+  <section class="screen" id="s-win">
+    <div class="panel solved-wrap">
+      <div class="stamp">CASE SOLVED ✓</div>
+      <h2 style="font-family:'Fredoka',sans-serif;color:var(--navy);font-size:1.5rem" id="winTitle"></h2>
+      <p style="color:var(--ink-soft);font-weight:700;margin-top:6px" id="winLine"></p>
+      <div class="recap" id="recap"></div>
+      <div class="nav" style="justify-content:center">
+        <button class="btn btn-ghost" id="replayBtn">↺ Replay Case</button>
+        <button class="btn btn-gold" id="newCaseBtn">Pick Another Case ›</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <button class="teks-toggle" id="teksBtn">📋 Texas TEKS alignment &amp; teacher notes</button>
+    <div class="teks-box" id="teksBox">
+      <h4>How CLEAR maps to the Texas Essential Knowledge &amp; Skills</h4>
+      <p style="margin-bottom:8px">CLEAR = <b>C</b>laim · <b>L</b>ens · <b>E</b>vidence · <b>A</b>lternatives · <b>R</b>esponse. This game builds the ELAR Comprehension &amp; Inquiry strands and Social Studies critical-thinking process skills (grades 3–8).</p>
+      <ul style="list-style:disc">
+        <li><b>Claim &amp; Evidence:</b> <code>ELA 3–8.6.F</code> make inferences and use evidence to support understanding; <code>3–8.6.G</code> evaluate details to determine what is most important.</li>
+        <li><b>Lens (assumptions/bias):</b> <code>ELA 3–8.9.E</code> author's purpose &amp; craft / point of view; recognizing one's own perspective.</li>
+        <li><b>Evidence sorting (strong vs. weak):</b> <code>ELA 6–8.12.J</code> &amp; inquiry strand <code>.13</code> examine sources for credibility; SS <code>8.29.B</code> drawing inferences and conclusions.</li>
+        <li><b>Alternatives:</b> SS critical-thinking <code>.29</code> compare, contrast, identify cause-and-effect, consider multiple viewpoints.</li>
+        <li><b>Response:</b> <code>ELA 3–8.7.C/E</code> use text evidence to support an appropriate response; speaking/listening to defend or challenge a claim.</li>
+      </ul>
+      <p style="margin-top:10px"><b>Classroom use:</b> Project on the board for a whole-class "case crack," assign at a center, or pair students as detective partners. Each case takes ~5–8 minutes. After solving, have students invent their own case file using the same 5 steps. No login, no internet needed — one file works offline. Share by sending the file or hosting it and embedding via iframe in Google Sites.</p>
+    </div>
+    <p style="margin-top:16px;font-size:.78rem">Based on the CLEAR Thinking Process · A critical-thinking checklist for young detectives.</p>
+    <p style="margin-top:10px;font-size:.76rem;color:var(--ink-soft)">🔒 <b>Privacy:</b> This game runs entirely in your browser. No accounts, no data sent to any server, no trackers or ads, no AI. · <a href="clear-detectives-policy.html" style="color:var(--resp);font-weight:700">Privacy &amp; compliance policy</a></p>
+  </footer>
+</div>
+
+<script>
+/* ============================================================
+   THE CLEAR CREW — self-contained detective thinking game
+   State lives in memory + URL hash (#case=ID) for sharing a case.
+   ============================================================ */
+
+const STEP_META = {
+  C:{c:'claim', cd:'claim-d', name:'Claim',        q:'What exactly is being said?'},
+  L:{c:'lens',  cd:'lens-d',  name:'Lens',         q:'What assumptions am I bringing?'},
+  E:{c:'evidence',cd:'evidence-d',name:'Evidence', q:'What supports the claim?'},
+  A:{c:'alt',   cd:'alt-d',   name:'Alternatives', q:'What else could explain this?'},
+  R:{c:'resp',  cd:'resp-d',  name:'Response',     q:'What should I do now?'}
+};
+const ORDER = ['C','L','E','A','R'];
+
+/* -------------------- CASE DATA -------------------- */
+const CASES = [
+  {
+    id:'cupcakes', emoji:'🧁', tag:'Grades 3–5', tagColor:'#46a23c', diff:'★☆☆ Rookie',
+    title:'The Missing Cupcakes',
+    blurb:'A dozen cupcakes vanished from the class party table.',
+    file:'Twelve cupcakes were on the table at 9:00. By 9:15 they were gone. Sam says, "Mia took them — I saw frosting on her hands!" There are also crumbs near the open window, and the class hamster cage door is unlatched.',
+    // C: pick the clearest claim
+    claim:{
+      prompt:'Vera says: "Before we accuse anyone, let\'s name the claim clearly." Which sentence states a CLEAR, testable claim?',
+      opts:[
+        {t:'Mia is a bad person.', correct:false, why:'That\'s an opinion about Mia, not a testable claim about the cupcakes.'},
+        {t:'Mia took the missing cupcakes.', correct:true, why:'Specific and testable — we can look for evidence for or against it.'},
+        {t:'Something weird happened today.', correct:false, why:'Too vague to test. A good claim is specific.'}
+      ]
+    },
+    // L: identify the assumption
+    lens:{
+      prompt:'Theo asks: "What assumption is hiding in Sam\'s accusation?" Spot the assumption.',
+      opts:[
+        {t:'Frosting on hands proves you took ALL the cupcakes.', correct:true, why:'Exactly — frosting could come from eating ONE cupcake, not stealing twelve. That\'s the hidden assumption.'},
+        {t:'Cupcakes are tasty.', correct:false, why:'True, but not an assumption that affects the case.'},
+        {t:'The party started at 9:00.', correct:false, why:'That\'s a fact we were given, not an assumption.'}
+      ]
+    },
+    // E: sort the clues
+    evidence:{
+      prompt:'Tag each clue as STRONG (facts/direct observation) or WEAK (rumor/impression).',
+      clues:[
+        {t:'Crumbs found right by the open window.', strong:true},
+        {t:'"I bet Mia did it, she loves sweets."', strong:false},
+        {t:'The hamster cage door is unlatched.', strong:true},
+        {t:'Someone "felt like" Mia was acting guilty.', strong:false}
+      ]
+    },
+    // A: pick a strong alternative
+    alt:{
+      prompt:'Vera: "Don\'t stop at the first answer. What ELSE could explain the missing cupcakes?"',
+      opts:[
+        {t:'The hamster escaped through the unlatched door and the crumbs by the window suggest an animal.', correct:true, why:'Great detective work — this alternative fits the window crumbs AND the open cage.'},
+        {t:'Mia is just guilty, no need to think more.', correct:false, why:'That skips the whole point of considering alternatives.'},
+        {t:'Cupcakes can disappear by magic.', correct:false, why:'Fun idea, but it ignores the real clues.'}
+      ]
+    },
+    // R: response (multi-select, need >=2 good)
+    response:{
+      prompt:'Time to act fairly. Pick the BEST detective responses (choose 2 or more):',
+      opts:[
+        {t:'Check the window and hamster cage for fur or crumbs.', good:true},
+        {t:'Ask Mia calmly what she saw, without accusing.', good:true},
+        {t:'Tell everyone Mia is the thief right now.', good:false},
+        {t:'Gather more information before deciding.', good:true}
+      ],
+      need:2
+    },
+    solved:'Following the crumbs, the Crew found the class hamster behind the bookshelf — with frosting on its whiskers! By naming the claim, checking their lens, sorting evidence, and considering alternatives, the CLEAR Crew cleared Mia\'s name and cracked the case.'
+  },
+
+  {
+    id:'science', emoji:'🌱', tag:'Grades 4–6', tagColor:'#1aa3b8', diff:'★★☆ Detective',
+    title:'The Wilting Classroom Plant',
+    blurb:'The class plant is drooping — and everyone has a theory.',
+    file:'The class sunflower looked great last week. Today it droops. Jordan says, "Plants need sun — someone must have turned off the lights, that killed it!" The soil is bone dry. The plant sits on a sunny windowsill. The cup has a crack leaking water.',
+    claim:{
+      prompt:'Name the claim Jordan is really making. Which is the clearest, testable version?',
+      opts:[
+        {t:'Turning off the lights made the plant droop.', correct:true, why:'Specific cause-and-effect claim we can actually test against the evidence.'},
+        {t:'Plants are hard to keep alive.', correct:false, why:'Too general — not about THIS plant or testable here.'},
+        {t:'Jordan worries a lot.', correct:false, why:'That\'s about Jordan, not the plant claim.'}
+      ]
+    },
+    lens:{
+      prompt:'What assumption is Jordan bringing to the case?',
+      opts:[
+        {t:'The ONLY thing a plant needs is light, so light must be the cause.', correct:true, why:'Right — Jordan assumed light is the only factor and skipped water, soil, and the cracked cup.'},
+        {t:'Sunflowers are yellow.', correct:false, why:'True but unrelated to why it drooped.'},
+        {t:'The classroom has a window.', correct:false, why:'That\'s an observation, not Jordan\'s hidden assumption.'}
+      ]
+    },
+    evidence:{
+      prompt:'Sort the clues: STRONG evidence or WEAK?',
+      clues:[
+        {t:'The soil is completely dry to the touch.', strong:true},
+        {t:'"It probably hates this classroom."', strong:false},
+        {t:'The water cup has a visible crack and is leaking.', strong:true},
+        {t:'The plant sits in direct sunlight all day.', strong:true}
+      ]
+    },
+    alt:{
+      prompt:'What else could explain the drooping? Pick the strongest alternative.',
+      opts:[
+        {t:'The cracked cup leaked the water out, so the dry soil left the plant thirsty.', correct:true, why:'This alternative connects the leak, the dry soil, AND the sunny spot. Strong reasoning!'},
+        {t:'The lights, definitely, end of story.', correct:false, why:'That ignores the dry soil and the leaking cup.'},
+        {t:'The plant is just lazy today.', correct:false, why:'Plants don\'t get lazy — and it ignores the evidence.'}
+      ]
+    },
+    response:{
+      prompt:'What should the Crew do now? Pick the BEST responses (choose 2 or more):',
+      opts:[
+        {t:'Water the plant and watch if it recovers.', good:true},
+        {t:'Replace the cracked cup so water stays in.', good:true},
+        {t:'Blame whoever touched the light switch.', good:false},
+        {t:'Document what happened so it doesn\'t repeat.', good:true}
+      ],
+      need:2
+    },
+    solved:'The Crew gave the sunflower a fresh drink in a new cup. By the next morning it stood tall again — proving the cracked cup, not the lights, was the culprit. Strong evidence beats a quick guess every time!'
+  },
+
+  {
+    id:'rumor', emoji:'📱', tag:'Grades 6–8', tagColor:'#7c5cbf', diff:'★★★ Ace',
+    title:'The Viral Field-Trip Rumor',
+    blurb:'A post says the big field trip is CANCELED. Is it true?',
+    file:'A post is spreading: "FIELD TRIP CANCELED!! My cousin\'s friend heard it from a teacher." It has 200 likes. The school website still lists the trip as scheduled. No email came from the office. The post has no name, date, or source link.',
+    claim:{
+      prompt:'Strip it down to the claim being shared. Which states it most clearly?',
+      opts:[
+        {t:'The field trip has been canceled.', correct:true, why:'Clear and checkable — we can verify it against real sources.'},
+        {t:'Social media is always wrong.', correct:false, why:'A sweeping opinion, not the specific claim being tested.'},
+        {t:'People are talking online.', correct:false, why:'Too vague — that\'s not the claim itself.'}
+      ]
+    },
+    lens:{
+      prompt:'What assumption makes people believe the post so fast?',
+      opts:[
+        {t:'If lots of people share it, it must be true.', correct:true, why:'Spot on — 200 likes feels convincing, but popularity isn\'t proof. That\'s the hidden assumption.'},
+        {t:'Field trips are fun.', correct:false, why:'True, but it\'s not what\'s making people believe the rumor.'},
+        {t:'The office sends emails sometimes.', correct:false, why:'A fact about the office, not the assumption driving belief.'}
+      ]
+    },
+    evidence:{
+      prompt:'Sort the clues: STRONG evidence or WEAK?',
+      clues:[
+        {t:'The official school website still lists the trip.', strong:true},
+        {t:'"My cousin\'s friend heard it from a teacher."', strong:false},
+        {t:'No cancellation email from the office.', strong:true},
+        {t:'The post has 200 likes.', strong:false}
+      ]
+    },
+    alt:{
+      prompt:'What else could explain the post? Choose the strongest alternative.',
+      opts:[
+        {t:'Someone misheard or made it up, and likes spread it before anyone checked.', correct:true, why:'This fits the missing source, no email, and the still-scheduled website. Excellent.'},
+        {t:'200 likes means it\'s official — case closed.', correct:false, why:'That repeats the very assumption we just caught.'},
+        {t:'The internet broke the trip somehow.', correct:false, why:'Not a real explanation of the evidence.'}
+      ]
+    },
+    response:{
+      prompt:'How should a smart digital detective respond? Pick the BEST actions (choose 2 or more):',
+      opts:[
+        {t:'Check the official school source before sharing.', good:true},
+        {t:'Ask the office to confirm or deny.', good:true},
+        {t:'Reshare it fast so friends know.', good:false},
+        {t:'Wait for confirmation before reacting.', good:true}
+      ],
+      need:2
+    },
+    solved:'The Crew checked the official site and asked the office — the trip was ON the whole time. One anonymous post had fooled 200 people. By refusing to share before verifying, the CLEAR Crew stopped a rumor in its tracks. That\'s real-world critical thinking!'
+  },
+
+  /* ===== GRADES 3–5 (two more) ===== */
+  {
+    id:'jacket', emoji:'🧥', tag:'Grades 3–5', tagColor:'#46a23c', diff:'★☆☆ Rookie',
+    title:'The Switched-Up Jacket',
+    blurb:'Leo says someone took his blue jacket from the hook.',
+    file:'Leo hung his blue jacket on hook #4 this morning. At recess it\'s gone. Leo says, "Dev stole it — he was near the hooks!" But there\'s an identical blue jacket on hook #5 with the name "A. Reyes" inside. Two kids in class wear the same brand. Leo never checked the name tag in his own jacket.',
+    claim:{
+      prompt:'Vera: "Let\'s state the claim plainly before pointing fingers." Which is the clearest, testable claim?',
+      opts:[
+        {t:'Dev took Leo\'s blue jacket.', correct:true, why:'Specific and checkable — we can look for proof for or against it.'},
+        {t:'Dev is sneaky.', correct:false, why:'That\'s an opinion about Dev, not a testable claim.'},
+        {t:'Jackets go missing a lot.', correct:false, why:'Too vague — not about this jacket today.'}
+      ]
+    },
+    lens:{
+      prompt:'Theo: "What is Leo assuming without checking?"',
+      opts:[
+        {t:'Being NEAR the hooks means you took the jacket.', correct:true, why:'Right — standing near hooks isn\'t proof. That leap is the hidden assumption.'},
+        {t:'Blue is a popular color.', correct:false, why:'True, but not the assumption driving the accusation.'},
+        {t:'Recess happens after morning.', correct:false, why:'A fact, not an assumption.'}
+      ]
+    },
+    evidence:{
+      prompt:'Sort each clue: STRONG (facts) or WEAK (guesses/feelings)?',
+      clues:[
+        {t:'A jacket on hook #5 has the name "A. Reyes" inside.', strong:true},
+        {t:'"Dev just LOOKS like he\'d do it."', strong:false},
+        {t:'Two classmates own the same brand of jacket.', strong:true},
+        {t:'Leo has a "bad feeling" about Dev.', strong:false}
+      ]
+    },
+    alt:{
+      prompt:'Vera: "What else could explain the missing jacket?"',
+      opts:[
+        {t:'Someone grabbed the wrong identical jacket by mistake, or Leo\'s is on a different hook.', correct:true, why:'Fits the matching brands and the name-tag clue perfectly. Strong thinking!'},
+        {t:'Dev did it, no need to look further.', correct:false, why:'That skips the whole point of considering alternatives.'},
+        {t:'Jackets can walk away on their own.', correct:false, why:'Fun, but it ignores the real clues.'}
+      ]
+    },
+    response:{
+      prompt:'What should the Crew do now? Pick the BEST actions (choose 2 or more):',
+      opts:[
+        {t:'Check the name tag inside every blue jacket.', good:true},
+        {t:'Ask Dev calmly if he saw what happened.', good:true},
+        {t:'Announce that Dev is a thief.', good:false},
+        {t:'Look on the other hooks and the lost-and-found.', good:true}
+      ],
+      need:2
+    },
+    solved:'The Crew checked the tags — Leo\'s jacket was on hook #7 the whole time, and the one he thought was stolen belonged to A. Reyes. Two identical jackets, one honest mix-up. By checking facts instead of feelings, the CLEAR Crew cleared Dev\'s name!'
+  },
+
+  {
+    id:'fastest', emoji:'🏃', tag:'Grades 3–5', tagColor:'#46a23c', diff:'★★☆ Detective',
+    title:'The "Fastest Runner" Boast',
+    blurb:'Max says he\'s the fastest kid in the whole grade.',
+    file:'Max announces, "I\'m the fastest runner in the grade — I beat Priya in a race today!" But the race was only Max and Priya, on the day Priya had a hurt ankle. Nobody timed it. Other fast runners weren\'t there. Last month, Jaylen won the field-day dash.',
+    claim:{
+      prompt:'Vera: "Let\'s pin down exactly what Max is claiming."',
+      opts:[
+        {t:'Max is the fastest runner in the entire grade.', correct:true, why:'That\'s the big, testable claim — and a big claim needs big evidence.'},
+        {t:'Max likes to run.', correct:false, why:'Probably true, but not the claim under question.'},
+        {t:'Racing is fun.', correct:false, why:'An opinion, not Max\'s claim.'}
+      ]
+    },
+    lens:{
+      prompt:'Theo: "What is Max assuming when he says he\'s fastest in the grade?"',
+      opts:[
+        {t:'Beating ONE person once proves you\'re faster than EVERYONE.', correct:true, why:'Exactly — one win over one runner doesn\'t cover the whole grade. That\'s the leap.'},
+        {t:'Priya is a classmate.', correct:false, why:'A fact, not the assumption.'},
+        {t:'Field day happened last month.', correct:false, why:'True, but not what Max is assuming.'}
+      ]
+    },
+    evidence:{
+      prompt:'Sort the clues: STRONG evidence or WEAK?',
+      clues:[
+        {t:'Priya had a hurt ankle during the race.', strong:true},
+        {t:'"Max just FEELS like the fastest."', strong:false},
+        {t:'Jaylen won the timed field-day dash last month.', strong:true},
+        {t:'The race had no timer and only two runners.', strong:true}
+      ]
+    },
+    alt:{
+      prompt:'Vera: "What else could explain Max\'s win besides being fastest in the grade?"',
+      opts:[
+        {t:'He won because Priya was injured — and the real fast runners weren\'t even racing.', correct:true, why:'This explains the win using the actual evidence. Sharp!'},
+        {t:'Max is just the fastest, end of discussion.', correct:false, why:'That repeats the claim instead of testing it.'},
+        {t:'The track was magic that day.', correct:false, why:'Not a real explanation.'}
+      ]
+    },
+    response:{
+      prompt:'How should the Crew settle this fairly? Pick the BEST actions (choose 2 or more):',
+      opts:[
+        {t:'Hold a timed race with all the fast runners, healthy.', good:true},
+        {t:'Compare official field-day times.', good:true},
+        {t:'Just believe Max because he said so.', good:false},
+        {t:'Gather more results before crowning anyone.', good:true}
+      ],
+      need:2
+    },
+    solved:'The Crew set up a fair, timed race with everyone healthy. Max ran great — but Jaylen edged him out. Max learned that one lucky win isn\'t proof of being "the fastest in the grade." A bold claim needs solid evidence!'
+  },
+
+  /* ===== GRADES 4–6 (two more) ===== */
+  {
+    id:'goldfish', emoji:'🐠', tag:'Grades 4–6', tagColor:'#1aa3b8', diff:'★★☆ Detective',
+    title:'The Cloudy Fish Tank Mystery',
+    blurb:'The classroom goldfish tank turned cloudy overnight.',
+    file:'On Monday the tank was clear; Tuesday it\'s cloudy and Sunny the goldfish hides. Avery says, "The new kid fed the fish — they poisoned it!" But the feeding log shows the tank was fed twice on Monday (double food). The filter light is off. Leftover food floats on top.',
+    claim:{
+      prompt:'Vera: "Name the claim Avery is making, clearly."',
+      opts:[
+        {t:'The new student poisoned the fish on purpose.', correct:true, why:'Specific and serious — exactly the kind of claim we must test before believing.'},
+        {t:'New kids cause trouble.', correct:false, why:'A sweeping opinion, not a testable claim about the tank.'},
+        {t:'Fish tanks are tricky.', correct:false, why:'Too general to investigate here.'}
+      ]
+    },
+    lens:{
+      prompt:'Theo: "What assumption is packed into Avery\'s accusation?"',
+      opts:[
+        {t:'A new person + a problem = they did it on purpose.', correct:true, why:'Right — blaming the newest person and assuming bad intent is the hidden bias here.'},
+        {t:'Goldfish are orange.', correct:false, why:'True, but irrelevant to the cause.'},
+        {t:'Monday comes before Tuesday.', correct:false, why:'A fact, not an assumption.'}
+      ]
+    },
+    evidence:{
+      prompt:'Sort the clues: STRONG evidence or WEAK?',
+      clues:[
+        {t:'The feeding log shows the tank was fed twice Monday.', strong:true},
+        {t:'"The new kid seems suspicious to me."', strong:false},
+        {t:'The filter light is off (filter not running).', strong:true},
+        {t:'Uneaten food is floating on the surface.', strong:true}
+      ]
+    },
+    alt:{
+      prompt:'Vera: "What else could turn the water cloudy?"',
+      opts:[
+        {t:'Double feeding plus a stopped filter let extra food rot and cloud the water.', correct:true, why:'This ties together the log, the dead filter, and the floating food. Excellent reasoning!'},
+        {t:'The new kid poisoned it — case closed.', correct:false, why:'That ignores the filter and the feeding log.'},
+        {t:'The fish made the water cloudy out of boredom.', correct:false, why:'Not how tanks work, and it skips the evidence.'}
+      ]
+    },
+    response:{
+      prompt:'What should the Crew do now? Pick the BEST actions (choose 2 or more):',
+      opts:[
+        {t:'Turn the filter back on and remove extra food.', good:true},
+        {t:'Set ONE clear feeding schedule so it isn\'t doubled.', good:true},
+        {t:'Blame and report the new student.', good:false},
+        {t:'Watch the tank over a few days to confirm it clears.', good:true}
+      ],
+      need:2
+    },
+    solved:'The Crew restarted the filter and scooped out the extra food. By Thursday the tank was clear and Sunny was swimming happily. No villain — just a stopped filter and too much food. The CLEAR Crew protected an innocent classmate from a false accusation!'
+  },
+
+  {
+    id:'energy', emoji:'⚡', tag:'Grades 4–6', tagColor:'#1aa3b8', diff:'★★★ Ace',
+    title:'The "Brain Boost" Snack Claim',
+    blurb:'A snack box promises it makes you smarter at tests.',
+    file:'A snack box reads: "Eat ZAP bars — kids who ate them scored higher on tests!" The box shows a cartoon brain and a kid with an A+. The tiny print says "based on 6 kids." The same kids also studied extra and slept well. No school or scientist is named. ZAP makes the bars AND ran the "study."',
+    claim:{
+      prompt:'Vera: "What exactly is the box claiming?"',
+      opts:[
+        {t:'Eating ZAP bars makes kids score higher on tests.', correct:true, why:'That\'s the testable cause-and-effect claim hiding behind the cartoon.'},
+        {t:'ZAP bars taste good.', correct:false, why:'Maybe, but that\'s not the claim being advertised.'},
+        {t:'Tests are stressful.', correct:false, why:'True, but not what the box is claiming.'}
+      ]
+    },
+    lens:{
+      prompt:'Theo: "What are we tempted to assume when we see a brain cartoon and an A+?"',
+      opts:[
+        {t:'A confident ad with science-y pictures must be telling the truth.', correct:true, why:'Exactly — slick packaging makes us assume proof. That\'s the bias advertisers count on.'},
+        {t:'Snacks come in boxes.', correct:false, why:'A fact, not the assumption.'},
+        {t:'Cartoons are colorful.', correct:false, why:'Irrelevant to the claim.'}
+      ]
+    },
+    evidence:{
+      prompt:'Sort the clues: STRONG evidence or WEAK?',
+      clues:[
+        {t:'The "study" used only 6 kids.', strong:false},
+        {t:'Those kids also studied extra and slept well.', strong:true},
+        {t:'ZAP both sells the bars and ran the study.', strong:true},
+        {t:'A cartoon brain is printed on the box.', strong:false}
+      ]
+    },
+    alt:{
+      prompt:'Vera: "What else could explain the higher scores besides the bars?"',
+      opts:[
+        {t:'The extra studying and good sleep raised the scores — not the bar.', correct:true, why:'Spot on. When other causes are present, you can\'t credit the snack. Great control of variables!'},
+        {t:'The bars are obviously magic brain food.', correct:false, why:'That swallows the ad\'s claim whole.'},
+        {t:'Cartoons make kids smarter.', correct:false, why:'Not a real explanation.'}
+      ]
+    },
+    response:{
+      prompt:'How should a smart consumer respond? Pick the BEST actions (choose 2 or more):',
+      opts:[
+        {t:'Look for a real, independent study with many kids.', good:true},
+        {t:'Notice the company tested its own product.', good:true},
+        {t:'Buy a box because the ad looks convincing.', good:false},
+        {t:'Ask what ELSE could have caused the scores.', good:true}
+      ],
+      need:2
+    },
+    solved:'The Crew dug into the fine print: 6 kids, no outside scientist, and a company grading its own homework. The "brain boost" was really just studying and sleep. The CLEAR Crew learned to read claims like a detective — not a customer!'
+  },
+
+  /* ===== GRADES 6–8 (two more) ===== */
+  {
+    id:'photo', emoji:'📸', tag:'Grades 6–8', tagColor:'#7c5cbf', diff:'★★★ Ace',
+    title:'The Too-Good Photo',
+    blurb:'A post shows a "shark swimming down a flooded street."',
+    file:'A post claims: "SHARK in our town\'s flooded street after the storm!" The photo looks dramatic. A reverse image search shows the same shark photo used in five other cities\' floods over ten years. The shark\'s lighting doesn\'t match the street. No local news reported it. The account posts shocking content for likes.',
+    claim:{
+      prompt:'Vera: "State the claim the post is making."',
+      opts:[
+        {t:'A real shark is swimming in our town\'s flooded street.', correct:true, why:'Clear and checkable against real sources — exactly what we test.'},
+        {t:'Storms are scary.', correct:false, why:'True, but not the specific claim.'},
+        {t:'The internet has photos.', correct:false, why:'Too vague to investigate.'}
+      ]
+    },
+    lens:{
+      prompt:'Theo: "What makes a dramatic photo so easy to believe?"',
+      opts:[
+        {t:'If a photo looks real and shocking, it must be true.', correct:true, why:'Right — a vivid image feels like proof, but images can be reused or faked. That\'s the trap.'},
+        {t:'Sharks live in oceans.', correct:false, why:'A fact, not the assumption driving belief.'},
+        {t:'Floods involve water.', correct:false, why:'Obvious and unrelated to the assumption.'}
+      ]
+    },
+    evidence:{
+      prompt:'Sort the clues: STRONG evidence or WEAK?',
+      clues:[
+        {t:'Reverse search finds the same photo in 5 other floods over 10 years.', strong:true},
+        {t:'"It just looks too real to be fake."', strong:false},
+        {t:'No local news outlet reported a shark.', strong:true},
+        {t:'The shark\'s lighting doesn\'t match the street.', strong:true}
+      ]
+    },
+    alt:{
+      prompt:'Vera: "What else explains this photo besides a real shark?"',
+      opts:[
+        {t:'It\'s an old recycled photo edited in, posted to chase likes.', correct:true, why:'Fits the reverse-search hits, mismatched lighting, and the attention-seeking account. Masterful!'},
+        {t:'There\'s definitely a shark, the photo proves it.', correct:false, why:'That ignores every piece of evidence we found.'},
+        {t:'The storm teleported a shark downtown.', correct:false, why:'Not a serious explanation.'}
+      ]
+    },
+    response:{
+      prompt:'How should a media-literate detective respond? Pick the BEST actions (choose 2 or more):',
+      opts:[
+        {t:'Run a reverse image search before believing it.', good:true},
+        {t:'Check whether trusted local news confirms it.', good:true},
+        {t:'Repost it immediately to warn everyone.', good:false},
+        {t:'Look at who posted it and why.', good:true}
+      ],
+      need:2
+    },
+    solved:'The Crew traced the photo back ten years and five cities — the same fake shark every flood. No local news, no real shark, just a like-hungry account. By verifying images instead of trusting them, the CLEAR Crew shut down a classic piece of misinformation!'
+  },
+
+  {
+    id:'streak', emoji:'🍀', tag:'Grades 6–8', tagColor:'#7c5cbf', diff:'★★★ Ace',
+    title:'The Lucky Socks Theory',
+    blurb:'Coach insists the team only wins in the "lucky" green socks.',
+    file:'The team won 3 games while wearing green socks, so Coach says, "The green socks make us win!" But in those 3 games the team also practiced more and faced weaker opponents. The team also won twice in regular socks. They lost once IN the green socks. Nobody tracked the other factors.',
+    claim:{
+      prompt:'Vera: "What is Coach actually claiming?"',
+      opts:[
+        {t:'Wearing the green socks causes the team to win.', correct:true, why:'A clear cause-and-effect claim we can test against the real results.'},
+        {t:'Green is a nice color.', correct:false, why:'Opinion, not the claim.'},
+        {t:'The team plays games.', correct:false, why:'A fact, not the claim under test.'}
+      ]
+    },
+    lens:{
+      prompt:'Theo: "What thinking trap is Coach falling into?"',
+      opts:[
+        {t:'Two things happening together means one CAUSED the other.', correct:true, why:'Exactly — winning while wearing socks doesn\'t mean the socks caused it. That\'s correlation-vs-causation.'},
+        {t:'Socks come in pairs.', correct:false, why:'A fact, not the assumption.'},
+        {t:'Coaches give advice.', correct:false, why:'Unrelated to the reasoning error.'}
+      ]
+    },
+    evidence:{
+      prompt:'Sort the clues: STRONG evidence or WEAK?',
+      clues:[
+        {t:'The team lost once WHILE wearing the green socks.', strong:true},
+        {t:'"It just feels like the socks are lucky."', strong:false},
+        {t:'The team won twice in regular socks.', strong:true},
+        {t:'During the green-sock wins they faced weaker teams.', strong:true}
+      ]
+    },
+    alt:{
+      prompt:'Vera: "What better explains the wins than the socks?"',
+      opts:[
+        {t:'More practice and weaker opponents explain the wins — the socks lost a game too.', correct:true, why:'You separated the real causes from a coincidence. That\'s expert-level reasoning!'},
+        {t:'The socks are clearly magic, keep wearing them.', correct:false, why:'That ignores the loss in green socks and the wins without them.'},
+        {t:'Luck is a real, measurable force.', correct:false, why:'Not supported by any evidence here.'}
+      ]
+    },
+    response:{
+      prompt:'How should the team test this fairly? Pick the BEST actions (choose 2 or more):',
+      opts:[
+        {t:'Track practice time and opponent strength each game.', good:true},
+        {t:'Compare records in green vs. regular socks honestly.', good:true},
+        {t:'Spend the budget on more "lucky" socks.', good:false},
+        {t:'Keep practicing hard regardless of socks.', good:true}
+      ],
+      need:2
+    },
+    solved:'The Crew charted every game: the wins lined up with practice and easier opponents, not sock color — and the team had won in regular socks AND lost in green ones. Coach laughed and kept the socks for fun, but credited the real winner: practice. Correlation isn\'t causation!'
+  }
+];
+
+/* -------------------- STATE -------------------- */
+let state = { caseId:null, stepIdx:0, answers:{} };
+const solvedCases = new Set(); // session memory only
+
+/* -------------------- HELPERS -------------------- */
+const $ = s => document.querySelector(s);
+function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); $('#'+id).classList.add('active'); window.scrollTo({top:0,behavior:'smooth'}); }
+function curCase(){ return CASES.find(c=>c.id===state.caseId); }
+
+/* -------------------- PICKER -------------------- */
+function renderPicker(){
+  const g = $('#caseGrid'); g.innerHTML='';
+  CASES.forEach(c=>{
+    const b=document.createElement('button'); b.className='case-tile';
+    b.innerHTML=`
+      ${solvedCases.has(c.id)?'<span class="solved">🏅</span>':''}
+      <span class="tag" style="background:${c.tagColor}">${c.tag}</span>
+      <h3>${c.emoji} ${c.title}</h3>
+      <p>${c.blurb}</p>
+      <div class="diff">${c.diff}</div>`;
+    b.onclick=()=>startCase(c.id);
+    g.appendChild(b);
+  });
+}
+
+/* -------------------- RANDOMIZER -------------------- */
+let lastPlayed=null;
+function pickRandom(){
+  let pool=CASES;
+  if(CASES.length>1 && lastPlayed) pool=CASES.filter(c=>c.id!==lastPlayed);
+  const pick=pool[(Math.random()*pool.length)|0];
+  startCase(pick.id);
+}
+$('#randomBtn').onclick=pickRandom;
+
+/* -------------------- START / NAV -------------------- */
+function startCase(id){
+  lastPlayed=id;
+  state={caseId:id, stepIdx:0, answers:{}};
+  location.hash='case='+id;
+  renderProgress(); renderStep(); show('s-play');
+}
+function renderProgress(){
+  const p=$('#progress'); p.innerHTML='';
+  ORDER.forEach((k,i)=>{
+    const d=document.createElement('div');
+    d.className='pstep'+(i===state.stepIdx?' on':'')+(state.answers[k]?' done':'');
+    d.dataset.c=k; d.textContent=k; p.appendChild(d);
+  });
+}
+
+/* -------------------- RENDER A STEP -------------------- */
+function renderStep(){
+  const c=curCase(), key=ORDER[state.stepIdx], m=STEP_META[key];
+  const panel=$('#stepPanel');
+  let body='';
+  // header + casefile (casefile only shown on first step to keep it tight, but available via toggle)
+  body+=`<div class="step-head">
+      <div class="step-letter" style="background:var(--${m.c})">${key}</div>
+      <div><div class="step-title">${m.name}</div><div class="step-q">${m.q}</div></div>
+    </div>`;
+  if(state.stepIdx===0){
+    body+=`<div class="casefile"><span class="cf-label">${c.emoji} Case File: ${c.title}</span>${c.file}</div>`;
+  } else {
+    body+=`<details style="margin:12px 0"><summary style="cursor:pointer;font-family:'Fredoka',sans-serif;font-weight:600;color:var(--navy)">📂 Re-read the case file</summary><div class="casefile" style="margin-top:8px"><span class="cf-label">${c.emoji} ${c.title}</span>${c.file}</div></details>`;
+  }
+
+  if(key==='E'){ body+=renderEvidence(c); }
+  else if(key==='R'){ body+=renderResponse(c); }
+  else { body+=renderMC(c,key); }
+
+  panel.innerHTML=body;
+  wireStep(c,key);
+  // tip line
+  $('#nextBtn').disabled = !state.answers[key];
+  $('#nextBtn').textContent = state.stepIdx===ORDER.length-1 ? 'Solve the Case ›' : 'Next Step ›';
+}
+
+/* multiple-choice steps: C, L, A */
+function renderMC(c,key){
+  const data = key==='C'?c.claim : key==='L'?c.lens : c.alt;
+  const tipWho = key==='L'?'Theo Clue':'Vera Lens';
+  let h=`<div class="detect-tip"><span class="who">🔎 ${tipWho}:</span><span>${data.prompt}</span></div><div class="opts" data-step="${key}">`;
+  data.opts.forEach((o,i)=>{
+    h+=`<button class="opt" data-i="${i}"><span class="mark">${String.fromCharCode(65+i)}</span><span>${o.t}</span></button>`;
+  });
+  h+=`</div><div class="feedback" id="fb"></div>`;
+  return h;
+}
+
+/* evidence sort step */
+function renderEvidence(c){
+  let h=`<div class="detect-tip"><span class="who">🔎 Theo Clue:</span><span>${c.evidence.prompt}</span></div><div class="sort-bank" id="bank">`;
+  c.evidence.clues.forEach((cl,i)=>{
+    h+=`<div class="clue" data-i="${i}">
+        <span class="ctext">${cl.t}</span>
+        <span class="cbtns">
+          <button class="cbtn" data-v="strong">💪 Strong</button>
+          <button class="cbtn" data-v="weak">💨 Weak</button>
+        </span>
+        <span class="verdict"></span>
+      </div>`;
+  });
+  h+=`</div><div class="feedback" id="fb"></div>`;
+  return h;
+}
+
+/* response multi-select */
+function renderResponse(c){
+  let h=`<div class="detect-tip"><span class="who">🔎 The Crew:</span><span>${c.response.prompt}</span></div><div class="resp-grid" id="respGrid">`;
+  c.response.opts.forEach((o,i)=>{
+    h+=`<button class="resp-opt" data-i="${i}">${o.t}</button>`;
+  });
+  h+=`</div><div class="feedback" id="fb"></div>`;
+  return h;
+}
+
+/* -------------------- WIRE INTERACTIONS -------------------- */
+function wireStep(c,key){
+  const fb=()=>$('#fb');
+  if(key==='E'){
+    const clues=c.evidence.clues; const tagged={};
+    $('#bank').querySelectorAll('.clue').forEach(row=>{
+      const i=+row.dataset.i;
+      row.querySelectorAll('.cbtn').forEach(btn=>{
+        btn.onclick=()=>{
+          const v=btn.dataset.v;
+          const correct = (v==='strong')===clues[i].strong;
+          tagged[i]=v;
+          row.classList.remove('tagged-strong','tagged-weak');
+          row.classList.add(v==='strong'?'tagged-strong':'tagged-weak');
+          row.querySelector('.verdict').textContent = correct?'✓ '+(v==='strong'?'Strong':'Weak'):'✗ try again';
+          row.querySelector('.verdict').style.color = correct?'':'var(--bad)';
+          // check all correct
+          const allDone = clues.every((cl,idx)=> tagged[idx] && ((tagged[idx]==='strong')===cl.strong));
+          if(allDone){
+            state.answers['E']=true;
+            fb().className='feedback good show';
+            fb().innerHTML='🎯 <b>Nice sorting!</b> Strong evidence is what we can see or measure — not rumors or feelings.';
+            $('#nextBtn').disabled=false; renderProgress();
+          } else {
+            state.answers['E']=false; $('#nextBtn').disabled=true;
+          }
+        };
+      });
+    });
+    return;
+  }
+  if(key==='R'){
+    const opts=c.response.opts; const picked=new Set();
+    $('#respGrid').querySelectorAll('.resp-opt').forEach(b=>{
+      b.onclick=()=>{
+        const i=+b.dataset.i;
+        if(picked.has(i)){picked.delete(i);b.classList.remove('picked');}
+        else{picked.add(i);b.classList.add('picked');}
+        const goodPicked=[...picked].filter(i=>opts[i].good).length;
+        const badPicked=[...picked].filter(i=>!opts[i].good).length;
+        if(goodPicked>=c.response.need && badPicked===0){
+          state.answers['R']=true;
+          fb().className='feedback good show';
+          fb().innerHTML='✅ <b>That\'s a fair, evidence-based plan.</b> You acted only after thinking it through!';
+          $('#nextBtn').disabled=false; renderProgress();
+        } else {
+          state.answers['R']=false; $('#nextBtn').disabled=true;
+          if(badPicked>0){
+            fb().className='feedback bad show';
+            fb().innerHTML='🤔 One of your picks jumps to a conclusion without evidence. Tap it again to un-pick.';
+          } else { fb().className='feedback'; fb().classList.remove('show'); }
+        }
+      };
+    });
+    return;
+  }
+  // MC steps
+  const data = key==='C'?c.claim : key==='L'?c.lens : c.alt;
+  $('#stepPanel').querySelectorAll('.opt').forEach(btn=>{
+    btn.onclick=()=>{
+      if(btn.classList.contains('locked')&&state.answers[key]) return;
+      const i=+btn.dataset.i; const o=data.opts[i];
+      // reset
+      $('#stepPanel').querySelectorAll('.opt').forEach(b=>{b.classList.remove('correct','wrong');});
+      if(o.correct){
+        btn.classList.add('correct'); 
+        $('#stepPanel').querySelectorAll('.opt').forEach(b=>b.classList.add('locked'));
+        state.answers[key]=true;
+        fb().className='feedback good show'; fb().innerHTML='✓ <b>Solved it!</b> '+o.why;
+        $('#nextBtn').disabled=false; renderProgress();
+      } else {
+        btn.classList.add('wrong'); state.answers[key]=false; $('#nextBtn').disabled=true;
+        fb().className='feedback bad show'; fb().innerHTML='✗ '+o.why+' <b>Try again, detective!</b>';
+      }
+    };
+  });
+}
+
+/* -------------------- NEXT / SOLVE -------------------- */
+$('#nextBtn').onclick=()=>{
+  if(state.stepIdx<ORDER.length-1){ state.stepIdx++; renderProgress(); renderStep(); }
+  else { solveCase(); }
+};
+$('#backBtn').onclick=()=>{ location.hash=''; show('s-picker'); renderPicker(); };
+
+function solveCase(){
+  const c=curCase(); solvedCases.add(c.id);
+  $('#winTitle').textContent=c.emoji+' '+c.title;
+  $('#winLine').textContent=c.solved;
+  // recap
+  const r=$('#recap'); r.innerHTML='';
+  ORDER.forEach(k=>{
+    const m=STEP_META[k];
+    const row=document.createElement('div'); row.className='recap-row';
+    row.innerHTML=`<span class="rl" style="background:var(--${m.c})">${k}</span><span><b>${m.name}:</b> ${m.q}</span>`;
+    r.appendChild(row);
+  });
+  show('s-win'); fireConfetti();
+}
+$('#replayBtn').onclick=()=>startCase(state.caseId);
+$('#newCaseBtn').onclick=()=>{ location.hash=''; show('s-picker'); renderPicker(); };
+
+/* -------------------- TEKS TOGGLE -------------------- */
+$('#teksBtn').onclick=()=>$('#teksBox').classList.toggle('show');
+
+/* -------------------- CONFETTI -------------------- */
+function fireConfetti(){
+  const cv=$('#confetti'), ctx=cv.getContext('2d');
+  cv.width=innerWidth; cv.height=innerHeight;
+  const cols=['#7c5cbf','#1aa3b8','#46a23c','#f08a16','#2f6fe0','#FCB040'];
+  const bits=Array.from({length:140},()=>({
+    x:Math.random()*cv.width, y:-20-Math.random()*cv.height*.5,
+    r:5+Math.random()*7, c:cols[(Math.random()*cols.length)|0],
+    vy:2.5+Math.random()*3.5, vx:-1.5+Math.random()*3, rot:Math.random()*6, vr:-.2+Math.random()*.4
+  }));
+  let frames=0;
+  (function anim(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    bits.forEach(b=>{
+      b.x+=b.vx; b.y+=b.vy; b.rot+=b.vr;
+      ctx.save(); ctx.translate(b.x,b.y); ctx.rotate(b.rot);
+      ctx.fillStyle=b.c; ctx.fillRect(-b.r/2,-b.r/2,b.r,b.r*.6); ctx.restore();
+    });
+    frames++;
+    if(frames<150) requestAnimationFrame(anim); else ctx.clearRect(0,0,cv.width,cv.height);
+  })();
+}
+window.addEventListener('resize',()=>{const cv=$('#confetti');cv.width=innerWidth;cv.height=innerHeight;});
+
+/* -------------------- INIT (deep-link via #case=ID) -------------------- */
+(function init(){
+  renderPicker();
+  const m=location.hash.match(/case=([a-z]+)/i);
+  if(m && CASES.find(c=>c.id===m[1])) startCase(m[1]);
+})();
+</script>
+</body>
+</html>

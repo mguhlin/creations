@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<title>困境：逃逸速度 — Critical Thinking Breakouts</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>:root{
+  --c1:#7c5cbf;--c2:#1aa3b8;--c3:#46a23c;--c4:#f08a16;--c5:#2f6fe0;
+  --navy:#102a54;--navy-d:#0b1d3d;--gold:#FCB040;--gold-d:#c97f12;
+  --paper:#fbf8f1;--ink:#1c2436;--ink-soft:#54607a;--card:#fff;--line:#e3e8f2;
+  --good:#2f9e44;--bad:#e03131;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;color:var(--ink);background:
+  radial-gradient(ellipse 60% 50% at 80% 0%,rgba(252,176,64,.12)0%,transparent 60%),
+  radial-gradient(ellipse 50% 40% at 0% 100%,rgba(47,111,224,.10)0%,transparent 60%),var(--paper);
+  min-height:100vh;line-height:1.55}
+.wrap{max-width:880px;margin:0 auto;padding:20px 18px 80px}
+.crumb{font-size:.82rem;font-weight:700;margin-bottom:10px}
+.crumb a{color:var(--c5);text-decoration:none}
+header.top{text-align:center;padding:8px 0 4px}
+.eyebrow{display:inline-block;background:var(--navy);color:#fff;font-family:'Fredoka',sans-serif;
+  font-weight:600;font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;padding:6px 16px;border-radius:100px;margin-bottom:12px}
+h1{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(1.9rem,6vw,3rem);color:var(--navy);line-height:1.04}
+.sub{color:var(--ink-soft);font-weight:600;margin-top:8px;max-width:620px;margin-left:auto;margin-right:auto}
+
+/* language bar */
+.langbar{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:10px 0 0}
+.langbar a,.langbar button{font-family:'Fredoka',sans-serif;font-weight:600;font-size:.78rem;border:2px solid var(--line);
+  background:#fff;color:var(--ink-soft);border-radius:100px;padding:5px 12px;cursor:pointer;text-decoration:none;transition:.15s}
+.langbar a:hover,.langbar button:hover{border-color:var(--gold);color:var(--navy)}
+.langbar a.active,.langbar button.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+.progress-wrap{display:flex;align-items:center;gap:12px;justify-content:center;flex-wrap:wrap;position:sticky;top:8px;z-index:30;margin:12px 0 6px;padding:10px 14px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:12px;box-shadow:0 4px 14px rgba(16,42,84,.07)}
+.lockdots{display:flex;gap:8px}
+.ld{width:30px;height:30px;border-radius:9px;background:#d8deea;display:flex;align-items:center;justify-content:center;
+  font-size:1rem;transition:.3s;border:2px solid transparent}
+.ld.open{background:var(--good);color:#fff;border-color:#1f7a31}
+.pcount{font-family:'Fredoka',sans-serif;font-weight:600;color:var(--navy)}
+.resetbtn{background:#fff;border:2px solid var(--line);border-radius:9px;padding:7px 14px;font-family:'Fredoka',sans-serif;
+  font-weight:600;color:var(--ink-soft);cursor:pointer;font-size:.85rem}
+.resetbtn:hover{border-color:var(--bad);color:var(--bad)}
+
+.brief{background:#fffdf6;border:2px dashed var(--gold-d);border-radius:14px;padding:16px 20px;margin:18px 0}
+.brief h2{font-family:'Fredoka',sans-serif;font-size:1.15rem;color:var(--navy);margin-bottom:6px}
+.brief .tag{font-family:'Fredoka',sans-serif;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-d);font-weight:600}
+
+.section-title{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.2rem;color:var(--navy);margin:24px 0 4px}
+.hint{color:var(--ink-soft);font-weight:600;font-size:.92rem;margin-bottom:12px}
+
+/* clue board */
+.clue-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.clue{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;
+  transition:.18s;text-align:center;font-family:inherit}
+.clue:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 8px 20px rgba(16,42,84,.1)}
+.clue .ico{font-size:2rem;line-height:1}
+.clue .nm{font-weight:700;margin-top:6px;color:var(--navy);font-size:.92rem}
+.clue.opened{border-color:var(--c3);background:#f2fbef}
+.clue.opened .nm::after{content:' ✓';color:var(--good)}
+
+/* locks */
+.locks{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:6px}
+@media(max-width:640px){.locks{grid-template-columns:1fr}.clue-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}}
+.lock{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:18px;position:relative}
+.lock.solved{border-color:var(--good);background:#f3fbf975}
+.lock .lk-head{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.lk-badge{width:38px;height:38px;border-radius:10px;color:#fff;font-family:'Fredoka',sans-serif;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.2rem}
+.lk-title{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.05rem;color:var(--navy);line-height:1.1}
+.lk-q{font-size:.9rem;color:var(--ink-soft);font-weight:600;margin:8px 0 12px}
+.lk-solved-msg{display:none;color:var(--good);font-weight:800;font-family:'Fredoka',sans-serif;margin-top:6px}
+.lock.solved .lk-solved-msg{display:block}
+.lock.solved .lk-body{display:none}
+
+/* digit pad */
+.digits{display:flex;gap:8px;margin-bottom:10px}
+.digit{width:46px;height:54px;border:2px solid var(--line);border-radius:10px;text-align:center;font-size:1.5rem;
+  font-weight:800;font-family:'Fredoka',sans-serif;color:var(--navy)}
+.digit:focus{outline:none;border-color:var(--c5)}
+
+/* word input */
+.wordin{width:100%;border:2px solid var(--line);border-radius:10px;padding:11px 13px;font-size:1.05rem;
+  font-weight:700;font-family:inherit;color:var(--navy)}
+.wordin:focus{outline:none;border-color:var(--c5)}
+
+/* MC */
+.mc{display:flex;flex-direction:column;gap:8px}
+.mc button{text-align:left;background:#fff;border:2px solid var(--line);border-radius:10px;padding:10px 13px;
+  font-family:inherit;font-weight:600;cursor:pointer;font-size:.92rem;transition:.15s}
+.mc button:hover{border-color:var(--navy);background:#f7f9ff}
+
+/* sequence */
+.seq-pads{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.seqpad{width:46px;height:46px;border-radius:10px;border:3px solid rgba(0,0,0,.12);cursor:pointer;font-size:1.3rem;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800}
+.seq-current{min-height:30px;font-family:'Fredoka',sans-serif;font-weight:700;color:var(--navy);letter-spacing:2px;font-size:1.2rem;
+  background:#f0f3fa;border-radius:8px;padding:4px 10px;display:inline-block;margin-bottom:8px;min-width:120px}
+.seq-clear{background:none;border:none;color:var(--ink-soft);font-weight:700;cursor:pointer;text-decoration:underline;font-size:.82rem;margin-left:8px}
+
+.lk-submit{background:var(--navy);color:#fff;border:none;border-radius:9px;padding:10px 20px;font-family:'Fredoka',sans-serif;
+  font-weight:600;cursor:pointer;font-size:.92rem;margin-top:4px}
+.lk-submit:hover{background:var(--navy-d)}
+.lk-feedback{margin-top:10px;font-weight:700;font-size:.88rem;min-height:20px}
+.lk-feedback.bad{color:var(--bad)}
+.lk-feedback.good{color:var(--good)}
+
+/* multi-select */
+.multi{display:flex;flex-direction:column;gap:8px}
+.multi-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:#fff;border:2px solid var(--line);border-radius:10px;padding:10px 13px;font-family:inherit;font-weight:600;cursor:pointer;font-size:.92rem;transition:.15s}
+.multi-opt:hover{border-color:var(--navy);background:#f7f9ff}
+.multi-opt .mbox{width:22px;height:22px;border-radius:6px;border:2px solid var(--line);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff}
+.multi-opt.picked{border-color:var(--c5);background:#eef4ff}
+.multi-opt.picked .mbox{background:var(--c5);border-color:var(--c5)}
+.multi-opt.picked .mbox::after{content:'✓'}
+
+/* clue modal */
+.modal-bg{position:fixed;inset:0;background:rgba(16,29,61,.55);display:none;align-items:center;justify-content:center;z-index:40;padding:20px}
+.modal-bg.show{display:flex}
+.modal{background:#fff;border-radius:18px;padding:26px 24px;max-width:440px;width:100%;animation:pop .25s ease}
+@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+.modal .mico{font-size:2.6rem;text-align:center}
+.modal h3{font-family:'Fredoka',sans-serif;color:var(--navy);text-align:center;margin:6px 0 12px;font-size:1.3rem}
+.modal p{font-weight:600;color:var(--ink);margin:8px 0}
+.modal .closebtn{display:block;margin:16px auto 0;background:var(--gold);color:var(--navy-d);border:none;border-radius:9px;
+  padding:10px 24px;font-family:'Fredoka',sans-serif;font-weight:600;cursor:pointer}
+.reasoning{background:#f4f1ff;border-left:4px solid var(--c1);border-radius:8px;padding:10px 13px;font-size:.88rem;color:#43386b;font-weight:600;margin-top:10px}
+
+/* win */
+.win{position:fixed;inset:0;background:rgba(16,29,61,.7);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+.win.show{display:flex}
+.win-card{background:#fff;border-radius:22px;padding:34px 30px;max-width:480px;text-align:center;animation:pop .3s ease}
+.win-card .stamp{display:inline-block;font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.3rem;color:var(--good);
+  border:4px solid var(--good);border-radius:12px;padding:8px 20px;transform:rotate(-6deg);margin-bottom:16px}
+.win-card h2{font-family:'Fredoka',sans-serif;color:var(--navy);font-size:1.6rem;margin-bottom:8px}
+.win-card p{font-weight:600;color:var(--ink-soft);margin-bottom:18px}
+.win-card button{background:var(--navy);color:#fff;border:none;border-radius:10px;padding:12px 26px;font-family:'Fredoka',sans-serif;
+  font-weight:600;cursor:pointer;font-size:1rem}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:60}
+footer{text-align:center;margin-top:30px;font-size:.8rem;color:var(--ink-soft);font-weight:600}
+footer a{color:var(--c5);font-weight:700;text-decoration:none}
+
+/* RTL */
+[dir=rtl] .reasoning{border-left:none;border-right:4px solid var(--c1)}
+[dir=rtl] .mc button,[dir=rtl] .multi-opt{text-align:right}
+[dir=rtl] .seq-clear{margin-left:0;margin-right:8px}
+
+/* catalog */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;margin-top:24px}
+.cat-card{display:flex;flex-direction:column;background:var(--card);border:2px solid var(--line);border-radius:18px;
+  padding:20px;text-decoration:none;color:inherit;transition:.18s}
+.cat-card:hover{transform:translateY(-4px);box-shadow:0 14px 32px rgba(16,42,84,.12);border-color:var(--gold)}
+.cat-card .ico{font-size:2.4rem;line-height:1}
+.cat-card .subj{font-family:'Fredoka',sans-serif;font-size:.66rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:#fff;padding:4px 11px;border-radius:100px;align-self:flex-start;margin:10px 0}
+.cat-card h2{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.22rem;color:var(--navy);margin:4px 0 6px;line-height:1.12}
+.cat-card p{font-size:.9rem;color:var(--ink-soft);font-weight:600;flex:1}
+.cat-card .go{margin-top:14px;font-family:'Fredoka',sans-serif;font-weight:600;color:var(--navy)}
+.cat-card .go::after{content:' →'}
+[dir=rtl] .cat-card .go::after{content:' ←'}
+</style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+<div class="wrap">
+  <div class="crumb"><a href="../../grade68.html">‹ 返回活动</a></div>
+  <header class="top">
+    <div class="eyebrow">数字解谜闯关 · 6–8 年级</div>
+    <h1>困境：逃逸速度</h1>
+    <p class="sub">你的货舱正漂向一颗小行星。自动驾驶已被锁定，只有清晰地思考力的作用，才能在撞击前解放控制系统。</p>
+    <div class="langbar"><a class="" href="en.html" lang="en">English</a><a class="" href="es.html" lang="es">Español</a><a class="" href="vi.html" lang="vi">Tiếng Việt</a><a class="active" href="zh.html" lang="zh">中文</a><a class="" href="hi.html" lang="hi">हिन्दी</a><a class="" href="ar.html" lang="ar">العربية</a><a class="" href="ur.html" lang="ur">اردو</a></div>
+  </header>
+
+  <div class="progress-wrap">
+    <span class="pcount" id="pcount">0</span>
+    <div class="lockdots" id="lockdots"></div>
+    <button class="resetbtn" id="resetBtn">↺ 重置</button>
+  </div>
+
+  <div class="brief">
+    <span class="tag">🚀 任务简报</span>
+    <h2>任务简报：解放舵盘</h2>
+    <p>你是货舱DART-9上的初级飞行工程师。一次电涌烧坏了自动驾驶并锁定了舵盘控制。飞船的日志仍可作为证据卡读取。打开每一条线索，研究它实际证明了什么，然后破解锁来重启舵盘。警告：有一条日志记录只是闲聊，证明不了任何有用的东西，所以要仔细判断每一张卡片。只用线索能证明的内容来解锁，而不是靠外部猜测。撞击倒计时10分钟。</p>
+  </div>
+
+  <div class="section-title">🔍 线索</div>
+  <p class="hint">点击每一项进行调查。（你可以随时重新打开它们。）</p>
+  <div class="clue-grid" id="clueGrid"></div>
+
+  <div class="section-title">🔒 密码锁</div>
+  <p class="hint">利用上面的线索解开每一把锁。</p>
+  <div class="locks" id="locks"></div>
+
+  <footer>Critical Thinking Breakouts · 6–8 年级 · 完全在你的浏览器中运行——无需登录，不收集任何数据。 · <a href="../../../policy.html">隐私与合规</a></footer>
+</div>
+
+<div class="modal-bg" id="modalBg"><div class="modal" id="modal"></div></div>
+<div class="win" id="win"><div class="win-card">
+  <div class="stamp">舵盘已解锁 ✓</div>
+  <h2>你驾驶DART-9脱离了险境！</h2>
+  <p>你把真正的证据与闲聊区分开，分辨了平衡力与不平衡力，并用F = m x a确认了合力。这就是用数据证据来证明每一个结论的推理能力。</p>
+  <button id="winBtn">再玩一次</button>
+</div></div>
+
+<script>const DATA={"T":{"locksOpen":"已打开 {t} 个锁中的 {n} 个","check":"检查","gotIt":"明白了","typeAnswer":"输入你的答案","clear":"清除","solved":"已解开！","fbDefault":"还差一点——再看看线索吧。","fbDigit":"这个数字与线索不符。再数一遍。","fbWord":"查看线索，找出合适的答案。","fbMc":"这个选项没有证据支持。再看看吧。","fbSeq":"这个顺序与线索不符。再试一次。","fbMultiExtra":"有一项不算有力证据——有力证据指的是你可以核实的事实，而不是传闻或感觉。","fbMultiMissing":"你还缺少一项有力证据。把它们全部找出来。"},"clues":[{"id":"c0","ico":"📋","nm":"引擎日志","title":"引擎推力日志","body":"主引擎以600牛顿（N）的力推动DART-9向前。与此同时，泄漏气体产生的阻力以600 N的力向后推货舱。货舱的速度在过去3分钟内没有改变。"},{"id":"c1","ico":"🧲","nm":"牵引日志","title":"小行星牵引日志","body":"当引擎熄火时，作用在DART-9上唯一剩下的力是小行星引力将它向前拉向岩石。没有任何东西向后推，货舱开始加速。向前的拉力测得为200 N。"},{"id":"c2","ico":"⚖️","nm":"定律卡","title":"牛顿定律参考","body":"第一定律：除非有不平衡的力作用于物体，否则物体保持匀速直线运动。第二定律：合力 = 质量 x 加速度（F = m x a）。第三定律：每一个作用力都有一个大小相等、方向相反的反作用力。"},{"id":"c3","ico":"☕","nm":"船员便条","title":"船员休息室便条","body":"船长提醒：2号甲板的咖啡机又坏了，电影之夜改到星期五。请清理你们的托盘。谢谢，大家在外面保持冷静，船员们！"},{"id":"c4","ico":"🛰️","nm":"质量日志","title":"货物质量读数","body":"传感器报告DART-9的总质量为100千克（kg）。在小行星牵引期间，舵盘计算机记录货舱的加速度为每秒平方2米（m/s^2）。"}],"locks":[{"id":"L1","color":"var(--c5)","type":"word","title":"锁1：说出平衡","q":"当引擎运转时，600 N向前推，600 N向后推，货舱的速度没有改变。什么样的力在作用于货舱？","reason":"向前和向后的力大小相等、方向相反，速度保持不变。大小相等、方向相反且运动状态不变的力是平衡力。","answer":["balanced","balanced forces","balanced force","平衡力","平衡","平衡的力"]},{"id":"L2","color":"var(--c4)","type":"digit","title":"锁2：合力重启代码","q":"当引擎熄火时，只剩下200 N的小行星拉力，货舱加速了。只用日志中的数字，作用在货舱上的合力是多少牛顿？","reason":"当600 N的引擎力和600 N的阻力都消失后，只剩下一个200 N的力，所以没有任何东西抵消它。合力等于那个唯一的不平衡力：200 N。","len":3,"answer":["200"]},{"id":"L3","color":"var(--c3)","type":"mc","title":"锁3：哪条定律起作用？","q":"在引擎熄火之前，货舱以稳定的速度运动，因为它受到的力是平衡的。牛顿的哪条定律解释了为什么稳定的速度意味着没有不平衡的力？","reason":"定律卡说第一定律是关于保持匀速运动，除非有不平衡的力作用。稳定、不变的速度直接指向第一定律。","options":["第一定律","第二定律","第三定律"],"answerIndex":0},{"id":"L4","color":"var(--c1)","type":"seq","title":"锁4：重放事件","q":"按照日志所述DART-9发生事件的顺序点击这些事件。","reason":"引擎日志首先显示平衡力和稳定速度；牵引日志说引擎熄火，只剩下小行星拉力，然后货舱开始加速。","pads":[{"k":"steady","e":"⚖️","c":"#e03131"},{"k":"cutout","e":"🔌","c":"#2f6fe0"},{"k":"pull","e":"🧲","c":"#f08a16"},{"k":"speedup","e":"💨","c":"#46a23c"}],"answer":["steady","cutout","pull","speedup"]},{"id":"L5","color":"var(--c2)","type":"multi","title":"锁5：确认最终计算","q":"选出日志确实能证明的关于小行星拉力的每一条陈述。","reason":"质量日志给出100 kg和2 m/s^2，F = m x a得出200 N，与200 N的拉力相符，确认了一个不平衡的力。咖啡便条什么也证明不了，日志清楚地说货舱加速了，而不是保持速度。","items":[{"t":"作用在货舱上的合力是200 N","strong":true},{"t":"用F = m x a，100 kg x 2 m/s^2 = 200 N，与拉力相符","strong":true},{"t":"作用在货舱上的力是不平衡的，所以它加速了","strong":true},{"t":"咖啡机导致了加速","strong":false},{"t":"引擎熄火后货舱保持了相同的速度","strong":false}]}]};</script>
+<script>/* Critical Thinking Breakouts — shared player engine.
+   Reads a global DATA object injected per page. No external requests. */
+(function(){
+  const T = DATA.T;
+  const CLUES = DATA.clues;
+  const LOCKS = DATA.locks;
+  const $ = s => document.querySelector(s);
+  let solved = {};
+  const opened = new Set();
+
+  function renderClues(){
+    const g = $('#clueGrid'); g.innerHTML = '';
+    CLUES.forEach(c => {
+      const b = document.createElement('button');
+      b.className = 'clue' + (opened.has(c.id) ? ' opened' : '');
+      b.innerHTML = '<div class="ico">' + c.ico + '</div><div class="nm">' + c.nm + '</div>';
+      b.onclick = () => openClue(c);
+      g.appendChild(b);
+    });
+  }
+  function openClue(c){
+    opened.add(c.id);
+    $('#modal').innerHTML = '<div class="mico">' + c.ico + '</div><h3>' + c.title + '</h3><p>' + c.body + '</p>' +
+      '<button class="closebtn" id="clueClose">' + T.gotIt + '</button>';
+    $('#modal').querySelector('#clueClose').onclick = () => $('#modalBg').classList.remove('show');
+    $('#modalBg').classList.add('show');
+    renderClues();
+  }
+  $('#modalBg').onclick = e => { if(e.target.id === 'modalBg') e.currentTarget.classList.remove('show'); };
+
+  function renderDots(){
+    const d = $('#lockdots'); d.innerHTML = '';
+    LOCKS.forEach(l => {
+      const s = document.createElement('div');
+      s.className = 'ld' + (solved[l.id] ? ' open' : '');
+      s.textContent = solved[l.id] ? '🔓' : '🔒';
+      d.appendChild(s);
+    });
+    const n = Object.keys(solved).filter(k => solved[k]).length;
+    $('#pcount').textContent = T.locksOpen.replace('{n}', n).replace('{t}', LOCKS.length);
+    if(n === LOCKS.length) setTimeout(showWin, 400);
+  }
+
+  function renderLocks(){
+    const wrap = $('#locks'); wrap.innerHTML = '';
+    LOCKS.forEach(l => {
+      const card = document.createElement('div');
+      card.className = 'lock' + (solved[l.id] ? ' solved' : '');
+      card.id = 'card-' + l.id;
+      let body = '';
+      if(l.type === 'digit'){
+        body = '<div class="digits">' + Array.from({length:l.len}).map((_,i) =>
+          '<input class="digit" data-i="' + i + '" maxlength="1" inputmode="numeric" pattern="[0-9]">').join('') + '</div>';
+      } else if(l.type === 'word'){
+        body = '<input class="wordin" placeholder="' + T.typeAnswer + '">';
+      } else if(l.type === 'mc'){
+        body = '<div class="mc">' + l.options.map((o,i) => '<button data-i="' + i + '">' + o + '</button>').join('') + '</div>';
+      } else if(l.type === 'seq'){
+        body = '<div class="seq-current" id="seq-' + l.id + '">— — —</div><button class="seq-clear" data-clear>' + T.clear + '</button>' +
+          '<div class="seq-pads">' + l.pads.map(p => '<button class="seqpad" data-k="' + p.k + '" style="background:' + p.c + '">' + p.e + '</button>').join('') + '</div>';
+      } else if(l.type === 'multi'){
+        body = '<div class="multi">' + l.items.map((o,i) =>
+          '<button class="multi-opt" data-i="' + i + '"><span class="mbox"></span><span>' + o.t + '</span></button>').join('') + '</div>';
+      }
+      const showSubmit = l.type !== 'mc';
+      card.innerHTML =
+        '<div class="lk-head"><div class="lk-badge" style="background:' + l.color + '">' + l.id.replace('L','') + '</div>' +
+        '<div class="lk-title">' + l.title + '</div></div>' +
+        '<div class="lk-body"><div class="lk-q">' + l.q + '</div>' + body +
+        (showSubmit ? '<button class="lk-submit">' + T.check + '</button>' : '') +
+        '<div class="lk-feedback" data-fb></div></div>' +
+        '<div class="lk-solved-msg">🔓 ' + T.solved + '</div>' +
+        '<div class="reasoning" style="' + (solved[l.id] ? '' : 'display:none') + '">' + l.reason + '</div>';
+      wrap.appendChild(card);
+      wireLock(l, card);
+    });
+  }
+
+  function wireLock(l, card){
+    if(solved[l.id]) return;
+    const fb = card.querySelector('[data-fb]');
+    const ok = () => {
+      solved[l.id] = true;
+      card.classList.add('solved');
+      card.querySelector('.reasoning').style.display = 'block';
+      renderDots();
+    };
+    const fail = msg => { fb.className = 'lk-feedback bad'; fb.textContent = msg || T.fbDefault; };
+
+    if(l.type === 'digit'){
+      const inputs = [...card.querySelectorAll('.digit')];
+      inputs.forEach((inp,i) => inp.addEventListener('input', () => { if(inp.value && i < inputs.length-1) inputs[i+1].focus(); }));
+      card.querySelector('.lk-submit').onclick = () => {
+        const val = inputs.map(x => x.value).join('');
+        if(l.answer.includes(val)) ok(); else fail(T.fbDigit);
+      };
+    } else if(l.type === 'word'){
+      const inp = card.querySelector('.wordin');
+      const go = () => { const v = inp.value.trim().toLowerCase(); if(l.answer.includes(v)) ok(); else fail(T.fbWord); };
+      card.querySelector('.lk-submit').onclick = go;
+      inp.addEventListener('keydown', e => { if(e.key === 'Enter') go(); });
+    } else if(l.type === 'mc'){
+      card.querySelectorAll('.mc button').forEach(b => {
+        b.onclick = () => { if(+b.dataset.i === l.answerIndex) ok(); else fail(T.fbMc); };
+      });
+    } else if(l.type === 'seq'){
+      let seq = [];
+      const disp = card.querySelector('#seq-' + l.id);
+      const draw = () => { disp.textContent = seq.length ? seq.map(k => l.pads.find(p => p.k === k).e).join(' ') : '— — —'; };
+      card.querySelectorAll('.seqpad').forEach(p => {
+        p.onclick = () => { seq.push(p.dataset.k); if(seq.length > l.answer.length) seq = seq.slice(-l.answer.length); draw(); };
+      });
+      card.querySelector('[data-clear]').onclick = () => { seq = []; draw(); };
+      card.querySelector('.lk-submit').onclick = () => {
+        if(seq.length === l.answer.length && seq.every((k,i) => k === l.answer[i])) ok();
+        else fail(T.fbSeq);
+      };
+    } else if(l.type === 'multi'){
+      const picked = new Set();
+      card.querySelectorAll('.multi-opt').forEach(b => {
+        b.onclick = () => { const i = +b.dataset.i; if(picked.has(i)){ picked.delete(i); b.classList.remove('picked'); } else { picked.add(i); b.classList.add('picked'); } };
+      });
+      card.querySelector('.lk-submit').onclick = () => {
+        const correct = l.items.map((o,i) => o.strong ? i : -1).filter(i => i >= 0);
+        const chosen = [...picked].sort((a,b) => a-b);
+        const good = chosen.length === correct.length && chosen.every((v,i) => v === correct[i]);
+        if(good) ok();
+        else { const extra = [...picked].some(i => !l.items[i].strong); fail(extra ? T.fbMultiExtra : T.fbMultiMissing); }
+      };
+    }
+  }
+
+  function showWin(){ $('#win').classList.add('show'); fireConfetti(); }
+  $('#resetBtn').onclick = () => { solved = {}; opened.clear(); renderClues(); renderLocks(); renderDots(); };
+  const wb = $('#winBtn'); if(wb) wb.onclick = () => location.reload();
+
+  function fireConfetti(){
+    const cv = $('#confetti'), ctx = cv.getContext('2d');
+    cv.width = innerWidth; cv.height = innerHeight;
+    const cols = ['#7c5cbf','#1aa3b8','#46a23c','#f08a16','#2f6fe0','#FCB040'];
+    const bits = Array.from({length:130}, () => ({ x:Math.random()*cv.width, y:-20-Math.random()*cv.height*.5,
+      r:5+Math.random()*7, c:cols[(Math.random()*cols.length)|0], vy:2.5+Math.random()*3.5, vx:-1.5+Math.random()*3, rot:Math.random()*6, vr:-.2+Math.random()*.4 }));
+    let f = 0;
+    (function a(){
+      ctx.clearRect(0,0,cv.width,cv.height);
+      bits.forEach(b => { b.x+=b.vx; b.y+=b.vy; b.rot+=b.vr;
+        ctx.save(); ctx.translate(b.x,b.y); ctx.rotate(b.rot); ctx.fillStyle=b.c; ctx.fillRect(-b.r/2,-b.r/2,b.r,b.r*.6); ctx.restore(); });
+      f++; if(f<150) requestAnimationFrame(a); else ctx.clearRect(0,0,cv.width,cv.height);
+    })();
+  }
+  addEventListener('resize', () => { const cv = $('#confetti'); cv.width = innerWidth; cv.height = innerHeight; });
+
+  renderClues(); renderLocks(); renderDots();
+})();
+</script>
+</body>
+</html>

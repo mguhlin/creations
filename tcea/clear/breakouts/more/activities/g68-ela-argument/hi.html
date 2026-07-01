@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="hi" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<title>गायब शुभंकर: बंद ट्रॉफी तिजोरी का मामला — Critical Thinking Breakouts</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>:root{
+  --c1:#7c5cbf;--c2:#1aa3b8;--c3:#46a23c;--c4:#f08a16;--c5:#2f6fe0;
+  --navy:#102a54;--navy-d:#0b1d3d;--gold:#FCB040;--gold-d:#c97f12;
+  --paper:#fbf8f1;--ink:#1c2436;--ink-soft:#54607a;--card:#fff;--line:#e3e8f2;
+  --good:#2f9e44;--bad:#e03131;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;color:var(--ink);background:
+  radial-gradient(ellipse 60% 50% at 80% 0%,rgba(252,176,64,.12)0%,transparent 60%),
+  radial-gradient(ellipse 50% 40% at 0% 100%,rgba(47,111,224,.10)0%,transparent 60%),var(--paper);
+  min-height:100vh;line-height:1.55}
+.wrap{max-width:880px;margin:0 auto;padding:20px 18px 80px}
+.crumb{font-size:.82rem;font-weight:700;margin-bottom:10px}
+.crumb a{color:var(--c5);text-decoration:none}
+header.top{text-align:center;padding:8px 0 4px}
+.eyebrow{display:inline-block;background:var(--navy);color:#fff;font-family:'Fredoka',sans-serif;
+  font-weight:600;font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;padding:6px 16px;border-radius:100px;margin-bottom:12px}
+h1{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(1.9rem,6vw,3rem);color:var(--navy);line-height:1.04}
+.sub{color:var(--ink-soft);font-weight:600;margin-top:8px;max-width:620px;margin-left:auto;margin-right:auto}
+
+/* language bar */
+.langbar{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:10px 0 0}
+.langbar a,.langbar button{font-family:'Fredoka',sans-serif;font-weight:600;font-size:.78rem;border:2px solid var(--line);
+  background:#fff;color:var(--ink-soft);border-radius:100px;padding:5px 12px;cursor:pointer;text-decoration:none;transition:.15s}
+.langbar a:hover,.langbar button:hover{border-color:var(--gold);color:var(--navy)}
+.langbar a.active,.langbar button.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+.progress-wrap{display:flex;align-items:center;gap:12px;justify-content:center;flex-wrap:wrap;position:sticky;top:8px;z-index:30;margin:12px 0 6px;padding:10px 14px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:12px;box-shadow:0 4px 14px rgba(16,42,84,.07)}
+.lockdots{display:flex;gap:8px}
+.ld{width:30px;height:30px;border-radius:9px;background:#d8deea;display:flex;align-items:center;justify-content:center;
+  font-size:1rem;transition:.3s;border:2px solid transparent}
+.ld.open{background:var(--good);color:#fff;border-color:#1f7a31}
+.pcount{font-family:'Fredoka',sans-serif;font-weight:600;color:var(--navy)}
+.resetbtn{background:#fff;border:2px solid var(--line);border-radius:9px;padding:7px 14px;font-family:'Fredoka',sans-serif;
+  font-weight:600;color:var(--ink-soft);cursor:pointer;font-size:.85rem}
+.resetbtn:hover{border-color:var(--bad);color:var(--bad)}
+
+.brief{background:#fffdf6;border:2px dashed var(--gold-d);border-radius:14px;padding:16px 20px;margin:18px 0}
+.brief h2{font-family:'Fredoka',sans-serif;font-size:1.15rem;color:var(--navy);margin-bottom:6px}
+.brief .tag{font-family:'Fredoka',sans-serif;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-d);font-weight:600}
+
+.section-title{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.2rem;color:var(--navy);margin:24px 0 4px}
+.hint{color:var(--ink-soft);font-weight:600;font-size:.92rem;margin-bottom:12px}
+
+/* clue board */
+.clue-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.clue{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;
+  transition:.18s;text-align:center;font-family:inherit}
+.clue:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 8px 20px rgba(16,42,84,.1)}
+.clue .ico{font-size:2rem;line-height:1}
+.clue .nm{font-weight:700;margin-top:6px;color:var(--navy);font-size:.92rem}
+.clue.opened{border-color:var(--c3);background:#f2fbef}
+.clue.opened .nm::after{content:' ✓';color:var(--good)}
+
+/* locks */
+.locks{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:6px}
+@media(max-width:640px){.locks{grid-template-columns:1fr}.clue-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}}
+.lock{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:18px;position:relative}
+.lock.solved{border-color:var(--good);background:#f3fbf975}
+.lock .lk-head{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.lk-badge{width:38px;height:38px;border-radius:10px;color:#fff;font-family:'Fredoka',sans-serif;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.2rem}
+.lk-title{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.05rem;color:var(--navy);line-height:1.1}
+.lk-q{font-size:.9rem;color:var(--ink-soft);font-weight:600;margin:8px 0 12px}
+.lk-solved-msg{display:none;color:var(--good);font-weight:800;font-family:'Fredoka',sans-serif;margin-top:6px}
+.lock.solved .lk-solved-msg{display:block}
+.lock.solved .lk-body{display:none}
+
+/* digit pad */
+.digits{display:flex;gap:8px;margin-bottom:10px}
+.digit{width:46px;height:54px;border:2px solid var(--line);border-radius:10px;text-align:center;font-size:1.5rem;
+  font-weight:800;font-family:'Fredoka',sans-serif;color:var(--navy)}
+.digit:focus{outline:none;border-color:var(--c5)}
+
+/* word input */
+.wordin{width:100%;border:2px solid var(--line);border-radius:10px;padding:11px 13px;font-size:1.05rem;
+  font-weight:700;font-family:inherit;color:var(--navy)}
+.wordin:focus{outline:none;border-color:var(--c5)}
+
+/* MC */
+.mc{display:flex;flex-direction:column;gap:8px}
+.mc button{text-align:left;background:#fff;border:2px solid var(--line);border-radius:10px;padding:10px 13px;
+  font-family:inherit;font-weight:600;cursor:pointer;font-size:.92rem;transition:.15s}
+.mc button:hover{border-color:var(--navy);background:#f7f9ff}
+
+/* sequence */
+.seq-pads{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.seqpad{width:46px;height:46px;border-radius:10px;border:3px solid rgba(0,0,0,.12);cursor:pointer;font-size:1.3rem;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800}
+.seq-current{min-height:30px;font-family:'Fredoka',sans-serif;font-weight:700;color:var(--navy);letter-spacing:2px;font-size:1.2rem;
+  background:#f0f3fa;border-radius:8px;padding:4px 10px;display:inline-block;margin-bottom:8px;min-width:120px}
+.seq-clear{background:none;border:none;color:var(--ink-soft);font-weight:700;cursor:pointer;text-decoration:underline;font-size:.82rem;margin-left:8px}
+
+.lk-submit{background:var(--navy);color:#fff;border:none;border-radius:9px;padding:10px 20px;font-family:'Fredoka',sans-serif;
+  font-weight:600;cursor:pointer;font-size:.92rem;margin-top:4px}
+.lk-submit:hover{background:var(--navy-d)}
+.lk-feedback{margin-top:10px;font-weight:700;font-size:.88rem;min-height:20px}
+.lk-feedback.bad{color:var(--bad)}
+.lk-feedback.good{color:var(--good)}
+
+/* multi-select */
+.multi{display:flex;flex-direction:column;gap:8px}
+.multi-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:#fff;border:2px solid var(--line);border-radius:10px;padding:10px 13px;font-family:inherit;font-weight:600;cursor:pointer;font-size:.92rem;transition:.15s}
+.multi-opt:hover{border-color:var(--navy);background:#f7f9ff}
+.multi-opt .mbox{width:22px;height:22px;border-radius:6px;border:2px solid var(--line);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff}
+.multi-opt.picked{border-color:var(--c5);background:#eef4ff}
+.multi-opt.picked .mbox{background:var(--c5);border-color:var(--c5)}
+.multi-opt.picked .mbox::after{content:'✓'}
+
+/* clue modal */
+.modal-bg{position:fixed;inset:0;background:rgba(16,29,61,.55);display:none;align-items:center;justify-content:center;z-index:40;padding:20px}
+.modal-bg.show{display:flex}
+.modal{background:#fff;border-radius:18px;padding:26px 24px;max-width:440px;width:100%;animation:pop .25s ease}
+@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+.modal .mico{font-size:2.6rem;text-align:center}
+.modal h3{font-family:'Fredoka',sans-serif;color:var(--navy);text-align:center;margin:6px 0 12px;font-size:1.3rem}
+.modal p{font-weight:600;color:var(--ink);margin:8px 0}
+.modal .closebtn{display:block;margin:16px auto 0;background:var(--gold);color:var(--navy-d);border:none;border-radius:9px;
+  padding:10px 24px;font-family:'Fredoka',sans-serif;font-weight:600;cursor:pointer}
+.reasoning{background:#f4f1ff;border-left:4px solid var(--c1);border-radius:8px;padding:10px 13px;font-size:.88rem;color:#43386b;font-weight:600;margin-top:10px}
+
+/* win */
+.win{position:fixed;inset:0;background:rgba(16,29,61,.7);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+.win.show{display:flex}
+.win-card{background:#fff;border-radius:22px;padding:34px 30px;max-width:480px;text-align:center;animation:pop .3s ease}
+.win-card .stamp{display:inline-block;font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.3rem;color:var(--good);
+  border:4px solid var(--good);border-radius:12px;padding:8px 20px;transform:rotate(-6deg);margin-bottom:16px}
+.win-card h2{font-family:'Fredoka',sans-serif;color:var(--navy);font-size:1.6rem;margin-bottom:8px}
+.win-card p{font-weight:600;color:var(--ink-soft);margin-bottom:18px}
+.win-card button{background:var(--navy);color:#fff;border:none;border-radius:10px;padding:12px 26px;font-family:'Fredoka',sans-serif;
+  font-weight:600;cursor:pointer;font-size:1rem}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:60}
+footer{text-align:center;margin-top:30px;font-size:.8rem;color:var(--ink-soft);font-weight:600}
+footer a{color:var(--c5);font-weight:700;text-decoration:none}
+
+/* RTL */
+[dir=rtl] .reasoning{border-left:none;border-right:4px solid var(--c1)}
+[dir=rtl] .mc button,[dir=rtl] .multi-opt{text-align:right}
+[dir=rtl] .seq-clear{margin-left:0;margin-right:8px}
+
+/* catalog */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;margin-top:24px}
+.cat-card{display:flex;flex-direction:column;background:var(--card);border:2px solid var(--line);border-radius:18px;
+  padding:20px;text-decoration:none;color:inherit;transition:.18s}
+.cat-card:hover{transform:translateY(-4px);box-shadow:0 14px 32px rgba(16,42,84,.12);border-color:var(--gold)}
+.cat-card .ico{font-size:2.4rem;line-height:1}
+.cat-card .subj{font-family:'Fredoka',sans-serif;font-size:.66rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:#fff;padding:4px 11px;border-radius:100px;align-self:flex-start;margin:10px 0}
+.cat-card h2{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.22rem;color:var(--navy);margin:4px 0 6px;line-height:1.12}
+.cat-card p{font-size:.9rem;color:var(--ink-soft);font-weight:600;flex:1}
+.cat-card .go{margin-top:14px;font-family:'Fredoka',sans-serif;font-weight:600;color:var(--navy)}
+.cat-card .go::after{content:' →'}
+[dir=rtl] .cat-card .go::after{content:' ←'}
+</style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+<div class="wrap">
+  <div class="crumb"><a href="../../grade68.html">‹ गतिविधियों पर वापस जाएँ</a></div>
+  <header class="top">
+    <div class="eyebrow">डिजिटल ब्रेकआउट · कक्षा 6–8</div>
+    <h1>गायब शुभंकर: बंद ट्रॉफी तिजोरी का मामला</h1>
+    <p class="sub">स्कूल के शुभंकर कूपर की पोशाक बड़े मैच से ठीक एक रात पहले गायब हो गई। केवल उसी पर भरोसा करो जो सबूत साबित करते हैं, और ट्रॉफी तिजोरी के तालों को खोलो।</p>
+    <div class="langbar"><a class="" href="en.html" lang="en">English</a><a class="" href="es.html" lang="es">Español</a><a class="" href="vi.html" lang="vi">Tiếng Việt</a><a class="" href="zh.html" lang="zh">中文</a><a class="active" href="hi.html" lang="hi">हिन्दी</a><a class="" href="ar.html" lang="ar">العربية</a><a class="" href="ur.html" lang="ur">اردو</a></div>
+  </header>
+
+  <div class="progress-wrap">
+    <span class="pcount" id="pcount">0</span>
+    <div class="lockdots" id="lockdots"></div>
+    <button class="resetbtn" id="resetBtn">↺ रीसेट</button>
+  </div>
+
+  <div class="brief">
+    <span class="tag">🔒 मिशन का विवरण</span>
+    <h2>मिशन ब्रीफ: तर्क से अंदर पहुँचो</h2>
+    <p>तुम लिंकन मिडिल स्कूल की छात्र जासूस टीम में हो। किसी ने कूपर द कूगर शुभंकर की पोशाक बंद ट्रॉफी तिजोरी के अंदर छिपा दी है, और चैंपियनशिप मैच एक घंटे में है। गवाहों ने पाँच सबूत कार्ड पीछे छोड़े हैं। चेतावनी: हर कार्ड सचमुच मददगार नहीं है। पहले सुराग खोलो, फिर केवल उसी का उपयोग करके हर ताला खोलो जो सबूत साबित करते हैं। बिना सबूत का दावा सिर्फ एक अनुमान है, और अनुमान से एक भी ताला नहीं खुलेगा। ध्यान से देखो कि क्या प्रासंगिक है और जो सिर्फ शोर है उसे नज़रअंदाज़ करो।</p>
+  </div>
+
+  <div class="section-title">🔍 सुराग</div>
+  <p class="hint">जाँच करने के लिए हर वस्तु पर टैप करें। (आप उन्हें कभी भी फिर से खोल सकते हैं।)</p>
+  <div class="clue-grid" id="clueGrid"></div>
+
+  <div class="section-title">🔒 ताले</div>
+  <p class="hint">ऊपर दिए गए सुरागों की मदद से हर ताला खोलें।</p>
+  <div class="locks" id="locks"></div>
+
+  <footer>Critical Thinking Breakouts · कक्षा 6–8 · पूरी तरह आपके ब्राउज़र में चलता है — न कोई लॉगिन, न कोई डेटा इकट्ठा किया जाता है। · <a href="../../../policy.html">गोपनीयता और अनुपालन</a></footer>
+</div>
+
+<div class="modal-bg" id="modalBg"><div class="modal" id="modal"></div></div>
+<div class="win" id="win"><div class="win-card">
+  <div class="stamp">मामला बंद ✓</div>
+  <h2>तिजोरी खुल गई और कूगर बच गया!</h2>
+  <p>तुमने एक भी अनुमान के बिना साबित कर दिया कि यह नाटक क्लब ने किया। तुमने दावा-सबूत-तर्क का मामला बनाने और प्रासंगिक समर्थन को असंबद्ध शोर से अलग करने का अभ्यास किया। मैच पाँच मिनट में शुरू होता है। आगे बढ़ो कूगर्स!</p>
+  <button id="winBtn">फिर से खेलें</button>
+</div></div>
+
+<script>const DATA={"T":{"locksOpen":"{t} में से {n} ताले खुले","check":"जाँचें","gotIt":"समझ गए","typeAnswer":"अपना उत्तर लिखें","clear":"मिटाएँ","solved":"हल हो गया!","fbDefault":"बिलकुल नहीं — सुरागों को फिर से जाँचें।","fbDigit":"यह संख्या सुरागों से मेल नहीं खाती। दोबारा गिनें।","fbWord":"सही उत्तर के लिए सुरागों को जाँचें।","fbMc":"यह विकल्प सबूतों से समर्थित नहीं है। फिर से देखें।","fbSeq":"यह क्रम सुरागों से मेल नहीं खाता। फिर से कोशिश करें।","fbMultiExtra":"एक चुनाव पुख्ता सबूत नहीं है — पुख्ता का मतलब है ऐसे तथ्य जिन्हें आप जाँच सकें, न कि अफवाहें या भावनाएँ।","fbMultiMissing":"आपके पास एक पुख्ता सबूत की कमी है। उन सबको ढूँढें।"},"clues":[{"id":"c0","ico":"📹","nm":"गलियारा कैमरा","title":"सुरक्षा कैमरा रिकॉर्ड","body":"जिम के पास गलियारे के कैमरे ने शाम 4:15 बजे किसी को एक बड़ा बैग लेकर ट्रॉफी तिजोरी की ओर जाते हुए रिकॉर्ड किया। उस व्यक्ति ने हरी बैंड जैकेट पहनी थी। उस साल केवल नाटक क्लब और बैंड, यही दो क्लब थे जिनके पास हरी जैकेट थीं।"},{"id":"c1","ico":"🎺","nm":"बैंड हाज़िरी","title":"बैंड अभ्यास शीट","body":"बैंड हाज़िरी शीट दिखाती है कि हर बैंड सदस्य शाम 4:00 बजे से 5:30 बजे तक पूरे रिहर्सल के लिए संगीत कक्ष में दर्ज हुआ। निर्देशक ने पुष्टि की कि अभ्यास के दौरान कोई भी बैंड सदस्य कमरे से बाहर नहीं गया। नाटक क्लब की उस दोपहर कोई बैठक नहीं थी।"},{"id":"c2","ico":"🍕","nm":"नाश्ता मेन्यू","title":"कैफ़ेटेरिया नाश्ता मेन्यू","body":"मंगलवार के कैफ़ेटेरिया मेन्यू में चीज़ पिज़्ज़ा, बेबी गाजर और चॉकलेट दूध थे। पिज़्ज़ा बहुत लोकप्रिय था और लाइन लंबी थी। पिछले वसंत के एक सर्वेक्षण में छात्रों ने गाजर को 5 में से 4 स्टार दिए।"},{"id":"c3","ico":"🔑","nm":"चाबी टैग","title":"तिजोरी चाबी रजिस्टर","body":"तिजोरी की चाबी एक रंगीन टैग के साथ ली जाती है। तीन टैग हैं: एक लाल टैग, एक नीला टैग और एक पीला टैग। रजिस्टर दिखाता है कि नीला टैग शाम 4:10 बजे लिया गया और 4:25 बजे लौटाया गया। नीला टैग केवल नाटक क्लब के सदस्यों को दिया जाता है।"},{"id":"c4","ico":"👟","nm":"कीचड़ के निशान","title":"तिजोरी के पास पैरों के निशान","body":"जासूसों को साइड दरवाज़े से तिजोरी तक और वापस जाते हुए कीचड़ भरे जूतों के निशान मिले। शाम 3:50 बजे बारिश हुई थी। निशानों का आकार उस पोशाक रैक कमरे से मेल खाता था जिसे नाटक क्लब इस्तेमाल करता है। संगीत कक्ष के पास कोई कीचड़ नहीं मिला।"}],"locks":[{"id":"L1","color":"var(--c5)","type":"word","title":"ताला 1: दोषी क्लब का नाम बताओ","q":"किस क्लब ने शुभंकर की पोशाक छिपाई? क्लब का नाम टाइप करो।","reason":"कैमरे ने इसे बैंड या नाटक तक सीमित कर दिया (हरी जैकेट)। हाज़िरी शीट साबित करती है कि हर बैंड सदस्य रिहर्सल में था और बाहर नहीं जा सकता था, इसलिए छँटाई से यह नाटक क्लब ही होना चाहिए।","answer":["drama","drama club","the drama club","नाटक","नाटक क्लब","ड्रामा","ड्रामा क्लब"]},{"id":"L2","color":"var(--c4)","type":"mc","title":"ताला 2: कौन सा कार्ड बेकार है?","q":"एक सबूत कार्ड अपराध के बारे में कुछ भी साबित नहीं करता। वह कौन सा छलावा है जिसे तुम्हें नज़रअंदाज़ करना चाहिए?","reason":"नाश्ता मेन्यू केवल पिज़्ज़ा और गाजर की रेटिंग के बारे में बात करता है। यह किसी संदिग्ध, समय या जगह से नहीं जुड़ता, इसलिए यह असंबद्ध शोर है।","options":["सुरक्षा कैमरा रिकॉर्ड","कैफ़ेटेरिया नाश्ता मेन्यू","तिजोरी चाबी रजिस्टर","तिजोरी के पास पैरों के निशान"],"answerIndex":1},{"id":"L3","color":"var(--c3)","type":"digit","title":"ताला 3: चाबी कितने मिनट बाहर रही","q":"नीली तिजोरी चाबी कितने मिनट तक बाहर रही (लेने से लौटाने तक)?","reason":"चाबी रजिस्टर कहता है कि नीला टैग शाम 4:10 बजे बाहर था और 4:25 बजे लौटाया गया। 4:25 में से 4:10 घटाने पर 15 मिनट होते हैं, जो सीधे सबूत से निकलता है।","len":2,"answer":["15"]},{"id":"L4","color":"var(--c1)","type":"multi","title":"ताला 4: मामला बनाओ","q":"हर वह सबूत चुनो जो सचमुच इस दावे का समर्थन करता है कि यह नाटक क्लब ने किया। जो भी असंबद्ध हो उसे छोड़ दो।","reason":"प्रासंगिक समर्थन सीधे कौन, कब या कहाँ से जुड़ता है। गाजर की रेटिंग अपराध के बारे में कुछ साबित नहीं करती, इसलिए एक मज़बूत मामले में बाकी चार शामिल हैं और इसे छोड़ दिया जाता है।","items":[{"t":"कैमरा हरी बैंड जैकेट दिखाता है (बैंड या नाटक)","strong":true},{"t":"बैंड हाज़िरी साबित करती है कि बैंड सदस्य कभी बाहर नहीं गए","strong":true},{"t":"नीला चाबी टैग (केवल नाटक) अपराध के समय लिया गया था","strong":true},{"t":"कैफ़ेटेरिया की गाजर को 5 में से 4 स्टार मिले","strong":false},{"t":"कीचड़ के निशान नाटक के पोशाक कमरे से मेल खाते हैं, संगीत कक्ष के पास कोई नहीं","strong":true}]},{"id":"L5","color":"var(--c2)","type":"seq","title":"ताला 5: तर्क को क्रम में रखो","q":"जासूस की सोच को क्रम में रखें — प्रत्येक पैड के लेबल का उपयोग करके तय करें कि एक मज़बूत तर्क कैसे बनता है।","reason":"एक मज़बूत तर्क पहले दावा बताता है, उसे सबूत से समर्थन देता है, फिर तर्क का उपयोग करके समझाता है कि वह सबूत दावे को क्यों साबित करता है। पहले दावा, फिर सबूत, और तर्क इन्हें आपस में जोड़ता है।","pads":[{"k":"claim","e":"📢","c":"#e03131"},{"k":"evidence","e":"🔍","c":"#2f6fe0"},{"k":"reasoning","e":"🧠","c":"#f08a16"}],"answer":["claim","evidence","reasoning"]}]};</script>
+<script>/* Critical Thinking Breakouts — shared player engine.
+   Reads a global DATA object injected per page. No external requests. */
+(function(){
+  const T = DATA.T;
+  const CLUES = DATA.clues;
+  const LOCKS = DATA.locks;
+  const $ = s => document.querySelector(s);
+  let solved = {};
+  const opened = new Set();
+
+  function renderClues(){
+    const g = $('#clueGrid'); g.innerHTML = '';
+    CLUES.forEach(c => {
+      const b = document.createElement('button');
+      b.className = 'clue' + (opened.has(c.id) ? ' opened' : '');
+      b.innerHTML = '<div class="ico">' + c.ico + '</div><div class="nm">' + c.nm + '</div>';
+      b.onclick = () => openClue(c);
+      g.appendChild(b);
+    });
+  }
+  function openClue(c){
+    opened.add(c.id);
+    $('#modal').innerHTML = '<div class="mico">' + c.ico + '</div><h3>' + c.title + '</h3><p>' + c.body + '</p>' +
+      '<button class="closebtn" id="clueClose">' + T.gotIt + '</button>';
+    $('#modal').querySelector('#clueClose').onclick = () => $('#modalBg').classList.remove('show');
+    $('#modalBg').classList.add('show');
+    renderClues();
+  }
+  $('#modalBg').onclick = e => { if(e.target.id === 'modalBg') e.currentTarget.classList.remove('show'); };
+
+  function renderDots(){
+    const d = $('#lockdots'); d.innerHTML = '';
+    LOCKS.forEach(l => {
+      const s = document.createElement('div');
+      s.className = 'ld' + (solved[l.id] ? ' open' : '');
+      s.textContent = solved[l.id] ? '🔓' : '🔒';
+      d.appendChild(s);
+    });
+    const n = Object.keys(solved).filter(k => solved[k]).length;
+    $('#pcount').textContent = T.locksOpen.replace('{n}', n).replace('{t}', LOCKS.length);
+    if(n === LOCKS.length) setTimeout(showWin, 400);
+  }
+
+  function renderLocks(){
+    const wrap = $('#locks'); wrap.innerHTML = '';
+    LOCKS.forEach(l => {
+      const card = document.createElement('div');
+      card.className = 'lock' + (solved[l.id] ? ' solved' : '');
+      card.id = 'card-' + l.id;
+      let body = '';
+      if(l.type === 'digit'){
+        body = '<div class="digits">' + Array.from({length:l.len}).map((_,i) =>
+          '<input class="digit" data-i="' + i + '" maxlength="1" inputmode="numeric" pattern="[0-9]">').join('') + '</div>';
+      } else if(l.type === 'word'){
+        body = '<input class="wordin" placeholder="' + T.typeAnswer + '">';
+      } else if(l.type === 'mc'){
+        body = '<div class="mc">' + l.options.map((o,i) => '<button data-i="' + i + '">' + o + '</button>').join('') + '</div>';
+      } else if(l.type === 'seq'){
+        body = '<div class="seq-current" id="seq-' + l.id + '">— — —</div><button class="seq-clear" data-clear>' + T.clear + '</button>' +
+          '<div class="seq-pads">' + l.pads.map(p => '<button class="seqpad" data-k="' + p.k + '" style="background:' + p.c + '">' + p.e + '</button>').join('') + '</div>';
+      } else if(l.type === 'multi'){
+        body = '<div class="multi">' + l.items.map((o,i) =>
+          '<button class="multi-opt" data-i="' + i + '"><span class="mbox"></span><span>' + o.t + '</span></button>').join('') + '</div>';
+      }
+      const showSubmit = l.type !== 'mc';
+      card.innerHTML =
+        '<div class="lk-head"><div class="lk-badge" style="background:' + l.color + '">' + l.id.replace('L','') + '</div>' +
+        '<div class="lk-title">' + l.title + '</div></div>' +
+        '<div class="lk-body"><div class="lk-q">' + l.q + '</div>' + body +
+        (showSubmit ? '<button class="lk-submit">' + T.check + '</button>' : '') +
+        '<div class="lk-feedback" data-fb></div></div>' +
+        '<div class="lk-solved-msg">🔓 ' + T.solved + '</div>' +
+        '<div class="reasoning" style="' + (solved[l.id] ? '' : 'display:none') + '">' + l.reason + '</div>';
+      wrap.appendChild(card);
+      wireLock(l, card);
+    });
+  }
+
+  function wireLock(l, card){
+    if(solved[l.id]) return;
+    const fb = card.querySelector('[data-fb]');
+    const ok = () => {
+      solved[l.id] = true;
+      card.classList.add('solved');
+      card.querySelector('.reasoning').style.display = 'block';
+      renderDots();
+    };
+    const fail = msg => { fb.className = 'lk-feedback bad'; fb.textContent = msg || T.fbDefault; };
+
+    if(l.type === 'digit'){
+      const inputs = [...card.querySelectorAll('.digit')];
+      inputs.forEach((inp,i) => inp.addEventListener('input', () => { if(inp.value && i < inputs.length-1) inputs[i+1].focus(); }));
+      card.querySelector('.lk-submit').onclick = () => {
+        const val = inputs.map(x => x.value).join('');
+        if(l.answer.includes(val)) ok(); else fail(T.fbDigit);
+      };
+    } else if(l.type === 'word'){
+      const inp = card.querySelector('.wordin');
+      const go = () => { const v = inp.value.trim().toLowerCase(); if(l.answer.includes(v)) ok(); else fail(T.fbWord); };
+      card.querySelector('.lk-submit').onclick = go;
+      inp.addEventListener('keydown', e => { if(e.key === 'Enter') go(); });
+    } else if(l.type === 'mc'){
+      card.querySelectorAll('.mc button').forEach(b => {
+        b.onclick = () => { if(+b.dataset.i === l.answerIndex) ok(); else fail(T.fbMc); };
+      });
+    } else if(l.type === 'seq'){
+      let seq = [];
+      const disp = card.querySelector('#seq-' + l.id);
+      const draw = () => { disp.textContent = seq.length ? seq.map(k => l.pads.find(p => p.k === k).e).join(' ') : '— — —'; };
+      card.querySelectorAll('.seqpad').forEach(p => {
+        p.onclick = () => { seq.push(p.dataset.k); if(seq.length > l.answer.length) seq = seq.slice(-l.answer.length); draw(); };
+      });
+      card.querySelector('[data-clear]').onclick = () => { seq = []; draw(); };
+      card.querySelector('.lk-submit').onclick = () => {
+        if(seq.length === l.answer.length && seq.every((k,i) => k === l.answer[i])) ok();
+        else fail(T.fbSeq);
+      };
+    } else if(l.type === 'multi'){
+      const picked = new Set();
+      card.querySelectorAll('.multi-opt').forEach(b => {
+        b.onclick = () => { const i = +b.dataset.i; if(picked.has(i)){ picked.delete(i); b.classList.remove('picked'); } else { picked.add(i); b.classList.add('picked'); } };
+      });
+      card.querySelector('.lk-submit').onclick = () => {
+        const correct = l.items.map((o,i) => o.strong ? i : -1).filter(i => i >= 0);
+        const chosen = [...picked].sort((a,b) => a-b);
+        const good = chosen.length === correct.length && chosen.every((v,i) => v === correct[i]);
+        if(good) ok();
+        else { const extra = [...picked].some(i => !l.items[i].strong); fail(extra ? T.fbMultiExtra : T.fbMultiMissing); }
+      };
+    }
+  }
+
+  function showWin(){ $('#win').classList.add('show'); fireConfetti(); }
+  $('#resetBtn').onclick = () => { solved = {}; opened.clear(); renderClues(); renderLocks(); renderDots(); };
+  const wb = $('#winBtn'); if(wb) wb.onclick = () => location.reload();
+
+  function fireConfetti(){
+    const cv = $('#confetti'), ctx = cv.getContext('2d');
+    cv.width = innerWidth; cv.height = innerHeight;
+    const cols = ['#7c5cbf','#1aa3b8','#46a23c','#f08a16','#2f6fe0','#FCB040'];
+    const bits = Array.from({length:130}, () => ({ x:Math.random()*cv.width, y:-20-Math.random()*cv.height*.5,
+      r:5+Math.random()*7, c:cols[(Math.random()*cols.length)|0], vy:2.5+Math.random()*3.5, vx:-1.5+Math.random()*3, rot:Math.random()*6, vr:-.2+Math.random()*.4 }));
+    let f = 0;
+    (function a(){
+      ctx.clearRect(0,0,cv.width,cv.height);
+      bits.forEach(b => { b.x+=b.vx; b.y+=b.vy; b.rot+=b.vr;
+        ctx.save(); ctx.translate(b.x,b.y); ctx.rotate(b.rot); ctx.fillStyle=b.c; ctx.fillRect(-b.r/2,-b.r/2,b.r,b.r*.6); ctx.restore(); });
+      f++; if(f<150) requestAnimationFrame(a); else ctx.clearRect(0,0,cv.width,cv.height);
+    })();
+  }
+  addEventListener('resize', () => { const cv = $('#confetti'); cv.width = innerWidth; cv.height = innerHeight; });
+
+  renderClues(); renderLocks(); renderDots();
+})();
+</script>
+</body>
+</html>

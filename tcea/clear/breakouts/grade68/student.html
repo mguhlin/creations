@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<title>Signal Check: The Viral Claim — Critical Thinking Breakout</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --c1:#7c5cbf;--c2:#1aa3b8;--c3:#46a23c;--c4:#f08a16;--c5:#2f6fe0;
+    --navy:#102a54;--navy-d:#0b1d3d;--gold:#FCB040;--gold-d:#c97f12;
+    --paper:#fbf8f1;--ink:#1c2436;--ink-soft:#54607a;--card:#fff;--line:#e3e8f2;
+    --good:#2f9e44;--bad:#e03131;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Nunito',sans-serif;color:var(--ink);background:
+    radial-gradient(ellipse 60% 50% at 80% 0%,rgba(252,176,64,.12)0%,transparent 60%),
+    radial-gradient(ellipse 50% 40% at 0% 100%,rgba(47,111,224,.10)0%,transparent 60%),var(--paper);
+    min-height:100vh;line-height:1.55}
+  .wrap{max-width:880px;margin:0 auto;padding:20px 18px 80px}
+  .crumb{font-size:.82rem;font-weight:700;margin-bottom:10px}
+  .crumb a{color:var(--c5);text-decoration:none}
+  header.top{text-align:center;padding:8px 0 4px}
+  .eyebrow{display:inline-block;background:var(--navy);color:#fff;font-family:'Fredoka',sans-serif;
+    font-weight:600;font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;padding:6px 16px;border-radius:100px;margin-bottom:12px}
+  h1{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(1.9rem,6vw,3rem);color:var(--navy);line-height:1.04}
+  .sub{color:var(--ink-soft);font-weight:600;margin-top:8px;max-width:620px;margin-left:auto;margin-right:auto}
+  .progress-wrap{display:flex;align-items:center;gap:12px;justify-content:center;flex-wrap:wrap;position:sticky;top:8px;z-index:30;margin:12px 0 6px;padding:10px 14px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:12px;box-shadow:0 4px 14px rgba(16,42,84,.07)}
+  .lockdots{display:flex;gap:8px}
+  .ld{width:30px;height:30px;border-radius:9px;background:#d8deea;display:flex;align-items:center;justify-content:center;
+    font-size:1rem;transition:.3s;border:2px solid transparent}
+  .ld.open{background:var(--good);color:#fff;border-color:#1f7a31}
+  .pcount{font-family:'Fredoka',sans-serif;font-weight:600;color:var(--navy)}
+  .resetbtn{background:#fff;border:2px solid var(--line);border-radius:9px;padding:7px 14px;font-family:'Fredoka',sans-serif;
+    font-weight:600;color:var(--ink-soft);cursor:pointer;font-size:.85rem}
+  .resetbtn:hover{border-color:var(--bad);color:var(--bad)}
+
+  .brief{background:#fffdf6;border:2px dashed var(--gold-d);border-radius:14px;padding:16px 20px;margin:18px 0}
+  .brief h2{font-family:'Fredoka',sans-serif;font-size:1.15rem;color:var(--navy);margin-bottom:6px}
+  .brief .tag{font-family:'Fredoka',sans-serif;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-d);font-weight:600}
+
+  .section-title{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.2rem;color:var(--navy);margin:24px 0 4px}
+  .hint{color:var(--ink-soft);font-weight:600;font-size:.92rem;margin-bottom:12px}
+
+  /* clue board */
+  .clue-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+  .clue{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;
+    transition:.18s;text-align:center;font-family:inherit}
+  .clue:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 8px 20px rgba(16,42,84,.1)}
+  .clue .ico{font-size:2rem;line-height:1}
+  .clue .nm{font-weight:700;margin-top:6px;color:var(--navy);font-size:.92rem}
+  .clue.opened{border-color:var(--c3);background:#f2fbef}
+  .clue.opened .nm::after{content:' ✓';color:var(--good)}
+
+  /* locks */
+  .locks{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:6px}
+  @media(max-width:640px){.locks{grid-template-columns:1fr}.clue-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}}
+  .lock{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:18px;position:relative}
+  .lock.solved{border-color:var(--good);background:#f3fbf975}
+  .lock .lk-head{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+  .lk-badge{width:38px;height:38px;border-radius:10px;color:#fff;font-family:'Fredoka',sans-serif;font-weight:700;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.2rem}
+  .lk-title{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.05rem;color:var(--navy);line-height:1.1}
+  .lk-q{font-size:.9rem;color:var(--ink-soft);font-weight:600;margin:8px 0 12px}
+  .lk-solved-msg{display:none;color:var(--good);font-weight:800;font-family:'Fredoka',sans-serif;margin-top:6px}
+  .lock.solved .lk-solved-msg{display:block}
+  .lock.solved .lk-body{display:none}
+
+  /* digit pad */
+  .digits{display:flex;gap:8px;margin-bottom:10px}
+  .digit{width:46px;height:54px;border:2px solid var(--line);border-radius:10px;text-align:center;font-size:1.5rem;
+    font-weight:800;font-family:'Fredoka',sans-serif;color:var(--navy)}
+  .digit:focus{outline:none;border-color:var(--c5)}
+
+  /* word input */
+  .wordin{width:100%;border:2px solid var(--line);border-radius:10px;padding:11px 13px;font-size:1.05rem;
+    font-weight:700;font-family:inherit;color:var(--navy)}
+  .wordin:focus{outline:none;border-color:var(--c5)}
+
+  /* MC */
+  .mc{display:flex;flex-direction:column;gap:8px}
+  .mc button{text-align:left;background:#fff;border:2px solid var(--line);border-radius:10px;padding:10px 13px;
+    font-family:inherit;font-weight:600;cursor:pointer;font-size:.92rem;transition:.15s}
+  .mc button:hover{border-color:var(--navy);background:#f7f9ff}
+
+  /* color/direction sequence */
+  .seq-pads{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+  .seqpad{width:46px;height:46px;border-radius:10px;border:3px solid rgba(0,0,0,.12);cursor:pointer;font-size:1.3rem;
+    display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800}
+  .seq-current{min-height:30px;font-family:'Fredoka',sans-serif;font-weight:700;color:var(--navy);letter-spacing:2px;font-size:1.2rem;
+    background:#f0f3fa;border-radius:8px;padding:4px 10px;display:inline-block;margin-bottom:8px;min-width:120px}
+  .seq-clear{background:none;border:none;color:var(--ink-soft);font-weight:700;cursor:pointer;text-decoration:underline;font-size:.82rem;margin-left:8px}
+
+  .lk-submit{background:var(--navy);color:#fff;border:none;border-radius:9px;padding:10px 20px;font-family:'Fredoka',sans-serif;
+    font-weight:600;cursor:pointer;font-size:.92rem;margin-top:4px}
+  .lk-submit:hover{background:var(--navy-d)}
+  .lk-feedback{margin-top:10px;font-weight:700;font-size:.88rem;min-height:20px}
+  .lk-feedback.bad{color:var(--bad)}
+  .lk-feedback.good{color:var(--good)}
+
+  /* multi-select evidence lock */
+  .multi{display:flex;flex-direction:column;gap:8px}
+  .multi-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:#fff;border:2px solid var(--line);border-radius:10px;padding:10px 13px;font-family:inherit;font-weight:600;cursor:pointer;font-size:.92rem;transition:.15s}
+  .multi-opt:hover{border-color:var(--navy);background:#f7f9ff}
+  .multi-opt .mbox{width:22px;height:22px;border-radius:6px;border:2px solid var(--line);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff}
+  .multi-opt.picked{border-color:var(--c5);background:#eef4ff}
+  .multi-opt.picked .mbox{background:var(--c5);border-color:var(--c5)}
+  .multi-opt.picked .mbox::after{content:'✓'}
+
+  /* clue modal */
+  .modal-bg{position:fixed;inset:0;background:rgba(16,29,61,.55);display:none;align-items:center;justify-content:center;z-index:40;padding:20px}
+  .modal-bg.show{display:flex}
+  .modal{background:#fff;border-radius:18px;padding:26px 24px;max-width:440px;width:100%;animation:pop .25s ease}
+  @keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+  .modal .mico{font-size:2.6rem;text-align:center}
+  .modal h3{font-family:'Fredoka',sans-serif;color:var(--navy);text-align:center;margin:6px 0 12px;font-size:1.3rem}
+  .modal p{font-weight:600;color:var(--ink);margin:8px 0}
+  .modal .closebtn{display:block;margin:16px auto 0;background:var(--gold);color:var(--navy-d);border:none;border-radius:9px;
+    padding:10px 24px;font-family:'Fredoka',sans-serif;font-weight:600;cursor:pointer}
+  .reasoning{background:#f4f1ff;border-left:4px solid var(--c1);border-radius:8px;padding:10px 13px;font-size:.88rem;color:#43386b;font-weight:600;margin-top:10px}
+
+  /* win */
+  .win{position:fixed;inset:0;background:rgba(16,29,61,.7);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+  .win.show{display:flex}
+  .win-card{background:#fff;border-radius:22px;padding:34px 30px;max-width:480px;text-align:center;animation:pop .3s ease}
+  .win-card .stamp{display:inline-block;font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.3rem;color:var(--good);
+    border:4px solid var(--good);border-radius:12px;padding:8px 20px;transform:rotate(-6deg);margin-bottom:16px}
+  .win-card h2{font-family:'Fredoka',sans-serif;color:var(--navy);font-size:1.6rem;margin-bottom:8px}
+  .win-card p{font-weight:600;color:var(--ink-soft);margin-bottom:18px}
+  .win-card button{background:var(--navy);color:#fff;border:none;border-radius:10px;padding:12px 26px;font-family:'Fredoka',sans-serif;
+    font-weight:600;cursor:pointer;font-size:1rem}
+  #confetti{position:fixed;inset:0;pointer-events:none;z-index:60}
+  footer{text-align:center;margin-top:30px;font-size:.8rem;color:var(--ink-soft);font-weight:600}
+</style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+<div class="wrap">
+  <div class="crumb"><a href="index.html">‹ Teacher launch</a> · <a href="../index.html">Critical Thinking Breakouts</a></div>
+
+  <header class="top">
+    <div class="eyebrow">Digital Breakout · Grades 6–8</div>
+    <h1>Signal Check: The Viral Claim</h1>
+    <p class="sub">A shocking post is going viral in your school group chat. Before anyone shares it, run a signal check. Investigate the evidence and solve all four locks to decide: is this claim a real signal — or just noise?</p>
+  </header>
+
+  <div class="progress-wrap">
+    <span class="pcount" id="pcount">0 of 4 locks open</span>
+    <div class="lockdots" id="lockdots"></div>
+    <button class="resetbtn" id="resetBtn">↺ Reset</button>
+  </div>
+
+  <div class="brief">
+    <span class="tag">📡 Mission Brief</span>
+    <h2>Verify before you amplify</h2>
+    <p>The post claims: <b>"BREAKING: The school board secretly CANCELED summer break — share before they delete this!!"</b> It has thousands of shares. Your job isn't to panic or repost — it's to <b>check the signal</b>. Open each piece of evidence, weigh how trustworthy it is, and solve all four locks to reach a smart conclusion.</p>
+  </div>
+
+  <div class="section-title">🔍 The Clues</div>
+  <p class="hint">Tap each item to investigate. (You can reopen them anytime.)</p>
+  <div class="clue-grid" id="clueGrid"></div>
+
+  <div class="section-title">🔒 The Locks</div>
+  <p class="hint">Solve each lock using the clues above.</p>
+  <div class="locks" id="locks"></div>
+
+  <footer>
+    Critical Thinking Breakouts · Grades 6–8 · Runs entirely in your browser — no logins, no data collected. · <a href="../policy.html" style="color:var(--c5);font-weight:700">Privacy &amp; compliance</a>
+  </footer>
+</div>
+
+<div class="modal-bg" id="modalBg"><div class="modal" id="modal"></div></div>
+<div class="win" id="win"><div class="win-card">
+  <div class="stamp">SIGNAL CHECKED ✓</div>
+  <h2>You're a verification pro!</h2>
+  <p>You traced the claim to its source, counted the red flags, and refused to share noise. That's real media literacy — the difference between spreading a rumor and stopping one.</p>
+  <button onclick="location.reload()">Play Again</button>
+</div></div>
+
+<script>
+/* ============ CLUE DATA ============ */
+const CLUES=[
+  {id:'post',ico:'📱',nm:'The post',title:"The viral post",body:"\"BREAKING: The school board SECRETLY canceled summer break \u2014 share before they DELETE this!!\" Posted by an account called @Real_News_Now_2026 with a \uD83D\uDD25 emoji. No author name, no date, no link to any official source."},
+  {id:'account',ico:'👤',nm:'The account',title:"Who posted it?",body:"@Real_News_Now_2026 was created 6 days ago. It has posted 40 shocking 'BREAKING' claims this week. Its bio says: 'Wake up! They don\'t want you to know.' It follows no local schools or news outlets."},
+  {id:'official',ico:'🏫',nm:'School site',title:"The official school district website",body:"The district\'s real website and calendar still list summer break for the normal dates. There is no announcement about any cancellation. The site was updated this morning."},
+  {id:'news',ico:'📰',nm:'Local news',title:"Local news search",body:"You search three trusted local news outlets. None report a canceled summer break. A school board meeting WAS held, but the published agenda was only about new library books."},
+  {id:'comments',ico:'💬',nm:'The comments',title:"The comment section",body:"Top comments: \"OMG sharing this!!\", \"This is so fake lol\", \"My cousin\'s friend works there and says it\'s true.\" Lots of emotion, lots of arguing, zero links to any real source."},
+  {id:'decoy',ico:'🌤️',nm:'Weather alert',title:"Weather notice",body:"A separate, real alert: light rain expected Thursday. (Does this have anything to do with the summer-break claim? A sharp thinker notices when information is unrelated \u2014 it\'s a distraction, not evidence.)"}
+];
+
+/* ============ LOCK DATA ============ */
+const LOCKS=[
+  {
+    id:'L1',color:'var(--c5)',type:'mc',title:'Lock 1 \u2014 Source Lock',
+    q:'You want the TRUTH about summer break. Which source is the most reliable to check?',
+    options:['The viral post itself','The comment section','The official school district website','A stranger\u2019s "my cousin\u2019s friend" comment'],
+    answerIndex:2,
+    reason:'The official district website is the primary, authoritative source \u2014 and it still lists summer break normally. Posts, comments, and second-hand claims are not reliable evidence.'
+  },
+  {
+    id:'L2',color:'var(--c4)',type:'digit',len:1,title:'Lock 2 \u2014 Red-Flag Lock',
+    q:'Count the warning signs IN THE POST: (1) no author named, (2) no date, (3) no link to a real source, (4) pressure to "share before they delete." How many red flags is that?',
+    answer:['4'],
+    reason:'All four are classic misinformation red flags. "Share before they delete it" is an urgency trick designed to make you repost before you think.'
+  },
+  {
+    id:'L3',color:'var(--c3)',type:'word',title:'Lock 3 \u2014 Action Lock',
+    q:'What is the one word for what a smart person does BEFORE sharing a shocking claim? (Hint: check it against a trusted source first.)',
+    answer:['verify','verifying','fact check','fact-check','factcheck'],
+    reason:'You VERIFY \u2014 confirm it against a trusted, primary source \u2014 before you amplify. Sharing first and checking later is how rumors spread.'
+  },
+  {
+    id:'L4',color:'var(--c1)',type:'seq',title:'Lock 4 \u2014 Process Lock',
+    q:'Put the smart response in order: first PAUSE, then CHECK the official source, then DECIDE if it\u2019s true, then choose whether to SHARE.',
+    pads:[
+      {k:'pause',e:'🛑',c:'#e03131'},
+      {k:'check',e:'🔎',c:'#2f6fe0'},
+      {k:'decide',e:'⚖️',c:'#f08a16'},
+      {k:'share',e:'📣',c:'#46a23c'}
+    ],
+    answer:['pause','check','decide','share'],
+    reason:'Pause \u2192 Check the source \u2192 Decide \u2192 then Share (or don\'t). Reversing this is exactly what spreads misinformation.'
+  },
+  {
+    id:'L5',color:'var(--c2)',type:'multi',title:'Lock 5 \u2014 Evidence-Sort Lock',
+    q:'Select EVERY item below that counts as a TRUSTWORTHY signal you could rely on. Leave the noise unchecked, then press Check.',
+    items:[
+      {t:'The official district website still lists summer break.',strong:true},
+      {t:'A 6-day-old anonymous account posted it.',strong:false},
+      {t:'Three trusted local news outlets report nothing.',strong:true},
+      {t:'"My cousin\'s friend says it\'s true."',strong:false},
+      {t:'The number of likes and shares on the post.',strong:false}
+    ],
+    reason:'Trustworthy signals are the official site and independent local news \u2014 primary, verifiable sources. An anonymous account, a "cousin\'s friend," and raw like-counts are noise, not evidence.'
+  }
+];
+
+/* ============ ENGINE (shared) ============ */
+const $=s=>document.querySelector(s);
+let solved={};
+const opened=new Set();
+
+function renderClues(){
+  const g=$('#clueGrid');g.innerHTML='';
+  CLUES.forEach(c=>{
+    const b=document.createElement('button');b.className='clue'+(opened.has(c.id)?' opened':'');
+    b.innerHTML=`<div class="ico">${c.ico}</div><div class="nm">${c.nm}</div>`;
+    b.onclick=()=>openClue(c);g.appendChild(b);
+  });
+}
+function openClue(c){
+  opened.add(c.id);
+  $('#modal').innerHTML=`<div class="mico">${c.ico}</div><h3>${c.title}</h3><p>${c.body}</p>
+    <button class="closebtn" onclick="document.getElementById('modalBg').classList.remove('show')">Got it</button>`;
+  $('#modalBg').classList.add('show');renderClues();
+}
+$('#modalBg').onclick=e=>{if(e.target.id==='modalBg')e.currentTarget.classList.remove('show')};
+
+function renderDots(){
+  const d=$('#lockdots');d.innerHTML='';
+  LOCKS.forEach(l=>{const s=document.createElement('div');s.className='ld'+(solved[l.id]?' open':'');s.textContent=solved[l.id]?'🔓':'🔒';d.appendChild(s);});
+  const n=Object.keys(solved).filter(k=>solved[k]).length;
+  $('#pcount').textContent=`${n} of ${LOCKS.length} locks open`;
+  if(n===LOCKS.length) setTimeout(showWin,400);
+}
+
+function renderLocks(){
+  const wrap=$('#locks');wrap.innerHTML='';
+  LOCKS.forEach(l=>{
+    const card=document.createElement('div');card.className='lock'+(solved[l.id]?' solved':'');card.id='card-'+l.id;
+    let body='';
+    if(l.type==='digit'){
+      body=`<div class="digits">${Array.from({length:l.len}).map((_,i)=>`<input class="digit" data-i="${i}" maxlength="1" inputmode="numeric" pattern="[0-9]">`).join('')}</div>`;
+    }else if(l.type==='word'){
+      body=`<input class="wordin" placeholder="Type your answer">`;
+    }else if(l.type==='mc'){
+      body=`<div class="mc">${l.options.map((o,i)=>`<button data-i="${i}">${o}</button>`).join('')}</div>`;
+    }else if(l.type==='seq'){
+      body=`<div class="seq-current" id="seq-${l.id}">— — —</div><button class="seq-clear" data-clear>clear</button>
+        <div class="seq-pads">${l.pads.map(p=>`<button class="seqpad" data-k="${p.k}" style="background:${p.c}">${p.e}</button>`).join('')}</div>`;
+    }else if(l.type==='multi'){
+      body=`<div class="multi">${l.items.map((o,i)=>`<button class="multi-opt" data-i="${i}"><span class="mbox"></span><span>${o.t}</span></button>`).join('')}</div>`;
+    }
+    const showSubmit = l.type!=='mc';
+    card.innerHTML=`
+      <div class="lk-head"><div class="lk-badge" style="background:${l.color}">${l.id.replace('L','')}</div>
+      <div class="lk-title">${l.title}</div></div>
+      <div class="lk-body">
+        <div class="lk-q">${l.q}</div>
+        ${body}
+        ${showSubmit?`<button class="lk-submit">Check</button>`:''}
+        <div class="lk-feedback" data-fb></div>
+      </div>
+      <div class="lk-solved-msg">🔓 Solved! <span class="reason-inline"></span></div>
+      <div class="reasoning" style="${solved[l.id]?'':'display:none'}">${l.reason}</div>`;
+    wrap.appendChild(card);
+    wireLock(l,card);
+  });
+}
+
+function wireLock(l,card){
+  if(solved[l.id])return;
+  const fb=card.querySelector('[data-fb]');
+  const ok=()=>{
+    solved[l.id]=true;
+    card.classList.add('solved');
+    card.querySelector('.reasoning').style.display='block';
+    renderDots();
+  };
+  const fail=msg=>{fb.className='lk-feedback bad';fb.textContent=msg||'Not quite — re-check the clues.';};
+
+  if(l.type==='digit'){
+    const inputs=[...card.querySelectorAll('.digit')];
+    inputs.forEach((inp,i)=>inp.addEventListener('input',()=>{if(inp.value&&i<inputs.length-1)inputs[i+1].focus();}));
+    card.querySelector('.lk-submit').onclick=()=>{
+      const val=inputs.map(x=>x.value).join('');
+      if(l.answer.includes(val))ok();else fail('That number doesn\'t match the clues. Count again.');
+    };
+  }else if(l.type==='word'){
+    const inp=card.querySelector('.wordin');
+    const go=()=>{const v=inp.value.trim().toLowerCase();if(l.answer.includes(v))ok();else fail('Check the clues for the name that fits.');};
+    card.querySelector('.lk-submit').onclick=go;
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter')go();});
+  }else if(l.type==='mc'){
+    card.querySelectorAll('.mc button').forEach(b=>{
+      b.onclick=()=>{if(+b.dataset.i===l.answerIndex)ok();else fail('That one isn\'t supported by direct evidence. Look again.');};
+    });
+  }else if(l.type==='seq'){
+    let seq=[];
+    const disp=card.querySelector('#seq-'+l.id);
+    const draw=()=>{disp.textContent=seq.length?seq.map(k=>l.pads.find(p=>p.k===k).e).join(' '):'— — —';};
+    card.querySelectorAll('.seqpad').forEach(p=>{
+      p.onclick=()=>{seq.push(p.dataset.k);if(seq.length>l.answer.length)seq=seq.slice(-l.answer.length);draw();};
+    });
+    card.querySelector('[data-clear]').onclick=()=>{seq=[];draw();};
+    card.querySelector('.lk-submit').onclick=()=>{
+      if(seq.length===l.answer.length&&seq.every((k,i)=>k===l.answer[i]))ok();
+      else fail('That order doesn\'t match the menu. Try again.');
+    };
+
+  }else if(l.type==='multi'){
+    const picked=new Set();
+    card.querySelectorAll('.multi-opt').forEach(b=>{
+      b.onclick=()=>{const i=+b.dataset.i;if(picked.has(i)){picked.delete(i);b.classList.remove('picked');}else{picked.add(i);b.classList.add('picked');}};
+    });
+    card.querySelector('.lk-submit').onclick=()=>{
+      const correct=l.items.map((o,i)=>o.strong?i:-1).filter(i=>i>=0);
+      const chosen=[...picked].sort((a,b)=>a-b);
+      const ok2 = chosen.length===correct.length && chosen.every((v,i)=>v===correct[i]);
+      if(ok2)ok();
+      else{const extra=[...picked].some(i=>!l.items[i].strong);fail(extra?'One pick isn\'t strong evidence — strong means facts you can verify, not rumors or feelings.':'You\'re missing a piece of strong evidence. Find them all.');}
+    };
+  }
+}
+
+function showWin(){$('#win').classList.add('show');fireConfetti();}
+$('#resetBtn').onclick=()=>{solved={};opened.clear();renderClues();renderLocks();renderDots();};
+
+/* confetti */
+function fireConfetti(){
+  const cv=$('#confetti'),ctx=cv.getContext('2d');cv.width=innerWidth;cv.height=innerHeight;
+  const cols=['#7c5cbf','#1aa3b8','#46a23c','#f08a16','#2f6fe0','#FCB040'];
+  const bits=Array.from({length:130},()=>({x:Math.random()*cv.width,y:-20-Math.random()*cv.height*.5,
+    r:5+Math.random()*7,c:cols[(Math.random()*cols.length)|0],vy:2.5+Math.random()*3.5,vx:-1.5+Math.random()*3,rot:Math.random()*6,vr:-.2+Math.random()*.4}));
+  let f=0;(function a(){ctx.clearRect(0,0,cv.width,cv.height);bits.forEach(b=>{b.x+=b.vx;b.y+=b.vy;b.rot+=b.vr;
+    ctx.save();ctx.translate(b.x,b.y);ctx.rotate(b.rot);ctx.fillStyle=b.c;ctx.fillRect(-b.r/2,-b.r/2,b.r,b.r*.6);ctx.restore();});
+    f++;if(f<150)requestAnimationFrame(a);else ctx.clearRect(0,0,cv.width,cv.height);})();
+}
+addEventListener('resize',()=>{const cv=$('#confetti');cv.width=innerWidth;cv.height=innerHeight;});
+
+/* init */
+renderClues();renderLocks();renderDots();
+</script>
+</body>
+</html>

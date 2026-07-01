@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<title>Answer Key — The Case of the Locked Town Hall</title>
+<style>
+  :root{--navy:#102a54;--gold-d:#c97f12;--paper:#fbf8f1;--ink:#1c2436;--ink-soft:#54607a;--card:#fff;--line:#e3e8f2;--good:#2f7a28}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--paper);line-height:1.55}
+  .wrap{max-width:760px;margin:0 auto;padding:28px 20px 80px}
+  .crumb{font-size:.82rem;font-weight:700;margin-bottom:14px}.crumb a{color:#2f6fe0;text-decoration:none}
+  .warn{background:#fde8e8;border:2px solid #f3b6b6;color:#9a2b2b;border-radius:12px;padding:14px 18px;font-weight:700;margin-bottom:20px}
+  h1{font-size:1.7rem;color:var(--navy);font-weight:800}
+  h2{font-size:1.2rem;color:var(--navy);margin:26px 0 4px;border-left:5px solid var(--gold-d);padding-left:12px}
+  .band{font-weight:700;color:var(--ink-soft);font-size:.86rem;margin-bottom:10px}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.9rem}
+  th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+  th{background:#f0f3fa;color:var(--navy)}.ans{font-weight:800;color:var(--good)}
+  .acc{margin-top:6px;font-size:.82rem;color:var(--ink-soft)}
+  .printbtn{background:var(--gold-d);color:#fff;border:none;border-radius:9px;padding:9px 18px;font-weight:700;cursor:pointer;margin-top:8px}
+  @media print{.printbtn,.crumb,#gate{display:none}}
+  #gate{max-width:420px;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:24px;margin-top:6px}
+  #gate label{display:block;font-weight:700;color:var(--navy);margin-bottom:8px}
+  #gate input{width:100%;padding:11px 13px;font-size:1rem;border:2px solid var(--line);border-radius:9px}
+  #gate input:focus{outline:none;border-color:var(--gold-d)}
+  #gate button{margin-top:12px;background:var(--navy);color:#fff;border:none;border-radius:9px;padding:11px 22px;font-weight:700;cursor:pointer;font-size:1rem}
+  #gateMsg{color:#9a2b2b;font-weight:700;font-size:.9rem;margin-top:10px;min-height:1.2em}
+  .lock-note{color:var(--ink-soft);font-size:.84rem;font-weight:600;margin:10px 0 0}
+  footer{margin-top:30px;font-size:.8rem;color:var(--ink-soft);font-weight:600}</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="crumb"><a href="../index.html">‹ Teacher hub</a></div>
+  <h1>Teacher Answer Key</h1>
+  <div class="warn">⚠️ For teachers only. Do not share this page, its URL, or the password with students.</div>
+  <div id="gate">
+    <label for="pw">🔒 Enter the teacher password to view the answer key</label>
+    <input type="password" id="pw" autocomplete="off" autofocus placeholder="Password">
+    <button id="unlock">Unlock answer key</button>
+    <div id="gateMsg"></div>
+    <p class="lock-note">The answers are encrypted in this file — unreadable without the password, even in the page source.</p>
+  </div>
+  <div id="content"></div>
+  <footer>Critical Thinking Breakouts · Teacher answer key · Keep private.</footer>
+</div>
+<script>const CIPHER={"salt":"izyIxcjMBvHYP0KGKac0tQ==","iv":"VjiWT7AdjyV6uWuI","iters":250000,"data":"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"};
+  const b64ToBytes=b=>Uint8Array.from(atob(b),ch=>ch.charCodeAt(0));
+  async function decrypt(pw){
+    const enc=new TextEncoder();
+    const bk=await crypto.subtle.importKey("raw",enc.encode(pw),"PBKDF2",false,["deriveKey"]);
+    const key=await crypto.subtle.deriveKey({name:"PBKDF2",salt:b64ToBytes(CIPHER.salt),iterations:CIPHER.iters,hash:"SHA-256"},bk,{name:"AES-GCM",length:256},false,["decrypt"]);
+    const plain=await crypto.subtle.decrypt({name:"AES-GCM",iv:b64ToBytes(CIPHER.iv)},key,b64ToBytes(CIPHER.data));
+    return new TextDecoder().decode(plain);
+  }
+  async function tryUnlock(){
+    const pw=document.getElementById("pw").value,msg=document.getElementById("gateMsg");msg.textContent="";
+    if(!pw){msg.textContent="Please enter the password.";return;}
+    try{document.getElementById("content").innerHTML=await decrypt(pw);document.getElementById("gate").style.display="none";}
+    catch(e){msg.textContent="Incorrect password. Try again.";document.getElementById("pw").value="";document.getElementById("pw").focus();}
+  }
+  document.getElementById("unlock").addEventListener("click",tryUnlock);
+  document.getElementById("pw").addEventListener("keydown",e=>{if(e.key==="Enter")tryUnlock();});</script>
+</body>
+</html>

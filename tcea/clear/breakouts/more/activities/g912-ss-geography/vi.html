@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="vi" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<title>Hồ nước biến mất: Phá vỡ hồ sơ vụ án Biển Aral — Critical Thinking Breakouts</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>:root{
+  --c1:#7c5cbf;--c2:#1aa3b8;--c3:#46a23c;--c4:#f08a16;--c5:#2f6fe0;
+  --navy:#102a54;--navy-d:#0b1d3d;--gold:#FCB040;--gold-d:#c97f12;
+  --paper:#fbf8f1;--ink:#1c2436;--ink-soft:#54607a;--card:#fff;--line:#e3e8f2;
+  --good:#2f9e44;--bad:#e03131;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;color:var(--ink);background:
+  radial-gradient(ellipse 60% 50% at 80% 0%,rgba(252,176,64,.12)0%,transparent 60%),
+  radial-gradient(ellipse 50% 40% at 0% 100%,rgba(47,111,224,.10)0%,transparent 60%),var(--paper);
+  min-height:100vh;line-height:1.55}
+.wrap{max-width:880px;margin:0 auto;padding:20px 18px 80px}
+.crumb{font-size:.82rem;font-weight:700;margin-bottom:10px}
+.crumb a{color:var(--c5);text-decoration:none}
+header.top{text-align:center;padding:8px 0 4px}
+.eyebrow{display:inline-block;background:var(--navy);color:#fff;font-family:'Fredoka',sans-serif;
+  font-weight:600;font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;padding:6px 16px;border-radius:100px;margin-bottom:12px}
+h1{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(1.9rem,6vw,3rem);color:var(--navy);line-height:1.04}
+.sub{color:var(--ink-soft);font-weight:600;margin-top:8px;max-width:620px;margin-left:auto;margin-right:auto}
+
+/* language bar */
+.langbar{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:10px 0 0}
+.langbar a,.langbar button{font-family:'Fredoka',sans-serif;font-weight:600;font-size:.78rem;border:2px solid var(--line);
+  background:#fff;color:var(--ink-soft);border-radius:100px;padding:5px 12px;cursor:pointer;text-decoration:none;transition:.15s}
+.langbar a:hover,.langbar button:hover{border-color:var(--gold);color:var(--navy)}
+.langbar a.active,.langbar button.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+.progress-wrap{display:flex;align-items:center;gap:12px;justify-content:center;flex-wrap:wrap;position:sticky;top:8px;z-index:30;margin:12px 0 6px;padding:10px 14px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:12px;box-shadow:0 4px 14px rgba(16,42,84,.07)}
+.lockdots{display:flex;gap:8px}
+.ld{width:30px;height:30px;border-radius:9px;background:#d8deea;display:flex;align-items:center;justify-content:center;
+  font-size:1rem;transition:.3s;border:2px solid transparent}
+.ld.open{background:var(--good);color:#fff;border-color:#1f7a31}
+.pcount{font-family:'Fredoka',sans-serif;font-weight:600;color:var(--navy)}
+.resetbtn{background:#fff;border:2px solid var(--line);border-radius:9px;padding:7px 14px;font-family:'Fredoka',sans-serif;
+  font-weight:600;color:var(--ink-soft);cursor:pointer;font-size:.85rem}
+.resetbtn:hover{border-color:var(--bad);color:var(--bad)}
+
+.brief{background:#fffdf6;border:2px dashed var(--gold-d);border-radius:14px;padding:16px 20px;margin:18px 0}
+.brief h2{font-family:'Fredoka',sans-serif;font-size:1.15rem;color:var(--navy);margin-bottom:6px}
+.brief .tag{font-family:'Fredoka',sans-serif;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-d);font-weight:600}
+
+.section-title{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.2rem;color:var(--navy);margin:24px 0 4px}
+.hint{color:var(--ink-soft);font-weight:600;font-size:.92rem;margin-bottom:12px}
+
+/* clue board */
+.clue-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.clue{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;
+  transition:.18s;text-align:center;font-family:inherit}
+.clue:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 8px 20px rgba(16,42,84,.1)}
+.clue .ico{font-size:2rem;line-height:1}
+.clue .nm{font-weight:700;margin-top:6px;color:var(--navy);font-size:.92rem}
+.clue.opened{border-color:var(--c3);background:#f2fbef}
+.clue.opened .nm::after{content:' ✓';color:var(--good)}
+
+/* locks */
+.locks{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:6px}
+@media(max-width:640px){.locks{grid-template-columns:1fr}.clue-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}}
+.lock{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:18px;position:relative}
+.lock.solved{border-color:var(--good);background:#f3fbf975}
+.lock .lk-head{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.lk-badge{width:38px;height:38px;border-radius:10px;color:#fff;font-family:'Fredoka',sans-serif;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.2rem}
+.lk-title{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.05rem;color:var(--navy);line-height:1.1}
+.lk-q{font-size:.9rem;color:var(--ink-soft);font-weight:600;margin:8px 0 12px}
+.lk-solved-msg{display:none;color:var(--good);font-weight:800;font-family:'Fredoka',sans-serif;margin-top:6px}
+.lock.solved .lk-solved-msg{display:block}
+.lock.solved .lk-body{display:none}
+
+/* digit pad */
+.digits{display:flex;gap:8px;margin-bottom:10px}
+.digit{width:46px;height:54px;border:2px solid var(--line);border-radius:10px;text-align:center;font-size:1.5rem;
+  font-weight:800;font-family:'Fredoka',sans-serif;color:var(--navy)}
+.digit:focus{outline:none;border-color:var(--c5)}
+
+/* word input */
+.wordin{width:100%;border:2px solid var(--line);border-radius:10px;padding:11px 13px;font-size:1.05rem;
+  font-weight:700;font-family:inherit;color:var(--navy)}
+.wordin:focus{outline:none;border-color:var(--c5)}
+
+/* MC */
+.mc{display:flex;flex-direction:column;gap:8px}
+.mc button{text-align:left;background:#fff;border:2px solid var(--line);border-radius:10px;padding:10px 13px;
+  font-family:inherit;font-weight:600;cursor:pointer;font-size:.92rem;transition:.15s}
+.mc button:hover{border-color:var(--navy);background:#f7f9ff}
+
+/* sequence */
+.seq-pads{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.seqpad{width:46px;height:46px;border-radius:10px;border:3px solid rgba(0,0,0,.12);cursor:pointer;font-size:1.3rem;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800}
+.seq-current{min-height:30px;font-family:'Fredoka',sans-serif;font-weight:700;color:var(--navy);letter-spacing:2px;font-size:1.2rem;
+  background:#f0f3fa;border-radius:8px;padding:4px 10px;display:inline-block;margin-bottom:8px;min-width:120px}
+.seq-clear{background:none;border:none;color:var(--ink-soft);font-weight:700;cursor:pointer;text-decoration:underline;font-size:.82rem;margin-left:8px}
+
+.lk-submit{background:var(--navy);color:#fff;border:none;border-radius:9px;padding:10px 20px;font-family:'Fredoka',sans-serif;
+  font-weight:600;cursor:pointer;font-size:.92rem;margin-top:4px}
+.lk-submit:hover{background:var(--navy-d)}
+.lk-feedback{margin-top:10px;font-weight:700;font-size:.88rem;min-height:20px}
+.lk-feedback.bad{color:var(--bad)}
+.lk-feedback.good{color:var(--good)}
+
+/* multi-select */
+.multi{display:flex;flex-direction:column;gap:8px}
+.multi-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:#fff;border:2px solid var(--line);border-radius:10px;padding:10px 13px;font-family:inherit;font-weight:600;cursor:pointer;font-size:.92rem;transition:.15s}
+.multi-opt:hover{border-color:var(--navy);background:#f7f9ff}
+.multi-opt .mbox{width:22px;height:22px;border-radius:6px;border:2px solid var(--line);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff}
+.multi-opt.picked{border-color:var(--c5);background:#eef4ff}
+.multi-opt.picked .mbox{background:var(--c5);border-color:var(--c5)}
+.multi-opt.picked .mbox::after{content:'✓'}
+
+/* clue modal */
+.modal-bg{position:fixed;inset:0;background:rgba(16,29,61,.55);display:none;align-items:center;justify-content:center;z-index:40;padding:20px}
+.modal-bg.show{display:flex}
+.modal{background:#fff;border-radius:18px;padding:26px 24px;max-width:440px;width:100%;animation:pop .25s ease}
+@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+.modal .mico{font-size:2.6rem;text-align:center}
+.modal h3{font-family:'Fredoka',sans-serif;color:var(--navy);text-align:center;margin:6px 0 12px;font-size:1.3rem}
+.modal p{font-weight:600;color:var(--ink);margin:8px 0}
+.modal .closebtn{display:block;margin:16px auto 0;background:var(--gold);color:var(--navy-d);border:none;border-radius:9px;
+  padding:10px 24px;font-family:'Fredoka',sans-serif;font-weight:600;cursor:pointer}
+.reasoning{background:#f4f1ff;border-left:4px solid var(--c1);border-radius:8px;padding:10px 13px;font-size:.88rem;color:#43386b;font-weight:600;margin-top:10px}
+
+/* win */
+.win{position:fixed;inset:0;background:rgba(16,29,61,.7);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+.win.show{display:flex}
+.win-card{background:#fff;border-radius:22px;padding:34px 30px;max-width:480px;text-align:center;animation:pop .3s ease}
+.win-card .stamp{display:inline-block;font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.3rem;color:var(--good);
+  border:4px solid var(--good);border-radius:12px;padding:8px 20px;transform:rotate(-6deg);margin-bottom:16px}
+.win-card h2{font-family:'Fredoka',sans-serif;color:var(--navy);font-size:1.6rem;margin-bottom:8px}
+.win-card p{font-weight:600;color:var(--ink-soft);margin-bottom:18px}
+.win-card button{background:var(--navy);color:#fff;border:none;border-radius:10px;padding:12px 26px;font-family:'Fredoka',sans-serif;
+  font-weight:600;cursor:pointer;font-size:1rem}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:60}
+footer{text-align:center;margin-top:30px;font-size:.8rem;color:var(--ink-soft);font-weight:600}
+footer a{color:var(--c5);font-weight:700;text-decoration:none}
+
+/* RTL */
+[dir=rtl] .reasoning{border-left:none;border-right:4px solid var(--c1)}
+[dir=rtl] .mc button,[dir=rtl] .multi-opt{text-align:right}
+[dir=rtl] .seq-clear{margin-left:0;margin-right:8px}
+
+/* catalog */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;margin-top:24px}
+.cat-card{display:flex;flex-direction:column;background:var(--card);border:2px solid var(--line);border-radius:18px;
+  padding:20px;text-decoration:none;color:inherit;transition:.18s}
+.cat-card:hover{transform:translateY(-4px);box-shadow:0 14px 32px rgba(16,42,84,.12);border-color:var(--gold)}
+.cat-card .ico{font-size:2.4rem;line-height:1}
+.cat-card .subj{font-family:'Fredoka',sans-serif;font-size:.66rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:#fff;padding:4px 11px;border-radius:100px;align-self:flex-start;margin:10px 0}
+.cat-card h2{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.22rem;color:var(--navy);margin:4px 0 6px;line-height:1.12}
+.cat-card p{font-size:.9rem;color:var(--ink-soft);font-weight:600;flex:1}
+.cat-card .go{margin-top:14px;font-family:'Fredoka',sans-serif;font-weight:600;color:var(--navy)}
+.cat-card .go::after{content:' →'}
+[dir=rtl] .cat-card .go::after{content:' ←'}
+</style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+<div class="wrap">
+  <div class="crumb"><a href="../../grade912.html">‹ Quay lại hoạt động</a></div>
+  <header class="top">
+    <div class="eyebrow">Phá đảo kỹ thuật số · Lớp 9–12</div>
+    <h1>Hồ nước biến mất: Phá vỡ hồ sơ vụ án Biển Aral</h1>
+    <p class="sub">Một hội đồng chính phủ tuyên bố rằng một dự án kênh đào đã cứu vùng này. Hãy mở các bằng chứng niêm phong và quyết định xem tuyên bố đó có thực sự đứng vững hay không.</p>
+    <div class="langbar"><a class="" href="en.html" lang="en">English</a><a class="" href="es.html" lang="es">Español</a><a class="active" href="vi.html" lang="vi">Tiếng Việt</a><a class="" href="zh.html" lang="zh">中文</a><a class="" href="hi.html" lang="hi">हिन्दी</a><a class="" href="ar.html" lang="ar">العربية</a><a class="" href="ur.html" lang="ur">اردو</a></div>
+  </header>
+
+  <div class="progress-wrap">
+    <span class="pcount" id="pcount">0</span>
+    <div class="lockdots" id="lockdots"></div>
+    <button class="resetbtn" id="resetBtn">↺ Đặt lại</button>
+  </div>
+
+  <div class="brief">
+    <span class="tag">🗺️ Tóm tắt nhiệm vụ</span>
+    <h2>Nhiệm vụ: Kiểm chứng tuyên bố</h2>
+    <p>Bạn là một nhà phân tích tập sự trong một Hội đồng Thẩm định Địa lý. Một văn phòng quy hoạch đã khóa kín hồ sơ về Biển Aral — một hồ nội địa từng rất rộng lớn ở Trung Á. Bản ghi nhớ chính thức của họ tuyên bố: &quot;Việc chuyển dòng các con sông để tưới cho những cánh đồng bông là một thành công đã cải thiện vùng này.&quot; Nhiệm vụ của bạn KHÔNG phải là tin vào bản ghi nhớ đó. Hãy mở từng thẻ bằng chứng, cân nhắc xem nó thực sự chứng minh điều gì, và mở các ổ khóa CHỈ bằng những gì bằng chứng cho thấy. Lưu ý: có một thẻ là đòn đánh lạc hướng mà văn phòng cài vào để làm bạn mất thời gian. Hãy giải hết mọi ổ khóa để mở ra phán quyết cuối cùng.</p>
+  </div>
+
+  <div class="section-title">🔍 Các manh mối</div>
+  <p class="hint">Chạm vào từng mục để điều tra. (Bạn có thể mở lại bất cứ lúc nào.)</p>
+  <div class="clue-grid" id="clueGrid"></div>
+
+  <div class="section-title">🔒 Các ổ khóa</div>
+  <p class="hint">Giải từng ổ khóa bằng các manh mối ở trên.</p>
+  <div class="locks" id="locks"></div>
+
+  <footer>Critical Thinking Breakouts · Lớp 9–12 · Chạy hoàn toàn trong trình duyệt của bạn — không cần đăng nhập, không thu thập dữ liệu. · <a href="../../../policy.html">Quyền riêng tư và tuân thủ</a></footer>
+</div>
+
+<div class="modal-bg" id="modalBg"><div class="modal" id="modal"></div></div>
+<div class="win" id="win"><div class="win-card">
+  <div class="stamp">VỤ ÁN KHÉP LẠI ✓</div>
+  <h2>Đã đưa ra phán quyết, nhà phân tích!</h2>
+  <p>Bạn đã đánh giá một tuyên bố địa lý dựa trên bằng chứng thực tế, tính toán sự thay đổi từ dữ liệu, tách biệt những hậu quả được ghi nhận khỏi thông tin gây nhiễu, và đánh dấu thông tin không liên quan — kỹ năng cốt lõi để đánh giá xem bằng chứng và lập luận có thực sự ủng hộ một kết luận hay không.</p>
+  <button id="winBtn">Chơi lại</button>
+</div></div>
+
+<script>const DATA={"T":{"locksOpen":"Đã mở {n} trên {t} ổ khóa","check":"Kiểm tra","gotIt":"Đã hiểu","typeAnswer":"Nhập câu trả lời của bạn","clear":"xóa","solved":"Đã giải!","fbDefault":"Chưa đúng — hãy xem lại các manh mối.","fbDigit":"Con số đó không khớp với các manh mối. Hãy đếm lại.","fbWord":"Xem lại các manh mối để tìm câu trả lời phù hợp.","fbMc":"Lựa chọn đó không có bằng chứng hỗ trợ. Hãy xem lại.","fbSeq":"Thứ tự đó không khớp với các manh mối. Hãy thử lại.","fbMultiExtra":"Một lựa chọn không phải là bằng chứng vững chắc — vững chắc nghĩa là sự thật bạn có thể xác minh, không phải tin đồn hay cảm giác.","fbMultiMissing":"Bạn còn thiếu một bằng chứng vững chắc. Hãy tìm tất cả."},"clues":[{"id":"c0","ico":"🌊","nm":"Bản ghi nhớ về sông","title":"Bằng chứng A — Nước đã đi đâu","body":"Hai con sông lớn, Amu Darya và Syr Darya, từng đổ vào Biển Aral. Bắt đầu từ thập niên 1960, các nhà quy hoạch đã chuyển một lượng nước sông khổng lồ vào các kênh đào để tưới cho những cánh đồng bông trong sa mạc. Mỗi năm càng ít nước sông chảy ra biển hơn."},{"id":"c1","ico":"📉","nm":"Báo cáo thu hẹp","title":"Bằng chứng B — Những con số","body":"Các cuộc khảo sát vệ tinh đã ghi lại diện tích bề mặt của hồ. Năm 1960, hồ rộng khoảng 68.000 ki-lô-mét vuông. Đến năm 2010, hồ chỉ còn khoảng 14.000 ki-lô-mét vuông. Mực nước cũng giảm mạnh trong những thập niên đó."},{"id":"c2","ico":"🐟","nm":"Nhật ký thị trấn","title":"Bằng chứng C — Cuộc sống trên bờ","body":"Các thị trấn cảng như Moynaq từng có ngành đánh cá nhộn nhịp. Khi bờ biển lùi xa hàng chục ki-lô-mét, đội tàu đánh cá bị mắc cạn trên nền cát khô. Các trận bão muối và bão bụi từ đáy biển lộ ra tăng lên, và nước uống của địa phương ngày càng ô nhiễm hơn."},{"id":"c3","ico":"☕","nm":"Ghi chú của khách","title":"Bằng chứng D — Bản ghi nhớ văn phòng","body":"Căng-tin của văn phòng quy hoạch nay phục vụ ba cỡ cà phê và gần đây đã sơn lại sảnh thành màu xanh dương vui mắt. Giấy phép đỗ xe phải được gia hạn trước thứ Sáu. Buổi dã ngoại thường niên của nhân viên đã được dời lên tầng hai."},{"id":"c4","ico":"🌾","nm":"Thống kê thực địa","title":"Bằng chứng E — Cái giá đánh đổi của bông","body":"Nguồn nước được chuyển dòng quả thật đã giúp các nông trại trồng được những vụ bông lớn trong sa mạc, đem lại tiền cho vùng này. Nhưng chính việc chuyển dòng đó là nguyên nhân được ghi nhận khiến biển thu hẹp và gây hại cho các thị trấn đánh cá. Lợi ích từ bông phải trả giá bằng biển."}],"locks":[{"id":"L1","color":"var(--c5)","type":"word","title":"Ổ khóa 1 — Gọi tên nguyên nhân","q":"Theo bằng chứng, hoạt động nào của con người đã khiến ít nước chảy đến Biển Aral hơn?","reason":"Bằng chứng A liên hệ trực tiếp việc thu hẹp với việc chuyển dòng nước sông vào các kênh đào để tưới tiêu — một hành động của con người, không phải hạn hán tự nhiên.","answer":["irrigation","diverting rivers","river diversion","diversion","canals","diverting water","irrigating cotton","cotton irrigation","tưới tiêu","tưới","chuyển dòng sông","chuyển dòng","kênh đào","chuyển nước","chuyển dòng nước","tưới bông"]},{"id":"L2","color":"var(--c4)","type":"digit","title":"Ổ khóa 2 — Đo lường mức tổn thất","q":"Dùng các con số khảo sát, hồ đã MẤT bao nhiêu nghìn ki-lô-mét vuông diện tích bề mặt trong khoảng từ năm 1960 đến 2010? (Nhập số nghìn.)","reason":"Bằng chứng B cho biết 68.000 vào năm 1960 và 14.000 vào năm 2010; 68.000 trừ 14.000 bằng 54.000, tức là 54 nghìn. Phép tính chỉ dựa trên manh mối.","len":2,"answer":["54"]},{"id":"L3","color":"var(--c3)","type":"multi","title":"Ổ khóa 3 — Phân loại hậu quả","q":"Hãy chọn TẤT CẢ những tác động mà bằng chứng thực sự ghi nhận đối với các thị trấn ven bờ.","reason":"Bằng chứng C liệt kê tàu đánh cá mắc cạn, nhiều bão bụi và bão muối hơn, và nước uống bẩn hơn. Các lựa chọn khác không hề được nêu ra, nên không thể chọn.","items":[{"t":"Đội tàu đánh cá bị mắc cạn trên đất khô","strong":true},{"t":"Bão muối và bão bụi tăng lên","strong":true},{"t":"Nước uống của địa phương trở nên ô nhiễm hơn","strong":true},{"t":"Các thị trấn xây một sân bay mới","strong":false},{"t":"Lượng du khách đến hồ tăng gấp đôi","strong":false}]},{"id":"L4","color":"var(--c1)","type":"mc","title":"Ổ khóa 4 — Phát hiện thông tin gây nhiễu","q":"Thẻ bằng chứng nào KHÔNG chứa thông tin hữu ích để đánh giá tuyên bố về biển?","reason":"Bằng chứng D chỉ nhắc đến cỡ cà phê, sơn, chỗ đỗ xe và một buổi dã ngoại — không điều nào liên quan đến nước, hồ hay môi trường của vùng. Đó là thông tin gây nhiễu không liên quan.","options":["Bằng chứng B — Những con số","Bằng chứng C — Cuộc sống trên bờ","Bằng chứng D — Bản ghi nhớ văn phòng","Bằng chứng E — Cái giá đánh đổi của bông"],"answerIndex":2},{"id":"L5","color":"var(--c2)","type":"mc","title":"Ổ khóa 5 — Phán quyết","q":"CHỈ dựa trên bằng chứng, nó có ủng hộ tuyên bố trong bản ghi nhớ rằng dự án là một 'thành công rõ ràng đã cải thiện vùng này' không?","reason":"Bằng chứng E cho thấy lợi ích từ bông phải trả bằng cái giá được ghi nhận là biển thu hẹp và các thị trấn bị thiệt hại, nên bằng chứng cho thấy một sự đánh đổi, chứ không phải một cải thiện rõ ràng. Tuyên bố đã phóng đại sự việc.","options":["Có — bằng chứng cho thấy sự cải thiện rõ ràng, toàn diện","Không — bằng chứng cho thấy một sự đánh đổi: được lợi từ bông nhưng gây hại nghiêm trọng về môi trường và kinh tế","Bằng chứng không nói gì về dự án cả"],"answerIndex":1}]};</script>
+<script>/* Critical Thinking Breakouts — shared player engine.
+   Reads a global DATA object injected per page. No external requests. */
+(function(){
+  const T = DATA.T;
+  const CLUES = DATA.clues;
+  const LOCKS = DATA.locks;
+  const $ = s => document.querySelector(s);
+  let solved = {};
+  const opened = new Set();
+
+  function renderClues(){
+    const g = $('#clueGrid'); g.innerHTML = '';
+    CLUES.forEach(c => {
+      const b = document.createElement('button');
+      b.className = 'clue' + (opened.has(c.id) ? ' opened' : '');
+      b.innerHTML = '<div class="ico">' + c.ico + '</div><div class="nm">' + c.nm + '</div>';
+      b.onclick = () => openClue(c);
+      g.appendChild(b);
+    });
+  }
+  function openClue(c){
+    opened.add(c.id);
+    $('#modal').innerHTML = '<div class="mico">' + c.ico + '</div><h3>' + c.title + '</h3><p>' + c.body + '</p>' +
+      '<button class="closebtn" id="clueClose">' + T.gotIt + '</button>';
+    $('#modal').querySelector('#clueClose').onclick = () => $('#modalBg').classList.remove('show');
+    $('#modalBg').classList.add('show');
+    renderClues();
+  }
+  $('#modalBg').onclick = e => { if(e.target.id === 'modalBg') e.currentTarget.classList.remove('show'); };
+
+  function renderDots(){
+    const d = $('#lockdots'); d.innerHTML = '';
+    LOCKS.forEach(l => {
+      const s = document.createElement('div');
+      s.className = 'ld' + (solved[l.id] ? ' open' : '');
+      s.textContent = solved[l.id] ? '🔓' : '🔒';
+      d.appendChild(s);
+    });
+    const n = Object.keys(solved).filter(k => solved[k]).length;
+    $('#pcount').textContent = T.locksOpen.replace('{n}', n).replace('{t}', LOCKS.length);
+    if(n === LOCKS.length) setTimeout(showWin, 400);
+  }
+
+  function renderLocks(){
+    const wrap = $('#locks'); wrap.innerHTML = '';
+    LOCKS.forEach(l => {
+      const card = document.createElement('div');
+      card.className = 'lock' + (solved[l.id] ? ' solved' : '');
+      card.id = 'card-' + l.id;
+      let body = '';
+      if(l.type === 'digit'){
+        body = '<div class="digits">' + Array.from({length:l.len}).map((_,i) =>
+          '<input class="digit" data-i="' + i + '" maxlength="1" inputmode="numeric" pattern="[0-9]">').join('') + '</div>';
+      } else if(l.type === 'word'){
+        body = '<input class="wordin" placeholder="' + T.typeAnswer + '">';
+      } else if(l.type === 'mc'){
+        body = '<div class="mc">' + l.options.map((o,i) => '<button data-i="' + i + '">' + o + '</button>').join('') + '</div>';
+      } else if(l.type === 'seq'){
+        body = '<div class="seq-current" id="seq-' + l.id + '">— — —</div><button class="seq-clear" data-clear>' + T.clear + '</button>' +
+          '<div class="seq-pads">' + l.pads.map(p => '<button class="seqpad" data-k="' + p.k + '" style="background:' + p.c + '">' + p.e + '</button>').join('') + '</div>';
+      } else if(l.type === 'multi'){
+        body = '<div class="multi">' + l.items.map((o,i) =>
+          '<button class="multi-opt" data-i="' + i + '"><span class="mbox"></span><span>' + o.t + '</span></button>').join('') + '</div>';
+      }
+      const showSubmit = l.type !== 'mc';
+      card.innerHTML =
+        '<div class="lk-head"><div class="lk-badge" style="background:' + l.color + '">' + l.id.replace('L','') + '</div>' +
+        '<div class="lk-title">' + l.title + '</div></div>' +
+        '<div class="lk-body"><div class="lk-q">' + l.q + '</div>' + body +
+        (showSubmit ? '<button class="lk-submit">' + T.check + '</button>' : '') +
+        '<div class="lk-feedback" data-fb></div></div>' +
+        '<div class="lk-solved-msg">🔓 ' + T.solved + '</div>' +
+        '<div class="reasoning" style="' + (solved[l.id] ? '' : 'display:none') + '">' + l.reason + '</div>';
+      wrap.appendChild(card);
+      wireLock(l, card);
+    });
+  }
+
+  function wireLock(l, card){
+    if(solved[l.id]) return;
+    const fb = card.querySelector('[data-fb]');
+    const ok = () => {
+      solved[l.id] = true;
+      card.classList.add('solved');
+      card.querySelector('.reasoning').style.display = 'block';
+      renderDots();
+    };
+    const fail = msg => { fb.className = 'lk-feedback bad'; fb.textContent = msg || T.fbDefault; };
+
+    if(l.type === 'digit'){
+      const inputs = [...card.querySelectorAll('.digit')];
+      inputs.forEach((inp,i) => inp.addEventListener('input', () => { if(inp.value && i < inputs.length-1) inputs[i+1].focus(); }));
+      card.querySelector('.lk-submit').onclick = () => {
+        const val = inputs.map(x => x.value).join('');
+        if(l.answer.includes(val)) ok(); else fail(T.fbDigit);
+      };
+    } else if(l.type === 'word'){
+      const inp = card.querySelector('.wordin');
+      const go = () => { const v = inp.value.trim().toLowerCase(); if(l.answer.includes(v)) ok(); else fail(T.fbWord); };
+      card.querySelector('.lk-submit').onclick = go;
+      inp.addEventListener('keydown', e => { if(e.key === 'Enter') go(); });
+    } else if(l.type === 'mc'){
+      card.querySelectorAll('.mc button').forEach(b => {
+        b.onclick = () => { if(+b.dataset.i === l.answerIndex) ok(); else fail(T.fbMc); };
+      });
+    } else if(l.type === 'seq'){
+      let seq = [];
+      const disp = card.querySelector('#seq-' + l.id);
+      const draw = () => { disp.textContent = seq.length ? seq.map(k => l.pads.find(p => p.k === k).e).join(' ') : '— — —'; };
+      card.querySelectorAll('.seqpad').forEach(p => {
+        p.onclick = () => { seq.push(p.dataset.k); if(seq.length > l.answer.length) seq = seq.slice(-l.answer.length); draw(); };
+      });
+      card.querySelector('[data-clear]').onclick = () => { seq = []; draw(); };
+      card.querySelector('.lk-submit').onclick = () => {
+        if(seq.length === l.answer.length && seq.every((k,i) => k === l.answer[i])) ok();
+        else fail(T.fbSeq);
+      };
+    } else if(l.type === 'multi'){
+      const picked = new Set();
+      card.querySelectorAll('.multi-opt').forEach(b => {
+        b.onclick = () => { const i = +b.dataset.i; if(picked.has(i)){ picked.delete(i); b.classList.remove('picked'); } else { picked.add(i); b.classList.add('picked'); } };
+      });
+      card.querySelector('.lk-submit').onclick = () => {
+        const correct = l.items.map((o,i) => o.strong ? i : -1).filter(i => i >= 0);
+        const chosen = [...picked].sort((a,b) => a-b);
+        const good = chosen.length === correct.length && chosen.every((v,i) => v === correct[i]);
+        if(good) ok();
+        else { const extra = [...picked].some(i => !l.items[i].strong); fail(extra ? T.fbMultiExtra : T.fbMultiMissing); }
+      };
+    }
+  }
+
+  function showWin(){ $('#win').classList.add('show'); fireConfetti(); }
+  $('#resetBtn').onclick = () => { solved = {}; opened.clear(); renderClues(); renderLocks(); renderDots(); };
+  const wb = $('#winBtn'); if(wb) wb.onclick = () => location.reload();
+
+  function fireConfetti(){
+    const cv = $('#confetti'), ctx = cv.getContext('2d');
+    cv.width = innerWidth; cv.height = innerHeight;
+    const cols = ['#7c5cbf','#1aa3b8','#46a23c','#f08a16','#2f6fe0','#FCB040'];
+    const bits = Array.from({length:130}, () => ({ x:Math.random()*cv.width, y:-20-Math.random()*cv.height*.5,
+      r:5+Math.random()*7, c:cols[(Math.random()*cols.length)|0], vy:2.5+Math.random()*3.5, vx:-1.5+Math.random()*3, rot:Math.random()*6, vr:-.2+Math.random()*.4 }));
+    let f = 0;
+    (function a(){
+      ctx.clearRect(0,0,cv.width,cv.height);
+      bits.forEach(b => { b.x+=b.vx; b.y+=b.vy; b.rot+=b.vr;
+        ctx.save(); ctx.translate(b.x,b.y); ctx.rotate(b.rot); ctx.fillStyle=b.c; ctx.fillRect(-b.r/2,-b.r/2,b.r,b.r*.6); ctx.restore(); });
+      f++; if(f<150) requestAnimationFrame(a); else ctx.clearRect(0,0,cv.width,cv.height);
+    })();
+  }
+  addEventListener('resize', () => { const cv = $('#confetti'); cv.width = innerWidth; cv.height = innerHeight; });
+
+  renderClues(); renderLocks(); renderDots();
+})();
+</script>
+</body>
+</html>

@@ -6,7 +6,7 @@
     "description": "A curated portfolio of AI-powered tools, reference guides, coaching frameworks, and interactive resources built for educators, administrators, and knowledge workers.",
     "tallies": [
       {
-        "num": "28",
+        "num": "29",
         "label": "Projects"
       },
       {
@@ -1080,6 +1080,46 @@
           "label": "Open Tool Menu →",
           "href": "tcea/tools10/index.html",
           "primary": true
+        }
+      ]
+    },
+    {
+      "num": "29",
+      "id": "tcea-clear",
+      "section": "Interactive &amp; Classroom Tools",
+      "category": "Critical Thinking · TCEA",
+      "title": "The CLEAR Crew",
+      "subtitle": "Detective thinking game and critical-thinking breakouts for students",
+      "stat": "3",
+      "statLabel": "Grade Bands",
+      "panelGradient": "linear-gradient(160deg, #102A54 0%, #2F6FE0 100%)",
+      "catStyle": "background:rgba(47,111,224,0.16);color:#2F6FE0;",
+      "statColor": "#2F6FE0",
+      "btnBg": "#102A54",
+      "btnColor": "#fff",
+      "btnHoverBg": "#2F6FE0",
+      "btnHoverColor": "#fff",
+      "description": "A TCEA CLEAR critical-thinking collection with a detective thinking game, grade-band digital breakouts, lesson resources, and policy materials. Students practice claims, lenses, evidence, alternatives, and responsible conclusions while working through browser-based reasoning activities.",
+      "features": [
+        "CLEAR Framework",
+        "Detective Thinking Game",
+        "Critical Thinking Breakouts",
+        "Grades 3-5",
+        "Grades 6-8",
+        "Grades 9-12",
+        "Lesson Plan",
+        "Policy Resource"
+      ],
+      "links": [
+        {
+          "label": "Open CLEAR Crew →",
+          "href": "tcea/clear/index.html",
+          "primary": true
+        },
+        {
+          "label": "Open Breakouts",
+          "href": "tcea/clear/breakouts/index.html",
+          "primary": false
         }
       ]
     }

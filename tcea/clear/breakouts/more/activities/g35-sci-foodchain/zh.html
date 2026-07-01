@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<title>消失的草地：能量侦探 — Critical Thinking Breakouts</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>:root{
+  --c1:#7c5cbf;--c2:#1aa3b8;--c3:#46a23c;--c4:#f08a16;--c5:#2f6fe0;
+  --navy:#102a54;--navy-d:#0b1d3d;--gold:#FCB040;--gold-d:#c97f12;
+  --paper:#fbf8f1;--ink:#1c2436;--ink-soft:#54607a;--card:#fff;--line:#e3e8f2;
+  --good:#2f9e44;--bad:#e03131;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;color:var(--ink);background:
+  radial-gradient(ellipse 60% 50% at 80% 0%,rgba(252,176,64,.12)0%,transparent 60%),
+  radial-gradient(ellipse 50% 40% at 0% 100%,rgba(47,111,224,.10)0%,transparent 60%),var(--paper);
+  min-height:100vh;line-height:1.55}
+.wrap{max-width:880px;margin:0 auto;padding:20px 18px 80px}
+.crumb{font-size:.82rem;font-weight:700;margin-bottom:10px}
+.crumb a{color:var(--c5);text-decoration:none}
+header.top{text-align:center;padding:8px 0 4px}
+.eyebrow{display:inline-block;background:var(--navy);color:#fff;font-family:'Fredoka',sans-serif;
+  font-weight:600;font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;padding:6px 16px;border-radius:100px;margin-bottom:12px}
+h1{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(1.9rem,6vw,3rem);color:var(--navy);line-height:1.04}
+.sub{color:var(--ink-soft);font-weight:600;margin-top:8px;max-width:620px;margin-left:auto;margin-right:auto}
+
+/* language bar */
+.langbar{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:10px 0 0}
+.langbar a,.langbar button{font-family:'Fredoka',sans-serif;font-weight:600;font-size:.78rem;border:2px solid var(--line);
+  background:#fff;color:var(--ink-soft);border-radius:100px;padding:5px 12px;cursor:pointer;text-decoration:none;transition:.15s}
+.langbar a:hover,.langbar button:hover{border-color:var(--gold);color:var(--navy)}
+.langbar a.active,.langbar button.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+.progress-wrap{display:flex;align-items:center;gap:12px;justify-content:center;flex-wrap:wrap;position:sticky;top:8px;z-index:30;margin:12px 0 6px;padding:10px 14px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:12px;box-shadow:0 4px 14px rgba(16,42,84,.07)}
+.lockdots{display:flex;gap:8px}
+.ld{width:30px;height:30px;border-radius:9px;background:#d8deea;display:flex;align-items:center;justify-content:center;
+  font-size:1rem;transition:.3s;border:2px solid transparent}
+.ld.open{background:var(--good);color:#fff;border-color:#1f7a31}
+.pcount{font-family:'Fredoka',sans-serif;font-weight:600;color:var(--navy)}
+.resetbtn{background:#fff;border:2px solid var(--line);border-radius:9px;padding:7px 14px;font-family:'Fredoka',sans-serif;
+  font-weight:600;color:var(--ink-soft);cursor:pointer;font-size:.85rem}
+.resetbtn:hover{border-color:var(--bad);color:var(--bad)}
+
+.brief{background:#fffdf6;border:2px dashed var(--gold-d);border-radius:14px;padding:16px 20px;margin:18px 0}
+.brief h2{font-family:'Fredoka',sans-serif;font-size:1.15rem;color:var(--navy);margin-bottom:6px}
+.brief .tag{font-family:'Fredoka',sans-serif;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-d);font-weight:600}
+
+.section-title{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.2rem;color:var(--navy);margin:24px 0 4px}
+.hint{color:var(--ink-soft);font-weight:600;font-size:.92rem;margin-bottom:12px}
+
+/* clue board */
+.clue-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.clue{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;
+  transition:.18s;text-align:center;font-family:inherit}
+.clue:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 8px 20px rgba(16,42,84,.1)}
+.clue .ico{font-size:2rem;line-height:1}
+.clue .nm{font-weight:700;margin-top:6px;color:var(--navy);font-size:.92rem}
+.clue.opened{border-color:var(--c3);background:#f2fbef}
+.clue.opened .nm::after{content:' ✓';color:var(--good)}
+
+/* locks */
+.locks{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:6px}
+@media(max-width:640px){.locks{grid-template-columns:1fr}.clue-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}}
+.lock{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:18px;position:relative}
+.lock.solved{border-color:var(--good);background:#f3fbf975}
+.lock .lk-head{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.lk-badge{width:38px;height:38px;border-radius:10px;color:#fff;font-family:'Fredoka',sans-serif;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.2rem}
+.lk-title{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.05rem;color:var(--navy);line-height:1.1}
+.lk-q{font-size:.9rem;color:var(--ink-soft);font-weight:600;margin:8px 0 12px}
+.lk-solved-msg{display:none;color:var(--good);font-weight:800;font-family:'Fredoka',sans-serif;margin-top:6px}
+.lock.solved .lk-solved-msg{display:block}
+.lock.solved .lk-body{display:none}
+
+/* digit pad */
+.digits{display:flex;gap:8px;margin-bottom:10px}
+.digit{width:46px;height:54px;border:2px solid var(--line);border-radius:10px;text-align:center;font-size:1.5rem;
+  font-weight:800;font-family:'Fredoka',sans-serif;color:var(--navy)}
+.digit:focus{outline:none;border-color:var(--c5)}
+
+/* word input */
+.wordin{width:100%;border:2px solid var(--line);border-radius:10px;padding:11px 13px;font-size:1.05rem;
+  font-weight:700;font-family:inherit;color:var(--navy)}
+.wordin:focus{outline:none;border-color:var(--c5)}
+
+/* MC */
+.mc{display:flex;flex-direction:column;gap:8px}
+.mc button{text-align:left;background:#fff;border:2px solid var(--line);border-radius:10px;padding:10px 13px;
+  font-family:inherit;font-weight:600;cursor:pointer;font-size:.92rem;transition:.15s}
+.mc button:hover{border-color:var(--navy);background:#f7f9ff}
+
+/* sequence */
+.seq-pads{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.seqpad{width:46px;height:46px;border-radius:10px;border:3px solid rgba(0,0,0,.12);cursor:pointer;font-size:1.3rem;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800}
+.seq-current{min-height:30px;font-family:'Fredoka',sans-serif;font-weight:700;color:var(--navy);letter-spacing:2px;font-size:1.2rem;
+  background:#f0f3fa;border-radius:8px;padding:4px 10px;display:inline-block;margin-bottom:8px;min-width:120px}
+.seq-clear{background:none;border:none;color:var(--ink-soft);font-weight:700;cursor:pointer;text-decoration:underline;font-size:.82rem;margin-left:8px}
+
+.lk-submit{background:var(--navy);color:#fff;border:none;border-radius:9px;padding:10px 20px;font-family:'Fredoka',sans-serif;
+  font-weight:600;cursor:pointer;font-size:.92rem;margin-top:4px}
+.lk-submit:hover{background:var(--navy-d)}
+.lk-feedback{margin-top:10px;font-weight:700;font-size:.88rem;min-height:20px}
+.lk-feedback.bad{color:var(--bad)}
+.lk-feedback.good{color:var(--good)}
+
+/* multi-select */
+.multi{display:flex;flex-direction:column;gap:8px}
+.multi-opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:#fff;border:2px solid var(--line);border-radius:10px;padding:10px 13px;font-family:inherit;font-weight:600;cursor:pointer;font-size:.92rem;transition:.15s}
+.multi-opt:hover{border-color:var(--navy);background:#f7f9ff}
+.multi-opt .mbox{width:22px;height:22px;border-radius:6px;border:2px solid var(--line);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff}
+.multi-opt.picked{border-color:var(--c5);background:#eef4ff}
+.multi-opt.picked .mbox{background:var(--c5);border-color:var(--c5)}
+.multi-opt.picked .mbox::after{content:'✓'}
+
+/* clue modal */
+.modal-bg{position:fixed;inset:0;background:rgba(16,29,61,.55);display:none;align-items:center;justify-content:center;z-index:40;padding:20px}
+.modal-bg.show{display:flex}
+.modal{background:#fff;border-radius:18px;padding:26px 24px;max-width:440px;width:100%;animation:pop .25s ease}
+@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+.modal .mico{font-size:2.6rem;text-align:center}
+.modal h3{font-family:'Fredoka',sans-serif;color:var(--navy);text-align:center;margin:6px 0 12px;font-size:1.3rem}
+.modal p{font-weight:600;color:var(--ink);margin:8px 0}
+.modal .closebtn{display:block;margin:16px auto 0;background:var(--gold);color:var(--navy-d);border:none;border-radius:9px;
+  padding:10px 24px;font-family:'Fredoka',sans-serif;font-weight:600;cursor:pointer}
+.reasoning{background:#f4f1ff;border-left:4px solid var(--c1);border-radius:8px;padding:10px 13px;font-size:.88rem;color:#43386b;font-weight:600;margin-top:10px}
+
+/* win */
+.win{position:fixed;inset:0;background:rgba(16,29,61,.7);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+.win.show{display:flex}
+.win-card{background:#fff;border-radius:22px;padding:34px 30px;max-width:480px;text-align:center;animation:pop .3s ease}
+.win-card .stamp{display:inline-block;font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.3rem;color:var(--good);
+  border:4px solid var(--good);border-radius:12px;padding:8px 20px;transform:rotate(-6deg);margin-bottom:16px}
+.win-card h2{font-family:'Fredoka',sans-serif;color:var(--navy);font-size:1.6rem;margin-bottom:8px}
+.win-card p{font-weight:600;color:var(--ink-soft);margin-bottom:18px}
+.win-card button{background:var(--navy);color:#fff;border:none;border-radius:10px;padding:12px 26px;font-family:'Fredoka',sans-serif;
+  font-weight:600;cursor:pointer;font-size:1rem}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:60}
+footer{text-align:center;margin-top:30px;font-size:.8rem;color:var(--ink-soft);font-weight:600}
+footer a{color:var(--c5);font-weight:700;text-decoration:none}
+
+/* RTL */
+[dir=rtl] .reasoning{border-left:none;border-right:4px solid var(--c1)}
+[dir=rtl] .mc button,[dir=rtl] .multi-opt{text-align:right}
+[dir=rtl] .seq-clear{margin-left:0;margin-right:8px}
+
+/* catalog */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;margin-top:24px}
+.cat-card{display:flex;flex-direction:column;background:var(--card);border:2px solid var(--line);border-radius:18px;
+  padding:20px;text-decoration:none;color:inherit;transition:.18s}
+.cat-card:hover{transform:translateY(-4px);box-shadow:0 14px 32px rgba(16,42,84,.12);border-color:var(--gold)}
+.cat-card .ico{font-size:2.4rem;line-height:1}
+.cat-card .subj{font-family:'Fredoka',sans-serif;font-size:.66rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:#fff;padding:4px 11px;border-radius:100px;align-self:flex-start;margin:10px 0}
+.cat-card h2{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.22rem;color:var(--navy);margin:4px 0 6px;line-height:1.12}
+.cat-card p{font-size:.9rem;color:var(--ink-soft);font-weight:600;flex:1}
+.cat-card .go{margin-top:14px;font-family:'Fredoka',sans-serif;font-weight:600;color:var(--navy)}
+.cat-card .go::after{content:' →'}
+[dir=rtl] .cat-card .go::after{content:' ←'}
+</style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+<div class="wrap">
+  <div class="crumb"><a href="../../grade35.html">‹ 返回活动</a></div>
+  <header class="top">
+    <div class="eyebrow">数字解谜闯关 · 3–5 年级</div>
+    <h1>消失的草地：能量侦探</h1>
+    <p class="sub">有什么东西正在破坏草地的食物链。打开野外笔记，追踪能量，在草彻底枯死之前打开护林员的防风棚。</p>
+    <div class="langbar"><a class="" href="en.html" lang="en">English</a><a class="" href="es.html" lang="es">Español</a><a class="" href="vi.html" lang="vi">Tiếng Việt</a><a class="active" href="zh.html" lang="zh">中文</a><a class="" href="hi.html" lang="hi">हिन्दी</a><a class="" href="ar.html" lang="ar">العربية</a><a class="" href="ur.html" lang="ur">اردو</a></div>
+  </header>
+
+  <div class="progress-wrap">
+    <span class="pcount" id="pcount">0</span>
+    <div class="lockdots" id="lockdots"></div>
+    <button class="resetbtn" id="resetBtn">↺ 重置</button>
+  </div>
+
+  <div class="brief">
+    <span class="tag">🌾 任务简报</span>
+    <h2>任务：拯救阳光草地</h2>
+    <p>护林员洛佩兹离开了小镇，锁上了她的防风棚，草地的拯救计划就藏在那里。植物正在变黄，兔子正在消失，没人知道为什么。她留下了五张野外笔记线索卡。你的任务是：像真正的能量侦探一样阅读证据，追踪能量如何从太阳流经每一个生物，然后破解这些锁。只相信线索能够证明的内容。有一张卡片是陷阱，它不会告诉你任何有用的信息，所以要仔细阅读。准备好了吗，侦探们？打开野外笔记吧。</p>
+  </div>
+
+  <div class="section-title">🔍 线索</div>
+  <p class="hint">点击每一项进行调查。（你可以随时重新打开它们。）</p>
+  <div class="clue-grid" id="clueGrid"></div>
+
+  <div class="section-title">🔒 密码锁</div>
+  <p class="hint">利用上面的线索解开每一把锁。</p>
+  <div class="locks" id="locks"></div>
+
+  <footer>Critical Thinking Breakouts · 3–5 年级 · 完全在你的浏览器中运行——无需登录，不收集任何数据。 · <a href="../../../policy.html">隐私与合规</a></footer>
+</div>
+
+<div class="modal-bg" id="modalBg"><div class="modal" id="modal"></div></div>
+<div class="win" id="win"><div class="win-card">
+  <div class="stamp">草地得救 ✓</div>
+  <h2>你破解了密码，能量侦探！</h2>
+  <p>你追踪了能量从太阳流经生产者、消费者和分解者，并且忽略了那条什么也证明不了的天气陷阱笔记。通过只用证据来找出食物链中断掉的环节，你练习了仔细推理和识别无关信息，就像一位真正的科学家一样。</p>
+  <button id="winBtn">再玩一次</button>
+</div></div>
+
+<script>const DATA={"T":{"locksOpen":"已打开 {t} 个锁中的 {n} 个","check":"检查","gotIt":"明白了","typeAnswer":"输入你的答案","clear":"清除","solved":"已解开！","fbDefault":"还差一点——再看看线索吧。","fbDigit":"这个数字与线索不符。再数一遍。","fbWord":"查看线索，找出合适的答案。","fbMc":"这个选项没有证据支持。再看看吧。","fbSeq":"这个顺序与线索不符。再试一次。","fbMultiExtra":"有一项不算有力证据——有力证据指的是你可以核实的事实，而不是传闻或感觉。","fbMultiMissing":"你还缺少一项有力证据。把它们全部找出来。"},"clues":[{"id":"c0","ico":"☀️","nm":"笔记1：阳光","title":"能量从哪里开始","body":"野外笔记：在阳光草地，所有的能量都从太阳开始。只有草和野花能够捕捉阳光，并用它来制造自己的食物。其他所有生物都必须通过进食来获取能量。"},{"id":"c1","ico":"🔗","nm":"笔记2：进食者","title":"谁吃谁","body":"野外笔记：我观察了草地一整周。蚱蜢吃草。老鼠吃蚱蜢。鹰吃老鼠。每当一个动物吃掉另一个动物时，能量就会传递下去。"},{"id":"c2","ico":"♻️","nm":"笔记3：回收者","title":"清理小队","body":"野外笔记：当草和动物死去时，两种回收者会把它们分解：蘑菇和土壤细菌。它们把死亡的物质重新变成土壤里的养分，好让新的草能够生长。我们把这些回收者称为分解者。"},{"id":"c3","ico":"☔","nm":"笔记4：天气记录","title":"护林员的天气日记","body":"野外笔记：星期二是阴天。星期三我忘了带伞，穿了我的幸运靴。镇上的集市星期六开始，我希望今年能再次赢得馅饼比赛。提醒自己：再买点咖啡。"},{"id":"c4","ico":"⚙️","nm":"笔记5：那台机器","title":"出了什么问题","body":"野外笔记：一台埋在地下的机器泄漏到了土壤里。它杀死了草地的两种回收者，所以死草堆积起来，永远不会分解。没有养分回到土壤里，新的草就无法生长，整条食物链都在挨饿。"}],"locks":[{"id":"L1","color":"var(--c5)","type":"word","title":"锁1：追踪源头","q":"根据野外笔记，阳光草地里所有的能量从哪里开始？","reason":"野外笔记1明确指出草地所有的能量都从太阳开始，因为只有草和野花能够用阳光制造食物。","answer":["sun","the sun","sunlight","sunshine","solar","太阳","阳光","日光","太阳光","太阳能"]},{"id":"L2","color":"var(--c4)","type":"mc","title":"锁2：说出这个角色","q":"草和野花用阳光制造自己的食物。在食物链中，这个角色叫什么？","reason":"野外笔记1说只有草和花制造自己的食物。能制造自己食物的生物就是生产者。","options":["消费者","生产者","分解者","捕食者"],"answerIndex":1},{"id":"L3","color":"var(--c3)","type":"seq","title":"锁3：追随能量","q":"按照能量流经它们的顺序点击这些生物，从捕捉阳光的那个开始。","reason":"野外笔记1说草最先捕捉阳光。野外笔记2说蚱蜢吃草，老鼠吃蚱蜢，鹰吃老鼠，所以能量正是按这个顺序流动。","pads":[{"k":"hawk","e":"🦅","c":"#e03131"},{"k":"grass","e":"🌱","c":"#2f6fe0"},{"k":"mouse","e":"🐁","c":"#f08a16"},{"k":"hopper","e":"🦗","c":"#46a23c"}],"answer":["grass","hopper","mouse","hawk"]},{"id":"L4","color":"var(--c1)","type":"multi","title":"锁4：找出回收者","q":"选出笔记能够证明是分解者（分解死亡物质的回收者）的所有生物。","reason":"野外笔记3点名蘑菇和土壤细菌是分解死草和废物的生物。鹰和老鼠是进食者，草是生产者，所以它们都不是分解者。","items":[{"t":"蘑菇","strong":true},{"t":"土壤细菌","strong":true},{"t":"鹰","strong":false},{"t":"草","strong":false},{"t":"老鼠","strong":false}]},{"id":"L5","color":"var(--c2)","type":"digit","title":"锁5：数一数断掉的环节","q":"那台机器消灭了回收者。笔记3里有多少种回收者消失了，使得土壤无法重新获得养分？","reason":"野外笔记3列出了两种回收者（蘑菇和土壤细菌），野外笔记5说那台机器把两种都杀死了，这就是死草不再分解的原因。","len":1,"answer":["2"]}]};</script>
+<script>/* Critical Thinking Breakouts — shared player engine.
+   Reads a global DATA object injected per page. No external requests. */
+(function(){
+  const T = DATA.T;
+  const CLUES = DATA.clues;
+  const LOCKS = DATA.locks;
+  const $ = s => document.querySelector(s);
+  let solved = {};
+  const opened = new Set();
+
+  function renderClues(){
+    const g = $('#clueGrid'); g.innerHTML = '';
+    CLUES.forEach(c => {
+      const b = document.createElement('button');
+      b.className = 'clue' + (opened.has(c.id) ? ' opened' : '');
+      b.innerHTML = '<div class="ico">' + c.ico + '</div><div class="nm">' + c.nm + '</div>';
+      b.onclick = () => openClue(c);
+      g.appendChild(b);
+    });
+  }
+  function openClue(c){
+    opened.add(c.id);
+    $('#modal').innerHTML = '<div class="mico">' + c.ico + '</div><h3>' + c.title + '</h3><p>' + c.body + '</p>' +
+      '<button class="closebtn" id="clueClose">' + T.gotIt + '</button>';
+    $('#modal').querySelector('#clueClose').onclick = () => $('#modalBg').classList.remove('show');
+    $('#modalBg').classList.add('show');
+    renderClues();
+  }
+  $('#modalBg').onclick = e => { if(e.target.id === 'modalBg') e.currentTarget.classList.remove('show'); };
+
+  function renderDots(){
+    const d = $('#lockdots'); d.innerHTML = '';
+    LOCKS.forEach(l => {
+      const s = document.createElement('div');
+      s.className = 'ld' + (solved[l.id] ? ' open' : '');
+      s.textContent = solved[l.id] ? '🔓' : '🔒';
+      d.appendChild(s);
+    });
+    const n = Object.keys(solved).filter(k => solved[k]).length;
+    $('#pcount').textContent = T.locksOpen.replace('{n}', n).replace('{t}', LOCKS.length);
+    if(n === LOCKS.length) setTimeout(showWin, 400);
+  }
+
+  function renderLocks(){
+    const wrap = $('#locks'); wrap.innerHTML = '';
+    LOCKS.forEach(l => {
+      const card = document.createElement('div');
+      card.className = 'lock' + (solved[l.id] ? ' solved' : '');
+      card.id = 'card-' + l.id;
+      let body = '';
+      if(l.type === 'digit'){
+        body = '<div class="digits">' + Array.from({length:l.len}).map((_,i) =>
+          '<input class="digit" data-i="' + i + '" maxlength="1" inputmode="numeric" pattern="[0-9]">').join('') + '</div>';
+      } else if(l.type === 'word'){
+        body = '<input class="wordin" placeholder="' + T.typeAnswer + '">';
+      } else if(l.type === 'mc'){
+        body = '<div class="mc">' + l.options.map((o,i) => '<button data-i="' + i + '">' + o + '</button>').join('') + '</div>';
+      } else if(l.type === 'seq'){
+        body = '<div class="seq-current" id="seq-' + l.id + '">— — —</div><button class="seq-clear" data-clear>' + T.clear + '</button>' +
+          '<div class="seq-pads">' + l.pads.map(p => '<button class="seqpad" data-k="' + p.k + '" style="background:' + p.c + '">' + p.e + '</button>').join('') + '</div>';
+      } else if(l.type === 'multi'){
+        body = '<div class="multi">' + l.items.map((o,i) =>
+          '<button class="multi-opt" data-i="' + i + '"><span class="mbox"></span><span>' + o.t + '</span></button>').join('') + '</div>';
+      }
+      const showSubmit = l.type !== 'mc';
+      card.innerHTML =
+        '<div class="lk-head"><div class="lk-badge" style="background:' + l.color + '">' + l.id.replace('L','') + '</div>' +
+        '<div class="lk-title">' + l.title + '</div></div>' +
+        '<div class="lk-body"><div class="lk-q">' + l.q + '</div>' + body +
+        (showSubmit ? '<button class="lk-submit">' + T.check + '</button>' : '') +
+        '<div class="lk-feedback" data-fb></div></div>' +
+        '<div class="lk-solved-msg">🔓 ' + T.solved + '</div>' +
+        '<div class="reasoning" style="' + (solved[l.id] ? '' : 'display:none') + '">' + l.reason + '</div>';
+      wrap.appendChild(card);
+      wireLock(l, card);
+    });
+  }
+
+  function wireLock(l, card){
+    if(solved[l.id]) return;
+    const fb = card.querySelector('[data-fb]');
+    const ok = () => {
+      solved[l.id] = true;
+      card.classList.add('solved');
+      card.querySelector('.reasoning').style.display = 'block';
+      renderDots();
+    };
+    const fail = msg => { fb.className = 'lk-feedback bad'; fb.textContent = msg || T.fbDefault; };
+
+    if(l.type === 'digit'){
+      const inputs = [...card.querySelectorAll('.digit')];
+      inputs.forEach((inp,i) => inp.addEventListener('input', () => { if(inp.value && i < inputs.length-1) inputs[i+1].focus(); }));
+      card.querySelector('.lk-submit').onclick = () => {
+        const val = inputs.map(x => x.value).join('');
+        if(l.answer.includes(val)) ok(); else fail(T.fbDigit);
+      };
+    } else if(l.type === 'word'){
+      const inp = card.querySelector('.wordin');
+      const go = () => { const v = inp.value.trim().toLowerCase(); if(l.answer.includes(v)) ok(); else fail(T.fbWord); };
+      card.querySelector('.lk-submit').onclick = go;
+      inp.addEventListener('keydown', e => { if(e.key === 'Enter') go(); });
+    } else if(l.type === 'mc'){
+      card.querySelectorAll('.mc button').forEach(b => {
+        b.onclick = () => { if(+b.dataset.i === l.answerIndex) ok(); else fail(T.fbMc); };
+      });
+    } else if(l.type === 'seq'){
+      let seq = [];
+      const disp = card.querySelector('#seq-' + l.id);
+      const draw = () => { disp.textContent = seq.length ? seq.map(k => l.pads.find(p => p.k === k).e).join(' ') : '— — —'; };
+      card.querySelectorAll('.seqpad').forEach(p => {
+        p.onclick = () => { seq.push(p.dataset.k); if(seq.length > l.answer.length) seq = seq.slice(-l.answer.length); draw(); };
+      });
+      card.querySelector('[data-clear]').onclick = () => { seq = []; draw(); };
+      card.querySelector('.lk-submit').onclick = () => {
+        if(seq.length === l.answer.length && seq.every((k,i) => k === l.answer[i])) ok();
+        else fail(T.fbSeq);
+      };
+    } else if(l.type === 'multi'){
+      const picked = new Set();
+      card.querySelectorAll('.multi-opt').forEach(b => {
+        b.onclick = () => { const i = +b.dataset.i; if(picked.has(i)){ picked.delete(i); b.classList.remove('picked'); } else { picked.add(i); b.classList.add('picked'); } };
+      });
+      card.querySelector('.lk-submit').onclick = () => {
+        const correct = l.items.map((o,i) => o.strong ? i : -1).filter(i => i >= 0);
+        const chosen = [...picked].sort((a,b) => a-b);
+        const good = chosen.length === correct.length && chosen.every((v,i) => v === correct[i]);
+        if(good) ok();
+        else { const extra = [...picked].some(i => !l.items[i].strong); fail(extra ? T.fbMultiExtra : T.fbMultiMissing); }
+      };
+    }
+  }
+
+  function showWin(){ $('#win').classList.add('show'); fireConfetti(); }
+  $('#resetBtn').onclick = () => { solved = {}; opened.clear(); renderClues(); renderLocks(); renderDots(); };
+  const wb = $('#winBtn'); if(wb) wb.onclick = () => location.reload();
+
+  function fireConfetti(){
+    const cv = $('#confetti'), ctx = cv.getContext('2d');
+    cv.width = innerWidth; cv.height = innerHeight;
+    const cols = ['#7c5cbf','#1aa3b8','#46a23c','#f08a16','#2f6fe0','#FCB040'];
+    const bits = Array.from({length:130}, () => ({ x:Math.random()*cv.width, y:-20-Math.random()*cv.height*.5,
+      r:5+Math.random()*7, c:cols[(Math.random()*cols.length)|0], vy:2.5+Math.random()*3.5, vx:-1.5+Math.random()*3, rot:Math.random()*6, vr:-.2+Math.random()*.4 }));
+    let f = 0;
+    (function a(){
+      ctx.clearRect(0,0,cv.width,cv.height);
+      bits.forEach(b => { b.x+=b.vx; b.y+=b.vy; b.rot+=b.vr;
+        ctx.save(); ctx.translate(b.x,b.y); ctx.rotate(b.rot); ctx.fillStyle=b.c; ctx.fillRect(-b.r/2,-b.r/2,b.r,b.r*.6); ctx.restore(); });
+      f++; if(f<150) requestAnimationFrame(a); else ctx.clearRect(0,0,cv.width,cv.height);
+    })();
+  }
+  addEventListener('resize', () => { const cv = $('#confetti'); cv.width = innerWidth; cv.height = innerHeight; });
+
+  renderClues(); renderLocks(); renderDots();
+})();
+</script>
+</body>
+</html>
