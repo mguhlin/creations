@@ -3,1215 +3,463 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MGuhlin.org — Creations</title>
+<title>MGuhlin.org - Creations</title>
 <style>
 :root {
-  --forest:        #2D6A4F;
-  --forest-deep:   #1B4332;
-  --forest-darker: #0F2E22;
-  --forest-mid:    #40916C;
-  --forest-light:  #74C69D;
-  --forest-pale:   #B7E4C7;
-  --forest-faint:  #D8F3DC;
-  --ink:           #1B2D24;
-  --ink-soft:      #2E4034;
-  --ink-mute:      #5C6B62;
-  --ink-faint:     #8A958E;
-  --page:          #FFFFFF;
-  --page-soft:     #F7F9F7;
-  --page-edge:     #ECF1EE;
-  --border:        #D5DED9;
-  --border-soft:   #E5EBE8;
-  --gold:          #D4AC0D;
-  --sidebar-w:     240px;
-  --header-h:      0px;
+  --page: #fff;
+  --ink: #0a0a0a;
+  --muted: #555;
+  --faint: #777;
+  --line: #ddd;
+  --soft: #f6f6f6;
+  --soft-line: #e9e9e9;
+  --max: 980px;
 }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
 
 body {
+  margin: 0;
   background: var(--page);
   color: var(--ink);
-  font-family: 'DM Sans', sans-serif;
-  line-height: 1.6;
-  overflow-x: hidden;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
 
-/* ─── LEFT SIDEBAR (dark-green highlight rail) ─── */
-.sidebar {
-  position: fixed;
-  top: 0; left: 0; bottom: 0;
-  width: var(--sidebar-w);
-  z-index: 200;
-  background: var(--forest-darker);
-  border-right: 1px solid rgba(116,198,157,0.2);
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(116,198,157,0.3) transparent;
-  transition: transform 0.3s ease;
-}
-.sidebar::-webkit-scrollbar { width: 4px; }
-.sidebar::-webkit-scrollbar-thumb { background: rgba(116,198,157,0.2); border-radius: 4px; }
-
-.sidebar-brand {
-  display: block;
-  padding: 22px 20px 18px;
-  font-family: 'Playfair Display', serif;
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--forest-faint);
-  text-decoration: none;
-  border-bottom: 1px solid rgba(116,198,157,0.18);
-}
-.sidebar-brand span { color: var(--forest-light); font-style: italic; }
-
-.sidebar-section-label {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.62rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--forest-light);
-  padding: 18px 20px 6px;
-  opacity: 0.7;
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
 }
 
-.sidebar-section-toggle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 10px 20px 6px;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.62rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--forest-light);
-  opacity: 0.85;
-  text-align: left;
-  transition: color 0.15s, opacity 0.15s;
-}
-.sidebar-section-toggle:hover { color: #fff; opacity: 1; }
-.sidebar-section-toggle .caret {
-  display: inline-block;
-  transition: transform 0.2s;
-  font-size: 0.7rem;
-  opacity: 0.7;
-}
-.sidebar-section-toggle.collapsed .caret { transform: rotate(-90deg); }
-.sidebar-section-toggle .count {
-  margin-left: auto;
-  font-size: 0.6rem;
-  color: var(--forest-light);
-  opacity: 0.6;
+a:hover {
+  text-decoration-thickness: 2px;
 }
 
-.sidebar-group {
-  display: flex;
-  flex-direction: column;
-  padding: 2px 10px 6px;
-  gap: 1px;
-}
-.sidebar-group.collapsed { display: none; }
-
-.sidebar-group a {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #D5E8DC;
-  text-decoration: none;
-  font-size: 0.8rem;
-  font-weight: 400;
-  padding: 6px 10px;
-  border-radius: 5px;
-  transition: background 0.15s, color 0.15s;
-  line-height: 1.3;
-}
-.sidebar-group a:hover {
-  background: rgba(116,198,157,0.15);
-  color: #fff;
-}
-.sidebar-group a .pnum {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.62rem;
-  color: var(--forest-light);
-  opacity: 0.85;
-  flex-shrink: 0;
-  width: 20px;
-}
-
-.sidebar-footer {
-  padding: 14px 20px;
-  border-top: 1px solid rgba(116,198,157,0.18);
-  margin-top: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.sidebar-footer a {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.66rem;
-  color: var(--forest-light);
-  opacity: 0.85;
-  text-decoration: none;
-  transition: opacity 0.15s;
-}
-.sidebar-footer a:hover { opacity: 1; color: var(--forest-pale); }
-
-/* ─── HAMBURGER (mobile) ─── */
-.menu-toggle {
-  display: none;
-  position: fixed;
-  top: 14px; left: 14px;
-  z-index: 300;
-  width: 42px; height: 42px;
-  border-radius: 8px;
-  background: var(--forest-deep);
-  border: 1px solid rgba(116,198,157,0.3);
-  cursor: pointer;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-}
-.menu-toggle span {
-  display: block;
-  width: 20px; height: 2px;
-  background: var(--forest-light);
-  border-radius: 2px;
-  transition: transform 0.25s, opacity 0.25s;
-}
-.menu-toggle.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.menu-toggle.active span:nth-child(2) { opacity: 0; }
-.menu-toggle.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-.sidebar-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 190;
-  background: rgba(15,46,34,0.5);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.sidebar-overlay.visible { opacity: 1; }
-
-/* ─── PAGE WRAP ─── */
-.page-wrap {
-  margin-left: var(--sidebar-w);
-  position: relative;
-  z-index: 1;
-  min-height: 100vh;
-}
-
-/* ─── HERO (white with dark-green accents) ─── */
-.hero {
-  position: relative;
-  background: var(--page);
-  border-bottom: 1px solid var(--border-soft);
-  padding: 64px 40px 56px;
-}
-.hero-inner {
-  max-width: 1200px;
+.site {
+  max-width: var(--max);
   margin: 0 auto;
-}
-.hero-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--forest-faint);
-  border: 1px solid var(--forest-pale);
-  border-radius: 100px;
-  padding: 5px 14px;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.66rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--forest-deep);
-  margin-bottom: 22px;
-}
-.hero-eyebrow::before {
-  content: '';
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--forest-mid);
-  animation: pulse 2.5s ease infinite;
-}
-@keyframes pulse {
-  0%,100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.7); }
-}
-.hero-title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
-  font-weight: 900;
-  line-height: 1;
-  color: var(--ink);
-  letter-spacing: -0.025em;
-  margin-bottom: 12px;
-}
-.hero-title em {
-  font-style: italic;
-  color: var(--forest-deep);
-}
-.hero-byline {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--ink-soft);
-  margin-bottom: 18px;
-}
-.hero-desc {
-  font-size: 0.98rem;
-  color: var(--ink-mute);
-  max-width: 680px;
-  line-height: 1.7;
-  margin-bottom: 28px;
-}
-.hero-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 28px;
-}
-.hero-link a {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.78rem;
-  color: var(--forest-deep);
-  text-decoration: none;
-  padding: 8px 16px;
-  border: 1px solid var(--forest-mid);
-  border-radius: 100px;
-  transition: background 0.15s, color 0.15s;
-  display: inline-block;
-}
-.hero-link a:hover {
-  background: var(--forest-deep);
-  color: #fff;
-}
-.hero-tally {
-  display: flex;
-  gap: 28px;
-  flex-wrap: wrap;
-}
-.tally-item { display: flex; flex-direction: column; }
-.tally-num {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.9rem;
-  font-weight: 700;
-  color: var(--forest-deep);
-  line-height: 1;
-}
-.tally-label {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.6rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-  margin-top: 4px;
-}
-
-/* ─── SEARCH / FILTER BAR ─── */
-.toolbar {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(255,255,255,0.94);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border-soft);
-  padding: 16px 40px;
-}
-.toolbar-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.search-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.search-wrap {
-  position: relative;
-  flex: 1;
-  max-width: 480px;
-}
-.search-wrap::before {
-  content: '⌕';
-  position: absolute;
-  left: 14px; top: 50%;
-  transform: translateY(-50%);
-  color: var(--forest-mid);
-  font-size: 1.1rem;
-  pointer-events: none;
-}
-#search-input {
-  width: 100%;
-  padding: 10px 38px 10px 36px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.92rem;
-  color: var(--ink);
-  background: var(--page);
-  transition: border-color 0.15s, box-shadow 0.15s;
-}
-#search-input:focus {
-  outline: none;
-  border-color: var(--forest-mid);
-  box-shadow: 0 0 0 3px rgba(64,145,108,0.12);
-}
-#search-input::placeholder { color: var(--ink-faint); }
-.search-clear {
-  position: absolute;
-  right: 10px; top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--ink-faint);
-  font-size: 1.1rem;
-  width: 22px; height: 22px;
-  border-radius: 50%;
-  display: none;
-  align-items: center;
-  justify-content: center;
-}
-.search-clear:hover { background: var(--page-edge); color: var(--ink); }
-.search-clear.visible { display: flex; }
-
-.result-count {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-  margin-left: auto;
-}
-
-.chips-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.filter-chip {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 500;
-  padding: 5px 12px;
-  border-radius: 100px;
-  border: 1px solid var(--border);
-  background: var(--page);
-  color: var(--ink-soft);
-  cursor: pointer;
-  transition: all 0.15s;
-  white-space: nowrap;
-}
-.filter-chip:hover {
-  border-color: var(--forest-mid);
-  color: var(--forest-deep);
-}
-.filter-chip.active {
-  background: var(--forest-deep);
-  border-color: var(--forest-deep);
-  color: #fff;
-}
-.filter-chip .ct {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.66rem;
-  margin-left: 5px;
-  opacity: 0.7;
-}
-
-/* ─── GRID ─── */
-.grid-wrap {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 28px 40px 60px;
-}
-
-.section-block {
-  margin-bottom: 36px;
-  scroll-margin-top: 140px;
-}
-.section-block.hidden { display: none; }
-
-.section-header {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-  margin-bottom: 16px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--border-soft);
-}
-.section-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--forest-deep);
-  letter-spacing: -0.01em;
-}
-.section-count {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.68rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-}
-
-.cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
-}
-
-.card {
-  position: relative;
-  background: var(--page);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transition: border-color 0.18s, box-shadow 0.18s, transform 0.18s;
-  scroll-margin-top: 140px;
-}
-.card.hidden { display: none; }
-.card:hover {
-  border-color: var(--forest-mid);
-  box-shadow: 0 6px 22px rgba(27,67,50,0.10);
-  transform: translateY(-2px);
-}
-
-.card-accent {
-  height: 4px;
-  width: 100%;
-}
-
-.card-body {
-  padding: 16px 18px 14px;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.card-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-.card-num {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.68rem;
-  color: var(--forest-mid);
-  letter-spacing: 0.08em;
-  font-weight: 500;
-}
-.card-cat {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.58rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  padding: 3px 8px;
-  border-radius: 3px;
-  color: var(--forest-deep);
-  background: var(--forest-faint);
-  border: 1px solid var(--forest-pale);
-  text-align: right;
-  max-width: 65%;
-}
-
-.card-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.18rem;
-  font-weight: 700;
-  line-height: 1.2;
-  color: var(--ink);
-  margin-bottom: 4px;
-}
-.card-sub {
-  font-size: 0.84rem;
-  color: var(--ink-mute);
-  font-style: italic;
-  line-height: 1.45;
-  margin-bottom: 12px;
-}
-
-.card-stat {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  padding: 8px 10px;
-  background: var(--page-soft);
-  border-radius: 6px;
-  margin-bottom: 12px;
-  border-left: 3px solid var(--forest-mid);
-}
-.card-stat-num {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--forest-deep);
-  line-height: 1;
-}
-.card-stat-lbl {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.6rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ink-mute);
-  flex: 1;
-}
-
-.card-desc {
-  font-size: 0.84rem;
-  color: var(--ink-soft);
-  line-height: 1.6;
-  margin-bottom: 12px;
-}
-
-.card-features {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  margin-bottom: 14px;
-}
-.feat-chip {
-  font-size: 0.66rem;
-  padding: 3px 8px;
-  border-radius: 100px;
-  border: 1px solid var(--border);
-  color: var(--ink-soft);
-  background: var(--page-soft);
-  white-space: nowrap;
-}
-
-.card-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: auto;
-}
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  padding: 7px 14px;
-  border-radius: 6px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  text-decoration: none;
-  background: var(--forest-deep);
-  color: #fff;
-  transition: background 0.15s, transform 0.12s;
-  letter-spacing: 0.01em;
-}
-.btn-primary:hover {
-  background: var(--forest);
-  transform: translateY(-1px);
-}
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  padding: 7px 12px;
-  border-radius: 6px;
-  font-size: 0.76rem;
-  font-weight: 500;
-  text-decoration: none;
-  border: 1px solid var(--border);
-  color: var(--forest-deep);
-  background: var(--page);
-  transition: all 0.15s;
-}
-.btn-secondary:hover {
-  background: var(--forest-faint);
-  border-color: var(--forest-mid);
-}
-
-/* ─── EMPTY STATE ─── */
-.empty-state {
-  display: none;
-  padding: 60px 20px;
-  text-align: center;
-  color: var(--ink-mute);
-}
-.empty-state.visible { display: block; }
-.empty-state h3 {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.3rem;
-  color: var(--ink-soft);
-  margin-bottom: 8px;
-}
-.empty-state p { font-size: 0.9rem; }
-
-/* ─── BACK TO TOP ─── */
-#back-to-top {
-  position: fixed;
-  bottom: 24px; right: 24px;
-  z-index: 300;
-  width: 42px; height: 42px;
-  border-radius: 50%;
-  background: var(--forest-deep);
-  border: none;
-  display: flex; align-items: center; justify-content: center;
-  color: #fff;
-  font-size: 1.1rem;
-  cursor: pointer;
-  text-decoration: none;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.3s, transform 0.3s, background 0.15s;
-  box-shadow: 0 4px 16px rgba(27,67,50,0.25);
-}
-#back-to-top.visible { opacity: 1; transform: translateY(0); }
-#back-to-top:hover { background: var(--forest); }
-
-/* ─── FOOTER ─── */
-footer {
-  background: var(--forest-darker);
-  padding: 28px 40px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-.footer-brand { font-family: 'Playfair Display', serif; font-size: 0.95rem; color: var(--forest-pale); }
-.footer-brand span { color: var(--forest-light); font-style: italic; }
-.footer-links { display: flex; gap: 18px; flex-wrap: wrap; }
-.footer-links a { font-size: 0.78rem; color: rgba(183,228,199,0.6); text-decoration: none; transition: color 0.15s; }
-.footer-links a:hover { color: var(--forest-pale); }
-.footer-copy { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: rgba(116,198,157,0.5); letter-spacing: 0.06em; }
-
-/* ─── LOADING ─── */
-#loading {
-  position: fixed; inset: 0; z-index: 500;
-  background: var(--page);
-  display: flex; align-items: center; justify-content: center;
-  flex-direction: column; gap: 14px;
-  transition: opacity 0.4s;
-}
-#loading.hidden { opacity: 0; pointer-events: none; }
-.loading-dot {
-  width: 8px; height: 8px; border-radius: 50%; background: var(--forest-mid);
-  display: inline-block; margin: 0 4px;
-  animation: ldot 1.2s ease infinite;
-}
-.loading-dot:nth-child(2) { animation-delay: 0.2s; }
-.loading-dot:nth-child(3) { animation-delay: 0.4s; }
-@keyframes ldot {
-  0%,80%,100% { transform: scale(0.6); opacity: 0.4; }
-  40% { transform: scale(1.1); opacity: 1; }
-}
-.loading-lbl { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-faint); }
-
-/* ─── RESPONSIVE ─── */
-@media (max-width: 1080px) {
-  :root { --sidebar-w: 210px; }
-  .hero { padding: 48px 28px 40px; }
-  .toolbar, .grid-wrap { padding-left: 28px; padding-right: 28px; }
-  footer { padding: 24px 28px; }
-}
-
-@media (max-width: 860px) {
-  :root { --sidebar-w: 260px; }
-  .menu-toggle { display: flex; }
-  .sidebar-overlay { display: block; }
-  .sidebar { transform: translateX(-100%); }
-  .sidebar.open { transform: translateX(0); }
-  .page-wrap { margin-left: 0; }
-  .hero { padding: 64px 20px 36px; }
-  .toolbar, .grid-wrap { padding-left: 20px; padding-right: 20px; }
-  footer { padding: 22px 20px; flex-direction: column; align-items: flex-start; gap: 10px; }
-}
-
-@media (max-width: 520px) {
-  .hero-row { gap: 16px; }
-  .hero-tally { gap: 18px; }
-  .cards { grid-template-columns: 1fr; }
-}
-
-/* Minimal black-and-white index theme */
-:root {
-  --forest: #111;
-  --forest-deep: #000;
-  --forest-darker: #000;
-  --forest-mid: #333;
-  --forest-light: #666;
-  --forest-pale: #ddd;
-  --forest-faint: #f5f5f5;
-  --ink: #000;
-  --ink-soft: #222;
-  --ink-mute: #555;
-  --ink-faint: #777;
-  --page: #fff;
-  --page-soft: #f7f7f7;
-  --page-edge: #eee;
-  --border: #d8d8d8;
-  --border-soft: #e8e8e8;
-  --gold: #000;
-  --sidebar-w: 270px;
-}
-
-body {
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  line-height: 1.5;
-}
-
-.sidebar {
-  background: #fff;
-  border-right: 1px solid var(--border);
-  scrollbar-color: #bbb transparent;
-}
-
-.sidebar-brand,
-.sidebar-brand span,
-.sidebar-section-label,
-.sidebar-section-toggle,
-.sidebar-section-toggle .count,
-.sidebar-footer a {
-  color: #000;
-  font-family: inherit;
-  font-style: normal;
-  letter-spacing: 0;
-}
-
-.sidebar-brand {
-  padding: 20px;
-  border-bottom: 1px solid var(--border);
-  font-size: 1rem;
-  font-weight: 700;
-}
-
-.sidebar-section-label {
-  color: #777;
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
-}
-
-.sidebar-section-toggle {
-  color: #111;
-  font-size: 0.76rem;
-  letter-spacing: 0.04em;
-  padding-top: 12px;
-}
-
-.sidebar-group a {
-  color: #222;
-  border-radius: 4px;
-  font-size: 0.82rem;
-}
-
-.sidebar-group a:hover {
-  background: #f1f1f1;
-  color: #000;
-}
-
-.sidebar-group a .pnum {
-  color: #777;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-}
-
-.sidebar-footer {
-  border-top: 1px solid var(--border);
-}
-
-.menu-toggle {
-  background: #fff;
-  border: 1px solid #000;
-  border-radius: 4px;
-}
-
-.menu-toggle span {
-  background: #000;
-}
-
-.sidebar-overlay {
-  background: rgba(0,0,0,0.45);
+  padding: 34px 24px 48px;
 }
 
 .hero {
-  padding: 34px 40px 28px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 24px;
 }
 
-.hero-inner,
-.toolbar-inner,
-.grid-wrap {
-  max-width: 1180px;
-}
-
-.hero-eyebrow {
-  background: transparent;
-  border: 0;
-  border-radius: 0;
-  padding: 0;
-  margin-bottom: 10px;
-  color: #555;
+.eyebrow,
+.stat-label,
+.result-count,
+.section-count,
+.item-meta,
+.loading-label {
+  color: var(--faint);
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 0.72rem;
   letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
-.hero-eyebrow::before {
-  display: none;
+.eyebrow {
+  margin-bottom: 10px;
 }
 
-.hero-title,
-.hero-title em,
-.hero-byline,
-.tally-num,
-.section-title,
-.card-title,
-.empty-state h3,
-.footer-brand,
-.footer-brand span {
-  color: #000;
-  font-family: inherit;
-  font-style: normal;
+h1 {
+  margin: 0;
+  font-size: clamp(2.1rem, 6vw, 4.2rem);
   letter-spacing: 0;
+  line-height: 1;
 }
 
-.hero-title {
-  font-size: clamp(2rem, 4vw, 3.4rem);
-  line-height: 1.05;
-  margin-bottom: 8px;
+.byline {
+  margin: 12px 0 0;
+  font-size: 1.05rem;
+  font-weight: 700;
 }
 
-.hero-byline {
-  margin-bottom: 8px;
+.description {
+  max-width: 720px;
+  margin: 10px 0 0;
+  color: #444;
   font-size: 1rem;
 }
 
-.hero-desc {
-  max-width: 760px;
-  margin-bottom: 18px;
-  color: #444;
-}
-
 .hero-row {
-  gap: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  align-items: flex-end;
+  margin-top: 22px;
 }
 
-.hero-link a,
-.btn-primary,
-.btn-secondary {
+.primary-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 8px 13px;
   background: #000;
   border: 1px solid #000;
   border-radius: 4px;
   color: #fff;
-  font-family: inherit;
+  font-size: 0.9rem;
   text-decoration: none;
-  transform: none;
 }
 
-.hero-link a:hover,
-.btn-primary:hover,
-.btn-secondary:hover {
+.primary-link:hover {
   background: #333;
   border-color: #333;
-  color: #fff;
-  transform: none;
 }
 
-.hero-tally {
-  gap: 18px;
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
-.tally-num {
+.stat {
+  min-width: 54px;
+}
+
+.stat-num {
+  display: block;
   font-size: 1.35rem;
+  font-weight: 800;
+  line-height: 1;
 }
 
-.tally-label,
-.result-count,
-.section-count,
-.card-num,
-.card-cat,
-.card-stat-lbl,
-.loading-lbl {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+.stat-label {
+  display: block;
+  margin-top: 4px;
 }
 
-.toolbar {
+.tools {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  margin: 0 -24px;
+  padding: 16px 24px;
   background: rgba(255,255,255,0.97);
-  border-bottom: 1px solid var(--border);
-  padding: 12px 40px;
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(10px);
 }
 
-.toolbar-inner {
-  gap: 10px;
+.search-row {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) auto;
+  gap: 12px;
+  align-items: center;
 }
 
 .search-wrap {
-  max-width: 560px;
+  position: relative;
 }
 
 .search-wrap::before {
-  color: #555;
+  content: "#";
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  color: var(--faint);
+  transform: translateY(-50%);
 }
 
 #search-input {
-  border-color: #bbb;
+  width: 100%;
+  min-height: 40px;
+  padding: 9px 40px 9px 32px;
+  border: 1px solid #bbb;
   border-radius: 4px;
-  font-family: inherit;
+  color: var(--ink);
+  font: inherit;
 }
 
 #search-input:focus {
+  outline: none;
   border-color: #000;
   box-shadow: 0 0 0 3px rgba(0,0,0,0.08);
 }
 
-.filter-chip {
+.search-clear {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  display: none;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 1.1rem;
+  transform: translateY(-50%);
+}
+
+.search-clear.visible {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-clear:hover {
+  background: var(--soft);
+  color: #000;
+}
+
+.quick-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 12px;
+}
+
+.quick-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 5px 9px;
+  border: 1px solid var(--line);
   border-radius: 4px;
   background: #fff;
   color: #222;
-  font-family: inherit;
+  font-size: 0.82rem;
+  text-decoration: none;
 }
 
-.filter-chip:hover,
-.filter-chip.active {
-  background: #000;
+.quick-links a:hover {
   border-color: #000;
-  color: #fff;
 }
 
-.grid-wrap {
-  padding-top: 20px;
+.content {
+  padding-top: 22px;
 }
 
 .section-block {
-  margin-bottom: 28px;
-  scroll-margin-top: 120px;
+  scroll-margin-top: 130px;
+  padding: 18px 0 22px;
+  border-bottom: 1px solid var(--soft-line);
 }
 
-.section-header {
-  margin-bottom: 10px;
-  border-color: #dcdcdc;
-}
-
-.section-title {
-  font-size: 1rem;
-}
-
-.cards {
-  grid-template-columns: repeat(auto-fill, minmax(245px, 1fr));
-  gap: 10px;
-}
-
-.card {
-  border-radius: 4px;
-  border-color: #d6d6d6;
-  box-shadow: none;
-  scroll-margin-top: 120px;
-}
-
-.card:hover {
-  border-color: #000;
-  box-shadow: none;
-  transform: none;
-}
-
-.card-accent {
+.section-block.hidden {
   display: none;
 }
 
-.card-body {
-  padding: 13px;
+.section-header {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 8px;
 }
 
-.card-head {
-  margin-bottom: 6px;
+.section-title {
+  margin: 0;
+  font-size: 1.05rem;
 }
 
-.card-num {
-  color: #777;
+.project-list {
+  margin: 0;
+  padding-left: 1.2rem;
 }
 
-.card-cat {
-  background: #f3f3f3;
-  border-color: #ddd;
-  color: #333;
+.project-item {
+  margin: 0;
+  padding: 8px 0;
 }
 
-.card-title {
-  font-size: 1rem;
+.project-item.hidden {
+  display: none;
 }
 
-.card-sub,
-.card-desc {
-  color: #555;
-  font-size: 0.82rem;
+.project-line {
+  display: grid;
+  grid-template-columns: minmax(170px, 240px) 1fr auto;
+  gap: 12px;
+  align-items: baseline;
 }
 
-.card-stat {
-  background: #f8f8f8;
-  border-left: 0;
-  border-radius: 4px;
-  margin-bottom: 10px;
-  padding: 7px 9px;
+.project-title {
+  font-weight: 700;
 }
 
-.card-stat-num {
-  color: #000;
-  font-family: inherit;
-  font-size: 1.15rem;
-}
-
-.feat-chip {
-  background: #fff;
-  border-radius: 4px;
+.project-summary {
   color: #444;
 }
 
-.card-actions {
-  gap: 5px;
+.item-meta {
+  white-space: nowrap;
 }
 
-.btn-secondary {
+.item-meta a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.item-meta a:hover {
+  color: #000;
+  text-decoration: underline;
+}
+
+.empty-state {
+  display: none;
+  padding: 42px 0;
+  color: var(--muted);
+}
+
+.empty-state.visible {
+  display: block;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  justify-content: space-between;
+  padding-top: 26px;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+#loading {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
   background: #fff;
-  color: #000;
+  transition: opacity 0.2s;
 }
 
-.btn-secondary:hover {
-  background: #eee;
-  border-color: #000;
-  color: #000;
+#loading.hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
-#back-to-top {
-  background: #000;
+.loading-mark {
+  width: 22px;
+  height: 22px;
+  border: 2px solid #ddd;
+  border-top-color: #000;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.top-link {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  display: none;
+  width: 38px;
+  height: 38px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #000;
   border-radius: 4px;
-  box-shadow: none;
-}
-
-footer {
-  background: #fff;
-  border-top: 1px solid var(--border);
-}
-
-.footer-links a,
-.footer-copy {
-  color: #555;
-}
-
-.footer-links a:hover {
-  color: #000;
-}
-
-.loading-dot {
   background: #000;
+  color: #fff;
+  text-decoration: none;
 }
 
-@media (max-width: 860px) {
-  .hero {
-    padding-top: 70px;
+.top-link.visible {
+  display: inline-flex;
+}
+
+@media (max-width: 720px) {
+  .site {
+    padding: 24px 16px 40px;
   }
 
-  .search-row {
+  .tools {
+    margin: 0 -16px;
+    padding: 14px 16px;
+  }
+
+  .search-row,
+  .project-line {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+
+  .result-count,
+  .item-meta {
+    white-space: normal;
+  }
+
+  .hero-row {
     align-items: flex-start;
     flex-direction: column;
   }
 
-  .search-wrap {
-    max-width: none;
-    width: 100%;
-  }
-
-  .result-count {
-    margin-left: 0;
+  .stats {
+    gap: 18px;
   }
 }
 </style>
 </head>
 <body>
-
-<!-- Loading overlay -->
 <div id="loading">
-  <div>
-    <span class="loading-dot"></span>
-    <span class="loading-dot"></span>
-    <span class="loading-dot"></span>
-  </div>
-  <div class="loading-lbl">Loading projects</div>
+  <div class="loading-mark" aria-hidden="true"></div>
+  <div class="loading-label">Loading projects</div>
 </div>
 
-<!-- Mobile hamburger -->
-<button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation">
-  <span></span><span></span><span></span>
-</button>
-<div class="sidebar-overlay" id="sidebar-overlay"></div>
-
-<!-- Sidebar -->
-<aside class="sidebar" id="sidebar">
-  <a href="#top" class="sidebar-brand">MG<span>uhlin</span>.org</a>
-  <div class="sidebar-section-label">Sections</div>
-  <nav id="sidebar-nav"></nav>
-  <div class="sidebar-footer">
-    <a href="https://go.mgpd.org/aic" target="_blank" rel="noopener">go.mgpd.org/aic</a>
-    <a href="#top">↑ Back to top</a>
-  </div>
-</aside>
-
-<div class="page-wrap">
-
-  <!-- Hero -->
-  <section class="hero" id="top">
-    <div class="hero-inner">
-      <div class="hero-eyebrow">MGuhlin.org · Digital Creations</div>
-      <h1 class="hero-title">Creative <em>Works</em></h1>
-      <p class="hero-byline" id="hero-byline"></p>
-      <p class="hero-desc" id="hero-desc"></p>
-      <div class="hero-row">
-        <div class="hero-link"><a href="https://go.mgpd.org/aic" target="_blank" rel="noopener">go.mgpd.org/aic</a></div>
-        <div class="hero-tally" id="hero-tally"></div>
-      </div>
+<div class="site">
+  <header class="hero" id="top">
+    <div class="eyebrow">MGuhlin.org - Digital Creations</div>
+    <h1>Creative Works</h1>
+    <p class="byline" id="hero-byline"></p>
+    <p class="description" id="hero-desc"></p>
+    <div class="hero-row">
+      <a class="primary-link" href="https://go.mgpd.org/aic" target="_blank" rel="noopener">go.mgpd.org/aic</a>
+      <div class="stats" id="hero-tally" aria-label="Project statistics"></div>
     </div>
+  </header>
+
+  <section class="tools" aria-label="Find projects">
+    <div class="search-row">
+      <div class="search-wrap">
+        <input type="search" id="search-input" placeholder="Search projects, sections, and descriptions" autocomplete="off">
+        <button class="search-clear" id="search-clear" aria-label="Clear search">x</button>
+      </div>
+      <div class="result-count" id="result-count"></div>
+    </div>
+    <nav class="quick-links" id="quick-links" aria-label="Section quick links"></nav>
   </section>
 
-  <!-- Search / Filter Toolbar -->
-  <div class="toolbar">
-    <div class="toolbar-inner">
-      <div class="search-row">
-        <div class="search-wrap">
-          <input type="search" id="search-input" placeholder="Search projects, features, descriptions…" autocomplete="off">
-          <button class="search-clear" id="search-clear" aria-label="Clear search">×</button>
-        </div>
-        <div class="result-count" id="result-count"></div>
-      </div>
-      <div class="chips-row" id="filter-chips"></div>
-    </div>
-  </div>
+  <main class="content" id="project-sections"></main>
 
-  <!-- Grid -->
-  <main class="grid-wrap" id="grid-wrap"></main>
-
-  <!-- Empty state -->
   <div class="empty-state" id="empty-state">
-    <h3>No projects match.</h3>
-    <p>Try a different search term or clear the active filter.</p>
+    <strong>No projects match.</strong>
+    <span> Try a different search term.</span>
   </div>
 
-  <!-- Footer -->
-  <footer id="site-footer"></footer>
-
+  <footer class="footer" id="site-footer"></footer>
 </div>
 
-<a href="#top" id="back-to-top" title="Back to top">↑</a>
+<a href="#top" class="top-link" id="back-to-top" aria-label="Back to top">^</a>
 
 <script>
 let ALL_PROJECTS = [];
-let ALL_SECTIONS = [];
-let activeSection = 'all';
-let searchTerm = '';
+let activeSearch = '';
 
 async function loadAndRender() {
   let data;
@@ -1219,246 +467,203 @@ async function loadAndRender() {
     const res = await fetch('projects.json?v=' + Date.now());
     if (!res.ok) throw new Error('fetch failed');
     data = await res.json();
-  } catch (e) {
+  } catch (error) {
     document.getElementById('loading').innerHTML =
-      '<p style="color:var(--ink-mute);font-family:DM Mono,monospace;font-size:.8rem;">Could not load projects.json — make sure it lives next to index.html.</p>';
+      '<p style="color:#555;font-family:ui-monospace,monospace;font-size:.82rem;">Could not load projects.json next to index.html.</p>';
     return;
   }
 
-  ALL_PROJECTS = data.projects;
-  ALL_SECTIONS = [...new Set(ALL_PROJECTS.map(p => p.section))];
-
-  buildHero(data.meta);
-  buildSidebar(ALL_PROJECTS);
-  buildFilterChips(ALL_SECTIONS, ALL_PROJECTS);
-  buildGrid(ALL_PROJECTS);
-  buildFooter(data.meta);
+  ALL_PROJECTS = data.projects || [];
+  buildHero(data.meta || {});
+  buildQuickLinks(ALL_PROJECTS);
+  buildSections(ALL_PROJECTS);
+  buildFooter(data.meta || {});
   bindControls();
+  updateResultCount(ALL_PROJECTS.length);
 
   const loader = document.getElementById('loading');
   loader.classList.add('hidden');
-  setTimeout(() => loader.remove(), 500);
+  setTimeout(() => loader.remove(), 250);
 
-  const btt = document.getElementById('back-to-top');
+  const backToTop = document.getElementById('back-to-top');
   window.addEventListener('scroll', () => {
-    btt.classList.toggle('visible', window.scrollY > 500);
+    backToTop.classList.toggle('visible', window.scrollY > 500);
   }, { passive: true });
-
-  updateResultCount();
 }
 
 function buildHero(meta) {
-  document.getElementById('hero-byline').textContent = meta.byline;
-  document.getElementById('hero-desc').textContent = meta.description;
+  document.getElementById('hero-byline').textContent = meta.byline || '';
+  document.getElementById('hero-desc').textContent = meta.description || '';
+
   const tallyEl = document.getElementById('hero-tally');
-  meta.tallies.forEach(t => {
+  tallyEl.innerHTML = '';
+  (meta.tallies || []).forEach(tally => {
     tallyEl.insertAdjacentHTML('beforeend', `
-      <div class="tally-item">
-        <span class="tally-num">${t.num}</span>
-        <span class="tally-label">${t.label}</span>
+      <div class="stat">
+        <span class="stat-num">${escapeHtml(tally.num)}</span>
+        <span class="stat-label">${escapeHtml(tally.label)}</span>
       </div>`);
   });
 }
 
-function buildSidebar(projects) {
-  const nav = document.getElementById('sidebar-nav');
-  const sections = [...new Set(projects.map(p => p.section))];
-  sections.forEach((section, idx) => {
-    const projectsInSection = projects.filter(p => p.section === section);
-    const sectionId = 'sec-' + idx;
-    const toggle = document.createElement('button');
-    toggle.className = 'sidebar-section-toggle';
-    toggle.innerHTML = `
-      <span class="caret">▾</span>
-      <span>${stripTags(section)}</span>
-      <span class="count">${projectsInSection.length}</span>`;
-    nav.appendChild(toggle);
-
-    const group = document.createElement('div');
-    group.className = 'sidebar-group';
-    group.id = sectionId;
-    projectsInSection.forEach(p => {
-      group.insertAdjacentHTML('beforeend',
-        `<a href="#${p.id}"><span class="pnum">${p.num}</span> ${stripTags(p.title)}</a>`);
-    });
-    nav.appendChild(group);
-
-    toggle.addEventListener('click', () => {
-      toggle.classList.toggle('collapsed');
-      group.classList.toggle('collapsed');
-    });
+function buildQuickLinks(projects) {
+  const nav = document.getElementById('quick-links');
+  nav.innerHTML = '';
+  getSections(projects).forEach(section => {
+    const count = projects.filter(project => project.section === section).length;
+    nav.insertAdjacentHTML('beforeend',
+      `<a href="#${sectionId(section)}">${escapeHtml(stripTags(section))} ${count}</a>`);
   });
 }
 
-function buildFilterChips(sections, projects) {
-  const el = document.getElementById('filter-chips');
-  el.insertAdjacentHTML('beforeend',
-    `<button class="filter-chip active" data-section="all">All <span class="ct">${projects.length}</span></button>`);
-  sections.forEach(s => {
-    const count = projects.filter(p => p.section === s).length;
-    el.insertAdjacentHTML('beforeend',
-      `<button class="filter-chip" data-section="${escapeAttr(s)}">${stripTags(s)} <span class="ct">${count}</span></button>`);
-  });
-  el.addEventListener('click', e => {
-    const btn = e.target.closest('.filter-chip');
-    if (!btn) return;
-    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-    btn.classList.add('active');
-    activeSection = btn.dataset.section;
-    applyFilters();
-  });
-}
-
-function buildGrid(projects) {
-  const main = document.getElementById('grid-wrap');
-  const sections = [...new Set(projects.map(p => p.section))];
+function buildSections(projects) {
+  const main = document.getElementById('project-sections');
   main.innerHTML = '';
 
-  sections.forEach((section, idx) => {
-    const sectionId = 'section-' + idx;
-    const projectsInSection = projects.filter(p => p.section === section);
-    const block = document.createElement('div');
+  getSections(projects).forEach(section => {
+    const projectsInSection = projects.filter(project => project.section === section);
+    const block = document.createElement('section');
     block.className = 'section-block';
+    block.id = sectionId(section);
     block.dataset.section = section;
-    block.id = sectionId;
 
     block.innerHTML = `
       <div class="section-header">
-        <h2 class="section-title">${stripTags(section)}</h2>
+        <h2 class="section-title">${escapeHtml(stripTags(section))}</h2>
         <span class="section-count">${projectsInSection.length} ${projectsInSection.length === 1 ? 'project' : 'projects'}</span>
       </div>
-      <div class="cards"></div>`;
+      <ul class="project-list"></ul>`;
 
-    const cardsEl = block.querySelector('.cards');
-    projectsInSection.forEach(p => cardsEl.appendChild(buildCard(p)));
+    const list = block.querySelector('.project-list');
+    projectsInSection.forEach(project => list.appendChild(buildProjectItem(project)));
     main.appendChild(block);
   });
 }
 
-function buildCard(p) {
-  const card = document.createElement('article');
-  card.className = 'card';
-  card.id = p.id;
-  card.dataset.section = p.section;
-  const hay = [
-    p.title, p.subtitle, p.description, p.category,
-    ...(p.features || []), p.section
+function buildProjectItem(project) {
+  const item = document.createElement('li');
+  item.className = 'project-item';
+  item.id = project.id;
+  item.dataset.section = project.section || '';
+  item.dataset.search = [
+    project.title,
+    project.subtitle,
+    project.description,
+    project.category,
+    project.section,
+    ...(project.features || [])
   ].join(' ').toLowerCase();
-  card.dataset.search = hay;
 
-  const chips = (p.features || []).slice(0, 6).map(f => `<span class="feat-chip">${f}</span>`).join('');
-  const btns = (p.links || []).map(l => {
-    const ext = l.external ? 'target="_blank" rel="noopener"' : '';
-    const cls = l.primary ? 'btn-primary' : 'btn-secondary';
-    return `<a href="${l.href}" class="${cls}" ${ext}>${l.label}</a>`;
-  }).join('') + `<a href="#${p.id}" class="btn-secondary" aria-label="Permalink to ${escapeAttr(stripTags(p.title))}">#</a>`;
+  const primary = (project.links || []).find(link => link.primary) || (project.links || [])[0];
+  const href = primary ? primary.href : `#${project.id}`;
+  const target = primary && primary.external ? ' target="_blank" rel="noopener"' : '';
+  const summary = oneLine(project.subtitle || project.description || project.category || '');
 
-  card.innerHTML = `
-    <div class="card-accent" style="background:${p.panelGradient}"></div>
-    <div class="card-body">
-      <div class="card-head">
-        <span class="card-num">${p.num}</span>
-        <span class="card-cat">${p.category}</span>
-      </div>
-      <h3 class="card-title">${p.title}</h3>
-      <p class="card-sub">${p.subtitle}</p>
-      <div class="card-stat">
-        <span class="card-stat-num">${p.stat}</span>
-        <span class="card-stat-lbl">${p.statLabel}</span>
-      </div>
-      <p class="card-desc">${p.description}</p>
-      <div class="card-features">${chips}</div>
-      <div class="card-actions">${btns}</div>
+  item.innerHTML = `
+    <div class="project-line">
+      <a class="project-title" href="${escapeAttr(href)}"${target}>${escapeHtml(stripTags(project.title))}</a>
+      <span class="project-summary">${escapeHtml(summary)}</span>
+      <span class="item-meta"><a href="#${escapeAttr(project.id)}">#${escapeHtml(project.num || '')}</a></span>
     </div>`;
-  return card;
-}
 
-function applyFilters() {
-  const term = searchTerm.trim().toLowerCase();
-  let visible = 0;
-  document.querySelectorAll('.section-block').forEach(block => {
-    const sectionMatch = activeSection === 'all' || block.dataset.section === activeSection;
-    let blockHasVisible = false;
-    block.querySelectorAll('.card').forEach(card => {
-      const matchesSearch = !term || card.dataset.search.includes(term);
-      const matchesSection = activeSection === 'all' || card.dataset.section === activeSection;
-      const show = matchesSearch && matchesSection;
-      card.classList.toggle('hidden', !show);
-      if (show) { blockHasVisible = true; visible++; }
-    });
-    block.classList.toggle('hidden', !sectionMatch || !blockHasVisible);
-  });
-  document.getElementById('empty-state').classList.toggle('visible', visible === 0);
-  updateResultCount(visible);
-}
-
-function updateResultCount(visible) {
-  const el = document.getElementById('result-count');
-  if (visible === undefined) visible = ALL_PROJECTS.length;
-  el.textContent = `${visible} of ${ALL_PROJECTS.length}`;
+  return item;
 }
 
 function bindControls() {
   const input = document.getElementById('search-input');
   const clear = document.getElementById('search-clear');
+
   input.addEventListener('input', () => {
-    searchTerm = input.value;
-    clear.classList.toggle('visible', !!searchTerm);
-    applyFilters();
+    activeSearch = input.value.trim().toLowerCase();
+    clear.classList.toggle('visible', activeSearch.length > 0);
+    applySearch();
   });
+
   clear.addEventListener('click', () => {
     input.value = '';
-    searchTerm = '';
+    activeSearch = '';
     clear.classList.remove('visible');
-    applyFilters();
+    applySearch();
     input.focus();
   });
-  input.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-      input.value = '';
-      searchTerm = '';
-      clear.classList.remove('visible');
-      applyFilters();
-    }
+
+  input.addEventListener('keydown', event => {
+    if (event.key === 'Escape') clear.click();
   });
+}
+
+function applySearch() {
+  let visible = 0;
+  const hasSearch = activeSearch.length > 0;
+
+  document.querySelectorAll('.section-block').forEach(section => {
+    let sectionHasVisible = false;
+
+    section.querySelectorAll('.project-item').forEach(item => {
+      const show = !hasSearch || item.dataset.search.includes(activeSearch);
+      item.classList.toggle('hidden', !show);
+      if (show) {
+        sectionHasVisible = true;
+        visible += 1;
+      }
+    });
+
+    section.classList.toggle('hidden', !sectionHasVisible);
+  });
+
+  document.getElementById('empty-state').classList.toggle('visible', visible === 0);
+  updateResultCount(visible);
+}
+
+function updateResultCount(visible) {
+  document.getElementById('result-count').textContent = `${visible} of ${ALL_PROJECTS.length}`;
 }
 
 function buildFooter(meta) {
-  const links = meta.footerLinks
-    .map(l => `<a href="${l.href}" target="_blank">${l.label}</a>`)
+  const links = (meta.footerLinks || [])
+    .map(link => `<a href="${escapeAttr(link.href)}" target="_blank" rel="noopener">${escapeHtml(link.label)}</a>`)
     .join('');
+
   document.getElementById('site-footer').innerHTML = `
-    <div class="footer-brand">MG<span>uhlin</span>.org — Creations</div>
-    <div class="footer-links">${links}</div>
-    <div class="footer-copy">CC0 1.0 Universal · Open for reuse</div>`;
+    <span>MGuhlin.org - Creations</span>
+    <nav class="footer-links" aria-label="Footer links">${links}</nav>
+    <span>CC0 1.0 Universal</span>`;
 }
 
-function stripTags(s) { return (s || '').replace(/<[^>]*>/g, '').replace(/&amp;/g, '&'); }
-function escapeAttr(s) { return (s || '').replace(/"/g, '&quot;'); }
+function getSections(projects) {
+  return [...new Set(projects.map(project => project.section))];
+}
 
-/* Mobile sidebar */
-const toggle = document.getElementById('menu-toggle');
-const sidebar = document.getElementById('sidebar');
-const overlay = document.getElementById('sidebar-overlay');
-function openSidebar() {
-  sidebar.classList.add('open');
-  toggle.classList.add('active');
-  overlay.classList.add('visible');
-  document.body.style.overflow = 'hidden';
+function sectionId(section) {
+  return 'section-' + stripTags(section || '')
+    .toLowerCase()
+    .replace(/&amp;/g, 'and')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
 }
-function closeSidebar() {
-  sidebar.classList.remove('open');
-  toggle.classList.remove('active');
-  overlay.classList.remove('visible');
-  document.body.style.overflow = '';
+
+function oneLine(value) {
+  const clean = stripTags(value).replace(/\s+/g, ' ').trim();
+  if (clean.length <= 118) return clean;
+  return clean.slice(0, 115).trim() + '...';
 }
-toggle.addEventListener('click', () => {
-  sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
-});
-overlay.addEventListener('click', closeSidebar);
-document.getElementById('sidebar').addEventListener('click', e => {
-  if (e.target.closest('a[href^="#"]')) closeSidebar();
-});
+
+function stripTags(value) {
+  return String(value || '').replace(/<[^>]*>/g, '').replace(/&amp;/g, '&');
+}
+
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function escapeAttr(value) {
+  return escapeHtml(value).replace(/`/g, '&#96;');
+}
 
 loadAndRender();
 </script>
