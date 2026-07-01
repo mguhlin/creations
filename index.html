@@ -308,12 +308,22 @@ h1 {
 
 .project-list {
   margin: 0;
-  padding-left: 1.2rem;
+  padding: 0;
+  list-style-position: inside;
 }
 
 .project-item {
   margin: 0;
-  padding: 8px 0;
+  padding: 9px 12px;
+  border-radius: 4px;
+}
+
+.project-item.is-even {
+  background: #f5f5f5;
+}
+
+.project-item.is-odd {
+  background: #fff;
 }
 
 .project-item.hidden {
@@ -621,14 +631,14 @@ function buildSections(projects) {
       <ul class="project-list"></ul>`;
 
     const list = block.querySelector('.project-list');
-    projectsInSection.forEach(project => list.appendChild(buildProjectItem(project)));
+    projectsInSection.forEach((project, index) => list.appendChild(buildProjectItem(project, index)));
     main.appendChild(block);
   });
 }
 
-function buildProjectItem(project) {
+function buildProjectItem(project, index = 0) {
   const item = document.createElement('li');
-  item.className = 'project-item';
+  item.className = `project-item ${index % 2 ? 'is-even' : 'is-odd'}`;
   item.id = project.id;
   item.dataset.section = displayGroupFor(project);
   item.dataset.search = [
@@ -696,11 +706,22 @@ function applySearch() {
       }
     });
 
+    refreshRowStripes(section);
     section.classList.toggle('hidden', !sectionHasVisible);
   });
 
   document.getElementById('empty-state').classList.toggle('visible', visible === 0);
   updateResultCount(visible);
+}
+
+function refreshRowStripes(section) {
+  let row = 0;
+  section.querySelectorAll('.project-item').forEach(item => {
+    if (item.classList.contains('hidden')) return;
+    item.classList.toggle('is-odd', row % 2 === 0);
+    item.classList.toggle('is-even', row % 2 === 1);
+    row += 1;
+  });
 }
 
 function updateResultCount(visible) {
