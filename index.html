@@ -264,6 +264,13 @@ h1 {
   font-size: 1.05rem;
 }
 
+.section-description {
+  max-width: 720px;
+  margin: -2px 0 10px;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
 .project-list {
   margin: 0;
   padding-left: 1.2rem;
@@ -461,6 +468,41 @@ h1 {
 let ALL_PROJECTS = [];
 let activeSearch = '';
 
+const DISPLAY_GROUPS = [
+  {
+    name: 'AI Tools & Prompt Libraries',
+    description: 'Prompt builders, custom instructions, AI literacy resources, and ready-to-use assistant libraries.'
+  },
+  {
+    name: 'Teaching Strategies & Professional Learning',
+    description: 'Coaching tools, strategy guides, reflection activities, course resources, and educator growth supports.'
+  },
+  {
+    name: 'Classroom Activities & Generators',
+    description: 'Student-facing games, randomizers, puzzles, breakouts, warm-ups, and quick classroom makers.'
+  },
+  {
+    name: 'Data, Dashboards & Evaluation',
+    description: 'Dashboards, rubrics, scoring tools, data displays, visualizations, and evidence-based decision aids.'
+  },
+  {
+    name: 'Library & Research Tools',
+    description: 'Library programming tools, reading activities, source evaluation, citations, catalog practice, and research skills.'
+  },
+  {
+    name: 'Leadership, Policy & Planning',
+    description: 'Planning frameworks, policy guides, technology integration resources, adoption roadmaps, and operational tools.'
+  },
+  {
+    name: 'Productivity, Utilities & Workflows',
+    description: 'Reusable work tools, search portals, media scripts, onboarding generators, and workflow helpers.'
+  },
+  {
+    name: 'Conference & Workshop Materials',
+    description: 'Session hubs, slide decks, web decks, training materials, and workshop-ready resources.'
+  }
+];
+
 async function loadAndRender() {
   let data;
   try {
@@ -509,10 +551,10 @@ function buildHero(meta) {
 function buildQuickLinks(projects) {
   const nav = document.getElementById('quick-links');
   nav.innerHTML = '';
-  getSections(projects).forEach(section => {
-    const count = projects.filter(project => project.section === section).length;
+  getDisplayGroups(projects).forEach(group => {
+    const count = projects.filter(project => displayGroupFor(project) === group.name).length;
     nav.insertAdjacentHTML('beforeend',
-      `<a href="#${sectionId(section)}">${escapeHtml(stripTags(section))} ${count}</a>`);
+      `<a href="#${sectionId(group.name)}">${escapeHtml(group.name)} ${count}</a>`);
   });
 }
 
@@ -520,18 +562,19 @@ function buildSections(projects) {
   const main = document.getElementById('project-sections');
   main.innerHTML = '';
 
-  getSections(projects).forEach(section => {
-    const projectsInSection = projects.filter(project => project.section === section);
+  getDisplayGroups(projects).forEach(group => {
+    const projectsInSection = projects.filter(project => displayGroupFor(project) === group.name);
     const block = document.createElement('section');
     block.className = 'section-block';
-    block.id = sectionId(section);
-    block.dataset.section = section;
+    block.id = sectionId(group.name);
+    block.dataset.section = group.name;
 
     block.innerHTML = `
       <div class="section-header">
-        <h2 class="section-title">${escapeHtml(stripTags(section))}</h2>
+        <h2 class="section-title">${escapeHtml(group.name)}</h2>
         <span class="section-count">${projectsInSection.length} ${projectsInSection.length === 1 ? 'project' : 'projects'}</span>
       </div>
+      <p class="section-description">${escapeHtml(group.description)}</p>
       <ul class="project-list"></ul>`;
 
     const list = block.querySelector('.project-list');
@@ -544,24 +587,26 @@ function buildProjectItem(project) {
   const item = document.createElement('li');
   item.className = 'project-item';
   item.id = project.id;
-  item.dataset.section = project.section || '';
+  item.dataset.section = displayGroupFor(project);
   item.dataset.search = [
     project.title,
     project.subtitle,
     project.description,
     project.category,
     project.section,
+    displayGroupFor(project),
     ...(project.features || [])
   ].join(' ').toLowerCase();
 
   const primary = (project.links || []).find(link => link.primary) || (project.links || [])[0];
   const href = primary ? primary.href : `#${project.id}`;
   const target = primary && primary.external ? ' target="_blank" rel="noopener"' : '';
-  const summary = oneLine(project.subtitle || project.description || project.category || '');
+  const title = displayTitleFor(project);
+  const summary = oneLine(cleanSummary(project.subtitle || project.description || project.category || '', project));
 
   item.innerHTML = `
     <div class="project-line">
-      <a class="project-title" href="${escapeAttr(href)}"${target}>${escapeHtml(stripTags(project.title))}</a>
+      <a class="project-title" href="${escapeAttr(href)}"${target}>${escapeHtml(title)}</a>
       <span class="project-summary">${escapeHtml(summary)}</span>
       <span class="item-meta"><a href="#${escapeAttr(project.id)}">#${escapeHtml(project.num || '')}</a></span>
     </div>`;
@@ -632,6 +677,128 @@ function buildFooter(meta) {
 
 function getSections(projects) {
   return [...new Set(projects.map(project => project.section))];
+}
+
+function displayTitleFor(project) {
+  return stripTags(project.title || '')
+    .replace(/^TCEA\s+/i, '')
+    .replace(/\s+[-—]\s+TCEA$/i, '')
+    .replace(/\s+\|\s+TCEA\s+WebDeck$/i, ' WebDeck')
+    .replace(/\s+TCEA\s+resource$/i, '')
+    .trim();
+}
+
+function cleanSummary(value, project) {
+  const title = displayTitleFor(project).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const href = (((project.links || [])[0] || {}).href || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+  return stripTags(value)
+    .replace(/\s*TCEA resource\s*/gi, ' ')
+    .replace(/\s*Added to the creations index so it can be found through search and section navigation\.?/gi, ' ')
+    .replace(href ? new RegExp(`\\s*available at\\s+${href}\\.?`, 'gi') : /$^/, ' ')
+    .replace(title ? new RegExp(`^${title}\\s+`, 'i') : /$^/, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function getDisplayGroups(projects) {
+  const active = new Set(projects.map(project => displayGroupFor(project)));
+  return DISPLAY_GROUPS.filter(group => active.has(group.name));
+}
+
+function displayGroupFor(project) {
+  const section = stripTags(project.section || '').toLowerCase();
+  const category = stripTags(project.category || '').toLowerCase();
+  const title = stripTags(project.title || '').toLowerCase();
+  const href = ((project.links || [])[0] || {}).href || '';
+  const haystack = [section, category, title, href.toLowerCase()].join(' ');
+
+  if (haystack.includes('libvibes') || href.includes('/vcl/') || href.includes('/vcll/')) {
+    return 'Library & Research Tools';
+  }
+
+  if (
+    haystack.includes('dashboard') ||
+    haystack.includes('data') ||
+    haystack.includes('visual') ||
+    haystack.includes('rubric') ||
+    haystack.includes('assessment system') ||
+    haystack.includes('scoring') ||
+    haystack.includes('evaluation')
+  ) {
+    return 'Data, Dashboards & Evaluation';
+  }
+
+  if (
+    haystack.includes('classroom') ||
+    haystack.includes('interactive') ||
+    haystack.includes('breakout') ||
+    haystack.includes('game') ||
+    haystack.includes('puzzle') ||
+    haystack.includes('spinner') ||
+    haystack.includes('dice') ||
+    haystack.includes('bingo') ||
+    haystack.includes('wheel') ||
+    haystack.includes('word search') ||
+    haystack.includes('activity') ||
+    haystack.includes('flashcards')
+  ) {
+    return 'Classroom Activities & Generators';
+  }
+
+  if (
+    haystack.includes('professional') ||
+    haystack.includes('coaching') ||
+    haystack.includes('coach') ||
+    haystack.includes('course') ||
+    haystack.includes('reflection') ||
+    haystack.includes('strategy') ||
+    haystack.includes('visible learning') ||
+    haystack.includes('instructional')
+  ) {
+    return 'Teaching Strategies & Professional Learning';
+  }
+
+  if (
+    haystack.includes('ai') ||
+    haystack.includes('prompt') ||
+    haystack.includes('claude') ||
+    haystack.includes('boodlebox') ||
+    haystack.includes('custom instructions') ||
+    haystack.includes('protect') ||
+    haystack.includes('vibe coding')
+  ) {
+    return 'AI Tools & Prompt Libraries';
+  }
+
+  if (
+    haystack.includes('policy') ||
+    haystack.includes('leadership') ||
+    haystack.includes('roadmap') ||
+    haystack.includes('planning') ||
+    haystack.includes('technology integration') ||
+    haystack.includes('edtech framework') ||
+    haystack.includes('vendor') ||
+    haystack.includes('privacy') ||
+    haystack.includes('intake') ||
+    haystack.includes('organizer')
+  ) {
+    return 'Leadership, Policy & Planning';
+  }
+
+  if (
+    haystack.includes('conference') ||
+    haystack.includes('session') ||
+    haystack.includes('workshop') ||
+    haystack.includes('webdeck') ||
+    haystack.includes('slide deck') ||
+    haystack.includes('training') ||
+    haystack.includes('lunch')
+  ) {
+    return 'Conference & Workshop Materials';
+  }
+
+  return 'Productivity, Utilities & Workflows';
 }
 
 function sectionId(section) {
