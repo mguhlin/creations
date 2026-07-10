@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NSPA Vibe Coding Project Cards</title>
+  <style>
+    :root {
+      --navy: #0A3476;
+      --navy-dark: #071f48;
+      --gold: #FCB040;
+      --gold-soft: #fff3dc;
+      --ink: #172033;
+      --muted: #5c6b82;
+      --paper: #f7f9fc;
+      --card: #ffffff;
+      --line: #dbe3ef;
+      --success: #117a4a;
+      --radius: 22px;
+      --shadow: 0 18px 40px rgba(10, 52, 118, 0.14);
+      --focus: 0 0 0 4px rgba(252, 176, 64, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(252,176,64,.22), transparent 28rem),
+        linear-gradient(180deg, #eef4ff 0%, var(--paper) 42%, #ffffff 100%);
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    a {
+      color: var(--navy);
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible {
+      outline: none;
+      box-shadow: var(--focus);
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -999px;
+      top: 1rem;
+      background: var(--navy);
+      color: white;
+      padding: .75rem 1rem;
+      border-radius: .5rem;
+      z-index: 20;
+    }
+
+    .skip-link:focus {
+      left: 1rem;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--navy-dark), var(--navy));
+      color: white;
+      padding: clamp(2rem, 6vw, 5rem) 1rem clamp(2rem, 4vw, 3rem);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::after {
+      content: "";
+      position: absolute;
+      inset: auto -5rem -8rem auto;
+      width: 24rem;
+      height: 24rem;
+      border-radius: 999px;
+      background: rgba(252,176,64,.18);
+      pointer-events: none;
+    }
+
+    .wrap {
+      width: min(1120px, calc(100% - 2rem));
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      color: #102147;
+      background: var(--gold);
+      border-radius: 999px;
+      padding: .45rem .8rem;
+      font-weight: 700;
+      font-size: .86rem;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 1rem 0 .75rem;
+      max-width: 820px;
+      font-size: clamp(2.2rem, 6vw, 4.8rem);
+      line-height: .95;
+      letter-spacing: -.04em;
+    }
+
+    .lead {
+      max-width: 780px;
+      color: rgba(255,255,255,.88);
+      font-size: clamp(1rem, 2vw, 1.25rem);
+    }
+
+    .toolbar {
+      margin: -1.6rem auto 1.25rem;
+      width: min(1120px, calc(100% - 2rem));
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: .85rem;
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: .75rem;
+      align-items: center;
+      position: sticky;
+      top: .75rem;
+      z-index: 10;
+    }
+
+    .search {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: .82rem 1rem;
+      font-size: 1rem;
+      color: var(--ink);
+      background: white;
+    }
+
+    .pill {
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--navy);
+      border-radius: 999px;
+      padding: .78rem 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .pill:hover {
+      border-color: var(--navy);
+      background: #f5f8ff;
+    }
+
+    main {
+      padding: 1rem 0 4rem;
+    }
+
+    .summary {
+      width: min(1120px, calc(100% - 2rem));
+      margin: 0 auto 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    .grid {
+      width: min(1120px, calc(100% - 2rem));
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 28px rgba(10, 52, 118, .08);
+      overflow: clip;
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+
+    .card[hidden] {
+      display: none;
+    }
+
+    .card-top {
+      padding: 1.15rem 1.15rem .8rem;
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+      min-height: 12.5rem;
+    }
+
+    .number {
+      width: 2.2rem;
+      height: 2.2rem;
+      display: inline-grid;
+      place-items: center;
+      border-radius: .8rem;
+      background: var(--gold-soft);
+      color: #8a5100;
+      border: 1px solid #ffd799;
+      font-weight: 800;
+    }
+
+    .card h2 {
+      margin: 0;
+      font-size: 1.18rem;
+      line-height: 1.2;
+      color: var(--navy-dark);
+      letter-spacing: -.01em;
+    }
+
+    .why {
+      margin: 0;
+      color: var(--muted);
+      font-size: .96rem;
+    }
+
+    .card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .55rem;
+      margin-top: auto;
+      padding: 0 1.15rem 1.15rem;
+    }
+
+    .button {
+      border: 0;
+      border-radius: .8rem;
+      padding: .75rem .9rem;
+      min-height: 2.75rem;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .45rem;
+      font-size: .94rem;
+    }
+
+    .primary {
+      background: var(--navy);
+      color: white;
+    }
+
+    .primary:hover {
+      background: var(--navy-dark);
+    }
+
+    .secondary {
+      background: var(--gold);
+      color: #1a2340;
+    }
+
+    .secondary:hover {
+      filter: brightness(.98);
+    }
+
+    .ghost {
+      background: #eef4ff;
+      color: var(--navy);
+      border: 1px solid #cbd9f1;
+    }
+
+    .ghost:hover {
+      background: #e4edff;
+    }
+
+    .disabled {
+      background: #eef1f5;
+      color: #738095;
+      cursor: not-allowed;
+    }
+
+    details {
+      border-top: 1px solid var(--line);
+      background: #fbfcff;
+    }
+
+    summary {
+      cursor: pointer;
+      padding: .9rem 1.15rem;
+      font-weight: 800;
+      color: var(--navy);
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary::after {
+      content: "＋";
+      color: var(--gold);
+      font-size: 1.2rem;
+    }
+
+    details[open] summary::after {
+      content: "−";
+    }
+
+    .prompt-box {
+      padding: 0 1.15rem 1.15rem;
+    }
+
+    .prompt-text {
+      margin: 0;
+      background: #071f48;
+      color: white;
+      border-radius: 14px;
+      padding: 1rem;
+      max-height: 18rem;
+      overflow: auto;
+      white-space: pre-wrap;
+      font: 0.9rem/1.5 ui-monospace, SFMono-Regular, Consolas, Monaco, monospace;
+    }
+
+    .toast {
+      position: fixed;
+      right: 1rem;
+      bottom: 1rem;
+      background: var(--success);
+      color: white;
+      border-radius: 999px;
+      padding: .8rem 1rem;
+      font-weight: 800;
+      box-shadow: var(--shadow);
+      transform: translateY(5rem);
+      opacity: 0;
+      transition: transform .2s ease, opacity .2s ease;
+      z-index: 30;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 1.5rem 1rem 2rem;
+      color: var(--muted);
+      text-align: center;
+      font-size: .95rem;
+    }
+
+    @media (max-width: 980px) {
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 680px) {
+      .toolbar {
+        grid-template-columns: 1fr;
+        position: static;
+        margin-top: 1rem;
+      }
+
+      .summary {
+        flex-direction: column;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card-top {
+        min-height: 0;
+      }
+
+      .button, .pill {
+        width: 100%;
+      }
+
+      .card-actions {
+        flex-direction: column;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      header, .toolbar, .summary, footer, .toast {
+        display: none;
+      }
+
+      main {
+        padding: 0;
+      }
+
+      .grid {
+        display: block;
+        width: 100%;
+      }
+
+      .card {
+        break-inside: avoid;
+        box-shadow: none;
+        margin: 0 0 1rem;
+      }
+
+      details {
+        display: block;
+      }
+
+      details:not([open]) .prompt-box {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#cards">Skip to cards</a>
+
+  <header>
+    <div class="wrap">
+      <span class="eyebrow">Click, View, Copy</span>
+      <h1>NSPA Vibe Coding Project Cards</h1>
+      <p class="lead">Open each card to review the pain point, why it matters, and a ready-to-copy prompt. Use the example links where a tool has already been built.</p>
+    </div>
+  </header>
+
+  <section class="toolbar" aria-label="Card tools">
+    <input id="search" class="search" type="search" placeholder="Search cards by pain point, prompt, or keyword" aria-label="Search cards">
+    <button id="expandAll" class="pill" type="button">Open all prompts</button>
+    <button id="collapseAll" class="pill" type="button">Close all prompts</button>
+  </section>
+
+  <main id="cards">
+    <div class="summary">
+      <span id="countText">Showing all project cards.</span>
+      <span>Tip: use “Copy Prompt” to paste directly into your Gen AI coding tool.</span>
+    </div>
+    <section id="cardGrid" class="grid" aria-label="Vibe coding project cards"></section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite">Copied prompt</div>
+
+  <footer>
+    Self-contained HTML. No external scripts, accounts, tracking, or data storage.
+  </footer>
+
+  <script>
+    const PROJECTS = [
+  {
+    "title": "FAQ pages give wrong answers in Gen AI search tools",
+    "why": "When students ask ChatGPT or Gemini about your scholarship, the Gen AI tool pulls from your website. Buried or unclear facts get misquoted, such as the wrong deadline or award amount.",
+    "link": "https://mguhlin.github.io/creations/nspa/vc/geofaq.html",
+    "prompt": "Build a single-page web app where I paste my scholarship program details (name, amount, deadline, eligibility, link) into a form, and it generates a GEO-optimized FAQ page in clean HTML with H2/H3 headers, a Position Zero summary box at the top, and direct one-sentence answers before each elaboration. Include a ‘Copy HTML’ button."
+  },
+  {
+    "title": "Counselor outreach emails get buried",
+    "why": "Counselors receive dozens of scholarship emails weekly. If yours is not scannable in 30 seconds with a copy-paste student blurb, it gets skipped.",
+    "link": "https://mguhlin.github.io/creations/nspa/vc/scog.html",
+    "prompt": "Build a tool where I enter scholarship name, eligibility, award amount, deadline, and flyer link. It generates a counselor outreach email under 150 words with: eligibility in sentence one, three action steps (forward/print/post), and a quoted ‘forward to students’ blurb. Show character count live. Include a ‘Copy Email’ button."
+  },
+  {
+    "title": "Social media posts leak student details",
+    "why": "Staff want to celebrate scholars publicly but can accidentally include identifying details. A school name, award amount, and major can make a student identifiable.",
+    "link": "https://mguhlin.github.io/creations/nspa/vc/spp.html",
+    "prompt": "Build a privacy-check tool for scholarship social media posts. I paste a draft post, and the tool flags potential PII or combinations that could identify a student (school + award + field of study, full name + location, etc.). Show flagged phrases highlighted in red with a suggestion to generalize. Include a ‘Safe Version’ output with redacted alternatives."
+  },
+  {
+    "title": "Eligibility language excludes eligible students",
+    "why": "Program pages often use jargon or assumptions that make first-generation students think they do not qualify when they actually do.",
+    "link": "https://mguhlin.github.io/creations/nspa/vc/eel.html",
+    "prompt": "Build a web app where I paste our scholarship eligibility text. It analyzes the language from three perspectives: a first-gen student whose parents never attended college, a DREAMer-eligible student uncertain about status, and a student without a guidance counselor. For each, it flags one phrase that might discourage them, one embedded assumption, and one addition that would be more welcoming. Show a revised version side by side."
+  },
+  {
+    "title": "Deadline reminder emails are inconsistent",
+    "why": "Small teams send reminders at different intervals with different wording. Some are too early, some too late, and tone varies from urgent to generic.",
+    "link": "https://mguhlin.github.io/creations/nspa/vc/dreg.html",
+    "prompt": "Build a deadline reminder email generator. I enter the application deadline date, program name, and application link. It auto-generates a three-email sequence: 30 days out (informational), 7 days out (encouraging), and 48 hours out (urgent). Each email is under 120 words. Show all three on one page with ‘Copy’ buttons."
+  },
+  {
+    "title": "Donor impact reports take weeks to write",
+    "why": "Staff manually compile numbers, write narratives, and format reports. A small team can spend many hours per cycle on this work.",
+    "link": "https://mguhlin.github.io/creations/nspa/vc/dirb.html",
+    "prompt": "Build a donor impact report builder. I enter: number of applicants, number of awards, total dollars awarded, average award, renewal rate, and three short student stories (anonymized). It generates a one-page impact summary with a headline stat, three giving-tier descriptions showing what each dollar amount covers, and a closing call to action. Output as printable HTML with a ‘Download PDF’ option."
+  },
+  {
+    "title": "No quick way to generate board-ready talking points",
+    "why": "When board members or media ask about the program, staff often improvise. Answers become inconsistent and may miss the strongest data.",
+    "link": "https://mguhlin.github.io/creations/nspa/vc/tpg.html",
+    "prompt": "Build a talking-points generator. I enter: program name, number of awards, total dollars, key eligibility criteria, and one standout fact. It generates a one-page talking points sheet with: elevator pitch (two sentences), three anticipated tough questions with suggested answers, one ‘don’t say’ column, and one stat to use in every conversation. Format for easy printing."
+  },
+  {
+    "title": "Year-end giving appeals are generic",
+    "why": "Donors ignore vague asks. Appeals that connect specific dollar amounts to specific student outcomes tend to be clearer and more compelling.",
+    "link": "",
+    "prompt": "Build a giving appeal email generator. I paste aggregate cost data (no names) like ‘textbooks: $500/student, transportation: $1,000/student, full award: $2,500.’ It creates a 180-word appeal email with three giving tiers that connect each dollar amount to a tangible student outcome. Include a tone slider (warm/urgent/formal) and a ‘Copy Email’ button."
+  },
+  {
+    "title": "Application status page does not exist or is outdated",
+    "why": "Applicants and parents email repeatedly asking where the application stands. Staff spend time answering the same status questions.",
+    "link": "",
+    "prompt": "Build a simple scholarship application timeline page. I enter the key dates: application opens, deadline, review period, notification date, and acceptance deadline. It generates a clean, mobile-friendly status page with a visual timeline, current status highlighted, and a FAQ section covering ‘When will I hear back?’ and ‘Who do I contact?’ Output as embeddable HTML."
+  },
+  {
+    "title": "No consistent way to train new reviewers",
+    "why": "Volunteer reviewers may join mid-cycle with no context. Staff must re-explain scoring criteria, equity considerations, and process each time.",
+    "link": "",
+    "prompt": "Build a reviewer orientation one-pager generator. I enter: program name, number of applications, scoring rubric categories (up to six), any equity flags to watch for, and the review deadline. It generates a printable one-page reviewer guide with: timeline, scoring criteria summary, a ‘watch for bias’ callout box, and a FAQ (How long per application? Can I score someone I know?). Output as clean HTML."
+  },
+  {
+    "title": "Program descriptions sound alike across every scholarship",
+    "why": "When every program uses generic language, Gen AI tools and students cannot easily tell programs apart. The scholarship becomes less distinctive and less findable.",
+    "link": "",
+    "prompt": "Build a scholarship differentiator tool. I paste my current program description and enter two competitor program descriptions. It highlights overlapping phrases, flags generic language (‘next generation of leaders,’ ‘make a difference’), and generates a revised description that leads with what’s unique about my program (specific population, specific field, specific geography, specific award structure)."
+  },
+  {
+    "title": "Acceptance and rejection letters take hours to personalize",
+    "why": "Staff may write the same letter many times with minor tweaks, or they may send a cold form letter. Neither approach fully respects applicants’ effort.",
+    "link": "",
+    "prompt": "Build a decision letter generator. I select letter type (award, waitlist, or not selected), enter program name and contact email, and choose a tone (warm, professional, encouraging). It generates a letter template under 200 words with placeholders for [First Name] and [Award Amount]. Include a built-in checklist: ‘Does it thank the applicant? Does it explain next steps? Does it avoid language that implies the student wasn’t good enough?’ Show a ‘Copy’ button."
+  }
+];
+
+    const grid = document.getElementById('cardGrid');
+    const search = document.getElementById('search');
+    const toast = document.getElementById('toast');
+    const countText = document.getElementById('countText');
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function renderCards() {
+      grid.innerHTML = PROJECTS.map((item, index) => {
+        const hasLink = item.link && item.link.trim().length > 0;
+        const linkButton = hasLink
+          ? `<a class="button secondary" href="${escapeHtml(item.link)}" target="_blank" rel="noopener">Open example tool ↗</a>`
+          : `<span class="button disabled" aria-disabled="true">No example yet</span>`;
+
+        return `
+          <article class="card" data-search="${escapeHtml((item.title + ' ' + item.why + ' ' + item.prompt).toLowerCase())}">
+            <div class="card-top">
+              <span class="number">${String(index + 1).padStart(2, '0')}</span>
+              <h2>${escapeHtml(item.title)}</h2>
+              <p class="why">${escapeHtml(item.why)}</p>
+            </div>
+            <div class="card-actions">
+              ${linkButton}
+              <button class="button primary copy-button" type="button" data-index="${index}">Copy Prompt</button>
+              <button class="button ghost open-button" type="button" data-index="${index}">View Prompt</button>
+            </div>
+            <details id="prompt-${index}">
+              <summary>Ready-to-paste prompt</summary>
+              <div class="prompt-box">
+                <pre class="prompt-text">${escapeHtml(item.prompt)}</pre>
+              </div>
+            </details>
+          </article>
+        `;
+      }).join('');
+    }
+
+    async function copyPrompt(index, button) {
+      const prompt = PROJECTS[index].prompt;
+      try {
+        await navigator.clipboard.writeText(prompt);
+        showToast('Copied prompt');
+        flashButton(button, 'Copied');
+      } catch (error) {
+        fallbackCopy(prompt);
+        showToast('Copied prompt');
+        flashButton(button, 'Copied');
+      }
+    }
+
+    function fallbackCopy(text) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'fixed';
+      textarea.style.left = '-9999px';
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      textarea.remove();
+    }
+
+    function flashButton(button, label) {
+      if (!button) return;
+      const original = button.textContent;
+      button.textContent = label;
+      setTimeout(() => {
+        button.textContent = original;
+      }, 1200);
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 1600);
+    }
+
+    function filterCards() {
+      const query = search.value.trim().toLowerCase();
+      let visible = 0;
+      document.querySelectorAll('.card').forEach(card => {
+        const match = !query || card.dataset.search.includes(query);
+        card.hidden = !match;
+        if (match) visible += 1;
+      });
+      countText.textContent = query
+        ? `Showing ${visible} of ${PROJECTS.length} project cards.`
+        : `Showing all ${PROJECTS.length} project cards.`;
+    }
+
+    renderCards();
+
+    grid.addEventListener('click', event => {
+      const copyButton = event.target.closest('.copy-button');
+      if (copyButton) {
+        copyPrompt(Number(copyButton.dataset.index), copyButton);
+        return;
+      }
+
+      const openButton = event.target.closest('.open-button');
+      if (openButton) {
+        const details = document.getElementById(`prompt-${openButton.dataset.index}`);
+        if (!details) return;
+        details.open = !details.open;
+        openButton.textContent = details.open ? 'Hide Prompt' : 'View Prompt';
+      }
+    });
+
+    search.addEventListener('input', filterCards);
+
+    document.getElementById('expandAll').addEventListener('click', () => {
+      document.querySelectorAll('details').forEach(details => details.open = true);
+      document.querySelectorAll('.open-button').forEach(button => button.textContent = 'Hide Prompt');
+    });
+
+    document.getElementById('collapseAll').addEventListener('click', () => {
+      document.querySelectorAll('details').forEach(details => details.open = false);
+      document.querySelectorAll('.open-button').forEach(button => button.textContent = 'View Prompt');
+    });
+  </script>
+</body>
+</html>
