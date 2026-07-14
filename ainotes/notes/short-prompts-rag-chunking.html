@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RAG Chunking | AI Notes</title>
+  <link rel="stylesheet" href="../assets/styles.css">
+  
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../index.html">AI Notes</a>
+    <nav>
+      <a href="../index.html#search">Search</a>
+      <a href="../sections.html">Sections</a>
+      <a href="../resources.html">Resources</a>
+    </nav>
+  </header>
+  <main>
+    <section class="page-hero compact">
+      <p class="eyebrow">Short Prompts</p>
+      <h1>RAG Chunking</h1>
+      <p>Universal Chunking Instructions (Production-Ready) Goal: Transform any long-form content into coherent, self-contained chunks optimized for retrieval accuracy, semantic clarity, and minimal hallucination risk. ⸻ General Rules...</p>
+      <div class="source-line">Source: <code>AI/Short Prompts/RAG Chunking.md</code></div>
+    </section>
+    <article class="content">
+<p>Universal Chunking Instructions (Production-Ready)</p>
+<p>Goal:</p>
+<p>Transform any long-form content into coherent, self-contained chunks optimized for retrieval accuracy, semantic clarity, and minimal hallucination risk.</p>
+<p>⸻</p>
+<ol>
+<li>General Rules</li>
+</ol>
+<p>When chunking any text:</p>
+<ol>
+<li>Preserve meaning.</li>
+</ol>
+<p>Each chunk must represent a complete idea, section, or logical unit.</p>
+<ol>
+<li>Avoid cutting mid-thought.</li>
+</ol>
+<p>Never break across sentences, clause boundaries, lists, or examples.</p>
+<ol>
+<li>Target chunk size:</li>
+</ol>
+<p>300–800 tokens (shorter for dense text, longer for narrative).</p>
+<ol>
+<li>Maintaining context:</li>
+</ol>
+<p>Use overlap of 50–150 tokens when content has dependencies across sections.</p>
+<ol>
+<li>Attach metadata:</li>
+</ol>
+<p>For every chunk include:</p>
+<p>	•	source_title</p>
+<p>	•	chunk_id</p>
+<p>	•	section_heading (if available)</p>
+<p>	•	token_count</p>
+<p>	•	summary (1–2 sentences)</p>
+<p>⸻</p>
+<ol>
+<li>Chunking Strategy (Apply in Order)</li>
+</ol>
+<p>Step 1. Hierarchical Parsing (Structure First)</p>
+<p>Use the document’s natural structure if it exists.</p>
+<p>Break at:</p>
+<p>	•	Headings</p>
+<p>	•	Subheadings</p>
+<p>	•	Paragraph groups</p>
+<p>	•	Numbered sections</p>
+<p>	•	Bullet clusters</p>
+<p>Output: preliminary chunks respecting document structure.</p>
+<p>⸻</p>
+<p>Step 2. Meaning Check (Semantic Integrity)</p>
+<p>For each preliminary chunk:</p>
+<p>	•	Ensure it expresses a complete concept.</p>
+<p>	•	If it contains multiple unrelated themes → split it.</p>
+<p>	•	If chunks fall below 150 tokens, merge with nearest related neighbor.</p>
+<p>⸻</p>
+<p>Step 3. Semantic Refinement (Meaning-Based Boundaries)</p>
+<p>Evaluate chunk boundaries using semantic similarity:</p>
+<p>	•	Do not separate text where concepts are tightly linked.</p>
+<p>	•	Do separate text where topic changes abruptly.</p>
+<p>	•	Adjust boundaries so each chunk has a clear topical focus.</p>
+<p>⸻</p>
+<p>Step 4. Windowed Overlap (Context Preservation)</p>
+<p>Apply overlap only when needed, such as:</p>
+<p>	•	Legal text</p>
+<p>	•	Technical procedures</p>
+<p>	•	Stepwise instructions</p>
+<p>	•	Research analysis</p>
+<p>Use 50–150 token overlap to preserve context.</p>
+<p>⸻</p>
+<p>Step 5. Token Normalization</p>
+<p>Ensure final chunks are sized for efficient retrieval:</p>
+<p>	•	&lt;250 tokens → expand with context if meaningful</p>
+<p>	•	900 tokens → split at the nearest semantic boundary</p>
+<p>Goal: consistent chunk sizes without damaging meaning.</p>
+<p>⸻</p>
+<ol>
+<li>Special Handling Rules (Based on Content Type)</li>
+</ol>
+<p>A. Technical Documentation</p>
+<p>	•	Prioritize hierarchical boundaries</p>
+<p>	•	Preserve lists, tables, definitions</p>
+<p>	•	Use small overlaps between procedural steps</p>
+<p>B. Legal Contracts</p>
+<p>	•	Chunk at clause boundaries</p>
+<p>	•	Never break definitions or terms-of-art</p>
+<p>	•	Apply generous overlap (100–150 tokens)</p>
+<p>C. Research Papers</p>
+<p>	•	Use semantic chunking</p>
+<p>	•	Keep methodology, results, and discussion separate</p>
+<p>	•	Ensure charts/tables remain with their explanations</p>
+<p>D. Blog Posts / Articles</p>
+<p>	•	Chunk by topic or argument shift</p>
+<p>	•	Avoid overlaps unless there is narrative flow</p>
+<p>E. Multi-Topic Reports</p>
+<p>	•	Use topic-boundary detection</p>
+<p>	•	Keep each chunk focused on a single theme</p>
+<p>⸻</p>
+<ol>
+<li>Output Format Template</li>
+</ol>
+<p>Produce chunks in the following structure:</p>
+<p>CHUNK {number}</p>
+<p>source_title: {title}</p>
+<p>section: {heading or topic}</p>
+<p>token_count: {approx count}</p>
+<p>content:</p>
+<p>&quot;&quot;&quot;</p>
+<p>{chunk text}</p>
+<p>&quot;&quot;&quot;</p>
+<p>summary:</p>
+<p>&quot;{one or two sentence summary capturing the meaning of the chunk}&quot;</p>
+<p>⸻</p>
+<ol>
+<li>Validation Checklist</li>
+</ol>
+<p>Before finalizing, verify that:</p>
+<p>	•	Each chunk stands alone without requiring unseen context</p>
+<p>	•	All chunks together preserve full document meaning</p>
+<p>	•	No concept is split awkwardly</p>
+<p>	•	Metadata is complete</p>
+<p>	•	Chunk sizes fall within target ranges</p>
+    </article>
+  </main>
+  <footer>
+    Built from <code>AI/</code> and <code>_resources/</code>. Last generated July 14, 2026.
+  </footer>
+</body>
+</html>

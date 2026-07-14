@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>mermaid-4 | AI Notes</title>
+  <link rel="stylesheet" href="../assets/styles.css">
+  
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../index.html">AI Notes</a>
+    <nav>
+      <a href="../index.html#search">Search</a>
+      <a href="../sections.html">Sections</a>
+      <a href="../resources.html">Resources</a>
+    </nav>
+  </header>
+  <main>
+    <section class="page-hero compact">
+      <p class="eyebrow">Code Samples</p>
+      <h1>mermaid-4</h1>
+      <p></p>
+      <div class="source-line">Source: <code>AI/Code Samples/mermaid-4.md</code></div>
+    </section>
+    <article class="content">
+<pre><code class="language-mermaid">
+graph LR
+    A[Marketing Plan] --&gt; B[Social Media Campaigns]
+    A --&gt; C[Email Marketing]
+    A --&gt; D[Webinars and Live Demos]
+    A --&gt; E[Partnerships and Collaborations]
+    B --&gt; B1[Facebook]
+    B --&gt; B2[Threads]
+    B --&gt; B3[Instagram]
+    B --&gt; B4[LinkedIn]
+    C --&gt; C1[Current Subscribers]
+    C --&gt; C2[Previous Participants]
+    C --&gt; C3[New Leads]
+    E --&gt; E1[Educational Influencers]
+    E --&gt; E2[Educational Blogs]
+</code></pre>
+<pre><code class="language-mermaid">
+graph LR
+    A[Tech Titan Toolkit]
+    A --&gt; B[Google Certified Educator Level 1]
+    B --&gt; B1[Google Workspace Intro]
+    B --&gt; B2[Google Drive and Docs]
+    B --&gt; B3[Google Classroom]
+    B --&gt; B4[Google Forms]
+    B --&gt; B5[Google Sheets]
+    B --&gt; B6[Google Slides]
+    B --&gt; B7[Practice Exams]
+    B --&gt; B8[Certification Exam]
+
+    A --&gt; C[Canva Educator]
+    C --&gt; C1[Canva Interface]
+    C --&gt; C2[Basic Design Principles]
+    C --&gt; C3[Lesson Materials]
+    C --&gt; C4[Interactive Assignments]
+    C --&gt; C5[Professional Presentations]
+    C --&gt; C6[Collaboration]
+    C --&gt; C7[Projects]
+    C --&gt; C8[Certification]
+
+    A --&gt; D[Canva Specialist]
+    D --&gt; D1[Advanced Techniques]
+    D --&gt; D2[Custom Templates]
+    D --&gt; D3[Infographics]
+    D --&gt; D4[Digital Portfolios]
+    D --&gt; D5[Social Media Content]
+    D --&gt; D6[Advanced Collaboration]
+    D --&gt; D7[Projects]
+    D --&gt; D8[Certification]
+
+    A --&gt; E[Chromebook Educator]
+    E --&gt; E1[Chromebooks Intro]
+    E --&gt; E2[Setup and Management]
+    E --&gt; E3[Essential Apps]
+    E --&gt; E4[Google Play for Education]
+    E --&gt; E5[1:1 Classroom Strategies]
+    E --&gt; E6[Troubleshooting]
+    E --&gt; E7[Practical Applications]
+    E --&gt; E8[Certification]
+</code></pre>
+<pre><code class="language-mermaid">
+%%{init: {
+  &#x27;theme&#x27;: &#x27;base&#x27;,
+  &#x27;themeVariables&#x27;: {
+    &#x27;background&#x27;: &#x27;#F0F8FF&#x27;,
+    &#x27;primaryColor&#x27;: &#x27;#8A2BE2&#x27;,
+    &#x27;secondaryColor&#x27;: &#x27;#00BFFF&#x27;,
+    &#x27;tertiaryColor&#x27;: &#x27;#FFD700&#x27;,
+    &#x27;fontFamily&#x27;: &#x27;Arial&#x27;,
+    &#x27;fontSize&#x27;: &#x27;18px&#x27;
+  }
+}}%%
+
+graph TD
+    classDef default fill:#F0F8FF,stroke:#000080,color:#000080,font-size:18px
+    classDef capture fill:#FFD700,stroke:#000080,color:#000080,font-size:18px
+    classDef create fill:#8A2BE2,stroke:#000080,color:#FFFFFF,font-size:18px
+    classDef adapt fill:#00BFFF,stroke:#000080,color:#000080,font-size:18px
+    classDef icon fill:#FFA500,stroke:#000080,color:#000080,font-size:24px
+
+    subgraph &quot;1. Capture&quot;
+        A[Analyze original document]
+        B[Identify Hemingway style elements]
+        C[Note key steps: terse sentences, active verbs, etc.]
+    end
+    subgraph &quot;2. Create&quot;
+        D[Analyze document prompt]
+        E[Rewrite first paragraph prompt]
+        F[Continue section by section prompt]
+        G[Review and adjust prompt]
+        H[Self-evaluation prompt]
+    end
+    subgraph &quot;3. Adapt&quot;
+        I[Analyze content and structure]
+        J[Provide style difference overview]
+        K[Rewrite section by section]
+        L[Get user feedback]
+        M[Adjust approach]
+        N[Perform self-evaluation]
+        O[Offer additional services]
+        P[Reset if requested]
+    end
+    A --&gt; D
+    B --&gt; E
+    C --&gt; F
+    F --&gt; G
+    G --&gt; H
+    
+    D --&gt; I
+    E --&gt; J
+    F --&gt; K
+    G --&gt; L
+    H --&gt; N
+    L --&gt; M
+    M --&gt; K
+    N --&gt; O
+    O --&gt; P
+
+    class A,B,C capture;
+    class D,E,F,G,H create;
+    class I,J,K,L,M,N,O,P adapt;
+
+    %% Add colorful title
+    title[3 Steps to Claude Projects Success]
+    class title fill:#FFD700,stroke:none,color:#8A2BE2,font-size:32px;
+
+    %% Add icon
+    icon[👥]
+    class icon icon;
+    icon --&gt; A
+    icon --&gt; D
+    icon --&gt; I
+</code></pre>
+    </article>
+  </main>
+  <footer>
+    Built from <code>AI/</code> and <code>_resources/</code>. Last generated July 14, 2026.
+  </footer>
+</body>
+</html>

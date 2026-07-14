@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Migrating ChatGPT Project Chats into a NotebookLM | AI Notes</title>
+  <link rel="stylesheet" href="../assets/styles.css">
+  
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../index.html">AI Notes</a>
+    <nav>
+      <a href="../index.html#search">Search</a>
+      <a href="../sections.html">Sections</a>
+      <a href="../resources.html">Resources</a>
+    </nav>
+  </header>
+  <main>
+    <section class="page-hero compact">
+      <p class="eyebrow">Gem Projects</p>
+      <h1>Migrating ChatGPT Project Chats into a NotebookLM</h1>
+      <p>Migrating ChatGPT Project Chats into a NotebookLM Miguel Guhlin The purpose of this is to export both the files and individual chats that you&#x27;ve had within the context of a ChatGPT Project. In a Project, it&#x27;s all about context...</p>
+      <div class="source-line">Source: <code>AI/Gem Projects/Migrating individual Chats from ChatGPT.md</code></div>
+    </section>
+    <article class="content">
+<h2 id="migrating-chatgpt-project-chats-into-a-notebooklm">Migrating ChatGPT Project Chats into a NotebookLM</h2>
+<p>Miguel Guhlin</p>
+<p>The purpose of this is to export both the files and individual chats that you&#x27;ve had within the context of a ChatGPT Project. In a Project, it&#x27;s all about context because the more informed the AI is, the better. This allows it to predict with uncanny accuracy what you need next. This means that walking away from context-rich chats in a ChatGPT Projects isn&#x27;t done lightly.</p>
+<h3 id="step-1-get-the-export">Step 1: Get the export</h3>
+<p>ChatGPT doesn&#x27;t make bulk export easy, especially if you have multiple Projects (the export file dumps them all in together, mixing it up). So you have to export one chat at a time from a Project, as well as grab the files.</p>
+<h4 id="use-this-export-prompt">Use this export prompt</h4>
+<p>To get a clean export, use the prompt that appears below (in between the dividers):</p>
+<p>---</p>
+<p>Create a clean export of this entire conversation.</p>
+<p>Output format: Markdown.</p>
+<p>Rules:</p>
+<ul>
+<li>Include a short title at the top.</li>
+</ul>
+<ul>
+<li>Then include a YAML header with: project_name, conversation_title, export_date (today), and tags (3–6).</li>
+</ul>
+<ul>
+<li>Export the full conversation in chronological order.</li>
+</ul>
+<ul>
+<li>Label each turn as &quot;User:&quot; or &quot;Assistant:&quot;.</li>
+</ul>
+<ul>
+<li>Preserve any lists and tables.</li>
+</ul>
+<ul>
+<li>Preserve any code blocks exactly using triple backticks.</li>
+</ul>
+<ul>
+<li>Do not add new content, commentary, or corrections. If something is unclear, keep it as-is.</li>
+</ul>
+<ul>
+<li>End with a one-paragraph “Index Summary” (max 80 words) describing what this chat is about.</li>
+</ul>
+<p>---</p>
+<p>Once you have the first one working, move to Step 2.</p>
+<h3 id="step-2-create-a-notebooklm">Step 2: Create a NotebookLM</h3>
+<p>Create a NotebookLM that will house your content. You can create a blank notebook, rename it, and have it ready to go.</p>
+<h3 id="step-3-click-add-a-source">Step 3: Click Add a Source</h3>
+<p>Your export file is probably ready in ChatGPT, so you are going to want to add a source in NotebookLM.</p>
+<h3 id="step-4-add-a-copy-paste-text-source">Step 4: Add a Copy-Paste Text Source</h3>
+<p>After clicking add a source, select &quot;Add sources&quot; then select Copied Text:</p>
+<p><img src="../resources/da2561624cf41e66590bf4d48d6cccd8.png" alt="da2561624cf41e66590bf4d48d6cccd8.png"></p>
+<p>Go back to ChatGPT and copy-n-paste whatever it has provided:</p>
+<p><img src="../resources/2fcde85b2f30c8bbff00504cab224dc8.png" alt="2fcde85b2f30c8bbff00504cab224dc8.png"></p>
+<p>Paste it into the box below in NotebookLM, then click the INSERT button:</p>
+<p><img src="../resources/c03f7d745b316a07cf4b0cd2a0240073.png" alt="c03f7d745b316a07cf4b0cd2a0240073.png"></p>
+<p>Once the text has been pasted into NotebookLM&#x27;s Copied Text window, you are ready to click INSERT:</p>
+<p><img src="../resources/85f2514381109002f70ca44e531e4dac.png" alt="85f2514381109002f70ca44e531e4dac.png"></p>
+<p>Then the information will appear on the left side in the sources list.</p>
+<h3 id="step-5-create-a-gem-to-interface-with-notebooklm">Step 5: Create a Gem to interface with NotebookLM</h3>
+<p>Now, you can use the NotebookLM, but all those chats are private, so it&#x27;s better to use a Gem created for that purpose. Modify these instructions to match your Gem:</p>
+<blockquote>Role: You are the [Insert Project Name] Strategy Lead. Your goal is to act as a bridge between active brainstorming and the permanent project documentation stored in the attached NotebookLM.</blockquote>
+<blockquote>### Core Directives:</blockquote>
+<blockquote>Grounded Reasoning: Always prioritize information found in the attached NotebookLM sources. If you are extrapolating beyond the provided data, explicitly state: &quot;Based on our project files, [Point A] is fact, and I suggest [Point B] as a logical next step.&quot;</blockquote>
+<blockquote>The &quot;History Loop&quot; Protocol: At the end of every significant breakthrough or session, you must provide a &quot;Project Update Summary.&quot; &gt;    * Format this summary as a clean, structured report.</blockquote>
+<blockquote>Include a suggested filename for export (e.g., YYYY-MM-DD_Project_Name_Decisions).</blockquote>
+<blockquote>Maintenance Prompt: After providing the summary, ask me: &quot;Should I prepare this for export to your NotebookLM now?&quot; Remind me that uploading this summary back to the Notebook ensures this reasoning is &quot;remembered&quot; in future sessions.</blockquote>
+<blockquote>Living History Tracking: If I mention a conflict with a previous decision, search the attached sources for the &quot;Project Update&quot; files to identify when and why the pivot occurred.</blockquote>
+<blockquote>Tone: Be professional, highly organized, and proactive. Do not just wait for questions—identify gaps in the project logic based on the existing documentation.</blockquote>
+<h3 id="step-6-interact-with-gem">Step 6: Interact with Gem</h3>
+<p>Give the Gem a new task that calls upon the knowledge stored in the NotebookLM. The benefit here is that the NotebookLM will serve as the Retrieval-Augmented-Generation (RAG) Knowledge base (whose data is secured and not used for training) for the Gem, which has access to the Internet.</p>
+<p>Or, alternatively, you can open a new chat and attach the instructions and the NotebookLM. Make sure to export the information from any important chats as Google Docs, then add them from Google Drive to the NotebookLM.</p>
+<p><strong>Why is this important?</strong> This allows you to update and modify the GoogleDoc rather than simply work from a static copy at the time.</p>
+    </article>
+  </main>
+  <footer>
+    Built from <code>AI/</code> and <code>_resources/</code>. Last generated July 14, 2026.
+  </footer>
+</body>
+</html>

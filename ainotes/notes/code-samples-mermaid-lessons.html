@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mermaid Lessons | AI Notes</title>
+  <link rel="stylesheet" href="../assets/styles.css">
+  
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../index.html">AI Notes</a>
+    <nav>
+      <a href="../index.html#search">Search</a>
+      <a href="../sections.html">Sections</a>
+      <a href="../resources.html">Resources</a>
+    </nav>
+  </header>
+  <main>
+    <section class="page-hero compact">
+      <p class="eyebrow">Code Samples</p>
+      <h1>Mermaid Lessons</h1>
+      <p>Module 1: &quot;Dive into Mermaid Basics&quot; Lesson 1: &quot;What is Mermaid?&quot; Objective: Understand what Mermaid is and its uses. Content: Introduction to Mermaid, its purpose, and how it helps create diagrams. Example: Simple flowchart....</p>
+      <div class="source-line">Source: <code>AI/Code Samples/Mermaid Lessons.md</code></div>
+    </section>
+    <article class="content">
+<h3 id="module-1-dive-into-mermaid-basics">Module 1: &quot;Dive into Mermaid Basics&quot;</h3>
+<h4 id="lesson-1-what-is-mermaid">Lesson 1: &quot;What is Mermaid?&quot;</h4>
+<ul>
+<li><strong>Objective</strong>: Understand what Mermaid is and its uses.</li>
+</ul>
+<ul>
+<li><strong>Content</strong>: Introduction to Mermaid, its purpose, and how it helps create diagrams.</li>
+</ul>
+<ul>
+<li><strong>Example</strong>: Simple flowchart.</li>
+</ul>
+<pre><code class="language-mermaid">
+graph TD;
+    A[Start] --&gt; B[Introduction to Mermaid];
+    B --&gt; C[Create Diagrams];
+    C --&gt; D[End];
+</code></pre>
+<h4 id="lesson-2-drawing-your-first-flowchart">Lesson 2: &quot;Drawing Your First Flowchart&quot;</h4>
+<ul>
+<li><strong>Objective</strong>: Create a basic flowchart.</li>
+</ul>
+<ul>
+<li><strong>Content</strong>: Learn the syntax for nodes and arrows.</li>
+</ul>
+<ul>
+<li><strong>Example</strong>: Flowchart of a daily routine.</li>
+</ul>
+<pre><code class="language-mermaid">
+graph TD;
+    A[Wake Up] --&gt; B[Brush Teeth];
+    B --&gt; C[Have Breakfast];
+    C --&gt; D[Go to School];
+</code></pre>
+<h4 id="lesson-3-adding-styles-to-your-flowchart">Lesson 3: &quot;Adding Styles to Your Flowchart&quot;</h4>
+<ul>
+<li><strong>Objective</strong>: Style nodes and arrows.</li>
+</ul>
+<ul>
+<li><strong>Content</strong>: Learn how to add colors and styles.</li>
+</ul>
+<ul>
+<li><strong>Example</strong>: Styled flowchart.</li>
+</ul>
+<pre><code class="language-mermaid">
+graph TD;
+    A[Wake Up] --&gt;|Brush Teeth| B[Brush Teeth];
+    B --&gt;|Have Breakfast| C[Have Breakfast];
+    C --&gt;|Go to School| D[Go to School];
+    A--&gt;D;
+    style A fill:#f9f,stroke:#333,stroke-width:4px;
+    style B fill:#bbf,stroke:#333,stroke-width:2px;
+    style C fill:#bfb,stroke:#333,stroke-width:2px;
+    style D fill:#ffb,stroke:#333,stroke-width:2px;
+</code></pre>
+<h4 id="pbl-scenario-my-morning-routine">PBL Scenario: &quot;My Morning Routine&quot;</h4>
+<ul>
+<li><strong>Task</strong>: Create a flowchart of your morning routine.</li>
+</ul>
+<ul>
+<li><strong>Solution</strong>: Students will create a flowchart similar to the example in Lesson 2, adding their own activities and styles.</li>
+</ul>
+<h3 id="module-2-charting-new-waters">Module 2: &quot;Charting New Waters&quot;</h3>
+<h4 id="lesson-1-understanding-graph-types">Lesson 1: &quot;Understanding Graph Types&quot;</h4>
+<ul>
+<li><strong>Objective</strong>: Learn different types of graphs.</li>
+</ul>
+<ul>
+<li><strong>Content</strong>: Introduction to flowcharts, sequence diagrams, and Gantt charts.</li>
+</ul>
+<ul>
+<li><strong>Example</strong>: Simple sequence diagram.</li>
+</ul>
+<pre><code class="language-mermaid">
+sequenceDiagram
+    participant Alice
+    participant Bob
+    Alice-&gt;&gt;Bob: Hello Bob, how are you?
+    Bob--&gt;&gt;Alice: I am good, thanks!
+</code></pre>
+<h4 id="lesson-2-creating-sequence-diagrams">Lesson 2: &quot;Creating Sequence Diagrams&quot;</h4>
+<ul>
+<li><strong>Objective</strong>: Create a basic sequence diagram.</li>
+</ul>
+<ul>
+<li><strong>Content</strong>: Learn the syntax for participants and messages.</li>
+</ul>
+<ul>
+<li><strong>Example</strong>: Conversation between friends.</li>
+</ul>
+<pre><code class="language-mermaid">
+sequenceDiagram
+    participant John
+    participant Jane
+    John-&gt;&gt;Jane: Hi Jane!
+    Jane--&gt;&gt;John: Hi John!
+    John-&gt;&gt;Jane: How&#x27;s your day?
+    Jane--&gt;&gt;John: Great, thanks!
+</code></pre>
+<h4 id="lesson-3-styling-sequence-diagrams">Lesson 3: &quot;Styling Sequence Diagrams&quot;</h4>
+<ul>
+<li><strong>Objective</strong>: Style sequence diagrams.</li>
+</ul>
+<ul>
+<li><strong>Content</strong>: Learn how to add colors and styles to participants and messages.</li>
+</ul>
+<ul>
+<li><strong>Example</strong>: Styled sequence diagram.</li>
+</ul>
+<pre><code class="language-mermaid">
+sequenceDiagram
+    participant John
+    participant Jane
+    John-&gt;&gt;Jane: Hi Jane!
+    Jane--&gt;&gt;John: Hi John!
+    John-&gt;&gt;Jane: How&#x27;s your day?
+    Jane--&gt;&gt;John: Great, thanks!
+    %%{init:{&#x27;theme&#x27;:&#x27;forest&#x27;}}%%
+%%{init:{&#x27;themeCSS&#x27;:&#x27;.messageLine0:nth-of-type(2) { stroke: red; };.messageText:nth-of-type(1) { fill: green; font-size: 30px !important;}; g:nth-of-type(3) rect.actor { stroke:blue;fill: pink; }; g:nth-of-type(5) .note { stroke:blue;fill: crimson; };#arrowhead path {stroke: blue; fill:red;};&#x27;}}%%
+</code></pre>
+<h4 id="pbl-scenario-a-day-in-the-life">PBL Scenario: &quot;A Day in the Life&quot;</h4>
+<ul>
+<li><strong>Task</strong>: Create a sequence diagram of a typical conversation with a friend.</li>
+</ul>
+<ul>
+<li><strong>Solution</strong>: Students will create a sequence diagram similar to the example in Lesson 2, adding their own dialogue and styles.</li>
+</ul>
+<h3 id="module-3-navigating-complex-diagrams">Module 3: &quot;Navigating Complex Diagrams&quot;</h3>
+<h4 id="lesson-1-introduction-to-gantt-charts">Lesson 1: &quot;Introduction to Gantt Charts&quot;</h4>
+<ul>
+<li><strong>Objective</strong>: Understand Gantt charts and their uses.</li>
+</ul>
+<ul>
+<li><strong>Content</strong>: Learn the basics of Gantt charts.</li>
+</ul>
+<ul>
+<li><strong>Example</strong>: Simple Gantt chart.</li>
+</ul>
+<pre><code class="language-mermaid">
+gantt
+    title A Gantt Diagram
+    dateFormat  YYYY-MM-DD
+    section Section
+    Task1 :a1, 2024-05-01, 30d
+    Task2 :after a1  , 20d
+    Task3 : 2024-06-12  , 12d
+</code></pre>
+<h4 id="lesson-2-creating-gantt-charts">Lesson 2: &quot;Creating Gantt Charts&quot;</h4>
+<ul>
+<li><strong>Objective</strong>: Create a basic Gantt chart.</li>
+</ul>
+<ul>
+<li><strong>Content</strong>: Learn the syntax for tasks and timelines.</li>
+</ul>
+<ul>
+<li><strong>Example</strong>: Project timeline.</li>
+</ul>
+<pre><code class="language-mermaid">
+gantt
+    title School Project Timeline
+    dateFormat  YYYY-MM-DD
+    section Research
+    Task1 :a1, 2024-05-01, 10d
+    section Writing
+    Task2 :after a1  , 15d
+    section Presentation
+    Task3 : 2024-06-01  , 5d
+</code></pre>
+<h4 id="lesson-3-styling-gantt-charts">Lesson 3: &quot;Styling Gantt Charts&quot;</h4>
+<ul>
+<li><strong>Objective</strong>: Style Gantt charts.</li>
+</ul>
+<ul>
+<li><strong>Content</strong>: Learn how to add colors and styles to tasks.</li>
+</ul>
+<ul>
+<li><strong>Example</strong>: Styled Gantt chart.</li>
+</ul>
+<pre><code class="language-mermaid">
+gantt
+    title School Project Timeline
+    dateFormat  YYYY-MM-DD
+    section Research
+    Task1 :a1, 2024-05-01, 10d
+    section Writing
+    Task2 :after a1  , 15d
+    section Presentation
+    Task3 : 2024-06-01  , 5d
+%%{init:{&#x27;theme&#x27;:&#x27;forest&#x27;}}%%
+%%{init:{&#x27;themeCSS&#x27;:&#x27;.messageLine0:nth-of-type(2) { stroke: red; };.messageText:nth-of-type(1) { fill: green; font-size: 30px !important;}; g:nth-of-type(3) rect.actor { stroke:blue;fill: pink; }; g:nth-of-type(5) .note { stroke:blue;fill: crimson; };#arrowhead path {stroke: blue; fill:red;};&#x27;}}%%
+</code></pre>
+<h4 id="pbl-scenario-planning-a-school-event">PBL Scenario: &quot;Planning a School Event&quot;</h4>
+<ul>
+<li><strong>Task</strong>: Create a Gantt chart for planning a school event.</li>
+</ul>
+<ul>
+<li><strong>Solution</strong>: Students will create a Gantt chart similar to the example in Lesson 2, adding their own tasks and styles.</li>
+</ul>
+<h3 id="module-4-mastering-mermaid">Module 4: &quot;Mastering Mermaid&quot;</h3>
+<h4 id="lesson-1-advanced-flowcharts">Lesson 1: &quot;Advanced Flowcharts&quot;</h4>
+<ul>
+<li><strong>Objective</strong>: Create complex flowcharts.</li>
+</ul>
+<ul>
+<li><strong>Content</strong>: Learn advanced syntax for nodes and arrows.</li>
+</ul>
+<ul>
+<li><strong>Example</strong>: Complex flowchart.</li>
+</ul>
+<pre><code class="language-mermaid">
+graph TD;
+    A[Start] --&gt; B{Is it sunny?};
+    B -- Yes --&gt; C[Go for a walk];
+    B -- No --&gt; D[Stay inside];
+    C --&gt; E[Enjoy the day];
+    D --&gt; E;
+</code></pre>
+<h4 id="lesson-2-advanced-sequence-diagrams">Lesson 2: &quot;Advanced Sequence Diagrams&quot;</h4>
+<ul>
+<li><strong>Objective</strong>: Create complex sequence diagrams.</li>
+</ul>
+<ul>
+<li><strong>Content</strong>: Learn advanced syntax for participants and messages.</li>
+</ul>
+<ul>
+<li><strong>Example</strong>: Complex sequence diagram.</li>
+</ul>
+<pre><code class="language-mermaid">
+sequenceDiagram
+    participant Alice
+    participant Bob
+    participant Charlie
+    Alice-&gt;&gt;Bob: Hi Bob!
+    Bob--&gt;&gt;Alice: Hi Alice!
+    Alice-&gt;&gt;Charlie: Hi Charlie!
+    Charlie--&gt;&gt;Alice: Hi Alice!
+    Bob-&gt;&gt;Charlie: Hi Charlie!
+    Charlie--&gt;&gt;Bob: Hi Bob!
+</code></pre>
+<h4 id="lesson-3-advanced-gantt-charts">Lesson 3: &quot;Advanced Gantt Charts&quot;</h4>
+<ul>
+<li><strong>Objective</strong>: Create complex Gantt charts.</li>
+</ul>
+<ul>
+<li><strong>Content</strong>: Learn advanced syntax for tasks and timelines.</li>
+</ul>
+<ul>
+<li><strong>Example</strong>: Complex Gantt chart.</li>
+</ul>
+<pre><code class="language-mermaid">
+gantt
+    title Complex Project Timeline
+    dateFormat  YYYY-MM-DD
+    section Phase 1
+    Task1 :a1, 2024-05-01, 10d
+    Task2 :after a1  , 15d
+    section Phase 2
+    Task3 : 2024-06-01  , 5d
+    Task4 :after a3  , 10d
+</code></pre>
+<h4 id="pbl-scenario-organizing-a-science-fair">PBL Scenario: &quot;Organizing a Science Fair&quot;</h4>
+<ul>
+<li><strong>Task</strong>: Create a complex Gantt chart for organizing a science fair.</li>
+</ul>
+<ul>
+<li><strong>Solution</strong>: Students will create a Gantt chart similar to the example in Lesson 3, adding their own tasks and styles.</li>
+</ul>
+<h3 id="module-5-mermaid-masterpieces">Module 5: &quot;Mermaid Masterpieces&quot;</h3>
+<h4 id="lesson-1-combining-diagrams">Lesson 1: &quot;Combining Diagrams&quot;</h4>
+<ul>
+<li><strong>Objective</strong>: Combine different types of diagrams.</li>
+</ul>
+<ul>
+<li><strong>Content</strong>: Learn how to integrate flowcharts, sequence diagrams, and Gantt charts.</li>
+</ul>
+<ul>
+<li><strong>Example</strong>: Combined diagram.</li>
+</ul>
+<pre><code class="language-mermaid">
+graph TD;
+    A[Start] --&gt; B{Choose Diagram Type};
+    B -- Flowchart --&gt; C[Create Flowchart];
+    B -- Sequence Diagram --&gt; D[Create Sequence Diagram];
+    B -- Gantt Chart --&gt; E[Create Gantt Chart];
+    C --&gt; F[End];
+    D --&gt; F;
+    E --&gt; F;
+</code></pre>
+<h4 id="lesson-2-interactive-diagrams">Lesson 2: &quot;Interactive Diagrams&quot;</h4>
+<ul>
+<li><strong>Objective</strong>: Create interactive diagrams.</li>
+</ul>
+<ul>
+<li><strong>Content</strong>: Learn how to add interactivity to diagrams.</li>
+</ul>
+<ul>
+<li><strong>Example</strong>: Interactive flowchart.</li>
+</ul>
+<pre><code class="language-mermaid">
+graph TD;
+    A[Start] --&gt; B{Click Me};
+    B --&gt;|Yes| C[You clicked Yes];
+    B --&gt;|No| D[You clicked No];
+</code></pre>
+<h4 id="lesson-3-presenting-your-diagrams">Lesson 3: &quot;Presenting Your Diagrams&quot;</h4>
+<ul>
+<li><strong>Objective</strong>: Present diagrams effectively.</li>
+</ul>
+<ul>
+<li><strong>Content</strong>: Learn tips and tricks for presenting diagrams.</li>
+</ul>
+<ul>
+<li><strong>Example</strong>: Presentation flowchart.</li>
+</ul>
+<pre><code class="language-mermaid">
+graph TD;
+    A[Introduction] --&gt; B[Explain Diagram Types];
+    B --&gt; C[Show Examples];
+    C --&gt; D[Conclusion];
+</code></pre>
+<h4 id="pbl-scenario-showcase-your-skills">PBL Scenario: &quot;Showcase Your Skills&quot;</h4>
+<ul>
+<li><strong>Task</strong>: Create a combined and interactive diagram to showcase what you&#x27;ve learned.</li>
+</ul>
+<ul>
+<li><strong>Solution</strong>: Students will create a combined diagram similar to the example in Lesson 1, adding their own elements and interactivity.</li>
+</ul>
+<p>---</p>
+<h4 id="summary-table">Summary Table</h4>
+<div class="table-wrap"><table>
+<thead><tr><th>Module</th><th>Title</th><th>Lessons</th><th>PBL Scenario</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Dive into Mermaid Basics</td><td>1. What is Mermaid? &lt;br&gt; 2. Drawing Your First Flowchart &lt;br&gt; 3. Adding Styles to Your Flowchart</td><td>My Morning Routine</td></tr>
+<tr><td>2</td><td>Charting New Waters</td><td>1. Understanding Graph Types &lt;br&gt; 2. Creating Sequence Diagrams &lt;br&gt; 3. Styling Sequence Diagrams</td><td>A Day in the Life</td></tr>
+<tr><td>3</td><td>Navigating Complex Diagrams</td><td>1. Introduction to Gantt Charts &lt;br&gt; 2. Creating Gantt Charts &lt;br&gt; 3. Styling Gantt Charts</td><td>Planning a School Event</td></tr>
+<tr><td>4</td><td>Mastering Mermaid</td><td>1. Advanced Flowcharts &lt;br&gt; 2. Advanced Sequence Diagrams &lt;br&gt; 3. Advanced Gantt Charts</td><td>Organizing a Science Fair</td></tr>
+<tr><td>5</td><td>Mermaid Masterpieces</td><td>1. Combining Diagrams &lt;br&gt; 2. Interactive Diagrams &lt;br&gt; 3. Presenting Your Diagrams</td><td>Showcase Your Skills</td></tr>
+</tbody>
+</table></div>
+<p>This series of lessons will help sixth-grade students progress from Mermaid beginners to intermediate users, with engaging and age-appropriate examples and projects.</p>
+<p>Citations:</p>
+<p>[1] https://jojozhuang.github.io/tutorial/mermaid-cheat-sheet/ould</p>
+<pre><code class="language-mermaid">
+graph TD;
+    A[Demonstration Activity]---|Pre-Assess, Assess, and/or 
+	Self-Assess 
+	and 
+	Put Feedback to work|D;
+    A[Demonstration Activity] --&gt;|Observe Phenomena/Experiment| B[Gauge Understanding];
+    B --&gt;|Introduce Vocabulary| C[Revise Notes and Clarify terms];
+    C --&gt;|Offer feedback to students| D[Share summary statements and exit tickets];
+
+    style A fill:#f9f,stroke:#333,stroke-width:4px;
+    style B fill:#bbf,stroke:#333,stroke-width:2px;
+    style C fill:#bfb,stroke:#333,stroke-width:2px;
+    style D fill:#ffb,stroke:#333,stroke-width:2px;
+</code></pre>
+<pre><code class="language-mermaid">
+pie title Pet adoptions by volunteers in states
+    &quot;Texas&quot; : 15000
+    &quot;Arkansas&quot; : 7000
+    &quot;Missouri&quot; : 18000
+</code></pre>
+<p>Based on the search results provided, here is a table summarizing the potential annual earnings for professionals with Mermaid coding skills:</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Role</th><th>Integration</th><th>Annual Earnings</th></tr></thead>
+<tbody>
+<tr><td>Technical Writer</td><td>Enhances documentation quality</td><td>$50,000 - $100,000</td></tr>
+<tr><td>Software Developer/Engineer</td><td>Improves project management and team communication</td><td>$70,000 - $150,000</td></tr>
+<tr><td>Project Manager</td><td>Visualizes project timelines, workflows, strategic alignments</td><td>$60,000 - $120,000</td></tr>
+<tr><td>Freelancer/Consultant</td><td>Offers technical documentation, software development services</td><td>$50 - $150 per hour</td></tr>
+<tr><td>Specialized Roles (e.g., AI &amp; Combat Programmer)</td><td>Companies specifically seeking Mermaid skills</td><td>$85,000 - $115,000</td></tr>
+</tbody>
+</table></div>
+<p>A few key points to note:</p>
+<ul>
+<li>The earnings potential varies significantly based on the specific role, industry, experience level, and location[1][4][5].</li>
+</ul>
+<ul>
+<li>Technical writers, software developers, project managers, and consultants can leverage Mermaid skills to enhance their documentation, communication, and project management capabilities, leading to higher earnings[1][4][5].</li>
+</ul>
+<ul>
+<li>Specialized roles in companies that heavily utilize Mermaid may offer higher salaries for professionals with Mermaid expertise[4][5].</li>
+</ul>
+<ul>
+<li>Professional mermaids can earn around $70,000 per year by performing at events, being brand ambassadors, running mermaid businesses, and participating in competitions[2].</li>
+</ul>
+<p>It&#x27;s important to note that these figures are estimates, and actual earnings may vary based on individual circumstances and negotiation skills. Additionally, continuously improving one&#x27;s Mermaid skills and staying up-to-date with the latest developments can enhance marketability and earning potential[1][2][4][5].</p>
+<p>Citations:</p>
+<p>[1] https://www.ziprecruiter.com/Salaries/Mermaid-Salary</p>
+<p>[2] https://aquamermaid.com/blogs/news/how-to-become-a-professional-mermaid</p>
+<p>[3] https://jonathanruiz.dev/level-up-your-documentation-game-with-mermaid/</p>
+<p>[4] https://news.ycombinator.com/item?id=39772520</p>
+<p>[5] https://www.mermaidchart.com</p>
+    </article>
+  </main>
+  <footer>
+    Built from <code>AI/</code> and <code>_resources/</code>. Last generated July 14, 2026.
+  </footer>
+</body>
+</html>
