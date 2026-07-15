@@ -7,14 +7,19 @@
 <link rel="alternate" type="application/rss+xml" title="Creative Works RSS" href="feed.xml">
 <style>
 :root {
-  --page: #fff;
-  --ink: #0a0a0a;
-  --muted: #555;
-  --faint: #777;
-  --line: #ddd;
-  --soft: #f6f6f6;
-  --soft-line: #e9e9e9;
-  --max: 980px;
+  --page: #f7f9fc;
+  --ink: #0b1d33;
+  --muted: #4f6072;
+  --faint: #6f8092;
+  --line: #c8d2dc;
+  --soft: #e6ebf1;
+  --soft-line: #d8dee6;
+  --navy: #102a54;
+  --blue: #2f5f8f;
+  --steel: #6f8faf;
+  --silver: #c8d2dc;
+  --white: #fff;
+  --max: 1100px;
 }
 
 *, *::before, *::after {
@@ -27,7 +32,9 @@ html {
 
 body {
   margin: 0;
-  background: var(--page);
+  background:
+    radial-gradient(circle at top left, rgba(200,210,220,0.45), transparent 34rem),
+    linear-gradient(180deg, #fff 0%, var(--page) 42%, #eef2f6 100%);
   color: var(--ink);
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   line-height: 1.5;
@@ -51,8 +58,28 @@ a:hover {
 }
 
 .hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
+  gap: 34px;
+  align-items: center;
   border-bottom: 1px solid var(--line);
-  padding-bottom: 24px;
+  padding: 18px 0 30px;
+}
+
+.hero-copy {
+  min-width: 0;
+}
+
+.hero-portrait {
+  --portrait-size: min(100%, 300px);
+  justify-self: end;
+  width: var(--portrait-size);
+  height: var(--portrait-size);
+  border: 1px solid rgba(111,143,175,0.45);
+  border-radius: 8px;
+  background: linear-gradient(145deg, #fff 0%, #eef3f8 100%);
+  box-shadow: 0 18px 45px rgba(11,29,51,0.15);
+  object-fit: cover;
 }
 
 .eyebrow,
@@ -70,6 +97,7 @@ a:hover {
 
 .eyebrow {
   margin-bottom: 10px;
+  color: var(--blue);
 }
 
 .eyebrow a {
@@ -86,6 +114,7 @@ h1 {
   font-size: clamp(2.1rem, 6vw, 4.2rem);
   letter-spacing: 0;
   line-height: 1;
+  color: var(--navy);
 }
 
 .byline {
@@ -97,7 +126,7 @@ h1 {
 .description {
   max-width: 720px;
   margin: 10px 0 0;
-  color: #444;
+  color: var(--muted);
   font-size: 1rem;
 }
 
@@ -114,8 +143,8 @@ h1 {
   align-items: center;
   min-height: 38px;
   padding: 8px 13px;
-  background: #000;
-  border: 1px solid #000;
+  background: var(--navy);
+  border: 1px solid var(--navy);
   border-radius: 4px;
   color: #fff;
   font-size: 0.9rem;
@@ -123,8 +152,8 @@ h1 {
 }
 
 .primary-link:hover {
-  background: #333;
-  border-color: #333;
+  background: var(--blue);
+  border-color: var(--blue);
 }
 
 .feed-link {
@@ -133,15 +162,15 @@ h1 {
   align-items: center;
   min-height: 38px;
   padding: 8px 12px;
-  border: 1px solid #bbb;
+  border: 1px solid var(--silver);
   border-radius: 4px;
-  color: #111;
+  color: var(--navy);
   font-size: 0.9rem;
   text-decoration: none;
 }
 
 .feed-link:hover {
-  border-color: #000;
+  border-color: var(--blue);
   background: var(--soft);
 }
 
@@ -167,6 +196,7 @@ h1 {
   font-size: 1.35rem;
   font-weight: 800;
   line-height: 1;
+  color: var(--navy);
 }
 
 .stat-label {
@@ -180,7 +210,7 @@ h1 {
   z-index: 10;
   margin: 0 -24px;
   padding: 16px 24px;
-  background: rgba(255,255,255,0.97);
+  background: rgba(247,249,252,0.94);
   border-bottom: 1px solid var(--line);
   backdrop-filter: blur(10px);
 }
@@ -209,7 +239,7 @@ h1 {
   width: 100%;
   min-height: 40px;
   padding: 9px 40px 9px 32px;
-  border: 1px solid #bbb;
+  border: 1px solid var(--silver);
   border-radius: 4px;
   color: var(--ink);
   font: inherit;
@@ -217,8 +247,8 @@ h1 {
 
 #search-input:focus {
   outline: none;
-  border-color: #000;
-  box-shadow: 0 0 0 3px rgba(0,0,0,0.08);
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(47,95,143,0.14);
 }
 
 .search-clear {
@@ -245,7 +275,7 @@ h1 {
 
 .search-clear:hover {
   background: var(--soft);
-  color: #000;
+  color: var(--navy);
 }
 
 .quick-links {
@@ -263,13 +293,14 @@ h1 {
   border: 1px solid var(--line);
   border-radius: 4px;
   background: #fff;
-  color: #222;
+  color: var(--navy);
   font-size: 0.82rem;
   text-decoration: none;
 }
 
 .quick-links a:hover {
-  border-color: #000;
+  border-color: var(--blue);
+  background: #eef3f8;
 }
 
 .content {
@@ -297,6 +328,7 @@ h1 {
 .section-title {
   margin: 0;
   font-size: 1.05rem;
+  color: var(--navy);
 }
 
 .section-description {
@@ -319,7 +351,7 @@ h1 {
 }
 
 .project-item.is-even {
-  background: #f5f5f5;
+  background: rgba(230,235,241,0.72);
 }
 
 .project-item.is-odd {
@@ -339,7 +371,7 @@ h1 {
 
 .project-line::before {
   content: "\2022";
-  color: #000;
+  color: var(--blue);
   font-weight: 700;
 }
 
@@ -348,7 +380,7 @@ h1 {
 }
 
 .project-summary {
-  color: #444;
+  color: var(--muted);
 }
 
 .item-meta {
@@ -361,7 +393,7 @@ h1 {
 }
 
 .item-meta a:hover {
-  color: #000;
+  color: var(--blue);
   text-decoration: underline;
 }
 
@@ -400,7 +432,7 @@ h1 {
   gap: 10px;
   align-items: center;
   justify-content: center;
-  background: #fff;
+  background: #f7f9fc;
   transition: opacity 0.2s;
 }
 
@@ -412,8 +444,8 @@ h1 {
 .loading-mark {
   width: 22px;
   height: 22px;
-  border: 2px solid #ddd;
-  border-top-color: #000;
+  border: 2px solid var(--silver);
+  border-top-color: var(--blue);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -431,9 +463,9 @@ h1 {
   height: 38px;
   align-items: center;
   justify-content: center;
-  border: 1px solid #000;
+  border: 1px solid var(--navy);
   border-radius: 4px;
-  background: #000;
+  background: var(--navy);
   color: #fff;
   text-decoration: none;
 }
@@ -468,6 +500,16 @@ h1 {
     flex-direction: column;
   }
 
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .hero-portrait {
+    --portrait-size: min(220px, 72vw);
+    justify-self: start;
+  }
+
   .stats {
     gap: 18px;
   }
@@ -482,20 +524,23 @@ h1 {
 
 <div class="site">
   <header class="hero" id="top">
-    <div class="eyebrow"><a href="https://mguhlin.org" target="_blank" rel="noopener">MGuhlin.org</a> - Digital Creations</div>
-    <h1>Creative Works</h1>
-    <p class="byline" id="hero-byline"></p>
-    <p class="description" id="hero-desc"></p>
-    <div class="hero-row">
-      <a class="primary-link" href="https://go.mgpd.org/aic" target="_blank" rel="noopener">go.mgpd.org/aic</a>
-      <a class="feed-link" href="feed.xml" type="application/rss+xml" aria-label="Creative Works RSS feed">
-        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path d="M6.18 17.82a2.18 2.18 0 1 1-4.36 0 2.18 2.18 0 0 1 4.36 0ZM2 8.72v3.09c5.62 0 10.19 4.57 10.19 10.19h3.09C15.28 14.67 9.33 8.72 2 8.72ZM2 2v3.09c9.32 0 16.91 7.59 16.91 16.91H22C22 10.97 13.03 2 2 2Z"/>
-        </svg>
-        RSS
-      </a>
-      <div class="stats" id="hero-tally" aria-label="Project statistics"></div>
+    <div class="hero-copy">
+      <div class="eyebrow"><a href="https://mguhlin.org" target="_blank" rel="noopener">MGuhlin.org</a> - Digital Creations</div>
+      <h1>Creative Works</h1>
+      <p class="byline" id="hero-byline"></p>
+      <p class="description" id="hero-desc"></p>
+      <div class="hero-row">
+        <a class="primary-link" href="https://go.mgpd.org/aic" target="_blank" rel="noopener">go.mgpd.org/aic</a>
+        <a class="feed-link" href="feed.xml" type="application/rss+xml" aria-label="Creative Works RSS feed">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M6.18 17.82a2.18 2.18 0 1 1-4.36 0 2.18 2.18 0 0 1 4.36 0ZM2 8.72v3.09c5.62 0 10.19 4.57 10.19 10.19h3.09C15.28 14.67 9.33 8.72 2 8.72ZM2 2v3.09c9.32 0 16.91 7.59 16.91 16.91H22C22 10.97 13.03 2 2 2Z"/>
+          </svg>
+          RSS
+        </a>
+        <div class="stats" id="hero-tally" aria-label="Project statistics"></div>
+      </div>
     </div>
+    <img class="hero-portrait" src="https://mguhlin.org/miguel.png" alt="Portrait of Miguel Guhlin" width="512" height="512">
   </header>
 
   <section class="tools" aria-label="Find projects">

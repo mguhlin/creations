@@ -80,7 +80,7 @@ A browsable library of copy-paste custom instructions for purpose-built AI assis
 - Sticky sidebar navigation with 37 anchor sections
 - One-click copy-to-clipboard for every instruction set
 - Expandable card layout per bot
-- Color-coded category tags (blue, gold, green)
+- Color-coded category tags (blue, gold, silver)
 - BoodleBox promotional code included (2-month free access)
 
 ---

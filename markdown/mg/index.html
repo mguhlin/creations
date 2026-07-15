@@ -9,12 +9,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --forest:        #2D6A4F;
-  --forest-deep:   #1B4332;
-  --forest-mid:    #40916C;
-  --forest-light:  #74C69D;
-  --forest-pale:   #B7E4C7;
-  --forest-faint:  #D8F3DC;
+  --forest:        #2F5F8F;
+  --forest-deep:   #102A54;
+  --forest-mid:    #6F8FAF;
+  --forest-light:  #C8D2DC;
+  --forest-pale:   #C8D2DC;
+  --forest-faint:  #E6EBF1;
   --charcoal:      #232526;
   --charcoal-mid:  #2F3133;
   --charcoal-soft: #414447;
@@ -24,8 +24,8 @@
   --white:         #FFFFFF;
   --gold:          #D4AC0D;
   --gold-light:    #F1C40F;
-  --border-dark:   rgba(116,198,157,0.15);
-  --border-mid:    rgba(116,198,157,0.08);
+  --border-dark:   rgba(200,210,220,0.16);
+  --border-mid:    rgba(200,210,220,0.16);
 }
 
 * { box-sizing: border-box; }
@@ -56,7 +56,7 @@ main, header, footer { position: relative; z-index: 1; }
   top: 0; left: 0; right: 0;
   z-index: 200;
   height: 56px;
-  background: rgba(27,67,50,0.96);
+  background: rgba(16,42,84,0.16);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--border-dark);
   display: flex;
@@ -89,15 +89,15 @@ main, header, footer { position: relative; z-index: 1; }
   text-transform: uppercase;
   transition: background 0.18s, color 0.18s;
 }
-.topnav-link:hover { background: rgba(116,198,157,0.12); color: var(--forest-pale); }
+.topnav-link:hover { background: rgba(200,210,220,0.16); color: var(--forest-pale); }
 
 /* ---------- Hero ---------- */
 .hero {
   padding: 96px 24px 32px;
   position: relative;
   background:
-    radial-gradient(ellipse 70% 55% at 50% 30%, rgba(45,106,79,0.28) 0%, transparent 65%),
-    radial-gradient(ellipse 30% 35% at 85% 20%, rgba(64,145,108,0.15) 0%, transparent 50%);
+    radial-gradient(ellipse 70% 55% at 50% 30%, rgba(47,95,143,0.18) 0%, transparent 65%),
+    radial-gradient(ellipse 30% 35% at 85% 20%, rgba(111,143,175,0.18) 0%, transparent 50%);
   overflow: hidden;
 }
 .hero::after {
@@ -105,8 +105,8 @@ main, header, footer { position: relative; z-index: 1; }
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(116,198,157,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(116,198,157,0.04) 1px, transparent 1px);
+    linear-gradient(rgba(200,210,220,0.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200,210,220,0.16) 1px, transparent 1px);
   background-size: 56px 56px;
   pointer-events: none;
 }
@@ -120,8 +120,8 @@ main, header, footer { position: relative; z-index: 1; }
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(45,106,79,0.2);
-  border: 1px solid rgba(116,198,157,0.3);
+  background: rgba(47,95,143,0.18);
+  border: 1px solid rgba(200,210,220,0.16);
   border-radius: 100px;
   padding: 6px 18px;
   font-family: 'DM Mono', monospace;
@@ -162,7 +162,7 @@ main, header, footer { position: relative; z-index: 1; }
 .hero kbd {
   font-family: 'DM Mono', monospace;
   font-size: 0.72rem;
-  background: rgba(116,198,157,0.12);
+  background: rgba(200,210,220,0.16);
   border: 1px solid var(--border-dark);
   padding: 2px 6px;
   border-radius: 4px;
@@ -201,7 +201,7 @@ main, header, footer { position: relative; z-index: 1; }
 .btn {
   appearance: none;
   border: 1px solid var(--border-dark);
-  background: rgba(116,198,157,0.06);
+  background: rgba(200,210,220,0.16);
   color: var(--forest-pale);
   font-family: 'DM Mono', monospace;
   font-size: 0.72rem;
@@ -214,7 +214,7 @@ main, header, footer { position: relative; z-index: 1; }
   white-space: nowrap;
   transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
-.btn:hover { background: rgba(116,198,157,0.16); border-color: var(--forest-mid); }
+.btn:hover { background: rgba(200,210,220,0.16); border-color: var(--forest-mid); }
 .btn:focus-visible { outline: 2px solid var(--forest-light); outline-offset: 2px; }
 .btn-primary {
   background: var(--forest);
@@ -309,7 +309,7 @@ main, header, footer { position: relative; z-index: 1; }
   justify-content: space-between;
   gap: 10px;
   padding: 10px 14px;
-  background: linear-gradient(160deg, #1B4332 0%, #2D6A4F 100%);
+  background: linear-gradient(160deg, #102A54 0%, #2F5F8F 100%);
   border-bottom: 1px solid var(--border-dark);
 }
 .panel-head h3 {
@@ -432,7 +432,7 @@ textarea.raw {
 .drop-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(27,67,50,0.85);
+  background: rgba(16,42,84,0.16);
   z-index: 400;
   display: none;
   align-items: center;
@@ -506,7 +506,7 @@ details[open] .help-summary::after { content: '−'; }
 .help-body code {
   font-family: 'DM Mono', monospace;
   font-size: 0.88em;
-  background: rgba(116,198,157,0.1);
+  background: rgba(200,210,220,0.16);
   color: var(--forest-pale);
   padding: 0.1em 0.4em;
   border-radius: 4px;
@@ -527,7 +527,7 @@ details[open] .help-summary::after { content: '−'; }
 .help-body kbd {
   font-family: 'DM Mono', monospace;
   font-size: 0.78em;
-  background: rgba(116,198,157,0.12);
+  background: rgba(200,210,220,0.16);
   border: 1px solid var(--border-dark);
   padding: 2px 6px;
   border-radius: 4px;
@@ -537,7 +537,7 @@ details[open] .help-summary::after { content: '−'; }
 /* ---------- Footer ---------- */
 footer {
   background: var(--forest-deep);
-  border-top: 1px solid rgba(116,198,157,0.12);
+  border-top: 1px solid rgba(200,210,220,0.16);
   padding: 28px 24px;
   display: flex;
   align-items: center;
@@ -557,7 +557,7 @@ footer .copy {
   font-family: 'DM Mono', monospace;
   font-size: 0.62rem;
   letter-spacing: 0.06em;
-  color: rgba(116,198,157,0.5);
+  color: rgba(200,210,220,0.16);
 }
 
 /* ---------- Back to top ---------- */
@@ -568,7 +568,7 @@ footer .copy {
   width: 42px; height: 42px;
   border-radius: 50%;
   background: var(--forest);
-  border: 1px solid rgba(116,198,157,0.3);
+  border: 1px solid rgba(200,210,220,0.16);
   display: flex; align-items: center; justify-content: center;
   color: var(--forest-pale);
   font-size: 1.1rem;
@@ -636,7 +636,7 @@ footer .copy {
     box-shadow: 0 1px 6px rgba(0,0,0,0.08);
   }
   .mg-back-bar a {
-    color: #B7E4C7;
+    color: #C8D2DC;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
@@ -646,7 +646,7 @@ footer .copy {
     transition: color 0.15s;
   }
   .mg-back-bar a:hover { color: #fff; }
-  .mg-back-bar .mg-back-arrow { color: #74C69D; }
+  .mg-back-bar .mg-back-arrow { color: #C8D2DC; }
   .mg-back-bar .mg-back-sep { color: rgba(183,228,199,0.4); margin: 0 4px; }
   .mg-back-bar .mg-back-label { color: rgba(183,228,199,0.65); font-weight: 400; }
   @media print { .mg-back-bar { display: none !important; } }
@@ -699,7 +699,7 @@ footer .copy {
     <div class="eyebrow">Markdown · Cleaner · Converter</div>
     <h1>Markdown <em>Studio</em></h1>
     <p>Paste Markdown. Clean common formatting bugs. Strip AI writing tells. Find and replace. Preview the rendered HTML and copy or download in any format.</p>
-    <p style="margin-top:12px;font-size:0.85rem;color:rgba(212,228,199,0.55)">Shortcuts: <kbd>Ctrl/⌘ F</kbd> find · <kbd>Ctrl/⌘ S</kbd> save .md · <kbd>Ctrl/⌘ K</kbd> clean · drop a <code style="font-family:'DM Mono',monospace;background:rgba(116,198,157,0.12);padding:2px 6px;border-radius:4px;color:var(--forest-pale)">.md</code> file anywhere</p>
+    <p style="margin-top:12px;font-size:0.85rem;color:rgba(212,228,199,0.55)">Shortcuts: <kbd>Ctrl/⌘ F</kbd> find · <kbd>Ctrl/⌘ S</kbd> save .md · <kbd>Ctrl/⌘ K</kbd> clean · drop a <code style="font-family:'DM Mono',monospace;background:rgba(200,210,220,0.16);padding:2px 6px;border-radius:4px;color:var(--forest-pale)">.md</code> file anywhere</p>
   </div>
 </header>
 
