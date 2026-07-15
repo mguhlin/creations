@@ -1,0 +1,398 @@
+/*
+  Creations-wide visual theme.
+  Applies the navy / blue / silver treatment used by the Prompt Library while
+  preserving each page's local layout and interactions.
+*/
+:root {
+  --mg-navy: #0b1d33;
+  --mg-navy-2: #102a54;
+  --mg-blue: #1d4f82;
+  --mg-blue-2: #2f5f8f;
+  --mg-steel: #6f8faf;
+  --mg-silver: #c8d2dc;
+  --mg-silver-2: #d8dee6;
+  --mg-paper: #f7f9fc;
+  --mg-ink: #102a54;
+  --mg-muted: #4f6072;
+  --mg-line: #d8dee6;
+}
+
+html {
+  accent-color: var(--mg-blue-2);
+}
+
+body {
+  background:
+    radial-gradient(circle at top left, rgba(200, 210, 220, 0.38), transparent 34rem),
+    linear-gradient(180deg, #ffffff 0%, var(--mg-paper) 52%, #eef2f6 100%) !important;
+  color: var(--mg-ink) !important;
+}
+
+body::before {
+  opacity: 0.16 !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--mg-navy-2);
+}
+
+p,
+li,
+td,
+th,
+label,
+summary {
+  color: inherit;
+}
+
+a {
+  color: var(--mg-navy-2);
+}
+
+a:hover {
+  color: var(--mg-blue-2);
+}
+
+.mg-back-bar,
+.topnav,
+.top-nav,
+.topbar,
+.navbar,
+.site-nav,
+.site-header,
+header.app-header,
+header[role="banner"] {
+  background: var(--mg-navy) !important;
+  border-color: rgba(200, 210, 220, 0.28) !important;
+  color: #e6ebf1 !important;
+}
+
+.mg-back-bar a,
+.mg-back-bar span,
+.topnav a,
+.top-nav a,
+.topbar a,
+.navbar a,
+.site-nav a,
+.site-header a,
+header.app-header a {
+  color: #e6ebf1 !important;
+}
+
+.mg-back-bar a:hover,
+.topnav a:hover,
+.top-nav a:hover,
+.topbar a:hover,
+.navbar a:hover,
+.site-nav a:hover,
+.site-header a:hover,
+header.app-header a:hover {
+  color: #ffffff !important;
+}
+
+.mg-back-bar .mg-back-arrow,
+.mg-back-bar .mg-back-sep,
+.mg-back-bar .mg-back-label,
+.nav-brand span,
+.brand span,
+.logo span {
+  color: var(--mg-silver) !important;
+}
+
+.sidebar,
+aside.sidebar,
+.side-panel,
+.left-panel,
+.nav-panel,
+.rail,
+.drawer {
+  background: var(--mg-navy) !important;
+  border-color: rgba(200, 210, 220, 0.24) !important;
+  color: rgba(230, 235, 241, 0.78) !important;
+}
+
+.sidebar a,
+aside.sidebar a,
+.side-panel a,
+.left-panel a,
+.nav-panel a,
+.rail a,
+.drawer a {
+  color: rgba(230, 235, 241, 0.78) !important;
+}
+
+.sidebar a:hover,
+.sidebar a.active,
+aside.sidebar a:hover,
+aside.sidebar a.active,
+.side-panel a:hover,
+.side-panel a.active,
+.left-panel a:hover,
+.left-panel a.active,
+.nav-panel a:hover,
+.nav-panel a.active,
+.rail a:hover,
+.rail a.active,
+.drawer a:hover,
+.drawer a.active {
+  background: rgba(200, 210, 220, 0.16) !important;
+  color: #ffffff !important;
+  border-color: var(--mg-silver) !important;
+}
+
+.sidebar-title,
+.sidebar-section-label,
+.section-label,
+.eyebrow,
+.kicker,
+.meta,
+.item-meta,
+.result-count,
+.stat-label {
+  color: rgba(79, 96, 114, 0.92) !important;
+}
+
+.sidebar .sidebar-title,
+.sidebar .sidebar-section-label,
+.sidebar .section-label,
+aside.sidebar .sidebar-title,
+aside.sidebar .sidebar-section-label,
+aside.sidebar .section-label {
+  color: rgba(230, 235, 241, 0.58) !important;
+}
+
+.hero,
+.page-hero,
+.banner,
+.jumbotron {
+  background: var(--mg-paper) !important;
+  border-color: var(--mg-line) !important;
+  color: var(--mg-muted) !important;
+}
+
+.hero h1,
+.page-hero h1,
+.banner h1,
+.jumbotron h1 {
+  color: var(--mg-navy-2) !important;
+}
+
+.hero h1 em,
+.page-hero h1 em,
+.banner h1 em,
+.jumbotron h1 em {
+  color: var(--mg-blue) !important;
+}
+
+.hero p,
+.hero .lede,
+.hero .lead,
+.hero .subtitle,
+.page-hero p,
+.page-hero .lede,
+.page-hero .lead,
+.page-hero .subtitle,
+.banner p,
+.jumbotron p {
+  color: var(--mg-muted) !important;
+}
+
+.card,
+.pcard,
+.tool-card,
+.feature-card,
+.instruction-card,
+.use-case-card,
+.project-item,
+.panel,
+.tool-panel,
+.modal,
+.dialog,
+.section-card,
+.content-card,
+.lesson,
+.topic,
+article.card {
+  background: #ffffff !important;
+  border-color: var(--mg-line) !important;
+  color: var(--mg-muted) !important;
+  box-shadow: 0 1px 3px rgba(16, 42, 84, 0.12) !important;
+}
+
+.card:hover,
+.pcard:hover,
+.tool-card:hover,
+.feature-card:hover,
+.instruction-card:hover,
+.use-case-card:hover,
+.project-item:hover,
+.panel:hover,
+.section-card:hover,
+.content-card:hover {
+  border-color: var(--mg-silver) !important;
+  box-shadow: 0 8px 28px rgba(16, 42, 84, 0.14) !important;
+}
+
+.card-header,
+.pcard-header,
+.tool-panel-header,
+.panel-header,
+.modal-header,
+.section-card-header,
+.feature-card-header {
+  background: linear-gradient(160deg, var(--mg-blue) 0%, var(--mg-blue-2) 100%) !important;
+  border-color: rgba(200, 210, 220, 0.28) !important;
+  color: #ffffff !important;
+}
+
+.card-header *,
+.pcard-header *,
+.tool-panel-header *,
+.panel-header *,
+.modal-header *,
+.section-card-header *,
+.feature-card-header * {
+  color: #ffffff !important;
+}
+
+.card p,
+.pcard p,
+.tool-card p,
+.feature-card p,
+.instruction-card p,
+.use-case-card p,
+.panel p,
+.tool-panel p,
+.section-card p,
+.content-card p,
+.pcard-desc,
+.card-description,
+.project-summary {
+  color: var(--mg-muted) !important;
+}
+
+pre,
+code,
+.pcard-prompt,
+.prompt,
+.code,
+.code-block,
+.output-box,
+.editor,
+textarea.code,
+textarea.editor {
+  background: var(--mg-navy) !important;
+  border-color: rgba(200, 210, 220, 0.28) !important;
+  color: #e6ebf1 !important;
+}
+
+pre *,
+code *,
+.pcard-prompt *,
+.prompt *,
+.code *,
+.code-block *,
+.output-box *,
+.editor * {
+  color: inherit !important;
+}
+
+button,
+.btn,
+.button,
+.primary-link,
+.copy-btn,
+.btn-copy,
+.btn-primary,
+input[type="button"],
+input[type="submit"] {
+  border-color: var(--mg-steel) !important;
+}
+
+.btn-primary,
+.button.primary,
+.primary-link,
+.copy-btn,
+.btn-copy,
+.active,
+button.active,
+.btn.active,
+input[type="submit"] {
+  background: var(--mg-blue-2) !important;
+  color: #ffffff !important;
+}
+
+.button.secondary,
+.btn-secondary,
+a.secondary {
+  background: #ffffff !important;
+  border-color: var(--mg-steel) !important;
+  color: var(--mg-navy-2) !important;
+}
+
+button:hover,
+.btn:hover,
+.button:hover,
+.primary-link:hover,
+.copy-btn:hover,
+.btn-copy:hover {
+  background: var(--mg-navy-2) !important;
+  color: #ffffff !important;
+}
+
+input,
+select,
+textarea {
+  border-color: var(--mg-silver) !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--mg-blue-2) !important;
+  box-shadow: 0 0 0 3px rgba(47, 95, 143, 0.14) !important;
+  outline: none !important;
+}
+
+table {
+  border-color: var(--mg-line) !important;
+}
+
+th {
+  background: var(--mg-navy-2) !important;
+  color: #ffffff !important;
+}
+
+tr:hover td {
+  background: var(--mg-paper) !important;
+}
+
+.tag-green,
+.badge-green,
+.success,
+.pill-green {
+  background: var(--mg-silver) !important;
+  border-color: var(--mg-silver) !important;
+  color: var(--mg-navy-2) !important;
+}
+
+footer,
+.footer,
+.site-footer,
+.app-footer {
+  background: var(--mg-navy) !important;
+  border-color: rgba(200, 210, 220, 0.24) !important;
+  color: rgba(230, 235, 241, 0.76) !important;
+}
+
+footer a,
+.footer a,
+.site-footer a,
+.app-footer a {
+  color: #e6ebf1 !important;
+}
