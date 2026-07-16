@@ -76,6 +76,12 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .hero-title em{font-style:italic;color:var(--forest-light)}
 .hero-desc{font-size:.9rem;color:rgba(212,228,199,.7);max-width:500px;margin:0 auto 26px;animation:fadeDown .7s .22s ease both}
 .hero-tally{display:flex;justify-content:center;align-items:center;gap:20px;flex-wrap:wrap;animation:fadeDown .7s .3s ease both}
+.hero-access{display:inline-flex;align-items:center;gap:14px;margin-top:24px;padding:12px 14px;background:#FFFFFF;border:1px solid #C8D2DC;border-radius:10px;box-shadow:0 12px 34px rgba(16,42,84,.12);animation:fadeDown .7s .38s ease both}
+.hero-access-copy{text-align:left}
+.hero-access-label{font-family:'DM Mono',monospace;font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:#5A6C80;margin-bottom:2px}
+.hero-access-link{font-family:'DM Mono',monospace;font-size:.86rem;letter-spacing:.02em;color:#102A54;text-decoration:none;font-weight:700}
+.hero-access-link:hover{text-decoration:underline}
+.hero-qr{display:block;width:86px;height:86px;border:1px solid #C8D2DC;border-radius:6px;padding:4px;background:#FFFFFF}
 .tally-item{text-align:center}
 .tally-num{font-family:'Playfair Display',serif;font-size:2.1rem;font-weight:700;color:var(--forest-light);line-height:1;display:block}
 .tally-label{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--charcoal-mute);margin-top:4px}
@@ -210,6 +216,7 @@ footer{background:var(--forest-deep);border-top:1px solid rgba(200,210,220,0.16)
   .sidebar-overlay.open{display:block}
   .main-content{margin-left:0}
   .hero{padding:54px 20px 38px;min-height:auto}
+  .hero-access{display:flex;justify-content:space-between;width:min(100%,360px);margin-top:20px}
   .prompts-grid{grid-template-columns:1fr;padding:12px 16px 44px;gap:13px}
   .sec-divider{padding:38px 16px 4px}
   .search-input{width:120px}
@@ -220,6 +227,9 @@ footer{background:var(--forest-deep);border-top:1px solid rgba(200,210,220,0.16)
   .hero-title{font-size:1.9rem}
   .tally-divider{display:none}
   .hero-tally{gap:12px}
+  .hero-access{align-items:center;gap:10px;padding:10px}
+  .hero-access-link{font-size:.74rem}
+  .hero-qr{width:72px;height:72px}
   .topnav{padding:0 12px}
 }
 
@@ -629,6 +639,13 @@ footer { background: #0B1D33 !important; }
       <div class="tally-item"><span class="tally-num" id="category-count">12</span><span class="tally-label">Categories</span></div>
       <div class="tally-divider"></div>
       <div class="tally-item"><span class="tally-num">3</span><span class="tally-label">Types</span></div>
+    </div>
+    <div class="hero-access" aria-label="Quick access link and QR code">
+      <div class="hero-access-copy">
+        <div class="hero-access-label">Short URL</div>
+        <a class="hero-access-link" href="https://go.mgpd.org/aipl">go.mgpd.org/aipl</a>
+      </div>
+      <img class="hero-qr" src="assets/aipl-qr.png" alt="QR code for go.mgpd.org/aipl" width="86" height="86">
     </div>
   </div>
 </section>
