@@ -6,7 +6,7 @@
     "description": "A curated portfolio of AI-powered tools, reference guides, coaching frameworks, and interactive resources built for educators, administrators, and knowledge workers.",
     "tallies": [
       {
-        "num": "213",
+        "num": "161",
         "label": "Projects"
       },
       {
@@ -116,10 +116,10 @@
       "id": "architect",
       "section": "Prompt Engineering",
       "category": "Interactive Tool",
-      "title": "AI Prompt Architect",
-      "subtitle": "Transform basic ideas into engineered prompts; identify high-value AI workflows",
-      "stat": "6",
-      "statLabel": "Prompt Frameworks",
+      "title": "The Prompt Library",
+      "subtitle": "Unified prompt, image prompt, and data display pattern library",
+      "stat": "248",
+      "statLabel": "Prompt Cards",
       "panelGradient": "linear-gradient(160deg, #151D28 0%, #283342 100%)",
       "catStyle": "background:rgba(200,210,220,0.16);color:#C8D2DC;",
       "statColor": "#C8D2DC",
@@ -127,18 +127,18 @@
       "btnColor": "#E6EBF1",
       "btnHoverBg": "#2F5F8F",
       "btnHoverColor": "#fff",
-      "description": "An interactive prompt optimizer that takes any basic request and transforms it using one of six evidence-backed frameworks: Triple-Check, Few-Shot, Chain-of-Thought, Tree-of-Thought, Prompt Chaining, and RAG. Each framework includes a recommended model, a ready-to-copy optimized prompt, and rationale. Includes a glossary and two strategic workflow models (Problem-Based Learning and Use Case) for identifying high-impact AI opportunities.",
+      "description": "The consolidated Prompt Library now contains prompt engineering cards, AI Essentials prompts, K-12 image prompts, data display pattern prompts, glossary references, and the Prompt Architect tool in one searchable hub.",
       "features": [
-        "Triple-Check Prompting",
-        "Chain-of-Thought",
-        "Tree-of-Thought",
-        "RAG Organization",
-        "PBL &amp; Use Case Models",
+        "AI Essentials Prompts",
+        "K-12 Image Prompts",
+        "Data Display Patterns",
+        "Prompt Architect",
+        "Searchable Cards",
         "Copy-to-Clipboard"
       ],
       "links": [
         {
-          "label": "Open Tool →",
+          "label": "Open Prompt Library →",
           "href": "architect/index.html",
           "primary": true
         }
@@ -756,44 +756,6 @@
       ]
     },
     {
-      "num": "20",
-      "id": "dicebreakers",
-      "section": "Interactive &amp; Classroom Tools",
-      "category": "Classroom Tool · Generator",
-      "title": "Dicebreaker Creator",
-      "subtitle": "Roll a die, answer a prompt — design custom reflection &amp; debrief dice",
-      "stat": "6",
-      "statLabel": "Faces · 4 Presets",
-      "panelGradient": "linear-gradient(160deg, #1F1A24 0%, #2E2438 100%)",
-      "catStyle": "background:rgba(180,140,220,0.18);color:#C4A8F0;",
-      "statColor": "#D0C0F8",
-      "btnBg": "#4A3A70",
-      "btnColor": "#E8DCFA",
-      "btnHoverBg": "#5C4A88",
-      "btnHoverColor": "#fff",
-      "description": "A web app for teachers to design custom six-sided dice with discussion prompts, debrief questions, or icebreakers. Live canvas preview, cloud save to Google Drive/OneDrive/Dropbox, and export as PNG, PDF, PPTX, or JSON. Includes a student-facing play view with a 3D interactive die, plus presets for debrief, entry tickets, story starters, and ice-breakers.",
-      "features": [
-        "Live Canvas Preview",
-        "PNG / PDF / PPTX / JSON Export",
-        "4 Preset Templates",
-        "Cloud OAuth Sync",
-        "3D Student Play Mode",
-        "Share via URL"
-      ],
-      "links": [
-        {
-          "label": "Open Creator →",
-          "href": "dicebreakers/index.html",
-          "primary": true
-        },
-        {
-          "label": "Student Play View",
-          "href": "dicebreakers/play.html",
-          "primary": false
-        }
-      ]
-    },
-    {
       "num": "21",
       "id": "libcon",
       "section": "Coaching &amp; Professional Development",
@@ -1044,41 +1006,6 @@
         {
           "label": "Open Manager →",
           "href": "workmanager/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "28",
-      "id": "tcea-tools10",
-      "section": "Interactive &amp; Classroom Tools",
-      "category": "Classroom Tool Suite · TCEA",
-      "title": "TCEA Tools10",
-      "subtitle": "Ten ready-to-run classroom tools — dice, spinners, wordsearch, and more",
-      "stat": "10",
-      "statLabel": "Tools · Drag-and-Drop",
-      "panelGradient": "linear-gradient(160deg, #0A1E3A 0%, #1E398D 100%)",
-      "catStyle": "background:rgba(252,176,64,0.18);color:#FAA634;",
-      "statColor": "#FDCC80",
-      "btnBg": "#1E398D",
-      "btnColor": "#FAA634",
-      "btnHoverBg": "#2A4FB8",
-      "btnHoverColor": "#fff",
-      "description": "A TCEA-branded menu of ten lightweight classroom tools — coin flipping, dice, dicebreakers, draw-sketch, fortune teller, meme puzzle, shape spinner, story wheel, wheel spinner, and word search. Each tool lives in its own folder with a consistent navy/gold visual style, and several include separate teacher and student views. Drop-in classroom utilities for PD, icebreakers, and warm-ups.",
-      "features": [
-        "Coin Flipping",
-        "Dice &amp; Dicebreakers",
-        "Draw-Sketch",
-        "Fortune Teller",
-        "Meme Puzzle",
-        "Shape &amp; Wheel Spinners",
-        "Story Wheel",
-        "Word Search"
-      ],
-      "links": [
-        {
-          "label": "Open Tool Menu →",
-          "href": "tcea/tools10/index.html",
           "primary": true
         }
       ]
@@ -1475,246 +1402,6 @@
       ]
     },
     {
-      "num": "44",
-      "id": "tcea-tool-coinflipping",
-      "section": "TCEA Tools10",
-      "category": "Classroom Tool",
-      "title": "Coin Flipping",
-      "subtitle": "Classroom coin-flipping tool for quick random choices",
-      "stat": "Tool",
-      "statLabel": "Randomizer",
-      "description": "A TCEA Tools10 classroom utility for flipping coins and making quick randomized choices.",
-      "features": [
-        "Coin Flip",
-        "Randomizer",
-        "Classroom Tool",
-        "TCEA Tools10"
-      ],
-      "links": [
-        {
-          "label": "Open Coin Flipping →",
-          "href": "tcea/tools10/coinflipping/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "45",
-      "id": "tcea-tool-dice",
-      "section": "TCEA Tools10",
-      "category": "Classroom Tool",
-      "title": "Dice",
-      "subtitle": "Classroom dice roller for activities and random prompts",
-      "stat": "Tool",
-      "statLabel": "Randomizer",
-      "description": "A TCEA Tools10 dice utility for classroom games, activities, and random selection.",
-      "features": [
-        "Dice",
-        "Randomizer",
-        "Classroom Tool",
-        "TCEA Tools10"
-      ],
-      "links": [
-        {
-          "label": "Open Dice →",
-          "href": "tcea/tools10/dice/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "46",
-      "id": "tcea-tool-dicebreakers",
-      "section": "TCEA Tools10",
-      "category": "Classroom Tool",
-      "title": "Dicebreakers",
-      "subtitle": "Dice-based icebreakers and discussion prompts",
-      "stat": "Tool",
-      "statLabel": "Prompts",
-      "description": "A TCEA Tools10 dicebreaker activity tool for icebreakers, reflection prompts, and group discussion.",
-      "features": [
-        "Dicebreakers",
-        "Icebreakers",
-        "Discussion Prompts",
-        "Classroom Tool"
-      ],
-      "links": [
-        {
-          "label": "Open Dicebreakers →",
-          "href": "tcea/tools10/dicebreakers/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "47",
-      "id": "tcea-tool-drawsketch",
-      "section": "TCEA Tools10",
-      "category": "Classroom Tool",
-      "title": "Draw Sketch",
-      "subtitle": "Quick sketching and drawing tool for classroom activities",
-      "stat": "Tool",
-      "statLabel": "Drawing",
-      "description": "A TCEA Tools10 drawing tool for quick sketching, visual prompts, and classroom creativity.",
-      "features": [
-        "Drawing",
-        "Sketching",
-        "Classroom Tool",
-        "Visual Activity"
-      ],
-      "links": [
-        {
-          "label": "Open Draw Sketch →",
-          "href": "tcea/tools10/drawsketch/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "48",
-      "id": "tcea-tool-fortune",
-      "section": "TCEA Tools10",
-      "category": "Classroom Tool",
-      "title": "Fortune Teller",
-      "subtitle": "Interactive fortune-teller style prompt activity",
-      "stat": "Tool",
-      "statLabel": "Prompts",
-      "description": "A TCEA Tools10 fortune teller activity for randomized prompts, reflections, and playful classroom interaction.",
-      "features": [
-        "Fortune Teller",
-        "Prompts",
-        "Student View",
-        "Classroom Tool"
-      ],
-      "links": [
-        {
-          "label": "Open Fortune Teller →",
-          "href": "tcea/tools10/fortune/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "49",
-      "id": "tcea-tool-memepuzzle",
-      "section": "TCEA Tools10",
-      "category": "Classroom Tool",
-      "title": "Meme Puzzle",
-      "subtitle": "Meme puzzle activity for classroom engagement",
-      "stat": "Tool",
-      "statLabel": "Puzzle",
-      "description": "A TCEA Tools10 meme puzzle tool with teacher and student-facing activity options.",
-      "features": [
-        "Meme Puzzle",
-        "Student View",
-        "Classroom Tool",
-        "Engagement"
-      ],
-      "links": [
-        {
-          "label": "Open Meme Puzzle →",
-          "href": "tcea/tools10/memepuzzle/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "50",
-      "id": "tcea-tool-shapespinner",
-      "section": "TCEA Tools10",
-      "category": "Classroom Tool",
-      "title": "Shape Spinner",
-      "subtitle": "Spinner tool for shape-based random selection",
-      "stat": "Tool",
-      "statLabel": "Spinner",
-      "description": "A TCEA Tools10 shape spinner for random selection, classroom games, and warm-up activities.",
-      "features": [
-        "Shape Spinner",
-        "Randomizer",
-        "Classroom Tool",
-        "Warm-Up"
-      ],
-      "links": [
-        {
-          "label": "Open Shape Spinner →",
-          "href": "tcea/tools10/shapespinner/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "51",
-      "id": "tcea-tool-storywheel",
-      "section": "TCEA Tools10",
-      "category": "Classroom Tool",
-      "title": "Story Wheel",
-      "subtitle": "Story prompt spinner for writing and discussion",
-      "stat": "Tool",
-      "statLabel": "Writing",
-      "description": "A TCEA Tools10 story wheel that generates writing, storytelling, and discussion prompts.",
-      "features": [
-        "Story Wheel",
-        "Writing Prompts",
-        "Discussion",
-        "Classroom Tool"
-      ],
-      "links": [
-        {
-          "label": "Open Story Wheel →",
-          "href": "tcea/tools10/storywheel/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "52",
-      "id": "tcea-tool-wheelspinner",
-      "section": "TCEA Tools10",
-      "category": "Classroom Tool",
-      "title": "Wheel Spinner",
-      "subtitle": "General-purpose wheel spinner for classroom random selection",
-      "stat": "Tool",
-      "statLabel": "Spinner",
-      "description": "A TCEA Tools10 wheel spinner for choosing names, prompts, groups, tasks, or other classroom options.",
-      "features": [
-        "Wheel Spinner",
-        "Randomizer",
-        "Classroom Tool",
-        "Selection"
-      ],
-      "links": [
-        {
-          "label": "Open Wheel Spinner →",
-          "href": "tcea/tools10/wheelspinner/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "53",
-      "id": "tcea-tool-wordsearch",
-      "section": "TCEA Tools10",
-      "category": "Classroom Tool",
-      "title": "Word Search",
-      "subtitle": "Word search classroom activity tool",
-      "stat": "Tool",
-      "statLabel": "Puzzle",
-      "description": "A TCEA Tools10 word search tool for classroom vocabulary practice, review, and warm-ups.",
-      "features": [
-        "Word Search",
-        "Vocabulary",
-        "Puzzle",
-        "Classroom Tool"
-      ],
-      "links": [
-        {
-          "label": "Open Word Search →",
-          "href": "tcea/tools10/wordsearch/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
       "num": "54",
       "id": "tcea-vibeprojects",
       "section": "TCEA AI Resources",
@@ -1790,59 +1477,6 @@
       ]
     },
     {
-      "num": "57",
-      "id": "tcea-ddp",
-      "section": "TCEA Data & Dashboards",
-      "category": "Data Visualization",
-      "title": "Data Display Patterns",
-      "subtitle": "TCEA field guide for choosing and building useful data displays",
-      "stat": "Patterns",
-      "statLabel": "Guide",
-      "description": "A TCEA field guide to data display patterns, including easy and medium display patterns, charts, KPIs, hosting guidance, and a VIBES framework for building data displays.",
-      "features": [
-        "Data Display Patterns",
-        "Data Visualization",
-        "Charts",
-        "KPIs",
-        "Easy Patterns",
-        "Medium Patterns",
-        "Hosting Guide",
-        "VIBES Framework"
-      ],
-      "links": [
-        {
-          "label": "Open Data Display Patterns →",
-          "href": "architect/index.html#data-display",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "58",
-      "id": "tcea-ai-adoption-checklist-standalone",
-      "section": "TCEA AI Resources",
-      "category": "Checklist",
-      "title": "Generative AI Adoption Checklist",
-      "subtitle": "Checklist for reviewing AI guidance, integrity, privacy, capacity, equity, and governance readiness.",
-      "stat": "TCEA",
-      "statLabel": "Resource",
-      "description": "Checklist for reviewing AI guidance, integrity, privacy, capacity, equity, and governance readiness.",
-      "features": [
-        "TCEA",
-        "AI",
-        "Adoption",
-        "Checklist",
-        "TCEA AI Resources"
-      ],
-      "links": [
-        {
-          "label": "Open Generative AI Adoption Checklist →",
-          "href": "tcea/ai-adoption-checklist/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
       "num": "59",
       "id": "tcea-ai-adoption-roadmap",
       "section": "TCEA AI Resources",
@@ -1863,33 +1497,6 @@
         {
           "label": "Open AI Adoption Roadmap →",
           "href": "tcea/ai-adoption-roadmap/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "60",
-      "id": "tcea-ai-essentials-prompt-library",
-      "section": "TCEA AI Resources",
-      "category": "Prompt Library",
-      "title": "AI Essentials for Educators · Prompt Library of 100",
-      "subtitle": "Collection of educator-ready prompts for planning, instruction, assessment, and productivity.",
-      "stat": "TCEA",
-      "statLabel": "Resource",
-      "description": "Collection of educator-ready prompts for planning, instruction, assessment, and productivity.",
-      "features": [
-        "TCEA",
-        "AI",
-        "Essentials",
-        "Prompt",
-        "Library",
-        "Prompt Library",
-        "TCEA AI Resources"
-      ],
-      "links": [
-        {
-          "label": "Open AI Essentials for Educators · Prompt Library of 100 →",
-          "href": "architect/index.html#ai-essentials",
           "primary": true
         }
       ]
@@ -2065,32 +1672,6 @@
       ]
     },
     {
-      "num": "68",
-      "id": "tcea-custom-instructions-library",
-      "section": "TCEA Resources",
-      "category": "TCEA Resource",
-      "title": "TCEA AI Custom Instructions Library",
-      "subtitle": "TCEA AI Custom Instructions Library TCEA resource",
-      "stat": "TCEA",
-      "statLabel": "Resource",
-      "description": "TCEA AI Custom Instructions Library now lives in the consolidated AI Custom Instructions hub at aici/. The old TCEA URLs redirect here.",
-      "features": [
-        "TCEA",
-        "Custom",
-        "Instructions",
-        "Library",
-        "TCEA Resource",
-        "TCEA Resources"
-      ],
-      "links": [
-        {
-          "label": "Open TCEA AI Custom Instructions Library →",
-          "href": "aici/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
       "num": "69",
       "id": "tcea-dailywrite",
       "section": "TCEA Professional Learning",
@@ -2186,33 +1767,6 @@
       ]
     },
     {
-      "num": "73",
-      "id": "tcea-k12-image-prompt-library",
-      "section": "TCEA AI Resources",
-      "category": "Prompt Library",
-      "title": "K–12 Image Prompt Library",
-      "subtitle": "Prompt library for generating age-appropriate classroom images, visuals, and learning supports.",
-      "stat": "TCEA",
-      "statLabel": "Resource",
-      "description": "Prompt library for generating age-appropriate classroom images, visuals, and learning supports.",
-      "features": [
-        "TCEA",
-        "K-12",
-        "Image",
-        "Prompt",
-        "Library",
-        "Prompt Library",
-        "TCEA AI Resources"
-      ],
-      "links": [
-        {
-          "label": "Open K–12 Image Prompt Library →",
-          "href": "architect/index.html#image-prompts",
-          "primary": true
-        }
-      ]
-    },
-    {
       "num": "74",
       "id": "tcea-kpi-dashboard",
       "section": "TCEA Data & Dashboards",
@@ -2237,30 +1791,6 @@
       ]
     },
     {
-      "num": "75",
-      "id": "tcea-mappuzzle",
-      "section": "TCEA Resources",
-      "category": "TCEA Resource",
-      "title": "Map Puzzle Generator",
-      "subtitle": "Map puzzle maker for geography practice, spatial reasoning, and classroom review activities.",
-      "stat": "TCEA",
-      "statLabel": "Resource",
-      "description": "Map puzzle maker for geography practice, spatial reasoning, and classroom review activities.",
-      "features": [
-        "TCEA",
-        "Mappuzzle",
-        "TCEA Resource",
-        "TCEA Resources"
-      ],
-      "links": [
-        {
-          "label": "Open Map Puzzle Generator →",
-          "href": "tcea/mappuzzle/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
       "num": "76",
       "id": "tcea-other",
       "section": "TCEA Resources",
@@ -2280,31 +1810,6 @@
         {
           "label": "Open Tired of AI Tools That Miss the Mark | Apps by OneScreen →",
           "href": "tcea/other/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "77",
-      "id": "tcea-other-lssn",
-      "section": "TCEA Resources",
-      "category": "TCEA Resource",
-      "title": "Tired of AI Tools That Miss the Mark | Apps by OneScreen",
-      "subtitle": "Apps by OneScreen resource page focused on lesson support and AI-assisted classroom workflows.",
-      "stat": "TCEA",
-      "statLabel": "Resource",
-      "description": "Apps by OneScreen resource page focused on lesson support and AI-assisted classroom workflows.",
-      "features": [
-        "TCEA",
-        "Other",
-        "Lssn",
-        "TCEA Resource",
-        "TCEA Resources"
-      ],
-      "links": [
-        {
-          "label": "Open Tired of AI Tools That Miss the Mark | Apps by OneScreen →",
-          "href": "tcea/other/lssn/index.html",
           "primary": true
         }
       ]
@@ -2879,31 +2384,6 @@
         {
           "label": "Open Classroom Word Search Maker →",
           "href": "tcea/tools/wordsearch/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "101",
-      "id": "tcea-tools10-dotsboxes",
-      "section": "TCEA Tools10",
-      "category": "TCEA Resource",
-      "title": "Dots and Boxes",
-      "subtitle": "Dots and boxes activity from the classroom tools collection for quick strategy play.",
-      "stat": "TCEA",
-      "statLabel": "Resource",
-      "description": "Dots and boxes activity from the classroom tools collection for quick strategy play.",
-      "features": [
-        "TCEA",
-        "Tools10",
-        "Dotsboxes",
-        "TCEA Resource",
-        "TCEA Tools10"
-      ],
-      "links": [
-        {
-          "label": "Open Dots and Boxes →",
-          "href": "tcea/tools10/dotsboxes/index.html",
           "primary": true
         }
       ]
@@ -3513,562 +2993,6 @@
       ]
     },
     {
-      "num": "124",
-      "id": "tcea-vcll",
-      "section": "TCEA Resources",
-      "category": "TCEA Resource",
-      "title": "Vibe Coding Projects for Librarians",
-      "subtitle": "Locked version of the vibe-coding library project collection and librarian tools.",
-      "stat": "TCEA",
-      "statLabel": "Resource",
-      "description": "Locked version of the vibe-coding library project collection and librarian tools.",
-      "features": [
-        "TCEA",
-        "VCLL",
-        "TCEA Resource",
-        "TCEA Resources"
-      ],
-      "links": [
-        {
-          "label": "Open Vibe Coding Projects for Librarians →",
-          "href": "tcea/vcll/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "125",
-      "id": "tcea-vcll-libvibes-book-of-the-week-carousel",
-      "section": "TCEA LibVibes Locked",
-      "category": "LibVibes Tool",
-      "title": "Book of the Week Spotlight Carousel · LibVibes",
-      "subtitle": "Book of the Week Spotlight Carousel · LibVibes LibVibes classroom/library tool",
-      "stat": "Tool",
-      "statLabel": "LibVibes",
-      "description": "Book of the Week Spotlight Carousel · LibVibes is a TCEA resource available at tcea/vcll/libvibes/book-of-the-week-carousel/index.html. Added to the creations index so it can be found through search and section navigation.",
-      "features": [
-        "TCEA",
-        "VCLL",
-        "Libvibes",
-        "Book",
-        "Of",
-        "The",
-        "Week",
-        "Carousel",
-        "LibVibes Tool",
-        "TCEA LibVibes Locked"
-      ],
-      "links": [
-        {
-          "label": "Open Book of the Week Spotlight Carousel · LibVibes →",
-          "href": "tcea/vcll/libvibes/book-of-the-week-carousel/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "126",
-      "id": "tcea-vcll-libvibes-book-spine-poetry",
-      "section": "TCEA LibVibes Locked",
-      "category": "LibVibes Tool",
-      "title": "Book Spine Poetry Maker · LibVibes",
-      "subtitle": "Book Spine Poetry Maker · LibVibes LibVibes classroom/library tool",
-      "stat": "Tool",
-      "statLabel": "LibVibes",
-      "description": "Book Spine Poetry Maker · LibVibes is a TCEA resource available at tcea/vcll/libvibes/book-spine-poetry/index.html. Added to the creations index so it can be found through search and section navigation.",
-      "features": [
-        "TCEA",
-        "VCLL",
-        "Libvibes",
-        "Book",
-        "Spine",
-        "Poetry",
-        "LibVibes Tool",
-        "TCEA LibVibes Locked"
-      ],
-      "links": [
-        {
-          "label": "Open Book Spine Poetry Maker · LibVibes →",
-          "href": "tcea/vcll/libvibes/book-spine-poetry/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "127",
-      "id": "tcea-vcll-libvibes-boolean-search-trainer",
-      "section": "TCEA LibVibes Locked",
-      "category": "LibVibes Tool",
-      "title": "Boolean Search Trainer · LibVibes",
-      "subtitle": "Boolean Search Trainer · LibVibes LibVibes classroom/library tool",
-      "stat": "Tool",
-      "statLabel": "LibVibes",
-      "description": "Boolean Search Trainer · LibVibes is a TCEA resource available at tcea/vcll/libvibes/boolean-search-trainer/index.html. Added to the creations index so it can be found through search and section navigation.",
-      "features": [
-        "TCEA",
-        "VCLL",
-        "Libvibes",
-        "Boolean",
-        "Search",
-        "Trainer",
-        "LibVibes Tool",
-        "TCEA LibVibes Locked"
-      ],
-      "links": [
-        {
-          "label": "Open Boolean Search Trainer · LibVibes →",
-          "href": "tcea/vcll/libvibes/boolean-search-trainer/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "128",
-      "id": "tcea-vcll-libvibes-call-number-shelving-game",
-      "section": "TCEA LibVibes Locked",
-      "category": "LibVibes Tool",
-      "title": "Call Number Shelving Game · LibVibes",
-      "subtitle": "Call Number Shelving Game · LibVibes LibVibes classroom/library tool",
-      "stat": "Tool",
-      "statLabel": "LibVibes",
-      "description": "Call Number Shelving Game · LibVibes is a TCEA resource available at tcea/vcll/libvibes/call-number-shelving-game/index.html. Added to the creations index so it can be found through search and section navigation.",
-      "features": [
-        "TCEA",
-        "VCLL",
-        "Libvibes",
-        "Call",
-        "Number",
-        "Shelving",
-        "Game",
-        "LibVibes Tool",
-        "TCEA LibVibes Locked"
-      ],
-      "links": [
-        {
-          "label": "Open Call Number Shelving Game · LibVibes →",
-          "href": "tcea/vcll/libvibes/call-number-shelving-game/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "129",
-      "id": "tcea-vcll-libvibes-catalog-lookup",
-      "section": "TCEA LibVibes Locked",
-      "category": "LibVibes Tool",
-      "title": "\"Is It On the Shelf?\" Catalog Lookup · LibVibes",
-      "subtitle": "\"Is It On the Shelf?\" Catalog Lookup · LibVibes LibVibes classroom/library tool",
-      "stat": "Tool",
-      "statLabel": "LibVibes",
-      "description": "\"Is It On the Shelf?\" Catalog Lookup · LibVibes is a TCEA resource available at tcea/vcll/libvibes/catalog-lookup/index.html. Added to the creations index so it can be found through search and section navigation.",
-      "features": [
-        "TCEA",
-        "VCLL",
-        "Libvibes",
-        "Catalog",
-        "Lookup",
-        "LibVibes Tool",
-        "TCEA LibVibes Locked"
-      ],
-      "links": [
-        {
-          "label": "Open \"Is It On the Shelf?\" Catalog Lookup · LibVibes →",
-          "href": "tcea/vcll/libvibes/catalog-lookup/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "130",
-      "id": "tcea-vcll-libvibes-citation-quick-helper",
-      "section": "TCEA LibVibes Locked",
-      "category": "LibVibes Tool",
-      "title": "Citation Quick-Helper (MLA & APA) · LibVibes",
-      "subtitle": "Citation Quick-Helper (MLA & APA) · LibVibes LibVibes classroom/library tool",
-      "stat": "Tool",
-      "statLabel": "LibVibes",
-      "description": "Citation Quick-Helper (MLA & APA) · LibVibes is a TCEA resource available at tcea/vcll/libvibes/citation-quick-helper/index.html. Added to the creations index so it can be found through search and section navigation.",
-      "features": [
-        "TCEA",
-        "VCLL",
-        "Libvibes",
-        "Citation",
-        "Quick",
-        "Helper",
-        "LibVibes Tool",
-        "TCEA LibVibes Locked"
-      ],
-      "links": [
-        {
-          "label": "Open Citation Quick-Helper (MLA & APA) · LibVibes →",
-          "href": "tcea/vcll/libvibes/citation-quick-helper/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "131",
-      "id": "tcea-vcll-libvibes-collection-diversity-dashboard",
-      "section": "TCEA LibVibes Locked",
-      "category": "LibVibes Tool",
-      "title": "Collection Diversity Snapshot Dashboard · LibVibes",
-      "subtitle": "Collection Diversity Snapshot Dashboard · LibVibes LibVibes classroom/library tool",
-      "stat": "Tool",
-      "statLabel": "LibVibes",
-      "description": "Collection Diversity Snapshot Dashboard · LibVibes is a TCEA resource available at tcea/vcll/libvibes/collection-diversity-dashboard/index.html. Added to the creations index so it can be found through search and section navigation.",
-      "features": [
-        "TCEA",
-        "VCLL",
-        "Libvibes",
-        "Collection",
-        "Diversity",
-        "Dashboard",
-        "LibVibes Tool",
-        "TCEA LibVibes Locked"
-      ],
-      "links": [
-        {
-          "label": "Open Collection Diversity Snapshot Dashboard · LibVibes →",
-          "href": "tcea/vcll/libvibes/collection-diversity-dashboard/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "132",
-      "id": "tcea-vcll-libvibes-dewey-explorer-wheel",
-      "section": "TCEA LibVibes Locked",
-      "category": "LibVibes Tool",
-      "title": "Dewey Decimal Explorer Wheel · LibVibes",
-      "subtitle": "Dewey Decimal Explorer Wheel · LibVibes LibVibes classroom/library tool",
-      "stat": "Tool",
-      "statLabel": "LibVibes",
-      "description": "Dewey Decimal Explorer Wheel · LibVibes is a TCEA resource available at tcea/vcll/libvibes/dewey-explorer-wheel/index.html. Added to the creations index so it can be found through search and section navigation.",
-      "features": [
-        "TCEA",
-        "VCLL",
-        "Libvibes",
-        "Dewey",
-        "Explorer",
-        "Wheel",
-        "LibVibes Tool",
-        "TCEA LibVibes Locked"
-      ],
-      "links": [
-        {
-          "label": "Open Dewey Decimal Explorer Wheel · LibVibes →",
-          "href": "tcea/vcll/libvibes/dewey-explorer-wheel/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "133",
-      "id": "tcea-vcll-libvibes-digital-citizenship-detective",
-      "section": "TCEA LibVibes Locked",
-      "category": "LibVibes Tool",
-      "title": "Post or Pass? — Digital Citizenship Game · LibVibes",
-      "subtitle": "Post or Pass? — Digital Citizenship Game · LibVibes LibVibes classroom/library tool",
-      "stat": "Tool",
-      "statLabel": "LibVibes",
-      "description": "Post or Pass? — Digital Citizenship Game · LibVibes is a TCEA resource available at tcea/vcll/libvibes/digital-citizenship-detective/index.html. Added to the creations index so it can be found through search and section navigation.",
-      "features": [
-        "TCEA",
-        "VCLL",
-        "Libvibes",
-        "Digital",
-        "Citizenship",
-        "Detective",
-        "LibVibes Tool",
-        "TCEA LibVibes Locked"
-      ],
-      "links": [
-        {
-          "label": "Open Post or Pass? — Digital Citizenship Game · LibVibes →",
-          "href": "tcea/vcll/libvibes/digital-citizenship-detective/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "134",
-      "id": "tcea-vcll-libvibes-event-countdown-banner",
-      "section": "TCEA LibVibes Locked",
-      "category": "LibVibes Tool",
-      "title": "Library Event Countdown Banner · LibVibes",
-      "subtitle": "Library Event Countdown Banner · LibVibes LibVibes classroom/library tool",
-      "stat": "Tool",
-      "statLabel": "LibVibes",
-      "description": "Library Event Countdown Banner · LibVibes is a TCEA resource available at tcea/vcll/libvibes/event-countdown-banner/index.html. Added to the creations index so it can be found through search and section navigation.",
-      "features": [
-        "TCEA",
-        "VCLL",
-        "Libvibes",
-        "Event",
-        "Countdown",
-        "Banner",
-        "LibVibes Tool",
-        "TCEA LibVibes Locked"
-      ],
-      "links": [
-        {
-          "label": "Open Library Event Countdown Banner · LibVibes →",
-          "href": "tcea/vcll/libvibes/event-countdown-banner/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "135",
-      "id": "tcea-vcll-libvibes-genre-quiz",
-      "section": "TCEA LibVibes Locked",
-      "category": "LibVibes Tool",
-      "title": "\"Find Your Next Read\" Genre Quiz · LibVibes",
-      "subtitle": "\"Find Your Next Read\" Genre Quiz · LibVibes LibVibes classroom/library tool",
-      "stat": "Tool",
-      "statLabel": "LibVibes",
-      "description": "\"Find Your Next Read\" Genre Quiz · LibVibes is a TCEA resource available at tcea/vcll/libvibes/genre-quiz/index.html. Added to the creations index so it can be found through search and section navigation.",
-      "features": [
-        "TCEA",
-        "VCLL",
-        "Libvibes",
-        "Genre",
-        "Quiz",
-        "LibVibes Tool",
-        "TCEA LibVibes Locked"
-      ],
-      "links": [
-        {
-          "label": "Open \"Find Your Next Read\" Genre Quiz · LibVibes →",
-          "href": "tcea/vcll/libvibes/genre-quiz/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "136",
-      "id": "tcea-vcll-libvibes-library-floor-map",
-      "section": "TCEA LibVibes Locked",
-      "category": "LibVibes Tool",
-      "title": "Interactive Library Floor Map · LibVibes",
-      "subtitle": "Interactive Library Floor Map · LibVibes LibVibes classroom/library tool",
-      "stat": "Tool",
-      "statLabel": "LibVibes",
-      "description": "Interactive Library Floor Map · LibVibes is a TCEA resource available at tcea/vcll/libvibes/library-floor-map/index.html. Added to the creations index so it can be found through search and section navigation.",
-      "features": [
-        "TCEA",
-        "VCLL",
-        "Libvibes",
-        "Library",
-        "Floor",
-        "Map",
-        "LibVibes Tool",
-        "TCEA LibVibes Locked"
-      ],
-      "links": [
-        {
-          "label": "Open Interactive Library Floor Map · LibVibes →",
-          "href": "tcea/vcll/libvibes/library-floor-map/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "137",
-      "id": "tcea-vcll-libvibes-library-hours-card",
-      "section": "TCEA LibVibes Locked",
-      "category": "LibVibes Tool",
-      "title": "Library Welcome & Hours Card · LibVibes",
-      "subtitle": "Library Welcome & Hours Card · LibVibes LibVibes classroom/library tool",
-      "stat": "Tool",
-      "statLabel": "LibVibes",
-      "description": "Library Welcome & Hours Card · LibVibes is a TCEA resource available at tcea/vcll/libvibes/library-hours-card/index.html. Added to the creations index so it can be found through search and section navigation.",
-      "features": [
-        "TCEA",
-        "VCLL",
-        "Libvibes",
-        "Library",
-        "Hours",
-        "Card",
-        "LibVibes Tool",
-        "TCEA LibVibes Locked"
-      ],
-      "links": [
-        {
-          "label": "Open Library Welcome & Hours Card · LibVibes →",
-          "href": "tcea/vcll/libvibes/library-hours-card/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "138",
-      "id": "tcea-vcll-libvibes-mock-award-voting",
-      "section": "TCEA LibVibes Locked",
-      "category": "LibVibes Tool",
-      "title": "Mock Caldecott / Newbery Award Voting Station · LibVibes",
-      "subtitle": "Mock Caldecott / Newbery Award Voting Station · LibVibes LibVibes classroom/library tool",
-      "stat": "Tool",
-      "statLabel": "LibVibes",
-      "description": "Mock Caldecott / Newbery Award Voting Station · LibVibes is a TCEA resource available at tcea/vcll/libvibes/mock-award-voting/index.html. Added to the creations index so it can be found through search and section navigation.",
-      "features": [
-        "TCEA",
-        "VCLL",
-        "Libvibes",
-        "Mock",
-        "Award",
-        "Voting",
-        "LibVibes Tool",
-        "TCEA LibVibes Locked"
-      ],
-      "links": [
-        {
-          "label": "Open Mock Caldecott / Newbery Award Voting Station · LibVibes →",
-          "href": "tcea/vcll/libvibes/mock-award-voting/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "139",
-      "id": "tcea-vcll-libvibes-primary-secondary-sorter",
-      "section": "TCEA LibVibes Locked",
-      "category": "LibVibes Tool",
-      "title": "Primary vs. Secondary Source Sorter · LibVibes",
-      "subtitle": "Primary vs. Secondary Source Sorter · LibVibes LibVibes classroom/library tool",
-      "stat": "Tool",
-      "statLabel": "LibVibes",
-      "description": "Primary vs. Secondary Source Sorter · LibVibes is a TCEA resource available at tcea/vcll/libvibes/primary-secondary-sorter/index.html. Added to the creations index so it can be found through search and section navigation.",
-      "features": [
-        "TCEA",
-        "VCLL",
-        "Libvibes",
-        "Primary",
-        "Secondary",
-        "Sorter",
-        "LibVibes Tool",
-        "TCEA LibVibes Locked"
-      ],
-      "links": [
-        {
-          "label": "Open Primary vs. Secondary Source Sorter · LibVibes →",
-          "href": "tcea/vcll/libvibes/primary-secondary-sorter/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "140",
-      "id": "tcea-vcll-libvibes-reading-bingo-generator",
-      "section": "TCEA LibVibes Locked",
-      "category": "LibVibes Tool",
-      "title": "Reading Bingo Board Generator · LibVibes",
-      "subtitle": "Reading Bingo Board Generator · LibVibes LibVibes classroom/library tool",
-      "stat": "Tool",
-      "statLabel": "LibVibes",
-      "description": "Reading Bingo Board Generator · LibVibes is a TCEA resource available at tcea/vcll/libvibes/reading-bingo-generator/index.html. Added to the creations index so it can be found through search and section navigation.",
-      "features": [
-        "TCEA",
-        "VCLL",
-        "Libvibes",
-        "Reading",
-        "Bingo",
-        "Generator",
-        "LibVibes Tool",
-        "TCEA LibVibes Locked"
-      ],
-      "links": [
-        {
-          "label": "Open Reading Bingo Board Generator · LibVibes →",
-          "href": "tcea/vcll/libvibes/reading-bingo-generator/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "141",
-      "id": "tcea-vcll-libvibes-reading-challenge-tracker",
-      "section": "TCEA LibVibes Locked",
-      "category": "LibVibes Tool",
-      "title": "Reading Challenge Tracker · LibVibes",
-      "subtitle": "Reading Challenge Tracker · LibVibes LibVibes classroom/library tool",
-      "stat": "Tool",
-      "statLabel": "LibVibes",
-      "description": "Reading Challenge Tracker · LibVibes is a TCEA resource available at tcea/vcll/libvibes/reading-challenge-tracker/index.html. Added to the creations index so it can be found through search and section navigation.",
-      "features": [
-        "TCEA",
-        "VCLL",
-        "Libvibes",
-        "Reading",
-        "Challenge",
-        "Tracker",
-        "LibVibes Tool",
-        "TCEA LibVibes Locked"
-      ],
-      "links": [
-        {
-          "label": "Open Reading Challenge Tracker · LibVibes →",
-          "href": "tcea/vcll/libvibes/reading-challenge-tracker/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "142",
-      "id": "tcea-vcll-libvibes-signup-board",
-      "section": "TCEA LibVibes Locked",
-      "category": "LibVibes Tool",
-      "title": "Makerspace / Study Room Sign-Up Board · LibVibes",
-      "subtitle": "Makerspace / Study Room Sign-Up Board · LibVibes LibVibes classroom/library tool",
-      "stat": "Tool",
-      "statLabel": "LibVibes",
-      "description": "Makerspace / Study Room Sign-Up Board · LibVibes is a TCEA resource available at tcea/vcll/libvibes/signup-board/index.html. Added to the creations index so it can be found through search and section navigation.",
-      "features": [
-        "TCEA",
-        "VCLL",
-        "Libvibes",
-        "Signup",
-        "Board",
-        "LibVibes Tool",
-        "TCEA LibVibes Locked"
-      ],
-      "links": [
-        {
-          "label": "Open Makerspace / Study Room Sign-Up Board · LibVibes →",
-          "href": "tcea/vcll/libvibes/signup-board/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "143",
-      "id": "tcea-vcll-libvibes-source-evaluation-lab",
-      "section": "TCEA LibVibes Locked",
-      "category": "LibVibes Tool",
-      "title": "Source Evaluation Lab (CRAAP Test) · LibVibes",
-      "subtitle": "Source Evaluation Lab (CRAAP Test) · LibVibes LibVibes classroom/library tool",
-      "stat": "Tool",
-      "statLabel": "LibVibes",
-      "description": "Source Evaluation Lab (CRAAP Test) · LibVibes is a TCEA resource available at tcea/vcll/libvibes/source-evaluation-lab/index.html. Added to the creations index so it can be found through search and section navigation.",
-      "features": [
-        "TCEA",
-        "VCLL",
-        "Libvibes",
-        "Source",
-        "Evaluation",
-        "Lab",
-        "LibVibes Tool",
-        "TCEA LibVibes Locked"
-      ],
-      "links": [
-        {
-          "label": "Open Source Evaluation Lab (CRAAP Test) · LibVibes →",
-          "href": "tcea/vcll/libvibes/source-evaluation-lab/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
       "num": "144",
       "id": "tcea-vibe-app-intake-package",
       "section": "TCEA AI Resources",
@@ -4215,31 +3139,6 @@
         {
           "label": "Open LearnDash Risk Assessment and Transition Path →",
           "href": "tcea/webdecks/ldtransition/index.html",
-          "primary": true
-        }
-      ]
-    },
-    {
-      "num": "150",
-      "id": "tcea-webdecks-lessn",
-      "section": "TCEA Webdecks",
-      "category": "Webdeck",
-      "title": "Tired of AI Tools That Miss the Mark | Apps by OneScreen",
-      "subtitle": "WebDeck for Apps by OneScreen resources and AI-assisted instructional workflows.",
-      "stat": "TCEA",
-      "statLabel": "Resource",
-      "description": "WebDeck for Apps by OneScreen resources and AI-assisted instructional workflows.",
-      "features": [
-        "TCEA",
-        "Webdecks",
-        "Lessn",
-        "Webdeck",
-        "TCEA Webdecks"
-      ],
-      "links": [
-        {
-          "label": "Open Tired of AI Tools That Miss the Mark | Apps by OneScreen →",
-          "href": "tcea/webdecks/lessn/index.html",
           "primary": true
         }
       ]
@@ -4846,31 +3745,6 @@
       ]
     },
     {
-      "num": "175",
-      "id": "drawsplat-coinflipping",
-      "section": "DrawSplat Tools",
-      "category": "Classroom Tool",
-      "title": "Classroom Coin Flipper",
-      "subtitle": "Flip one or many coins, track probability, customize sides, and save classroom-ready setups.",
-      "stat": "External",
-      "statLabel": "DrawSplat",
-      "description": "Flip one or many coins, track probability, customize sides, and save classroom-ready setups.",
-      "features": [
-        "DrawSplat",
-        "DrawSplat Tools",
-        "Classroom Tool",
-        "External link"
-      ],
-      "links": [
-        {
-          "label": "Open Classroom Coin Flipper ->",
-          "href": "https://mguhlin.github.io/drawsplat/solutions/coinflipping/",
-          "primary": true,
-          "external": true
-        }
-      ]
-    },
-    {
       "num": "176",
       "id": "drawsplat-coloring-book",
       "section": "DrawSplat Tools",
@@ -4921,131 +3795,6 @@
       ]
     },
     {
-      "num": "178",
-      "id": "drawsplat-dice",
-      "section": "DrawSplat Tools",
-      "category": "Classroom Tool",
-      "title": "Classroom Dice Roller",
-      "subtitle": "Roll classroom dice with multiple die types, modifiers, totals, products, sounds, and history.",
-      "stat": "External",
-      "statLabel": "DrawSplat",
-      "description": "Roll classroom dice with multiple die types, modifiers, totals, products, sounds, and history.",
-      "features": [
-        "DrawSplat",
-        "DrawSplat Tools",
-        "Classroom Tool",
-        "External link"
-      ],
-      "links": [
-        {
-          "label": "Open Classroom Dice Roller ->",
-          "href": "https://mguhlin.github.io/drawsplat/solutions/dice/",
-          "primary": true,
-          "external": true
-        }
-      ]
-    },
-    {
-      "num": "179",
-      "id": "drawsplat-dicebreakers",
-      "section": "DrawSplat Tools",
-      "category": "Classroom Tool",
-      "title": "Dicebreaker Creator",
-      "subtitle": "Create and roll prompt dice for icebreakers, reflections, discussion starters, and debriefs.",
-      "stat": "External",
-      "statLabel": "DrawSplat",
-      "description": "Create and roll prompt dice for icebreakers, reflections, discussion starters, and debriefs.",
-      "features": [
-        "DrawSplat",
-        "DrawSplat Tools",
-        "Classroom Tool",
-        "External link"
-      ],
-      "links": [
-        {
-          "label": "Open Dicebreaker Creator ->",
-          "href": "https://mguhlin.github.io/drawsplat/solutions/dicebreakers/",
-          "primary": true,
-          "external": true
-        }
-      ]
-    },
-    {
-      "num": "180",
-      "id": "drawsplat-dotsboxes",
-      "section": "DrawSplat Tools",
-      "category": "Classroom Game",
-      "title": "Dots and Boxes",
-      "subtitle": "Play dots and boxes in the browser for quick strategy practice and paired classroom play.",
-      "stat": "External",
-      "statLabel": "DrawSplat",
-      "description": "Play dots and boxes in the browser for quick strategy practice and paired classroom play.",
-      "features": [
-        "DrawSplat",
-        "DrawSplat Tools",
-        "Classroom Game",
-        "External link"
-      ],
-      "links": [
-        {
-          "label": "Open Dots and Boxes ->",
-          "href": "https://mguhlin.github.io/drawsplat/solutions/dotsboxes/",
-          "primary": true,
-          "external": true
-        }
-      ]
-    },
-    {
-      "num": "181",
-      "id": "drawsplat-drawsketch",
-      "section": "DrawSplat Tools",
-      "category": "Creative Tool",
-      "title": "Draw and Sketch",
-      "subtitle": "Knob-style drawing toy for sketching, curves, visual play, and quick classroom creativity.",
-      "stat": "External",
-      "statLabel": "DrawSplat",
-      "description": "Knob-style drawing toy for sketching, curves, visual play, and quick classroom creativity.",
-      "features": [
-        "DrawSplat",
-        "DrawSplat Tools",
-        "Creative Tool",
-        "External link"
-      ],
-      "links": [
-        {
-          "label": "Open Draw and Sketch ->",
-          "href": "https://mguhlin.github.io/drawsplat/solutions/drawsketch/",
-          "primary": true,
-          "external": true
-        }
-      ]
-    },
-    {
-      "num": "182",
-      "id": "drawsplat-fortune",
-      "section": "DrawSplat Tools",
-      "category": "Classroom Tool",
-      "title": "Classroom Fortune Wheel",
-      "subtitle": "Teacher setup page for fortune-wheel prompts, categories, puzzles, and student sharing.",
-      "stat": "External",
-      "statLabel": "DrawSplat",
-      "description": "Teacher setup page for fortune-wheel prompts, categories, puzzles, and student sharing.",
-      "features": [
-        "DrawSplat",
-        "DrawSplat Tools",
-        "Classroom Tool",
-        "External link"
-      ],
-      "links": [
-        {
-          "label": "Open Classroom Fortune Wheel ->",
-          "href": "https://mguhlin.github.io/drawsplat/solutions/fortune/",
-          "primary": true,
-          "external": true
-        }
-      ]
-    },
-    {
       "num": "183",
       "id": "drawsplat-graph-maker",
       "section": "DrawSplat Tools",
@@ -5065,56 +3814,6 @@
         {
           "label": "Open Graph Maker ->",
           "href": "https://mguhlin.github.io/drawsplat/solutions/graph-maker/",
-          "primary": true,
-          "external": true
-        }
-      ]
-    },
-    {
-      "num": "184",
-      "id": "drawsplat-markdown-studio",
-      "section": "DrawSplat Tools",
-      "category": "Writing Tool",
-      "title": "Markdown Studio",
-      "subtitle": "Clean, preview, find and replace, and convert Markdown to HTML or WordPress block code.",
-      "stat": "External",
-      "statLabel": "DrawSplat",
-      "description": "Clean, preview, find and replace, and convert Markdown to HTML or WordPress block code.",
-      "features": [
-        "DrawSplat",
-        "DrawSplat Tools",
-        "Writing Tool",
-        "External link"
-      ],
-      "links": [
-        {
-          "label": "Open Markdown Studio ->",
-          "href": "https://mguhlin.github.io/drawsplat/solutions/markdown-studio/",
-          "primary": true,
-          "external": true
-        }
-      ]
-    },
-    {
-      "num": "185",
-      "id": "drawsplat-memepuzzle",
-      "section": "DrawSplat Tools",
-      "category": "Classroom Game",
-      "title": "Meme Puzzle Maker",
-      "subtitle": "Create low-stakes quiz puzzles where correct answers reveal a hidden meme image.",
-      "stat": "External",
-      "statLabel": "DrawSplat",
-      "description": "Create low-stakes quiz puzzles where correct answers reveal a hidden meme image.",
-      "features": [
-        "DrawSplat",
-        "DrawSplat Tools",
-        "Classroom Game",
-        "External link"
-      ],
-      "links": [
-        {
-          "label": "Open Meme Puzzle Maker ->",
-          "href": "https://mguhlin.github.io/drawsplat/solutions/memepuzzle/",
           "primary": true,
           "external": true
         }
@@ -5296,31 +3995,6 @@
       ]
     },
     {
-      "num": "193",
-      "id": "drawsplat-storywheel",
-      "section": "DrawSplat Tools",
-      "category": "Classroom Tool",
-      "title": "Story Wheel Maker",
-      "subtitle": "Create visual story summaries by ordering key events into illustrated wheel sections.",
-      "stat": "External",
-      "statLabel": "DrawSplat",
-      "description": "Create visual story summaries by ordering key events into illustrated wheel sections.",
-      "features": [
-        "DrawSplat",
-        "DrawSplat Tools",
-        "Classroom Tool",
-        "External link"
-      ],
-      "links": [
-        {
-          "label": "Open Story Wheel Maker ->",
-          "href": "https://mguhlin.github.io/drawsplat/solutions/storywheel/",
-          "primary": true,
-          "external": true
-        }
-      ]
-    },
-    {
       "num": "194",
       "id": "drawsplat-toneshifter",
       "section": "DrawSplat Tools",
@@ -5365,56 +4039,6 @@
         {
           "label": "Open Vibe Check ->",
           "href": "https://mguhlin.github.io/drawsplat/solutions/vibe-check/",
-          "primary": true,
-          "external": true
-        }
-      ]
-    },
-    {
-      "num": "196",
-      "id": "drawsplat-wheel-spinner",
-      "section": "DrawSplat Tools",
-      "category": "Classroom Tool",
-      "title": "Wheel Spinner",
-      "subtitle": "Spin a classroom wheel for names, groups, prompts, choices, tasks, and review questions.",
-      "stat": "External",
-      "statLabel": "DrawSplat",
-      "description": "Spin a classroom wheel for names, groups, prompts, choices, tasks, and review questions.",
-      "features": [
-        "DrawSplat",
-        "DrawSplat Tools",
-        "Classroom Tool",
-        "External link"
-      ],
-      "links": [
-        {
-          "label": "Open Wheel Spinner ->",
-          "href": "https://mguhlin.github.io/drawsplat/solutions/wheel-spinner/",
-          "primary": true,
-          "external": true
-        }
-      ]
-    },
-    {
-      "num": "197",
-      "id": "drawsplat-wordsearch",
-      "section": "DrawSplat Tools",
-      "category": "Classroom Tool",
-      "title": "Classroom Word Search Maker",
-      "subtitle": "Build printable word searches from vocabulary banks or custom classroom word lists.",
-      "stat": "External",
-      "statLabel": "DrawSplat",
-      "description": "Build printable word searches from vocabulary banks or custom classroom word lists.",
-      "features": [
-        "DrawSplat",
-        "DrawSplat Tools",
-        "Classroom Tool",
-        "External link"
-      ],
-      "links": [
-        {
-          "label": "Open Classroom Word Search Maker ->",
-          "href": "https://mguhlin.github.io/drawsplat/solutions/wordsearch/",
           "primary": true,
           "external": true
         }

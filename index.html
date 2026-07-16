@@ -298,13 +298,34 @@ h1 {
   text-decoration: none;
 }
 
-.quick-links a:hover {
+.quick-links button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 5px 9px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--navy);
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.quick-links a:hover,
+.quick-links button:hover,
+.quick-links button.active {
   border-color: var(--blue);
   background: #eef3f8;
 }
 
 .content {
+  display: none;
   padding-top: 22px;
+}
+
+.content.active {
+  display: block;
 }
 
 .section-block {
@@ -570,6 +591,7 @@ h1 {
 <script>
 let ALL_PROJECTS = [];
 let activeSearch = '';
+let activeGroup = '';
 
 const DISPLAY_GROUPS = [
   {
@@ -624,7 +646,7 @@ async function loadAndRender() {
   buildSections(ALL_PROJECTS);
   buildFooter(data.meta || {});
   bindControls();
-  updateResultCount(ALL_PROJECTS.length);
+  applySearch();
 
   const loader = document.getElementById('loading');
   loader.classList.add('hidden');
@@ -657,7 +679,7 @@ function buildQuickLinks(projects) {
   getDisplayGroups(projects).forEach(group => {
     const count = projects.filter(project => displayGroupFor(project) === group.name).length;
     nav.insertAdjacentHTML('beforeend',
-      `<a href="#${sectionId(group.name)}">${escapeHtml(group.name)} ${count}</a>`);
+      `<button type="button" data-group="${escapeAttr(group.name)}">${escapeHtml(group.name)} ${count}</button>`);
   });
 }
 
@@ -725,14 +747,18 @@ function bindControls() {
 
   input.addEventListener('input', () => {
     activeSearch = input.value.trim().toLowerCase();
+    if (activeSearch) activeGroup = '';
     clear.classList.toggle('visible', activeSearch.length > 0);
+    syncQuickLinkState();
     applySearch();
   });
 
   clear.addEventListener('click', () => {
     input.value = '';
     activeSearch = '';
+    activeGroup = '';
     clear.classList.remove('visible');
+    syncQuickLinkState();
     applySearch();
     input.focus();
   });
@@ -740,17 +766,33 @@ function bindControls() {
   input.addEventListener('keydown', event => {
     if (event.key === 'Escape') clear.click();
   });
+
+  document.getElementById('quick-links').addEventListener('click', event => {
+    const button = event.target.closest('button[data-group]');
+    if (!button) return;
+    activeGroup = activeGroup === button.dataset.group ? '' : button.dataset.group;
+    activeSearch = '';
+    input.value = '';
+    clear.classList.remove('visible');
+    syncQuickLinkState();
+    applySearch();
+    if (activeGroup) document.getElementById('project-sections').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
 }
 
 function applySearch() {
   let visible = 0;
   const hasSearch = activeSearch.length > 0;
+  const hasGroup = activeGroup.length > 0;
+  const shouldShowResults = hasSearch || hasGroup;
 
   document.querySelectorAll('.section-block').forEach(section => {
     let sectionHasVisible = false;
 
     section.querySelectorAll('.project-item').forEach(item => {
-      const show = !hasSearch || item.dataset.search.includes(activeSearch);
+      const matchesSearch = !hasSearch || item.dataset.search.includes(activeSearch);
+      const matchesGroup = !hasGroup || item.dataset.section === activeGroup;
+      const show = shouldShowResults && matchesSearch && matchesGroup;
       item.classList.toggle('hidden', !show);
       if (show) {
         sectionHasVisible = true;
@@ -762,8 +804,15 @@ function applySearch() {
     section.classList.toggle('hidden', !sectionHasVisible);
   });
 
-  document.getElementById('empty-state').classList.toggle('visible', visible === 0);
+  document.getElementById('project-sections').classList.toggle('active', shouldShowResults);
+  document.getElementById('empty-state').classList.toggle('visible', shouldShowResults && visible === 0);
   updateResultCount(visible);
+}
+
+function syncQuickLinkState() {
+  document.querySelectorAll('#quick-links button[data-group]').forEach(button => {
+    button.classList.toggle('active', button.dataset.group === activeGroup);
+  });
 }
 
 function refreshRowStripes(section) {
@@ -777,7 +826,10 @@ function refreshRowStripes(section) {
 }
 
 function updateResultCount(visible) {
-  document.getElementById('result-count').textContent = `${visible} of ${ALL_PROJECTS.length}`;
+  const hasQuery = activeSearch.length > 0 || activeGroup.length > 0;
+  document.getElementById('result-count').textContent = hasQuery
+    ? `${visible} of ${ALL_PROJECTS.length}`
+    : `Search or choose a category`;
 }
 
 function buildFooter(meta) {
