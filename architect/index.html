@@ -616,6 +616,7 @@ footer { background: #0B1D33 !important; }
     <a href="#ai-essentials" class="sidebar-link" data-cat="ai-essentials" onclick="handleCatClick(event,'ai-essentials')"><span class="sidebar-link-icon">💬</span>AI Essentials<span class="sidebar-link-count" id="cnt-ai-essentials">0</span></a>
     <a href="#image-prompts" class="sidebar-link" data-cat="image-prompts" onclick="handleCatClick(event,'image-prompts')"><span class="sidebar-link-icon">🖼️</span>Image Prompts<span class="sidebar-link-count" id="cnt-image-prompts">0</span></a>
     <a href="#data-display" class="sidebar-link" data-cat="data-display" onclick="handleCatClick(event,'data-display')"><span class="sidebar-link-icon">📊</span>Data Display<span class="sidebar-link-count" id="cnt-data-display">0</span></a>
+    <a href="#libvibes" class="sidebar-link" data-cat="libvibes" onclick="handleCatClick(event,'libvibes')"><span class="sidebar-link-icon">📚</span>LibVibes<span class="sidebar-link-count" id="cnt-libvibes">0</span></a>
     <div class="sidebar-section-label" style="margin-top:8px">Tools &amp; Reference</div>
     <a href="#prompt-architect" class="sidebar-link"><span class="sidebar-link-icon">🛠️</span>Prompt Architect</a>
     <a href="#glossary" class="sidebar-link"><span class="sidebar-link-icon">📚</span>Glossary</a>
@@ -4597,6 +4598,597 @@ Data (full dataset with labels and one or more series):
 [PASTE YOUR DATASET, or: &quot;Chart the data in this article/CSV: PASTE URL&quot;]</div>
 <div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
 </div>
+
+<!-- LIBVIBES PROMPTS: generated from https://mglearn.github.io/tcea/vcl/libvibes.html -->
+<div class="sec-divider" id="libvibes"><div class="sec-divider-line"></div><span class="sec-divider-icon">📚</span><span class="sec-divider-lbl">LibVibes Library Prompts</span><div class="sec-divider-line"></div></div>
+<div class="prompts-grid">
+
+<div class="pcard" data-cat="libvibes" data-type="short" data-keywords="libvibes library librarian k12 beginner operations github pages sites library welcome hours card i am a school librarian i am not a developer build me a single self-contained index html file html css and javascript in one file no external libraries that is a">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">LibVibes · Operations</div><div class="pcard-title">Library Welcome &amp; Hours Card</div></div><span class="pcard-type type-short">Beginner</span></div>
+<div class="pcard-body"><div class="pcard-desc">A no-login info card answering &quot;are you open and what can I do here?&quot; for students and parents. Host pattern: GitHub Pages / Sites.</div>
+<div class="pcard-prompt">Source: https://mglearn.github.io/tcea/vcl/libvibes/library-hours-card/index.html
+
+I am a school librarian. I am not a developer. Build me a single self-contained index.html file (HTML, CSS, and JavaScript in one file, no external libraries) that is a beautiful, mobile-first &quot;Library at a Glance&quot; info card I can embed in Google Sites.
+
+It should show:
+- The library name and a one-line welcome message at the top
+- Today&#39;s hours, with the CURRENT day auto-highlighted using the visitor&#39;s clock
+- A simple weekly hours table
+- Three &quot;quick info&quot; tiles: checkout limits, how to renew, and Wi-Fi/printing notes
+- A friendly &quot;Open now / Closed now&quot; status pill that updates based on the time of day
+
+Design:
+- Responsive, thumb-first; the tiles stack on phones and sit in a row on wide screens
+- Color palette: navy #0A3476, gold #FCB040, soft off-white background
+- A gentle fade-in on load and a subtle hover lift on the tiles
+- Large, readable type and strong contrast
+
+Put placeholder text I can easily edit at the top of the file with clear comments. Give me the complete file in one response.
+
+VIBES game plan:
+- Vision: A no-login info card answering &quot;are you open and what can I do here?&quot; for students and parents.
+- Instruct: Hand the AI your real hours and policies; name the navy/gold palette and the Google Sites embed.
+- Build: Get the layout first, then the live &quot;open now&quot; clock logic, then the polish.
+- Evaluate: Change your clock (or the test time) to confirm the right day highlights and the pill flips.
+- Ship: Save as index.html, push to GitHub Pages, paste the URL into Google Sites → Embed.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="libvibes" data-type="short" data-keywords="libvibes library librarian k12 beginner reader advisory github pages sites find your next read genre quiz i am a school librarian i am not a developer build me a single self-contained index html file no external libraries that is a fun what should i">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">LibVibes · Reader advisory</div><div class="pcard-title">&quot;Find Your Next Read&quot; Genre Quiz</div></div><span class="pcard-type type-short">Beginner</span></div>
+<div class="pcard-body"><div class="pcard-desc">Turn &quot;I don&#39;t know what to read&quot; into a 60-second interactive recommendation. Host pattern: GitHub Pages / Sites.</div>
+<div class="pcard-prompt">Source: https://mglearn.github.io/tcea/vcl/libvibes/genre-quiz/index.html
+
+I am a school librarian. I am not a developer. Build me a single self-contained index.html file (no external libraries) that is a fun &quot;What Should I Read Next?&quot; quiz for students in grades 4 through 8.
+
+How it works:
+- 5 light, friendly multiple-choice questions about mood, pace, and interests
+- At the end it reveals ONE recommended genre (Fantasy, Mystery, Realistic Fiction, Graphic Novel, Nonfiction, or Sci-Fi) with a short blurb and 3 sample titles
+- A &quot;Try again&quot; button resets the quiz
+
+Design:
+- Mobile-first, one question on screen at a time with a progress bar
+- Each genre result has its own accent color and a small emoji or icon
+- Smooth slide or fade transition between questions
+- Palette base: navy #0A3476 and gold #FCB040; let each result tint the card
+
+Make the questions and book titles easy to edit in clearly-labeled arrays at the top of the script. Give me the complete file in one response.
+
+VIBES game plan:
+- Vision: Turn &quot;I don&#39;t know what to read&quot; into a 60-second interactive recommendation.
+- Instruct: Give it your actual collection&#39;s titles so recommendations point at books you own.
+- Build: Build the question engine first; add the result-reveal animation and per-genre colors second.
+- Evaluate: Click through every answer path; confirm every genre result fires and the titles are real.
+- Ship: Embed in your catalog page or post a QR code at the shelf ends.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="libvibes" data-type="short" data-keywords="libvibes library librarian k12 beginner engagement github pages sites reading challenge tracker i am a school librarian i am not a developer build me a single self-contained index html file no external libraries that is a personal reading challenge tracker a student can use">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">LibVibes · Engagement</div><div class="pcard-title">Reading Challenge Tracker</div></div><span class="pcard-type type-short">Beginner</span></div>
+<div class="pcard-body"><div class="pcard-desc">A private, no-account habit tracker that makes progress feel rewarding. Host pattern: GitHub Pages / Sites.</div>
+<div class="pcard-prompt">Source: https://mglearn.github.io/tcea/vcl/libvibes/reading-challenge-tracker/index.html
+
+I am a school librarian. I am not a developer. Build me a single self-contained index.html file (no external libraries) that is a personal &quot;Reading Challenge&quot; tracker a student can use on their own Chromebook or phone.
+
+Features:
+- A goal of 20 books for the year (let me change the number in one place)
+- A &quot;+ Add a book I finished&quot; button that asks for the title and saves it
+- A big animated progress ring or bar showing books read vs. the goal
+- A list of finished books with the date added and a delete (x) on each
+- Milestone celebrations: a little confetti burst or badge at 25%, 50%, 75%, 100%
+- All data saved in the browser with localStorage so it survives a refresh
+- A &quot;Save to file&quot; and &quot;Load from file&quot; pair that exports and imports all the data as a JSON file (so it can move between devices or be backed up); if I ask, also offer a Google Apps Script + Google Sheet version that stores the data in my account
+
+Design:
+- Mobile-first, celebratory feel, palette navy #0A3476 + gold #FCB040 + teal #0E6B8A
+- The progress ring animates when a book is added
+
+Give me the complete file in one response.
+
+VIBES game plan:
+- Vision: A private, no-account habit tracker that makes progress feel rewarding.
+- Instruct: Specify localStorage (no login, data stays on the device) and the celebration moments.
+- Build: Get add/list/delete working first, then the animated ring, then the confetti milestones.
+- Evaluate: Add books, refresh, confirm the list persists; hit a milestone to see the celebration.
+- Ship: Link it from your library homepage; students bookmark it on their own devices.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="libvibes" data-type="short" data-keywords="libvibes library librarian k12 beginner library skill projector sites dewey decimal explorer wheel i am a school librarian i am not a developer build me a single self-contained index html file no external libraries that is an interactive dewey decimal explorer for elementary and">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">LibVibes · Library skill</div><div class="pcard-title">Dewey Decimal Explorer Wheel</div></div><span class="pcard-type type-short">Beginner</span></div>
+<div class="pcard-body"><div class="pcard-desc">Make the Dewey system feel like a game board instead of a wall chart. Host pattern: Projector / Sites.</div>
+<div class="pcard-prompt">Source: https://mglearn.github.io/tcea/vcl/libvibes/dewey-explorer-wheel/index.html
+
+I am a school librarian. I am not a developer. Build me a single self-contained index.html file (no external libraries) that is an interactive &quot;Dewey Decimal Explorer&quot; for elementary and middle school students.
+
+It should:
+- Show the 10 main Dewey classes (000 Computers/Info, 100 Philosophy/Psychology, 200 Religion, 300 Social Sciences, 400 Language, 500 Science, 600 Technology, 700 Arts/Recreation, 800 Literature, 900 History/Geography) as 10 clickable segments of a colorful wheel or a grid of cards
+- When a student clicks one, reveal a plain-language description, 2 or 3 example topics, and a &quot;where to find it in our library&quot; placeholder line I can edit
+- A search box where a student types a topic (like &quot;dinosaurs&quot; or &quot;soccer&quot;) and it highlights the most likely Dewey class
+
+Design:
+- Mobile-first; the wheel becomes a stacked grid on small screens
+- 10 distinct, friendly colors, one per class
+- A smooth highlight/zoom animation on the selected class
+
+Make the topic-to-class keyword list easy to edit. Give me the complete file.
+
+VIBES game plan:
+- Vision: Make the Dewey system feel like a game board instead of a wall chart.
+- Instruct: Provide local shelf-location notes and a starter keyword list (dinosaurs → 500s, etc.).
+- Build: Render the 10 segments first; wire up click-to-reveal; add the search-highlight last.
+- Evaluate: Test on a tablet at the shelf; try odd topics in the search box and fix misroutes.
+- Ship: Project it during orientation, or embed in your Google Site as a self-serve station.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="libvibes" data-type="short" data-keywords="libvibes library librarian k12 beginner promotion lobby screen sites library event countdown banner i am a school librarian i am not a developer build me a single self-contained index html file no external libraries that is a bold animated countdown banner for a library">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">LibVibes · Promotion</div><div class="pcard-title">Library Event Countdown Banner</div></div><span class="pcard-type type-short">Beginner</span></div>
+<div class="pcard-body"><div class="pcard-desc">Build hype for one upcoming event with a screen that earns a glance. Host pattern: Lobby screen / Sites.</div>
+<div class="pcard-prompt">Source: https://mglearn.github.io/tcea/vcl/libvibes/event-countdown-banner/index.html
+
+I am a school librarian. I am not a developer. Build me a single self-contained index.html file (no external libraries) that is a bold, animated countdown banner for a library event (for example Banned Books Week, a Book Fair, or an author visit).
+
+It should:
+- Count down in days, hours, minutes, seconds to a target date I set in one place
+- Show the event name, a one-line description, and a &quot;Learn more&quot; button with a link
+- When the countdown hits zero, switch to a celebratory &quot;It&#39;s here!&quot; message
+- Cycle through 3 short rotating tag lines or fun facts above the timer
+
+Design:
+- Full-width, projector-friendly AND phone-friendly
+- Big gold #FCB040 numerals on a navy #0A3476 background, high drama
+- The seconds digit ticks with a subtle flip or pulse animation
+- The rotating tag lines fade in and out
+
+Give me the complete file in one response, with the date, event name, and tag lines clearly marked for editing at the top.
+
+VIBES game plan:
+- Vision: Build hype for one upcoming event with a screen that earns a glance.
+- Instruct: Give it the exact date/time, event name, and link; specify the high-drama navy/gold look.
+- Build: Get the countdown math right first, then the zero-state switch, then the rotating taglines.
+- Evaluate: Set the target a minute out to watch the zero-state trigger; check it on the hallway display.
+- Ship: Loop it on a lobby monitor and embed a small version in your Google Site sidebar.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="libvibes" data-type="short" data-keywords="libvibes library librarian k12 beginner library skill github pages sites call number shelving game i am a school librarian i am not a developer build me a single self-contained index html file no external libraries that is a shelve it right game where students">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">LibVibes · Library skill</div><div class="pcard-title">Call Number Shelving Game</div></div><span class="pcard-type type-short">Beginner</span></div>
+<div class="pcard-body"><div class="pcard-desc">Drill the one hands-on skill (shelf order) that students and aides genuinely need. Host pattern: GitHub Pages / Sites.</div>
+<div class="pcard-prompt">Source: https://mglearn.github.io/tcea/vcl/libvibes/call-number-shelving-game/index.html
+
+I am a school librarian. I am not a developer. Build me a single self-contained index.html file (no external libraries) that is a &quot;Shelve It Right!&quot; game where students practice putting books in correct shelf order — a real library skill that nothing else teaches well.
+
+Two modes I can switch between:
+- DEWEY mode: students drag a row of scrambled nonfiction spine labels (e.g. 595.7, 595.789, 595.79, 599.2, 599.65) into correct ascending order
+- FICTION mode: students order scrambled author-last-name labels (e.g. ROW, ROWE, ROWLING, ROY) the way fiction is shelved alphabetically
+
+How it plays:
+- 5 spine &quot;labels&quot; appear scrambled; students drag to reorder them on a shelf
+- A &quot;Check my shelf&quot; button marks each spine correct (green) or out of place (red) and shows the number it should move to
+- A short &quot;Why?&quot; tooltip explains the rule when something is wrong
+- A &quot;New round&quot; button generates a fresh scrambled set
+- A simple score/streak counter
+
+Design:
+- Mobile-first and touch-draggable; spines reflow smoothly
+- Palette navy #0A3476, gold #FCB040, teal #0E6B8A; a wooden-shelf-tone backdrop
+- Satisfying snap animation when a spine drops into place
+
+Make the practice sets easy to edit. Give me the complete file in one response.
+
+VIBES game plan:
+- Vision: Drill the one hands-on skill (shelf order) that students and aides genuinely need.
+- Instruct: Provide real call numbers and author names from your stacks so the practice is authentic.
+- Build: Get drag-reorder working first, then the check/feedback logic, then the &quot;why&quot; rules.
+- Evaluate: Test the trickiest cases (e.g., 595.7 vs 595.789) on a touchscreen; confirm the ordering is correct.
+- Ship: Use it to train student library aides; embed in Google Sites for whole-class practice.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="libvibes" data-type="short" data-keywords="libvibes library librarian k12 beginner creative literacy projector sites book spine poetry maker i am a school librarian i am not a developer build me a single self-contained index html file no external libraries that is a digital book spine poetry maker a classic">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">LibVibes · Creative literacy</div><div class="pcard-title">Book Spine Poetry Maker</div></div><span class="pcard-type type-short">Beginner</span></div>
+<div class="pcard-body"><div class="pcard-desc">A low-floor, high-ceiling poetry activity that celebrates the collection itself. Host pattern: Projector / Sites.</div>
+<div class="pcard-prompt">Source: https://mglearn.github.io/tcea/vcl/libvibes/book-spine-poetry/index.html
+
+I am a school librarian. I am not a developer. Build me a single self-contained index.html file (no external libraries) that is a digital &quot;Book Spine Poetry&quot; maker — a classic library creativity activity where stacked book titles become a poem.
+
+Features:
+- A palette of draggable &quot;book spines,&quot; each a colored bar with an editable title
+- Students drag spines into a vertical stack to compose a poem from the titles
+- They can add their own spine, type any title on it, and pick its color
+- A &quot;Shuffle the shelf&quot; button reorders the unused spines for inspiration
+- A &quot;Download my poem&quot; button that saves the finished stack as an image (PNG)
+- A starter set of 12 evocative titles I can edit
+
+Design:
+- Mobile-first; touch-draggable spines that look like real book spines (varied heights, fonts, and colors)
+- Warm, bookish palette; gentle tilt and shadow on each spine
+- A clean &quot;stage&quot; area where the stacked poem reads top to bottom
+
+Give me the complete file in one response.
+
+VIBES game plan:
+- Vision: A low-floor, high-ceiling poetry activity that celebrates the collection itself.
+- Instruct: Seed it with real titles from your shelves; ask for PNG export so poems can be displayed.
+- Build: Get drag-into-stack working first; add custom spines + colors; add the image export last.
+- Evaluate: Compose a poem on a phone, download the PNG, and confirm it looks shareable.
+- Ship: Print the downloads for a hallway display; embed the maker in Google Sites for National Poetry Month.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="libvibes" data-type="long" data-keywords="libvibes library librarian k12 intermediate engagement github pages sites reading bingo board generator i am a school librarian i am not a developer build me a single self-contained index html file no external libraries that generates a 5x5 reading bingo board for a summer">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">LibVibes · Engagement</div><div class="pcard-title">Reading Bingo Board Generator</div></div><span class="pcard-type type-long">Intermediate</span></div>
+<div class="pcard-body"><div class="pcard-desc">One board that works as a digital game and a printable handout. Host pattern: GitHub Pages / Sites.</div>
+<div class="pcard-prompt">Source: https://mglearn.github.io/tcea/vcl/libvibes/reading-bingo-generator/index.html
+
+I am a school librarian. I am not a developer. Build me a single self-contained index.html file (no external libraries) that generates a 5x5 &quot;Reading Bingo&quot; board for a summer or seasonal reading program.
+
+Features:
+- A pool of about 30 reading challenges I can edit (e.g. &quot;Read a book set in space,&quot; &quot;Read a graphic novel,&quot; &quot;Read outside&quot;) shuffled into a 5x5 grid with a FREE center
+- A &quot;Shuffle new board&quot; button so each student gets a different board
+- Click/tap a square to mark it done; marked squares get a colored stamp
+- Auto-detects and celebrates a completed row, column, or diagonal (BINGO!)
+- A &quot;Print my board&quot; button that prints cleanly on one page
+- localStorage so a student&#39;s marked squares survive a refresh
+- A &quot;Save to file&quot; and &quot;Load from file&quot; pair that exports and imports the board and marks as a JSON file (to move between devices or keep a backup); if I ask, also offer a Google Apps Script + Google Sheet version
+
+Design:
+- Mobile-first; the 5x5 grid stays square and tappable on phones
+- Palette navy #0A3476, gold #FCB040, teal #0E6B8A; stamped squares animate in
+- Clean black-and-white print layout when printed
+
+Give me the complete file in one response.
+
+VIBES game plan:
+- Vision: One board that works as a digital game and a printable handout.
+- Instruct: Supply your real challenge list; specify shuffle, stamp, BINGO detection, and print.
+- Build: Grid + shuffle first; tap-to-stamp + persistence next; BINGO detection and print styles last.
+- Evaluate: Force a row to fill and confirm the BINGO fires; print to PDF and check it fits one page.
+- Ship: Embed in Google Sites for at-home play; print copies for the front desk.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="libvibes" data-type="long" data-keywords="libvibes library librarian k12 intermediate promotion lobby screen sites book of the week spotlight carousel i am a school librarian i am not a developer build me a single self-contained index html file no external libraries that is a rotating staff picks book of">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">LibVibes · Promotion</div><div class="pcard-title">Book of the Week Spotlight Carousel</div></div><span class="pcard-type type-long">Intermediate</span></div>
+<div class="pcard-body"><div class="pcard-desc">A self-running display that keeps fresh recommendations in front of students. Host pattern: Lobby screen / Sites.</div>
+<div class="pcard-prompt">Source: https://mglearn.github.io/tcea/vcl/libvibes/book-of-the-week-carousel/index.html
+
+I am a school librarian. I am not a developer. Build me a single self-contained index.html file (no external libraries) that is a rotating &quot;Staff Picks / Book of the Week&quot; spotlight I can embed in Google Sites and on a lobby screen.
+
+Features:
+- A data array of books, each with: cover image URL, title, author, a one-sentence pitch, a genre tag, and an optional &quot;Reserve / Find it&quot; link
+- A carousel that auto-advances every several seconds with manual next/prev arrows and clickable dots
+- Each slide shows the cover, the pitch, the author, and a colored genre pill
+- Pause auto-advance when a viewer hovers or focuses the carousel
+- Keyboard arrow support and swipe support on touch screens
+
+Design:
+- Mobile-first; on wide screens show cover on the left, text on the right
+- Palette navy #0A3476 + gold #FCB040; each genre pill has its own color
+- Smooth cross-fade or slide transition between books
+
+Put the book list in a clearly-labeled array at the top. Give me the complete file.
+
+VIBES game plan:
+- Vision: A self-running display that keeps fresh recommendations in front of students.
+- Instruct: Provide 5-10 real books with cover URLs and pitches; name the auto-advance timing.
+- Build: Static slide first, then navigation (arrows/dots/swipe), then auto-advance + pause-on-hover.
+- Evaluate: Test swipe on a phone, arrows on a keyboard, and confirm hover pauses the timer.
+- Ship: Embed in Google Sites and loop it on the lobby monitor; update the array weekly.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="libvibes" data-type="long" data-keywords="libvibes library librarian k12 intermediate info literacy sites embed citation quick-helper mla apa i am a school librarian i am not a developer build me a single self-contained index html file no external libraries that is a friendly citation quick-helper for students citing a">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">LibVibes · Info literacy</div><div class="pcard-title">Citation Quick-Helper (MLA &amp; APA)</div></div><span class="pcard-type type-long">Intermediate</span></div>
+<div class="pcard-body"><div class="pcard-desc">A guided helper that teaches the shape of a citation, not a black box. Host pattern: Sites embed.</div>
+<div class="pcard-prompt">Source: https://mglearn.github.io/tcea/vcl/libvibes/citation-quick-helper/index.html
+
+I am a school librarian. I am not a developer. Build me a single self-contained index.html file (no external libraries) that is a friendly &quot;Citation Quick-Helper&quot; for students citing a book or a website.
+
+Features:
+- A toggle between MLA and APA style
+- A toggle between &quot;Book&quot; and &quot;Website&quot; source type
+- A short form (author, title, publisher/site name, year, URL, date accessed) that shows only the fields relevant to the chosen source type
+- A live-updating formatted citation as the student types
+- A &quot;Copy citation&quot; button with a confirmation message
+- A small &quot;Double-check with your teacher&quot; disclaimer line
+
+Design:
+- Mobile-first, calm and clean, palette navy #0A3476 + teal #0E6B8A
+- Fields that don&#39;t apply hide with a smooth height/fade transition
+- The formatted output sits in a highlighted card with the right hanging-indent look
+
+Be accurate with MLA 9th and APA 7th formatting rules. Give me the complete file.
+
+VIBES game plan:
+- Vision: A guided helper that teaches the shape of a citation, not a black box.
+- Instruct: Tell it which styles/source types you need and to show fields conditionally.
+- Build: Build the form + live output first; add the MLA/APA logic; add copy + transitions.
+- Evaluate: Accuracy matters most — verify several examples against an official MLA/APA guide.
+- Ship: Embed in your research-help Google Site next to your database links.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="libvibes" data-type="long" data-keywords="libvibes library librarian k12 intermediate operations qr sites embed interactive library floor map i am a school librarian i am not a developer build me a single self-contained index html file no external libraries that is an interactive floor map of the library so">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">LibVibes · Operations</div><div class="pcard-title">Interactive Library Floor Map</div></div><span class="pcard-type type-long">Intermediate</span></div>
+<div class="pcard-body"><div class="pcard-desc">Replace &quot;where is it?&quot; with a tap-and-find map students use solo. Host pattern: QR / Sites embed.</div>
+<div class="pcard-prompt">Source: https://mglearn.github.io/tcea/vcl/libvibes/library-floor-map/index.html
+
+I am a school librarian. I am not a developer. Build me a single self-contained index.html file (no external libraries) that is an interactive floor map of the library so students can find sections fast.
+
+Features:
+- A simple top-down layout drawn with HTML/CSS boxes (no image needed) representing zones: Fiction, Nonfiction, Graphic Novels, Picture Books, Makerspace, Computers, Quiet Reading, and the Front Desk — I&#39;ll rename/rearrange them
+- Clicking a zone highlights it and opens a small panel with a description, the Dewey range or genre it holds, and a tip (&quot;Ask at the desk for...&quot;)
+- A search box: type a topic and it highlights the matching zone
+- A legend with a color per zone
+
+Design:
+- Mobile-first; the map scales to fit the screen and zones stay tappable
+- Distinct, accessible colors per zone; selected zone gets an outline + gentle zoom
+- Palette anchored in navy #0A3476 and gold #FCB040
+
+Make the zone names, positions, and descriptions easy to edit. Give me the complete file.
+
+VIBES game plan:
+- Vision: Replace &quot;where is it?&quot; with a tap-and-find map students use solo.
+- Instruct: Describe your actual room layout in rough rows/columns so the AI can place the boxes.
+- Build: Lay out the zones first; add click-to-highlight + info panel; add the search last.
+- Evaluate: Hand a student a phone and watch them find Graphic Novels without help.
+- Ship: Post a QR code at the entrance that opens the embedded Google Sites version.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="libvibes" data-type="long" data-keywords="libvibes library librarian k12 intermediate info literacy sites embed source evaluation lab craap test i am a school librarian i am not a developer build me a single self-contained index html file no external libraries that is an interactive is this source trustworthy lab">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">LibVibes · Info literacy</div><div class="pcard-title">Source Evaluation Lab (CRAAP Test)</div></div><span class="pcard-type type-long">Intermediate</span></div>
+<div class="pcard-body"><div class="pcard-desc">Turn an abstract checklist into a hands-on judgment students actually practice. Host pattern: Sites embed.</div>
+<div class="pcard-prompt">Source: https://mglearn.github.io/tcea/vcl/libvibes/source-evaluation-lab/index.html
+
+I am a school librarian. I am not a developer. Build me a single self-contained index.html file (no external libraries) that is an interactive &quot;Is This Source Trustworthy?&quot; lab teaching the CRAAP test (Currency, Relevance, Authority, Accuracy, Purpose) to middle and high school students.
+
+How it works:
+- A short intro card explaining the 5 CRAAP factors in student-friendly language
+- The student works through a sample source (I can provide a few example &quot;sources&quot; with title, author, date, publisher, and a snippet)
+- For each of the 5 factors, the student rates it 1-5 with a slider and reads a guiding question (e.g., Authority: &quot;Who wrote this and are they qualified?&quot;)
+- At the end, a &quot;Source Confidence&quot; meter combines the ratings into a visual score with a plain-language verdict (Strong / Mixed / Be Careful)
+- A &quot;Try another source&quot; button loads the next example
+
+Design:
+- Mobile-first; one factor at a time with a progress indicator
+- Each factor has its own accent color; the final meter animates as it fills
+- Palette navy #0A3476, gold #FCB040, teal #0E6B8A
+
+Make the example sources and guiding questions easy to edit. Give me the complete file.
+
+VIBES game plan:
+- Vision: Turn an abstract checklist into a hands-on judgment students actually practice.
+- Instruct: Provide 2-3 realistic example sources (one strong, one weak) so the lesson lands.
+- Build: Build the factor-by-factor flow first; add the combined confidence meter; add multiple sources.
+- Evaluate: Run a weak source and confirm the verdict reads &quot;Be Careful&quot;; check the wording with a teacher.
+- Ship: Assign it during a research unit; embed in your info-literacy Google Site.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="libvibes" data-type="long" data-keywords="libvibes library librarian k12 intermediate research skills sites embed boolean search trainer i am a school librarian i am not a developer build me a single self-contained index html file no external libraries that is a boolean search trainer game teaching and or not">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">LibVibes · Research skills</div><div class="pcard-title">Boolean Search Trainer</div></div><span class="pcard-type type-long">Intermediate</span></div>
+<div class="pcard-body"><div class="pcard-desc">Let students feel how operators change results before they touch a real database. Host pattern: Sites embed.</div>
+<div class="pcard-prompt">Source: https://mglearn.github.io/tcea/vcl/libvibes/boolean-search-trainer/index.html
+
+I am a school librarian. I am not a developer. Build me a single self-contained index.html file (no external libraries) that is a &quot;Boolean Search Trainer&quot; game teaching AND, OR, NOT, quotes, and parentheses to students using databases.
+
+How it works:
+- A small built-in pretend &quot;database&quot; of ~20 fake article cards, each with a few keyword tags (I can edit these)
+- The student types a Boolean query (supports AND, OR, NOT, &quot;quoted phrases&quot;, and parentheses) and the matching cards appear live
+- Challenge mode: a prompt like &quot;Find articles about sharks but NOT shark attacks&quot; with a target result set; the app checks whether their query returns the right cards
+- A hints panel explaining each operator with a quick example
+- A score for challenges solved
+
+Design:
+- Mobile-first; a clean query bar at the top, results as cards below
+- Matching keywords highlight inside the result cards
+- Palette navy #0A3476 + teal #0E6B8A; correct-challenge feedback animates in
+
+Make the fake article set and the challenges easy to edit. Build a small, correct Boolean parser. Give me the complete file in one response.
+
+VIBES game plan:
+- Vision: Let students feel how operators change results before they touch a real database.
+- Instruct: Define your fake article tags and the specific challenges you want students to solve.
+- Build: Get the parser + live filtering working first; add challenge-checking; add hints and scoring.
+- Evaluate: Test edge cases: NOT, nested parentheses, quoted phrases — confirm results are correct.
+- Ship: Pair it with a screencast of your real databases; embed in your research Google Site.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="libvibes" data-type="long" data-keywords="libvibes library librarian k12 intermediate info literacy sites embed primary vs secondary source sorter i am a school librarian i am not a developer build me a single self-contained index html file no external libraries that is a drag-and-sort game for primary vs secondary">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">LibVibes · Info literacy</div><div class="pcard-title">Primary vs. Secondary Source Sorter</div></div><span class="pcard-type type-long">Intermediate</span></div>
+<div class="pcard-body"><div class="pcard-desc">A quick, replayable check that a tricky distinction actually clicked. Host pattern: Sites embed.</div>
+<div class="pcard-prompt">Source: https://mglearn.github.io/tcea/vcl/libvibes/primary-secondary-sorter/index.html
+
+I am a school librarian. I am not a developer. Build me a single self-contained index.html file (no external libraries) that is a drag-and-sort game for &quot;Primary vs. Secondary Sources,&quot; a core social-studies and research concept.
+
+How it works:
+- A deck of source cards (e.g., &quot;a soldier&#39;s wartime diary,&quot; &quot;a textbook chapter,&quot; &quot;a photograph from the event,&quot; &quot;an encyclopedia entry,&quot; &quot;a recorded interview&quot;) that I can fully edit
+- Two labeled drop zones: PRIMARY and SECONDARY
+- Students drag each card into a zone; a &quot;Check&quot; button marks each right or wrong
+- Wrong answers flip to show a one-line explanation of why
+- A score and a &quot;Play again&quot; button that reshuffles the deck
+
+Design:
+- Mobile-first and touch-draggable; cards animate into the drop zones
+- Clear color coding for the two zones; correct cards glow, wrong cards shake gently
+- Palette navy #0A3476, gold #FCB040, teal #0E6B8A
+
+Make the card deck and explanations easy to edit. Give me the complete file.
+
+VIBES game plan:
+- Vision: A quick, replayable check that a tricky distinction actually clicked.
+- Instruct: Write source examples that match the units your teachers teach (history, science, ELA).
+- Build: Get drag-to-zone working first; add the check + explanations; add scoring and reshuffle.
+- Evaluate: Sort a full deck on a touchscreen; confirm every explanation is accurate and fair.
+- Ship: Hand it to a teacher as a station; embed in your Google Site for review.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="libvibes" data-type="mega" data-keywords="libvibes library librarian k12 advanced operations apps script sites is it on the shelf catalog lookup i am a school librarian i am not a developer but i can follow setup steps build me a google apps script web app backed by a google">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">LibVibes · Operations</div><div class="pcard-title">&quot;Is It On the Shelf?&quot; Catalog Lookup</div></div><span class="pcard-type type-mega">Advanced</span></div>
+<div class="pcard-body"><div class="pcard-desc">Turn a spreadsheet you already keep into a self-serve availability checker. Host pattern: Apps Script + Sites.</div>
+<div class="pcard-prompt">Source: https://mglearn.github.io/tcea/vcl/libvibes/catalog-lookup/index.html
+
+I am a school librarian. I am not a developer, but I can follow setup steps. Build me a Google Apps Script web app, backed by a Google Sheet, that lets students check whether a book is available without logging in.
+
+Setup:
+- My Google Sheet has columns: Title, Author, Genre, Call Number, Status (In / Checked Out / On Hold), and Location
+- The web app reads from this Sheet live
+
+Student-facing search page:
+- One search box that matches title OR author as the student types (live filtering)
+- Results as cards: title, author, call number, location, and a color-coded status pill (green In, amber On Hold, red Checked Out)
+- A genre filter and a &quot;show only available&quot; toggle
+- A friendly empty state when nothing matches, suggesting they ask at the desk
+
+Design:
+- Mobile-first; fast, no page reloads; palette navy #0A3476 + gold #FCB040
+- Status pills are color-coded AND labeled in text (don&#39;t rely on color alone)
+- Subtle skeleton/loading shimmer while results fetch
+
+Walk me through connecting the Sheet and deploying. Give me all the files.
+
+VIBES game plan:
+- Vision: Turn a spreadsheet you already keep into a self-serve availability checker.
+- Instruct: Give it your exact column names and status values so the backend maps cleanly.
+- Build: Sheet read + search first; add filters and status colors; add loading states.
+- Evaluate: Search real titles, flip a status in the Sheet, confirm the app reflects it.
+- Ship: Embed the search page in your catalog Google Site; share the link on signage.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="libvibes" data-type="mega" data-keywords="libvibes library librarian k12 advanced operations apps script sites makerspace study room sign-up board i am a school librarian i am not a developer but i can follow setup steps build me a google apps script web app backed by a google sheet for">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">LibVibes · Operations</div><div class="pcard-title">Makerspace / Study Room Sign-Up Board</div></div><span class="pcard-type type-mega">Advanced</span></div>
+<div class="pcard-body"><div class="pcard-desc">Replace the paper clipboard with a live, double-booking-proof sign-up sheet. Host pattern: Apps Script + Sites.</div>
+<div class="pcard-prompt">Source: https://mglearn.github.io/tcea/vcl/libvibes/signup-board/index.html
+
+I am a school librarian. I am not a developer, but I can follow setup steps. Build me a Google Apps Script web app, backed by a Google Sheet, for signing up to use the Makerspace stations (or study rooms) during set time slots.
+
+Setup:
+- A Google Sheet stores bookings: Date, Time Slot, Station/Room, Student Name, Grade
+- I can edit the list of stations and the list of time slots in one place
+
+Student-facing page:
+- Pick a date, then see a grid of time slots x stations
+- Open slots show a &quot;Sign up&quot; button; taken slots show the booked name (or just &quot;Reserved&quot; if I turn name-hiding on)
+- Submitting writes the booking to the Sheet and refreshes the grid
+- Also a &quot;Save to file&quot; / &quot;Load from file&quot; option that exports and imports the bookings as a JSON file (handy for backups or moving the demo between devices)
+- Prevents double-booking the same slot/station
+
+Admin page:
+- Password-protected; view all bookings for a date and cancel any with one click
+
+Design:
+- Mobile-first; the grid scrolls horizontally on phones with sticky time labels
+- Palette navy #0A3476, gold #FCB040, teal #0E6B8A; open vs. taken slots clearly distinct
+- A confirmation animation when a booking succeeds
+
+Walk me through the Sheet setup and deployment. Give me all the files.
+
+VIBES game plan:
+- Vision: Replace the paper clipboard with a live, double-booking-proof sign-up sheet.
+- Instruct: Define your stations, slots, and Sheet columns; specify the double-booking guard.
+- Build: Read + render-the-grid first; add booking writes + the conflict check; add admin cancel.
+- Evaluate: Have two people try the same slot at once; confirm only one wins and the grid updates.
+- Ship: Deploy and embed in Google Sites; bookmark it on the Makerspace tablet.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="libvibes" data-type="mega" data-keywords="libvibes library librarian k12 advanced library event apps script sites mock caldecott newbery award voting station i am a school librarian i am not a developer but i can follow setup steps build me a google apps script web app backed by a google">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">LibVibes · Library event</div><div class="pcard-title">Mock Caldecott / Newbery Award Voting Station</div></div><span class="pcard-type type-mega">Advanced</span></div>
+<div class="pcard-body"><div class="pcard-desc">Run a real democratic reading event: students read, deliberate, and vote on a winner. Host pattern: Apps Script + Sites.</div>
+<div class="pcard-prompt">Source: https://mglearn.github.io/tcea/vcl/libvibes/mock-award-voting/index.html
+
+I am a school librarian. I am not a developer, but I can follow setup steps. Build me a Google Apps Script web app, backed by a Google Sheet, for running a &quot;Mock Caldecott&quot; (or Mock Newbery) student book-award vote.
+
+Setup:
+- I maintain a Google Sheet of nominee books: Title, Author, cover image URL, and a one-line description
+- A second sheet/tab stores votes: Timestamp, Class, and the book voted for
+- Also a &quot;Save to file&quot; / &quot;Load from file&quot; option that exports and imports the votes as a JSON file (handy for backups or moving the demo between devices)
+- I can open and close voting with a setting
+
+Student-facing ballot page:
+- A gallery of nominee cards (cover, title, author, blurb)
+- A student picks ONE book and submits a short &quot;because...&quot; reason (optional)
+- One friendly confirmation; simple guard against rapid repeat votes from one device
+
+Results page:
+- A live, animated bar chart of votes per book
+- A toggle to show or hide results while voting is open (so it doesn&#39;t sway voters)
+- A scrolling wall of the &quot;because...&quot; reasons (no student names shown)
+
+Admin page:
+- Password-protected; open/close voting, clear the results, and export
+
+Design:
+- Mobile-first AND projector-friendly for the reveal assembly
+- Palette navy #0A3476, gold #FCB040, teal #0E6B8A; a gold winner&#39;s medal/glow on the leader
+- Bars grow with a smooth animation
+
+Walk me through the Sheet setup and deployment. Give me all the files.
+
+VIBES game plan:
+- Vision: Run a real democratic reading event: students read, deliberate, and vote on a winner.
+- Instruct: Load your nominee list with covers; decide whether reasons are required and results hidden.
+- Build: Build the ballot + vote storage first; add the results chart; add the open/close admin controls.
+- Evaluate: Cast votes across classes, confirm the tally and the &quot;hide results&quot; toggle behave.
+- Ship: Embed the ballot in Google Sites; project the animated results at the award-reveal assembly.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="libvibes" data-type="mega" data-keywords="libvibes library librarian k12 advanced operations apps script sites collection diversity snapshot dashboard i am a school librarian i am not a developer but i can follow setup steps build me a google apps script web app backed by a google sheet that gives">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">LibVibes · Operations</div><div class="pcard-title">Collection Diversity Snapshot Dashboard</div></div><span class="pcard-type type-mega">Advanced</span></div>
+<div class="pcard-body"><div class="pcard-desc">Turn an export you already have into evidence for weeding and budget requests. Host pattern: Apps Script + Sites.</div>
+<div class="pcard-prompt">Source: https://mglearn.github.io/tcea/vcl/libvibes/collection-diversity-dashboard/index.html
+
+I am a school librarian. I am not a developer, but I can follow setup steps. Build me a Google Apps Script web app, backed by a Google Sheet, that gives me a visual &quot;Collection Snapshot&quot; dashboard from a list of my titles — to support weeding, diversity audits, and collection-development conversations.
+
+Setup:
+- My Google Sheet has columns I&#39;ll define, such as: Title, Author, Genre, Format, Copyright Year, Last Checkout Date, and Representation Tags (free text I add)
+- The dashboard reads the Sheet live; treat missing cells gracefully
+
+Dashboard (for me, the librarian — password-protected):
+- Headline stats: total titles, average/median copyright year, % checked out in the last 12 months
+- A bar chart of titles by Genre and one by Format
+- A histogram of titles by copyright decade (spotlights an aging collection)
+- A &quot;Weeding candidates&quot; list: titles older than a year cutoff I set AND not checked out since a date I set (basic CREW/MUSTIE-style flag), with a reason shown
+- A simple breakdown of Representation Tags so I can see gaps at a glance
+
+Design:
+- Mobile-first but data-dense on desktop; clean charts drawn in plain HTML/CSS/Canvas (no chart libraries)
+- Palette navy #0A3476, gold #FCB040, teal #0E6B8A; charts animate on load
+- Every chart has a plain-language caption explaining what it suggests
+
+Walk me through the Sheet setup and deployment. Give me all the files.
+
+VIBES game plan:
+- Vision: Turn an export you already have into evidence for weeding and budget requests.
+- Instruct: Map your real column names and set your weeding cutoffs (age + last-checkout date).
+- Build: Get the headline stats + one chart working first; add the rest of the charts; add the weeding flag last.
+- Evaluate: Sanity-check the numbers against the raw Sheet; confirm weeding candidates match your judgment.
+- Ship: Keep it private (password-gated); screenshot charts for your collection-development report.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+<div class="pcard" data-cat="libvibes" data-type="long" data-keywords="libvibes library librarian k12 intermediate digital citizenship github pages sites post or pass digital citizenship game i am a school librarian i am not a developer build me a single self-contained index html file no external libraries that is a digital citizenship decision game">
+<div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">LibVibes · Digital citizenship</div><div class="pcard-title">Post or Pass? Digital Citizenship Game</div></div><span class="pcard-type type-long">Intermediate</span></div>
+<div class="pcard-body"><div class="pcard-desc">Turn abstract &quot;be safe and kind online&quot; rules into real decisions students practice and feel. Host pattern: GitHub Pages / Sites.</div>
+<div class="pcard-prompt">Source: https://mglearn.github.io/tcea/vcl/libvibes/digital-citizenship-detective/index.html
+
+I am a school librarian. I am not a developer. Build me a single self-contained index.html file (no external libraries) that is a &quot;digital citizenship&quot; decision game for students in grades 4 through 9.
+
+How it works:
+- A deck of about 10 real online situations (a quiz app asking for personal info, a phishing &quot;you won!&quot; pop-up, a friend asking for a password, a mean group chat, a viral fake headline, a stranger asking for a selfie and location, four hours of gaming vs. homework, using an image without permission, a threatening DM)
+- For each situation the student picks one of 2 to 4 actions; the game marks it best / okay / risky, reveals the best answer, and explains WHY in student-friendly language
+- Each situation is tagged with one of six skills: Privacy, Kindness, Credibility, Security, Digital Footprint, and Balance
+- A running score and a progress bar across the deck
+- At the end, a &quot;Digital Citizen Report&quot; shows the total score and a per-skill breakdown bar so I can see where the class is strong or needs work
+- A &quot;Play again&quot; button reshuffles the deck
+
+Design:
+- Mobile-first; one situation on screen at a time with instant, animated feedback
+- Each of the six skills has its own color and icon; the chosen answer and the best answer are both highlighted
+- Palette navy #0A3476, gold #FCB040, teal #0E6B8A on a soft off-white
+
+Make the scenarios, skills, and explanations easy to edit in clearly-labeled arrays at the top of the script. Give me the complete file in one response.
+
+VIBES game plan:
+- Vision: Turn abstract &quot;be safe and kind online&quot; rules into real decisions students practice and feel.
+- Instruct: Feed it scenarios from your own acceptable-use policy and recent situations so the cases ring true.
+- Build: Get the scenario → choose → feedback loop working first; add scoring and the progress bar; add the per-skill report last.
+- Evaluate: Play every path on a phone; confirm each &quot;best&quot; answer and explanation is accurate and age-appropriate; check with a counselor.
+- Ship: Use it as a station or bell-ringer; embed in your digital-citizenship Google Site or project it for a class discussion.</div>
+<div class="pcard-actions"><button class="btn-expand" onclick="toggleExpand(this)">Expand ▾</button><button class="btn-copy" onclick="copyPrompt(this)">Copy</button></div></div></div>
+
+</div>
+<!-- /LIBVIBES PROMPTS -->
 
 <!-- /CONSOLIDATED COLLECTIONS -->
 
