@@ -414,6 +414,12 @@ pre { background: #0B1D33 !important; color: #E6EBF1 !important; }
 .use-case-card h4 { color: #102A54 !important; }
 .use-case-card p { color: #5C6B62 !important; }
 
+/* Glossary cards */
+.gcard { background: #FFFFFF !important; border-color: #C8D2DC !important; box-shadow: 0 1px 3px rgba(16,42,84,0.12) !important; }
+.gcard:hover { border-color: #6F8FAF !important; box-shadow: 0 8px 24px rgba(16,42,84,0.14) !important; }
+.gterm { color: #102A54 !important; }
+.gdef { color: #4F6072 !important; }
+
 /* Promo box (gold accent) */
 .promo-box { background: #FFF8E7 !important; border-color: rgba(212,172,13,0.4) !important; }
 .promo-box h3 { color: #8B6B0E !important; }
@@ -4683,7 +4689,10 @@ Data (full dataset with labels and one or more series):
   <div class="gcard"><span class="gterm">Chain-of-Thought (CoT)</span><span class="gdef">Instructing the AI to "think step-by-step" and show its reasoning process, which significantly reduces errors in logic and math tasks.</span></div>
   <div class="gcard"><span class="gterm">Tree-of-Thought (ToT)</span><span class="gdef">Asking the AI to simulate multiple experts exploring different solution paths and vote on the best one — ideal for complex decisions.</span></div>
   <div class="gcard"><span class="gterm">Prompt Chaining</span><span class="gdef">Breaking a complex task into a sequence of smaller prompts, where the output of one prompt becomes the input for the next.</span></div>
+  <div class="gcard"><span class="gterm">CORE Framework</span><span class="gdef">A structured prompting approach: clarity, objectives, relevance, and examples. Use it to make prompts specific, purposeful, grounded, and easier for an AI to follow.</span></div>
   <div class="gcard"><span class="gterm">RAG (Retrieval-Augmented Generation)</span><span class="gdef">Grounding the AI's response in specific, uploaded documents rather than its general training data, reducing hallucinations.</span></div>
+  <div class="gcard"><span class="gterm">Custom Instructions</span><span class="gdef">Persistent guidelines that tell an AI who you are, what context matters, and how you want it to respond across conversations or projects.</span></div>
+  <div class="gcard"><span class="gterm">Knowledge Stack</span><span class="gdef">A coordinated set of tools, prompts, reference files, and reusable workflows that support a specific role, team, or recurring task.</span></div>
   <div class="gcard"><span class="gterm">Bot Stacking</span><span class="gdef">A BoodleBox feature where you use different AI models (e.g., Perplexity for research, Claude for writing) in the same chat context.</span></div>
   <div class="gcard"><span class="gterm">Nano Banana</span><span class="gdef">Google's Gemini Flash image generator. Fast, watermark-free, and ideal for creating educational visuals and diagrams.</span></div>
   <div class="gcard"><span class="gterm">Star Docs</span><span class="gdef">Documents you "star" in BoodleBox to automatically attach them to every new chat — ideal for Style Guides, Policies, and Reference Files.</span></div>
