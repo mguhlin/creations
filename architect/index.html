@@ -255,12 +255,10 @@ footer{background:var(--forest-deep);border-top:1px solid rgba(200,210,220,0.16)
 /* ═══════════════════════════════════════════
    GLOSSARY
 ═══════════════════════════════════════════ */
-.glossary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;padding:16px 28px 52px}
-.gcard{background:var(--charcoal-mid);border:1px solid var(--border-dark);border-radius:10px;padding:16px 18px;opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease,border-color .2s}
-.gcard.visible{opacity:1;transform:translateY(0)}
-.gcard:hover{border-color:rgba(200,210,220,0.16)}
-.gterm{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.1em;color:var(--forest-light);display:block;margin-bottom:6px}
-.gdef{font-size:.78rem;color:rgba(212,228,199,.65);line-height:1.55}
+.glossary-list{padding:16px 28px 52px;max-width:1040px}
+.glossary-list ol{margin:0;padding-left:2.1rem;column-count:2;column-gap:42px}
+.glossary-list li{break-inside:avoid;margin:0 0 12px;padding-left:4px;color:#4F6072;font-size:.88rem;line-height:1.55}
+.glossary-list strong{color:#102A54;font-weight:700}
 
 /* ═══════════════════════════════════════════
    AI WORKFLOW MODELS
@@ -291,12 +289,9 @@ footer{background:var(--forest-deep);border-top:1px solid rgba(200,210,220,0.16)
 .ptag-gen{background:rgba(200,210,220,0.16);color:var(--forest-light);border:1px solid rgba(200,210,220,0.16)}
 
 @media(max-width:768px){
-  .tool-wrapper,.glossary-grid,.workflow-grid{padding-left:16px;padding-right:16px}
+  .tool-wrapper,.glossary-list,.workflow-grid{padding-left:16px;padding-right:16px}
   .workflow-grid{grid-template-columns:1fr}
-  .glossary-grid{grid-template-columns:1fr 1fr}
-}
-@media(max-width:480px){
-  .glossary-grid{grid-template-columns:1fr}
+  .glossary-list ol{column-count:1}
 }
 
 
@@ -447,12 +442,6 @@ pre { background: #0B1D33 !important; color: #E6EBF1 !important; }
 .use-case-card:hover { border-color: #C8D2DC !important; }
 .use-case-card h4 { color: #102A54 !important; }
 .use-case-card p { color: #5C6B62 !important; }
-
-/* Glossary cards */
-.gcard { background: #FFFFFF !important; border-color: #C8D2DC !important; box-shadow: 0 1px 3px rgba(16,42,84,0.12) !important; }
-.gcard:hover { border-color: #6F8FAF !important; box-shadow: 0 8px 24px rgba(16,42,84,0.14) !important; }
-.gterm { color: #102A54 !important; }
-.gdef { color: #4F6072 !important; }
 
 /* Promo box (gold accent) */
 .promo-box { background: #FFF8E7 !important; border-color: rgba(212,172,13,0.4) !important; }
@@ -5238,19 +5227,37 @@ VIBES game plan:
 
 <!-- ═══════════ GLOSSARY ═══════════ -->
 <div class="sec-divider" id="glossary"><div class="sec-divider-line"></div><span class="sec-divider-icon">📚</span><span class="sec-divider-lbl">Glossary of Concepts</span><div class="sec-divider-line"></div></div>
-<div class="glossary-grid">
-  <div class="gcard"><span class="gterm">Triple-Check Prompting</span><span class="gdef">A rigorous framework that forces the AI to analyze variables, criticize its own draft, and adopt multiple expert perspectives before finalizing an answer.</span></div>
-  <div class="gcard"><span class="gterm">Few-Shot Prompting</span><span class="gdef">Providing the AI with a few examples of the desired input/output to establish a specific pattern or style it should follow.</span></div>
-  <div class="gcard"><span class="gterm">Chain-of-Thought (CoT)</span><span class="gdef">Instructing the AI to "think step-by-step" and show its reasoning process, which significantly reduces errors in logic and math tasks.</span></div>
-  <div class="gcard"><span class="gterm">Tree-of-Thought (ToT)</span><span class="gdef">Asking the AI to simulate multiple experts exploring different solution paths and vote on the best one — ideal for complex decisions.</span></div>
-  <div class="gcard"><span class="gterm">Prompt Chaining</span><span class="gdef">Breaking a complex task into a sequence of smaller prompts, where the output of one prompt becomes the input for the next.</span></div>
-  <div class="gcard"><span class="gterm">CORE Framework</span><span class="gdef">A structured prompting approach: clarity, objectives, relevance, and examples. Use it to make prompts specific, purposeful, grounded, and easier for an AI to follow.</span></div>
-  <div class="gcard"><span class="gterm">RAG (Retrieval-Augmented Generation)</span><span class="gdef">Grounding the AI's response in specific, uploaded documents rather than its general training data, reducing hallucinations.</span></div>
-  <div class="gcard"><span class="gterm">Custom Instructions</span><span class="gdef">Persistent guidelines that tell an AI who you are, what context matters, and how you want it to respond across conversations or projects.</span></div>
-  <div class="gcard"><span class="gterm">Knowledge Stack</span><span class="gdef">A coordinated set of tools, prompts, reference files, and reusable workflows that support a specific role, team, or recurring task.</span></div>
-  <div class="gcard"><span class="gterm">Bot Stacking</span><span class="gdef">A BoodleBox feature where you use different AI models (e.g., Perplexity for research, Claude for writing) in the same chat context.</span></div>
-  <div class="gcard"><span class="gterm">Nano Banana</span><span class="gdef">Google's Gemini Flash image generator. Fast, watermark-free, and ideal for creating educational visuals and diagrams.</span></div>
-  <div class="gcard"><span class="gterm">Star Docs</span><span class="gdef">Documents you "star" in BoodleBox to automatically attach them to every new chat — ideal for Style Guides, Policies, and Reference Files.</span></div>
+<div class="glossary-list">
+  <ol>
+    <li><strong>Bias.</strong> Systematic prejudice in AI outputs resulting from the data used to train the model.</li>
+    <li><strong>Bot Stacking.</strong> Using multiple AI models in one conversation where each builds on the others' outputs.</li>
+    <li><strong>Chain-of-Thought (CoT).</strong> Asking the AI to think step by step to improve reasoning on complex tasks.</li>
+    <li><strong>Coach Mode.</strong> A built-in feature that teaches you to prompt better as you work.</li>
+    <li><strong>Context Engineering.</strong> Creating the specific environment, background instructions, or knowledge stack that lets the AI deliver consistent results.</li>
+    <li><strong>CORE Framework.</strong> A structured prompting approach: clarity, objectives, relevance, and examples.</li>
+    <li><strong>Custom Instructions.</strong> Persistent guidelines telling the AI who you are and how you want it to respond across conversations.</li>
+    <li><strong>Few-Shot Prompting.</strong> Providing a few examples to guide the AI's style, format, or desired input/output pattern.</li>
+    <li><strong>Generative AI.</strong> A category of AI that creates new content, such as text, images, or code, in response to user inputs.</li>
+    <li><strong>Hallucination.</strong> When an AI confidently generates incorrect or fabricated information.</li>
+    <li><strong>Knowledge Bank.</strong> Your personal AI library where uploaded files are stored and can be referenced.</li>
+    <li><strong>Knowledge Stack.</strong> A personalized system of tools, prompts, and reference files that work together for a specific workflow.</li>
+    <li><strong>Large Language Model (LLM).</strong> The underlying technology, like GPT-5, Claude, or Gemini, trained on massive datasets to understand and generate human-like language.</li>
+    <li><strong>Lexical Density.</strong> A measure of content word concentration used to analyze how formal or conversational a text is.</li>
+    <li><strong>Memory Mode.</strong> A feature where AI remembers previous conversations for continuity.</li>
+    <li><strong>Nano Banana.</strong> Google's Gemini Flash image generator; fast, watermark-free, and useful for educational visuals.</li>
+    <li><strong>Negative Prompting.</strong> Explicitly telling the AI what not to include, such as "no jargon."</li>
+    <li><strong>Persona (Role-Playing).</strong> Instructing the AI to adopt a specific role, such as expert editor, to influence tone and expertise.</li>
+    <li><strong>Prompt Chaining.</strong> Breaking a complex task into a sequence of smaller prompts, where the output of one prompt becomes the input for the next.</li>
+    <li><strong>Prompt Engineering.</strong> The practice of refining inputs to get the most accurate and useful outputs.</li>
+    <li><strong>RAG (Retrieval-Augmented Generation).</strong> Providing the AI with specific documents to reference, grounding answers in facts and reducing hallucinations.</li>
+    <li><strong>Star Docs.</strong> Documents you star to auto-attach to every new chat.</li>
+    <li><strong>Stochastic Parrot.</strong> A term describing how AI assembles statistically probable sequences of words without true underlying understanding.</li>
+    <li><strong>Thematic Clustering.</strong> How AI groups unstructured data into related categories based on mathematical similarity.</li>
+    <li><strong>Tree-of-Thought (ToT).</strong> Asking the AI to simulate multiple experts exploring different solution paths and vote on the best one; useful for complex decisions.</li>
+    <li><strong>Triple-Check Prompting.</strong> A rigorous framework that forces the AI to analyze variables, criticize its own draft, and adopt multiple expert perspectives before finalizing an answer.</li>
+    <li><strong>Voice Drift.</strong> The tendency for AI to gradually strip away a human's unique writing style during revision.</li>
+    <li><strong>Zero-Shot Prompting.</strong> Asking for a task with no examples provided.</li>
+  </ol>
 </div>
 
 <!-- ═══════════ AI WORKFLOW MODELS ═══════════ -->
@@ -5360,7 +5367,7 @@ window.addEventListener('scroll',()=>btt.classList.toggle('visible',scrollY>500)
 
 /* Scroll-in */
 const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}});},{threshold:0.05});
-document.querySelectorAll('.pcard,.gcard,.wcard').forEach(c=>io.observe(c));
+document.querySelectorAll('.pcard,.wcard').forEach(c=>io.observe(c));
 
 /* Prompt Architect */
 function runArchitect(){
