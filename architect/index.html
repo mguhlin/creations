@@ -28,6 +28,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 .nav-brand{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--forest-pale);text-decoration:none;white-space:nowrap}
 .nav-brand span{color:var(--forest-light)}
+.nav-title{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:#E6EBF1;letter-spacing:.01em;white-space:nowrap;pointer-events:none}
 .nav-spacer{flex:1}
 .nav-count{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--charcoal-mute);white-space:nowrap;flex-shrink:0}
 .nav-count strong{color:var(--forest-light)}
@@ -206,6 +207,7 @@ footer{background:var(--forest-deep);border-top:1px solid rgba(200,210,220,0.16)
 /* ── RESPONSIVE ── */
 @media(max-width:1024px){
   :root{--sidebar-w:220px}
+  .nav-title{display:none}
   .prompts-grid{grid-template-columns:repeat(auto-fill,minmax(300px,1fr));padding:14px 20px 52px}
 }
 @media(max-width:768px){
@@ -581,6 +583,7 @@ footer { background: #0B1D33 !important; }
     <span></span><span></span><span></span>
   </button>
   <a href="#top" class="nav-brand">MG<span>uhlin</span> Prompts</a>
+  <div class="nav-title" aria-hidden="true">The Prompt Library</div>
   <div class="nav-spacer"></div>
   <div class="nav-count">Showing <strong id="visible-count">0</strong> of <strong id="total-count">0</strong></div>
   <div class="nav-search">
