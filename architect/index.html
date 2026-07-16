@@ -274,29 +274,29 @@ footer{background:var(--forest-deep);border-top:1px solid rgba(200,210,220,0.16)
    AI WORKFLOW MODELS
 ═══════════════════════════════════════════ */
 .workflow-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:18px;padding:16px 28px 60px}
-.wcard{background:var(--charcoal-mid);border:1px solid var(--border-dark);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;opacity:0;transform:translateY(24px);transition:opacity .55s ease,transform .55s ease,border-color .2s}
+.wcard{background:#FFFFFF;border:1px solid #C8D2DC;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;opacity:0;transform:translateY(24px);transition:opacity .55s ease,transform .55s ease,border-color .2s;box-shadow:0 1px 3px rgba(16,42,84,.12)}
 .wcard.visible{opacity:1;transform:translateY(0)}
-.wcard:hover{border-color:rgba(200,210,220,0.16)}
-.wcard-header{padding:18px 18px 14px;border-bottom:1px solid var(--border-mid)}
-.wcard-header.pbl{background:linear-gradient(160deg,#1a3a6e 0%,#1e4d8c 100%)}
-.wcard-header.uc{background:linear-gradient(160deg,#0d3d30 0%,#136247 100%)}
+.wcard:hover{border-color:#6F8FAF;box-shadow:0 8px 24px rgba(16,42,84,.14)}
+.wcard-header{padding:18px 18px 14px;border-bottom:1px solid #C8D2DC}
+.wcard-header.pbl{background:linear-gradient(160deg,#102A54 0%,#2F5F8F 100%)}
+.wcard-header.uc{background:linear-gradient(160deg,#1B426D 0%,#6F8FAF 100%)}
 .wcard-eyebrow{font-family:'DM Mono',monospace;font-size:.56rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:4px}
-.wcard-header.pbl .wcard-eyebrow{color:rgba(100,160,255,.7)}
-.wcard-header.uc .wcard-eyebrow{color:rgba(200,210,220,0.16)}
-.wcard-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--forest-pale)}
-.wcard-focus{font-size:.75rem;color:rgba(212,228,199,.6);margin-top:4px;line-height:1.5}
+.wcard-eyebrow{color:#C8D2DC}
+.wcard-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:#FFFFFF}
+.wcard-focus{font-size:.75rem;color:#E6EBF1;margin-top:4px;line-height:1.5}
+.wcard-focus strong{color:#FFFFFF !important}
 .wcard-body{padding:16px 18px;flex:1}
 .wcard-section{margin-bottom:16px}
-.wcard-section-lbl{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(200,210,220,0.16);margin-bottom:10px}
-.wcard-item{padding:9px 12px;background:rgba(16,42,84,0.16);border:1px solid var(--border-mid);border-radius:6px;margin-bottom:7px}
-.wcard-item-title{font-size:.78rem;font-weight:500;color:var(--cream)}
-.wcard-item-value{font-size:.72rem;color:rgba(200,210,220,0.16);margin-top:3px;font-style:italic}
+.wcard-section-lbl{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:#5A6C80;margin-bottom:10px}
+.wcard-item{padding:9px 12px;background:#E6EBF1;border:1px solid #C8D2DC;border-radius:6px;margin-bottom:7px}
+.wcard-item-title{font-size:.78rem;font-weight:500;color:#102A54}
+.wcard-item-value{font-size:.72rem;color:#4F6072;margin-top:3px;font-style:italic}
 .pillar-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.ptag{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:100px;font-weight:500}
-.ptag-data{background:rgba(100,160,255,.12);color:#7eb3ff;border:1px solid rgba(100,160,255,.2)}
-.ptag-rep{background:rgba(212,172,13,.12);color:var(--gold-light);border:1px solid rgba(212,172,13,.2)}
-.ptag-pred{background:rgba(255,100,50,.1);color:#FF8C5A;border:1px solid rgba(255,100,50,.2)}
-.ptag-gen{background:rgba(200,210,220,0.16);color:var(--forest-light);border:1px solid rgba(200,210,220,0.16)}
+.ptag{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:100px;font-weight:600}
+.ptag-data{background:#DCE8F4;color:#102A54;border:1px solid #9FB6CE}
+.ptag-rep{background:#EEF2F6;color:#2F5F8F;border:1px solid #C8D2DC}
+.ptag-pred{background:#D8DEE6;color:#102A54;border:1px solid #B7C3CF}
+.ptag-gen{background:#F7F9FC;color:#4F6072;border:1px solid #C8D2DC}
 
 @media(max-width:768px){
   .tool-wrapper,.glossary-list,.workflow-grid{padding-left:16px;padding-right:16px}
