@@ -117,6 +117,75 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .btn-copy.copied{background:rgba(200,210,220,0.16);color:var(--forest-faint)}
 .no-results{padding:80px 20px;text-align:center;color:var(--charcoal-mute);font-family:'DM Mono',monospace;font-size:.78rem;letter-spacing:.1em;display:none}
 
+
+/* Data Display examples inside prompt cards */
+.pcard-demo { margin: 0 0 10px; border: 1px dashed #C8D2DC; border-radius: 8px; background: #F7F9FC; overflow: hidden; }
+.pcard-demo summary { cursor: pointer; padding: 8px 11px; font-family: 'DM Mono', monospace; font-size: .58rem; letter-spacing: .12em; text-transform: uppercase; color: #102A54; background: #E6EBF1; }
+.pcard-demo-content { --navy:#102A54; --navy-dark:#0B1D33; --navy-mid:#2F5F8F; --gold:#D4AC0D; --gold-light:#F1C40F; --teal:#2F5F8F; --green:#237A57; --red:#B44A4A; --white:#FFFFFF; --off-white:#F7F9FC; --border:#D8DEE6; --pale-navy:#C8D2DC; --text-muted:#4F6072; padding: 14px; color: #102A54; font-family: 'DM Sans', sans-serif; }
+.pcard-demo-content .flip { background: transparent; width: 170px; height: 110px; perspective: 800px; display: inline-block; margin: 4px; }
+.pcard-demo-content .flip-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer; }
+.pcard-demo-content .flip:hover .flip-inner, .pcard-demo-content .flip.flipped .flip-inner { transform: rotateY(180deg); }
+.pcard-demo-content .flip-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px; text-align: center; }
+.pcard-demo-content .flip-front { background: #102A54; color: #FFFFFF; }
+.pcard-demo-content .flip-front .ff-num { font-family: 'Playfair Display', serif; font-size: 1.7rem; color: #C8D2DC; }
+.pcard-demo-content .flip-back { background: #C8D2DC; color: #0B1D33; transform: rotateY(180deg); font-size: 0.76rem; font-weight: 600; }
+.pcard-demo-content .bar-row, .pcard-demo-content .spark-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+.pcard-demo-content .b-label, .pcard-demo-content .sp-label { width: 86px; font-size: .76rem; font-weight: 700; color: #102A54; flex-shrink: 0; }
+.pcard-demo-content .bar-track { flex: 1; background: #D8DEE6; border-radius: 999px; height: 20px; overflow: hidden; }
+.pcard-demo-content .bar-fill { height: 100%; background: linear-gradient(90deg,#102A54,#2F5F8F); border-radius: 999px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; color: white; font-size: .68rem; font-weight: 700; }
+.pcard-demo-content .acc-item { border: 1px solid #D8DEE6; border-radius: 8px; margin-bottom: 7px; background: white; overflow: hidden; }
+.pcard-demo-content .acc-item summary { padding: 10px 12px; font-weight: 700; color: #102A54; cursor: pointer; font-size: .78rem; background: white; }
+.pcard-demo-content .acc-body { padding: 0 12px 10px; font-size: .76rem; color: #4F6072; }
+.pcard-demo-content .compare-table, .pcard-demo-content .sortable-table { width: 100%; border-collapse: collapse; font-size: .74rem; }
+.pcard-demo-content .compare-table th, .pcard-demo-content .sortable-table th { background: #102A54; color: white; padding: 7px 9px; text-align: left; }
+.pcard-demo-content .compare-table td, .pcard-demo-content .sortable-table td { padding: 7px 9px; border-top: 1px solid #D8DEE6; color: #102A54; }
+.pcard-demo-content .hotspot-wrap { position: relative; width: 230px; max-width: 100%; height: 132px; background: linear-gradient(135deg,#102A54,#2F5F8F); border-radius: 10px; }
+.pcard-demo-content .hotspot { position: absolute; width: 24px; height: 24px; border-radius: 50%; background: #C8D2DC; color: #0B1D33; font-weight: 800; font-size: .75rem; display: flex; align-items: center; justify-content: center; border: 2px solid white; }
+.pcard-demo-content .radial-row, .pcard-demo-content .donut-wrap { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; }
+.pcard-demo-content .radial-item { text-align: center; }
+.pcard-demo-content .radial { position: relative; width: 88px; height: 88px; border-radius: 50%; margin: 0 auto; }
+.pcard-demo-content .radial::after { content: ''; position: absolute; inset: 11px; background: white; border-radius: 50%; }
+.pcard-demo-content .r-val { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 1.05rem; color: #102A54; z-index: 1; }
+.pcard-demo-content .r-label, .pcard-demo-content .k-label, .pcard-demo-content .tl-text { font-size: .72rem; color: #4F6072; }
+.pcard-demo-content .waffle { display: grid; grid-template-columns: repeat(10, 1fr); gap: 3px; width: 210px; max-width: 100%; }
+.pcard-demo-content .w-cell { aspect-ratio: 1; border-radius: 3px; background: #D8DEE6; }
+.pcard-demo-content .w-cell.on { background: #102A54; }
+.pcard-demo-content .w-cell.on2 { background: #C8D2DC; }
+.pcard-demo-content .waffle-legend, .pcard-demo-content .stacked-legend, .pcard-demo-content .donut-legend { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; font-size: .72rem; color: #4F6072; }
+.pcard-demo-content .rank-list { display: grid; gap: 7px; }
+.pcard-demo-content .rank-row { display: grid; grid-template-columns: 28px 1fr 44px; gap: 8px; align-items: center; font-size: .76rem; }
+.pcard-demo-content .rank-num { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: #C8D2DC; color: #0B1D33; font-weight: 800; }
+.pcard-demo-content .rank-bar { height: 18px; border-radius: 999px; background: linear-gradient(90deg,#102A54,#2F5F8F); }
+.pcard-demo-content .steps { display: flex; gap: 8px; flex-wrap: wrap; }
+.pcard-demo-content .step { flex: 1; min-width: 88px; padding: 10px; background: white; border: 1px solid #D8DEE6; border-radius: 8px; font-size: .74rem; }
+.pcard-demo-content .step-num { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: #102A54; color: white; font-weight: 800; margin-bottom: 6px; }
+.pcard-demo-content .funnel { display: grid; gap: 6px; }
+.pcard-demo-content .f-row { background: linear-gradient(90deg,#102A54,#2F5F8F); color: white; text-align: center; padding: 8px; border-radius: 6px; font-size: .74rem; font-weight: 700; margin: 0 auto; }
+.pcard-demo-content .f-row:last-child { background: #C8D2DC; color: #0B1D33; }
+.pcard-demo-content .tabs-demo .tab-btns { display: flex; gap: 6px; border-bottom: 1px solid #D8DEE6; margin-bottom: 10px; }
+.pcard-demo-content .tb { background: none; border: none; padding: 7px 10px; font-weight: 700; font-size: .72rem; color: #4F6072; border-bottom: 2px solid transparent; }
+.pcard-demo-content .tb.active { color: #102A54; border-color: #2F5F8F; }
+.pcard-demo-content .tp { display: none; font-size: .76rem; color: #4F6072; }
+.pcard-demo-content .tp.active { display: block; }
+.pcard-demo-content .chip-list { display: flex; flex-wrap: wrap; gap: 7px; }
+.pcard-demo-content .data-chip { background: #E6EBF1; color: #102A54; padding: 5px 10px; border-radius: 999px; font-size: .72rem; font-weight: 700; }
+.pcard-demo-content .timeline { position: relative; padding-left: 24px; }
+.pcard-demo-content .tl-item { margin-bottom: 12px; }
+.pcard-demo-content .tl-date { font-size: .7rem; font-weight: 800; color: #102A54; }
+.pcard-demo-content .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(110px,1fr)); gap: 10px; }
+.pcard-demo-content .kpi { background: white; border: 1px solid #D8DEE6; border-top: 3px solid #2F5F8F; border-radius: 8px; padding: 12px; }
+.pcard-demo-content .k-num { font-family: 'Playfair Display', serif; font-size: 1.45rem; color: #102A54; }
+.pcard-demo-content .donut { width: 110px; height: 110px; border-radius: 50%; background: conic-gradient(#102A54 0% 45%, #6F8FAF 45% 70%, #C8D2DC 70% 88%, #D8DEE6 88% 100%); display: grid; place-items: center; }
+.pcard-demo-content .donut::after { content: ''; width: 66px; height: 66px; background: white; border-radius: 50%; }
+.pcard-demo-content .gauge { width: 140px; height: 78px; position: relative; overflow: hidden; margin: 0 auto; }
+.pcard-demo-content .gauge-bg { width: 140px; height: 140px; border-radius: 50%; background: conic-gradient(from 270deg,#237A57 0deg 54deg,#C8D2DC 54deg 90deg,#B44A4A 90deg 108deg,#D8DEE6 108deg 180deg); }
+.pcard-demo-content .gauge-center { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 96px; height: 48px; background: white; border-radius: 96px 96px 0 0; }
+.pcard-demo-content .gauge-val { position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); font-family: 'Playfair Display', serif; font-size: 1.2rem; color: #102A54; }
+.pcard-demo-content .stacked { height: 28px; display: flex; border-radius: 999px; overflow: hidden; color: white; font-size: .68rem; font-weight: 700; }
+.pcard-demo-content .heatmap { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; max-width: 260px; }
+.pcard-demo-content .heat-cell { aspect-ratio: 1; border-radius: 3px; }
+.pcard-demo-content .svg-chart { width: 100%; max-width: 320px; height: auto; }
+
 /* BACK TO TOP */
 #back-to-top{position:fixed;bottom:24px;right:24px;z-index:400;width:42px;height:42px;border-radius:50%;background:var(--forest);border:1px solid rgba(200,210,220,0.16);display:flex;align-items:center;justify-content:center;color:var(--forest-pale);font-size:1rem;text-decoration:none;opacity:0;transform:translateY(12px);transition:opacity .3s,transform .3s,background .2s;box-shadow:0 4px 20px rgba(0,0,0,.4)}
 #back-to-top.visible{opacity:1;transform:translateY(0)}
@@ -509,9 +578,6 @@ footer { background: #0B1D33 !important; }
     <a href="#data-display" class="sidebar-link" data-cat="data-display" onclick="handleCatClick(event,'data-display')"><span class="sidebar-link-icon">📊</span>Data Display<span class="sidebar-link-count" id="cnt-data-display">0</span></a>
     <div class="sidebar-section-label" style="margin-top:8px">Tools &amp; Reference</div>
     <a href="#prompt-architect" class="sidebar-link"><span class="sidebar-link-icon">🛠️</span>Prompt Architect</a>
-    <a href="#ai-essentials" class="sidebar-link"><span class="sidebar-link-icon">💬</span>AI Essentials Prompts</a>
-    <a href="#image-prompts" class="sidebar-link"><span class="sidebar-link-icon">🖼️</span>K-12 Image Prompts</a>
-    <a href="#data-display" class="sidebar-link"><span class="sidebar-link-icon">📊</span>Data Display Patterns</a>
     <a href="#glossary" class="sidebar-link"><span class="sidebar-link-icon">📚</span>Glossary</a>
     <a href="#ai-workflows" class="sidebar-link"><span class="sidebar-link-icon">🗺️</span>AI Workflow Models</a>
   </nav>
@@ -2601,6 +2667,15 @@ Use for: LinkedIn profile / company website / speaker bio</div>
 <div class="pcard" data-cat="data-display" data-type="short" data-keywords="data display pattern visualization chart html embed easy flip Card Flip">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">Card Flip</div></div><span class="pcard-type type-short">Short</span></div>
 <div class="pcard-body"><div class="pcard-desc">A card that flips on hover or click to reveal detail on the back. Good for a headline number with an explanation behind it. Best fit: Anywhere. CSS transforms only. Survives WordPress Custom HTML, Google Sites, and GitHub Pages with no changes.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><div class="flip" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-face flip-front"><div class="ff-num">73%</div><div>Tap to flip</div></div>
+        <div class="flip-face flip-back">73% of staff completed the AI training in Q2</div>
+      </div></div>
+      <div class="flip" onclick="this.classList.toggle('flipped')"><div class="flip-inner">
+        <div class="flip-face flip-front"><div class="ff-num">12</div><div>Tap to flip</div></div>
+        <div class="flip-face flip-back">12 campuses now have a coaching cycle in place</div>
+      </div></div></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with a row of flip cards.
 Each card shows a headline number on the front and a short explanation on the back, flipping on hover and on click.
 Use CSS transforms only, no JavaScript libraries. TCEA brand: navy #0A3476, gold #FCB040, white text on the front, navy text on a gold back.
@@ -2613,6 +2688,9 @@ Data (label, number, back-of-card explanation):
 <div class="pcard" data-cat="data-display" data-type="short" data-keywords="data display pattern visualization chart html embed easy accordion Accordion / Collapsible Sections">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">Accordion / Collapsible Sections</div></div><span class="pcard-type type-short">Short</span></div>
 <div class="pcard-body"><div class="pcard-desc">Stacked sections that expand one at a time. Best for dense reference data a reader scans selectively. Best fit: Anywhere. Uses the native details and summary elements, so zero JavaScript. Perfect for WordPress Custom HTML blocks.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><details class="acc-item" open><summary>What counts as Surface learning?</summary><div class="acc-body">Building foundational facts and skills. Effect size around 0.54.</div></details>
+      <details class="acc-item"><summary>What counts as Deep learning?</summary><div class="acc-body">Connecting ideas and relating concepts to one another.</div></details>
+      <details class="acc-item"><summary>What counts as Transfer learning?</summary><div class="acc-body">Applying learning to new and unfamiliar situations.</div></details></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with an accordion of collapsible sections.
 Use the native &lt;details&gt; and &lt;summary&gt; elements so there is no JavaScript at all.
 Style with TCEA navy #0A3476 headings, gold #FCB040 plus/minus markers, white cards with a light border.
@@ -2625,6 +2703,9 @@ Data (each item is a heading and its body):
 <div class="pcard" data-cat="data-display" data-type="short" data-keywords="data display pattern visualization chart html embed easy progress Progress Bars">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">Progress Bars</div></div><span class="pcard-type type-short">Short</span></div>
 <div class="pcard-body"><div class="pcard-desc">Horizontal bars comparing values against a whole. The fastest way to show proportion or completion. Best fit: Anywhere. Pure CSS widths. No scripting, so nothing gets stripped on any host.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><div class="bar-row"><span class="b-label">ChatGPT</span><div class="bar-track"><div class="bar-fill" style="width:82%">82%</div></div></div>
+      <div class="bar-row"><span class="b-label">Gemini</span><div class="bar-track"><div class="bar-fill" style="width:61%">61%</div></div></div>
+      <div class="bar-row"><span class="b-label">Perplexity</span><div class="bar-track"><div class="bar-fill" style="width:44%">44%</div></div></div></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with horizontal progress bars.
 Each row has a label, a track, and a filled portion sized by CSS width with the percentage shown inside the fill.
 Pure CSS, no JavaScript. TCEA navy #0A3476 gradient fills, gold #FCB040 reserved for any highlighted bar.
@@ -2637,6 +2718,10 @@ Data (label, percentage):
 <div class="pcard" data-cat="data-display" data-type="short" data-keywords="data display pattern visualization chart html embed easy compare Comparison Table">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">Comparison Table</div></div><span class="pcard-type type-short">Short</span></div>
 <div class="pcard-body"><div class="pcard-desc">A clean, styled table for side-by-side attributes. Still the clearest pattern when the reader needs exact values. Best fit: Anywhere. Styled HTML table, no scripting. Reliable in every host including email-style embeds.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><table class="compare-table"><thead><tr><th>Tool</th><th>Free tier</th><th>Best for</th></tr></thead>
+      <tbody><tr><td>BoodleBox</td><td>Yes</td><td>Multi-model classrooms</td></tr>
+      <tr><td>NotebookLM</td><td>Yes</td><td>Source-grounded research</td></tr>
+      <tr><td>Perplexity</td><td>Limited</td><td>Cited answers</td></tr></tbody></table></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with a styled comparison table.
 Navy #0A3476 header row with white text, alternating off-white row stripes, gold #FCB040 accent on any recommended row.
 Responsive: allow horizontal scroll on narrow screens. No JavaScript. Safe for a WordPress Custom HTML block.
@@ -2648,6 +2733,11 @@ Data (columns then rows):
 <div class="pcard" data-cat="data-display" data-type="short" data-keywords="data display pattern visualization chart html embed easy hotspot Image / Diagram Hotspots">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">Image / Diagram Hotspots</div></div><span class="pcard-type type-short">Short</span></div>
 <div class="pcard-body"><div class="pcard-desc">Clickable or hover points on a graphic that reveal a label. Good for annotated diagrams and maps. Best fit: Anywhere with hover-only tooltips (pure CSS). Click-to-reveal versions need a touch of JavaScript, so treat those as Medium for WordPress.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><div class="hotspot-wrap">
+      <div class="hotspot" data-tip="Empower and Engage" style="top:20px;left:24px">1</div>
+      <div class="hotspot" data-tip="Investigate and Innovate" style="top:90px;left:90px">2</div>
+      <div class="hotspot" data-tip="Implement and Improve" style="top:40px;left:180px">3</div>
+    </div><p style="font-size:0.78rem;color:var(--text-muted);margin-top:8px">Hover a point to see its label.</p></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with image hotspots.
 Position small numbered markers over a background graphic. On hover, each marker shows a tooltip label. Use pure CSS tooltips so it works in a WordPress Custom HTML block.
 TCEA gold #FCB040 markers with white borders on a navy #0A3476 background.
@@ -2659,6 +2749,11 @@ Data (marker number, x/y position, label):
 <div class="pcard" data-cat="data-display" data-type="short" data-keywords="data display pattern visualization chart html embed easy radial Radial Progress Ring">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">Radial Progress Ring</div></div><span class="pcard-type type-short">Short</span></div>
 <div class="pcard-body"><div class="pcard-desc">A circular progress indicator built from a CSS conic-gradient. Best for a single completion percentage that reads at a glance. Best fit: Anywhere. The ring is pure CSS conic-gradient with no script, so it survives WordPress Custom HTML, Google Sites, and GitHub Pages.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><div class="radial-row">
+      <div class="radial-item"><div class="radial" style="background:conic-gradient(var(--navy) 0% 78%, var(--border) 78% 100%)"><div class="r-val">78%</div></div><div class="r-label">Training complete</div></div>
+      <div class="radial-item"><div class="radial" style="background:conic-gradient(var(--gold) 0% 92%, var(--border) 92% 100%)"><div class="r-val">92%</div></div><div class="r-label">Satisfaction</div></div>
+      <div class="radial-item"><div class="radial" style="background:conic-gradient(var(--teal) 0% 45%, var(--border) 45% 100%)"><div class="r-val">45%</div></div><div class="r-label">Devices refreshed</div></div>
+    </div></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with radial progress rings.
 Each ring is a circle filled by a CSS conic-gradient up to its percentage, with a white hole in the middle and the percentage in the center. Put a label beneath each ring.
 Pure CSS, no JavaScript and no charting library. TCEA navy #0A3476 fill with gold #FCB040 for a highlighted ring, light gray for the remainder.
@@ -2671,6 +2766,8 @@ Data (label, percentage):
 <div class="pcard" data-cat="data-display" data-type="short" data-keywords="data display pattern visualization chart html embed easy waffle Waffle Chart">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">Waffle Chart</div></div><span class="pcard-type type-short">Short</span></div>
 <div class="pcard-body"><div class="pcard-desc">A ten-by-ten grid of squares where each square is one percent. Best for making a proportion feel concrete, like 64 in 100. Best fit: Anywhere. One hundred styled squares, no script needed in production. Reliable in every host.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><div class="waffle"><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on"></span><span class="w-cell on2"></span><span class="w-cell on2"></span><span class="w-cell on2"></span><span class="w-cell on2"></span><span class="w-cell on2"></span><span class="w-cell on2"></span><span class="w-cell on2"></span><span class="w-cell on2"></span><span class="w-cell on2"></span><span class="w-cell on2"></span><span class="w-cell on2"></span><span class="w-cell on2"></span><span class="w-cell on2"></span><span class="w-cell on2"></span><span class="w-cell on2"></span><span class="w-cell on2"></span><span class="w-cell on2"></span><span class="w-cell on2"></span><span class="w-cell "></span><span class="w-cell "></span><span class="w-cell "></span><span class="w-cell "></span><span class="w-cell "></span><span class="w-cell "></span><span class="w-cell "></span><span class="w-cell "></span><span class="w-cell "></span><span class="w-cell "></span><span class="w-cell "></span><span class="w-cell "></span><span class="w-cell "></span><span class="w-cell "></span><span class="w-cell "></span><span class="w-cell "></span><span class="w-cell "></span><span class="w-cell "></span></div>
+      <div class="waffle-legend"><div><span class="sw" style="background:var(--navy)"></span> Adopted — 64%</div><div><span class="sw" style="background:var(--gold)"></span> Piloting — 18%</div><div><span class="sw" style="background:var(--border)"></span> Not yet — 18%</div></div></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with a waffle chart.
 Render a 10 by 10 grid of 100 small squares. Fill the first squares to match each category's percentage using different colors, and leave the remainder gray. Add a legend with the categories and percentages.
 Pure CSS grid, no charting library. TCEA navy #0A3476 and gold #FCB040. Safe for a WordPress Custom HTML block.
@@ -2682,6 +2779,11 @@ Data (category, percentage — totalling 100):
 <div class="pcard" data-cat="data-display" data-type="short" data-keywords="data display pattern visualization chart html embed easy leaderboard Ranked Leaderboard">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">Ranked Leaderboard</div></div><span class="pcard-type type-short">Short</span></div>
 <div class="pcard-body"><div class="pcard-desc">A numbered list of items with an inline bar for each value. Best for a top-ten where both order and magnitude matter. Best fit: Anywhere. Numbered rows with CSS bars, no script. Works in every host including Custom HTML blocks.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><div class="rank-list">
+      <div class="rank-row"><span class="rank-num">1</span><span class="b-label">ChatGPT</span><div class="bar-track"><div class="bar-fill" style="width:100%">1,240</div></div></div>
+      <div class="rank-row"><span class="rank-num">2</span><span class="b-label">Gemini</span><div class="bar-track"><div class="bar-fill" style="width:74%">918</div></div></div>
+      <div class="rank-row"><span class="rank-num">3</span><span class="b-label">NotebookLM</span><div class="bar-track"><div class="bar-fill" style="width:52%">642</div></div></div>
+    </div></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with a ranked leaderboard.
 Each row has a rank number in a circle, a label, and a horizontal bar sized by value with the value shown inside. Sort highest to lowest and scale the bars against the top value.
 Pure CSS, no JavaScript. TCEA navy #0A3476 bars, gold #FCB040 rank badges. Safe for a WordPress Custom HTML block.
@@ -2693,6 +2795,12 @@ Data (label, value):
 <div class="pcard" data-cat="data-display" data-type="short" data-keywords="data display pattern visualization chart html embed easy steps Process Steps">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">Process Steps</div></div><span class="pcard-type type-short">Short</span></div>
 <div class="pcard-body"><div class="pcard-desc">A horizontal row of numbered steps connected by a line, with some marked complete. Best for a rollout, workflow, or phase view. Best fit: Anywhere. CSS layout with no script. Works in every host and wraps to a stack on mobile.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><div class="steps">
+      <div class="step done"><div class="s-num">1</div><div class="s-label">Explore</div><div class="s-desc">Awareness sessions</div></div>
+      <div class="step done"><div class="s-num">2</div><div class="s-label">Pilot</div><div class="s-desc">Three campuses</div></div>
+      <div class="step"><div class="s-num">3</div><div class="s-label">Scale</div><div class="s-desc">District-wide</div></div>
+      <div class="step"><div class="s-num">4</div><div class="s-label">Sustain</div><div class="s-desc">Coaching cycle</div></div>
+    </div></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with a horizontal process-steps indicator.
 Each step is a numbered circle with a short label and caption, connected by a line. Completed steps use a filled accent color; upcoming steps are muted. It should wrap to a vertical stack on narrow screens.
 Pure CSS, no JavaScript. TCEA navy #0A3476 for upcoming, gold #FCB040 for completed. Safe for a WordPress Custom HTML block.
@@ -2704,6 +2812,12 @@ Data (step label, caption, and whether it is complete):
 <div class="pcard" data-cat="data-display" data-type="short" data-keywords="data display pattern visualization chart html embed easy funnel Funnel Chart">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">Funnel Chart</div></div><span class="pcard-type type-short">Short</span></div>
 <div class="pcard-body"><div class="pcard-desc">Stacked bars that narrow at each stage. Best for showing drop-off through a pipeline or conversion path. Best fit: Anywhere. Centered bars sized by CSS width, no script. Reliable in every host.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><div class="funnel">
+      <div class="f-row" style="width:100%">Invited — 1,000</div>
+      <div class="f-row" style="width:72%">Registered — 720</div>
+      <div class="f-row" style="width:48%">Attended — 480</div>
+      <div class="f-row" style="width:30%">Completed — 300</div>
+    </div></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with a funnel chart.
 Each stage is a centered bar whose width shrinks with its value, labeled with the stage name and count. The final stage uses a highlight color.
 Pure CSS widths, no JavaScript. TCEA navy #0A3476 stages with a gold #FCB040 final stage. Safe for a WordPress Custom HTML block.
@@ -2715,6 +2829,14 @@ Data (stage label, value — in funnel order):
 <div class="pcard" data-cat="data-display" data-type="long" data-keywords="data display pattern visualization chart html embed medium tabs Tabs">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">Tabs</div></div><span class="pcard-type type-long">Long</span></div>
 <div class="pcard-body"><div class="pcard-desc">Switch between panels of content in the same space. Best for parallel views the reader toggles between. Best fit: GitHub Pages and iframe embeds. A CSS-only checkbox version exists, but the readable version uses a little JavaScript, so iframe it into WordPress rather than pasting into a Custom HTML block.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><div class="tabs-demo">
+      <div class="tab-btns">
+        <button class="tb active" data-t="0">Surface</button><button class="tb" data-t="1">Deep</button><button class="tb" data-t="2">Transfer</button>
+      </div>
+      <div class="tp active">Foundational facts and skills. Strongest early in a unit.</div>
+      <div class="tp">Connecting and relating ideas to build understanding.</div>
+      <div class="tp">Applying learning to new and unfamiliar contexts.</div>
+    </div></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with a tabbed panel.
 A row of tab buttons switches which content panel is visible using a small amount of vanilla JavaScript, no libraries.
 TCEA navy #0A3476 text, gold #FCB040 active-tab underline, white panels.
@@ -2727,6 +2849,12 @@ Data (one content block per tab):
 <div class="pcard" data-cat="data-display" data-type="long" data-keywords="data display pattern visualization chart html embed medium filter Searchable / Filterable List">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">Searchable / Filterable List</div></div><span class="pcard-type type-long">Long</span></div>
 <div class="pcard-body"><div class="pcard-desc">A live search box that filters a set of items as the reader types. Best for catalogs and long lists. Best fit: GitHub Pages and iframe embeds. Needs vanilla JavaScript. Use an iframe for WordPress.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><div class="filter-demo">
+      <input type="text" placeholder="Type to filter tools..." class="filterInput">
+      <div class="chip-list">
+        <span class="data-chip">BoodleBox</span><span class="data-chip">ChatGPT</span><span class="data-chip">Gemini</span>
+        <span class="data-chip">NotebookLM</span><span class="data-chip">Perplexity</span><span class="data-chip">Claude</span>
+      </div></div></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with a searchable, filterable list.
 A text input filters the items live as the user types, using vanilla JavaScript only, no libraries.
 Render items as cards or chips. TCEA navy #0A3476 and gold #FCB040 styling.
@@ -2739,6 +2867,11 @@ Data (list of items, optionally with a category for each):
 <div class="pcard" data-cat="data-display" data-type="long" data-keywords="data display pattern visualization chart html embed medium timeline Timeline">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">Timeline</div></div><span class="pcard-type type-long">Long</span></div>
 <div class="pcard-body"><div class="pcard-desc">A vertical sequence of dated events. Best for showing change or a rollout over time. Best fit: CSS-only timelines work anywhere. Add scroll-reveal animation and it becomes Medium, so iframe it into WordPress.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><div class="timeline">
+      <div class="tl-item"><div class="tl-date">AUG 2025</div><div class="tl-text">Pilot launches on three campuses</div></div>
+      <div class="tl-item"><div class="tl-date">NOV 2025</div><div class="tl-text">Coaching cycle added district-wide</div></div>
+      <div class="tl-item"><div class="tl-date">FEB 2026</div><div class="tl-text">First cohort earns certificates</div></div>
+    </div></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with a vertical timeline.
 Each entry has a date and a short description, connected by a vertical line with gold #FCB040 dots.
 Use CSS for the layout and optional light vanilla JavaScript for scroll-reveal. TCEA navy #0A3476 text.
@@ -2751,6 +2884,14 @@ Data (date, event):
 <div class="pcard" data-cat="data-display" data-type="long" data-keywords="data display pattern visualization chart html embed medium flashcards Flashcard Deck">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">Flashcard Deck</div></div><span class="pcard-type type-long">Long</span></div>
 <div class="pcard-body"><div class="pcard-desc">A shuffleable deck the reader steps through one card at a time. Best for study sets and term review. Best fit: GitHub Pages and iframe embeds. State tracking needs JavaScript. Avoid localStorage if the destination is a sandboxed iframe.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><div style="text-align:center">
+      <div class="flip" id="fcDemo" onclick="this.classList.toggle('flipped')" style="margin:0 auto">
+        <div class="flip-inner">
+          <div class="flip-face flip-front"><div style="font-weight:700">Effect size</div><div style="font-size:0.74rem;margin-top:6px">Tap to flip</div></div>
+          <div class="flip-face flip-back">A measure of the impact of an influence on achievement</div>
+        </div></div>
+      <div style="margin-top:14px"><button class="copy-btn fcNext" style="background:var(--navy);color:#fff">Next card →</button></div>
+    </div></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with a flashcard deck.
 Show one card at a time with a term on the front and definition on the back, flipping on click. A Next button advances through the deck, with a Shuffle option.
 Use vanilla JavaScript only, no libraries, and no localStorage so it works inside sandboxed iframes.
@@ -2763,6 +2904,11 @@ Data (term, definition):
 <div class="pcard" data-cat="data-display" data-type="long" data-keywords="data display pattern visualization chart html embed medium toggleview Toggle Data Views">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">Toggle Data Views</div></div><span class="pcard-type type-long">Long</span></div>
 <div class="pcard-body"><div class="pcard-desc">One dataset, switchable between table, cards, and bars. Best when different readers want different formats. Best fit: GitHub Pages and iframe embeds. Re-rendering on toggle needs JavaScript. Iframe into WordPress.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><div class="tabs-demo" data-toggle>
+      <div class="tab-btns"><button class="tb active" data-t="0">Cards</button><button class="tb" data-t="1">Bars</button></div>
+      <div class="tp active"><div class="kpi-grid"><div class="kpi"><div class="k-num">82%</div><div class="k-label">ChatGPT use</div></div><div class="kpi"><div class="k-num">61%</div><div class="k-label">Gemini use</div></div></div></div>
+      <div class="tp"><div class="bar-row"><span class="b-label">ChatGPT</span><div class="bar-track"><div class="bar-fill" style="width:82%">82%</div></div></div><div class="bar-row"><span class="b-label">Gemini</span><div class="bar-track"><div class="bar-fill" style="width:61%">61%</div></div></div></div>
+    </div></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file that shows one dataset in switchable views.
 A toggle lets the reader flip the same data between a table, a card grid, and CSS bars, re-rendered from one data array in vanilla JavaScript, no libraries.
 TCEA navy #0A3476 and gold #FCB040 styling. Embed in WordPress via an iframe.
@@ -2774,6 +2920,15 @@ Data (label, value pairs from one dataset):
 <div class="pcard" data-cat="data-display" data-type="long" data-keywords="data display pattern visualization chart html embed medium carousel Carousel / Slideshow">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">Carousel / Slideshow</div></div><span class="pcard-type type-long">Long</span></div>
 <div class="pcard-body"><div class="pcard-desc">A single-frame slideshow the reader steps through with arrows or dots. Best for rotating highlights, quotes, or one metric at a time. Best fit: GitHub Pages and iframe embeds. Slide switching needs vanilla JavaScript, so iframe it into WordPress rather than a Custom HTML block.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><div class="carousel">
+      <div class="carousel-track">
+        <div class="carousel-slide"><div class="cs-num">1,248</div><div class="cs-cap">Educators trained this year</div></div>
+        <div class="carousel-slide"><div class="cs-num">94%</div><div class="cs-cap">Would recommend the program</div></div>
+        <div class="carousel-slide"><div class="cs-num">12</div><div class="cs-cap">Active coaching cohorts</div></div>
+      </div>
+      <div class="carousel-nav"><button class="c-prev" type="button" aria-label="Previous">‹</button><button class="c-next" type="button" aria-label="Next">›</button></div>
+      <div class="carousel-dots"></div>
+    </div></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with a carousel or slideshow.
 Show one slide at a time inside a fixed frame. Previous and next arrows and a row of clickable dots move between slides by translating a flex track. Optional auto-advance on a timer that pauses on hover.
 Use vanilla JavaScript only, no libraries. TCEA navy #0A3476 controls, gold #FCB040 active dot.
@@ -2786,6 +2941,14 @@ Data (one slide of content per item):
 <div class="pcard" data-cat="data-display" data-type="long" data-keywords="data display pattern visualization chart html embed medium sortable Sortable Table">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">Sortable Table</div></div><span class="pcard-type type-long">Long</span></div>
 <div class="pcard-body"><div class="pcard-desc">A table whose columns sort when the reader clicks a header. Best when readers want to reorder data by different measures. Best fit: GitHub Pages and iframe embeds. Sorting needs vanilla JavaScript. Use an iframe for WordPress.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><table class="sortable-table">
+      <thead><tr><th data-type="text">Tool <span class="sarr">⇅</span></th><th data-type="num">Users <span class="sarr">⇅</span></th><th data-type="num">Cost <span class="sarr">⇅</span></th></tr></thead>
+      <tbody>
+        <tr><td>ChatGPT</td><td>1240</td><td>20</td></tr>
+        <tr><td>Gemini</td><td>918</td><td>0</td></tr>
+        <tr><td>NotebookLM</td><td>642</td><td>0</td></tr>
+        <tr><td>Perplexity</td><td>430</td><td>20</td></tr>
+      </tbody></table></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with a sortable table.
 Clicking a column header sorts the rows by that column, toggling ascending and descending, with an arrow showing the active sort. Support both text and numeric columns.
 Use vanilla JavaScript only, no libraries. TCEA navy #0A3476 header, gold #FCB040 active-sort arrow, striped rows.
@@ -2798,6 +2961,11 @@ Data (columns then rows, marking which columns are numeric):
 <div class="pcard" data-cat="data-display" data-type="long" data-keywords="data display pattern visualization chart html embed medium countup Animated Count-Up Stats">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">Animated Count-Up Stats</div></div><span class="pcard-type type-long">Long</span></div>
 <div class="pcard-body"><div class="pcard-desc">KPI numbers that animate from zero to their value on load. Best for a headline that should draw the eye the moment the page opens. Best fit: GitHub Pages and iframe embeds. The animation needs vanilla JavaScript. Iframe it into WordPress.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><div class="kpi-grid">
+      <div class="kpi"><div class="k-num" data-count="1248">0</div><div class="k-label">Educators trained</div></div>
+      <div class="kpi"><div class="k-num" data-count="94" data-suffix="%">0</div><div class="k-label">Satisfaction</div></div>
+      <div class="kpi"><div class="k-num" data-count="12">0</div><div class="k-label">Active cohorts</div></div>
+    </div><div style="margin-top:12px"><button class="copy-btn cuReplay" type="button" style="background:var(--navy);color:#fff">Replay animation</button></div></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with animated count-up stat cards.
 Each card shows a large number that animates from zero up to its final value when the page loads, using requestAnimationFrame with an ease. Support an optional suffix like a percent sign.
 Use vanilla JavaScript only, no libraries. TCEA navy #0A3476 numbers, gold #FCB040 accents.
@@ -2810,6 +2978,12 @@ Data (label, final value, optional suffix):
 <div class="pcard" data-cat="data-display" data-type="long" data-keywords="data display pattern visualization chart html embed medium beforeafter Before / After Slider">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">Before / After Slider</div></div><span class="pcard-type type-long">Long</span></div>
 <div class="pcard-body"><div class="pcard-desc">Two states with a draggable divider that wipes between them. Best for comparing a before and after, or two versions of a visual. Best fit: GitHub Pages and iframe embeds. The drag needs vanilla JavaScript. Iframe it into WordPress.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><div class="ba">
+      <div class="ba-layer ba-before">Before</div>
+      <div class="ba-layer ba-after">After</div>
+      <div class="ba-divider"></div>
+      <input class="ba-range" type="range" min="0" max="100" value="50" aria-label="Reveal">
+    </div></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with a before-and-after comparison slider.
 Stack two layers (two images or two states) and let a draggable vertical divider wipe between them by adjusting a clip-path. A range input drives the reveal so it works with mouse, touch, and keyboard.
 Use vanilla JavaScript only, no libraries. TCEA navy #0A3476 for the before layer, gold #FCB040 for the after, white divider.
@@ -2822,6 +2996,11 @@ Data (the two states or images to compare):
 <div class="pcard" data-cat="data-display" data-type="long" data-keywords="data display pattern visualization chart html embed medium whatif What-If Slider Calculator">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">What-If Slider Calculator</div></div><span class="pcard-type type-long">Long</span></div>
 <div class="pcard-body"><div class="pcard-desc">Sliders the reader moves to see a live-updating result. Best for letting people explore a scenario instead of reading a fixed number. Best fit: GitHub Pages and iframe embeds. The live calculation needs vanilla JavaScript. Iframe it into WordPress.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><div class="whatif">
+      <div class="wi-field"><label>Students <span class="wi-a">500</span></label><input type="range" class="wiA" min="100" max="2000" step="50" value="500"></div>
+      <div class="wi-field"><label>Cost per seat <span class="wi-b">$12</span></label><input type="range" class="wiB" min="2" max="40" step="1" value="12"></div>
+      <div class="wi-out"><div class="wo-num wiOut">$6,000</div><div class="wo-label">Estimated annual cost</div></div>
+    </div></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with a what-if slider calculator.
 Two or three range sliders feed a simple formula and a headline result updates live as the reader drags. Show each slider's current value beside its label.
 Use vanilla JavaScript only, no libraries. TCEA navy #0A3476 result panel with a gold #FCB040 number.
@@ -2834,6 +3013,11 @@ Data (input names, ranges, and the formula):
 <div class="pcard" data-cat="data-display" data-type="long" data-keywords="data display pattern visualization chart html embed charts kpi KPI Cards">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">KPI Cards</div></div><span class="pcard-type type-long">Long</span></div>
 <div class="pcard-body"><div class="pcard-desc">Big single-number callouts with a label and a trend arrow. The clearest signal of whether something is on track. Best fit: Anywhere when static. Pure CSS. Add an animated count-up and it becomes Medium, so iframe that version into WordPress.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><div class="kpi-grid">
+      <div class="kpi"><div class="k-num">1,248</div><div class="k-label">Educators trained</div><div class="k-trend up">▲ 18% vs last year</div></div>
+      <div class="kpi"><div class="k-num">94%</div><div class="k-label">Satisfaction</div><div class="k-trend up">▲ 3 pts</div></div>
+      <div class="kpi"><div class="k-num">12</div><div class="k-label">Active cohorts</div><div class="k-trend down">▼ 1 vs Q1</div></div>
+    </div></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with a row of KPI cards.
 Each card has a large headline number, a label beneath it, and a colored trend indicator (green up, red down) with the comparison.
 Static version is pure CSS. If you want the numbers to count up on load, use vanilla JavaScript only.
@@ -2846,6 +3030,11 @@ Data (metric label, value, trend):
 <div class="pcard" data-cat="data-display" data-type="long" data-keywords="data display pattern visualization chart html embed charts cssbar CSS Bar Chart">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">CSS Bar Chart</div></div><span class="pcard-type type-long">Long</span></div>
 <div class="pcard-body"><div class="pcard-desc">A grouped bar chart built from div heights or widths. Self-contained, no library, survives strict hosts. Best fit: Anywhere. Pure CSS and a little optional JavaScript to scale values. The safe alternative to a charting library.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><div style="display:flex;align-items:flex-end;gap:18px;height:140px;padding:10px 4px;border-bottom:2px solid var(--border)">
+      <div style="text-align:center;flex:1"><div style="background:var(--navy);height:60px;border-radius:6px 6px 0 0"></div><div style="font-size:0.72rem;margin-top:6px;color:var(--text-muted)">2023</div></div>
+      <div style="text-align:center;flex:1"><div style="background:var(--navy-mid);height:95px;border-radius:6px 6px 0 0"></div><div style="font-size:0.72rem;margin-top:6px;color:var(--text-muted)">2024</div></div>
+      <div style="text-align:center;flex:1"><div style="background:var(--gold);height:125px;border-radius:6px 6px 0 0"></div><div style="font-size:0.72rem;margin-top:6px;color:var(--text-muted)">2025</div></div>
+    </div></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with a bar chart made from CSS only, no charting library.
 Bars are div elements scaled by height as a percentage of the maximum value, with category labels beneath and value labels on top. Optional vanilla JavaScript to compute the scaling.
 TCEA navy #0A3476 bars with a gold #FCB040 highlight on the latest or largest. Works in any host because there is no external script.
@@ -2857,6 +3046,13 @@ Data (category, value):
 <div class="pcard" data-cat="data-display" data-type="long" data-keywords="data display pattern visualization chart html embed charts donut CSS Donut / Pie">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">CSS Donut / Pie</div></div><span class="pcard-type type-long">Long</span></div>
 <div class="pcard-body"><div class="pcard-desc">A proportional circle built with conic-gradient. Shows parts of a whole without any library. Best fit: Anywhere. The conic-gradient is pure CSS. A genuinely self-contained pie chart.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><div class="donut-wrap"><div class="donut"></div>
+      <div class="donut-legend">
+        <div><span class="sw" style="background:var(--navy)"></span> ChatGPT — 45%</div>
+        <div><span class="sw" style="background:var(--gold)"></span> Gemini — 25%</div>
+        <div><span class="sw" style="background:var(--teal)"></span> Perplexity — 18%</div>
+        <div><span class="sw" style="background:var(--pale-navy)"></span> Other — 12%</div>
+      </div></div></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with a donut chart using CSS conic-gradient, no library.
 Each segment is a slice of the conic-gradient sized by its percentage, with a matching legend beside it and a white hole in the center.
 TCEA palette: navy #0A3476, gold #FCB040, teal #0e6b8a, pale navy #D0D8F0 for additional slices.
@@ -2869,6 +3065,8 @@ Data (segment label, percentage — should total 100):
 <div class="pcard" data-cat="data-display" data-type="long" data-keywords="data display pattern visualization chart html embed charts gauge Gauge / Dial">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">Gauge / Dial</div></div><span class="pcard-type type-long">Long</span></div>
 <div class="pcard-body"><div class="pcard-desc">A half-circle dial pointing at a value against a colored range. Best for a single score versus a target. Best fit: Anywhere when built with conic-gradient and CSS. SVG versions also stay self-contained. No library needed.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><div class="gauge"><div class="gauge-bg"></div><div class="gauge-center"></div><div class="gauge-val">78</div></div>
+      <p style="text-align:center;font-size:0.78rem;color:var(--text-muted);margin-top:6px">Readiness score out of 100</p></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with a gauge or dial.
 A half-circle shows colored zones (green, gold, red) with the current value displayed in the center. Build it with CSS conic-gradient or inline SVG, no charting library.
 TCEA accent colors. Self-contained and safe for any host.
@@ -2880,6 +3078,13 @@ Data (current value, scale, and zone thresholds):
 <div class="pcard" data-cat="data-display" data-type="long" data-keywords="data display pattern visualization chart html embed charts stackedbar 100% Stacked Bar">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">100% Stacked Bar</div></div><span class="pcard-type type-long">Long</span></div>
 <div class="pcard-body"><div class="pcard-desc">A single horizontal bar split into proportional segments. Best for showing the composition of a whole in one line. Best fit: Anywhere. Flexbox segments sized by CSS, no library. Reliable in every host.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><div class="stacked">
+      <div class="seg" style="width:45%;background:var(--navy)">45%</div>
+      <div class="seg" style="width:25%;background:var(--navy-mid)">25%</div>
+      <div class="seg" style="width:18%;background:var(--gold);color:var(--navy-dark)">18%</div>
+      <div class="seg" style="width:12%;background:var(--pale-navy);color:var(--navy-dark)">12%</div>
+    </div>
+    <div class="stacked-legend"><div><span class="sw" style="background:var(--navy)"></span> Instruction</div><div><span class="sw" style="background:var(--navy-mid)"></span> Assessment</div><div><span class="sw" style="background:var(--gold)"></span> Planning</div><div><span class="sw" style="background:var(--pale-navy)"></span> Other</div></div></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with a 100% stacked bar.
 One horizontal bar is split into segments sized by each category's share of the whole, with the percentage inside each segment and a legend beneath.
 Pure CSS flexbox widths, no JavaScript. TCEA navy #0A3476, navy-mid, gold #FCB040, and pale navy for segments. Safe for a WordPress Custom HTML block.
@@ -2891,6 +3096,8 @@ Data (segment label, percentage — totalling 100):
 <div class="pcard" data-cat="data-display" data-type="long" data-keywords="data display pattern visualization chart html embed charts heatmap Heatmap Grid">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">Heatmap Grid</div></div><span class="pcard-type type-long">Long</span></div>
 <div class="pcard-body"><div class="pcard-desc">A grid of cells shaded by intensity, like a contribution calendar. Best for showing activity across days or a matrix of values. Best fit: Anywhere. Colored cells with no script needed in production. Reliable in every host.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><div class="heatmap"><span class="heat-cell" style="background:rgba(47,95,143,0.19)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.33)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.52)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.67)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.84)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.43)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.29)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.59)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.71)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.86)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.50)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.36)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.63)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.77)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.27)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.42)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.56)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.70)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.90)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.64)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.47)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.31)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.39)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.55)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.72)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.80)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.66)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.45)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.34)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.58)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.75)"></span><span class="heat-cell" style="background:rgba(47,95,143,0.88)"></span></div>
+      <div class="heat-scale">Less <span class="hs-cell" style="background:var(--border)"></span><span class="hs-cell" style="background:rgba(10,52,118,0.3)"></span><span class="hs-cell" style="background:rgba(10,52,118,0.55)"></span><span class="hs-cell" style="background:rgba(10,52,118,0.8)"></span><span class="hs-cell" style="background:#0A3476"></span> More</div></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with a heatmap grid.
 Lay out cells in a grid (for example seven rows for days of the week, one column per week) and shade each cell by its value using steps of a single color. Add a low-to-high scale legend.
 Pure CSS grid with the colors set from your data, no charting library. TCEA navy #0A3476 intensity steps. Safe for a WordPress Custom HTML block.
@@ -2902,6 +3109,12 @@ Data (a date and count list, or a labeled matrix of values):
 <div class="pcard" data-cat="data-display" data-type="long" data-keywords="data display pattern visualization chart html embed charts svgline SVG Line Chart">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">SVG Line Chart</div></div><span class="pcard-type type-long">Long</span></div>
 <div class="pcard-body"><div class="pcard-desc">A line chart drawn as an inline SVG polyline. Best for a trend over time without pulling in a charting library. Best fit: Anywhere. Inline SVG is part of the HTML, so nothing is stripped. The self-contained answer to a trend line.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><svg class="svg-chart" viewBox="0 0 320 160" role="img" aria-label="Line chart">
+      <line x1="30" y1="10" x2="30" y2="130" stroke="#e2e7f5"/><line x1="30" y1="130" x2="310" y2="130" stroke="#e2e7f5"/>
+      <polyline fill="none" stroke="#0A3476" stroke-width="3" stroke-linejoin="round" points="30,110 90,86 150,92 210,54 270,40 310,28"/>
+      <g fill="#FCB040" stroke="#0A3476" stroke-width="2"><circle cx="30" cy="110" r="4"/><circle cx="90" cy="86" r="4"/><circle cx="150" cy="92" r="4"/><circle cx="210" cy="54" r="4"/><circle cx="270" cy="40" r="4"/><circle cx="310" cy="28" r="4"/></g>
+      <g fill="#5a6680" font-size="10"><text x="20" y="145">2020</text><text x="140" y="145">2023</text><text x="286" y="145">2025</text></g>
+    </svg></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with a line chart drawn as inline SVG, no charting library.
 Plot the series as an SVG polyline with a light axis, circle markers at each point, and x labels beneath. Compute the point coordinates by scaling values to the SVG viewBox.
 TCEA navy #0A3476 line, gold #FCB040 markers. Because it is inline SVG it works in any host including a WordPress Custom HTML block.
@@ -2913,6 +3126,12 @@ Data (x label, value):
 <div class="pcard" data-cat="data-display" data-type="long" data-keywords="data display pattern visualization chart html embed charts svgarea SVG Area Chart">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">SVG Area Chart</div></div><span class="pcard-type type-long">Long</span></div>
 <div class="pcard-body"><div class="pcard-desc">A filled line chart with a soft gradient beneath the curve. Best for emphasizing volume or cumulative growth in a trend. Best fit: Anywhere. Inline SVG with a gradient fill, no library. Self-contained and safe for strict hosts.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><svg class="svg-chart" viewBox="0 0 320 160" role="img" aria-label="Area chart">
+      <defs><linearGradient id="ddpArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0A3476" stop-opacity="0.45"/><stop offset="100%" stop-color="#0A3476" stop-opacity="0.03"/></linearGradient></defs>
+      <path d="M30,120 L90,96 L150,100 L210,62 L270,44 L310,32 L310,130 L30,130 Z" fill="url(#ddpArea)"/>
+      <polyline fill="none" stroke="#0A3476" stroke-width="3" points="30,120 90,96 150,100 210,62 270,44 310,32"/>
+      <g fill="#5a6680" font-size="10"><text x="22" y="145">Aug</text><text x="140" y="145">Nov</text><text x="290" y="145">Feb</text></g>
+    </svg></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with an area chart drawn as inline SVG, no charting library.
 Draw the trend as an SVG path, close it to the baseline, and fill it with a vertical gradient. Overlay a solid line on top and add x labels.
 TCEA navy #0A3476 line and gradient. Inline SVG works in any host including a WordPress Custom HTML block.
@@ -2924,6 +3143,9 @@ Data (x label, value):
 <div class="pcard" data-cat="data-display" data-type="long" data-keywords="data display pattern visualization chart html embed charts sparkline Sparklines">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">Sparklines</div></div><span class="pcard-type type-long">Long</span></div>
 <div class="pcard-body"><div class="pcard-desc">Tiny inline trend lines beside a label and current value. Best for showing many small trends compactly, like a watchlist. Best fit: Anywhere. Each sparkline is a small inline SVG, no library. Great inside tables and lists.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><div class="spark-row"><span class="sp-label">ChatGPT</span><svg viewBox="0 0 100 30" preserveAspectRatio="none" height="26"><polyline fill="none" stroke="#0A3476" stroke-width="2" points="0,22 20,18 40,20 60,10 80,8 100,4"/></svg><span class="sp-val">▲ 82%</span></div>
+      <div class="spark-row"><span class="sp-label">Gemini</span><svg viewBox="0 0 100 30" preserveAspectRatio="none" height="26"><polyline fill="none" stroke="#0A3476" stroke-width="2" points="0,10 20,14 40,12 60,18 80,16 100,20"/></svg><span class="sp-val down">▼ 61%</span></div>
+      <div class="spark-row"><span class="sp-label">NotebookLM</span><svg viewBox="0 0 100 30" preserveAspectRatio="none" height="26"><polyline fill="none" stroke="#0A3476" stroke-width="2" points="0,20 20,16 40,17 60,12 80,14 100,9"/></svg><span class="sp-val">▲ 47%</span></div></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with sparklines.
 Each row has a label, a small inline SVG polyline showing a short trend, and the current value with an up or down marker. Scale each series to the tiny SVG viewBox.
 No charting library. TCEA navy #0A3476 lines, red for a downward value. Inline SVG works in any host.
@@ -2935,6 +3157,12 @@ Data (label, series of values):
 <div class="pcard" data-cat="data-display" data-type="long" data-keywords="data display pattern visualization chart html embed charts radar Radar / Spider Chart">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">Radar / Spider Chart</div></div><span class="pcard-type type-long">Long</span></div>
 <div class="pcard-body"><div class="pcard-desc">A polygon plotted on radial axes. Best for comparing one or two items across several dimensions, like a skills profile. Best fit: Anywhere. Drawn as inline SVG, no library. Self-contained and safe for strict hosts.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><svg class="svg-chart" viewBox="0 0 200 195" role="img" aria-label="Radar chart" style="max-width:260px">
+      <g fill="none" stroke="#e2e7f5"><polygon points="100,25 169,65 169,135 100,175 31,135 31,65"/><polygon points="100,55 135,75 135,125 100,145 65,125 65,75"/></g>
+      <g stroke="#e2e7f5"><line x1="100" y1="100" x2="100" y2="25"/><line x1="100" y1="100" x2="169" y2="65"/><line x1="100" y1="100" x2="169" y2="135"/><line x1="100" y1="100" x2="100" y2="175"/><line x1="100" y1="100" x2="31" y2="135"/><line x1="100" y1="100" x2="31" y2="65"/></g>
+      <polygon points="100,38 156,70 150,128 100,160 54,124 48,70" fill="rgba(10,52,118,0.25)" stroke="#0A3476" stroke-width="2"/>
+      <g fill="#5a6680" font-size="9" text-anchor="middle"><text x="100" y="19">Vision</text><text x="184" y="62">Build</text><text x="184" y="145">Evaluate</text><text x="100" y="190">Ship</text><text x="16" y="145">Instruct</text><text x="16" y="62">Data</text></g>
+    </svg></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with a radar or spider chart drawn as inline SVG, no library.
 Draw evenly spaced axes for each dimension, faint gridline polygons, then plot the data as a filled polygon by converting each score to a point along its axis. Label each axis.
 TCEA navy #0A3476 shape with a translucent fill. Inline SVG works in any host including a WordPress Custom HTML block.
@@ -2946,6 +3174,11 @@ Data (dimension name, score, and the scale maximum):
 <div class="pcard" data-cat="data-display" data-type="long" data-keywords="data display pattern visualization chart html embed charts scatter Scatter Plot">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">Scatter Plot</div></div><span class="pcard-type type-long">Long</span></div>
 <div class="pcard-body"><div class="pcard-desc">Points placed by two values to show correlation or spread. Best for revealing a relationship between two measures. Best fit: Anywhere. Inline SVG circles on two axes, no library. Self-contained and safe for strict hosts.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><svg class="svg-chart" viewBox="0 0 320 170" role="img" aria-label="Scatter plot">
+      <line x1="34" y1="12" x2="34" y2="140" stroke="#e2e7f5"/><line x1="34" y1="140" x2="310" y2="140" stroke="#e2e7f5"/>
+      <g fill="rgba(10,52,118,0.75)"><circle cx="70" cy="118" r="6"/><circle cx="110" cy="96" r="6"/><circle cx="150" cy="104" r="6"/><circle cx="190" cy="70" r="6"/><circle cx="230" cy="58" r="6"/><circle cx="270" cy="40" r="6"/><circle cx="120" cy="120" r="6"/><circle cx="250" cy="82" r="6"/></g>
+      <g fill="#5a6680" font-size="10"><text x="150" y="158">Spend &#8594;</text><text x="10" y="80" transform="rotate(-90 10 80)">Outcome &#8594;</text></g>
+    </svg></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with a scatter plot drawn as inline SVG, no library.
 Draw an x and y axis, then place a circle for each data pair by scaling its x and y to the plot area. Optionally size or color points by a third value.
 TCEA navy #0A3476 points. Inline SVG works in any host including a WordPress Custom HTML block.
@@ -2957,6 +3190,9 @@ Data (x value, y value, optional label):
 <div class="pcard" data-cat="data-display" data-type="long" data-keywords="data display pattern visualization chart html embed charts library Library Chart (Chart.js / D3)">
 <div class="pcard-header"><div class="pcard-meta"><div class="pcard-cat">Data Display Patterns</div><div class="pcard-title">Library Chart (Chart.js / D3)</div></div><span class="pcard-type type-long">Long</span></div>
 <div class="pcard-body"><div class="pcard-desc">Rich interactive charts with tooltips, legends, and animation. The most capable option and the least portable. Best fit: GitHub Pages and iframe embeds only. The external script is blocked in WordPress Custom HTML blocks and may be sandboxed in Google Sites. Host it yourself and iframe it in.</div>
+<details class="pcard-demo"><summary>Example</summary><div class="pcard-demo-content"><div style="background:var(--off-white);border:1px solid var(--border);border-radius:10px;padding:20px;text-align:center;color:var(--text-muted);font-size:0.86rem">
+      <div style="font-size:1.6rem;margin-bottom:8px">📊</div>
+      Library charts render from an external script (Chart.js, D3) loaded by CDN.<br>They are powerful but get stripped or sandboxed by strict hosts, so preview them on GitHub Pages.</div></div></details>
 <div class="pcard-prompt">Build a single self-contained HTML file with an interactive chart using Chart.js loaded from a CDN.
 Include the Chart.js script tag, a canvas element, and the config inline. Use a [bar / line / radar / pie] chart with tooltips and a legend.
 TCEA navy #0A3476 and gold #FCB040 dataset colors.
