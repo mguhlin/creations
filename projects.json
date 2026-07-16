@@ -75,10 +75,10 @@
       "id": "aici",
       "section": "AI Productivity &amp; Self-Assessment",
       "category": "Reference Library",
-      "title": "AI Custom Instructions Library",
-      "subtitle": "Purpose-built AI assistants for educators &amp; administrators",
-      "stat": "35+",
-      "statLabel": "Custom Bots",
+      "title": "Custom Instructions in The Prompt Library",
+      "subtitle": "Purpose-built AI assistant prompts for educators and administrators, consolidated into Architect.",
+      "stat": "34",
+      "statLabel": "Mega Prompts",
       "panelGradient": "linear-gradient(160deg, #111F33 0%, #2F4F6F 100%)",
       "catStyle": "background:rgba(200,210,220,0.16);color:#C8D2DC;",
       "statColor": "#C8D2DC",
@@ -86,7 +86,7 @@
       "btnColor": "#fff",
       "btnHoverBg": "#6F8FAF",
       "btnHoverColor": "#fff",
-      "description": "A browsable library of copy-paste custom instructions deployable in any major Gen AI platform — ChatGPT, Claude Projects, Google Gems, BoodleBox, Copilot, or NotebookLM. Eight organized categories spanning productivity, communications, education, analysis, classroom bots, and specialty tools. Grew from the TCEA session on Automating Office Tasks with AI (March 2026).",
+      "description": "A browsable library of copy-paste custom instructions now blended into The Prompt Library as Custom Assistants and mega prompts. Includes productivity, communications, education, analysis, classroom bots, and specialty assistant prompts deployable in ChatGPT, Claude Projects, Google Gems, BoodleBox, Copilot, or NotebookLM.",
       "features": [
         "BLUF Bot",
         "Meeting Minutes",
@@ -99,15 +99,9 @@
       ],
       "links": [
         {
-          "label": "Browse Library →",
-          "href": "aici/index.html",
+          "label": "Open in Prompt Library →",
+          "href": "architect/index.html#custom-assistants",
           "primary": true
-        },
-        {
-          "label": "Live Site ↗",
-          "href": "https://mguhlin.github.io/aici/index.html",
-          "primary": false,
-          "external": true
         }
       ]
     },
@@ -117,8 +111,8 @@
       "section": "Prompt Engineering",
       "category": "Interactive Tool",
       "title": "The Prompt Library",
-      "subtitle": "Unified prompt, image prompt, and data display pattern library",
-      "stat": "248",
+      "subtitle": "Unified prompt, custom instruction, image prompt, and data display pattern library",
+      "stat": "282",
       "statLabel": "Prompt Cards",
       "panelGradient": "linear-gradient(160deg, #151D28 0%, #283342 100%)",
       "catStyle": "background:rgba(200,210,220,0.16);color:#C8D2DC;",
@@ -127,8 +121,9 @@
       "btnColor": "#E6EBF1",
       "btnHoverBg": "#2F5F8F",
       "btnHoverColor": "#fff",
-      "description": "The consolidated Prompt Library now contains prompt engineering cards, AI Essentials prompts, K-12 image prompts, data display pattern prompts, glossary references, and the Prompt Architect tool in one searchable hub.",
+      "description": "The consolidated Prompt Library now contains prompt engineering cards, custom instructions and mega prompts, AI Essentials prompts, K-12 image prompts, data display pattern prompts, glossary references, and the Prompt Architect tool in one searchable hub.",
       "features": [
+        "Custom Instructions",
         "AI Essentials Prompts",
         "K-12 Image Prompts",
         "Data Display Patterns",
