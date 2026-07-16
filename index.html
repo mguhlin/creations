@@ -676,6 +676,8 @@ function buildHero(meta) {
 function buildQuickLinks(projects) {
   const nav = document.getElementById('quick-links');
   nav.innerHTML = '';
+  nav.insertAdjacentHTML('beforeend',
+    `<button type="button" data-group="__all">All Projects ${projects.length}</button>`);
   getDisplayGroups(projects).forEach(group => {
     const count = projects.filter(project => displayGroupFor(project) === group.name).length;
     nav.insertAdjacentHTML('beforeend',
@@ -783,8 +785,9 @@ function bindControls() {
 function applySearch() {
   let visible = 0;
   const hasSearch = activeSearch.length > 0;
-  const hasGroup = activeGroup.length > 0;
-  const shouldShowResults = hasSearch || hasGroup;
+  const showAll = activeGroup === '__all';
+  const hasGroup = activeGroup.length > 0 && !showAll;
+  const shouldShowResults = hasSearch || hasGroup || showAll;
 
   document.querySelectorAll('.section-block').forEach(section => {
     let sectionHasVisible = false;
@@ -829,7 +832,7 @@ function updateResultCount(visible) {
   const hasQuery = activeSearch.length > 0 || activeGroup.length > 0;
   document.getElementById('result-count').textContent = hasQuery
     ? `${visible} of ${ALL_PROJECTS.length}`
-    : `Search or choose a category`;
+    : `Search, choose a category, or show all`;
 }
 
 function buildFooter(meta) {

@@ -115,23 +115,15 @@
   <div class="num">Prompt #6</div>
   <h1>Call Number Shelving Game</h1>
 </header>
-
-    <section>
-      <div class="built">
-        <div class="built-head">
-          <div>
-            <div class="section-eyebrow">Built &amp; playable</div>
-            <h2 class="built-title">Try the built example</h2>
-          </div>
-          <div class="built-actions">
-            <a class="btn-gold" href="app.html" target="_blank" rel="noopener">Open full screen ↗</a>
-            <a class="btn-soft" href="call-number-shelving-game.zip" download>⬇ Download .zip</a>
-          </div>
-        </div>
-        <img src="preview.png" alt="Preview of the Call Number Shelving Game tool" loading="lazy" onerror="this.style.display='none'" style="width:100%;display:block">
-        <iframe class="built-frame" src="app.html" title="Call Number Shelving Game built example" loading="lazy"></iframe>
-      </div>
-    </section>
+<section>
+  <div class="prompt-card">
+    <div class="prompt-head">
+      <h3>Prompt-first resource</h3>
+      <a class="btn-soft" href="../../index.html">All LibVibes prompts</a>
+    </div>
+    <p class="section-lead" style="margin:0">This resource is consolidated as a starter prompt. Build the tool from the prompt below, then host the generated single-file app wherever you publish classroom resources.</p>
+  </div>
+</section>
 <section>
   <div class="section-eyebrow">Paste · Iterate · Ship</div>
   <h2 class="section-title">The starter prompt</h2>
@@ -176,25 +168,11 @@ Make the practice sets easy to edit. Give me the complete file in one response.<
 
 <section>
   <div class="host-note">
-    <strong>Ready to put it online?</strong> Once your tool works, host it free on GitHub Pages and embed it in Google Sites — follow the step-by-step walkthrough on the <a href="../../libvibes-host.html">main Vibe Coding page</a> or grab the example .zip above.
+    <strong>Ready to put it online?</strong> Once your tool works, host it free on GitHub Pages and embed it in Google Sites — follow the step-by-step walkthrough on the <a href="../../libvibes-host.html">main Vibe Coding page</a>.
   </div>
 </section>
 
 
-<section>
-  <div class="section-divider"></div>
-  <div class="section-eyebrow">Put it in Google Sites</div>
-  <h2 class="section-title">Embed code for Google Sites</h2>
-  <p class="section-lead">In Google Sites, choose <strong>Insert &rarr; Embed &rarr; Embed code</strong> and paste the snippet below — the live tool loads right inside your page. (Or use <strong>Embed &rarr; By URL</strong> with the <code>app.html</code> link.)</p>
-  <div class="prompt-card">
-    <div class="prompt-head">
-      <h3>Google Sites embed snippet</h3>
-      <button class="copy-btn" id="embedCopy">Copy embed code</button>
-    </div>
-    <pre class="prompt-body" id="embedCode">&lt;iframe src="https://mglearn.github.io/tcea/vcl/libvibes/call-number-shelving-game/app.html" width="100%" height="720" style="border:0;border-radius:12px" loading="lazy" title="Call Number Shelving Game"&gt;&lt;/iframe&gt;</pre>
-  </div>
-  <p class="tip" style="font-size:.85rem;color:var(--text-muted);margin-top:.6rem">Adjust <code>height</code> to fit your tool. The tool is already published, so the embed works as soon as you paste it.</p>
-</section>
 
 <footer>
   <div class="row">
@@ -230,11 +208,6 @@ Make the practice sets easy to edit. Give me the complete file in one response.<
 })();
 </script>
 <script>
-(function(){var b=document.getElementById("embedCopy");if(!b)return;
-  b.addEventListener("click",async function(){var t=document.getElementById("embedCode").textContent;
-    try{await navigator.clipboard.writeText(t);}catch(e){var ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);}
-    var o=b.textContent;b.textContent="Copied!";b.classList.add("copied");setTimeout(function(){b.textContent=o;b.classList.remove("copied");},1700);});
-})();
 </script>
 <script src="../../libvibes-notice.js"></script>
 </body>
