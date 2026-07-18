@@ -3,1347 +3,1107 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CTOBs for K-2 Science — Webdeck</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<title>CTOBs for K–2 Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Libre+Franklin:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0D1117;
-    --bg-light: #161B22;
-    --fg: #E6EDF3;
-    --fg-muted: #8B949E;
-    --accent: #F0883E;
-    --accent2: #3FB950;
-    --accent3: #58A6FF;
-    --card: rgba(22,27,34,0.85);
-    --border: rgba(139,148,158,0.15);
-    --glass: rgba(255,255,255,0.04);
-    --slide-transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  }
+/* ============================================================
+   Web Deck Framework — slide styling (design system, layout, chrome, print, accessibility)
+   Blue and silver. Fraunces + Libre Franklin + IBM Plex Mono.
+   Shared by every deck. Class names preserved.
+   ============================================================ */
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  /* palette (blue and silver) */
+  --navy:    #102A54;
+  --navy-dk: #0B1D33;
+  --navy-md: #2F5F8F;
+  --steel:   #2F5F8F;
+  --gold:    #6F8FAF;   /* accent (kept name for compatibility) */
+  --gold-lt: #C8D2DC;   /* silver */
+  --gold-dk: #2F5F8F;
+  --white:   #FFFFFF;
+  --lgray:   #F5F8FC;
+  --mgray:   #DCE3EE;
+  --hair:    #E2E8F2;   /* hairline on light */
+  --slate:   #51617A;
+  --text:    #1C2B44;
+  --good:    #6B7A8C;
+  --better:  #2F5F8F;
+  --best:    #102A54;
+  --red:     #102A54;   /* "do not" */
+  --red-bg:  #F1F3F6;
+  --red-bd:  #CBD4DE;
+  --green:   #2F5F8F;   /* "do" */
+  --green-bg:#E4EDF7;
+  --green-bd:#93AFCE;
 
-  html, body {
-    width: 100%; height: 100%;
-    overflow: hidden;
-    background: var(--bg);
-    color: var(--fg);
-    font-family: 'DM Sans', sans-serif;
-  }
+  /* fonts */
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-body:    "Libre Franklin", system-ui, -apple-system, sans-serif;
+  --font-mono:    "IBM Plex Mono", "Courier New", monospace;
 
-  /* ── Background atmosphere ── */
-  .bg-layer {
-    position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  }
-  .bg-layer::before {
-    content: '';
-    position: absolute; inset: 0;
-    background:
-      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(240,136,62,0.08) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 50% at 80% 90%, rgba(63,185,80,0.06) 0%, transparent 60%),
-      radial-gradient(ellipse 50% 40% at 50% 50%, rgba(88,166,255,0.04) 0%, transparent 60%);
-  }
-  .bg-layer::after {
-    content: '';
-    position: absolute; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-    background-size: 200px 200px;
-  }
+  /* material */
+  --metal: linear-gradient(180deg,#EEF3F9 0%,#C8D2DC 48%,#93AFCE 100%);
+  --paper: linear-gradient(174deg,#FDFEFF 0%,#EEF3FA 100%);
+  --sh-card: 0 1px 2px rgba(16,42,84,.05), 0 12px 26px rgba(16,42,84,.07);
+  --sh-lift: 0 2px 4px rgba(16,42,84,.06), 0 18px 40px rgba(16,42,84,.10);
 
-  /* ── Floating orbs ── */
-  .orb {
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.12;
-    pointer-events: none;
-    z-index: 0;
-    animation: orbFloat 20s ease-in-out infinite alternate;
-  }
-  .orb-1 { width: 400px; height: 400px; background: var(--accent); top: -100px; left: -100px; }
-  .orb-2 { width: 350px; height: 350px; background: var(--accent2); bottom: -80px; right: -80px; animation-delay: -7s; }
-  .orb-3 { width: 250px; height: 250px; background: var(--accent3); top: 40%; left: 60%; animation-delay: -14s; }
+  --slide-w: 1280px;
+  --slide-h: 720px;
+}
 
-  @keyframes orbFloat {
-    0% { transform: translate(0, 0) scale(1); }
-    33% { transform: translate(30px, -20px) scale(1.05); }
-    66% { transform: translate(-20px, 30px) scale(0.95); }
-    100% { transform: translate(15px, 15px) scale(1.02); }
-  }
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* ── Slide container ── */
-  .deck-viewport {
-    position: relative;
-    width: 100%; height: 100%;
-    z-index: 1;
-    overflow: hidden;
-  }
+html, body {
+  height: 100%;
+  font-family: var(--font-body);
+  color: var(--text);
+  background: #060F1F;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
 
-  .slide {
-    position: absolute; inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 60px 80px;
-    opacity: 0;
-    transform: translateY(40px) scale(0.97);
-    transition: opacity var(--slide-transition), transform var(--slide-transition);
-    pointer-events: none;
-    will-change: transform, opacity;
-  }
-  .slide.active {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    pointer-events: auto;
-  }
-  .slide.exit-up {
-    opacity: 0;
-    transform: translateY(-60px) scale(0.97);
-  }
+/* ── Deck stage ─────────────────────────────────────────── */
+.deck { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.deck::before {                         /* ambient backdrop */
+  content:''; position:absolute; inset:-20%;
+  background:
+    radial-gradient(60% 60% at 20% 10%, rgba(47,95,143,.35), transparent 60%),
+    radial-gradient(60% 60% at 90% 90%, rgba(16,42,84,.55), transparent 60%);
+  filter: blur(20px);
+}
 
-  .slide-inner {
-    width: 100%;
-    max-width: 1100px;
-    position: relative;
-  }
+/* Each slide is a fixed 16:9 canvas, scaled by JS. */
+.slide {
+  position: absolute; width: var(--slide-w); height: var(--slide-h);
+  background: var(--paper); overflow: hidden; display: none;
+  flex-direction: column; box-shadow: var(--sh-lift), 0 40px 90px rgba(0,0,0,.55);
+}
+.slide::after {                          /* fine grain / texture */
+  content:''; position:absolute; inset:0; z-index:2; pointer-events:none; opacity:.05;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.slide.current { display: flex; }
 
-  /* ── Typography ── */
-  h1, h2, h3 {
-    font-family: 'Space Grotesk', sans-serif;
-    line-height: 1.1;
-    letter-spacing: -0.03em;
-  }
+.slide-body { position:relative; z-index:1; flex: 1; padding: 54px 72px 40px; display: flex; flex-direction: column; min-height: 0; }
 
-  .slide-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--accent);
-    margin-bottom: 20px;
-    padding: 6px 14px;
-    background: rgba(240,136,62,0.08);
-    border: 1px solid rgba(240,136,62,0.2);
-    border-radius: 100px;
-  }
+/* ── Footer ─────────────────────────────────────────────── */
+.slide-footer {
+  position: relative; z-index: 3; height: 44px; min-height: 44px; background: var(--navy);
+  display: flex; align-items: center; justify-content: space-between; padding: 0 26px;
+  color: #C6D4EC; font-size: 11.5px;
+}
+.slide-footer::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--metal); }
+.slide-footer .brand {
+  font-family: var(--font-display); font-weight: 600; font-size: 13px; letter-spacing: .06em;
+  color: var(--gold-lt); display: flex; align-items: center; gap: 6px;
+}
+.slide-footer .brand .star { color: var(--gold-lt); }
+.slide-footer .url { font-family: var(--font-body); font-weight: 600; font-size: 10.5px; letter-spacing:.03em; color: var(--gold-lt); }
+.slide-footer .fac { font-style: italic; font-size: 11px; color: #9FB4D6; }
 
-  .slide-title {
-    font-size: clamp(2.2rem, 5vw, 3.8rem);
-    font-weight: 700;
-    margin-bottom: 20px;
-  }
-  .slide-title .highlight {
-    background: linear-gradient(135deg, var(--accent), #FFBA6A);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .slide-title .highlight-green {
-    background: linear-gradient(135deg, var(--accent2), #7EE787);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .slide-title .highlight-blue {
-    background: linear-gradient(135deg, var(--accent3), #79C0FF);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
+/* ── Type ───────────────────────────────────────────────── */
+.slide h1, .slide h2, .slide h3, .slide h4 { font-family: var(--font-display); }
 
-  .slide-subtitle {
-    font-size: clamp(1rem, 2vw, 1.25rem);
-    color: var(--fg-muted);
-    line-height: 1.7;
-    max-width: 700px;
-    font-weight: 300;
-  }
+.slide-title {
+  font-family: var(--font-display); font-size: 41px; font-weight: 600;
+  color: var(--navy); line-height: 1.03; letter-spacing: -0.015em; margin-bottom: 4px; max-width: 24ch;
+}
+.slide-kicker {
+  font-family: var(--font-body); font-size: 13px; font-weight: 600; letter-spacing: .26em;
+  text-transform: uppercase; color: var(--steel); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 12px;
+}
+.slide-kicker::before { content:''; width:7px; height:7px; background:var(--steel); transform:rotate(45deg); flex:none; }
+.slide-kicker::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,var(--mgray),transparent); }
 
-  /* ── Cards grid ── */
-  .cards-grid {
-    display: grid;
-    gap: 16px;
-    margin-top: 32px;
-  }
-  .cards-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
-  .cards-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
-  .cards-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+.lead { font-family: var(--font-body); font-size: 22px; font-weight: 300; color: var(--slate); line-height: 1.5; max-width: 62ch; }
 
-  .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 28px;
-    backdrop-filter: blur(20px);
-    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-    position: relative;
-    overflow: hidden;
-  }
-  .card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-  .card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(240,136,62,0.3);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
-  }
-  .card:hover::before { opacity: 1; }
+/* Bullets — editorial hanging diamonds */
+.bullets { list-style: none; margin-top: 20px; display: flex; flex-direction: column; gap: 15px; }
+.bullets li { position: relative; padding-left: 32px; font-size: 23px; font-weight: 400; color: var(--text); line-height: 1.38; }
+.bullets li::before { content:''; position:absolute; left:2px; top:9px; width:11px; height:11px; background:var(--metal); transform:rotate(45deg); box-shadow:0 1px 2px rgba(16,42,84,.25); }
+.bullets li strong { color: var(--navy); font-weight: 600; }
 
-  .card-icon {
-    width: 48px; height: 48px;
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.2rem;
-    margin-bottom: 16px;
-  }
-  .card-icon.orange { background: rgba(240,136,62,0.12); color: var(--accent); }
-  .card-icon.green { background: rgba(63,185,80,0.12); color: var(--accent2); }
-  .card-icon.blue { background: rgba(88,166,255,0.12); color: var(--accent3); }
+/* ── Cover / divider ────────────────────────────────────── */
+.slide.cover, .slide.divider {
+  background:
+    radial-gradient(120% 90% at 12% -5%, #1B3E6E 0%, rgba(27,62,110,0) 52%),
+    radial-gradient(90% 100% at 105% 108%, #123059 0%, rgba(18,48,89,0) 55%),
+    linear-gradient(160deg,#0E2545 0%, #081627 100%);
+}
+.slide.cover::after, .slide.divider::after { opacity:.07; }
+.slide.cover .slide-body, .slide.divider .slide-body { justify-content: center; padding-left: 92px; }
+.slide.cover .slide-body::before, .slide.divider .slide-body::before {
+  content:''; position:absolute; left:0; top:0; bottom:0; width:8px; background:var(--metal);
+}
+.slide.cover .slide-body::after, .slide.divider .slide-body::after {
+  content:''; position:absolute; left:24px; right:40px; top:26px; bottom:26px;
+  border:1px solid rgba(200,210,220,.18); pointer-events:none;
+}
+.cover-eyebrow, .divider-eyebrow {
+  font-family: var(--font-body); font-size: 12.5px; font-weight: 600; letter-spacing: .28em;
+  text-transform: uppercase; color: var(--gold-lt); margin-bottom: 20px;
+}
+.cover h1 { font-family: var(--font-display); font-size: 62px; font-weight: 600; color: #F4F8FE; line-height: 1.0; letter-spacing:-0.02em; max-width: 18ch; margin-bottom: 22px; }
+.cover .subtitle { font-family: var(--font-display); font-size: 24px; font-style: italic; font-weight: 400; color: var(--gold-lt); max-width: 40ch; }
+.cover .meta { font-family: var(--font-body); margin-top: 34px; font-size: 14px; color: #A9BEDD; line-height: 1.75; font-weight: 300; }
+.cover .meta strong { color: #F4F8FE; font-weight: 500; }
 
-  .card h3 {
-    font-size: 1.05rem;
-    font-weight: 600;
-    margin-bottom: 8px;
-  }
-  .card p {
-    font-size: 0.88rem;
-    color: var(--fg-muted);
-    line-height: 1.6;
-  }
+.divider h1 { font-family: var(--font-display); font-size: 52px; font-weight: 600; color: #F4F8FE; line-height: 1.04; letter-spacing:-0.02em; max-width: 20ch; }
+.divider .subtitle { font-family: var(--font-display); font-size: 22px; font-style: italic; color: var(--gold-lt); margin-top: 16px; max-width: 46ch; font-weight: 400; }
+.divider .seg-num {
+  position: absolute; top: 40px; right: 66px; margin: 0;
+  font-family: var(--font-display); font-size: 300px; font-weight: 600; line-height: 1;
+  color: transparent; -webkit-text-stroke: 1.5px rgba(200,210,220,.28); opacity: .9;
+  z-index: 0; pointer-events: none;
+}
+.divider .divider-eyebrow, .divider h1, .divider .subtitle { position: relative; z-index: 1; }
 
-  /* ── Numbered list ── */
-  .step-list {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    margin-top: 28px;
-  }
-  .step-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-    padding: 18px 22px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    backdrop-filter: blur(20px);
-    transition: transform 0.3s ease, border-color 0.3s ease;
-  }
-  .step-item:hover {
-    transform: translateX(6px);
-    border-color: rgba(240,136,62,0.25);
-  }
-  .step-num {
-    flex-shrink: 0;
-    width: 36px; height: 36px;
-    border-radius: 10px;
-    background: rgba(240,136,62,0.12);
-    color: var(--accent);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: 0.9rem;
-  }
-  .step-content h4 {
-    font-size: 0.95rem;
-    font-weight: 600;
-    margin-bottom: 4px;
-  }
-  .step-content p {
-    font-size: 0.85rem;
-    color: var(--fg-muted);
-    line-height: 1.5;
-  }
+/* ── Cards ──────────────────────────────────────────────── */
+.grid { display: grid; gap: 16px; margin-top: 20px; }
+.grid.cols-2 { grid-template-columns: 1fr 1fr; }
+.grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
 
-  /* ── Quote block ── */
-  .quote-block {
-    border-left: 3px solid var(--accent);
-    padding: 20px 28px;
-    background: rgba(240,136,62,0.04);
-    border-radius: 0 14px 14px 0;
-    margin-top: 24px;
-  }
-  .quote-block p {
-    font-size: 1.05rem;
-    font-style: italic;
-    color: var(--fg);
-    line-height: 1.7;
-  }
-  .quote-block .attribution {
-    font-size: 0.8rem;
-    color: var(--fg-muted);
-    margin-top: 10px;
-    font-style: normal;
-  }
+.card {
+  position: relative; background: var(--white); border: 1px solid var(--hair);
+  border-radius: 4px; padding: 17px 19px 16px; box-shadow: var(--sh-card);
+}
+.card::before { content:''; position:absolute; left:0; top:0; width:36px; height:3px; background:var(--navy); border-radius:0 0 3px 0; }
+.card.gold::before { background: var(--steel); }
+.card h3 { font-family: var(--font-display); font-size: 20px; font-weight: 600; color: var(--navy); margin: 4px 0 7px; line-height: 1.15; display: flex; align-items: center; gap: 9px; }
+.card p { font-family: var(--font-body); font-size: 18px; font-weight: 300; color: var(--slate); line-height: 1.5; }
+.card .ico { font-size: 19px; }
 
-  /* ── Two-column layout ── */
-  .two-col {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    align-items: start;
-  }
-  .two-col .col-text { padding-top: 10px; }
+/* ── Steps ──────────────────────────────────────────────── */
+.steps { display: flex; gap: 15px; margin-top: 22px; align-items: stretch; }
+.step { flex: 1; position: relative; background: var(--white); border: 1px solid var(--hair); border-radius: 4px; padding: 16px 17px; box-shadow: var(--sh-card); }
+.step::before { content:''; position:absolute; left:0; top:0; right:0; height:3px; background:var(--metal); }
+.step .n {
+  width: 34px; height: 34px; border-radius: 50%; background: var(--navy); color: #fff;
+  font-family: var(--font-display); font-weight: 600; font-size: 16px;
+  display: flex; align-items: center; justify-content: center; margin-bottom: 11px;
+}
+.step h4 { font-family: var(--font-display); font-size: 18px; font-weight: 600; color: var(--navy); margin-bottom: 5px; }
+.step p { font-family: var(--font-body); font-size: 16px; font-weight: 300; color: var(--slate); line-height: 1.42; }
 
-  /* ── Lock visual ── */
-  .lock-row {
-    display: flex;
-    gap: 16px;
-    margin-top: 28px;
-    flex-wrap: wrap;
-  }
-  .lock-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    padding: 20px 24px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    min-width: 120px;
-    transition: transform 0.3s ease;
-  }
-  .lock-item:hover { transform: scale(1.05); }
-  .lock-icon {
-    width: 44px; height: 44px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.1rem;
-  }
-  .lock-icon.orange { background: rgba(240,136,62,0.15); color: var(--accent); }
-  .lock-icon.green { background: rgba(63,185,80,0.15); color: var(--accent2); }
-  .lock-icon.blue { background: rgba(88,166,255,0.15); color: var(--accent3); }
-  .lock-icon.purple { background: rgba(188,140,255,0.15); color: #BC8CFF; }
-  .lock-label {
-    font-size: 0.78rem;
-    font-weight: 600;
-    text-align: center;
-    color: var(--fg-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
+/* ── Do / Do-not columns ────────────────────────────────── */
+.guardrail { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 20px; }
+.guardrail-col { border-radius: 4px; border: 1px solid; padding: 17px 19px; }
+.guardrail-col.will { background: var(--green-bg); border-color: var(--green-bd); }
+.guardrail-col.willnot { background: var(--red-bg); border-color: var(--red-bd); }
+.guardrail-col h4 { font-family: var(--font-display); font-size: 18px; font-weight: 600; margin-bottom: 11px; display:flex; align-items:center; gap:8px; letter-spacing:-0.01em; }
+.guardrail-col.will h4 { color: var(--green); }
+.guardrail-col.willnot h4 { color: var(--red); }
+.guardrail-col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.guardrail-col li { font-family: var(--font-body); font-size: 18px; font-weight: 300; line-height: 1.4; padding-left: 24px; position: relative; }
+.guardrail-col.will li { color: #24446B; } .guardrail-col.willnot li { color: #1B2E48; }
+.guardrail-col.will li::before { content:'✓'; position:absolute; left:0; color:var(--green); font-weight:700; }
+.guardrail-col.willnot li::before { content:'✕'; position:absolute; left:0; color:var(--red); font-weight:700; }
 
-  /* ── Badges / pills ── */
-  .pill-row {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-top: 18px;
-  }
-  .pill {
-    padding: 8px 16px;
-    border-radius: 100px;
-    font-size: 0.8rem;
-    font-weight: 500;
-    border: 1px solid var(--border);
-    background: var(--glass);
-    color: var(--fg-muted);
-    transition: all 0.3s ease;
-  }
-  .pill:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: rgba(240,136,62,0.06);
-  }
+/* ── Compare ────────────────────────────────────────────── */
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+.compare-col { position: relative; border-radius: 4px; padding: 18px 20px; background: var(--white); border: 1px solid var(--hair); box-shadow: var(--sh-card); }
+.compare-col::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--navy); }
+.compare-col.alt::before { background: var(--steel); }
+.compare-col h3 { font-family: var(--font-display); font-size: 21px; font-weight: 600; color: var(--navy); margin-bottom: 11px; }
+.compare-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.compare-col li { font-family: var(--font-body); font-size: 18px; font-weight: 300; padding-left: 20px; position: relative; color: var(--text); line-height: 1.35; }
+.compare-col li::before { content:''; position:absolute; left:3px; top:8px; width:6px; height:6px; background:var(--steel); transform:rotate(45deg); }
 
-  /* ── Hero specific ── */
-  .hero-title {
-    font-size: clamp(2.8rem, 6vw, 5rem);
-    font-weight: 700;
-    line-height: 1.05;
-    margin-bottom: 16px;
-  }
-  .hero-sub {
-    font-size: clamp(1.1rem, 2vw, 1.35rem);
-    color: var(--fg-muted);
-    line-height: 1.6;
-    max-width: 600px;
-    font-weight: 300;
-    margin-bottom: 32px;
-  }
-  .hero-meta {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    font-size: 0.82rem;
-    color: var(--fg-muted);
-  }
-  .hero-meta span {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
+/* ── Callout / reflect ──────────────────────────────────── */
+.callout { position: relative; margin-top: 22px; background: var(--navy); color: #EAF1FB; border-radius: 5px; padding: 20px 26px 20px 28px; overflow: hidden; }
+.callout::before { content:''; position:absolute; left:0; top:0; bottom:0; width:5px; background:var(--metal); }
+.callout .label { font-family: var(--font-body); font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--gold-lt); margin-bottom: 8px; }
+.callout p { font-family: var(--font-display); font-size: 22px; font-weight: 400; line-height: 1.35; }
+.callout.light { background: #EEF3FA; color: var(--navy-dk); }
+.callout.light::before { background: var(--navy); }
+.callout.light .label { color: var(--steel); }
 
-  /* ── Progress bar ── */
-  .progress-bar {
-    position: fixed;
-    top: 0; left: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    z-index: 100;
-    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 0 2px 2px 0;
-  }
+.reflect { margin-top: 20px; position: relative; background: var(--navy); border-radius: 5px; padding: 15px 20px 15px 22px; color: var(--gold-lt); font-family: var(--font-display); font-style: italic; font-size: 20px; display:flex; gap:12px; align-items:flex-start; overflow:hidden; }
+.reflect::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--metal); }
+.reflect strong { color: #F4F8FE; font-style: normal; font-weight: 600; }
 
-  /* ── Navigation ── */
-  .nav-controls {
-    position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    z-index: 100;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 100px;
-    padding: 8px 12px;
-    backdrop-filter: blur(20px);
-  }
-  .nav-btn {
-    width: 40px; height: 40px;
-    border-radius: 50%;
-    border: none;
-    background: transparent;
-    color: var(--fg-muted);
-    font-size: 0.9rem;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.25s ease;
-  }
-  .nav-btn:hover {
-    background: rgba(255,255,255,0.08);
-    color: var(--fg);
-  }
-  .nav-btn:disabled {
-    opacity: 0.25;
-    cursor: default;
-  }
-  .nav-btn:disabled:hover {
-    background: transparent;
-    color: var(--fg-muted);
-  }
-  .nav-dots {
-    display: flex;
-    gap: 6px;
-    padding: 0 8px;
-  }
-  .nav-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.15);
-    transition: all 0.35s ease;
-    cursor: pointer;
-    border: none;
-  }
-  .nav-dot.active {
-    background: var(--accent);
-    width: 24px;
-    border-radius: 4px;
-  }
-  .slide-counter {
-    font-size: 0.72rem;
-    color: var(--fg-muted);
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 500;
-    padding: 0 8px;
-    min-width: 42px;
-    text-align: center;
-  }
+/* ── Prompt / code ──────────────────────────────────────── */
+.prompt {
+  font-family: var(--font-mono); font-size: 16px; line-height: 1.55; background: #0C1B32; color: #DCE6F5;
+  border-radius: 6px; padding: 17px 19px; white-space: pre-wrap; word-break: break-word;
+  border: 1px solid #21406E; position: relative; box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+}
+.prompt::before { content:''; position:absolute; left:0; top:12px; bottom:12px; width:3px; background:var(--steel); border-radius:0 2px 2px 0; }
+.prompt .tok { color: var(--gold-lt); }
 
-  /* ── Keyboard hint ── */
-  .key-hint {
-    position: fixed;
-    bottom: 90px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 0.7rem;
-    color: rgba(139,148,158,0.4);
-    z-index: 99;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: opacity 0.5s ease;
-  }
-  .key-hint kbd {
-    padding: 2px 7px;
-    border: 1px solid rgba(139,148,158,0.2);
-    border-radius: 4px;
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 0.65rem;
-  }
+/* ── Stats ──────────────────────────────────────────────── */
+.stat-row { display: flex; gap: 22px; margin-top: 24px; }
+.stat { flex: 1; text-align: center; position: relative; background: var(--white); border: 1px solid var(--hair); border-radius: 5px; padding: 22px 12px 18px; box-shadow: var(--sh-card); }
+.stat::after { content:''; position:absolute; left:26px; right:26px; bottom:0; height:3px; background:var(--metal); }
+.stat .num { font-family: var(--font-display); font-size: 34px; font-weight: 600; color: var(--navy); line-height: 1; letter-spacing:-0.01em; }
+.stat .lbl { font-family: var(--font-body); font-size: 17px; font-weight: 300; color: var(--slate); margin-top: 10px; line-height:1.4; }
 
-  /* ── Big stat ── */
-  .big-stat {
-    text-align: center;
-    padding: 24px;
-  }
-  .big-stat .num {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 3rem;
-    font-weight: 700;
-    line-height: 1;
-  }
-  .big-stat .num.orange { color: var(--accent); }
-  .big-stat .num.green { color: var(--accent2); }
-  .big-stat .num.blue { color: var(--accent3); }
-  .big-stat .label {
-    font-size: 0.78rem;
-    color: var(--fg-muted);
-    margin-top: 6px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
+/* ── Pills ──────────────────────────────────────────────── */
+.pill { display: inline-flex; align-items:center; gap:6px; font-family: var(--font-body); font-size: 14px; font-weight: 600; padding: 4px 12px; border-radius: 999px; }
+.pill.time { background: #fff; color: var(--navy); border: 1px solid var(--mgray); }
+.pill.tag { background: var(--navy); color: var(--gold-lt); letter-spacing: .08em; text-transform: uppercase; font-size: 11px; }
 
-  /* ── Divider line ── */
-  .divider {
-    height: 1px;
-    background: var(--border);
-    margin: 28px 0;
-  }
+/* ── Scenario / activity ────────────────────────────────── */
+.scenario { position: relative; margin-top: 18px; background: #EEF3FA; border: 1px solid var(--green-bd); border-radius: 6px; padding: 18px 22px; }
+.scenario::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--metal); border-radius:6px 0 0 6px; }
+.scenario .scenario-label { font-family: var(--font-body); font-size: 13px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--steel); margin-bottom: 7px; }
+.scenario p { font-family: var(--font-body); font-size: 19px; font-weight: 300; color: var(--text); line-height: 1.5; }
 
-  /* ── Topic tag with icon ── */
-  .topic-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 18px;
-    background: var(--glass);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    font-size: 0.88rem;
-    font-weight: 500;
-    transition: all 0.3s ease;
-  }
-  .topic-tag:hover {
-    border-color: var(--accent2);
-    background: rgba(63,185,80,0.06);
-  }
-  .topic-tag i { color: var(--accent2); }
+/* ── Misc ───────────────────────────────────────────────── */
+.two-col-text { columns: 2; column-gap: 44px; margin-top: 16px; }
+.spacer { flex: 1; } .muted { color: var(--slate); } .center { text-align: center; }
+.mt-s { margin-top: 10px; } .mt-m { margin-top: 18px; }
+a.inline { color: var(--navy); font-weight: 600; text-decoration: underline; text-decoration-color: var(--steel); text-underline-offset: 2px; }
+a.inline:hover { text-decoration-color: var(--navy); }
 
-  /* ── Responsive ── */
-  @media (max-width: 768px) {
-    .slide { padding: 40px 24px; }
-    .two-col { grid-template-columns: 1fr; gap: 24px; }
-    .cards-grid.cols-2,
-    .cards-grid.cols-3,
-    .cards-grid.cols-4 { grid-template-columns: 1fr; }
-    .lock-row { flex-direction: column; align-items: stretch; }
-    .lock-item { flex-direction: row; min-width: auto; }
-    .hero-meta { flex-direction: column; gap: 8px; align-items: flex-start; }
-  }
+/* Do-this-next reference to an activity or resource */
+.next-step { margin-top: 20px; align-self: flex-start; display: inline-flex; align-items: center; gap: 16px;
+  background: #EAF1FB; border: 1px solid var(--green-bd); border-left: 5px solid var(--steel);
+  border-radius: 7px; padding: 13px 20px; box-shadow: var(--sh-card); }
+.next-step .ns-label { font-family: var(--font-body); font-weight: 700; font-size: 12px; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--steel); white-space: nowrap; }
+.next-step a { font-family: var(--font-body); font-weight: 600; font-size: 19px; color: var(--navy);
+  text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+.next-step a .arrow { color: var(--steel); font-size: 16px; }
+.next-step a:hover { color: var(--steel); }
+.next-step a:hover .arrow { transform: translate(2px,-2px); }
+.next-step a .arrow { transition: transform .15s; }
 
-  /* ── Reduced motion ── */
-  @media (prefers-reduced-motion: reduce) {
-    .slide { transition: opacity 0.3s ease; transform: none !important; }
-    .slide.active { transform: none !important; }
-    .orb { animation: none; }
-    .card, .step-item, .lock-item, .pill, .topic-tag { transition: none; }
-  }
+/* ── Presenter notes never render on the slide ──────────── */
+.slide .notes { display: none; }
 
-  /* ── Entrance animations ── */
-  .slide.active .anim-up {
-    animation: animUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
-  }
-  .slide.active .anim-up.d1 { animation-delay: 0.1s; }
-  .slide.active .anim-up.d2 { animation-delay: 0.2s; }
-  .slide.active .anim-up.d3 { animation-delay: 0.3s; }
-  .slide.active .anim-up.d4 { animation-delay: 0.4s; }
-  .slide.active .anim-up.d5 { animation-delay: 0.5s; }
-  .slide.active .anim-up.d6 { animation-delay: 0.6s; }
-  .slide.active .anim-up.d7 { animation-delay: 0.7s; }
-  .slide.active .anim-up.d8 { animation-delay: 0.8s; }
+/* ── Entrance choreography ──────────────────────────────── */
+@keyframes riseIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@keyframes glideIn { from { opacity: 0; transform: translateY(24px); filter: blur(2px); } to { opacity: 1; transform: none; filter: none; } }
+.slide.current .slide-body > * { animation: riseIn .52s cubic-bezier(.22,.7,.2,1) both; }
+.slide.current.cover .slide-body > *, .slide.current.divider .slide-body > * { animation: glideIn .7s cubic-bezier(.22,.7,.2,1) both; }
+.slide.current .slide-body > *:nth-child(1){animation-delay:.04s}
+.slide.current .slide-body > *:nth-child(2){animation-delay:.11s}
+.slide.current .slide-body > *:nth-child(3){animation-delay:.18s}
+.slide.current .slide-body > *:nth-child(4){animation-delay:.25s}
+.slide.current .slide-body > *:nth-child(5){animation-delay:.32s}
+.slide.current .slide-body > *:nth-child(6){animation-delay:.39s}
+.slide.current .slide-body > *:nth-child(7){animation-delay:.46s}
+.slide.current .slide-body > *:nth-child(8){animation-delay:.53s}
+.slide.current .slide-body > *:nth-child(9){animation-delay:.60s}
+.slide.divider .seg-num { animation: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .slide.current .slide-body > * { animation: none !important; }
+  #notesPanel, #progress, #controls button, .next-step a .arrow, .pv-btn, #exitDeck { transition: none !important; }
+}
 
-  @keyframes animUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+/* ── Presenter notes panel ──────────────────────────────── */
+#notesPanel {
+  position: fixed; left: 0; right: 0; bottom: 0; max-height: 42vh;
+  background: linear-gradient(180deg, rgba(11,29,51,.98), rgba(8,22,39,.98));
+  color: #E7EEFB; border-top: 2px solid; border-image: var(--metal) 1;
+  padding: 20px 30px 24px; overflow-y: auto; transform: translateY(100%);
+  transition: transform .28s cubic-bezier(.22,.7,.2,1); z-index: 50; backdrop-filter: blur(8px);
+}
+#notesPanel.open { transform: translateY(0); }
+#notesPanel .np-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; font-family: var(--font-body); font-size: 11px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--gold-lt); }
+#notesPanel .np-head .np-slide { color: #8FA6C8; letter-spacing: .04em; text-transform: none; font-weight: 500; }
+#notesPanel .np-body { font-family: var(--font-display); font-size: 18px; line-height: 1.6; max-width: 92ch; font-weight: 400; }
+#notesPanel .np-body p { margin-bottom: 11px; }
 
-  /* ── Canvas particles ── */
-  #particles-canvas {
-    position: fixed; inset: 0;
-    z-index: 0;
-    pointer-events: none;
-  }
+/* ── Controls ───────────────────────────────────────────── */
+#controls { position: fixed; top: 14px; right: 16px; z-index: 60; display: flex; align-items: center; gap: 7px; font-family: var(--font-body); font-size: 12px; color: #C6D4EC; opacity: .62; transition: opacity .2s; }
+#controls:hover { opacity: 1; }
+#controls button { background: rgba(16,42,84,.82); color: #EAF0FB; border: 1px solid rgba(200,210,220,.35); border-radius: 6px; width: 34px; height: 34px; cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+#controls button:hover { background: var(--gold-lt); color: var(--navy-dk); border-color: var(--gold-lt); }
+#counter { font-family: var(--font-mono); font-variant-numeric: tabular-nums; padding: 0 6px; min-width: 58px; text-align: center; letter-spacing:.04em; }
+
+#progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--metal); z-index: 60; transition: width .3s cubic-bezier(.22,.7,.2,1); width: 0; box-shadow:0 0 8px rgba(147,175,206,.6); }
+
+#exitDeck { position: fixed; top: 14px; left: 16px; z-index: 60; width: 34px; height: 34px; display: none; align-items: center; justify-content: center; background: rgba(16,42,84,.82); color: #EAF0FB; border: 1px solid rgba(200,210,220,.35); border-radius: 6px; opacity: .62; transition: all .15s; text-decoration: none; }
+#exitDeck:hover { opacity: 1; background: var(--gold-lt); color: var(--navy-dk); border-color: var(--gold-lt); }
+
+/* ── Help ───────────────────────────────────────────────── */
+#help { position: fixed; inset: 0; background: rgba(8,22,39,.94); z-index: 100; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+#help.open { display: flex; }
+#help .help-card { background: var(--white); border-radius: 8px; padding: 32px 38px; max-width: 470px; box-shadow: 0 30px 80px rgba(0,0,0,.5); border-top: 3px solid; border-image: var(--metal) 1; }
+#help h3 { font-family: var(--font-display); color: var(--navy); font-size: 23px; font-weight: 600; margin-bottom: 18px; }
+#help table { width: 100%; border-collapse: collapse; font-family: var(--font-body); font-size: 15px; }
+#help td { padding: 7px 4px; border-bottom: 1px solid var(--hair); color: var(--text); }
+#help td kbd { background: var(--lgray); border: 1px solid var(--mgray); border-bottom-width: 2px; border-radius: 5px; padding: 2px 8px; font-family: var(--font-mono); font-size: 13px; color: var(--navy); }
+#help .close-hint { margin-top: 18px; font-size: 13px; color: var(--slate); text-align: center; }
+
+/* ── Print / PDF ────────────────────────────────────────── */
+/* ================= a11y remediation ================= */
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+/* visible keyboard focus (WCAG 2.4.7) */
+#controls:focus-within{opacity:1;}
+#controls button:focus-visible,#exitDeck:focus-visible,.pv-btn:focus-visible,a.inline:focus-visible,.next-step a:focus-visible,.reflect a:focus-visible{outline:3px solid #F4F8FE;outline-offset:2px;}
+#exitDeck:focus-visible{opacity:1;}
+/* Reflow mode for narrow screens / high browser zoom (WCAG 1.4.10, 1.4.4, 1.4.12).
+   The .reflow class is toggled on .deck by fit() in deck-framework.js. Slides drop the
+   fixed 1280x720 transform-scaled canvas and become a normal-flow, single-column, scrollable
+   layout with relative type, so content reflows and enlarged text/spacing no longer clips. */
+.deck.reflow{position:static;display:block;height:auto;overflow:visible;background:var(--paper);}
+.deck.reflow::before{display:none;}
+.deck.reflow .slide{position:relative;left:auto!important;top:auto!important;transform:none!important;
+  width:100%;max-width:940px;height:auto;min-height:0;overflow:visible;margin:0 auto 18px;box-shadow:none;display:none;}
+.deck.reflow .slide.current{display:flex;}
+.deck.reflow .slide::after{display:none;}
+.deck.reflow .slide-body{padding:22px 18px 16px;}
+.deck.reflow .slide-title{font-size:1.7rem;line-height:1.2;}
+.deck.reflow .cover h1,.deck.reflow .divider h1,.deck.reflow h1{font-size:2rem;line-height:1.15;}
+.deck.reflow .lead,.deck.reflow .subtitle{font-size:1.05rem;line-height:1.5;}
+.deck.reflow .bullets li,.deck.reflow .card p,.deck.reflow .callout p,.deck.reflow .reflect p,.deck.reflow .step p{font-size:1rem;line-height:1.5;}
+.deck.reflow .grid,.deck.reflow .steps,.deck.reflow .guardrail,.deck.reflow .compare{grid-template-columns:1fr!important;display:block!important;}
+.deck.reflow .grid > *,.deck.reflow .steps > *{margin-bottom:12px;}
+/* Neutralize absolutely-positioned decorative art so it cannot overlap reflowed text.
+   Add your own deck-local absolute-image class names to this selector, e.g. .my-corner-photo */
+.deck.reflow [class*="-photo"],.deck.reflow [class*="-visual"]{position:static!important;width:auto!important;max-width:100%;height:auto!important;transform:none!important;margin:10px auto;display:block;-webkit-mask-image:none;mask-image:none;}
+
+@media print {
+  @page { size: 1280px 720px; margin: 0; }
+  html, body { background: #fff; height: auto; }
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+  .deck::before { display: none !important; }
+  .deck { position: static; display: block; }
+  .slide { position: relative !important; left: auto !important; top: auto !important; display: flex !important; transform: none !important; page-break-after: always; break-after: page; box-shadow: none; margin: 0 auto; }
+  .slide:last-child { page-break-after: auto; break-after: auto; }
+  .slide.current .slide-body > * { animation: none !important; }
+  #controls, #notesPanel, #progress, #help, #exitDeck, .back-bar { display: none !important; }
+}
+
+/* ── Small screens ──────────────────────────────────────── */
+@media (max-width: 700px) { #controls { top: 8px; right: 8px; } #notesPanel { max-height: 55vh; } }
+
+/* ── Presenter view (separate laptop window) ────────────── */
+body.presenter-mode { overflow: hidden; background: #060F1F; }
+body.presenter-mode .deck { display: none !important; }
+body.presenter-mode .slide.current .slide-body > * { animation: none !important; }
+
+#presenter { position: fixed; inset: 0; display: flex; flex-direction: column; background: #071527; color: #E7EEFB; font-family: var(--font-body); }
+.pv-top { display: flex; align-items: center; gap: 20px; padding: 12px 22px; border-bottom: 1px solid rgba(200,210,220,.14); }
+.pv-top .brand { font-family: var(--font-display); font-weight: 600; font-size: 15px; letter-spacing: .05em; color: var(--gold-lt); }
+.pv-nav { display: flex; gap: 6px; }
+.pv-btn { background: rgba(16,42,84,.75); border: 1px solid rgba(200,210,220,.3); color: #EAF0FB; border-radius: 6px; padding: 6px 12px; font-size: 13px; cursor: pointer; font-family: var(--font-body); transition: all .15s; }
+.pv-btn:hover { background: var(--gold-lt); color: var(--navy-dk); border-color: var(--gold-lt); }
+.pv-btn.icon { width: 34px; padding: 6px 0; font-size: 15px; }
+.pv-count { font-family: var(--font-mono); font-size: 15px; color: var(--gold-lt); letter-spacing: .04em; }
+.pv-spacer { margin-left: auto; }
+.pv-metrics { display: flex; align-items: center; gap: 22px; }
+.pv-timer { font-family: var(--font-mono); font-size: 30px; font-weight: 500; color: #F4F8FE; letter-spacing: .02em; cursor: pointer; }
+.pv-timer.paused { color: #8093B4; }
+.pv-clock { font-family: var(--font-mono); font-size: 15px; color: #8FA6C8; }
+
+.pv-main { flex: 1; display: grid; grid-template-columns: 1.55fr 1fr; gap: 22px; padding: 22px; min-height: 0; }
+.pv-main > * { min-width: 0; }
+.pv-left, .pv-right { display: flex; flex-direction: column; min-height: 0; min-width: 0; }
+.pv-right { gap: 16px; }
+.pv-right > * { min-width: 0; }
+.pv-label { font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #8FA6C8; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.pv-label .dot { width: 6px; height: 6px; background: var(--gold-lt); transform: rotate(45deg); }
+.pv-frame { width: 100%; background: #04070E; border: 1px solid rgba(200,210,220,.2); border-radius: 6px; overflow: hidden; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
+.pv-holder { position: absolute; top: 0; left: 0; width: 1280px; height: 720px; transform-origin: top left; }
+.pv-holder .slide { box-shadow: none !important; }
+.pv-next-wrap { flex: 0 0 auto; }
+.pv-notes { flex: 1; overflow-y: auto; background: rgba(11,29,51,.55); border: 1px solid rgba(200,210,220,.14); border-radius: 8px; padding: 18px 22px; min-height: 0; }
+.pv-notes-body { font-family: var(--font-display); font-size: 20px; line-height: 1.62; color: #EBF2FD; font-weight: 400; }
+.pv-notes-body p { margin-bottom: 12px; }
+.pv-end { display: flex; align-items: center; justify-content: center; height: 100%; color: #8FA6C8; font-family: var(--font-display); font-style: italic; font-size: 20px; }
+.pv-hint { padding: 8px 22px 12px; font-size: 12px; color: #6E82A6; border-top: 1px solid rgba(200,210,220,.1); }
+.pv-hint kbd { font-family: var(--font-mono); background: rgba(255,255,255,.06); border: 1px solid rgba(200,210,220,.2); border-radius: 4px; padding: 1px 6px; color: #C6D4EC; font-size: 11px; }
+
+/* Slide corner icon */
+.slide-ico{position:absolute;top:38px;right:52px;width:108px;height:108px;object-fit:contain;border-radius:12px;z-index:1;}
 </style>
 </head>
 <body>
+<div class="deck">
 
-<!-- Background layers -->
-<div class="bg-layer"></div>
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-<div class="orb orb-3"></div>
-<canvas id="particles-canvas"></canvas>
-
-<!-- Progress bar -->
-<div class="progress-bar" id="progressBar"></div>
-
-<!-- Deck viewport -->
-<div class="deck-viewport" id="deck">
-
-  <!-- SLIDE 0: Hero -->
-  <div class="slide active" data-slide="0">
-    <div class="slide-inner">
-      <div class="slide-tag anim-up"><i class="fa-solid fa-flask"></i> TCEA Blog Highlights</div>
-      <h1 class="hero-title anim-up d1">
-        <span class="highlight">CTOBs</span> for Your<br>K-2 Science Classroom
-      </h1>
-      <p class="hero-sub anim-up d2">
-        Critical Thinking Online Breakouts transform elementary science into engaging puzzle-solving adventures — building reasoning skills students will use for life.
-      </p>
-      <div class="hero-meta anim-up d3">
-        <span><i class="fa-solid fa-building-columns"></i> TCEA.org</span>
-        <span><i class="fa-solid fa-graduation-cap"></i> K-2 Focus</span>
-        <span><i class="fa-solid fa-atom"></i> Science TEKS-Aligned</span>
-      </div>
+  <!-- 1 · COVER -->
+  <section class="slide cover current">
+    <div class="slide-body">
+      <div class="cover-eyebrow">TCEA Blog</div>
+      <h1>Critical Thinking Online Breakouts</h1>
+      <div class="subtitle">CTOBs for your K–2 science classroom</div>
+      <div class="meta"><strong>Source:</strong> blog.tcea.org<br>Early Elementary · Science · Digital Puzzles</div>
     </div>
-  </div>
-
-  <!-- SLIDE 1: What Are CTOBs? -->
-  <div class="slide" data-slide="1">
-    <div class="slide-inner">
-      <div class="slide-tag anim-up"><i class="fa-solid fa-circle-question"></i> Definition</div>
-      <h2 class="slide-title anim-up d1">What Exactly Are <span class="highlight">CTOBs</span>?</h2>
-      <p class="slide-subtitle anim-up d2">
-        Critical Thinking Online Breakouts are digital puzzle experiences where students solve clues to "unlock" a final answer — no physical locks required.
-      </p>
-      <div class="quote-block anim-up d3">
-        <p>"CTOBs are online breakout activities that require students to use critical thinking to solve puzzles and unlock answers, all within a digital environment."</p>
-        <div class="attribution">— TCEA Blog</div>
-      </div>
-      <div class="two-col" style="margin-top: 28px;">
-        <div class="cards-grid cols-2 anim-up d4" style="margin-top:0;">
-          <div class="card">
-            <div class="card-icon orange"><i class="fa-solid fa-lock"></i></div>
-            <h3>Digital Locks</h3>
-            <p>Students solve puzzles to crack letter, number, color, or direction locks on a Google Form.</p>
-          </div>
-          <div class="card">
-            <div class="card-icon green"><i class="fa-solid fa-magnifying-glass"></i></div>
-            <h3>Clue Hunting</h3>
-            <p>Clues are hidden across images, text, videos, and interactive elements on a Google Site.</p>
-          </div>
-        </div>
-        <div class="cards-grid cols-2 anim-up d5" style="margin-top:0;">
-          <div class="card">
-            <div class="card-icon blue"><i class="fa-solid fa-brain"></i></div>
-            <h3>Critical Thinking</h3>
-            <p>Every puzzle demands observation, inference, pattern recognition, and logical reasoning.</p>
-          </div>
-          <div class="card">
-            <div class="card-icon orange"><i class="fa-solid fa-trophy"></i></div>
-            <h3>One Final Answer</h3>
-            <p>Cracking all locks reveals a celebration screen — a satisfying payoff for young learners.</p>
-          </div>
-        </div>
-      </div>
+    <div class="slide-footer">
+      <span class="brand"><span class="star">✦</span> CTOBs for K–2</span>
+      <span class="fac">Based on TCEA Blog</span>
+      <span class="url">blog.tcea.org</span>
     </div>
-  </div>
+    <div class="notes">
+      <p>Good morning. Today I want to show you a classroom tool that takes the escape-room format your students already love and adapts it for the youngest learners. CTOBs stand for Critical Thinking Online Breakouts. They are fully digital, require no physical boxes or locks, and they are built entirely inside tools you already use, like Google Slides and Google Forms. I am going to walk you through what they are, why they work so well for kindergarten through second grade science, and how you can build one this week using nothing you do not already have.</p>
+    </div>
+  </section>
 
-  <!-- SLIDE 2: Why K-2? -->
-  <div class="slide" data-slide="2">
-    <div class="slide-inner">
-      <div class="slide-tag anim-up"><i class="fa-solid fa-child-reaching"></i> Age Appropriateness</div>
-      <h2 class="slide-title anim-up d1">Why <span class="highlight-green">K-2</span> Learners Need This</h2>
-      <p class="slide-subtitle anim-up d2">
-        Young children are natural questioners. CTOBs channel that curiosity into structured problem-solving — meeting them where they are developmentally.
-      </p>
-      <div class="cards-grid cols-3 anim-up d3">
-        <div class="card" style="text-align:center;">
-          <div class="big-stat">
-            <div class="num orange">85%</div>
-            <div class="label">Of brain development<br>happens by age 5</div>
-          </div>
+  <!-- 2 · DIVIDER — What Are CTOBs? -->
+  <section class="slide divider">
+    <div class="slide-body">
+      <div class="seg-num">1</div>
+      <div class="divider-eyebrow">Part One · about 4 minutes</div>
+      <h1>What Are CTOBs?</h1>
+      <div class="subtitle">The escape-room format, rethought for little hands and early readers</div>
+    </div>
+    <div class="slide-footer">
+      <span class="brand"><span class="star">✦</span> CTOBs for K–2</span>
+      <span class="fac">Based on TCEA Blog</span>
+      <span class="url">blog.tcea.org</span>
+    </div>
+    <div class="notes">
+      <p>Let us start with the basics. What exactly is a CTOB? If you have seen or used physical breakout boxes from Breakout EDU, the idea is familiar. Students solve a series of puzzles, each one unlocking the next, until they break out. A CTOB does the same thing but lives entirely online. No padlocks, no boxes, no typed codes on little locks. Instead, the locks are digital, and the clues are images, short passages, or interactive elements on a screen. The key difference from a random online escape room is that every puzzle is tied to your curriculum content.</p>
+    </div>
+  </section>
+
+  <!-- 3 · Definition -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="slide-kicker">Definition</div>
+      <h2 class="slide-title">Digital locks, content-rich clues</h2>
+      <p class="lead">A CTOB is a digital activity where students solve curriculum-aligned puzzles to unlock each section and break out of an online space.</p>
+      <ul class="bullets">
+        <li><strong>Digital locks</strong> replace physical padlocks — students crack codes on screen</li>
+        <li><strong>Every puzzle ties to content</strong> — not random riddles, but your science standards</li>
+        <li><strong>Critical thinking is the goal</strong> — reasoning, observation, and making connections</li>
+      </ul>
+    </div>
+    <div class="slide-footer">
+      <span class="brand"><span class="star">✦</span> CTOBs for K–2</span>
+      <span class="fac">Based on TCEA Blog</span>
+      <span class="url">blog.tcea.org</span>
+    </div>
+    <div class="notes">
+      <p>So here is the formal definition. A CTOB is a digital activity where students solve curriculum-aligned puzzles to unlock each section and break out of an online space. Three things make it different from a generic online game. First, the locks are digital. Instead of turning a dial on a padlock, students type a code into a Google Form or click the right sequence on a slide. Second, every puzzle is tied to your content. This is not a riddle about a random animal. It is a puzzle about the life cycle of a butterfly, because that is what you are teaching. Third, the whole point is critical thinking. Students observe, reason, and connect clues. Memorization will not get them through.</p>
+    </div>
+  </section>
+
+  <!-- 4 · Why K–2? -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="slide-kicker">Rationale</div>
+      <h2 class="slide-title">Why this works for K–2</h2>
+      <p class="lead">Young children are natural investigators. CTOBs channel that curiosity into structured problem-solving.</p>
+      <div class="grid cols-3">
+        <div class="card">
+          <h3><span class="ico">◆</span>Curiosity</h3>
+          <p>They already ask why — CTOBs give them a reason to keep asking</p>
         </div>
-        <div class="card" style="text-align:center;">
-          <div class="big-stat">
-            <div class="num green">4x</div>
-            <div class="label">More engaged with<br>puzzle-based learning</div>
-          </div>
+        <div class="card gold">
+          <h3><span class="ico">◆</span>Observation</h3>
+          <p>Careful looking is a core science skill these puzzles reinforce</p>
         </div>
-        <div class="card" style="text-align:center;">
-          <div class="big-stat">
-            <div class="num blue">K-2</div>
-            <div class="label">Critical window for<br>thinking habit formation</div>
-          </div>
-        </div>
-      </div>
-      <div class="step-list anim-up d4">
-        <div class="step-item">
-          <div class="step-num">1</div>
-          <div class="step-content">
-            <h4>Simplified Puzzles, Deep Thinking</h4>
-            <p>CTOBs for K-2 use age-appropriate puzzles — color matching, simple ciphers, picture clues — that still require genuine reasoning.</p>
-          </div>
-        </div>
-        <div class="step-item">
-          <div class="step-num">2</div>
-          <div class="step-content">
-            <h4>Visual-First Design</h4>
-            <p>Minimal text, rich imagery, and audio support ensure pre-readers and early readers can participate fully.</p>
-          </div>
-        </div>
-        <div class="step-item">
-          <div class="step-num">3</div>
-          <div class="step-content">
-            <h4>Collaboration Built In</h4>
-            <p>Students work in pairs or small groups, building communication skills alongside critical thinking.</p>
-          </div>
+        <div class="card">
+          <h3><span class="ico">◆</span>Confidence</h3>
+          <p>Cracking a puzzle builds an I-can-figure-this-out mindset</p>
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- SLIDE 3: How the Locks Work -->
-  <div class="slide" data-slide="3">
-    <div class="slide-inner">
-      <div class="slide-tag anim-up"><i class="fa-solid fa-key"></i> Mechanics</div>
-      <h2 class="slide-title anim-up d1">How the <span class="highlight-blue">Locks</span> Actually Work</h2>
-      <p class="slide-subtitle anim-up d2">
-        Each CTOB has multiple lock types. Students must crack every lock to submit the final form and "break out." Here are the four primary lock types used.
-      </p>
-      <div class="lock-row anim-up d3">
-        <div class="lock-item">
-          <div class="lock-icon orange"><i class="fa-solid fa-hashtag"></i></div>
-          <div class="lock-label">Number Lock</div>
-        </div>
-        <div class="lock-item">
-          <div class="lock-icon green"><i class="fa-solid fa-font"></i></div>
-          <div class="lock-label">Letter Lock</div>
-        </div>
-        <div class="lock-item">
-          <div class="lock-icon blue"><i class="fa-solid fa-palette"></i></div>
-          <div class="lock-label">Color Lock</div>
-        </div>
-        <div class="lock-item">
-          <div class="lock-icon purple"><i class="fa-solid fa-compass"></i></div>
-          <div class="lock-label">Direction Lock</div>
-        </div>
-      </div>
-      <div class="divider"></div>
-      <div class="two-col anim-up d4">
-        <div>
-          <h3 style="font-size:1.1rem; margin-bottom:12px;">Example: Number Lock</h3>
-          <p style="font-size:0.9rem; color:var(--fg-muted); line-height:1.7;">
-            A page shows 5 butterflies. Students count them, notice 2 have spots, and infer the code is "52" — five total, two spotted. The number lock on the Google Form accepts "52."
-          </p>
-        </div>
-        <div>
-          <h3 style="font-size:1.1rem; margin-bottom:12px;">Example: Color Lock</h3>
-          <p style="font-size:0.9rem; color:var(--fg-muted); line-height:1.7;">
-            A life cycle diagram uses red, blue, green, yellow for each stage. A hidden clue says "start from the egg" — students enter the colors in life cycle order.
-          </p>
-        </div>
-      </div>
-      <div class="quote-block anim-up d5" style="margin-top:24px;">
-        <p>"The magic is in the mismatch — the answer isn't obvious. Students must reason, not just recall."</p>
-      </div>
+    <div class="slide-footer">
+      <span class="brand"><span class="star">✦</span> CTOBs for K–2</span>
+      <span class="fac">Based on TCEA Blog</span>
+      <span class="url">blog.tcea.org</span>
     </div>
-  </div>
+    <div class="notes">
+      <p>Why start this in kindergarten through second grade? Because five-, six-, and seven-year-olds are already investigators. They pick up rocks, they watch bugs, they ask why the sky is blue. A CTOB takes that natural curiosity and gives it structure. The puzzles force them to observe carefully, which is one of the most important science skills at any age. And when they crack a code, the feeling of success is enormous. They start to believe they can figure hard things out. That mindset carries forward into every subject, not just science.</p>
+    </div>
+  </section>
 
-  <!-- SLIDE 4: Science Topics -->
-  <div class="slide" data-slide="4">
-    <div class="slide-inner">
-      <div class="slide-tag anim-up"><i class="fa-solid fa-seedling"></i> Curriculum</div>
-      <h2 class="slide-title anim-up d1">Science Topics That <span class="highlight-green">Come Alive</span></h2>
-      <p class="slide-subtitle anim-up d2">
-        CTOBs align with K-2 Science TEKS, turning standard topics into investigative experiences students genuinely care about solving.
-      </p>
-      <div class="pill-row anim-up d3">
-        <div class="topic-tag"><i class="fa-solid fa-frog"></i> Life Cycles</div>
-        <div class="topic-tag"><i class="fa-solid fa-cloud-sun"></i> Weather & Seasons</div>
-        <div class="topic-tag"><i class="fa-solid fa-tree"></i> Habitats & Ecosystems</div>
-        <div class="topic-tag"><i class="fa-solid fa-magnet"></i> Forces & Motion</div>
-        <div class="topic-tag"><i class="fa-solid fa-droplet"></i> Water Cycle</div>
-        <div class="topic-tag"><i class="fa-solid fa-sun"></i> Sun, Light & Heat</div>
-        <div class="topic-tag"><i class="fa-solid fa-paw"></i> Animal Adaptations</div>
-        <div class="topic-tag"><i class="fa-solid fa-leaf"></i> Plant Parts & Needs</div>
-      </div>
-      <div class="cards-grid cols-2 anim-up d4" style="margin-top:28px;">
+  <!-- 5 · DIVIDER — Building a CTOB -->
+  <section class="slide divider">
+    <div class="slide-body">
+      <div class="seg-num">2</div>
+      <div class="divider-eyebrow">Part Two · about 8 minutes</div>
+      <h1>Building a CTOB</h1>
+      <div class="subtitle">Locks, topics, structure, and the tools already on your computer</div>
+    </div>
+    <div class="slide-footer">
+      <span class="brand"><span class="star">✦</span> CTOBs for K–2</span>
+      <span class="fac">Based on TCEA Blog</span>
+      <span class="url">blog.tcea.org</span>
+    </div>
+    <div class="notes">
+      <p>Now we get into the practical part. How do you actually build one of these? I am going to show you four things: the lock types that work for young children, the science topics that lend themselves to puzzles, the structure every CTOB should follow, and the tools you will use. The good news is that you do not need any new software. If your school uses Google Workspace or Microsoft 365, you already have everything.</p>
+    </div>
+  </section>
+
+  <!-- 6 · Lock Types -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="slide-kicker">Lock Mechanics</div>
+      <h2 class="slide-title">Four locks for little learners</h2>
+      <p class="lead">Keep it to three or four locks. Match the type to what your students can already do.</p>
+      <div class="grid cols-4">
         <div class="card">
-          <div class="card-icon green"><i class="fa-solid fa-egg"></i></div>
-          <h3>Butterfly Life Cycle CTOB</h3>
-          <p>Students explore egg, caterpillar, chrysalis, and butterfly stages through embedded images and videos. Clues are hidden in metamorphosis timelines and vocabulary hints. The final lock requires ordering stages correctly.</p>
+          <h3><span class="ico">◆</span>Number</h3>
+          <p>Count objects in an image to find a three- or four-digit code</p>
+        </div>
+        <div class="card gold">
+          <h3><span class="ico">◆</span>Letter</h3>
+          <p>Unscramble or identify letters hidden in a science diagram</p>
         </div>
         <div class="card">
-          <div class="card-icon blue"><i class="fa-solid fa-cloud-rain"></i></div>
-          <h3>Weather Patterns CTOB</h3>
-          <p>Learners analyze weather maps, thermometer readings, and seasonal photos. A directional lock comes from tracing a cold front's movement. A number lock comes from reading temperatures in a sequence.</p>
+          <h3><span class="ico">◆</span>Color</h3>
+          <p>Sequence colors in the order they appear in a photograph</p>
+        </div>
+        <div class="card gold">
+          <h3><span class="ico">◆</span>Direction</h3>
+          <p>Follow a path of arrows — up, down, left, right</p>
         </div>
       </div>
+      <div class="callout light mt-m">
+        <span class="label">Pro tip</span>
+        <p>Use a Google Form with data validation as your lock box — each question is a lock, and the form will not submit until all answers are correct.</p>
+      </div>
     </div>
-  </div>
+    <div class="slide-footer">
+      <span class="brand"><span class="star">✦</span> CTOBs for K–2</span>
+      <span class="fac">Based on TCEA Blog</span>
+      <span class="url">blog.tcea.org</span>
+    </div>
+    <div class="notes">
+      <p>For kindergarten through second grade, the article recommends four lock types, and you should pick three or four of these for any given breakout. A number lock asks students to count something in an image — how many legs on the caterpillar, how many seeds in the pod — and enter that number. A letter lock has them find or unscramble letters. A color lock asks them to identify a sequence of colors. And a direction lock has them trace a path using arrows. The pro tip here is that a Google Form with data validation acts as your lock box. You set each question to accept only the correct answer. Students cannot move on until they get it right, and you do not have to grade anything.</p>
+    </div>
+  </section>
 
-  <!-- SLIDE 5: Building a CTOB Step by Step -->
-  <div class="slide" data-slide="5">
-    <div class="slide-inner">
-      <div class="slide-tag anim-up"><i class="fa-solid fa-hammer"></i> Build Guide</div>
-      <h2 class="slide-title anim-up d1">Building a CTOB: <span class="highlight">Step by Step</span></h2>
-      <div class="step-list anim-up d2">
-        <div class="step-item">
-          <div class="step-num">1</div>
-          <div class="step-content">
-            <h4>Choose Your Science Standard</h4>
-            <p>Pick one specific TEKS or learning objective. A focused topic makes better puzzles than a broad one.</p>
-          </div>
+  <!-- 7 · Science Topics -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="slide-kicker">Content Areas</div>
+      <h2 class="slide-title">Science topics that lend themselves to puzzles</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3><span class="ico">◆</span>Plant life cycles</h3>
+          <p>Sequence seed, sprout, flower, fruit. Count parts. Match labels to stages.</p>
         </div>
-        <div class="step-item">
-          <div class="step-num">2</div>
-          <div class="step-content">
-            <h4>Design the Locks First</h4>
-            <p>Decide your answers (e.g., RED, BLUE, GREEN, YELLOW for a color lock) before creating clues. Work backward from the answer.</p>
-          </div>
+        <div class="card gold">
+          <h3><span class="ico">◆</span>Weather and seasons</h3>
+          <p>Match symbols to seasons. Count cloud types. Order months by temperature.</p>
         </div>
-        <div class="step-item">
-          <div class="step-num">3</div>
-          <div class="step-content">
-            <h4>Build the Google Form</h4>
-            <p>Create a Google Form with data validation set to your lock answers. Use "short answer" with specific text matching for each lock field.</p>
-          </div>
+        <div class="card gold">
+          <h3><span class="ico">◆</span>Animal life cycles</h3>
+          <p>Butterfly, frog, or chicken — order the stages and extract letters or numbers from labels.</p>
         </div>
-        <div class="step-item">
-          <div class="step-num">4</div>
-          <div class="step-content">
-            <h4>Create the Google Site</h4>
-            <p>Build a multi-page Google Site. Embed images, text, videos, and hidden clues across pages. Link the Google Form to the final page.</p>
-          </div>
-        </div>
-        <div class="step-item">
-          <div class="step-num">5</div>
-          <div class="step-content">
-            <h4>Hide Clues in Plain Sight</h4>
-            <p>Use alt text on images, hover effects, color coding, hidden text boxes, and embedded video timestamps as clue locations.</p>
-          </div>
-        </div>
-        <div class="step-item">
-          <div class="step-num">6</div>
-          <div class="step-content">
-            <h4>Test, Refine, Launch</h4>
-            <p>Have a colleague or student test it first. Check that puzzles are solvable but not trivial, and that the tech works on student devices.</p>
-          </div>
+        <div class="card">
+          <h3><span class="ico">◆</span>Magnetic or not</h3>
+          <p>Sort objects into two groups. The count of magnetic items becomes the lock code.</p>
         </div>
       </div>
     </div>
-  </div>
+    <div class="slide-footer">
+      <span class="brand"><span class="star">✦</span> CTOBs for K–2</span>
+      <span class="fac">Based on TCEA Blog</span>
+      <span class="url">blog.tcea.org</span>
+    </div>
+    <div class="notes">
+      <p>The article highlights four science topics that work especially well because they are visual, sequential, and part of most K-2 curricula. Plant life cycles are perfect because the stages are distinct and easy to photograph. Weather and seasons work because students can sort, match, and count. Animal life cycles — the butterfly is the classic example — give you a clear sequence with vocabulary words you can turn into letter locks. And the magnetic-or-not activity is great because sorting is a concrete task for young kids, and the count from one column becomes your number lock. Any science standard that involves sorting, sequencing, or counting can become a CTOB.</p>
+    </div>
+  </section>
 
-  <!-- SLIDE 6: Tools You Need -->
-  <div class="slide" data-slide="6">
-    <div class="slide-inner">
-      <div class="slide-tag anim-up"><i class="fa-solid fa-toolbox"></i> Toolkit</div>
-      <h2 class="slide-title anim-up d1">The <span class="highlight-blue">Tool Stack</span> — Free & Accessible</h2>
-      <p class="slide-subtitle anim-up d2">
-        You don't need expensive software. The entire CTOB ecosystem runs on free Google Workspace tools that most districts already provide.
-      </p>
-      <div class="cards-grid cols-3 anim-up d3">
-        <div class="card">
-          <div class="card-icon orange"><i class="fa-brands fa-google"></i></div>
-          <h3>Google Sites</h3>
-          <p>The "room" where students explore. Multiple pages hold clues, images, and embedded content. No coding needed.</p>
+  <!-- 8 · Anatomy -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="slide-kicker">Structure</div>
+      <h2 class="slide-title">Anatomy of a K–2 CTOB</h2>
+      <p class="lead">Every breakout follows the same four-part shape, regardless of topic.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="n">1</div>
+          <h4>Story hook</h4>
+          <p>A simple scenario that gives students a reason to solve the puzzles</p>
         </div>
-        <div class="card">
-          <div class="card-icon green"><i class="fa-solid fa-file-lines"></i></div>
-          <h3>Google Forms</h3>
-          <p>The lock mechanism. Data validation ensures only correct answers advance. Confirmation page becomes the "breakout" celebration.</p>
+        <div class="step">
+          <div class="n">2</div>
+          <h4>Clue pages</h4>
+          <p>One page per lock with images, short text, or an interactive element</p>
         </div>
-        <div class="card">
-          <div class="card-icon blue"><i class="fa-solid fa-images"></i></div>
-          <h3>Google Drawings / Slides</h3>
-          <p>Create custom images with hidden clues — invisible text, coded colors, embedded patterns that students must decode.</p>
+        <div class="step">
+          <div class="n">3</div>
+          <h4>Lock input</h4>
+          <p>A Google Form question, drag-and-drop slide, or hidden cell that accepts the answer</p>
         </div>
-      </div>
-      <div class="cards-grid cols-3 anim-up d4" style="margin-top:16px;">
-        <div class="card">
-          <div class="card-icon blue"><i class="fa-brands fa-youtube"></i></div>
-          <h3>YouTube Videos</h3>
-          <p>Embed science videos. Clues can be hidden at specific timestamps, in video descriptions, or in thumbnail details.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon green"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
-          <h3>Google Inside Search</h3>
-          <p>Teach students to search within a page (Ctrl+F) to find hidden text — a legitimate digital literacy skill.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon orange"><i class="fa-solid fa-puzzle-piece"></i></div>
-          <h3>Optional Extras</h3>
-          <p>ThingLink for interactive images, Padlet for collaboration hints, or Flip for video reflections after breaking out.</p>
+        <div class="step">
+          <div class="n">4</div>
+          <h4>Celebration</h4>
+          <p>A congratulatory image or GIF when all locks are opened</p>
         </div>
       </div>
     </div>
-  </div>
+    <div class="slide-footer">
+      <span class="brand"><span class="star">✦</span> CTOBs for K–2</span>
+      <span class="fac">Based on TCEA Blog</span>
+      <span class="url">blog.tcea.org</span>
+    </div>
+    <div class="notes">
+      <p>No matter what science topic you pick, the structure is always the same four parts. First, a story hook. Something simple like, the animals are locked in their habitat and cannot get out. You do not need a long narrative — one sentence is enough for this age. Second, clue pages. One page per lock. Keep each page to a single screen — an image, maybe a short question, nothing that requires scrolling. Third, the lock input. This is where students enter their answer. A Google Form question is the easiest option. Fourth, and this matters more than you might think, a celebration slide. When they break out, show them something fun. Positive reinforcement at that age is everything.</p>
+    </div>
+  </section>
 
-  <!-- SLIDE 7: Clue Design Principles -->
-  <div class="slide" data-slide="7">
-    <div class="slide-inner">
-      <div class="slide-tag anim-up"><i class="fa-solid fa-lightbulb"></i> Design Principles</div>
-      <h2 class="slide-title anim-up d1">Designing Clues That <span class="highlight-green">Actually Work</span></h2>
-      <div class="two-col">
-        <div class="col-text">
-          <div class="step-list anim-up d2">
-            <div class="step-item">
-              <div class="step-num"><i class="fa-solid fa-check" style="font-size:0.75rem;"></i></div>
-              <div class="step-content">
-                <h4>One Clue Per Lock</h4>
-                <p>Each puzzle should lead to exactly one answer. Ambiguity frustrates young learners fast.</p>
-              </div>
-            </div>
-            <div class="step-item">
-              <div class="step-num"><i class="fa-solid fa-check" style="font-size:0.75rem;"></i></div>
-              <div class="step-content">
-                <h4>Redundant Hinting</h4>
-                <p>Provide 2-3 ways to find each answer — visual, textual, and contextual — so different learners can succeed.</p>
-              </div>
-            </div>
-            <div class="step-item">
-              <div class="step-num"><i class="fa-solid fa-check" style="font-size:0.75rem;"></i></div>
-              <div class="step-content">
-                <h4>Progressive Difficulty</h4>
-                <p>First lock should be easy (confidence builder). Last lock should require combining multiple clues.</p>
-              </div>
-            </div>
-            <div class="step-item">
-              <div class="step-num"><i class="fa-solid fa-check" style="font-size:0.75rem;"></i></div>
-              <div class="step-content">
-                <h4>Misdirection Is Fine, Tricking Is Not</h4>
-                <p>Red herrings add fun. But every real clue must be findable — don't hide answers in unreasonable places.</p>
-              </div>
-            </div>
-          </div>
+  <!-- 9 · Tools -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="slide-kicker">Toolset</div>
+      <h2 class="slide-title">Tools you already have</h2>
+      <div class="compare">
+        <div class="compare-col">
+          <h3>Google Workspace</h3>
+          <ul>
+            <li>Google Slides for clue pages</li>
+            <li>Google Forms as the lock box</li>
+            <li>Google Sheets for hidden-answer cells</li>
+            <li>Google Drawings for custom images</li>
+            <li>Google Sites to house it all</li>
+          </ul>
         </div>
-        <div>
-          <div class="card anim-up d3" style="border-color: rgba(240,136,62,0.2); background: rgba(240,136,62,0.04);">
-            <h3 style="color: var(--accent); margin-bottom: 14px;"><i class="fa-solid fa-triangle-exclamation" style="margin-right:8px;"></i>Common Pitfalls</h3>
-            <div style="display:flex; flex-direction:column; gap:12px;">
-              <p style="font-size:0.88rem; color:var(--fg-muted); line-height:1.6; padding-bottom:12px; border-bottom: 1px solid var(--border);">
-                <strong style="color:var(--fg);">Too much text.</strong> K-2 students can't read paragraphs of instructions. Use icons, images, and short phrases.
-              </p>
-              <p style="font-size:0.88rem; color:var(--fg-muted); line-height:1.6; padding-bottom:12px; border-bottom: 1px solid var(--border);">
-                <strong style="color:var(--fg);">Broken links.</strong> Test every link, embed, and video on student devices before going live.
-              </p>
-              <p style="font-size:0.88rem; color:var(--fg-muted); line-height:1.6; padding-bottom:12px; border-bottom: 1px solid var(--border);">
-                <strong style="color:var(--fg);">No hint system.</strong> Always have a way for stuck students to get help — a hint page, a teacher check-in, or a clue card.
-              </p>
-              <p style="font-size:0.88rem; color:var(--fg-muted); line-height:1.6;">
-                <strong style="color:var(--fg);">Case sensitivity.</strong> Set Google Form validation to accept multiple case variations of the same answer.
-              </p>
-            </div>
-          </div>
+        <div class="compare-col alt">
+          <h3>Microsoft 365</h3>
+          <ul>
+            <li>PowerPoint Online for clue pages</li>
+            <li>Microsoft Forms as the lock box</li>
+            <li>Excel Online for hidden-answer cells</li>
+            <li>Sway or SharePoint to house it all</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout mt-m">
+        <span class="label">Recommended starter combo</span>
+        <p>Google Slides for clue pages plus Google Forms for the lock box. Slides let you embed images and link to the next clue; the Form validates answers and shows a confirmation page when they escape.</p>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="brand"><span class="star">✦</span> CTOBs for K–2</span>
+      <span class="fac">Based on TCEA Blog</span>
+      <span class="url">blog.tcea.org</span>
+    </div>
+    <div class="notes">
+      <p>You do not need to buy anything. If your district uses Google, you have Slides for building the clue pages and Forms for the lock box. Sheets and Drawings are optional extras. If your district uses Microsoft, the same pattern works with PowerPoint Online and Microsoft Forms. The article specifically recommends the Google Slides plus Google Forms combo for beginners. You build each clue as a slide with an image and a question, then link to a Google Form where each question is a lock. The form will not let students submit until every answer is correct, and the confirmation page becomes your celebration.</p>
+    </div>
+  </section>
+
+  <!-- 10 · DIVIDER — Making It Work -->
+  <section class="slide divider">
+    <div class="slide-body">
+      <div class="seg-num">3</div>
+      <div class="divider-eyebrow">Part Three · about 5 minutes</div>
+      <h1>Making It Work</h1>
+      <div class="subtitle">Design principles for young learners, a worked example, and how to start</div>
+    </div>
+    <div class="slide-footer">
+      <span class="brand"><span class="star">✦</span> CTOBs for K–2</span>
+      <span class="fac">Based on TCEA Blog</span>
+      <span class="url">blog.tcea.org</span>
+    </div>
+    <div class="notes">
+      <p>Now that you know what a CTOB is and how it is built, let us talk about making it actually work with real five- to seven-year-olds. I will show you what to do and what to avoid, walk through a complete butterfly life cycle example, and then give you a clear starting point so you can build one this week.</p>
+    </div>
+  </section>
+
+  <!-- 11 · Do / Do Not -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="slide-kicker">Design Principles</div>
+      <h2 class="slide-title">Design for the age group</h2>
+      <div class="guardrail">
+        <div class="guardrail-col will">
+          <h4>Do</h4>
+          <ul>
+            <li>Use pictures instead of words wherever possible</li>
+            <li>Record audio directions for pre-readers</li>
+            <li>Limit to three or four locks maximum</li>
+            <li>Pair students so they talk through the puzzles</li>
+            <li>Pilot with one small group before going whole-class</li>
+          </ul>
+        </div>
+        <div class="guardrail-col willnot">
+          <h4>Do not</h4>
+          <ul>
+            <li>Use more than one screen of content per lock</li>
+            <li>Assume students can read the instructions alone</li>
+            <li>Make the puzzles so hard that frustration sets in</li>
+            <li>Skip the hint system — young learners need a way out</li>
+            <li>Forget to test the Google Form validation yourself first</li>
+          </ul>
         </div>
       </div>
     </div>
-  </div>
+    <div class="slide-footer">
+      <span class="brand"><span class="star">✦</span> CTOBs for K–2</span>
+      <span class="fac">Based on TCEA Blog</span>
+      <span class="url">blog.tcea.org</span>
+    </div>
+    <div class="notes">
+      <p>These design principles come directly from the article and from classroom experience. On the do side: use pictures, not words, because many of your students are pre-readers. Record audio of yourself reading the story hook and the clue prompts — you can use the Mote extension or insert audio directly into Google Slides. Keep it to three or four locks. Anything more and you lose them. Pair students up, because the conversation between partners is where the actual critical thinking happens. And always pilot with a small group first. On the do-not side: do not put more than one screen of content per lock, do not assume they can read independently, do not make it so hard that frustration kills the fun, do not skip a hint system, and do not forget to test the form yourself before students see it.</p>
+    </div>
+  </section>
 
-  <!-- SLIDE 8: Sample CTOB Walkthrough -->
-  <div class="slide" data-slide="8">
-    <div class="slide-inner">
-      <div class="slide-tag anim-up"><i class="fa-solid fa-route"></i> Walkthrough</div>
-      <h2 class="slide-title anim-up d1">Sample CTOB: <span class="highlight">Frog Life Cycle</span></h2>
-      <p class="slide-subtitle anim-up d2">
-        Follow how a 1st-grade student would progress through a frog life cycle CTOB — from first click to final breakout.
-      </p>
-      <div class="cards-grid cols-4 anim-up d3">
-        <div class="card" style="text-align:center;">
-          <div style="font-family:'Space Grotesk'; font-size:2rem; font-weight:700; color:var(--accent); margin-bottom:8px;">01</div>
-          <h3>Landing Page</h3>
-          <p>Student opens the Google Site. Sees a pond scene with a frog. A riddle at the top: "I start as something tiny in the water..."</p>
+  <!-- 12 · Worked Example -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="slide-kicker">Worked Example</div>
+      <h2 class="slide-title">Butterfly life cycle breakout</h2>
+      <p class="lead">Three locks, one Google Form, about ten minutes for second graders.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="n">1</div>
+          <h4>Number lock</h4>
+          <p>Four life-cycle images out of order. Students count the caterpillar legs: the code starts with 6.</p>
         </div>
-        <div class="card" style="text-align:center;">
-          <div style="font-family:'Space Grotesk'; font-size:2rem; font-weight:700; color:var(--accent2); margin-bottom:8px;">02</div>
-          <h3>Explore Page 1</h3>
-          <p>Images of eggs, tadpole, tadpole with legs, froglet, adult frog. A hidden number in each image's alt text: 3, 1, 4, 2.</p>
+        <div class="step">
+          <div class="n">2</div>
+          <h4>Color lock</h4>
+          <p>A chrysalis diagram labeled with colors in order: green, brown, gold. Students select that sequence.</p>
         </div>
-        <div class="card" style="text-align:center;">
-          <div style="font-family:'Space Grotesk'; font-size:2rem; font-weight:700; color:var(--accent3); margin-bottom:8px;">03</div>
-          <h3>Crack the Locks</h3>
-          <p>Number lock: 3142 (order of stages). Color lock: BROWN, BLACK, GREEN (colors of each stage). Direction lock: UP, UP, RIGHT (growth pattern).</p>
-        </div>
-        <div class="card" style="text-align:center;">
-          <div style="font-family:'Space Grotesk'; font-size:2rem; font-weight:700; color:#BC8CFF; margin-bottom:8px;">04</div>
-          <h3>Breakout!</h3>
-          <p>Google Form submits. Celebration page appears with confetti GIF and a "You're a Frog Life Cycle Expert!" badge. Student earned it through thinking.</p>
+        <div class="step">
+          <div class="n">3</div>
+          <h4>Direction lock</h4>
+          <p>Arrows trace egg to larva to pupa to adult: up, right, down. Students enter the arrow sequence.</p>
         </div>
       </div>
-      <div class="quote-block anim-up d4">
-        <p>"The student didn't just memorize the frog life cycle — they decoded it. That's the difference between recalling and reasoning."</p>
+      <div class="reflect mt-m">
+        <span>◆</span>
+        <p><strong>After all three locks:</strong> the Google Form confirmation page reads, "You set the butterflies free!"</p>
       </div>
     </div>
-  </div>
+    <div class="slide-footer">
+      <span class="brand"><span class="star">✦</span> CTOBs for K–2</span>
+      <span class="fac">Based on TCEA Blog</span>
+      <span class="url">blog.tcea.org</span>
+    </div>
+    <div class="notes">
+      <p>Let me walk you through a concrete example so you can see how all the pieces fit together. This is a butterfly life cycle CTOB designed for second graders, and it has three locks. Lock one is a number lock. You show four images of the butterfly life cycle out of order on a slide. Students count the legs on the caterpillar image — there are six — and that is the first digit of their code. Lock two is a color lock. A diagram of a chrysalis is labeled with three colors in sequence: green, then brown, then gold. Students select that color order in the form. Lock three is a direction lock. Arrows on the slide trace the path from egg to larva to pupa to adult — up, right, down. They enter that arrow sequence. When all three are correct, the form submits and the confirmation page says, you set the butterflies free. The whole thing takes about ten minutes.</p>
+    </div>
+  </section>
 
-  <!-- SLIDE 9: Classroom Tips -->
-  <div class="slide" data-slide="9">
-    <div class="slide-inner">
-      <div class="slide-tag anim-up"><i class="fa-solid fa-chalkboard-user"></i> Implementation</div>
-      <h2 class="slide-title anim-up d1">Classroom <span class="highlight-green">Tips</span> That Make It Work</h2>
-      <div class="two-col">
-        <div>
-          <div class="step-list anim-up d2">
-            <div class="step-item">
-              <div class="step-num"><i class="fa-solid fa-users" style="font-size:0.75rem;"></i></div>
-              <div class="step-content">
-                <h4>Pair Students Strategically</h4>
-                <p>Mix strong readers with visual thinkers. Different strengths solve different puzzle types — everyone contributes.</p>
-              </div>
-            </div>
-            <div class="step-item">
-              <div class="step-num"><i class="fa-solid fa-clock" style="font-size:0.75rem;"></i></div>
-              <div class="step-content">
-                <h4>Set a Time Limit (But Be Flexible)</h4>
-                <p>20-30 minutes is ideal for K-2. Have a "save progress" plan if groups finish at different times.</p>
-              </div>
-            </div>
-            <div class="step-item">
-              <div class="step-num"><i class="fa-solid fa-hand-holding-heart" style="font-size:0.75rem;"></i></div>
-              <div class="step-content">
-                <h4>Hint Cards, Not Answers</h4>
-                <p>Give each group 2-3 hint cards they can "spend." This teaches them to struggle productively before seeking help.</p>
-              </div>
-            </div>
-            <div class="step-item">
-              <div class="step-num"><i class="fa-solid fa-rotate" style="font-size:0.75rem;"></i></div>
-              <div class="step-content">
-                <h4>Debrief Afterward</h4>
-                <p>Ask: "Which clue was hardest? What strategy did you use?" Metacognition turns a fun activity into lasting learning.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div class="card anim-up d3" style="border-color: rgba(63,185,80,0.2); background: rgba(63,185,80,0.04);">
-            <h3 style="color: var(--accent2); margin-bottom:14px;"><i class="fa-solid fa-star" style="margin-right:8px;"></i>Differentiation Strategies</h3>
-            <div style="display:flex; flex-direction:column; gap:12px;">
-              <p style="font-size:0.88rem; color:var(--fg-muted); line-height:1.6; padding-bottom:12px; border-bottom: 1px solid var(--border);">
-                <strong style="color:var(--fg);">For struggling learners:</strong> Reduce the number of locks from 4 to 2. Add audio recordings of clues. Provide a visual checklist of pages to visit.
-              </p>
-              <p style="font-size:0.88rem; color:var(--fg-muted); line-height:1.6; padding-bottom:12px; border-bottom: 1px solid var(--border);">
-                <strong style="color:var(--fg);">For advanced learners:</strong> Add a bonus lock with a multi-step clue. Include a red herring that they need to identify and ignore.
-              </p>
-              <p style="font-size:0.88rem; color:var(--fg-muted); line-height:1.6;">
-                <strong style="color:var(--fg);">For ELL students:</strong> Use picture-heavy clues, minimal text, and pair with a bilingual partner. Record clue instructions in both languages.
-              </p>
-            </div>
-          </div>
-        </div>
+  <!-- 13 · Getting Started -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="slide-kicker">Next Steps</div>
+      <h2 class="slide-title">Start small, iterate</h2>
+      <p class="lead">Your first CTOB does not need to be perfect. Build one lock, try it with five students, then add another.</p>
+      <ul class="bullets">
+        <li><strong>Pick one science standard</strong> you are already teaching this week</li>
+        <li><strong>Choose three lock types</strong> that match your students' level</li>
+        <li><strong>Build clue pages in Google Slides</strong> with images and minimal text</li>
+        <li><strong>Create a Google Form</strong> with data validation for each lock</li>
+        <li><strong>Pilot, reflect, improve</strong> — then share with your team</li>
+      </ul>
+      <div class="callout mt-m">
+        <span class="label">Remember</span>
+        <p>The goal is not a perfect breakout. It is giving five-, six-, and seven-year-olds their first experience with cracking a puzzle they did not think they could solve.</p>
+      </div>
+      <div class="next-step mt-m">
+        <span class="ns-label">Read more</span>
+        <a href="https://blog.tcea.org/critical-thinking-online-breakouts-ctobs-for-your-k-2-science-classroom/" target="_blank">Full article on TCEA <span class="arrow">↗</span></a>
       </div>
     </div>
-  </div>
-
-  <!-- SLIDE 10: Benefits Summary -->
-  <div class="slide" data-slide="10">
-    <div class="slide-inner">
-      <div class="slide-tag anim-up"><i class="fa-solid fa-chart-line"></i> Impact</div>
-      <h2 class="slide-title anim-up d1">Why CTOBs Are <span class="highlight">Worth the Effort</span></h2>
-      <p class="slide-subtitle anim-up d2">
-        Beyond the fun factor, CTOBs deliver measurable learning outcomes that align with what we know about how young minds grow.
-      </p>
-      <div class="cards-grid cols-2 anim-up d3">
-        <div class="card">
-          <div class="card-icon orange"><i class="fa-solid fa-brain"></i></div>
-          <h3>Higher-Order Thinking</h3>
-          <p>Students move beyond "what is this?" to "how does this connect?" — operating at the analysis and evaluation levels of Bloom's Taxonomy, even in kindergarten.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon green"><i class="fa-solid fa-laptop-code"></i></div>
-          <h3>Digital Literacy</h3>
-          <p>Navigating a multi-page site, using Ctrl+F, clicking embedded links, and submitting forms — these are foundational digital skills practiced authentically.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon blue"><i class="fa-solid fa-comments"></i></div>
-          <h3>Academic Vocabulary</h3>
-          <p>Science terms are encountered in context during puzzle-solving, which research shows is far more effective than memorizing definitions from a list.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon orange"><i class="fa-solid fa-face-smile"></i></div>
-          <h3>Intrinsic Motivation</h3>
-          <p>The gamified structure creates genuine motivation to solve the puzzle — not for a grade, but for the satisfaction of breaking out. That's the kind of engagement that lasts.</p>
-        </div>
-      </div>
+    <div class="slide-footer">
+      <span class="brand"><span class="star">✦</span> CTOBs for K–2</span>
+      <span class="fac">Based on TCEA Blog</span>
+      <span class="url">blog.tcea.org</span>
     </div>
-  </div>
-
-  <!-- SLIDE 11: Getting Started -->
-  <div class="slide" data-slide="11">
-    <div class="slide-inner" style="text-align:center;">
-      <div class="slide-tag anim-up" style="margin-left:auto; margin-right:auto;"><i class="fa-solid fa-rocket"></i> Start Here</div>
-      <h2 class="slide-title anim-up d1" style="max-width:700px; margin:0 auto 20px;">
-        Your <span class="highlight-green">First CTOB</span> Starts Today
-      </h2>
-      <p class="slide-subtitle anim-up d2" style="margin:0 auto 36px; text-align:center;">
-        You don't need to be a tech expert. Start small, iterate, and watch your youngest students surprise you with their thinking.
-      </p>
-      <div class="cards-grid cols-3 anim-up d3" style="max-width:900px; margin:0 auto;">
-        <div class="card" style="text-align:center;">
-          <div style="font-size:2.5rem; margin-bottom:12px; color:var(--accent);"><i class="fa-solid fa-copy"></i></div>
-          <h3>Try an Existing One</h3>
-          <p>Visit TCEA's library of pre-made CTOBs. Experience one as a student first — you'll instantly understand the design.</p>
-        </div>
-        <div class="card" style="text-align:center;">
-          <div style="font-size:2.5rem; margin-bottom:12px; color:var(--accent2);"><i class="fa-solid fa-pencil"></i></div>
-          <h3>Modify Before Creating</h3>
-          <p>Take an existing CTOB and change the content to match your next unit. It's faster than starting from scratch and teaches you the structure.</p>
-        </div>
-        <div class="card" style="text-align:center;">
-          <div style="font-size:2.5rem; margin-bottom:12px; color:var(--accent3);"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
-          <h3>Build Your Own</h3>
-          <p>Follow the 6-step process from this deck. Start with 2 locks instead of 4. Your first one doesn't need to be perfect — it needs to exist.</p>
-        </div>
-      </div>
-      <div class="divider" style="max-width:400px; margin:32px auto;"></div>
-      <p class="anim-up d4" style="font-size:1.05rem; color:var(--fg-muted); line-height:1.7; max-width:600px; margin:0 auto;">
-        <strong style="color:var(--fg);">Source:</strong> Adapted from <em>"Critical Thinking Online Breakouts (CTOBs) for Your K-2 Science Classroom"</em> published on the TCEA Blog at <span style="color:var(--accent3);">blog.tcea.org</span>
-      </p>
+    <div class="notes">
+      <p>Here is how I would start. This week, pick one science standard you are already planning to teach. Do not create something new from scratch — embed the breakout into what you are doing. Choose three lock types based on your students. Kindergarten might stick to number and color locks. Second grade can handle letters and directions. Build the clue pages in Google Slides. Find photographs or diagrams online, drop them on slides, add one question per slide. Then create a Google Form with three questions, one per lock, and turn on data validation so only the correct answer is accepted. Try it with five students first. Watch where they get stuck. Fix those spots. Then roll it out to the whole class. The goal is not a perfect breakout. It is giving young children their first experience with cracking a puzzle they did not think they could solve.</p>
     </div>
-  </div>
+  </section>
 
-</div>
-
-<!-- Navigation -->
-<nav class="nav-controls" aria-label="Slide navigation">
-  <button class="nav-btn" id="prevBtn" aria-label="Previous slide" disabled>
-    <i class="fa-solid fa-chevron-left"></i>
-  </button>
-  <div class="nav-dots" id="navDots"></div>
-  <span class="slide-counter" id="slideCounter">1 / 12</span>
-  <button class="nav-btn" id="nextBtn" aria-label="Next slide">
-    <i class="fa-solid fa-chevron-right"></i>
-  </button>
-</nav>
-
-<div class="key-hint" id="keyHint">
-  <kbd>&larr;</kbd> <kbd>&rarr;</kbd> to navigate &nbsp;·&nbsp; <kbd>F</kbd> fullscreen
 </div>
 
 <script>
-  // ── Slide engine ──
-  const slides = document.querySelectorAll('.slide');
-  const totalSlides = slides.length;
-  let currentSlide = 0;
-  let isTransitioning = false;
+/* ============================================================
+   Web Deck Framework — navigation, presenter view, sync, print
+   No dependencies. Include once per deck, after the slides.
+   Two-monitor use: press V (or the 🖥 button) to open the
+   presenter window on your laptop; drag the main window to the
+   projector and press F for fullscreen. Both stay in sync.
+   ============================================================ */
+(function () {
+  'use strict';
 
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
-  const navDots = document.getElementById('navDots');
-  const slideCounter = document.getElementById('slideCounter');
-  const progressBar = document.getElementById('progressBar');
-  const keyHint = document.getElementById('keyHint');
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  if (!slides.length) return;
+  var TOTAL = slides.length;
 
-  // Build dots
-  for (let i = 0; i < totalSlides; i++) {
-    const dot = document.createElement('button');
-    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
-    dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
-    dot.addEventListener('click', () => goToSlide(i));
-    navDots.appendChild(dot);
+  // ── Cross-window sync (same origin) ─────────────────────
+  var CH = 'webdeck:' + location.pathname;
+  var bc = ('BroadcastChannel' in window) ? new BroadcastChannel(CH) : null;
+  function send(msg) {
+    if (bc) { try { bc.postMessage(msg); } catch (e) {} }
+    try { localStorage.setItem(CH, JSON.stringify(Object.assign({ _t: Date.now() }, msg))); } catch (e) {}
   }
-
-  function updateUI() {
-    // Counter
-    slideCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
-
-    // Progress bar
-    const progress = ((currentSlide) / (totalSlides - 1)) * 100;
-    progressBar.style.width = progress + '%';
-
-    // Buttons
-    prevBtn.disabled = currentSlide === 0;
-    nextBtn.disabled = currentSlide === totalSlides - 1;
-
-    // Dots
-    navDots.querySelectorAll('.nav-dot').forEach((dot, i) => {
-      dot.classList.toggle('active', i === currentSlide);
+  function onMsg(fn) {
+    if (bc) bc.onmessage = function (e) { fn(e.data); };
+    window.addEventListener('storage', function (e) {
+      if (e.key === CH && e.newValue) { try { fn(JSON.parse(e.newValue)); } catch (_) {} }
     });
   }
 
-  function goToSlide(index) {
-    if (index === currentSlide || isTransitioning || index < 0 || index >= totalSlides) return;
-    isTransitioning = true;
+  var isPresenter = /[?&]presenter=1/.test(location.search);
+  if (isPresenter) { initPresenter(); return; }
 
-    const direction = index > currentSlide ? 1 : -1;
-    const oldSlide = slides[currentSlide];
-    const newSlide = slides[index];
+  /* ==========================================================
+     MAIN DECK
+     ========================================================== */
+  var deck = document.querySelector('.deck');
+  var SLIDE_W = 1280, SLIDE_H = 720, idx = 0;
 
-    // Exit old slide
-    oldSlide.classList.remove('active');
-    oldSlide.classList.add(direction > 0 ? 'exit-up' : '');
-    oldSlide.style.transform = direction > 0
-      ? 'translateY(-60px) scale(0.97)'
-      : 'translateY(60px) scale(0.97)';
-    oldSlide.style.opacity = '0';
+  var progress = el('div', { id: 'progress' });
+  var counter = el('span', { id: 'counter' });
+  var controls = el('div', { id: 'controls' });
+  controls.appendChild(btn('‹', 'Previous slide', prev));
+  controls.appendChild(counter);
+  controls.appendChild(btn('›', 'Next slide', next));
+  controls.appendChild(btn('🗒', 'Toggle presenter notes here (S)', toggleNotes));
+  controls.appendChild(btn('🖥', 'Open presenter view for your laptop (V)', openPresenter));
+  controls.appendChild(btn('⛶', 'Fullscreen (F)', toggleFull));
+  controls.appendChild(btn('?', 'Keyboard help', toggleHelp));
 
-    // Prepare new slide entry
-    newSlide.style.transition = 'none';
-    newSlide.style.transform = direction > 0
-      ? 'translateY(40px) scale(0.97)'
-      : 'translateY(-40px) scale(0.97)';
-    newSlide.style.opacity = '0';
+  var notesPanel = el('div', { id: 'notesPanel' });
+  var npHead = el('div', { class: 'np-head' });
+  var npTitle = document.createElement('span'); npTitle.textContent = 'Speaker Notes';
+  var npSlide = el('span', { class: 'np-slide' });
+  npHead.appendChild(npTitle); npHead.appendChild(npSlide);
+  var npBody = el('div', { class: 'np-body' });
+  notesPanel.appendChild(npHead); notesPanel.appendChild(npBody);
 
-    // Force reflow
-    void newSlide.offsetWidth;
+  var help = el('div', { id: 'help' });
+  help.innerHTML = '<div class="help-card"><h3>Keyboard shortcuts</h3>' +
+    '<table>' +
+    '<tr><td><kbd>→</kbd> <kbd>Space</kbd></td><td>Next slide</td></tr>' +
+    '<tr><td><kbd>←</kbd></td><td>Previous slide</td></tr>' +
+    '<tr><td><kbd>Home</kbd> / <kbd>End</kbd></td><td>First / last slide</td></tr>' +
+    '<tr><td><kbd>V</kbd></td><td>Open presenter view (second monitor)</td></tr>' +
+    '<tr><td><kbd>S</kbd></td><td>Toggle notes on this screen</td></tr>' +
+    '<tr><td><kbd>F</kbd></td><td>Fullscreen</td></tr>' +
+    '<tr><td><kbd>P</kbd></td><td>Print / export to PDF</td></tr>' +
+    '</table><div class="close-hint">Press any key or click to close</div></div>';
 
-    newSlide.style.transition = '';
-    newSlide.classList.add('active');
-    newSlide.style.transform = '';
-    newSlide.style.opacity = '';
+  // live region for slide-change announcements (WCAG 4.1.3)
+  var liveRegion = el('div', { id: 'slideLive', 'aria-live': 'polite', 'aria-atomic': 'true', class: 'sr-only' });
 
-    currentSlide = index;
-    updateUI();
+  document.body.appendChild(progress);
+  document.body.appendChild(controls);
+  document.body.appendChild(notesPanel);
+  document.body.appendChild(help);
+  document.body.appendChild(liveRegion);
 
-    setTimeout(() => {
-      oldSlide.classList.remove('exit-up');
-      oldSlide.style.transform = '';
-      oldSlide.style.opacity = '';
-      isTransitioning = false;
-    }, 650);
+  function fit() {
+    var pad = 24;
+    var raw = Math.min((window.innerWidth - pad) / SLIDE_W, (window.innerHeight - pad) / SLIDE_H);
+    // Reflow when the screen is narrow or zoom shrinks the fit below a usable scale (WCAG 1.4.10 / 1.4.4).
+    var reflow = window.innerWidth < 800 || raw < 0.55;
+    deck.classList.toggle('reflow', reflow);
+    slides.forEach(function (s) {
+      if (reflow) {
+        s.style.transform = ''; s.style.left = ''; s.style.top = '';
+      } else {
+        s.style.transform = 'translate(-50%, -50%) scale(' + Math.max(0.2, raw) + ')';
+        s.style.left = '50%'; s.style.top = '50%';
+      }
+    });
+  }
+  window.addEventListener('resize', fit);
+
+  function show(n, fromSync) {
+    idx = Math.max(0, Math.min(TOTAL - 1, n));
+    slides.forEach(function (s, i) { s.classList.toggle('current', i === idx); });
+    counter.textContent = (idx + 1) + ' / ' + TOTAL;
+    progress.style.width = ((idx + 1) / TOTAL * 100) + '%';
+    var titleEl = slides[idx].querySelector('.slide-title, h1, h2');
+    liveRegion.textContent = 'Slide ' + (idx + 1) + ' of ' + TOTAL + (titleEl ? ': ' + titleEl.textContent.trim() : '');
+    updateNotes();
+    if (history.replaceState) history.replaceState(null, '', '#' + (idx + 1));
+    if (!fromSync) send({ type: 'goto', idx: idx });
+  }
+  function next() { show(idx + 1); }
+  function prev() { show(idx - 1); }
+
+  function updateNotes() {
+    var src = slides[idx].querySelector('.notes');
+    npSlide.textContent = 'Slide ' + (idx + 1) + ' of ' + TOTAL;
+    npBody.innerHTML = src ? src.innerHTML : '<p class="muted">No notes for this slide.</p>';
   }
 
-  prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
-  nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+  function toggleNotes() { notesPanel.classList.toggle('open'); }
+  function toggleHelp() { help.classList.toggle('open'); }
+  function toggleFull() {
+    if (!document.fullscreenElement) { (document.documentElement.requestFullscreen || function () {}).call(document.documentElement); }
+    else if (document.exitFullscreen) { document.exitFullscreen(); }
+  }
+  var presenterWin = null;
+  function openPresenter() {
+    presenterWin = window.open(location.pathname + '?presenter=1', 'webdeck-presenter',
+      'width=1280,height=800,menubar=no,toolbar=no,location=no');
+    if (presenterWin) setTimeout(function () { send({ type: 'goto', idx: idx }); }, 400);
+  }
 
-  // Keyboard navigation
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
-      e.preventDefault();
-      goToSlide(currentSlide + 1);
-    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-      e.preventDefault();
-      goToSlide(currentSlide - 1);
-    } else if (e.key === 'f' || e.key === 'F') {
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(() => {});
-      } else {
-        document.exitFullscreen();
-      }
-    } else if (e.key === 'Home') {
-      e.preventDefault();
-      goToSlide(0);
-    } else if (e.key === 'End') {
-      e.preventDefault();
-      goToSlide(totalSlides - 1);
+  document.addEventListener('keydown', function (e) {
+    if (help.classList.contains('open')) { help.classList.remove('open'); return; }
+    switch (e.key) {
+      case 'ArrowRight': case ' ': case 'PageDown': next(); e.preventDefault(); break;
+      case 'ArrowLeft': case 'PageUp': prev(); e.preventDefault(); break;
+      case 'Home': show(0); break;
+      case 'End': show(TOTAL - 1); break;
+      case 's': case 'S': case 'n': case 'N': toggleNotes(); break;
+      case 'v': case 'V': openPresenter(); break;
+      case 'f': case 'F': toggleFull(); break;
+      case 'p': case 'P': window.print(); break;
+      case '?': toggleHelp(); break;
     }
   });
 
-  // Touch swipe
-  let touchStartX = 0;
-  let touchStartY = 0;
-  document.addEventListener('touchstart', (e) => {
-    touchStartX = e.changedTouches[0].screenX;
-    touchStartY = e.changedTouches[0].screenY;
-  }, { passive: true });
-  document.addEventListener('touchend', (e) => {
-    const dx = e.changedTouches[0].screenX - touchStartX;
-    const dy = e.changedTouches[0].screenY - touchStartY;
-    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 60) {
-      if (dx < 0) goToSlide(currentSlide + 1);
-      else goToSlide(currentSlide - 1);
+  deck.addEventListener('click', function (e) {
+    if (e.target.closest('a, button, input, textarea, select, .no-advance')) return;
+    if (e.clientX < window.innerWidth * 0.32) prev(); else next();
+  });
+  help.addEventListener('click', function () { help.classList.remove('open'); });
+
+  onMsg(function (m) {
+    if (!m) return;
+    if (m.type === 'goto' && m.idx !== idx) show(m.idx, true);
+    else if (m.type === 'hello') send({ type: 'goto', idx: idx });
+  });
+
+  fit();
+  var start = parseInt((location.hash || '').replace('#', ''), 10);
+  show(isNaN(start) ? 0 : start - 1, true);
+  window.__deck = { show: show, next: next, prev: prev, presenter: openPresenter };
+
+  function el(tag, attrs) { var e = document.createElement(tag); if (attrs) for (var k in attrs) e.setAttribute(k, attrs[k]); return e; }
+  function btn(label, title, fn) { var b = el('button', { title: title, 'aria-label': title }); b.textContent = label; b.addEventListener('click', function (ev) { ev.stopPropagation(); fn(); }); return b; }
+
+  /* ==========================================================
+     PRESENTER WINDOW
+     ========================================================== */
+  function initPresenter() {
+    document.body.classList.add('presenter-mode');
+    var pIdx = 0;
+    var wrap = document.createElement('div'); wrap.id = 'presenter';
+    wrap.innerHTML =
+      '<div class="pv-top">' +
+        '<span class="brand">✦ Presenter</span>' +
+        '<div class="pv-nav">' +
+          '<button class="pv-btn icon" id="pvPrev" title="Previous">‹</button>' +
+          '<button class="pv-btn icon" id="pvNext" title="Next">›</button>' +
+        '</div>' +
+        '<span class="pv-count" id="pvCount">1 / ' + TOTAL + '</span>' +
+        '<span class="pv-spacer"></span>' +
+        '<div class="pv-metrics">' +
+          '<span class="pv-timer" id="pvTimer" title="Click to pause or resume">00:00</span>' +
+          '<button class="pv-btn" id="pvReset">Reset timer</button>' +
+          '<span class="pv-clock" id="pvClock">--:--</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="pv-main">' +
+        '<div class="pv-left">' +
+          '<div class="pv-label"><span class="dot"></span>Current slide</div>' +
+          '<div class="pv-frame" id="pvCurrent"></div>' +
+        '</div>' +
+        '<div class="pv-right">' +
+          '<div class="pv-next-wrap">' +
+            '<div class="pv-label"><span class="dot"></span>Next up</div>' +
+            '<div class="pv-frame" id="pvNext"></div>' +
+          '</div>' +
+          '<div style="display:flex;flex-direction:column;min-height:0;flex:1;">' +
+            '<div class="pv-label"><span class="dot"></span>Speaker notes</div>' +
+            '<div class="pv-notes"><div class="pv-notes-body" id="pvNotes"></div></div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="pv-hint">Navigate with <kbd>←</kbd> <kbd>→</kbd> or <kbd>Space</kbd>. This window and the projector stay in sync. Put the other window on the projector and press <kbd>F</kbd> to go fullscreen.</div>';
+    document.body.appendChild(wrap);
+
+    var elCur = document.getElementById('pvCurrent');
+    var elNext = document.getElementById('pvNext');
+    var elNotes = document.getElementById('pvNotes');
+    var elCount = document.getElementById('pvCount');
+
+    function preview(container, i, big) {
+      container.innerHTML = '';
+      if (i < 0 || i >= TOTAL) { container.innerHTML = '<div class="pv-end">End of deck</div>'; container.style.height = (big ? 300 : 150) + 'px'; return; }
+      var holder = document.createElement('div'); holder.className = 'pv-holder';
+      var clone = slides[i].cloneNode(true);
+      clone.classList.add('current');
+      clone.style.position = 'absolute'; clone.style.left = '0'; clone.style.top = '0'; clone.style.margin = '0';
+      var notesInClone = clone.querySelector('.notes'); if (notesInClone) notesInClone.remove();
+      holder.appendChild(clone);
+      container.appendChild(holder);
+      scale(container, holder);
     }
-  }, { passive: true });
-
-  // Hide key hint after first navigation
-  let hintVisible = true;
-  function hideHint() {
-    if (hintVisible) {
-      keyHint.style.opacity = '0';
-      hintVisible = false;
+    function scale(container, holder) {
+      var w = container.clientWidth || 600;
+      var s = w / 1280;
+      holder.style.width = '1280px'; holder.style.height = '720px';
+      holder.style.transform = 'scale(' + s + ')'; holder.style.transformOrigin = 'top left';
+      container.style.height = (720 * s) + 'px';
     }
-  }
-  prevBtn.addEventListener('click', hideHint);
-  nextBtn.addEventListener('click', hideHint);
-  document.addEventListener('keydown', hideHint, { once: true });
-
-  // ── Particle canvas ──
-  const canvas = document.getElementById('particles-canvas');
-  const ctx = canvas.getContext('2d');
-  let particles = [];
-  const PARTICLE_COUNT = 50;
-
-  function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-  resizeCanvas();
-  window.addEventListener('resize', resizeCanvas);
-
-  // Check reduced motion preference
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  class Particle {
-    constructor() {
-      this.reset();
+    function render() {
+      preview(elCur, pIdx, true);
+      preview(elNext, pIdx + 1, false);
+      var src = slides[pIdx] && slides[pIdx].querySelector('.notes');
+      elNotes.innerHTML = src ? src.innerHTML : '<p style="color:#8FA6C8">No notes for this slide.</p>';
+      elCount.textContent = (pIdx + 1) + ' / ' + TOTAL;
     }
-    reset() {
-      this.x = Math.random() * canvas.width;
-      this.y = Math.random() * canvas.height;
-      this.size = Math.random() * 2 + 0.5;
-      this.speedX = (Math.random() - 0.5) * 0.3;
-      this.speedY = (Math.random() - 0.5) * 0.3;
-      this.opacity = Math.random() * 0.3 + 0.05;
-      this.pulse = Math.random() * Math.PI * 2;
-      this.pulseSpeed = Math.random() * 0.02 + 0.005;
+    function goto(n, fromSync) {
+      pIdx = Math.max(0, Math.min(TOTAL - 1, n));
+      render();
+      if (!fromSync) send({ type: 'goto', idx: pIdx });
     }
-    update() {
-      this.x += this.speedX;
-      this.y += this.speedY;
-      this.pulse += this.pulseSpeed;
-      if (this.x < -10 || this.x > canvas.width + 10 ||
-          this.y < -10 || this.y > canvas.height + 10) {
-        this.reset();
+
+    document.getElementById('pvPrev').onclick = function () { goto(pIdx - 1); };
+    document.getElementById('pvNext').onclick = function () { goto(pIdx + 1); };
+    document.getElementById('pvCurrent').onclick = function () { goto(pIdx + 1); };
+    document.addEventListener('keydown', function (e) {
+      switch (e.key) {
+        case 'ArrowRight': case ' ': case 'PageDown': goto(pIdx + 1); e.preventDefault(); break;
+        case 'ArrowLeft': case 'PageUp': goto(pIdx - 1); e.preventDefault(); break;
+        case 'Home': goto(0); break;
+        case 'End': goto(TOTAL - 1); break;
+        case 't': case 'T': resetTimer(); break;
       }
+    });
+    window.addEventListener('resize', render);
+
+    onMsg(function (m) { if (m && m.type === 'goto') goto(m.idx, true); });
+    send({ type: 'hello' });
+    var last = null; try { last = JSON.parse(localStorage.getItem(CH)); } catch (e) {}
+    goto(last && typeof last.idx === 'number' ? last.idx : 0, true);
+
+    // Timer + clock
+    var elapsed = 0, running = true;
+    var elTimer = document.getElementById('pvTimer'), elClock = document.getElementById('pvClock');
+    function fmt(s) { var m = Math.floor(s / 60), r = s % 60; return (m < 10 ? '0' : '') + m + ':' + (r < 10 ? '0' : '') + r; }
+    function tick() {
+      if (running) { elapsed++; elTimer.textContent = fmt(elapsed); }
+      var d = new Date();
+      elClock.textContent = (d.getHours() < 10 ? '0' : '') + d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
     }
-    draw() {
-      const o = this.opacity * (0.6 + 0.4 * Math.sin(this.pulse));
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, Math.max(0.1, this.size), 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(240, 136, 62, ${o})`;
-      ctx.fill();
-    }
+    function resetTimer() { elapsed = 0; elTimer.textContent = '00:00'; }
+    elTimer.onclick = function () { running = !running; elTimer.classList.toggle('paused', !running); };
+    document.getElementById('pvReset').onclick = resetTimer;
+    setInterval(tick, 1000); tick();
+    render();
   }
+})();
 
-  if (!prefersReducedMotion) {
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      particles.push(new Particle());
-    }
-
-    function animateParticles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => {
-        p.update();
-        p.draw();
-      });
-
-      // Draw faint connections
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 150) {
-            const o = (1 - dist / 150) * 0.04;
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(240, 136, 62, ${o})`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
-          }
-        }
-      }
-      requestAnimationFrame(animateParticles);
-    }
-    animateParticles();
-  }
-
-  // Initial UI state
-  updateUI();
+/* Copy-to-clipboard used by prompt blocks across decks and pages */
+function copyText(btn, ev) {
+  if (ev) ev.stopPropagation();
+  var target = btn.getAttribute('data-target');
+  var node = target ? document.getElementById(target)
+                    : btn.parentElement.querySelector('.prompt, .copytext');
+  if (!node) return;
+  var clone = node.cloneNode(true);                 // strip the Copy button from the copied text
+  var b = clone.querySelector('.copy-btn'); if (b) b.parentNode.removeChild(b);
+  var text = (clone.innerText || clone.textContent || '').trim();
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(function () {
+    var old = btn.textContent;
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(function () { btn.textContent = old; btn.classList.remove('copied'); }, 1600);
+  });
+}
 </script>
 </body>
 </html>
