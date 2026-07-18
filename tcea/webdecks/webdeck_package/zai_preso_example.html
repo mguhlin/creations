@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CTOBs for K-2 Science — Webdeck</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  :root {
+    --bg: #0D1117;
+    --bg-light: #161B22;
+    --fg: #E6EDF3;
+    --fg-muted: #8B949E;
+    --accent: #F0883E;
+    --accent2: #3FB950;
+    --accent3: #58A6FF;
+    --card: rgba(22,27,34,0.85);
+    --border: rgba(139,148,158,0.15);
+    --glass: rgba(255,255,255,0.04);
+    --slide-transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  /* ── Background atmosphere ── */
+  .bg-layer {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  }
+  .bg-layer::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(240,136,62,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 90%, rgba(63,185,80,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 50% 50%, rgba(88,166,255,0.04) 0%, transparent 60%);
+  }
+  .bg-layer::after {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+  }
+
+  /* ── Floating orbs ── */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: 0;
+    animation: orbFloat 20s ease-in-out infinite alternate;
+  }
+  .orb-1 { width: 400px; height: 400px; background: var(--accent); top: -100px; left: -100px; }
+  .orb-2 { width: 350px; height: 350px; background: var(--accent2); bottom: -80px; right: -80px; animation-delay: -7s; }
+  .orb-3 { width: 250px; height: 250px; background: var(--accent3); top: 40%; left: 60%; animation-delay: -14s; }
+
+  @keyframes orbFloat {
+    0% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -20px) scale(1.05); }
+    66% { transform: translate(-20px, 30px) scale(0.95); }
+    100% { transform: translate(15px, 15px) scale(1.02); }
+  }
+
+  /* ── Slide container ── */
+  .deck-viewport {
+    position: relative;
+    width: 100%; height: 100%;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute; inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 80px;
+    opacity: 0;
+    transform: translateY(40px) scale(0.97);
+    transition: opacity var(--slide-transition), transform var(--slide-transition);
+    pointer-events: none;
+    will-change: transform, opacity;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+  .slide.exit-up {
+    opacity: 0;
+    transform: translateY(-60px) scale(0.97);
+  }
+
+  .slide-inner {
+    width: 100%;
+    max-width: 1100px;
+    position: relative;
+  }
+
+  /* ── Typography ── */
+  h1, h2, h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+  }
+
+  .slide-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-bottom: 20px;
+    padding: 6px 14px;
+    background: rgba(240,136,62,0.08);
+    border: 1px solid rgba(240,136,62,0.2);
+    border-radius: 100px;
+  }
+
+  .slide-title {
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  .slide-title .highlight {
+    background: linear-gradient(135deg, var(--accent), #FFBA6A);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .slide-title .highlight-green {
+    background: linear-gradient(135deg, var(--accent2), #7EE787);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .slide-title .highlight-blue {
+    background: linear-gradient(135deg, var(--accent3), #79C0FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .slide-subtitle {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--fg-muted);
+    line-height: 1.7;
+    max-width: 700px;
+    font-weight: 300;
+  }
+
+  /* ── Cards grid ── */
+  .cards-grid {
+    display: grid;
+    gap: 16px;
+    margin-top: 32px;
+  }
+  .cards-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .cards-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .cards-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    backdrop-filter: blur(20px);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(240,136,62,0.3);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  }
+  .card:hover::before { opacity: 1; }
+
+  .card-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+  }
+  .card-icon.orange { background: rgba(240,136,62,0.12); color: var(--accent); }
+  .card-icon.green { background: rgba(63,185,80,0.12); color: var(--accent2); }
+  .card-icon.blue { background: rgba(88,166,255,0.12); color: var(--accent3); }
+
+  .card h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .card p {
+    font-size: 0.88rem;
+    color: var(--fg-muted);
+    line-height: 1.6;
+  }
+
+  /* ── Numbered list ── */
+  .step-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 28px;
+  }
+  .step-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 18px 22px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    backdrop-filter: blur(20px);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+  .step-item:hover {
+    transform: translateX(6px);
+    border-color: rgba(240,136,62,0.25);
+  }
+  .step-num {
+    flex-shrink: 0;
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: rgba(240,136,62,0.12);
+    color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+  .step-content h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .step-content p {
+    font-size: 0.85rem;
+    color: var(--fg-muted);
+    line-height: 1.5;
+  }
+
+  /* ── Quote block ── */
+  .quote-block {
+    border-left: 3px solid var(--accent);
+    padding: 20px 28px;
+    background: rgba(240,136,62,0.04);
+    border-radius: 0 14px 14px 0;
+    margin-top: 24px;
+  }
+  .quote-block p {
+    font-size: 1.05rem;
+    font-style: italic;
+    color: var(--fg);
+    line-height: 1.7;
+  }
+  .quote-block .attribution {
+    font-size: 0.8rem;
+    color: var(--fg-muted);
+    margin-top: 10px;
+    font-style: normal;
+  }
+
+  /* ── Two-column layout ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+  .two-col .col-text { padding-top: 10px; }
+
+  /* ── Lock visual ── */
+  .lock-row {
+    display: flex;
+    gap: 16px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  .lock-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 24px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    min-width: 120px;
+    transition: transform 0.3s ease;
+  }
+  .lock-item:hover { transform: scale(1.05); }
+  .lock-icon {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+  }
+  .lock-icon.orange { background: rgba(240,136,62,0.15); color: var(--accent); }
+  .lock-icon.green { background: rgba(63,185,80,0.15); color: var(--accent2); }
+  .lock-icon.blue { background: rgba(88,166,255,0.15); color: var(--accent3); }
+  .lock-icon.purple { background: rgba(188,140,255,0.15); color: #BC8CFF; }
+  .lock-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-align: center;
+    color: var(--fg-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── Badges / pills ── */
+  .pill-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 18px;
+  }
+  .pill {
+    padding: 8px 16px;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    background: var(--glass);
+    color: var(--fg-muted);
+    transition: all 0.3s ease;
+  }
+  .pill:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(240,136,62,0.06);
+  }
+
+  /* ── Hero specific ── */
+  .hero-title {
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 700;
+    line-height: 1.05;
+    margin-bottom: 16px;
+  }
+  .hero-sub {
+    font-size: clamp(1.1rem, 2vw, 1.35rem);
+    color: var(--fg-muted);
+    line-height: 1.6;
+    max-width: 600px;
+    font-weight: 300;
+    margin-bottom: 32px;
+  }
+  .hero-meta {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    font-size: 0.82rem;
+    color: var(--fg-muted);
+  }
+  .hero-meta span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* ── Progress bar ── */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    z-index: 100;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 0 2px 2px 0;
+  }
+
+  /* ── Navigation ── */
+  .nav-controls {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 100;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 8px 12px;
+    backdrop-filter: blur(20px);
+  }
+  .nav-btn {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: var(--fg-muted);
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.25s ease;
+  }
+  .nav-btn:hover {
+    background: rgba(255,255,255,0.08);
+    color: var(--fg);
+  }
+  .nav-btn:disabled {
+    opacity: 0.25;
+    cursor: default;
+  }
+  .nav-btn:disabled:hover {
+    background: transparent;
+    color: var(--fg-muted);
+  }
+  .nav-dots {
+    display: flex;
+    gap: 6px;
+    padding: 0 8px;
+  }
+  .nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: all 0.35s ease;
+    cursor: pointer;
+    border: none;
+  }
+  .nav-dot.active {
+    background: var(--accent);
+    width: 24px;
+    border-radius: 4px;
+  }
+  .slide-counter {
+    font-size: 0.72rem;
+    color: var(--fg-muted);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 500;
+    padding: 0 8px;
+    min-width: 42px;
+    text-align: center;
+  }
+
+  /* ── Keyboard hint ── */
+  .key-hint {
+    position: fixed;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.7rem;
+    color: rgba(139,148,158,0.4);
+    z-index: 99;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: opacity 0.5s ease;
+  }
+  .key-hint kbd {
+    padding: 2px 7px;
+    border: 1px solid rgba(139,148,158,0.2);
+    border-radius: 4px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.65rem;
+  }
+
+  /* ── Big stat ── */
+  .big-stat {
+    text-align: center;
+    padding: 24px;
+  }
+  .big-stat .num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .big-stat .num.orange { color: var(--accent); }
+  .big-stat .num.green { color: var(--accent2); }
+  .big-stat .num.blue { color: var(--accent3); }
+  .big-stat .label {
+    font-size: 0.78rem;
+    color: var(--fg-muted);
+    margin-top: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* ── Divider line ── */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 28px 0;
+  }
+
+  /* ── Topic tag with icon ── */
+  .topic-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+  .topic-tag:hover {
+    border-color: var(--accent2);
+    background: rgba(63,185,80,0.06);
+  }
+  .topic-tag i { color: var(--accent2); }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .slide { padding: 40px 24px; }
+    .two-col { grid-template-columns: 1fr; gap: 24px; }
+    .cards-grid.cols-2,
+    .cards-grid.cols-3,
+    .cards-grid.cols-4 { grid-template-columns: 1fr; }
+    .lock-row { flex-direction: column; align-items: stretch; }
+    .lock-item { flex-direction: row; min-width: auto; }
+    .hero-meta { flex-direction: column; gap: 8px; align-items: flex-start; }
+  }
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    .slide { transition: opacity 0.3s ease; transform: none !important; }
+    .slide.active { transform: none !important; }
+    .orb { animation: none; }
+    .card, .step-item, .lock-item, .pill, .topic-tag { transition: none; }
+  }
+
+  /* ── Entrance animations ── */
+  .slide.active .anim-up {
+    animation: animUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+  .slide.active .anim-up.d1 { animation-delay: 0.1s; }
+  .slide.active .anim-up.d2 { animation-delay: 0.2s; }
+  .slide.active .anim-up.d3 { animation-delay: 0.3s; }
+  .slide.active .anim-up.d4 { animation-delay: 0.4s; }
+  .slide.active .anim-up.d5 { animation-delay: 0.5s; }
+  .slide.active .anim-up.d6 { animation-delay: 0.6s; }
+  .slide.active .anim-up.d7 { animation-delay: 0.7s; }
+  .slide.active .anim-up.d8 { animation-delay: 0.8s; }
+
+  @keyframes animUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Canvas particles ── */
+  #particles-canvas {
+    position: fixed; inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- Background layers -->
+<div class="bg-layer"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<canvas id="particles-canvas"></canvas>
+
+<!-- Progress bar -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- Deck viewport -->
+<div class="deck-viewport" id="deck">
+
+  <!-- SLIDE 0: Hero -->
+  <div class="slide active" data-slide="0">
+    <div class="slide-inner">
+      <div class="slide-tag anim-up"><i class="fa-solid fa-flask"></i> TCEA Blog Highlights</div>
+      <h1 class="hero-title anim-up d1">
+        <span class="highlight">CTOBs</span> for Your<br>K-2 Science Classroom
+      </h1>
+      <p class="hero-sub anim-up d2">
+        Critical Thinking Online Breakouts transform elementary science into engaging puzzle-solving adventures — building reasoning skills students will use for life.
+      </p>
+      <div class="hero-meta anim-up d3">
+        <span><i class="fa-solid fa-building-columns"></i> TCEA.org</span>
+        <span><i class="fa-solid fa-graduation-cap"></i> K-2 Focus</span>
+        <span><i class="fa-solid fa-atom"></i> Science TEKS-Aligned</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 1: What Are CTOBs? -->
+  <div class="slide" data-slide="1">
+    <div class="slide-inner">
+      <div class="slide-tag anim-up"><i class="fa-solid fa-circle-question"></i> Definition</div>
+      <h2 class="slide-title anim-up d1">What Exactly Are <span class="highlight">CTOBs</span>?</h2>
+      <p class="slide-subtitle anim-up d2">
+        Critical Thinking Online Breakouts are digital puzzle experiences where students solve clues to "unlock" a final answer — no physical locks required.
+      </p>
+      <div class="quote-block anim-up d3">
+        <p>"CTOBs are online breakout activities that require students to use critical thinking to solve puzzles and unlock answers, all within a digital environment."</p>
+        <div class="attribution">— TCEA Blog</div>
+      </div>
+      <div class="two-col" style="margin-top: 28px;">
+        <div class="cards-grid cols-2 anim-up d4" style="margin-top:0;">
+          <div class="card">
+            <div class="card-icon orange"><i class="fa-solid fa-lock"></i></div>
+            <h3>Digital Locks</h3>
+            <p>Students solve puzzles to crack letter, number, color, or direction locks on a Google Form.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon green"><i class="fa-solid fa-magnifying-glass"></i></div>
+            <h3>Clue Hunting</h3>
+            <p>Clues are hidden across images, text, videos, and interactive elements on a Google Site.</p>
+          </div>
+        </div>
+        <div class="cards-grid cols-2 anim-up d5" style="margin-top:0;">
+          <div class="card">
+            <div class="card-icon blue"><i class="fa-solid fa-brain"></i></div>
+            <h3>Critical Thinking</h3>
+            <p>Every puzzle demands observation, inference, pattern recognition, and logical reasoning.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon orange"><i class="fa-solid fa-trophy"></i></div>
+            <h3>One Final Answer</h3>
+            <p>Cracking all locks reveals a celebration screen — a satisfying payoff for young learners.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: Why K-2? -->
+  <div class="slide" data-slide="2">
+    <div class="slide-inner">
+      <div class="slide-tag anim-up"><i class="fa-solid fa-child-reaching"></i> Age Appropriateness</div>
+      <h2 class="slide-title anim-up d1">Why <span class="highlight-green">K-2</span> Learners Need This</h2>
+      <p class="slide-subtitle anim-up d2">
+        Young children are natural questioners. CTOBs channel that curiosity into structured problem-solving — meeting them where they are developmentally.
+      </p>
+      <div class="cards-grid cols-3 anim-up d3">
+        <div class="card" style="text-align:center;">
+          <div class="big-stat">
+            <div class="num orange">85%</div>
+            <div class="label">Of brain development<br>happens by age 5</div>
+          </div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div class="big-stat">
+            <div class="num green">4x</div>
+            <div class="label">More engaged with<br>puzzle-based learning</div>
+          </div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div class="big-stat">
+            <div class="num blue">K-2</div>
+            <div class="label">Critical window for<br>thinking habit formation</div>
+          </div>
+        </div>
+      </div>
+      <div class="step-list anim-up d4">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>Simplified Puzzles, Deep Thinking</h4>
+            <p>CTOBs for K-2 use age-appropriate puzzles — color matching, simple ciphers, picture clues — that still require genuine reasoning.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>Visual-First Design</h4>
+            <p>Minimal text, rich imagery, and audio support ensure pre-readers and early readers can participate fully.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>Collaboration Built In</h4>
+            <p>Students work in pairs or small groups, building communication skills alongside critical thinking.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: How the Locks Work -->
+  <div class="slide" data-slide="3">
+    <div class="slide-inner">
+      <div class="slide-tag anim-up"><i class="fa-solid fa-key"></i> Mechanics</div>
+      <h2 class="slide-title anim-up d1">How the <span class="highlight-blue">Locks</span> Actually Work</h2>
+      <p class="slide-subtitle anim-up d2">
+        Each CTOB has multiple lock types. Students must crack every lock to submit the final form and "break out." Here are the four primary lock types used.
+      </p>
+      <div class="lock-row anim-up d3">
+        <div class="lock-item">
+          <div class="lock-icon orange"><i class="fa-solid fa-hashtag"></i></div>
+          <div class="lock-label">Number Lock</div>
+        </div>
+        <div class="lock-item">
+          <div class="lock-icon green"><i class="fa-solid fa-font"></i></div>
+          <div class="lock-label">Letter Lock</div>
+        </div>
+        <div class="lock-item">
+          <div class="lock-icon blue"><i class="fa-solid fa-palette"></i></div>
+          <div class="lock-label">Color Lock</div>
+        </div>
+        <div class="lock-item">
+          <div class="lock-icon purple"><i class="fa-solid fa-compass"></i></div>
+          <div class="lock-label">Direction Lock</div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="two-col anim-up d4">
+        <div>
+          <h3 style="font-size:1.1rem; margin-bottom:12px;">Example: Number Lock</h3>
+          <p style="font-size:0.9rem; color:var(--fg-muted); line-height:1.7;">
+            A page shows 5 butterflies. Students count them, notice 2 have spots, and infer the code is "52" — five total, two spotted. The number lock on the Google Form accepts "52."
+          </p>
+        </div>
+        <div>
+          <h3 style="font-size:1.1rem; margin-bottom:12px;">Example: Color Lock</h3>
+          <p style="font-size:0.9rem; color:var(--fg-muted); line-height:1.7;">
+            A life cycle diagram uses red, blue, green, yellow for each stage. A hidden clue says "start from the egg" — students enter the colors in life cycle order.
+          </p>
+        </div>
+      </div>
+      <div class="quote-block anim-up d5" style="margin-top:24px;">
+        <p>"The magic is in the mismatch — the answer isn't obvious. Students must reason, not just recall."</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: Science Topics -->
+  <div class="slide" data-slide="4">
+    <div class="slide-inner">
+      <div class="slide-tag anim-up"><i class="fa-solid fa-seedling"></i> Curriculum</div>
+      <h2 class="slide-title anim-up d1">Science Topics That <span class="highlight-green">Come Alive</span></h2>
+      <p class="slide-subtitle anim-up d2">
+        CTOBs align with K-2 Science TEKS, turning standard topics into investigative experiences students genuinely care about solving.
+      </p>
+      <div class="pill-row anim-up d3">
+        <div class="topic-tag"><i class="fa-solid fa-frog"></i> Life Cycles</div>
+        <div class="topic-tag"><i class="fa-solid fa-cloud-sun"></i> Weather & Seasons</div>
+        <div class="topic-tag"><i class="fa-solid fa-tree"></i> Habitats & Ecosystems</div>
+        <div class="topic-tag"><i class="fa-solid fa-magnet"></i> Forces & Motion</div>
+        <div class="topic-tag"><i class="fa-solid fa-droplet"></i> Water Cycle</div>
+        <div class="topic-tag"><i class="fa-solid fa-sun"></i> Sun, Light & Heat</div>
+        <div class="topic-tag"><i class="fa-solid fa-paw"></i> Animal Adaptations</div>
+        <div class="topic-tag"><i class="fa-solid fa-leaf"></i> Plant Parts & Needs</div>
+      </div>
+      <div class="cards-grid cols-2 anim-up d4" style="margin-top:28px;">
+        <div class="card">
+          <div class="card-icon green"><i class="fa-solid fa-egg"></i></div>
+          <h3>Butterfly Life Cycle CTOB</h3>
+          <p>Students explore egg, caterpillar, chrysalis, and butterfly stages through embedded images and videos. Clues are hidden in metamorphosis timelines and vocabulary hints. The final lock requires ordering stages correctly.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon blue"><i class="fa-solid fa-cloud-rain"></i></div>
+          <h3>Weather Patterns CTOB</h3>
+          <p>Learners analyze weather maps, thermometer readings, and seasonal photos. A directional lock comes from tracing a cold front's movement. A number lock comes from reading temperatures in a sequence.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: Building a CTOB Step by Step -->
+  <div class="slide" data-slide="5">
+    <div class="slide-inner">
+      <div class="slide-tag anim-up"><i class="fa-solid fa-hammer"></i> Build Guide</div>
+      <h2 class="slide-title anim-up d1">Building a CTOB: <span class="highlight">Step by Step</span></h2>
+      <div class="step-list anim-up d2">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>Choose Your Science Standard</h4>
+            <p>Pick one specific TEKS or learning objective. A focused topic makes better puzzles than a broad one.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>Design the Locks First</h4>
+            <p>Decide your answers (e.g., RED, BLUE, GREEN, YELLOW for a color lock) before creating clues. Work backward from the answer.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>Build the Google Form</h4>
+            <p>Create a Google Form with data validation set to your lock answers. Use "short answer" with specific text matching for each lock field.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h4>Create the Google Site</h4>
+            <p>Build a multi-page Google Site. Embed images, text, videos, and hidden clues across pages. Link the Google Form to the final page.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <h4>Hide Clues in Plain Sight</h4>
+            <p>Use alt text on images, hover effects, color coding, hidden text boxes, and embedded video timestamps as clue locations.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">6</div>
+          <div class="step-content">
+            <h4>Test, Refine, Launch</h4>
+            <p>Have a colleague or student test it first. Check that puzzles are solvable but not trivial, and that the tech works on student devices.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: Tools You Need -->
+  <div class="slide" data-slide="6">
+    <div class="slide-inner">
+      <div class="slide-tag anim-up"><i class="fa-solid fa-toolbox"></i> Toolkit</div>
+      <h2 class="slide-title anim-up d1">The <span class="highlight-blue">Tool Stack</span> — Free & Accessible</h2>
+      <p class="slide-subtitle anim-up d2">
+        You don't need expensive software. The entire CTOB ecosystem runs on free Google Workspace tools that most districts already provide.
+      </p>
+      <div class="cards-grid cols-3 anim-up d3">
+        <div class="card">
+          <div class="card-icon orange"><i class="fa-brands fa-google"></i></div>
+          <h3>Google Sites</h3>
+          <p>The "room" where students explore. Multiple pages hold clues, images, and embedded content. No coding needed.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon green"><i class="fa-solid fa-file-lines"></i></div>
+          <h3>Google Forms</h3>
+          <p>The lock mechanism. Data validation ensures only correct answers advance. Confirmation page becomes the "breakout" celebration.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon blue"><i class="fa-solid fa-images"></i></div>
+          <h3>Google Drawings / Slides</h3>
+          <p>Create custom images with hidden clues — invisible text, coded colors, embedded patterns that students must decode.</p>
+        </div>
+      </div>
+      <div class="cards-grid cols-3 anim-up d4" style="margin-top:16px;">
+        <div class="card">
+          <div class="card-icon blue"><i class="fa-brands fa-youtube"></i></div>
+          <h3>YouTube Videos</h3>
+          <p>Embed science videos. Clues can be hidden at specific timestamps, in video descriptions, or in thumbnail details.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon green"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
+          <h3>Google Inside Search</h3>
+          <p>Teach students to search within a page (Ctrl+F) to find hidden text — a legitimate digital literacy skill.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon orange"><i class="fa-solid fa-puzzle-piece"></i></div>
+          <h3>Optional Extras</h3>
+          <p>ThingLink for interactive images, Padlet for collaboration hints, or Flip for video reflections after breaking out.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: Clue Design Principles -->
+  <div class="slide" data-slide="7">
+    <div class="slide-inner">
+      <div class="slide-tag anim-up"><i class="fa-solid fa-lightbulb"></i> Design Principles</div>
+      <h2 class="slide-title anim-up d1">Designing Clues That <span class="highlight-green">Actually Work</span></h2>
+      <div class="two-col">
+        <div class="col-text">
+          <div class="step-list anim-up d2">
+            <div class="step-item">
+              <div class="step-num"><i class="fa-solid fa-check" style="font-size:0.75rem;"></i></div>
+              <div class="step-content">
+                <h4>One Clue Per Lock</h4>
+                <p>Each puzzle should lead to exactly one answer. Ambiguity frustrates young learners fast.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num"><i class="fa-solid fa-check" style="font-size:0.75rem;"></i></div>
+              <div class="step-content">
+                <h4>Redundant Hinting</h4>
+                <p>Provide 2-3 ways to find each answer — visual, textual, and contextual — so different learners can succeed.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num"><i class="fa-solid fa-check" style="font-size:0.75rem;"></i></div>
+              <div class="step-content">
+                <h4>Progressive Difficulty</h4>
+                <p>First lock should be easy (confidence builder). Last lock should require combining multiple clues.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num"><i class="fa-solid fa-check" style="font-size:0.75rem;"></i></div>
+              <div class="step-content">
+                <h4>Misdirection Is Fine, Tricking Is Not</h4>
+                <p>Red herrings add fun. But every real clue must be findable — don't hide answers in unreasonable places.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="card anim-up d3" style="border-color: rgba(240,136,62,0.2); background: rgba(240,136,62,0.04);">
+            <h3 style="color: var(--accent); margin-bottom: 14px;"><i class="fa-solid fa-triangle-exclamation" style="margin-right:8px;"></i>Common Pitfalls</h3>
+            <div style="display:flex; flex-direction:column; gap:12px;">
+              <p style="font-size:0.88rem; color:var(--fg-muted); line-height:1.6; padding-bottom:12px; border-bottom: 1px solid var(--border);">
+                <strong style="color:var(--fg);">Too much text.</strong> K-2 students can't read paragraphs of instructions. Use icons, images, and short phrases.
+              </p>
+              <p style="font-size:0.88rem; color:var(--fg-muted); line-height:1.6; padding-bottom:12px; border-bottom: 1px solid var(--border);">
+                <strong style="color:var(--fg);">Broken links.</strong> Test every link, embed, and video on student devices before going live.
+              </p>
+              <p style="font-size:0.88rem; color:var(--fg-muted); line-height:1.6; padding-bottom:12px; border-bottom: 1px solid var(--border);">
+                <strong style="color:var(--fg);">No hint system.</strong> Always have a way for stuck students to get help — a hint page, a teacher check-in, or a clue card.
+              </p>
+              <p style="font-size:0.88rem; color:var(--fg-muted); line-height:1.6;">
+                <strong style="color:var(--fg);">Case sensitivity.</strong> Set Google Form validation to accept multiple case variations of the same answer.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: Sample CTOB Walkthrough -->
+  <div class="slide" data-slide="8">
+    <div class="slide-inner">
+      <div class="slide-tag anim-up"><i class="fa-solid fa-route"></i> Walkthrough</div>
+      <h2 class="slide-title anim-up d1">Sample CTOB: <span class="highlight">Frog Life Cycle</span></h2>
+      <p class="slide-subtitle anim-up d2">
+        Follow how a 1st-grade student would progress through a frog life cycle CTOB — from first click to final breakout.
+      </p>
+      <div class="cards-grid cols-4 anim-up d3">
+        <div class="card" style="text-align:center;">
+          <div style="font-family:'Space Grotesk'; font-size:2rem; font-weight:700; color:var(--accent); margin-bottom:8px;">01</div>
+          <h3>Landing Page</h3>
+          <p>Student opens the Google Site. Sees a pond scene with a frog. A riddle at the top: "I start as something tiny in the water..."</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-family:'Space Grotesk'; font-size:2rem; font-weight:700; color:var(--accent2); margin-bottom:8px;">02</div>
+          <h3>Explore Page 1</h3>
+          <p>Images of eggs, tadpole, tadpole with legs, froglet, adult frog. A hidden number in each image's alt text: 3, 1, 4, 2.</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-family:'Space Grotesk'; font-size:2rem; font-weight:700; color:var(--accent3); margin-bottom:8px;">03</div>
+          <h3>Crack the Locks</h3>
+          <p>Number lock: 3142 (order of stages). Color lock: BROWN, BLACK, GREEN (colors of each stage). Direction lock: UP, UP, RIGHT (growth pattern).</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-family:'Space Grotesk'; font-size:2rem; font-weight:700; color:#BC8CFF; margin-bottom:8px;">04</div>
+          <h3>Breakout!</h3>
+          <p>Google Form submits. Celebration page appears with confetti GIF and a "You're a Frog Life Cycle Expert!" badge. Student earned it through thinking.</p>
+        </div>
+      </div>
+      <div class="quote-block anim-up d4">
+        <p>"The student didn't just memorize the frog life cycle — they decoded it. That's the difference between recalling and reasoning."</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: Classroom Tips -->
+  <div class="slide" data-slide="9">
+    <div class="slide-inner">
+      <div class="slide-tag anim-up"><i class="fa-solid fa-chalkboard-user"></i> Implementation</div>
+      <h2 class="slide-title anim-up d1">Classroom <span class="highlight-green">Tips</span> That Make It Work</h2>
+      <div class="two-col">
+        <div>
+          <div class="step-list anim-up d2">
+            <div class="step-item">
+              <div class="step-num"><i class="fa-solid fa-users" style="font-size:0.75rem;"></i></div>
+              <div class="step-content">
+                <h4>Pair Students Strategically</h4>
+                <p>Mix strong readers with visual thinkers. Different strengths solve different puzzle types — everyone contributes.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num"><i class="fa-solid fa-clock" style="font-size:0.75rem;"></i></div>
+              <div class="step-content">
+                <h4>Set a Time Limit (But Be Flexible)</h4>
+                <p>20-30 minutes is ideal for K-2. Have a "save progress" plan if groups finish at different times.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num"><i class="fa-solid fa-hand-holding-heart" style="font-size:0.75rem;"></i></div>
+              <div class="step-content">
+                <h4>Hint Cards, Not Answers</h4>
+                <p>Give each group 2-3 hint cards they can "spend." This teaches them to struggle productively before seeking help.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num"><i class="fa-solid fa-rotate" style="font-size:0.75rem;"></i></div>
+              <div class="step-content">
+                <h4>Debrief Afterward</h4>
+                <p>Ask: "Which clue was hardest? What strategy did you use?" Metacognition turns a fun activity into lasting learning.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="card anim-up d3" style="border-color: rgba(63,185,80,0.2); background: rgba(63,185,80,0.04);">
+            <h3 style="color: var(--accent2); margin-bottom:14px;"><i class="fa-solid fa-star" style="margin-right:8px;"></i>Differentiation Strategies</h3>
+            <div style="display:flex; flex-direction:column; gap:12px;">
+              <p style="font-size:0.88rem; color:var(--fg-muted); line-height:1.6; padding-bottom:12px; border-bottom: 1px solid var(--border);">
+                <strong style="color:var(--fg);">For struggling learners:</strong> Reduce the number of locks from 4 to 2. Add audio recordings of clues. Provide a visual checklist of pages to visit.
+              </p>
+              <p style="font-size:0.88rem; color:var(--fg-muted); line-height:1.6; padding-bottom:12px; border-bottom: 1px solid var(--border);">
+                <strong style="color:var(--fg);">For advanced learners:</strong> Add a bonus lock with a multi-step clue. Include a red herring that they need to identify and ignore.
+              </p>
+              <p style="font-size:0.88rem; color:var(--fg-muted); line-height:1.6;">
+                <strong style="color:var(--fg);">For ELL students:</strong> Use picture-heavy clues, minimal text, and pair with a bilingual partner. Record clue instructions in both languages.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 10: Benefits Summary -->
+  <div class="slide" data-slide="10">
+    <div class="slide-inner">
+      <div class="slide-tag anim-up"><i class="fa-solid fa-chart-line"></i> Impact</div>
+      <h2 class="slide-title anim-up d1">Why CTOBs Are <span class="highlight">Worth the Effort</span></h2>
+      <p class="slide-subtitle anim-up d2">
+        Beyond the fun factor, CTOBs deliver measurable learning outcomes that align with what we know about how young minds grow.
+      </p>
+      <div class="cards-grid cols-2 anim-up d3">
+        <div class="card">
+          <div class="card-icon orange"><i class="fa-solid fa-brain"></i></div>
+          <h3>Higher-Order Thinking</h3>
+          <p>Students move beyond "what is this?" to "how does this connect?" — operating at the analysis and evaluation levels of Bloom's Taxonomy, even in kindergarten.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon green"><i class="fa-solid fa-laptop-code"></i></div>
+          <h3>Digital Literacy</h3>
+          <p>Navigating a multi-page site, using Ctrl+F, clicking embedded links, and submitting forms — these are foundational digital skills practiced authentically.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon blue"><i class="fa-solid fa-comments"></i></div>
+          <h3>Academic Vocabulary</h3>
+          <p>Science terms are encountered in context during puzzle-solving, which research shows is far more effective than memorizing definitions from a list.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon orange"><i class="fa-solid fa-face-smile"></i></div>
+          <h3>Intrinsic Motivation</h3>
+          <p>The gamified structure creates genuine motivation to solve the puzzle — not for a grade, but for the satisfaction of breaking out. That's the kind of engagement that lasts.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 11: Getting Started -->
+  <div class="slide" data-slide="11">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="slide-tag anim-up" style="margin-left:auto; margin-right:auto;"><i class="fa-solid fa-rocket"></i> Start Here</div>
+      <h2 class="slide-title anim-up d1" style="max-width:700px; margin:0 auto 20px;">
+        Your <span class="highlight-green">First CTOB</span> Starts Today
+      </h2>
+      <p class="slide-subtitle anim-up d2" style="margin:0 auto 36px; text-align:center;">
+        You don't need to be a tech expert. Start small, iterate, and watch your youngest students surprise you with their thinking.
+      </p>
+      <div class="cards-grid cols-3 anim-up d3" style="max-width:900px; margin:0 auto;">
+        <div class="card" style="text-align:center;">
+          <div style="font-size:2.5rem; margin-bottom:12px; color:var(--accent);"><i class="fa-solid fa-copy"></i></div>
+          <h3>Try an Existing One</h3>
+          <p>Visit TCEA's library of pre-made CTOBs. Experience one as a student first — you'll instantly understand the design.</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:2.5rem; margin-bottom:12px; color:var(--accent2);"><i class="fa-solid fa-pencil"></i></div>
+          <h3>Modify Before Creating</h3>
+          <p>Take an existing CTOB and change the content to match your next unit. It's faster than starting from scratch and teaches you the structure.</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:2.5rem; margin-bottom:12px; color:var(--accent3);"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+          <h3>Build Your Own</h3>
+          <p>Follow the 6-step process from this deck. Start with 2 locks instead of 4. Your first one doesn't need to be perfect — it needs to exist.</p>
+        </div>
+      </div>
+      <div class="divider" style="max-width:400px; margin:32px auto;"></div>
+      <p class="anim-up d4" style="font-size:1.05rem; color:var(--fg-muted); line-height:1.7; max-width:600px; margin:0 auto;">
+        <strong style="color:var(--fg);">Source:</strong> Adapted from <em>"Critical Thinking Online Breakouts (CTOBs) for Your K-2 Science Classroom"</em> published on the TCEA Blog at <span style="color:var(--accent3);">blog.tcea.org</span>
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<nav class="nav-controls" aria-label="Slide navigation">
+  <button class="nav-btn" id="prevBtn" aria-label="Previous slide" disabled>
+    <i class="fa-solid fa-chevron-left"></i>
+  </button>
+  <div class="nav-dots" id="navDots"></div>
+  <span class="slide-counter" id="slideCounter">1 / 12</span>
+  <button class="nav-btn" id="nextBtn" aria-label="Next slide">
+    <i class="fa-solid fa-chevron-right"></i>
+  </button>
+</nav>
+
+<div class="key-hint" id="keyHint">
+  <kbd>&larr;</kbd> <kbd>&rarr;</kbd> to navigate &nbsp;·&nbsp; <kbd>F</kbd> fullscreen
+</div>
+
+<script>
+  // ── Slide engine ──
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+  let currentSlide = 0;
+  let isTransitioning = false;
+
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const navDots = document.getElementById('navDots');
+  const slideCounter = document.getElementById('slideCounter');
+  const progressBar = document.getElementById('progressBar');
+  const keyHint = document.getElementById('keyHint');
+
+  // Build dots
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+    dot.addEventListener('click', () => goToSlide(i));
+    navDots.appendChild(dot);
+  }
+
+  function updateUI() {
+    // Counter
+    slideCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+
+    // Progress bar
+    const progress = ((currentSlide) / (totalSlides - 1)) * 100;
+    progressBar.style.width = progress + '%';
+
+    // Buttons
+    prevBtn.disabled = currentSlide === 0;
+    nextBtn.disabled = currentSlide === totalSlides - 1;
+
+    // Dots
+    navDots.querySelectorAll('.nav-dot').forEach((dot, i) => {
+      dot.classList.toggle('active', i === currentSlide);
+    });
+  }
+
+  function goToSlide(index) {
+    if (index === currentSlide || isTransitioning || index < 0 || index >= totalSlides) return;
+    isTransitioning = true;
+
+    const direction = index > currentSlide ? 1 : -1;
+    const oldSlide = slides[currentSlide];
+    const newSlide = slides[index];
+
+    // Exit old slide
+    oldSlide.classList.remove('active');
+    oldSlide.classList.add(direction > 0 ? 'exit-up' : '');
+    oldSlide.style.transform = direction > 0
+      ? 'translateY(-60px) scale(0.97)'
+      : 'translateY(60px) scale(0.97)';
+    oldSlide.style.opacity = '0';
+
+    // Prepare new slide entry
+    newSlide.style.transition = 'none';
+    newSlide.style.transform = direction > 0
+      ? 'translateY(40px) scale(0.97)'
+      : 'translateY(-40px) scale(0.97)';
+    newSlide.style.opacity = '0';
+
+    // Force reflow
+    void newSlide.offsetWidth;
+
+    newSlide.style.transition = '';
+    newSlide.classList.add('active');
+    newSlide.style.transform = '';
+    newSlide.style.opacity = '';
+
+    currentSlide = index;
+    updateUI();
+
+    setTimeout(() => {
+      oldSlide.classList.remove('exit-up');
+      oldSlide.style.transform = '';
+      oldSlide.style.opacity = '';
+      isTransitioning = false;
+    }, 650);
+  }
+
+  prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+  nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault();
+      goToSlide(currentSlide + 1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      goToSlide(currentSlide - 1);
+    } else if (e.key === 'f' || e.key === 'F') {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen();
+      }
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      goToSlide(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      goToSlide(totalSlides - 1);
+    }
+  });
+
+  // Touch swipe
+  let touchStartX = 0;
+  let touchStartY = 0;
+  document.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 60) {
+      if (dx < 0) goToSlide(currentSlide + 1);
+      else goToSlide(currentSlide - 1);
+    }
+  }, { passive: true });
+
+  // Hide key hint after first navigation
+  let hintVisible = true;
+  function hideHint() {
+    if (hintVisible) {
+      keyHint.style.opacity = '0';
+      hintVisible = false;
+    }
+  }
+  prevBtn.addEventListener('click', hideHint);
+  nextBtn.addEventListener('click', hideHint);
+  document.addEventListener('keydown', hideHint, { once: true });
+
+  // ── Particle canvas ──
+  const canvas = document.getElementById('particles-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  const PARTICLE_COUNT = 50;
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  // Check reduced motion preference
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  class Particle {
+    constructor() {
+      this.reset();
+    }
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.size = Math.random() * 2 + 0.5;
+      this.speedX = (Math.random() - 0.5) * 0.3;
+      this.speedY = (Math.random() - 0.5) * 0.3;
+      this.opacity = Math.random() * 0.3 + 0.05;
+      this.pulse = Math.random() * Math.PI * 2;
+      this.pulseSpeed = Math.random() * 0.02 + 0.005;
+    }
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      this.pulse += this.pulseSpeed;
+      if (this.x < -10 || this.x > canvas.width + 10 ||
+          this.y < -10 || this.y > canvas.height + 10) {
+        this.reset();
+      }
+    }
+    draw() {
+      const o = this.opacity * (0.6 + 0.4 * Math.sin(this.pulse));
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, Math.max(0.1, this.size), 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(240, 136, 62, ${o})`;
+      ctx.fill();
+    }
+  }
+
+  if (!prefersReducedMotion) {
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      particles.push(new Particle());
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+
+      // Draw faint connections
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 150) {
+            const o = (1 - dist / 150) * 0.04;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(240, 136, 62, ${o})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+  }
+
+  // Initial UI state
+  updateUI();
+</script>
+</body>
+</html>
