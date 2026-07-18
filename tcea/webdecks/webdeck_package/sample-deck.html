@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sample Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Libre+Franklin:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="deck-framework.css">
+</head>
+<body>
+<div class="deck">
+
+  <!-- 1 · COVER -->
+  <section class="slide cover current">
+    <div class="slide-body">
+      <div class="cover-eyebrow">Event or series name</div>
+      <h1>Lorem Ipsum Dolor Sit Amet</h1>
+      <div class="subtitle">Consectetur adipiscing elit, sed do eiusmod tempor</div>
+      <div class="meta"><strong>Presenter:</strong> Firstname Lastname<br>yoursite.example</div>
+    </div>
+    <div class="slide-footer">
+      <span class="brand"><span class="star">✦</span> Sample Deck</span>
+      <span class="fac">Presenter: Firstname Lastname</span>
+      <span class="url">yoursite.example</span>
+    </div>
+    <div class="notes">
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. This is the cover. Speaker notes are teleprompter text — what you would actually say out loud, in the first person, about 90 to 130 words.</p>
+      <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Notes never appear on the slide; press S to read them on this screen, or V to open the two-monitor presenter view.</p>
+    </div>
+  </section>
+
+  <!-- 2 · DIVIDER -->
+  <section class="slide divider">
+    <div class="slide-body">
+      <div class="seg-num">1</div>
+      <div class="divider-eyebrow">Section One · about 10 minutes</div>
+      <h1>Ut Enim Ad Minim</h1>
+      <div class="subtitle">Quis nostrud exercitation ullamco laboris nisi.</div>
+    </div>
+    <div class="slide-footer">
+      <span class="brand"><span class="star">✦</span> Sample Deck</span>
+      <span class="fac">Presenter: Firstname Lastname</span>
+      <span class="url">yoursite.example</span>
+    </div>
+    <div class="notes">
+      <p>Use a divider between sections. It carries an oversized ghost numeral. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
+    </div>
+  </section>
+
+  <!-- 3 · CONTENT · BULLETS -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="slide-kicker">One idea per slide</div>
+      <h2 class="slide-title">The headline states the point</h2>
+      <p class="lead">A single lead sentence frames what the bullets support.</p>
+      <ul class="bullets">
+        <li><strong>Duis aute irure</strong> dolor in reprehenderit in voluptate velit</li>
+        <li>Excepteur sint occaecat cupidatat non proident</li>
+        <li>Sunt in culpa qui officia deserunt mollit anim</li>
+        <li>Keep bullets to short phrases, three to five per slide</li>
+      </ul>
+    </div>
+    <div class="slide-footer">
+      <span class="brand"><span class="star">✦</span> Sample Deck</span>
+      <span class="fac">Presenter: Firstname Lastname</span>
+      <span class="url">yoursite.example</span>
+    </div>
+    <div class="notes">
+      <p>Say the full sentences here; put only short phrases on the slide. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    </div>
+  </section>
+
+  <!-- 4 · CONTENT · CARDS -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="slide-kicker">Three-part structure</div>
+      <h2 class="slide-title">Group related points into cards</h2>
+      <div class="grid cols-3">
+        <div class="card"><h3><span class="ico">◆</span>Lorem</h3><p>Ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.</p></div>
+        <div class="card gold"><h3><span class="ico">◆</span>Tempor</h3><p>Incididunt ut labore et dolore magna aliqua ut enim ad minim.</p></div>
+        <div class="card"><h3><span class="ico">◆</span>Veniam</h3><p>Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea.</p></div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="brand"><span class="star">✦</span> Sample Deck</span>
+      <span class="fac">Presenter: Firstname Lastname</span>
+      <span class="url">yoursite.example</span>
+    </div>
+    <div class="notes">
+      <p>Use <code>grid cols-2</code> or <code>cols-3</code>. Add <code>gold</code> to a card for a steel top-tab. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    </div>
+  </section>
+
+  <!-- 5 · CONTENT · STEPS -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="slide-kicker">A process in order</div>
+      <h2 class="slide-title">Numbered steps for a sequence</h2>
+      <div class="steps">
+        <div class="step"><div class="n">1</div><h4>Consectetur</h4><p>Adipiscing elit, sed do eiusmod tempor incididunt.</p></div>
+        <div class="step"><div class="n">2</div><h4>Incididunt</h4><p>Ut labore et dolore magna aliqua ut enim.</p></div>
+        <div class="step"><div class="n">3</div><h4>Exercitation</h4><p>Ullamco laboris nisi ut aliquip ex ea commodo.</p></div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="brand"><span class="star">✦</span> Sample Deck</span>
+      <span class="fac">Presenter: Firstname Lastname</span>
+      <span class="url">yoursite.example</span>
+    </div>
+    <div class="notes">
+      <p>Walk through each step. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+    </div>
+  </section>
+
+  <!-- 6 · CONTENT · DO / DO NOT -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="slide-kicker">Clear guidance</div>
+      <h2 class="slide-title">Do and do not</h2>
+      <div class="guardrail">
+        <div class="guardrail-col will">
+          <h4>Do</h4>
+          <ul>
+            <li>Lorem ipsum dolor sit amet consectetur</li>
+            <li>Adipiscing elit sed do eiusmod tempor</li>
+            <li>Incididunt ut labore et dolore magna</li>
+          </ul>
+        </div>
+        <div class="guardrail-col willnot">
+          <h4>Do not</h4>
+          <ul>
+            <li>Ut enim ad minim veniam quis nostrud</li>
+            <li>Exercitation ullamco laboris nisi aliquip</li>
+            <li>Duis aute irure dolor in reprehenderit</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="brand"><span class="star">✦</span> Sample Deck</span>
+      <span class="fac">Presenter: Firstname Lastname</span>
+      <span class="url">yoursite.example</span>
+    </div>
+    <div class="notes">
+      <p>Keep each column to about three items so it fits the canvas. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    </div>
+  </section>
+
+  <!-- 7 · CONTENT · CALLOUT + REFLECT -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="slide-kicker">Emphasis blocks</div>
+      <h2 class="slide-title">Callouts and reflection prompts</h2>
+      <div class="callout"><span class="label">Key point</span><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p></div>
+      <div class="reflect"><span>◆</span><p><strong>Reflect.</strong> Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris?</p></div>
+    </div>
+    <div class="slide-footer">
+      <span class="brand"><span class="star">✦</span> Sample Deck</span>
+      <span class="fac">Presenter: Firstname Lastname</span>
+      <span class="url">yoursite.example</span>
+    </div>
+    <div class="notes">
+      <p>A <code>callout</code> is a navy emphasis strip; add <code>light</code> for a pale version. A <code>reflect</code> block poses a question. Lorem ipsum dolor sit amet.</p>
+    </div>
+  </section>
+
+  <!-- 8 · CONTENT · COMPARE -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="slide-kicker">Two options side by side</div>
+      <h2 class="slide-title">Compare two things</h2>
+      <div class="compare">
+        <div class="compare-col">
+          <h4>Option A</h4>
+          <ul><li>Lorem ipsum dolor sit amet</li><li>Consectetur adipiscing elit</li><li>Sed do eiusmod tempor</li></ul>
+        </div>
+        <div class="compare-col alt">
+          <h4>Option B</h4>
+          <ul><li>Ut labore et dolore magna</li><li>Aliqua ut enim ad minim</li><li>Quis nostrud exercitation</li></ul>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="brand"><span class="star">✦</span> Sample Deck</span>
+      <span class="fac">Presenter: Firstname Lastname</span>
+      <span class="url">yoursite.example</span>
+    </div>
+    <div class="notes">
+      <p>The second <code>compare-col</code> takes <code>alt</code> for a steel accent. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    </div>
+  </section>
+
+  <!-- 9 · CLOSING -->
+  <section class="slide divider">
+    <div class="slide-body">
+      <div class="divider-eyebrow">Thank you</div>
+      <h1>Gratias Tibi Ago</h1>
+      <div class="subtitle">Firstname Lastname · yoursite.example</div>
+    </div>
+    <div class="slide-footer">
+      <span class="brand"><span class="star">✦</span> Sample Deck</span>
+      <span class="fac">Presenter: Firstname Lastname</span>
+      <span class="url">yoursite.example</span>
+    </div>
+    <div class="notes">
+      <p>Close with a clear next step or contact. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
+    </div>
+  </section>
+
+</div>
+<script src="deck-framework.js"></script>
+</body>
+</html>
