@@ -123,7 +123,7 @@ Every content image needs accurate `alt` text; decorative images get `alt=""`. I
 Injected once by the script, fixed to the corner of the viewport:
 
 - **Progress bar** — thin bar across the top.
-- **Controls** — top-right cluster (fades in on hover/focus): `‹` prev · counter · `›` next · 🗒 notes · 🖥 presenter · ⛶ fullscreen · **?** help.
+- **Controls** — top-right cluster (fades in on hover/focus): `‹` prev · counter · `›` next · 🗒 notes · 🖥 presenter · ⛶ fullscreen · **?** help. **All seven are required in every deck** — the 🖥 button is the speaker-notes / presenter popout. They are injected automatically the moment Appendix B is pasted in verbatim; if any are missing, the JS was abridged (see Appendix B).
 
 **Keyboard:** → / Space / PgDn next · ← / PgUp previous · Home / End first / last · **S** notes · **V** presenter view · **F** fullscreen · **P** print/PDF · **?** help. Clicking the left third of a slide goes back, the rest advances (links and buttons are ignored).
 
@@ -174,6 +174,7 @@ Press **P** in any deck. The print stylesheet stacks every slide one-per-page at
 5. Keep each slide to 3–5 short bullets or one main block; push full sentences into the notes.
 6. Write teleprompter notes for every slide.
 7. Open the file in a browser; arrow through it, and shrink the window / zoom to confirm it reflows and reads on a phone.
+8. Confirm the top-right toolbar shows **all seven controls** (‹ · counter · › · 🗒 · 🖥 · ⛶ · ?) and that pressing **V** or clicking 🖥 opens the presenter / speaker-notes popout window. If a button is missing, Appendix B was pasted incompletely — re-paste it verbatim.
 
 **On-slide writing style:** short phrases, spell out small numbers, avoid colons in titles, and skip hype words (unlock, elevate, journey, master, delve). Say the full thoughts out loud from the notes.
 
@@ -194,7 +195,7 @@ Because everything the framework needs is embedded in this document (Appendix A 
 2. Paste **this whole file** (`webdeck_instructions.md`). It contains the design rules, the component reference, the self-contained skeleton (§12.1), and the full CSS and JS in the appendices.
 3. Give it a prompt like:
 
-> Using the web-deck system fully described in the document I just pasted, build a **single self-contained HTML file** deck on **[YOUR TOPIC]** for **[YOUR AUDIENCE]**. Put the entire CSS from Appendix A inside one `<style>` tag in the `<head>`, and the entire JavaScript from Appendix B inside one `<script>` tag just before `</body>` — do **not** link any external `.css` or `.js` file. Follow the exact structure and class names from §2–§4 and the skeleton in §12.1. Include a cover, a divider before each section, and content slides using the bullets, cards, steps, do/do-not, callout, reflect, and compare blocks where they fit. Keep on-slide text to short phrases; write real teleprompter speaker notes (~100 words, first person) in the `.notes` block of every slide. Give every slide the `.slide-footer`. Aim for about [N] slides. Output the complete file, ready to save and open.
+> Using the web-deck system fully described in the document I just pasted, build a **single self-contained HTML file** deck on **[YOUR TOPIC]** for **[YOUR AUDIENCE]**. Put the entire CSS from Appendix A inside one `<style>` tag in the `<head>`, and paste the entire JavaScript from Appendix B **verbatim and in full** inside one `<script>` tag just before `</body>` — do **not** abridge, summarize, retype, or replace it, and do **not** link any external `.css` or `.js` file. The pasted Appendix B must keep the complete top-right control cluster (‹ · counter · › · 🗒 notes · **🖥 presenter/speaker-notes popout** · ⛶ fullscreen · ?) — all seven buttons — exactly as written. Follow the exact structure and class names from §2–§4 and the skeleton in §12.1. Include a cover, a divider before each section, and content slides using the bullets, cards, steps, do/do-not, callout, reflect, and compare blocks where they fit. Keep on-slide text to short phrases; write real teleprompter speaker notes (~100 words, first person) in the `.notes` block of every slide. Give every slide the `.slide-footer`. Aim for about [N] slides. Before you finish, confirm the toolbar shows all seven controls and pressing **V** (or 🖥) opens the presenter window. Output the complete file, ready to save and open.
 
 4. Save the AI's output as `my-deck.html` **anywhere** and double-click it — nothing else is needed beside it.
 5. Ask the AI to revise specific slides as needed ("slide 5 is too dense — split it," "add a compare slide for X vs Y").
@@ -676,6 +677,8 @@ body.presenter-mode .slide.current .slide-body > * { animation: none !important;
 ## Appendix B — `deck-framework.js` (paste into the `<script>` tag)
 
 The complete navigation, notes panel, presenter window, cross-window sync, and print logic. No dependencies. Paste **everything between the fences** into the single `<script>` tag just before `</body>` (see §12.1).
+
+> **Paste this verbatim — do not abridge, summarize, or rewrite it.** The top-right control cluster (‹ · counter · › · 🗒 notes · 🖥 presenter · ⛶ fullscreen · ?) is built by the `controls.appendChild(...)` lines below. If you retype or trim this JS, you will drop buttons — most often the **🖥 presenter / speaker-notes popout**. Every generated deck must include all seven controls exactly as written here.
 
 ```html
 <script>
