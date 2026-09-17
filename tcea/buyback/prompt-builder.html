@@ -1,0 +1,791 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>IT Asset Disposition Prompt Builder</title>
+<meta name="description" content="Copy-ready prompts for comparing IT asset disposition and technology buyback vendors in Texas K-12 districts.">
+<style>
+:root{
+  --navy:#0A3476;
+  --navy-dark:#082759;
+  --blue:#147AD6;
+  --gold:#FCB040;
+  --pale:#EEF4FC;
+  --pale-2:#F7FAFE;
+  --ink:#172033;
+  --muted:#5A6680;
+  --line:#D9E5F4;
+  --white:#FFFFFF;
+  --green:#1C7C54;
+  --red:#A63A3A;
+  --shadow:0 14px 34px rgba(8,39,89,.10);
+  --radius:18px;
+  --max:1180px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(20,122,214,.08), transparent 24rem),
+    linear-gradient(#fff,#f7faff);
+  line-height:1.55;
+}
+a{color:var(--navy);text-underline-offset:3px}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.skip{
+  position:absolute;left:-9999px;top:auto;
+}
+.skip:focus{
+  left:16px;top:16px;z-index:999;background:#fff;color:#000;
+  padding:10px 14px;border-radius:8px;box-shadow:var(--shadow);
+}
+.topbar{
+  background:var(--navy-dark);
+  color:#fff;
+  border-bottom:4px solid var(--gold);
+}
+.topbar-inner{
+  max-width:var(--max);margin:auto;padding:14px 24px;
+  display:flex;gap:18px;align-items:center;justify-content:space-between;
+}
+.brand{
+  display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.01em;
+}
+.brand-mark{
+  width:38px;height:38px;border-radius:10px;
+  display:grid;place-items:center;background:var(--gold);color:var(--navy-dark);font-weight:900;
+}
+.nav{
+  display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end
+}
+.nav a{
+  color:#fff;text-decoration:none;font-size:.94rem;padding:8px 10px;border-radius:8px;
+}
+.nav a:hover,.nav a:focus-visible{background:rgba(255,255,255,.10);outline:none}
+.nav a.cross{background:var(--gold);color:var(--navy-dark);font-weight:800}
+.nav a.cross:hover,.nav a.cross:focus-visible{background:#fdd17a}
+.hero{
+  max-width:var(--max);margin:0 auto;padding:58px 24px 34px;
+  display:grid;grid-template-columns:1.25fr .75fr;gap:34px;align-items:center;
+}
+.kicker{
+  text-transform:uppercase;letter-spacing:.16em;font-weight:800;font-size:.78rem;color:var(--blue);
+}
+h1,h2,h3{line-height:1.1;margin:0;color:var(--navy-dark)}
+h1{font-size:clamp(2.4rem,6vw,5.2rem);letter-spacing:-.045em;max-width:13ch}
+.hero p{font-size:1.15rem;color:var(--muted);max-width:65ch}
+.hero-card{
+  background:linear-gradient(145deg,var(--navy-dark),var(--navy));
+  color:#fff;border-radius:28px;padding:28px;box-shadow:var(--shadow);position:relative;overflow:hidden;
+}
+.hero-card:after{
+  content:"";position:absolute;width:180px;height:180px;border-radius:50%;
+  background:rgba(252,176,64,.18);right:-60px;top:-60px;
+}
+.hero-card .big{font-size:3.5rem;font-weight:900;color:var(--gold);line-height:1}
+.hero-card strong{display:block;font-size:1.15rem;margin-top:10px}
+.hero-card p{color:#dbe8fa;font-size:.98rem;margin-bottom:0}
+.hero-card .card-link{
+  display:inline-block;margin-top:18px;background:var(--gold);color:var(--navy-dark);
+  text-decoration:none;font-weight:800;padding:10px 14px;border-radius:10px;font-size:.92rem;
+}
+.hero-card .card-link:hover{background:#fdd17a}
+.wrap{max-width:var(--max);margin:auto;padding:0 24px 64px}
+.section{
+  margin-top:24px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);overflow:hidden;
+}
+.section-head{
+  display:grid;grid-template-columns:90px 1fr;gap:18px;align-items:start;padding:28px 30px 20px;
+  border-bottom:1px solid var(--line);background:linear-gradient(180deg,#fff,#fbfdff);
+}
+.num{
+  font-size:2rem;font-weight:900;color:var(--gold);letter-spacing:.04em;
+}
+.section-head h2{font-size:clamp(1.65rem,3vw,2.4rem)}
+.section-head p{margin:.55rem 0 0;color:var(--muted)}
+.section-body{padding:26px 30px 30px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+label{display:block;font-weight:750;color:var(--navy-dark);margin-bottom:6px}
+.field{
+  width:100%;border:1px solid #bfcfe5;border-radius:10px;padding:11px 12px;background:#fff;color:var(--ink);
+}
+textarea.field{min-height:94px;resize:vertical}
+.field:focus{outline:3px solid rgba(20,122,214,.18);border-color:var(--blue)}
+.note{
+  padding:14px 16px;background:var(--pale);border-left:4px solid var(--blue);border-radius:10px;color:#2d4162;
+}
+.prompt-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.prompt-card{
+  border:1px solid var(--line);border-radius:16px;background:#fff;overflow:hidden;display:flex;flex-direction:column;
+}
+.prompt-card-head{
+  padding:18px 18px 12px;background:linear-gradient(180deg,#fff,#f7fbff);border-bottom:1px solid var(--line);
+}
+.prompt-card-head .tag{
+  display:inline-block;background:#fff3d9;color:#664100;border:1px solid #ffd47c;
+  border-radius:999px;padding:4px 9px;font-weight:800;font-size:.75rem;letter-spacing:.04em;text-transform:uppercase;
+}
+.prompt-card h3{font-size:1.25rem;margin-top:9px}
+.prompt-card p{color:var(--muted);margin:.45rem 0 0}
+.prompt-area{
+  flex:1;margin:16px;background:#0d2345;color:#eaf2ff;border-radius:12px;padding:16px;
+  font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace;font-size:.9rem;white-space:pre-wrap;line-height:1.5;
+  overflow:auto;max-height:340px;border:1px solid #244978;
+}
+.card-actions{display:flex;gap:10px;padding:0 16px 16px;flex-wrap:wrap}
+.btn{
+  border:none;border-radius:10px;padding:10px 14px;font-weight:800;
+  background:var(--navy);color:#fff;
+}
+.btn:hover,.btn:focus-visible{background:var(--navy-dark);outline:3px solid rgba(20,122,214,.22)}
+.btn.alt{background:#fff;color:var(--navy);border:1px solid #bfcfe5}
+.btn.alt:hover{background:var(--pale)}
+.builder{
+  display:grid;grid-template-columns:.9fr 1.1fr;gap:22px;align-items:start;
+}
+.builder-panel{
+  border:1px solid var(--line);border-radius:14px;padding:18px;background:var(--pale-2)
+}
+.output{
+  position:sticky;top:16px;
+}
+.output .prompt-area{margin:0;max-height:600px;min-height:360px}
+.small{font-size:.9rem;color:var(--muted)}
+.checks{display:grid;gap:8px;margin-top:10px}
+.check{display:flex;gap:9px;align-items:flex-start}
+.check input{margin-top:.3em}
+.footer{
+  margin-top:38px;padding:24px 0 8px;color:var(--muted);font-size:.92rem;text-align:center;
+}
+.footer a{font-weight:700}
+.badge-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.badge{
+  border-radius:999px;padding:7px 11px;background:var(--pale);color:var(--navy);font-weight:800;font-size:.82rem
+}
+.toast{
+  position:fixed;right:18px;bottom:18px;background:#102b52;color:#fff;padding:12px 16px;
+  border-radius:12px;box-shadow:var(--shadow);opacity:0;transform:translateY(8px);pointer-events:none;transition:.2s
+}
+.toast.show{opacity:1;transform:translateY(0)}
+.crosslink{
+  margin-top:24px;background:linear-gradient(145deg,var(--navy-dark),var(--navy));color:#fff;
+  border-radius:var(--radius);box-shadow:var(--shadow);padding:28px 30px;
+  display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;
+}
+.crosslink h2{color:#fff}
+.crosslink p{color:#dbe8fa;margin:.5rem 0 0;max-width:60ch}
+.crosslink .btn{white-space:nowrap;background:var(--gold);color:var(--navy-dark)}
+.crosslink .btn:hover,.crosslink .btn:focus-visible{background:#fdd17a}
+@media (max-width:900px){
+  .hero,.builder{grid-template-columns:1fr}
+  .prompt-grid,.grid-2,.grid-3{grid-template-columns:1fr}
+  .output{position:static}
+  .crosslink{grid-template-columns:1fr}
+}
+@media (max-width:650px){
+  .topbar-inner{align-items:flex-start;flex-direction:column}
+  .nav{justify-content:flex-start}
+  .hero{padding-top:36px}
+  .section-head{grid-template-columns:1fr;gap:4px}
+  .section-body,.section-head{padding-left:20px;padding-right:20px}
+  h1{font-size:2.8rem}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+<link rel="stylesheet" href="../../creations-theme.css" data-creations-theme>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><div class="brand-mark">IT</div><span>Buyback Prompt Builder</span></div>
+    <nav class="nav" aria-label="Primary">
+      <a href="#overview">Overview</a>
+      <a href="#local">Local Conditions</a>
+      <a href="#prompts">Prompt Library</a>
+      <a href="#builder">Build One</a>
+      <a class="cross" href="index.html">Vendor Assessment &rarr;</a>
+      <a href="https://mglearn.github.io/vcs/misc/vendor-flashcards.html">Vendor Flashcards &#8599;</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" id="overview">
+    <div>
+      <div class="kicker">K-12 Technology Disposition</div>
+      <h1>Build a better vendor comparison prompt</h1>
+      <p>Start with the same six weighted criteria used in the <a href="index.html">Buyback Vendor Assessment</a>, then add local district conditions, evidence requirements, charts, risk views, and board-ready outputs.</p>
+      <div class="badge-row" aria-label="Site features">
+        <span class="badge">Browser-only</span>
+        <span class="badge">Copy-ready prompts</span>
+        <span class="badge">Texas K-12 context</span>
+        <span class="badge">No data collection</span>
+      </div>
+    </div>
+    <aside class="hero-card" aria-label="Rubric summary">
+      <div class="big">500</div>
+      <strong>Maximum weighted score</strong>
+      <p>Six criteria: data destruction, pickup logistics, compliance documentation, turnaround time, payout model, and references.</p>
+      <a class="card-link" href="index.html">Score a vendor in the Assessment &rarr;</a>
+    </aside>
+  </section>
+
+  <div class="wrap">
+    <section class="section" id="local">
+      <div class="section-head">
+        <div class="num">01</div>
+        <div>
+          <h2>Add local district conditions</h2>
+          <p>Generic vendor comparisons miss the operational details that can make or break a device retirement project.</p>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="grid-3">
+          <div><label for="devices">Devices retiring</label><input class="field" id="devices" placeholder="e.g., 4,500"></div>
+          <div><label for="campuses">Campuses / sites</label><input class="field" id="campuses" placeholder="e.g., 12"></div>
+          <div><label for="setting">District setting</label>
+            <select class="field" id="setting"><option>Urban</option><option>Suburban</option><option>Rural</option><option>Mixed / regional</option></select>
+          </div>
+          <div><label for="types">Device types</label><input class="field" id="types" placeholder="Chromebooks, laptops, iPads..."></div>
+          <div><label for="window">Pickup window</label><input class="field" id="window" placeholder="e.g., June 10–28"></div>
+          <div><label for="staff">Staff available</label><input class="field" id="staff" placeholder="e.g., 3 technicians"></div>
+        </div>
+        <div style="margin-top:18px">
+          <label for="conditions">Other local conditions</label>
+          <textarea class="field" id="conditions" placeholder="Storage limits, multi-site pickup needs, damaged-device mix, required reports, board deadlines, preferred payout model, etc."></textarea>
+        </div>
+        <div class="note" style="margin-top:18px"><strong>Tip:</strong> Local conditions should change the analysis, not the rubric weights. Keep the six weighted criteria stable, then ask the chatbot to explain how well each vendor fits your district.</div>
+      </div>
+    </section>
+
+    <section class="section" id="prompts">
+      <div class="section-head">
+        <div class="num">02</div>
+        <div>
+          <h2>Prompt library</h2>
+          <p>Choose a version based on the decision you need to make or the visual you need to show.</p>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="prompt-grid" id="promptGrid"></div>
+      </div>
+    </section>
+
+    <section class="section" id="builder">
+      <div class="section-head">
+        <div class="num">03</div>
+        <div>
+          <h2>Build one for your district</h2>
+          <p>Select the outputs you want, add vendor names, and generate one copy-ready prompt.</p>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="builder">
+          <div class="builder-panel">
+            <label for="vendors">Vendors to compare</label>
+            <textarea class="field" id="vendors" placeholder="Vendor A, Vendor B, Vendor C"></textarea>
+
+            <label for="priority" style="margin-top:16px">Primary district priority</label>
+            <select class="field" id="priority">
+              <option>Balanced</option>
+              <option>Data security</option>
+              <option>Minimum staff workload</option>
+              <option>Financial return</option>
+              <option>Fastest completion</option>
+            </select>
+
+            <fieldset style="border:0;padding:0;margin:18px 0 0">
+              <legend style="font-weight:800;color:var(--navy-dark)">Include these outputs</legend>
+              <div class="checks">
+                <label class="check"><input type="checkbox" value="A weighted comparison table with evidence" checked> <span>A weighted comparison table with evidence</span></label>
+                <label class="check"><input type="checkbox" value="A horizontal bar chart comparing total scores" checked> <span>Overall score bar chart</span></label>
+                <label class="check"><input type="checkbox" value="A criterion-by-criterion comparison chart" checked> <span>Criterion comparison chart</span></label>
+                <label class="check"><input type="checkbox" value="A local-fit analysis based on district conditions" checked> <span>Local-fit analysis</span></label>
+                <label class="check"><input type="checkbox" value="A red/yellow/green risk matrix"> <span>Risk matrix</span></label>
+                <label class="check"><input type="checkbox" value="A 'Who Does the Work?' responsibility matrix"> <span>District vs. vendor workload matrix</span></label>
+                <label class="check"><input type="checkbox" value="A pickup-to-payment timeline"> <span>Timeline</span></label>
+                <label class="check"><input type="checkbox" value="A one-page infographic for district leadership" checked> <span>Leadership infographic</span></label>
+                <label class="check"><input type="checkbox" value="A plain-language explanation for a superintendent or board member" checked> <span>Plain-language leadership summary</span></label>
+              </div>
+            </fieldset>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
+              <button class="btn" id="generateBtn">Generate prompt</button>
+              <button class="btn alt" id="resetBtn" type="button">Reset</button>
+            </div>
+          </div>
+
+          <div class="output">
+            <div class="prompt-area" id="customPrompt" tabindex="0" aria-label="Generated prompt"></div>
+            <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap">
+              <button class="btn" id="copyCustom">Copy prompt</button>
+              <button class="btn alt" id="downloadTxt">Download .txt</button>
+            </div>
+            <p class="small">Verification language is built in so missing information does not turn into confident-looking scores.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div class="num">04</div>
+        <div>
+          <h2>Keep the evidence visible</h2>
+          <p>Every prompt on this page uses the same four evidence labels.</p>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="grid-2">
+          <div class="note"><strong>Verified:</strong> Supported by current public evidence.</div>
+          <div class="note"><strong>Vendor claim:</strong> Stated by the vendor but not independently confirmed.</div>
+          <div class="note"><strong>Not found:</strong> The research did not locate the information.</div>
+          <div class="note"><strong>Requires confirmation:</strong> Ask for written evidence during the quote process.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="crosslink" aria-label="Related tool">
+      <div>
+        <h2>Ready to score the finalists?</h2>
+        <p>Once your chatbot narrows the field, take the two or three strongest vendors into the Buyback Vendor Assessment. Ask the five questions, score the six weighted criteria, and get a defensible recommendation you can print for a board or procurement officer.</p>
+      </div>
+      <a class="btn" href="index.html">Open the Vendor Assessment &rarr;</a>
+    </section>
+
+    <footer class="footer">
+      Buyback Prompt Builder · All inputs stay in your browser · Designed to complement the <a href="index.html">Buyback Vendor Assessment</a>
+    </footer>
+  </div>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite">Copied</div>
+
+<script>
+const prompts = [
+{
+ tag:"EXECUTIVE",
+ title:"Executive comparison + charts",
+ desc:"Best for a fast, defensible side-by-side comparison.",
+ text:`Compare these IT asset disposition vendors for a Texas K-12 district retiring [number] devices: [list vendors].
+
+Score each vendor from 1–5 against these weighted criteria:
+- Data destruction method (25)
+- Pickup logistics (20)
+- Compliance documentation (15)
+- Turnaround time (15)
+- Payout model (15)
+- References (10)
+
+Multiply each rating by its weight for a maximum score of 500.
+
+Verify R2v3 or e-Stewards certification using current public sources. Do not assume certification. Mark anything you cannot verify as "Unverified."
+
+Create:
+1. A comparison table showing ratings, weighted scores, and evidence
+2. A horizontal bar chart comparing total vendor scores out of 500
+3. A second chart showing each vendor's performance by criterion
+4. A short plain-language explanation suitable for a superintendent or school board
+5. A list of questions that still need to be answered before requesting quotes
+
+Flag vendors missing verified R2v3 or e-Stewards certification and identify the two vendors that best match the stated criteria for further formal quote review.`
+},
+{
+ tag:"LOCAL FIT",
+ title:"District conditions + local fit",
+ desc:"Adds campuses, staffing, logistics, timing, and district priorities.",
+ text:`Compare these IT asset disposition vendors for a Texas K-12 district retiring [number] devices: [list vendors].
+
+District context:
+- District enrollment: [number]
+- Number of campuses/sites: [number]
+- Location: [urban/suburban/rural]
+- Geographic area: [square miles or communities served]
+- Devices: [Chromebooks/laptops/iPads/desktops/servers/etc.]
+- Device condition: [working/damaged/mixed]
+- Storage available before pickup: [describe]
+- Preferred pickup window: [dates/timeframe]
+- District staffing available to pack/palletize equipment: [describe]
+- Maximum acceptable project duration: [days/weeks]
+- Financial priority: [maximum payout / low district labor / fastest completion / balanced]
+- Special security or documentation requirements: [describe]
+
+Score each vendor from 1–5 using:
+- Data destruction method (25)
+- Pickup logistics (20)
+- Compliance documentation (15)
+- Turnaround time (15)
+- Payout model (15)
+- References (10)
+
+Calculate a weighted score out of 500.
+
+Then create:
+- A vendor comparison table
+- A weighted-score bar chart
+- A "local fit" chart showing how well each vendor matches our district conditions
+- A one-page infographic summarizing strengths, risks, and unresolved questions
+- A short recommendation for which vendors should advance to a formal quote request
+
+Verify certifications and factual claims. Label any information that cannot be confirmed as "Unverified." Do not invent missing information.`
+},
+{
+ tag:"SECURITY",
+ title:"Security-first review",
+ desc:"Emphasizes data destruction, chain of custody, and written evidence.",
+ text:`Compare these IT asset disposition vendors for a Texas K-12 district retiring [number] devices: [list vendors].
+
+Use the standard rubric, but analyze the results through a security-first lens.
+
+Pay particular attention to:
+- R2v3 or e-Stewards certification
+- NIST 800-88 alignment
+- On-site versus off-site data destruction
+- Physical shredding options
+- Certificates of destruction
+- Serial-number-level reporting
+- Chain of custody
+- Employee screening
+- Facility security
+- Transportation security
+- Third-party downstream processors
+- Incident and breach procedures
+
+Create:
+- Standard weighted scores out of 500
+- A bar chart comparing overall scores
+- A security comparison chart
+- A chain-of-custody infographic from device pickup through final destruction or resale
+- A red/yellow/green risk matrix for unresolved security questions
+- Five security questions the district should require vendors to answer in writing
+
+Do not infer that a vendor meets a requirement merely because its website uses terms such as secure, certified, compliant, or audited. Verify claims or mark them unverified.`
+},
+{
+ tag:"FINANCIAL",
+ title:"Financial return",
+ desc:"Looks past headline payout numbers to fees, grading, and net return.",
+ text:`Compare these IT asset disposition vendors for a Texas K-12 district retiring [number] devices: [list vendors].
+
+Our priority is recovering maximum value without compromising security or compliance.
+
+Use the standard weighted rubric:
+Data destruction method (25), pickup logistics (20), compliance documentation (15), turnaround time (15), payout model (15), and references (10).
+
+For the payout category, examine:
+- Guaranteed versus estimated value
+- Revenue-share percentages
+- Per-device pricing
+- Grading deductions
+- Freight charges
+- Processing fees
+- Minimum quantities
+- Devices with zero or negative value
+- Timing of payment
+- Revenue reporting
+- Price-lock periods
+
+Create:
+1. Weighted vendor comparison table
+2. Total-score bar chart
+3. Financial comparison chart showing estimated gross return, deductions, and estimated net return when data are available
+4. A break-even analysis if fees or transportation costs apply
+5. A short explanation identifying where an attractive headline payout might be reduced by fees or grading rules
+
+Do not estimate dollar returns unless sufficient pricing information is available. Clearly label assumptions.`
+},
+{
+ tag:"WORKLOAD",
+ title:"Who does the work?",
+ desc:"Useful for small technology teams with limited staff time.",
+ text:`Compare these IT asset disposition vendors for a Texas K-12 district retiring [number] devices: [list vendors].
+
+Our technology department has [number] staff members available for this project, and minimizing staff workload is a priority.
+
+Evaluate who is responsible for:
+- Inventory preparation
+- Serial-number scanning
+- Packing
+- Palletizing
+- Loading
+- Transportation
+- Campus-to-campus consolidation
+- Data destruction
+- Reporting
+- Payment reconciliation
+
+Apply the standard weighted rubric and calculate scores out of 500.
+
+Create:
+- Overall vendor score chart
+- District workload comparison chart
+- A responsibility matrix showing Vendor vs. District for each task
+- A simple infographic titled "Who Does the Work?"
+- Estimated district touchpoints for each vendor based only on available evidence
+
+Flag tasks where responsibility is unclear and turn those gaps into questions for the formal quote request.`
+},
+{
+ tag:"TIMELINE",
+ title:"Summer refresh timeline",
+ desc:"Frames vendor performance around a hard completion window.",
+ text:`Our Texas K-12 district must dispose of [number] devices between [start date] and [end date] so campuses are ready for the next school year.
+
+Compare these vendors: [list vendors].
+
+Use the standard weighted rubric and give special attention to:
+- Pickup scheduling
+- Multi-campus coordination
+- Processing time
+- Final inventory reports
+- Certificates of destruction
+- Payment timing
+- Delays that could interfere with summer projects
+
+Create:
+1. Weighted vendor scores
+2. A comparison bar chart
+3. A timeline graphic showing pickup → processing → reporting → payment for each vendor
+4. A schedule-risk matrix
+5. A list of milestones the district should put into the contract
+
+Identify any vendor whose published or confirmed turnaround time creates a scheduling risk. Do not invent turnaround times when they are unavailable.`
+},
+{
+ tag:"BOARD READY",
+ title:"Leadership infographic",
+ desc:"Turns the analysis into a one-page board or cabinet summary.",
+ text:`Compare these IT asset disposition vendors for a Texas K-12 district retiring [number] devices: [list vendors].
+
+Score each using:
+Data destruction method (25), pickup logistics (20), compliance documentation (15), turnaround time (15), payout model (15), and references (10).
+
+Create a board-ready summary containing:
+
+SECTION 1 — Overall Results
+A horizontal bar chart showing each vendor's weighted score out of 500.
+
+SECTION 2 — Six-Criterion Comparison
+A visual chart showing how each vendor performed in each category.
+
+SECTION 3 — Key Risks
+Use short red/yellow/green indicators for:
+- Data security
+- Logistics
+- Documentation
+- Schedule
+- Financial uncertainty
+- References
+
+SECTION 4 — What Matters Most
+Explain the three most important differences among the vendors in plain language for people without an IT background.
+
+SECTION 5 — Next Step
+Identify two vendors that warrant a formal quote request based on the documented rubric results.
+
+Use concise language suitable for a superintendent, CFO, or school board. Cite the evidence behind factual claims and mark missing information as unverified.`
+},
+{
+ tag:"MASTER PROMPT",
+ title:"Full decision-support analysis",
+ desc:"Combines local conditions, visuals, risks, workload, and next steps.",
+ text:`Act as a procurement research assistant helping a Texas K-12 technology director evaluate IT asset disposition vendors.
+
+DISTRICT CONTEXT
+
+Devices being retired: [number]
+Device types: [types]
+Approximate condition: [condition]
+Campuses/sites: [number]
+District geography: [urban/suburban/rural and approximate area]
+District staff available for project: [number]
+Storage limitations: [describe]
+Desired pickup period: [dates]
+Required completion date: [date]
+Primary district priority: [security / minimum staff workload / financial return / speed / balanced]
+Other local requirements: [describe]
+
+VENDORS
+
+[list vendors]
+
+EVALUATION RUBRIC
+
+Score each vendor from 1–5 and multiply by the assigned weight:
+- Data destruction method: 25
+- Pickup logistics: 20
+- Compliance documentation: 15
+- Turnaround time: 15
+- Payout model: 15
+- References: 10
+
+Maximum weighted score: 500.
+
+RESEARCH RULES
+
+Use current, verifiable information.
+Verify R2v3 or e-Stewards certification rather than relying only on vendor marketing.
+Clearly distinguish:
+- Verified information
+- Vendor claims
+- Information not found
+- Questions requiring written confirmation
+
+Do not invent missing data.
+
+OUTPUTS
+
+1. Executive summary
+2. Evidence-based vendor comparison table
+3. Weighted scores out of 500
+4. Horizontal bar chart comparing overall scores
+5. Criterion-by-criterion comparison chart
+6. Local-fit analysis based on our district conditions
+7. Red/yellow/green risk matrix
+8. "Who Does the Work?" responsibility matrix
+9. Timeline from pickup through final payment
+10. One-page infographic suitable for district leadership
+11. Three strengths and three concerns for each vendor
+12. Unanswered questions for each vendor
+13. Questions to include in a formal quote request
+14. Identify two vendors whose documented results warrant further consideration for a formal quote request
+
+Finish with a short explanation written for a superintendent or board member who has no technology background.`
+}
+];
+
+const grid = document.getElementById("promptGrid");
+prompts.forEach((p,i)=>{
+  const card=document.createElement("article");
+  card.className="prompt-card";
+  card.innerHTML=`
+    <div class="prompt-card-head">
+      <span class="tag">${p.tag}</span>
+      <h3>${p.title}</h3>
+      <p>${p.desc}</p>
+    </div>
+    <pre class="prompt-area" id="p${i}"></pre>
+    <div class="card-actions">
+      <button class="btn" data-copy="p${i}">Copy prompt</button>
+    </div>`;
+  grid.appendChild(card);
+  document.getElementById(`p${i}`).textContent=p.text;
+});
+
+function districtContext(){
+  const val=id=>document.getElementById(id).value.trim();
+  return {
+    devices:val("devices")||"[number]",
+    campuses:val("campuses")||"[number]",
+    setting:val("setting")||"[urban/suburban/rural]",
+    types:val("types")||"[device types]",
+    window:val("window")||"[dates/timeframe]",
+    staff:val("staff")||"[staffing available]",
+    conditions:val("conditions")||"[other local requirements]"
+  };
+}
+function makeCustom(){
+  const d=districtContext();
+  const vendors=document.getElementById("vendors").value.trim()||"[list vendors]";
+  const priority=document.getElementById("priority").value;
+  const outputs=[...document.querySelectorAll(".check input:checked")].map(x=>"- "+x.value).join("\n");
+  return `Act as a procurement research assistant helping a Texas K-12 technology director evaluate IT asset disposition vendors.
+
+DISTRICT CONTEXT
+- Devices being retired: ${d.devices}
+- Device types: ${d.types}
+- Campuses/sites: ${d.campuses}
+- District setting: ${d.setting}
+- District staff available: ${d.staff}
+- Desired pickup period: ${d.window}
+- Primary district priority: ${priority}
+- Other local requirements: ${d.conditions}
+
+VENDORS
+${vendors}
+
+EVALUATION RUBRIC
+
+Score each vendor from 1–5 and multiply by the assigned weight:
+- Data destruction method: 25
+- Pickup logistics: 20
+- Compliance documentation: 15
+- Turnaround time: 15
+- Payout model: 15
+- References: 10
+
+Maximum weighted score: 500.
+
+RESEARCH RULES
+
+Use current, verifiable information.
+Verify R2v3 or e-Stewards certification rather than relying only on vendor marketing.
+For every important factual claim, label the evidence as one of:
+- Verified
+- Vendor claim
+- Not found
+- Requires confirmation
+
+Do not invent missing data. If a score depends on missing information, explain the uncertainty rather than guessing.
+
+OUTPUTS
+
+${outputs || "- A concise evidence-based comparison"}
+
+Flag vendors missing verified R2v3 or e-Stewards certification.
+
+Finish with:
+- The most important tradeoffs for this district
+- Questions that should be answered in writing before a formal quote request
+- Two vendors whose documented results warrant further consideration for a formal quote request
+- A short plain-language explanation for a superintendent or school board member with no IT background.`;
+}
+function updateCustom(){
+  document.getElementById("customPrompt").textContent=makeCustom();
+}
+document.getElementById("generateBtn").addEventListener("click",updateCustom);
+document.getElementById("resetBtn").addEventListener("click",()=>{
+  ["devices","campuses","types","window","staff","conditions","vendors"].forEach(id=>document.getElementById(id).value="");
+  document.getElementById("setting").selectedIndex=0;
+  document.getElementById("priority").selectedIndex=0;
+  document.querySelectorAll(".check input").forEach((x,i)=>x.checked=[0,1,2,3,7,8].includes(i));
+  updateCustom();
+});
+function showToast(msg="Copied"){
+  const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),1400);
+}
+async function copyText(text){
+  try{await navigator.clipboard.writeText(text);showToast("Prompt copied");}
+  catch{
+    const ta=document.createElement("textarea");ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand("copy");ta.remove();showToast("Prompt copied");
+  }
+}
+document.addEventListener("click",e=>{
+  const id=e.target.getAttribute("data-copy");
+  if(id) copyText(document.getElementById(id).textContent);
+});
+document.getElementById("copyCustom").addEventListener("click",()=>copyText(document.getElementById("customPrompt").textContent));
+document.getElementById("downloadTxt").addEventListener("click",()=>{
+  const blob=new Blob([document.getElementById("customPrompt").textContent],{type:"text/plain;charset=utf-8"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="buyback-vendor-comparison-prompt.txt";a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+});
+updateCustom();
+</script>
+
+<nav class="mg-bottom-nav" aria-label="Back navigation" style="text-align:center;padding:1.25rem 1.5rem;background:#071F4A;border-top:3px solid #FCB040;font-family:system-ui,-apple-system,sans-serif;">
+  <a href="index.html" style="color:#FDD17A;text-decoration:none;font-weight:700;font-size:0.85rem;margin:0 0.7rem;">← Vendor Assessment</a>
+  <a href="../index.html" style="color:#FDD17A;text-decoration:none;font-weight:700;font-size:0.85rem;margin:0 0.7rem;">← TCEA</a>
+</nav>
+</body>
+</html>
