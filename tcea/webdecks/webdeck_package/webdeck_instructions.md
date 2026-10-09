@@ -153,7 +153,7 @@ Still needs a person: a real screen-reader pass, if you're distributing widely.
 Every slide carries `<div class="notes"><p>…</p></div>` — hidden on the slide, shown two ways:
 
 - Press **S** to slide up a notes panel on the current screen.
-- Press **V** to open a **presenter window**: current slide, next slide, big notes, an elapsed timer (click to pause), and a clock. Put the main window on the projector, press **F** for fullscreen. The two windows stay in sync.
+- Press **V** to open a **presenter window**: current slide, next slide, big notes, an elapsed timer (click to pause), and a clock. Put the main window on the projector, press **F** for fullscreen. The two windows stay in sync. Resize the notes text with the **A− / A+** buttons (by the "Speaker notes" label) or the **+** / **−** keys; the chosen size persists via `localStorage`.
 
 Write notes as teleprompter text: first person, what you'd actually say, ~90–130 words, no stage directions.
 
@@ -656,6 +656,10 @@ body.presenter-mode .slide.current .slide-body > * { animation: none !important;
 .pv-right { gap: 16px; }
 .pv-right > * { min-width: 0; }
 .pv-label { font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #8FA6C8; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.pv-note-size { margin-left: auto; display: inline-flex; gap: 6px; }
+.pv-size-btn { font-family: var(--font-body); font-size: 12px; font-weight: 700; line-height: 1; letter-spacing: normal; cursor: pointer; background: rgba(16,42,84,.75); border: 1px solid rgba(200,210,220,.3); color: #EAF0FB; border-radius: 5px; padding: 4px 9px; transition: all .15s; }
+.pv-size-btn:hover { background: var(--gold-lt); color: var(--navy-dk); border-color: var(--gold-lt); }
+.pv-size-btn:focus-visible { outline: 3px solid #F4F8FE; outline-offset: 2px; }
 .pv-label .dot { width: 6px; height: 6px; background: var(--gold-lt); transform: rotate(45deg); }
 .pv-frame { width: 100%; background: #04070E; border: 1px solid rgba(200,210,220,.2); border-radius: 6px; overflow: hidden; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
 .pv-holder { position: absolute; top: 0; left: 0; width: 1280px; height: 720px; transform-origin: top left; }
@@ -877,7 +881,9 @@ The complete navigation, notes panel, presenter window, cross-window sync, and p
             '<div class="pv-frame" id="pvNext"></div>' +
           '</div>' +
           '<div style="display:flex;flex-direction:column;min-height:0;flex:1;">' +
-            '<div class="pv-label"><span class="dot"></span>Speaker notes</div>' +
+            '<div class="pv-label"><span class="dot"></span><span>Speaker notes</span>' +
+              '<span class="pv-note-size"><button class="pv-size-btn" id="pvNotesDown" title="Smaller notes text (-)" aria-label="Smaller notes text">A−</button>' +
+              '<button class="pv-size-btn" id="pvNotesUp" title="Larger notes text (+)" aria-label="Larger notes text">A+</button></span></div>' +
             '<div class="pv-notes"><div class="pv-notes-body" id="pvNotes"></div></div>' +
           '</div>' +
         '</div>' +
@@ -889,6 +895,19 @@ The complete navigation, notes panel, presenter window, cross-window sync, and p
     var elNext = document.getElementById('pvNext');
     var elNotes = document.getElementById('pvNotes');
     var elCount = document.getElementById('pvCount');
+
+    // Speaker-notes text sizing (A- / A+, or + / - keys), persisted across sessions.
+    var NOTE_SCALE_KEY = 'webdeck-notes-scale';
+    var noteScale = parseFloat(localStorage.getItem(NOTE_SCALE_KEY)) || 1;
+    function applyNoteScale() {
+      noteScale = Math.max(0.7, Math.min(2.2, noteScale));
+      elNotes.style.fontSize = (20 * noteScale).toFixed(1) + 'px';
+      try { localStorage.setItem(NOTE_SCALE_KEY, noteScale); } catch (e) {}
+    }
+    function bumpNotes(d) { noteScale = Math.round((noteScale + d) * 10) / 10; applyNoteScale(); }
+    document.getElementById('pvNotesUp').onclick = function () { bumpNotes(0.1); };
+    document.getElementById('pvNotesDown').onclick = function () { bumpNotes(-0.1); };
+    applyNoteScale();
 
     function preview(container, i, big) {
       container.innerHTML = '';
@@ -932,6 +951,8 @@ The complete navigation, notes panel, presenter window, cross-window sync, and p
         case 'Home': goto(0); break;
         case 'End': goto(TOTAL - 1); break;
         case 't': case 'T': resetTimer(); break;
+        case '+': case '=': bumpNotes(0.1); e.preventDefault(); break;
+        case '-': case '_': bumpNotes(-0.1); e.preventDefault(); break;
       }
     });
     window.addEventListener('resize', render);
