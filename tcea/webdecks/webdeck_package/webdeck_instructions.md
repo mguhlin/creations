@@ -563,6 +563,8 @@ a.inline:hover { text-decoration-color: var(--navy); }
 #notesPanel.open { transform: translateY(0); }
 #notesPanel .np-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; font-family: var(--font-body); font-size: 11px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--gold-lt); }
 #notesPanel .np-head .np-slide { color: #8FA6C8; letter-spacing: .04em; text-transform: none; font-weight: 500; }
+#notesPanel .np-head .np-close { margin-left: auto; cursor: pointer; background: transparent; border: 1px solid rgba(231,238,251,.28); color: #E7EEFB; width: 26px; height: 26px; border-radius: 7px; font-size: 20px; line-height: 1; display: flex; align-items: center; justify-content: center; letter-spacing: 0; padding: 0; font-weight: 400; transition: background .15s, border-color .15s; }
+#notesPanel .np-head .np-close:hover { background: rgba(231,238,251,.12); border-color: var(--gold-lt); color: #fff; }
 #notesPanel .np-body { font-family: var(--font-display); font-size: 18px; line-height: 1.6; max-width: 92ch; font-weight: 400; }
 #notesPanel .np-body p { margin-bottom: 11px; }
 
@@ -649,6 +651,8 @@ body.presenter-mode .slide.current .slide-body > * { animation: none !important;
 .pv-timer { font-family: var(--font-mono); font-size: 30px; font-weight: 500; color: #F4F8FE; letter-spacing: .02em; cursor: pointer; }
 .pv-timer.paused { color: #8093B4; }
 .pv-clock { font-family: var(--font-mono); font-size: 15px; color: #8FA6C8; }
+.pv-close { margin-left: 6px; }
+.pv-close:hover { background: #E0566B; color: #fff; border-color: #E0566B; }
 
 .pv-main { flex: 1; display: grid; grid-template-columns: 1.55fr 1fr; gap: 22px; padding: 22px; min-height: 0; }
 .pv-main > * { min-width: 0; }
@@ -738,7 +742,7 @@ The complete navigation, notes panel, presenter window, cross-window sync, and p
   var npHead = el('div', { class: 'np-head' });
   var npTitle = document.createElement('span'); npTitle.textContent = 'Speaker Notes';
   var npSlide = el('span', { class: 'np-slide' });
-  npHead.appendChild(npTitle); npHead.appendChild(npSlide);
+  var npClose=el('button',{class:'np-close',title:'Close notes (S or Esc)','aria-label':'Close notes'});npClose.innerHTML='×';npClose.addEventListener('click',function(ev){ev.stopPropagation();notesPanel.classList.remove('open');});npHead.appendChild(npTitle); npHead.appendChild(npSlide); npHead.appendChild(npClose);
   var npBody = el('div', { class: 'np-body' });
   notesPanel.appendChild(npHead); notesPanel.appendChild(npBody);
 
@@ -815,6 +819,7 @@ The complete navigation, notes panel, presenter window, cross-window sync, and p
 
   document.addEventListener('keydown', function (e) {
     if (help.classList.contains('open')) { help.classList.remove('open'); return; }
+    if (e.key === 'Escape' && notesPanel.classList.contains('open')) { notesPanel.classList.remove('open'); return; }
     switch (e.key) {
       case 'ArrowRight': case ' ': case 'PageDown': next(); e.preventDefault(); break;
       case 'ArrowLeft': case 'PageUp': prev(); e.preventDefault(); break;
@@ -868,6 +873,7 @@ The complete navigation, notes panel, presenter window, cross-window sync, and p
           '<span class="pv-timer" id="pvTimer" title="Click to pause or resume">00:00</span>' +
           '<button class="pv-btn" id="pvReset">Reset timer</button>' +
           '<span class="pv-clock" id="pvClock">--:--</span>' +
+          '<button class="pv-btn pv-close" id="pvClose" title="Close presenter window (Esc)">✕ Close</button>' +
         '</div>' +
       '</div>' +
       '<div class="pv-main">' +
@@ -950,6 +956,7 @@ The complete navigation, notes panel, presenter window, cross-window sync, and p
         case 'ArrowLeft': case 'PageUp': goto(pIdx - 1); e.preventDefault(); break;
         case 'Home': goto(0); break;
         case 'End': goto(TOTAL - 1); break;
+        case 'Escape': window.close(); break;
         case 't': case 'T': resetTimer(); break;
         case '+': case '=': bumpNotes(0.1); e.preventDefault(); break;
         case '-': case '_': bumpNotes(-0.1); e.preventDefault(); break;
@@ -974,6 +981,7 @@ The complete navigation, notes panel, presenter window, cross-window sync, and p
     function resetTimer() { elapsed = 0; elTimer.textContent = '00:00'; }
     elTimer.onclick = function () { running = !running; elTimer.classList.toggle('paused', !running); };
     document.getElementById('pvReset').onclick = resetTimer;
+    var pvCloseBtn = document.getElementById('pvClose'); if (pvCloseBtn) pvCloseBtn.onclick = function () { window.close(); };
     setInterval(tick, 1000); tick();
     render();
   }
