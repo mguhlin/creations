@@ -1,0 +1,34 @@
+{
+  "skills": 6,
+  "prompts": 313,
+  "imageChallenges": 8,
+  "glossaryTerms": 53,
+  "widths": [
+    360,
+    412,
+    800,
+    1440
+  ],
+  "clipboard": true,
+  "download": true,
+  "multiwordAndPhraseSearch": true,
+  "skillAndGlossarySearch": true,
+  "urlSearch": true,
+  "architectPatterns": 6,
+  "mobileNavigation": true,
+  "noJavaScriptContent": true,
+  "errors": [],
+  "structuralChecks": {
+    "skillCreatorValidation": 6,
+    "singleFolderZips": 6,
+    "zipContentsMatchSources": true,
+    "checksums": true,
+    "localLinksAndFragments": true,
+    "uniqueIds": true,
+    "externalReferenceLinks": 8,
+    "javascriptSyntax": "passed",
+    "doubleEncodedAmpersandsFixed": 144,
+    "existingPromptCardsEdited": 54
+  },
+  "behavioralEvaluationInChatGPTAndClaude": "Practice tests supplied; no cross-host benchmark claimed."
+}
