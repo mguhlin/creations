@@ -171,8 +171,6 @@ const rss = `<?xml version="1.0" encoding="UTF-8"?>
     <atom:link href="${xml(feedUrl)}" rel="self" type="application/rss+xml" />
     <description>${xml(channelDescription)}</description>
     <language>en-us</language>
-    <lastBuildDate>${latestDate.toUTCString()}</lastBuildDate>
-    <pubDate>${latestDate.toUTCString()}</pubDate>
     <generator>MGuhlin Creative Works static feed</generator>
 ${items.map(item => `    <item>
       <title>${xml(item.title)}</title>
@@ -180,7 +178,6 @@ ${items.map(item => `    <item>
       <guid isPermaLink="true">${xml(item.link)}</guid>
       <dc:creator>Miguel Guhlin</dc:creator>
       <category>${xml(item.group)}</category>
-      <pubDate>${item.date.toUTCString()}</pubDate>
       <description>${xml(item.summary)}</description>
       <content:encoded><![CDATA[<p>${cdata(item.summary)}</p><p>${cdata(item.writeup)}</p><p><a href="${xml(item.link)}">Open ${cdata(item.title)}</a></p>]]></content:encoded>
     </item>`).join('\n')}

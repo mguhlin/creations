@@ -312,7 +312,6 @@ function buildRssFeed(posts) {
       <title>${xmlEscape(title)}</title>
       <link>${xmlEscape(post.url)}</link>
       <guid isPermaLink="true">${xmlEscape(post.url)}</guid>
-      <pubDate>${xmlEscape(pubDate)}</pubDate>
       <source>${xmlEscape(post.source)}</source>
       <description>${xmlEscape(description)}</description>
     </item>`;
@@ -324,7 +323,6 @@ function buildRssFeed(posts) {
     <title>${xmlEscape(`Miguel's Writings - ${currentSearchLabel()}`)}</title>
     <link>${xmlEscape(pageUrl)}</link>
     <description>${xmlEscape("Generated RSS feed for the currently displayed search results.")}</description>
-    <lastBuildDate>${xmlEscape(updated)}</lastBuildDate>
 ${items}
   </channel>
 </rss>

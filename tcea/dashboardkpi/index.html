@@ -506,7 +506,7 @@
             try {
                 const response = await fetch('data.md?_=' + Date.now());
                 if (!response.ok) throw new Error('Could not load data.md');
-                
+
                 const markdown = await response.text();
                 const data = parseMarkdown(markdown);
                 renderDashboard(data);
@@ -527,7 +527,7 @@
                 metadata: {},
                 sections: []
             };
-            
+
             let currentSection = null;
             let currentTable = null;
             let inTable = false;
@@ -586,7 +586,7 @@
                     }
 
                     const cells = line.split('|').map(c => c.trim()).filter(c => c);
-                    
+
                     if (currentTable.headers.length === 0) {
                         currentTable.headers = cells;
                     } else if (!line.includes('---')) {
@@ -608,7 +608,7 @@
             // Update metadata
             document.getElementById('district-name').textContent = data.metadata.district || 'District';
             document.getElementById('school-year').textContent = data.metadata.schoolYear || '';
-            document.getElementById('last-updated').textContent = `Last updated: ${data.metadata.updated || 'Unknown'}`;
+            document.getElementById('last-updated').textContent = '';
 
             // Generate navigation
             const nav = document.getElementById('sidebar-nav');
@@ -620,11 +620,11 @@
             // Generate sections
             const content = document.getElementById('dashboard-content');
             const accentColors = ['gold', 'teal', 'purple', 'green', 'rose'];
-            
+
             content.innerHTML = data.sections.map((section, idx) => {
                 const id = section.title.toLowerCase().replace(/\s+/g, '-');
                 const accent = accentColors[idx % accentColors.length];
-                
+
                 let html = `<section class="section" id="${id}">`;
                 html += `<h3 class="section-title">${section.title}</h3>`;
 
@@ -635,11 +635,11 @@
                     for (const [label, value] of Object.entries(section.stats)) {
                         const statAccent = accentColors[(idx + statIdx) % accentColors.length];
                         const goal = section.goals[label];
-                        
+
                         html += `<div class="stat-card accent-${statAccent}">`;
                         html += `<div class="stat-label">${label}</div>`;
                         html += `<div class="stat-value" data-target="${parseFloat(value.replace(/[^0-9.]/g, ''))}">${value}</div>`;
-                        
+
                         if (goal) {
                             const current = parseFloat(value.replace(/[^0-9.]/g, ''));
                             const target = parseFloat(goal.replace(/[^0-9.]/g, ''));
@@ -649,7 +649,7 @@
                             html += `<div class="progress-bar"><div class="progress-fill" style="width: ${percent}%"></div></div>`;
                             html += `</div>`;
                         }
-                        
+
                         html += '</div>';
                         statIdx++;
                     }
@@ -660,7 +660,7 @@
                 section.tables.forEach((table, tableIdx) => {
                     const tableAccent = accentColors[(idx + tableIdx) % accentColors.length];
                     const tableId = `table-${id}-${tableIdx}`;
-                    
+
                     html += `<div class="table-container">`;
                     html += `<div class="table-header">`;
                     html += `<div class="table-title">${table.headers[0]} Breakdown</div>`;
@@ -687,7 +687,7 @@
                             const num = parseFloat(cell.replace(/[^0-9.]/g, ''));
                             return num === 0 || isNaN(num);
                         });
-                        
+
                         html += `<tr${isZero ? ' class="zero-row"' : ''}>`;
                         row.forEach((cell, cellIdx) => {
                             if (cellIdx === row.length - 1) {
@@ -729,7 +729,7 @@
                         current = target;
                         clearInterval(timer);
                     }
-                    
+
                     // Format based on original text
                     const originalText = stat.textContent;
                     if (originalText.includes('%')) {

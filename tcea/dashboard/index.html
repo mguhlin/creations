@@ -151,7 +151,7 @@ tbody td.right { text-align: right; }
     <a href="#ardent" class="ardent"><span class="icon">🏫</span> Ardent ISD</a>
   </nav>
   <div class="sidebar-updated" id="sidebar-meta">
-    <strong>Last Updated</strong>Loading…
+
   </div>
 </aside>
 <main class="main" id="main-content">
@@ -343,8 +343,8 @@ function toggleZeroRows() {
 // ── RENDER ───────────────────────────────────────────────────────────────────
 function renderDashboard(data) {
   // Meta
-  const metaText = data.updated ? `Last updated: ${data.updated}` : '';
-  document.getElementById('sidebar-meta').innerHTML = `<strong>Last Updated</strong>${data.updated||'—'}`;
+  const metaText = '';
+  document.getElementById('sidebar-meta').textContent = '';
   document.getElementById('header-meta').textContent = metaText;
   document.getElementById('footer-updated').textContent = metaText;
   // ── OVERVIEW ──

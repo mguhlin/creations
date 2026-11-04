@@ -1,6 +1,5 @@
 # TCEA Registration Dashboard Data
 
-**Updated:** July 15, 2026
 **Goal Registrations:** 1,200
 **Goal Revenue:** 75000
 

@@ -1,4 +1,3 @@
-**Updated:** March 25, 2026
 **District:** Greenwood Unified School District
 **School Year:** 2025–2026
 

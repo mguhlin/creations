@@ -1,6 +1,5 @@
 # Technology Dashboard Data
 
-**Updated:** March 25, 2026
 **District:** Sample Independent School District
 **School Year:** 2025–2026
 
