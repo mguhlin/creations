@@ -2,7 +2,7 @@
 
 A portable security skill for reviewing and hardening AI-assisted apps, websites, APIs, scripts, and desktop tools.
 
-**[Open the site](https://mguhlin.github.io/creations/securevcc/)** · **[Download securevcc.md](https://mguhlin.github.io/creations/securevcc/securevcc.md)** · [Sources](SOURCES.md)
+**[Security checklist](https://mguhlin.github.io/creations/securevcc/#checklist)** · **[Open the site](https://mguhlin.github.io/creations/securevcc/)** · **[Download securevcc.md](https://mguhlin.github.io/creations/securevcc/securevcc.md)** · [Sources](SOURCES.md)
 
 ## Get started
 
