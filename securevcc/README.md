@@ -96,6 +96,7 @@ No file or checklist can guarantee that every vulnerability will be found. This 
 | File | Purpose |
 | --- | --- |
 | `securevcc.md` | The complete single-file skill; rename to `SKILL.md` for supported skill folders |
+| `build.py` | Website preview synchronization and checklist consistency check; not required to use the skill |
 | `index.html` | Accessible static landing page, installation guidance, prompts, download, and readable skill preview |
 | `assets/favicon.svg` | Local browser-tab icon |
 | `assets/securevcc-workstation.webp` | Optimized copy of the supplied retro workstation illustration |
@@ -105,6 +106,10 @@ No file or checklist can guarantee that every vulnerability will be found. This 
 | `sources/cloudflare-MIT-LICENSE.txt` | Original upstream MIT license |
 
 The source ZIP is reference material; it is not needed to install or use SecureVCC. Original source documents may reference supporting files that were not supplied. SecureVCC itself has no such dependencies.
+
+## Maintain the website
+
+After editing the downloadable skill, run `python3 securevcc/build.py` from the repository root. It refreshes the full preview and checklist count, and requires every skill check ID to appear exactly once in the public checklist. Add or revise the plain-language checklist entries when their corresponding checks change. Run `python3 securevcc/build.py --check` before publication; CI reports the same consistency check. This publishing helper is optional website tooling, not a dependency of the one-file skill.
 
 ## Reuse
 
