@@ -4454,7 +4454,7 @@
       "statColor": "#B7E4C7",
       "btnBg": "#2D6A4F",
       "btnColor": "#fff",
-      "description": "A portable security audit and hardening skill for vibe-coded websites, apps, APIs, and tools. Check hardcoded passwords and API keys, frontend environment leaks, key revocation, authentication, access control, database policies, injection, AI tools, dependencies, deployment, accessibility, and vendor evidence. Includes README, original sources, practical prompts, and an honest coverage ledger.",
+      "description": "A portable security audit and hardening skill for vibe-coded websites, apps, APIs, and tools. Check hardcoded passwords and API keys, frontend environment leaks, key revocation, authentication, access control, database policies, injection, AI tools, dependencies, deployment, accessibility, and vendor evidence. Includes README, original sources, practical prompts, and an honest coverage ledger. Find implicit state machines and improve UX, DX, and AX through clear transitions, guards, recovery, and regression checks. Covers password-reset safety, admin MFA, verified payment webhooks, idempotency, timeouts, saga compensation, permission-aware caching, pagination, notifications, dependency alerts, logs, and smoke tests.",
       "features": [
         "Security audit",
         "Vibe coding",
@@ -4462,7 +4462,11 @@
         "Server-side secrets",
         "OWASP",
         "Markdown skill",
-        "MIT reuse"
+        "MIT reuse",
+        "State machines",
+        "UX / DX / AX",
+        "Idempotency & recovery",
+        "Safe caching & pagination"
       ],
       "links": [
         {

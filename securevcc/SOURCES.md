@@ -1,6 +1,8 @@
 # SecureVCC sources
 
-SecureVCC combines the supplied website-assessment Markdown, the supplied Cloudflare audit-skill archive, and the creator's advice about hardcoded credentials, frontend environment variables, server-side secrets, and revocation after exposure.
+SecureVCC combines the supplied website-assessment Markdown, the supplied Cloudflare audit-skill archive, and the creator's advice about hardcoded credentials, frontend environment variables, server-side secrets, and revocation after exposure, plus the creator’s state-machine, reliability, performance, notification, account-security, payment, and optional product-quality prompts.
+
+The later prompt collections were supplied by the creator; one pasted excerpt was labeled **ashleyfoose**, without an original source URL. Their ideas are paraphrased and qualified here, with technical claims grounded in the official references below. This does not attribute the entire collection to that account or imply its endorsement.
 
 ## Original supplied files
 
@@ -19,6 +21,10 @@ These are preserved inputs, not a claim that the ZIP matches the upstream reposi
 - Preserves separate accessibility and vendor evidence tracks from the supplied Markdown, without requiring its referenced image.
 - Makes the private-password/API-key question, frontend bundle inspection, server-only privileged credentials, and exposed-key revocation a dedicated first section.
 - Keeps platform-specific checks conditional and requires adding application-specific abuse cases beyond the checklist.
+- Incorporates the creator's instruction to identify implicit state machines and improve UX, DX, and AX together. The adaptation maps states, transitions, guards, side effects, persistence, failure/recovery, completion evidence, and regression checks without requiring a new framework or promising zero regressions.
+
+- Expands the creator’s prompts into evidence-based checks for durable idempotency, bounded external calls/retries, business-specific saga compensation, permission-aware caches, pagination/indexes, notifications, password reset, admin MFA, database exposure, Stripe webhook verification, investigation logs, dependency-update automation, and browser smoke tests. Adds explicit competing-request races, upload ownership, email/SMS relay abuse, terms-acceptance evidence, and framing controls.
+- Keeps optional typography, favicon, animation, app-banner, and store-review checks separate from security findings. Separates business-readiness questions from code findings and avoids blanket claims about LLCs, banking, liability, or legal compliance.
 
 ## Official reference material
 
@@ -31,6 +37,16 @@ These are preserved inputs, not a claim that the ZIP matches the upstream reposi
 | [OWASP Secrets Management Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html) | Credential handling, lifecycle, and rotation considerations |
 | [WCAG 2.2](https://www.w3.org/TR/WCAG22/) and [WCAG 2.1](https://www.w3.org/TR/WCAG21/) | Selected accessibility targets and exact criterion text; no blanket conformance claim |
 | [W3C Easy Checks](https://www.w3.org/WAI/test-evaluate/preliminary/) | Initial accessibility review, with its limitations |
+
+Additional implementation references:
+
+- [OWASP IDOR prevention](https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html): object-level permissions and scoped synthetic accounts.
+- [OWASP password-reset guidance](https://cheatsheetseries.owasp.org/cheatsheets/Forgot_Password_Cheat_Sheet.html) and [MFA guidance](https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html): entropy, expiry, single use, recovery, and privileged-account protection.
+- [Stripe idempotency](https://docs.stripe.com/api/idempotent_requests) and [webhook verification](https://docs.stripe.com/events/manage-webhook-endpoints#signature-errors): provider-specific replay, raw-body, and signing-secret semantics.
+- [AWS saga patterns](https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/saga-patterns.html) and [Microsoft compensating transactions](https://learn.microsoft.com/en-us/azure/architecture/patterns/compensating-transaction): durable distributed workflows, concurrency, and compensation limits.
+- [GitHub Dependabot security updates](https://docs.github.com/en/code-security/concepts/supply-chain-security/dependabot-security-updates): alerts and patch PRs, distinguished from installed/deployed fixes.
+- [Apple Smart App Banners](https://developer.apple.com/documentation/webkit/promoting-apps-with-smart-app-banners), [App Store review requests](https://developer.apple.com/documentation/storekit/requesting-app-store-reviews), and [Google Play in-app reviews](https://developer.android.com/guide/playcore/in-app-review): conditional mobile distribution/engagement checks; implementation must follow current platform rules.
+- [U.S. SBA launch guide](https://www.sba.gov/counseling/launch-your-business/): background for a separate owner/adviser discussion of business structure, finances, and insurance; not a guarantee of liability protection or a rule for every jurisdiction.
 
 Use the current authoritative provider documentation and advisories for the exact stack under review. A reference link or category mapping is not evidence that a control passed. SecureVCC is not endorsed or certified by OWASP, W3C, or Cloudflare.
 
