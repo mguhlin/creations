@@ -6,7 +6,7 @@
     "description": "A curated portfolio of AI-powered tools, reference guides, coaching frameworks, and interactive resources built for educators, administrators, and knowledge workers.",
     "tallies": [
       {
-        "num": "161",
+        "num": "162",
         "label": "Projects"
       },
       {
@@ -4437,6 +4437,42 @@
           "href": "https://mguhlin.github.io/drawsplat/games/untangle/",
           "primary": true,
           "external": true
+        }
+      ]
+    },
+    {
+      "num": "214",
+      "id": "securevcc",
+      "section": "AI Tools & Prompt Libraries",
+      "category": "Security Skill",
+      "title": "SecureVCC — Secure Vibe-Coded Creations",
+      "subtitle": "Download one Markdown skill for evidence-driven security audits of AI-assisted apps.",
+      "stat": "1",
+      "statLabel": "Markdown file",
+      "panelGradient": "linear-gradient(160deg, #1B4332 0%, #2D6A4F 100%)",
+      "catStyle": "background:rgba(116,198,157,0.16);color:#B7E4C7;",
+      "statColor": "#B7E4C7",
+      "btnBg": "#2D6A4F",
+      "btnColor": "#fff",
+      "description": "A portable security audit and hardening skill for vibe-coded websites, apps, APIs, and tools. Check hardcoded passwords and API keys, frontend environment leaks, key revocation, authentication, access control, database policies, injection, AI tools, dependencies, deployment, accessibility, and vendor evidence. Includes README, original sources, practical prompts, and an honest coverage ledger.",
+      "features": [
+        "Security audit",
+        "Vibe coding",
+        "Passwords & API keys",
+        "Server-side secrets",
+        "OWASP",
+        "Markdown skill",
+        "MIT reuse"
+      ],
+      "links": [
+        {
+          "label": "Open SecureVCC →",
+          "href": "securevcc/",
+          "primary": true
+        },
+        {
+          "label": "Download Markdown ↓",
+          "href": "securevcc/securevcc.md"
         }
       ]
     }
