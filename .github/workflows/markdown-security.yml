@@ -1,0 +1,29 @@
+name: Markdown preview security
+on:
+  push:
+    branches: [main]
+    paths: ['markdown/**', 'vibecoding/mguhlin_MD_Converter.html', 'tcea/courses/ai_essentials*.html', 'security-tests/**', '.github/workflows/markdown-security.yml']
+  pull_request:
+    paths: ['markdown/**', 'vibecoding/mguhlin_MD_Converter.html', 'tcea/courses/ai_essentials*.html', 'security-tests/**', '.github/workflows/markdown-security.yml']
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: security-tests
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: security-tests/package-lock.json
+      - run: npm ci --ignore-scripts
+      - run: npm audit --ignore-scripts --audit-level=low
+      - run: npx playwright install --with-deps chromium
+      - run: npm test

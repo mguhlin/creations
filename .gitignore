@@ -12,3 +12,8 @@ desktop.ini
 # Temp
 *.tmp
 *.log
+
+# Browser security regression tooling
+security-tests/node_modules/
+security-tests/test-results/
+security-tests/playwright-report/

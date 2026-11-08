@@ -2114,12 +2114,22 @@ Use clean Markdown with:
         return text
           .replace(/&/g, "&amp;")
           .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;");
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
       }
 
       function formatInline(text) {
         let safe = escapeHtml(text);
-        safe = safe.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+        safe = safe.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function (_match, label, url) {
+          // The surrounding text is escaped before this URL becomes an attribute.
+          // Validate the interpreted protocol too; URL parsing strips control chars.
+          try {
+            var protocol = new URL(url, 'https://markdown.invalid/').protocol;
+            if (['http:', 'https:', 'mailto:', 'tel:'].indexOf(protocol) === -1) return label;
+          } catch (_error) { return label; }
+          return '<a href="' + url.replace(/"/g, '&quot;').replace(/'/g, '&#39;') + '" target="_blank" rel="noopener noreferrer">' + label + '</a>';
+        });
         safe = safe.replace(/`([^`]+)`/g, "<code>$1</code>");
         safe = safe.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
         safe = safe.replace(/\*([^*]+)\*/g, "<em>$1</em>");
@@ -2156,7 +2166,142 @@ Use clean Markdown with:
         let inUL = false;
         let inOL = false;
         let inCode = false;
-        let codeB</div></details>
+        let codeBuffer = [];
+        let codeLang = "";
+
+        function closeLists() {
+          if (inUL) {
+            html += "</ul>";
+            inUL = false;
+          }
+          if (inOL) {
+            html += "</ol>";
+            inOL = false;
+          }
+        }
+
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i];
+          const trimmed = line.trim();
+
+          if (trimmed.startsWith("```")) {
+            closeLists();
+            if (!inCode) {
+              inCode = true;
+              codeLang = trimmed.replace("```", "").trim();
+              codeBuffer = [];
+            } else {
+              html += '<pre><code' + (codeLang ? ' class="language-' + codeLang + '"' : "") + ">" +
+                escapeHtml(codeBuffer.join("\n")) +
+                "</code></pre>";
+              inCode = false;
+              codeLang = "";
+            }
+            continue;
+          }
+
+          if (inCode) {
+            codeBuffer.push(line);
+            continue;
+          }
+
+          if (/^\|.*\|$/.test(trimmed) && i + 1 < lines.length && /^\|\s*:?-+:?\s*(\|\s*:?-+:?\s*)+\|?$/.test(lines[i + 1].trim())) {
+            closeLists();
+            const table = parseTable(lines, i);
+            if (table) {
+              html += table.html;
+              i = table.nextIndex - 1;
+              continue;
+            }
+          }
+
+          if (trimmed === "") {
+            closeLists();
+            continue;
+          }
+
+          if (trimmed.startsWith("### ")) {
+            closeLists();
+            html += "<h3>" + formatInline(trimmed.slice(4)) + "</h3>";
+          } else if (trimmed.startsWith("## ")) {
+            closeLists();
+            html += "<h2>" + formatInline(trimmed.slice(3)) + "</h2>";
+          } else if (trimmed.startsWith("# ")) {
+            closeLists();
+            html += "<h1>" + formatInline(trimmed.slice(2)) + "</h1>";
+          } else if (trimmed.startsWith("> ")) {
+            closeLists();
+            html += "<blockquote>" + formatInline(trimmed.slice(2)) + "</blockquote>";
+          } else if (/^- \[[ xX]\] /.test(trimmed)) {
+            if (!inUL) {
+              closeLists();
+              html += "<ul>";
+              inUL = true;
+            }
+            const checked = /^- \[[xX]\]/.test(trimmed) ? " checked" : "";
+            const text = trimmed.replace(/^- \[[ xX]\] /, "");
+            html += '<li><input type="checkbox" disabled' + checked + "> " + formatInline(text) + "</li>";
+          } else if (trimmed.startsWith("- ")) {
+            if (!inUL) {
+              closeLists();
+              html += "<ul>";
+              inUL = true;
+            }
+            html += "<li>" + formatInline(trimmed.slice(2)) + "</li>";
+          } else if (/^\d+\. /.test(trimmed)) {
+            if (!inOL) {
+              closeLists();
+              html += "<ol>";
+              inOL = true;
+            }
+            html += "<li>" + formatInline(trimmed.replace(/^\d+\. /, "")) + "</li>";
+          } else if (trimmed === "---") {
+            closeLists();
+            html += "<hr>";
+          } else {
+            closeLists();
+            html += "<p>" + formatInline(trimmed) + "</p>";
+          }
+        }
+
+        closeLists();
+        return html;
+      }
+
+      function updatePreview() {
+        const html = markdownToHtml(input.value);
+        preview.innerHTML = html;
+        htmlOutput.value = html;
+      }
+
+      async function copyHtml() {
+        try {
+          await navigator.clipboard.writeText(htmlOutput.value);
+          copyBtn.textContent = "Copied!";
+          setTimeout(function () {
+            copyBtn.textContent = "Copy HTML";
+          }, 1200);
+        } catch (error) {
+          htmlOutput.select();
+          document.execCommand("copy");
+          copyBtn.textContent = "Copied!";
+          setTimeout(function () {
+            copyBtn.textContent = "Copy HTML";
+          }, 1200);
+        }
+      }
+
+      function resetSample() {
+        input.value = sampleMarkdown;
+        updatePreview();
+      }
+
+      input.addEventListener("input", updatePreview);
+      copyBtn.addEventListener("click", copyHtml);
+      resetBtn.addEventListener("click", resetSample);
+      resetSample();
+    })();
+  </script>
   </div>
 </section>
 

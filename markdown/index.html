@@ -1088,15 +1088,32 @@ landscape of".</li>
 
   // ---------- Markdown parser ----------
   function escapeHtml(t) {
-    return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
   }
 
   function inlineFormat(text) {
     let s = escapeHtml(text);
     // Images first (must come before links)
-    s = s.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" loading="lazy">');
+    s = s.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, function (_match, alt, url) {
+      try {
+        var protocol = new URL(url, 'https://markdown.invalid/').protocol;
+        var rasterOrSvgData = /^data:image\/[a-z0-9.+-]+(?:;|,)/i.test(url);
+        if (['http:', 'https:'].indexOf(protocol) === -1 && !rasterOrSvgData) return alt;
+      } catch (_error) { return alt; }
+      return '<img src="' + url.replace(/"/g, '&quot;').replace(/'/g, '&#39;') + '" alt="' + alt.replace(/"/g, '&quot;').replace(/'/g, '&#39;') + '" loading="lazy">';
+    });
     // Links
-    s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function (_match, label, url) {
+          // The surrounding text is escaped before this URL becomes an attribute.
+          // Validate the interpreted protocol too; URL parsing strips control chars.
+          try {
+            var protocol = new URL(url, 'https://markdown.invalid/').protocol;
+            if (['http:', 'https:', 'mailto:', 'tel:'].indexOf(protocol) === -1) return label;
+          } catch (_error) { return label; }
+          return '<a href="' + url.replace(/"/g, '&quot;').replace(/'/g, '&#39;') + '" target="_blank" rel="noopener noreferrer">' + label + '</a>';
+        });
     // Inline code (do before emphasis so we don't process inside it; minimal version)
     s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
     // Bold + italic combos
