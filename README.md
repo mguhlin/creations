@@ -452,7 +452,7 @@ For the Claude Project tools (`claude/`, `eog/`), copy the system prompt text fr
 
 ## SecureVCC — Secure Vibe-Coded Creations
 
-[Open SecureVCC](https://mguhlin.github.io/creations/securevcc/) · [Download the Markdown skill](securevcc/securevcc.md) · [README and sources](securevcc/README.md). A self-contained security review skill covering secrets, access control, database rules, injection, AI tools, deployment, and conditional specialist checks. The SecureVCC folder retains an MIT notice adapted from Cloudflare’s security-audit-skill; its terms override the collection’s general CC0 statement for that material.
+[Open the Vibe-Coding Center](https://mguhlin.github.io/vcc/) · [Security field guide](https://mguhlin.github.io/vcc/guides/security.html) · [Complete VCC download](https://mguhlin.github.io/vcc/downloads/vcc-complete.zip). SecureVCC has moved to the dedicated [VCC repository](https://github.com/mguhlin/vcc), which adds educator-friendly website design, education privacy, planning templates, and launch guidance. The old folder retains migration pointers only; all new development happens at VCC. The original SecureVCC MIT notices and provenance are preserved there.
 
 ## License
 
