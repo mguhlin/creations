@@ -60,11 +60,11 @@ main {
 
 .eyebrow {
   margin: 0 0 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  text-transform: none;
+  letter-spacing: normal;
   font-size: 0.78rem;
   color: var(--accent);
-  font-weight: 800;
+  font-weight: 500;
 }
 
 h1, h2, h3 {

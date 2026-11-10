@@ -84,8 +84,8 @@
       border: 1px solid rgba(255,255,255,0.22);
       border-radius: 999px;
       padding: .45rem .85rem;
-      font-weight: 700;
-      letter-spacing: .02em;
+      font-weight: 500;
+      letter-spacing: normal;
       font-size: .92rem;
     }
 
@@ -431,7 +431,9 @@
       .example { grid-template-columns: 1fr 1fr; break-inside: avoid; }
       section { margin: 1rem 0; }
     }
-  </style>
+
+@media(max-width:600px){table{table-layout:fixed}th,td{padding:8px;overflow-wrap:anywhere}td code{white-space:normal;overflow-wrap:anywhere}}
+</style>
 <link rel="stylesheet" href="../creations-theme.css" data-creations-theme>
 </head>
 <body>

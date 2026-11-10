@@ -73,10 +73,10 @@ button:hover,
 .eyebrow {
   color: var(--blue);
   font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
+  font-weight: 500;
+  letter-spacing: normal;
   margin: 0;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 h1,

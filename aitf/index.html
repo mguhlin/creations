@@ -97,10 +97,10 @@ nav a:hover {
 }
 .hero-eyebrow {
   display: inline-block;
-  font-size: 0.72rem;
+  font-size: .75rem;
   font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  letter-spacing: normal;
+  text-transform: none;
   color: var(--gold);
   background: rgba(252,176,64,0.12);
   border: 1px solid rgba(252,176,64,0.35);
@@ -162,10 +162,10 @@ section + section {
 
 .section-label {
   display: inline-block;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-size: .75rem;
+  font-weight: 500;
+  letter-spacing: normal;
+  text-transform: none;
   color: var(--teal);
   margin-bottom: 0.6rem;
 }
@@ -677,6 +677,8 @@ footer strong { color: var(--gold); }
   margin: 0;
 }
 .alert-banner strong { color: var(--gold); }
+
+@media(max-width:600px){nav{flex-wrap:wrap;height:auto;overflow:visible;padding:8px 16px}nav a{padding:8px}}
 </style>
 <link rel="stylesheet" href="../creations-theme.css" data-creations-theme>
 </head>

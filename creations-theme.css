@@ -23,8 +23,7 @@ html {
 
 body {
   background:
-    radial-gradient(circle at top left, rgba(200, 210, 220, 0.38), transparent 34rem),
-    linear-gradient(180deg, #ffffff 0%, var(--mg-paper) 52%, #eef2f6 100%) !important;
+    var(--mg-paper) !important;
   color: var(--mg-ink) !important;
 }
 
@@ -235,7 +234,7 @@ article.card {
 .section-card:hover,
 .content-card:hover {
   border-color: var(--mg-silver) !important;
-  box-shadow: 0 8px 28px rgba(16, 42, 84, 0.14) !important;
+  box-shadow: 0 1px 3px rgba(16, 42, 84, 0.12) !important;
 }
 
 .card-header,
@@ -245,7 +244,7 @@ article.card {
 .modal-header,
 .section-card-header,
 .feature-card-header {
-  background: linear-gradient(160deg, var(--mg-blue) 0%, var(--mg-blue-2) 100%) !important;
+  background: var(--mg-blue) !important;
   border-color: rgba(200, 210, 220, 0.28) !important;
   color: #ffffff !important;
 }

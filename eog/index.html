@@ -132,8 +132,8 @@
     .content section { margin-bottom: 3.5rem; scroll-margin-top: 84px; }
 
     .section-eyebrow {
-      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.15em;
-      text-transform: uppercase; color: var(--accent2);
+      font-size: .75rem; font-weight: 500; letter-spacing: normal;
+      text-transform: none; color: var(--accent2);
       margin-bottom: 0.5rem;
     }
     h2 {
@@ -284,7 +284,11 @@
       .toc { position: static; }
       header nav { display: none; }
     }
-  </style>
+
+.layout>*{min-width:0}.layout pre{max-width:100%;overflow:auto}@media(max-width:720px){.layout{grid-template-columns:minmax(0,1fr);gap:24px;padding:24px 16px}.toc{position:static}.prompt-grid,.card-grid{grid-template-columns:minmax(0,1fr)}}
+
+@media(max-width:720px){.var-table,.info-table{table-layout:fixed;width:100%}.var-table th,.var-table td,.info-table th,.info-table td{padding:8px;overflow-wrap:anywhere}.var-table code,.info-table code{white-space:normal;overflow-wrap:anywhere}}
+</style>
 <link rel="stylesheet" href="../creations-theme.css" data-creations-theme>
 </head>
 <body>
@@ -322,6 +326,8 @@
   .mg-back-bar .mg-back-sep { color: rgba(183,228,199,0.4); margin: 0 4px; }
   .mg-back-bar .mg-back-label { color: rgba(183,228,199,0.65); font-weight: 400; }
   @media print { .mg-back-bar { display: none !important; } }
+
+@media(max-width:720px){.var-table,.info-table{table-layout:fixed;width:100%}.var-table th,.var-table td,.info-table th,.info-table td{padding:8px;overflow-wrap:anywhere}.var-table code,.info-table code{white-space:normal;overflow-wrap:anywhere}}
 </style>
 <div class="mg-back-bar" role="navigation" aria-label="Back to Creations index">
   <a href="../index.html"><span class="mg-back-arrow">←</span> MGuhlin.org <span class="mg-back-sep">/</span> <span class="mg-back-label">Creations</span></a>

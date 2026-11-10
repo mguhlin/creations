@@ -18,7 +18,7 @@
   .topnav a.home{font-weight:700;color:#fff}
   .topnav a.active{background:var(--accent);color:#fff}
   .wrap{max-width:1140px;margin:0 auto;padding:26px 20px 70px}
-  .kicker{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  .kicker{font-size:12px;letter-spacing:normal;text-transform:none;color:var(--accent);font-weight:500}
   h1{font-family:Georgia,serif;font-size:clamp(28px,5vw,42px);margin:.12em 0 .2em}
   .lead{max-width:740px;color:#5a5142;line-height:1.6;font-size:15.5px;margin-bottom:18px}
   .studio{display:grid;grid-template-columns:260px 1fr;gap:20px;align-items:start}
@@ -54,6 +54,8 @@
     font-size:14.5px;line-height:1.55;margin-bottom:16px}
   .legend-key{display:flex;align-items:center;gap:7px;font-size:13px;margin-top:5px}
   .legend-key span:first-child{font-size:17px}
+
+.studio>*{min-width:0}.meta{grid-template-columns:repeat(2,minmax(0,1fr))}.meta input{min-width:0;width:100%}.row input[type=range]{min-width:0}@media(max-width:880px){.studio{grid-template-columns:minmax(0,1fr)}}
 </style>
 <link rel="stylesheet" href="../creations-theme.css" data-creations-theme>
 </head>
